@@ -1,0 +1,110 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Cinétique : la vitesse des réactions"
+chapter: cinetique-chimique
+description: "La cinétique chimique : vitesse de réaction, ordres, loi d'Arrhenius, énergie d'activation, théorie de l'état de transition, et catalyse."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieDiagrammeEnergie from '../../../components/interactive/ChimieDiagrammeEnergie.astro';
+
+## Cinétique : la vitesse des réactions
+
+Jusqu'ici, notre fil conducteur répondait à une question : une réaction *peut-elle* se produire ? L'enthalpie libre tranchait par $\Delta G < 0$ (voir <Prereq href="/chimie/partie-iv/enthalpie-libre-spontaneite">le critère de spontanéité à T et P constantes</Prereq>), et l'équilibre fixait *jusqu'où* elle va via $K$ (voir <Prereq href="/chimie/partie-v/equilibre-chimique">l'équilibre chimique et la relation $\Delta G^\circ = -RT\ln K$</Prereq>). Mais une question reste entière : *à quelle vitesse* ? Le diamant est thermodynamiquement instable face au graphite — pourtant un diamant ne se transforme pas en mine de crayon de votre vivant. **Spontané ne veut pas dire rapide.** Bienvenue en cinétique.
+
+<Encart type="intuition" titre="La vallée derrière la colline">
+Imaginez une bille en haut d'une colline. De l'autre côté, une vallée bien plus profonde l'attend : énergétiquement, elle *veut* y descendre. Mais entre les deux il y a un petit muret. Tant que la bille n'a pas l'élan pour franchir le muret, elle reste coincée — indéfiniment. La thermodynamique vous dit que la vallée est plus basse (la réaction est favorable). La cinétique vous parle du muret : sa hauteur décide si l'on attend une microseconde ou un million d'années.
+</Encart>
+
+### Définir une vitesse
+
+Pour une transformation, la **vitesse** mesure combien de matière se transforme par unité de temps. Pour une réaction $aA + bB \rightarrow cC + dD$, on définit une vitesse unique en divisant chaque variation de concentration par son coefficient stœchiométrique :
+
+<Resultat label="Vitesse de réaction">
+
+$$ v = -\frac{1}{a}\frac{\mathrm{d}[A]}{\mathrm{d}t} = -\frac{1}{b}\frac{\mathrm{d}[B]}{\mathrm{d}t} = +\frac{1}{c}\frac{\mathrm{d}[C]}{\mathrm{d}t} = +\frac{1}{d}\frac{\mathrm{d}[D]}{\mathrm{d}t} $$
+
+<Badge niveau="experimental" slot="badge">La vitesse est une grandeur mesurée (suivi spectrophotométrique, conductimétrique, pression…) ; sa définition normalise par les coefficients pour obtenir une valeur unique.</Badge>
+</Resultat>
+
+Les signes garantissent que $v > 0$ : les réactifs disparaissent (dérivée négative), les produits apparaissent.
+
+### Le piège central : l'ordre ne se lit PAS sur l'équation bilan
+
+On constate expérimentalement que la vitesse dépend des concentrations. Souvent on peut l'écrire sous la forme d'une **loi de vitesse** :
+
+$$ v = k\,[A]^{\alpha}\,[B]^{\beta} $$
+
+où $\alpha$ et $\beta$ sont les **ordres partiels** par rapport à $A$ et $B$, et $\alpha + \beta$ l'**ordre global**. Voici le point de rigueur le plus important — et le plus maltraité — de tout ce chapitre :
+
+<Resultat label="L'ordre est une donnée expérimentale">
+
+$$ \alpha,\ \beta \ \text{se mesurent} \quad\text{et ne se déduisent PAS de}\quad a,\ b $$
+
+<Badge niveau="experimental" slot="badge">Les ordres s'obtiennent par l'expérience (méthode des vitesses initiales, dégénérescence de l'ordre, suivi temporel). Les égaler aux coefficients stœchiométriques est une erreur, sauf cas particulier (acte élémentaire).</Badge>
+</Resultat>
+
+Pourquoi ? Parce que l'équation bilan ne décrit *que* le bilan global de matière, pas le chemin emprunté. Une réaction se déroule presque toujours en plusieurs étapes élémentaires, et c'est l'étape la plus lente (l'étape « cinétiquement déterminante ») qui impose la loi de vitesse. Les coefficients stœchiométriques d'un bilan ne savent rien de ce mécanisme caché.
+
+<Encart type="plusloin" titre="La seule exception : l'acte élémentaire">
+Pour une étape **élémentaire** — une réaction qui se produit en un seul choc moléculaire, telle qu'elle est écrite — alors, et alors seulement, les ordres partiels coïncident avec les coefficients (on parle de **molécularité**). Ainsi $A + B \rightarrow$ produits, s'il s'agit d'un acte élémentaire bimoléculaire, suit bien $v = k[A][B]$. Mais on ne *décrète* pas qu'une réaction est élémentaire : on le démontre, en vérifiant que la loi de vitesse mesurée est cohérente avec ce mécanisme. Des ordres fractionnaires, nuls ou négatifs (observés couramment) sont la signature indubitable d'un mécanisme à plusieurs étapes.
+</Encart>
+
+Ainsi $\alpha$ peut valoir $0$, $1$, $\tfrac{1}{2}$, $2$… et n'a aucune raison d'égaler le coefficient de $A$ dans le bilan. C'est expérimental. On le martèle parce que l'oublier conduit à des prédictions fausses.
+
+### La barrière : énergie d'activation et loi d'Arrhenius
+
+D'où vient le « muret » de notre intuition ? Pour réagir, les molécules doivent se rencontrer dans la bonne orientation et avec assez d'énergie pour déformer leurs liaisons jusqu'à un sommet : l'**état de transition**, configuration instable de plus haute énergie sur le chemin réactionnel. La hauteur de ce sommet au-dessus des réactifs est l'**énergie d'activation** $E_a$.
+
+<Encart type="rappel" titre="L'état de transition est un modèle">
+L'état de transition (ou « complexe activé ») est une représentation utile : un point de selle sur la surface d'énergie potentielle, que les molécules franchissent fugacement. Il n'est pas une espèce isolable. La théorie qui le formalise (théorie de l'état de transition) est un modèle prédictif performant, à distinguer d'une nécessité fondamentale.
+</Encart>
+
+<ChimieDiagrammeEnergie />
+
+La fraction des chocs assez énergétiques pour franchir $E_a$ est gouvernée par la distribution de Boltzmann, en $e^{-E_a/RT}$. D'où la loi qui relie la constante de vitesse $k$ à la température :
+
+<Resultat label="Loi d'Arrhenius">
+
+$$ k = A\,\exp\!\left(-\frac{E_a}{RT}\right) $$
+
+<Badge niveau="empirique" slot="badge">Loi empirique remarquablement robuste : $A$ (facteur préexponentiel, lié à la fréquence et à la géométrie des chocs) et $E_a$ s'ajustent sur l'expérience. $R$ est la constante des gaz, $T$ la température absolue.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Lire E_a sur une droite : la forme linéarisée">
+On prend le logarithme népérien de chaque membre :
+
+$$ \ln k = \ln\!\left[A\,\exp\!\left(-\frac{E_a}{RT}\right)\right] $$
+
+$$ \ln k = \ln A + \ln\!\left[\exp\!\left(-\frac{E_a}{RT}\right)\right] $$
+
+$$ \ln k = \ln A - \frac{E_a}{R}\cdot\frac{1}{T} $$
+
+C'est l'équation d'une droite si l'on porte $\ln k$ en fonction de $1/T$ : ordonnée à l'origine $\ln A$, **pente** $-E_a/R$. Mesurer $k$ à plusieurs températures donne donc directement $E_a$. Une pente raide (forte barrière) signifie une réaction très sensible à la température.
+</Encart>
+
+Conséquence concrète : élever $T$ peuple la queue énergétique de la distribution, augmente $k$, donc $v$. C'est pourquoi on chauffe pour accélérer.
+
+### Le catalyseur : il change la route, pas la destination
+
+Un **catalyseur** ouvre un *autre* chemin réactionnel, à énergie d'activation plus basse. Davantage de molécules franchissent la barrière abaissée : la réaction va plus vite. Mais — et c'est l'erreur classique à abattre :
+
+<Resultat label="Ce qu'un catalyseur ne fait PAS">
+
+$$ E_a \downarrow \quad\Rightarrow\quad v \uparrow \qquad\text{mais}\qquad \Delta G,\ \Delta H,\ K \ \text{inchangés} $$
+
+<Badge niveau="quantique" slot="badge">Un catalyseur n'agit que sur la cinétique. Il ne déplace pas l'équilibre, ne modifie ni $\Delta G$, ni $\Delta H$, ni $K$ : ces grandeurs sont des fonctions d'état, fixées par les seuls états initial et final, indépendamment du chemin. C'est une nécessité, pas une tendance.</Badge>
+</Resultat>
+
+La raison est imparable : $\Delta G$ et $K$ sont des **fonctions d'état**, fixées par les réactifs et les produits seuls. Le catalyseur ne touche qu'au sommet de la colline, pas à l'altitude des deux vallées. Il abaisse $E_a$ **dans les deux sens** : il accélère aussi bien la réaction directe que la réaction inverse, dans le même rapport. On atteint donc *plus vite* le même état d'équilibre, jamais un équilibre différent.
+
+<Encart type="intuition" titre="Un raccourci ne déplace pas les villes">
+Un catalyseur, c'est un tunnel creusé sous le col. Le trajet est plus rapide dans les deux sens, mais les deux villes — départ et arrivée — restent exactement où elles étaient, à la même altitude. La thermodynamique fixe les villes ; la cinétique aménage la route.
+</Encart>
+
+Nous avons donc deux horloges indépendantes : la thermodynamique dit *où* l'on finit, la cinétique dit *quand*. Cette distinction, et le rôle des barrières énergétiques, sera notre clé pour aborder les transferts de particules les plus courants de la chimie — à commencer, au chapitre suivant, par le transfert de proton : les réactions acide-base.

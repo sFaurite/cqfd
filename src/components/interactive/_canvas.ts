@@ -23,6 +23,7 @@ export interface Palette {
   green: string;
   purple: string;
   teal: string;
+  orange: string;
   grid: string;
 }
 
@@ -39,6 +40,7 @@ const FALLBACK: Palette = {
   green: '#83c167',
   purple: '#c39bd3',
   teal: '#5cd0b3',
+  orange: '#ff9f40',
   grid: 'rgba(255,255,255,0.07)',
 };
 
@@ -64,6 +66,7 @@ export function palette(): Palette {
     green: v('--c-green', FALLBACK.green),
     purple: v('--c-purple', FALLBACK.purple),
     teal: v('--c-teal', FALLBACK.teal),
+    orange: v('--c-orange', FALLBACK.orange),
     grid: light ? 'rgba(20,40,70,0.08)' : 'rgba(255,255,255,0.07)',
   };
 }

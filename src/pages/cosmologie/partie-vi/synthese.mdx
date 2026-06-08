@@ -1,0 +1,78 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Synthèse : de l'hypothèse d'homogénéité au monde actuel"
+chapter: synthese
+description: "Le récapitulatif déductif : ce qu'on a posé, ce qu'on a déduit, ce qu'on a observé."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Synthèse : de l'hypothèse d'homogénéité au monde actuel
+
+Nous voici au bout du fil. Vingt-trois chapitres en arrière, nous avons posé une seule idée — l'univers se ressemble partout — et nous en avons tiré, sans jamais (ou presque) tricher, une métrique, une dynamique, une histoire thermique, et finalement un univers reconnaissable : galaxies, fond de ciel à $2{,}7$ K, abondance d'hélium. Le moment est venu de **relire la déduction à l'envers**, non pour la réciter, mais pour faire le tri honnête entre ce que nous avons *posé*, ce que nous avons *déduit*, et ce que nous avons *observé*. C'est le vrai bénéfice du cours : un cosmologue lucide ne confond jamais ces trois statuts.
+
+<Encart type="intuition" titre="Une cathédrale sur un seul pilier">
+Imaginez un édifice immense — voûtes, contreforts, vitraux — qui ne repose que sur **un pilier** et une **règle de construction**. Le pilier, c'est le principe cosmologique. La règle, c'est la relativité générale. Tout le reste — la forme des arcs, la hauteur des nefs — n'a pas été choisi : il est **forcé** par le pilier et la règle. C'est ce qui rend la cosmologie si vertigineuse : presque tout y est déduit. Mais une cathédrale superbement bâtie peut très bien abriter un mystère sur lequel elle ne dit rien — et c'est exactement notre situation finale.
+</Encart>
+
+### Le fil déductif, relu d'un trait
+
+Reprenons la chaîne, maillon par maillon, en marquant à chaque étape ce qui entre comme **hypothèse** et ce qui en **sort**.
+
+| Étape | Ce qui est posé (hypothèse) | Ce qui en est déduit |
+|---|---|---|
+| Cadre géométrique | <Prereq href="/cosmologie/partie-i/principe-cosmologique">Homogénéité + isotropie</Prereq>, relativité générale admise | Métrique FLRW : un seul degré de liberté, $a(t)$ |
+| Dynamique | Contenu décrit par $(\rho, p)$ | <Prereq href="/cosmologie/partie-ii/equations-friedmann">Équations de Friedmann</Prereq> : $a(t)$ est piloté par $\rho$ |
+| Histoire thermique | Univers chaud et dense au départ | Refroidissement, nucléosynthèse, <Prereq href="/cosmologie/partie-iii/recombinaison-cmb">recombinaison et CMB</Prereq> |
+| Structures | Petites perturbations de densité initiales | Effondrement gravitationnel → galaxies, amas, toile cosmique |
+| Comptabilité | Mesure des paramètres | <Prereq href="/cosmologie/partie-vi/modele-lcdm">Modèle ΛCDM</Prereq> à six paramètres |
+
+La beauté de l'affaire est que chaque ligne **découle** de la précédente une fois le contenu fixé. Le principe cosmologique n'était pas un dogme : c'était une hypothèse <Badge niveau="observe">aujourd'hui testée — le fond diffus est isotrope à $10^{-5}$ près, et la distribution des galaxies à grande échelle devient statistiquement uniforme au-delà de $\sim 300$ millions d'années-lumière.</Badge> Nous avions parié, et l'observation a confirmé le pari.
+
+### Ce qui est robustement observé
+
+Quatre piliers empiriques tiennent debout **indépendamment du modèle**. Ce sont les faits que toute cosmologie future devra reproduire, quelle qu'elle soit.
+
+- **L'expansion.** Le redshift des galaxies croît avec leur distance (Hubble, 1929), relation confirmée ensuite jusqu'à très grand $z$. <Badge niveau="observe">Fait direct : on mesure des longueurs d'onde décalées vers le rouge, point.</Badge>
+- **Le fond diffus cosmologique.** Un corps noir à $T_0 = 2{,}725$ K emplit le ciel, avec un spectre de fluctuations finement structuré. <Badge niveau="observe">Mesuré par COBE, WMAP, Planck ; c'est l'image directe de l'univers à $380\,000$ ans.</Badge>
+- **Les abondances primordiales.** Environ $75\%$ d'hydrogène, $25\%$ d'hélium-4 en masse, traces de deutérium et de lithium. <Badge niveau="observe">Mesurées dans les milieux les moins pollués par les étoiles, et concordantes avec la nucléosynthèse à trois minutes.</Badge>
+- **Les grandes structures.** La toile cosmique — filaments, amas, vides — avec une échelle caractéristique (les oscillations acoustiques baryoniques) imprimée dans la répartition des galaxies. <Badge niveau="observe">Cartographiée par les grands relevés (SDSS, etc.).</Badge>
+
+Voilà le socle. Il ne dépend ni de la nature de la matière noire, ni de celle de l'énergie noire : il serait là même si nous ignorions tout de ces deux inconnues.
+
+<Tournant titre="Tournant : on cesse de déduire, on ajoute du contenu">
+Jusqu'ici, le socle observé tenait **sans engagement** sur la composition fine de l'univers. Pour passer de ce socle au récit complet, il faut maintenant **poser** ce que contient le $\rho$ de Friedmann — et ces ingrédients (matière noire froide, constante cosmologique $\Lambda$) ne se déduisent ni du principe cosmologique ni de la relativité générale. Ce sont des **hypothèses supplémentaires**, adoptées parce que, et seulement parce que, elles font boucler la comptabilité avec les données. Le fil « tout est déduit » s'arrête ici : ce qui suit relève du **modèle**, pas de la déduction.
+</Tournant>
+
+### Ce qui dépend du modèle
+
+Le passage du socle observé au récit complet exige d'**ajouter du contenu** dans le $\rho$ de Friedmann — et c'est ici que le statut épistémologique change.
+
+<Encart type="rappel" titre="Densités critiques et paramètres Ω">
+On rapporte chaque densité à la **densité critique** $\rho_c = \dfrac{3 H_0^2}{8\pi G}$, celle qui rend l'univers spatialement plat. Le paramètre $\Omega_i = \rho_i / \rho_c$ mesure la part de chaque ingrédient. La platitude mesurée impose $\sum_i \Omega_i \approx 1$, ce qui force la comptabilité à **boucler** : tout déficit visible doit être comblé par de l'invisible.
+</Encart>
+
+La platitude n'est elle-même pas un axiome mais un résultat de mesure <Badge niveau="concordance">$\Omega_{\text{tot}} \approx 1$ est compatible avec les données du CMB à mieux que $1\%$ — mais cette lecture passe par le modèle ΛCDM.</Badge>. Or la comptabilité ne boucle qu'au prix de deux ajouts massifs :
+
+$$ \Omega_b \approx 0{,}05, \qquad \Omega_{\text{matière noire}} \approx 0{,}27, \qquad \Omega_\Lambda \approx 0{,}68. $$
+
+La <Prereq href="/cosmologie/partie-v/matiere-noire">matière noire</Prereq> est requise pour expliquer la vitesse de rotation des galaxies, la cohésion des amas et — surtout — pour que les structures aient eu le temps de se former. <Badge niveau="concordance">Sa nécessité gravitationnelle est solidement établie dans ΛCDM et concordante avec toutes les données ; mais aucune particule de matière noire n'a été détectée directement.</Badge> L'<Prereq href="/cosmologie/partie-v/energie-noire">énergie noire</Prereq> (ici la constante cosmologique $\Lambda$) est requise pour l'accélération de l'expansion. <Badge niveau="concordance">Concordante avec les supernovae, le CMB et les BAO, elle se résume à un seul nombre — mais sa nature physique reste un terme ajouté à la main.</Badge>
+
+Le modèle complet n'a besoin que de **six paramètres** ajustés sur les données. Six nombres pour décrire $13{,}8$ milliards d'années d'histoire cosmique : c'est un triomphe de parcimonie <Badge niveau="concordance">— ΛCDM reproduit simultanément le spectre du CMB, les abondances, l'expansion et les structures avec ces six paramètres seulement.</Badge>
+
+### Ce qui reste spéculatif
+
+Aux deux bords du récit, la déduction cède la place à l'extrapolation. Les conditions initiales — pourquoi l'univers est-il si homogène, si plat, et d'où viennent les graines de structure ? — sont attribuées à l'**inflation**. <Badge niveau="extrapole">L'inflation explique élégamment ces faits et prédit le spectre des fluctuations, mais le champ qui la porte n'est pas identifié et le scénario n'est pas tranché.</Badge> Et avant le temps de Planck, le cadre lui-même s'effondre. <Badge niveau="speculatif">Sans théorie de la gravité quantique, l'« origine » et un éventuel multivers échappent à toute donnée.</Badge>
+
+### Le paradoxe final : décrire n'est pas expliquer
+
+Récapitulons l'extraordinaire bilan. À partir d'**une** hypothèse de symétrie et d'**une** théorie de la gravité, nous avons construit un modèle qui ajuste *tout* le ciel observable avec **six paramètres**. Et pourtant : environ $95\%$ du contenu énergétique de cet univers — la matière noire et l'énergie noire réunies — reste de **nature physique inconnue**. <Badge niveau="concordance">Nous savons précisément *combien* il y en a et *comment* cela gravite ; nous ignorons *ce que c'est*.</Badge>
+
+C'est, sans détour, la leçon épistémologique du cours. ΛCDM **décrit** l'univers avec une précision stupéfiante — mais décrire superbement n'est pas **expliquer**. Le modèle nomme les inconnues, mesure leur poids, prédit leurs effets, et s'arrête net au seuil de leur identité. Loin d'être un échec, c'est la marque d'une science honnête : elle sait exactement où finit ce qu'elle a déduit, où commence ce qu'elle a seulement mesuré, et où s'ouvre, intacte, l'inconnu.
+
+Le fil déductif est refermé. Reste à le tendre vers ce qui pourrait, demain, transformer ces inconnues nommées en réponses — c'est l'horizon ouvert vers lequel nous tournons les yeux dans le chapitre de clôture.

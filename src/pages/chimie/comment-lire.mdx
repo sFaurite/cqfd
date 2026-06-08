@@ -1,0 +1,136 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce cours
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’échelle de fiabilité « physico-chimique », et la promesse exacte. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce cours raconte **d’un seul tenant** comment toute la chimie découle d’un unique point de départ :
+**l’atome est quantique**. On part de la structure de l’atome et on remonte, étage par étage :
+orbitales → tableau périodique → liaison → géométrie → thermodynamique → équilibres → chimie du
+carbone. La règle, non négociable : *on ne vous demande jamais de croire sur parole.* Chaque maillon
+est soit **posé explicitement comme hypothèse**, soit **construit** à partir du précédent.
+
+Une précision d’honnêteté, dès maintenant. « Tout se déduit » serait **trompeur** ici, et pour
+deux raisons opposées :
+
+- En bas, on **admet la physique quantique** : la quantification des niveaux d’énergie, le principe
+  de Pauli, la notion d’orbitale. On ne la démontre pas — c’est notre socle, posé au grand jour.
+- À chaque étage, la chimie s’appuie sur des **règles empiriques** que la quantique ne fournit pas
+  directement : la règle de l’octet, VSEPR, l’électronégativité, les pKa tabulés. Ce ne sont pas des
+  vérités fondamentales : ce sont des **modèles approchés**, remarquablement utiles, et on les
+  signale comme tels.
+
+La promesse exacte est donc : *rien n’est utilisé sans être, soit une hypothèse posée au grand jour,
+soit une déduction de ce qui précède, soit une règle empirique annoncée comme telle.* C’est tout
+l’intérêt de l’échelle de fiabilité de ce cours — elle distingue, à chaque ligne, **ce que la
+mécanique quantique impose** de **ce qui n’est qu’une règle commode**.
+
+## À qui s’adresse ce cours ?
+
+Le niveau de départ visé est la **fin du lycée / début de licence** : vous êtes à l’aise avec la
+notion d’atome, de molécule, de réaction, et un peu de mathématiques (puissances, logarithmes).
+**Aucun prérequis avancé en physique quantique n’est supposé.** Dès qu’un outil nouveau apparaît, un
+encart « Rappel » le ramène à des bases simples.
+
+<Encart type="rappel" titre="Exemple de rappel — mole et masse molaire">
+La **mole** est un paquet de $N_A \approx 6{,}022 \times 10^{23}$ entités : c’est le pont entre
+l’atome (invisible) et le gramme (mesurable). La **masse molaire** $M$ (en g·mol⁻¹) est la masse
+d’une mole d’une espèce ; pour le carbone, $M \approx 12$ g·mol⁻¹.
+</Encart>
+
+## Les encadrés « Hypothèses » et les « Tournants »
+
+Au début d’une partie qui **pose** quelque chose (la physique quantique de départ, l’adoption d’un
+modèle de liaison), un encadré liste **noir sur blanc** ce qui est admis.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente ainsi, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **cesse de déduire pour adopter un modèle commode** — la règle de l’octet, l’hybridation
+du carbone —, un **bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, on quitte le terrain de la quantique rigoureuse pour adopter un **modèle approché**, parce
+qu’il prédit bien et qu’il est simple — et on le dit, plutôt que de le faire passer pour une vérité
+fondamentale. La construction reprend ensuite à partir de ce choix, en gardant ses limites en tête.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — calculs, rappels,
+approfondissements — sont rangés dans des encarts que vous **dépliez d’un clic** (ou avec la touche
+<kbd>Entrée</kbd>). Quatre familles, reconnaissables à leur couleur et leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ouverts par défaut, car ils aident à
+comprendre *avant* de formaliser. Exemple : « une orbitale, c’est un nuage de probabilité, pas une
+orbite de planète ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent un calcul **ligne à ligne**, sans étape sautée. Par exemple, on y montrerait
+le critère de spontanéité d’une réaction,
+
+$$ \Delta_r G = \Delta_r H - T\,\Delta_r S, $$
+
+et comment son signe décide du sens d’évolution. Chaque ligne est justifiée par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil à des bases simples : ce qu’est un logarithme, une concentration,
+un vecteur. Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors fil principal** : le détail des orbitales d,
+la théorie du champ cristallin, un mécanisme avancé. Facultatifs : on peut les sauter.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent sur
+tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce cours. **Chaque affirmation notable** porte une pastille colorée
+qui dit *à quel point elle est nécessaire* — imposée par la quantique, mesurée, ou simplement
+commode. Survolez un badge (ou donnez-lui le focus au clavier) pour lire **pourquoi**.
+
+- La conservation de la charge et de la matière dans une réaction <Badge niveau="quantique">Conséquence des lois de conservation fondamentales : on ne crée ni ne détruit d’atomes ni de charge.</Badge>
+- L’enthalpie standard de formation de l’eau vaut −286 kJ·mol⁻¹ <Badge niveau="experimental">Mesuré par calorimétrie de façon reproductible ; fait expérimental, indépendant de tout modèle.</Badge>
+- Les atomes « cherchent » à compléter leur octet <Badge niveau="empirique">Règle empirique : très prédictive pour les éléments légers, mais des exceptions existent (hypervalence, radicaux).</Badge>
+- Tel solvant « favorise généralement » telle réaction <Badge niveau="qualitatif">Tendance qualitative, fortement dépendante du contexte : à manier avec prudence.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et la
+page <a href="/chimie/methodologie">Méthodologie</a> détaille les quatre niveaux.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ \text{une réaction est spontanée (à } T,P \text{ fixés) si et seulement si } \Delta_r G < 0. $$
+<Badge niveau="quantique" slot="badge">Conséquence du second principe de la thermodynamique appliqué à T et P constants.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat établi ailleurs, un lien **prérequis** vous y renvoie :
+par exemple, on invoquera plus tard la <Prereq href="/chimie/partie-ii/tendances-periodiques">électronégativité</Prereq> en pointant vers la page qui l’introduit.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? La construction commence tout en bas : un atome, et le fait qu’il soit quantique.

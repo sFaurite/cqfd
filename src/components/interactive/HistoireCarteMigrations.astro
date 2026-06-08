@@ -1,0 +1,40 @@
+---
+/**
+ * HistoireCarteMigrations — carte du monde schématique des grandes migrations
+ * et diffusions humaines. Un curseur temporel (de −70 000 ans à aujourd'hui)
+ * fait défiler les vagues : sortie d'Afrique de Sapiens, peuplement des
+ * continents, foyers indépendants du Néolithique, expansion des empires, routes
+ * médiévales, voyages océaniques. Chaque trajet apparaît à sa date et se trace
+ * progressivement ; les trajets attestés sont en trait plein, les reconstitués
+ * en pointillé. Permet de comparer les chronologies entre régions.
+ */
+---
+
+<div class="iw" data-iw="carte-migrations">
+  <div class="iw__head"><span class="tag">Interactif</span> Migrations et diffusions humaines à travers le monde</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="cm-temps">Date</label>
+      <input id="cm-temps" type="range" min="0" max="1000" step="1" value="0" data-temps />
+      <output data-out-temps>−70 000</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-play aria-pressed="false">▶ Lecture</button>
+      <button class="iw__btn" data-reset>⟲ Début</button>
+    </div>
+  </div>
+  <div class="iw__readouts" data-legend></div>
+  <p class="iw__note">
+    La carte est volontairement schématique. Déplace le curseur (ou lance la
+    lecture) pour faire avancer le temps : chaque flux apparaît à sa date et se
+    trace. <b>Trait plein</b> = trajet bien attesté (archéologie, génétique,
+    textes) ; <b>pointillé</b> = trajet reconstitué, plus incertain. Les couleurs
+    distinguent les grandes phases — sortie d'Afrique, peuplements, foyers du
+    Néolithique, empires, routes médiévales, voyages océaniques.
+  </p>
+</div>
+
+<script>
+  import './HistoireCarteMigrations.client.ts';
+</script>

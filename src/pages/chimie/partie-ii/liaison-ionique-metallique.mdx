@@ -1,0 +1,100 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Liaisons ionique et métallique"
+chapter: liaison-ionique-metallique
+description: "La liaison ionique (transfert d'électrons, énergie réticulaire, cycle de Born-Haber), la liaison métallique (mer d'électrons, modèle de bandes), et le continuum covalent-ionique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Liaisons ionique et métallique
+
+Au chapitre précédent, deux atomes mettaient en commun un doublet pour atteindre l'octet : c'est la liaison covalente, le **partage** d'électrons — voir <Prereq href="/chimie/partie-ii/liaison-covalente-lewis">la liaison covalente et le modèle de Lewis</Prereq>. Mais que se passe-t-il quand les deux partenaires n'ont pas du tout la même envie de garder les électrons ? Et quand des millions d'atomes identiques se serrent les uns contre les autres, comme dans un bloc de cuivre ? On découvre alors deux autres façons de tenir la matière ensemble — et, surprise, ce sont **les deux extrêmes** d'un même continuum dont le covalent occupe le milieu.
+
+<Encart type="intuition" titre="Trois façons de gérer un trésor partagé">
+Imagine deux personnes et un sac de pièces. Si elles tirent dessus avec la même force, elles le tiennent **entre** elles : c'est le covalent. Si l'une est bien plus avide, elle **attire** presque tout le sac, devient riche (anion) pendant que l'autre se retrouve démuni (cation) — puis les deux restent collées par l'attraction du riche et du pauvre : c'est l'**ionique**. Et si une foule entière met **toutes** ses pièces au centre d'une place publique où chacun peut piocher : c'est la **mer d'électrons** du métal. Trois régimes, fixés par une seule question — qui veut les électrons, et de combien ?
+</Encart>
+
+### La liaison ionique : transférer, puis s'attirer
+
+Le moteur du transfert est la différence d'**électronégativité** $\Delta\chi$, cette tendance d'un atome à attirer les électrons d'une liaison, établie au chapitre <Prereq href="/chimie/partie-ii/tendances-periodiques">tendances périodiques : rayon, ionisation, électronégativité</Prereq>. Quand un atome très électronégatif (le chlore) rencontre un atome très électropositif (le sodium), le second cède un électron au premier. On obtient $\text{Na}^+$ et $\text{Cl}^-$ : deux ions de charges opposées.
+
+<Badge niveau="empirique">La description « Na cède un électron à Cl » est une idéalisation utile : elle reproduit bien les propriétés de NaCl, mais le transfert n'est jamais total (on le quantifie plus bas).</Badge>
+
+Mais deux ions isolés ne font pas un cristal. La stabilité vient de ce que **chaque** cation s'entoure d'anions, et réciproquement, formant un **réseau** régulier où l'attraction l'emporte massivement sur la répulsion. L'énergie libérée en assemblant ce réseau à partir des ions gazeux est l'**énergie réticulaire**.
+
+<Encart type="rappel" titre="L'attraction électrostatique (loi de Coulomb)">
+Deux charges $q_1$ et $q_2$ séparées de $r$ ont une énergie potentielle
+
+$$
+E = \dfrac{1}{4\pi\varepsilon_0}\,\dfrac{q_1 q_2}{r}
+$$
+
+négative quand les charges sont opposées (attraction). La constante $\varepsilon_0 = 8{,}854\times 10^{-12}\ \text{F·m}^{-1}$ est la permittivité du vide : c'est une constante physique fondamentale, dont la valeur est fixée par les mesures de l'électromagnétisme.
+</Encart>
+
+Dans un cristal, il faut sommer cette énergie sur **tous** les couples d'ions du réseau. Le résultat condense toute la géométrie en un seul nombre, la **constante de Madelung** $M$.
+
+<Encart type="calcul" titre="Du couple isolé au réseau : la constante de Madelung">
+Pour un cristal d'ions de charges $\pm z e$ et de plus proche distance $r_0$, on additionne les contributions de toutes les paires. Chaque ion voit des voisins attractifs (signe $-$) et répulsifs (signe $+$), à des distances multiples de $r_0$ :
+
+$$
+E_{\text{réseau}} = -\,\dfrac{M\, z^2 e^2}{4\pi\varepsilon_0\, r_0}\,N_A
+$$
+
+où $M$ est une **somme géométrique** sans dimension, purement liée à l'arrangement (pour NaCl, $M \approx 1{,}748$), $N_A = 6{,}022\times 10^{23}\ \text{mol}^{-1}$ est le nombre d'Avogadro, et $e = 1{,}602\times 10^{-19}\ \text{C}$ la charge élémentaire. Un terme répulsif à courte portée (recouvrement des nuages, conséquence du principe de Pauli) réduit **légèrement la magnitude** de cette énergie. Le signe négatif dit que **former le réseau libère de l'énergie** : c'est lui qui stabilise l'ionique.
+</Encart>
+
+<Badge niveau="empirique">L'énergie réticulaire calculée par ce modèle électrostatique (Madelung + répulsion à courte portée) est un **modèle approché** : juste à quelques pour-cent, il néglige le caractère partiellement covalent et la polarisabilité des ions.</Badge>
+
+On ne mesure pas l'énergie réticulaire directement — on ne peut pas « peser » l'assemblage d'ions gazeux. On la reconstruit par un **cycle thermodynamique**, le cycle de Born-Haber, qui enchaîne des étapes individuellement mesurables (sublimation, dissociation, ionisation, attachement électronique, formation) dont la somme, par conservation de l'énergie, **doit** boucler.
+
+<Badge niveau="experimental">L'énergie réticulaire est obtenue **indirectement** par le cycle de Born-Haber, à partir d'enthalpies mesurées et de la conservation de l'énergie ; l'accord avec le modèle de Madelung confirme l'image électrostatique.</Badge>
+
+### Aucune liaison n'est 100 % ionique
+
+Le « transfert total » est commode mais faux à la loupe. Même dans NaCl, le nuage de $\text{Cl}^-$ déborde un peu vers $\text{Na}^+$ : la charge effective des ions vaut environ $\pm 0{,}8\,e$ selon les estimations, pas $\pm 1\,e$.
+
+<Badge niveau="qualitatif">Le « caractère ionique partiel » est une tendance contextuelle : toute liaison réelle mêle transfert et partage ; ionique pur et covalent pur sont des **idéalisations** que rien n'atteint exactement. La charge effective dépend de la méthode d'estimation.</Badge>
+
+D'où l'idée d'un **continuum** réglé par $\Delta\chi$. Une convention répandue place le seuil à $\Delta\chi > 1{,}7$ pour parler de liaison « ionique », et en dessous de « covalente polaire ».
+
+<Tournant titre="Tournant : on adopte une convention de seuil">
+Le seuil $\Delta\chi \approx 1{,}7$ n'est **pas** une frontière physique : rien ne change brutalement quand on le franchit. C'est une convention pratique, qu'on **pose** pour classer les liaisons, en sachant qu'elle hérite de l'imprécision de l'échelle d'électronégativité elle-même (et qu'elle dépend de l'échelle choisie, Pauling, Mulliken, Allred-Rochow…).
+</Tournant>
+
+<Badge niveau="empirique">La règle $\Delta\chi > 1{,}7 \Rightarrow$ « ionique » est une **convention commode**, dépendante de l'échelle d'électronégativité choisie ; aucune coupure nette n'existe dans la nature.</Badge>
+
+### La liaison métallique : une mer d'électrons
+
+Reste le cas des atomes **identiques et peu électronégatifs**, comme le sodium ou le cuivre. Aucun ne peut arracher l'électron de l'autre : $\Delta\chi = 0$. Mais leurs électrons de valence sont si faiblement retenus que, dans le solide, ils se **délocalisent** : ils ne sont plus attachés à un atome, mais circulent dans tout le cristal. On décrit alors un réseau de **cations** fixes baignant dans une **mer d'électrons** mobiles.
+
+<Encart type="intuition" titre="Pourquoi ce modèle explique tant de choses">
+Des électrons libres de se déplacer, c'est exactement un **courant** dès qu'on applique une tension : voilà la conductivité électrique. Ces mêmes électrons transportent aussi l'agitation thermique : voilà la conductivité thermique. Et comme la cohésion ne tient pas à des liaisons orientées entre atomes précis mais à une « colle » électronique diffuse, on peut **déformer** le métal sans le casser — les plans d'atomes glissent et la mer d'électrons se réajuste : voilà la malléabilité et la ductilité.
+</Encart>
+
+<Badge niveau="qualitatif">La « mer d'électrons » est un **modèle qualitatif** : il explique correctement les grandes tendances (conduction, malléabilité, éclat) mais reste une image, pas une théorie prédictive quantitative.</Badge>
+
+Pour aller plus loin que cette image, on traite les électrons par la mécanique quantique dans le potentiel périodique du réseau : leurs niveaux se regroupent en **bandes** d'énergie permises, séparées par des bandes interdites. C'est la **théorie des bandes** — celle qui distingue rigoureusement métaux, isolants et semi-conducteurs.
+
+<Encart type="plusloin" titre="De la mer d'électrons aux bandes — et au silicium des processeurs">
+Quand $N$ atomes s'assemblent, chaque niveau atomique se démultiplie en $N$ niveaux très resserrés : une **bande**. Un métal a sa bande de valence partiellement remplie, donc des électrons libres juste au-dessus du niveau occupé le plus haut — d'où la conduction. Un isolant a sa bande pleine séparée de la suivante par un large écart. C'est précisément ce cadre, appliqué au silicium, qui fonde l'électronique : on le développe dans un autre cours, <Prereq href="/processeurs/partie-i/bandes-energie">bandes d'énergie</Prereq>.
+
+<Badge niveau="quantique" slot="badge">La structure de bandes **découle** de la résolution quantique du mouvement électronique dans un potentiel périodique (théorème de Bloch) ; c'est une conséquence, non un postulat ajouté.</Badge>
+</Encart>
+
+<Resultat label="Le continuum des liaisons fortes">
+
+$$
+\Delta\chi \approx 0 \;\Rightarrow\; \text{métallique / covalent pur} \qquad \Delta\chi \text{ grand} \;\Rightarrow\; \text{ionique}
+$$
+
+<Badge niveau="empirique" slot="badge">Classement **graduel** et non binaire : la position d'une liaison sur ce continuum suit $\Delta\chi$, mais les bornes (« pur ») sont des idéalisations et les seuils des conventions.</Badge>
+</Resultat>
+
+Nous savons maintenant **pourquoi** les atomes se lient et selon quel régime. Reste à comprendre la **forme** des édifices qu'ils construisent : pourquoi l'eau est coudée et le méthane tétraédrique. C'est la géométrie des molécules, et c'est l'objet de la partie suivante.

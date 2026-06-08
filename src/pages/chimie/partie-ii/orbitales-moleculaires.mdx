@@ -1,0 +1,113 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Au-delà de Lewis : les orbitales moléculaires"
+chapter: orbitales-moleculaires
+description: "La théorie des orbitales moléculaires (LCAO) : combinaisons liantes et antiliantes, diagramme énergétique, ordre de liaison, et les succès là où Lewis échoue (O₂ paramagnétique, He₂ inexistant)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieDiagrammeOM from '../../../components/interactive/ChimieDiagrammeOM.astro';
+
+## Quand deux atomes mettent leurs orbitales en commun
+
+Le modèle de Lewis (vu en <Prereq href="/chimie/partie-ii/liaison-covalente-lewis">La liaison covalente et le modèle de Lewis</Prereq>) est merveilleusement efficace : on compte des doublets, on respecte l'octet, on dessine. Mais c'est une comptabilité, pas une description physique. Il échoue sur deux faits têtus que l'expérience impose. Premièrement, He₂ ne devrait pas exister — et n'existe pas — mais Lewis ne dit pas *pourquoi*. Deuxièmement, le dioxygène O₂ est **paramagnétique** : il est attiré par un aimant, signe qu'il possède des électrons célibataires. Or la structure de Lewis classique de O₂ (une double liaison O=O, tous les électrons appariés) prédit exactement le contraire. Il nous faut un meilleur modèle. Ce modèle, c'est celui des **orbitales moléculaires** (OM).
+
+### L'idée centrale : combiner des ondes
+
+Rappelons d'où l'on part. Un électron dans un atome n'est pas une bille : c'est une onde stationnaire, une **orbitale atomique** (OA), décrite par une fonction d'onde $\psi$ dont $|\psi|^2$ donne la densité de probabilité de présence (voir <Prereq href="/chimie/partie-i/atome-hydrogene">L'atome d'hydrogène : niveaux et orbitales</Prereq>).
+
+Rapprochons maintenant deux atomes. Leurs orbitales se recouvrent, et comme toutes les ondes, elles peuvent **s'additionner** (interférence constructive) ou **se soustraire** (interférence destructive). C'est tout le cœur de l'affaire.
+
+<Encart type="intuition" titre="Deux haut-parleurs, deux ondes">
+Pensez à deux haut-parleurs émettant la même note. En phase, leurs ondes s'ajoutent : le son enfle entre eux. En opposition de phase, elles s'annulent : un silence apparaît au milieu. Deux orbitales atomiques font pareil. En phase, la densité électronique **s'accumule entre les deux noyaux** : cette charge négative attire les deux noyaux positifs et les **soude** — c'est une orbitale *liante*. En opposition de phase, la densité **s'évide** entre les noyaux (un plan où $\psi = 0$, dit plan nodal) : rien ne les retient, ils se repoussent — c'est une orbitale *antiliante*, notée d'une étoile (\*).
+</Encart>
+
+Cette construction porte un nom : la **combinaison linéaire d'orbitales atomiques** (LCAO). On écrit l'orbitale moléculaire comme une somme pondérée des OA. Pour deux OA identiques $\psi_A$ et $\psi_B$ :
+
+$$ \psi_{\text{liante}} \propto \psi_A + \psi_B \qquad \psi_{\text{antiliante}} \propto \psi_A - \psi_B $$
+
+<Badge niveau="quantique">Que combiner des fonctions d'onde donne une liante (énergie abaissée) et une antiliante (énergie élevée) n'est pas une astuce : c'est ce que produit la résolution approchée de l'équation de Schrödinger pour la molécule. La concentration de densité entre les noyaux abaisse l'énergie ; le plan nodal la relève. C'est imposé par la mécanique quantique.</Badge>
+
+### La règle de conservation : N entre, N sortent
+
+Un principe sobre mais incontournable gouverne tout diagramme d'OM.
+
+<Hypotheses titre="Règle de construction des OM">
+1. **Conservation du nombre d'orbitales.** En combinant $N$ orbitales atomiques, on obtient **exactement $N$ orbitales moléculaires**. Les orbitales ne se créent ni ne se détruisent : elles se réarrangent.
+2. **Autant de liantes que d'antiliantes.** Chaque combinaison « somme » liante est accompagnée d'une combinaison « différence » antiliante. Pour deux OA, une liante et une antiliante.
+3. **Remplissage.** On place les électrons dans ces OM par énergie croissante, deux par orbitale au maximum (Pauli), et on applique la règle de Hund (un électron seul dans chaque orbitale de même énergie avant d'apparier).
+</Hypotheses>
+
+Les points 1 et 2 découlent de l'algèbre linéaire appliquée à Schrödinger ; le point 3 reprend les règles déjà posées pour les atomes dans <Prereq href="/chimie/partie-i/atome-hydrogene">les orbitales de l'hydrogène</Prereq>. <Badge niveau="quantique">Conservation du nombre d'états et appariement liant/antiliant sont des conséquences mathématiques directes de la méthode variationnelle sur l'équation de Schrödinger.</Badge>
+
+### L'outil décisif : l'ordre de liaison
+
+De combien de liaisons parle-t-on, au fond ? On le mesure par l'**ordre de liaison** :
+
+<Resultat label="Ordre de liaison">
+
+$$ \text{OL} = \frac{1}{2}\left( n_{\text{liants}} - n_{\text{antiliants}} \right) $$
+
+<Badge niveau="quantique" slot="badge">Chaque électron antiliant annule la stabilisation apportée par un électron liant. La demi-somme convertit un comptage d'électrons en nombre de liaisons. OL &gt; 0 : molécule liée ; OL = 0 : pas de molécule.</Badge>
+</Resultat>
+
+Testons-le immédiatement sur les cas les plus simples.
+
+<Encart type="calcul" titre="H₂ existe, He₂ n'existe pas">
+**H₂** (2 électrons au total). Les deux OA 1s donnent une OM liante $\sigma_{1s}$ et une antiliante $\sigma^*_{1s}$. Les 2 électrons remplissent la liante, plus basse en énergie. On a donc 2 électrons liants et 0 antiliant :
+
+$$ \text{OL}(\text{H}_2) = \tfrac{1}{2}(2 - 0) = 1 $$
+
+Une liaison simple : H₂ est stable. Conforme à Lewis.
+
+**He₂** (4 électrons au total). Mêmes deux OM, mais 4 électrons : la liante **et** l'antiliante sont pleines, soit 2 électrons liants et 2 antiliants :
+
+$$ \text{OL}(\text{He}_2) = \tfrac{1}{2}(2 - 2) = 0 $$
+
+Ordre de liaison nul : aucune liaison nette, He₂ ne se forme pas. Lewis « expliquait » cela en disant que He a déjà son octet ; l'OM **le démontre** : le gain de la liante est exactement effacé par le coût de l'antiliante.
+</Encart>
+
+Manipulez le diagramme ci-dessous pour remplir vous-même les orbitales de chaque diatomique et lire l'ordre de liaison.
+
+<ChimieDiagrammeOM />
+
+### Le verdict expérimental : O₂ est paramagnétique
+
+Pour les diatomiques de la deuxième période, on combine aussi les orbitales 2s et 2p. Les 2p engendrent une OM $\sigma$ (recouvrement axial) et deux OM $\pi$ dégénérées (recouvrement latéral), chacune avec son antiliante $\sigma^*$ et $\pi^*$. Concentrons-nous sur le cas le plus instructif.
+
+<Encart type="calcul" titre="O₂ : l'ordre de liaison et les deux célibataires">
+**O₂** : chaque oxygène apporte 6 électrons de valence, soit 12 à placer dans les OM de valence. Pour O₂, l'ordre énergétique place $\sigma_{2p}$ **sous** les deux $\pi_{2p}$. En remplissant par énergie croissante :
+
+$$ \underbrace{\sigma_{2s}}_{2}\ \underbrace{\sigma^*_{2s}}_{2}\ \underbrace{\sigma_{2p}}_{2}\ \underbrace{\pi_{2p}\,\pi_{2p}}_{4}\ \underbrace{\pi^*_{2p}\,\pi^*_{2p}}_{2} $$
+
+Les 10 premiers électrons saturent jusqu'aux deux $\pi_{2p}$ ; il reste alors **2 électrons** pour les deux orbitales $\pi^*_{2p}$, qui sont **dégénérées** (même énergie).
+
+Par la règle de Hund, ces 2 électrons se placent **un dans chaque** $\pi^*$, spins parallèles, plutôt que de s'apparier : deux **électrons célibataires**.
+
+Comptons. Électrons liants : $\sigma_{2s}$ (2) $+\ \sigma_{2p}$ (2) $+\ \pi_{2p}$ (4) $= 8$. Électrons antiliants : $\sigma^*_{2s}$ (2) $+\ \pi^*_{2p}$ (2) $= 4$.
+
+$$ \text{OL}(\text{O}_2) = \tfrac{1}{2}(8 - 4) = 2 $$
+
+Double liaison (bon, comme Lewis) **mais avec deux électrons non appariés** (que Lewis rate complètement).
+</Encart>
+
+Or un électron célibataire possède un spin non compensé : il rend la molécule sensible au champ magnétique. La prédiction de l'OM est donc nette : O₂ doit être **paramagnétique**. Versez de l'oxygène liquide entre les pôles d'un aimant : il s'y accroche, visiblement. La mesure tranche.
+
+<Badge niveau="experimental">Le paramagnétisme de O₂ est mesuré de façon reproductible (oxygène liquide attiré par un aimant, susceptibilité magnétique). C'est un fait expérimental qui départage les modèles : l'OM le prédit, la structure de Lewis classique le contredit.</Badge>
+
+Voilà le point d'honnêteté décisif : ce n'est pas que l'OM soit « plus jolie », c'est qu'une **expérience** la confirme là où Lewis se trompe.
+
+### Une meilleure approximation — pas la vérité ultime
+
+Au passage, l'OM explique aussi N₂ : avec 10 électrons de valence, ordre de liaison $\tfrac{1}{2}(8-2) = 3$, une triple liaison, tous spins appariés (diamagnétique) — ce qui colle à son inertie remarquable. <Badge niveau="quantique">L'ordre 3 et le caractère diamagnétique de N₂ se lisent directement sur le remplissage des OM.</Badge>
+
+Restons lucides cependant. LCAO suppose qu'on construit les OM à partir d'une poignée d'OA seulement et qu'on néglige les répulsions électron-électron fines : c'est une **approximation**, certes meilleure que Lewis, mais pas la fonction d'onde exacte. <Badge niveau="empirique">Le découpage liant/antiliant est rigoureux dans son principe, mais le diagramme précis (notamment l'ordre relatif des $\sigma_{2p}$ et $\pi_{2p}$, qui s'inverse entre N₂ et O₂) repose sur des recouvrements approchés. Modèle prédictif et fiable, non exact.</Badge>
+
+Ne survendons donc pas l'OM : c'est une marche de plus vers le traitement quantique, qui explique ce que Lewis ne pouvait pas, sans prétendre être le mot de la fin.
+
+Nous savons maintenant *combien* d'électrons lient les atomes et *comment* ils se répartissent. Reste à savoir **où** ces atomes se placent dans l'espace : la forme tridimensionnelle des molécules, que nous prédirons avec la méthode VSEPR au chapitre suivant.

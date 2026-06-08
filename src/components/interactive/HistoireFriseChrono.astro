@@ -1,0 +1,40 @@
+---
+/**
+ * HistoireFriseChrono — frise chronologique interactive et multi-échelle.
+ * Un curseur fait passer continûment d'une échelle logarithmique (où des
+ * millions d'années de Paléolithique tiennent à côté de quelques millénaires
+ * d'histoire écrite) à une échelle linéaire (où l'histoire écrite est écrasée
+ * contre le présent). Objectif : faire SENTIR la disproportion des durées et
+ * pourquoi la « profondeur du temps » humain est si contre-intuitive.
+ */
+---
+
+<div class="iw" data-iw="frise-chrono">
+  <div class="iw__head"><span class="tag">Interactif</span> Frise du temps humain : du Paléolithique aux temps modernes</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="fc-echelle">Échelle</label>
+      <input id="fc-echelle" type="range" min="0" max="1" step="0.01" value="0" data-echelle />
+      <output data-out-echelle>log</output>
+    </div>
+    <div class="iw__row">
+      <label for="fc-zoom">Fenêtre (la plus ancienne)</label>
+      <input id="fc-zoom" type="range" min="0" max="6" step="1" value="0" data-zoom />
+      <output data-out-zoom>−3 Ma</output>
+    </div>
+  </div>
+  <div class="iw__readouts" data-readouts></div>
+  <p class="iw__note">
+    À gauche du curseur « Échelle », le temps est <b>logarithmique</b> : on voit
+    tous les jalons à la fois, mais les durées sont déformées. Glisse vers la
+    droite pour passer en <b>linéaire</b> : l'écriture, les empires, le Moyen Âge
+    et la modernité se tassent alors contre le présent, et les millions d'années
+    de Paléolithique s'étirent — c'est cela, la « profondeur du temps ». Le second
+    curseur resserre la fenêtre sur les périodes plus récentes.
+  </p>
+</div>
+
+<script>
+  import './HistoireFriseChrono.client.ts';
+</script>

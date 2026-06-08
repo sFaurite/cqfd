@@ -1,0 +1,104 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La fonction de perte : mesurer pour corriger"
+chapter: fonction-de-perte
+description: "Généralise la notion de perte au-delà des cas précédents : qu'est-ce qu'une bonne fonction de coût, pourquoi on minimise un risque empirique, et le lien (puis l'écart) entre perte d'entraînement et erreur réelle."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Mesurer pour pouvoir corriger
+
+Jusqu'ici nous avons rencontré deux modèles concrets — la <Prereq href="/ia/partie-i/regression-lineaire">régression linéaire</Prereq> et la <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq> — et, à chaque fois, la même mécanique : un modèle dépend de paramètres, on définit un nombre qui dit « à quel point le modèle se trompe », et on cherche les paramètres qui rendent ce nombre petit. Ce nombre, c'est la **fonction de perte**. Ce chapitre prend de la hauteur : on isole ce schéma, on lui donne un nom général, et on installe une distinction qui hantera tout le reste du cours — celle entre l'erreur qu'on **mesure** et l'erreur qui nous **importe vraiment**.
+
+L'idée centrale tient en une phrase : *on ne peut corriger que ce qu'on sait mesurer*. Tout l'apprentissage automatique consiste à transformer un objectif flou (« reconnaître des chats », « traduire ») en un seul scalaire qu'on fera décroître.
+
+<Hypotheses titre="Le cadre général">
+1. On dispose d'un **modèle** $f_\theta$, une fonction indexée par un vecteur de paramètres $\theta$ (les $(w,b)$ du neurone formel, par exemple).
+2. On dispose d'un **jeu de données** : $n$ exemples $(x_i, y_i)$, où $x_i$ est l'entrée et $y_i$ la cible (« vérité terrain »).
+3. On se donne une **perte ponctuelle** $\ell(\hat y, y) \ge 0$ qui compare une prédiction $\hat y = f_\theta(x)$ à la cible $y$, et qui vaut $0$ quand la prédiction est parfaite.
+</Hypotheses>
+
+## Le risque empirique
+
+La perte ponctuelle juge **un** exemple. Pour juger le modèle dans son ensemble, on moyenne sur tout le jeu de données. On appelle cette moyenne le **risque empirique** :
+
+<Resultat label="Risque empirique">
+
+$$ R(\theta) = \frac{1}{n}\sum_{i=1}^{n} \ell\big(f_\theta(x_i),\, y_i\big) $$
+
+<Badge niveau="prouve" slot="badge">Définition : une moyenne arithmétique des pertes. Aucune hypothèse cachée — c'est la grandeur qu'on optimisera.</Badge>
+</Resultat>
+
+Avec cette définition, **apprendre se reformule exactement** :
+
+$$ \theta^\star = \arg\min_{\theta}\; R(\theta) $$
+
+Tout le reste du cours — descente de gradient, rétropropagation, optimiseurs — n'est qu'un ensemble de techniques pour résoudre, approximativement, ce problème de minimisation. C'est le cadre unifiant promis.
+
+<Badge niveau="prouve">« Apprendre = minimiser le risque empirique » n'est pas une croyance mais une *définition* qu'on adopte. Elle rend l'apprentissage mathématiquement traitable.</Badge>
+
+## Les pertes déjà vues sont des cas particuliers
+
+Le pouvoir de ce cadre, c'est qu'il **contient** ce qu'on a déjà construit. On ne change rien aux deux modèles précédents ; on les relit.
+
+<Encart type="rappel" titre="Deux pertes, deux objectifs">
+**Régression (sortie réelle).** La perte des moindres carrés, ou *erreur quadratique* :
+
+$$ \ell_{\text{MSE}}(\hat y, y) = (\hat y - y)^2 $$
+
+En moyenne, $R(\theta) = \frac{1}{n}\sum_i (f_\theta(x_i) - y_i)^2$ : c'est exactement le **MSE** de la régression linéaire.
+
+**Classification (sortie probabiliste).** L'**entropie croisée** binaire, pour une cible $y \in \{0,1\}$ et une probabilité prédite $\hat y \in (0,1)$ :
+
+$$ \ell_{\text{CE}}(\hat y, y) = -\big[\, y\log \hat y + (1-y)\log(1-\hat y)\,\big] $$
+
+C'est la *log-loss* obtenue en régression logistique par maximum de vraisemblance. Sa moyenne donne le risque empirique de classification.
+</Encart>
+
+Deux problèmes très différents, **un même squelette** : $R(\theta) = \frac{1}{n}\sum_i \ell(\cdot)$. Seule la pièce $\ell$ change selon ce qu'on veut accomplir.
+
+<Badge niveau="prouve">MSE et entropie croisée s'insèrent *littéralement* dans la formule du risque empirique. Démontré aux chapitres précédents, simplement reformulé ici.</Badge>
+
+## La distinction capitale : ce qu'on mesure n'est pas ce qu'on veut
+
+Voici le point le plus important du chapitre, et l'un des plus importants du cours. Le risque empirique $R(\theta)$ se calcule sur les exemples qu'on **possède déjà**. Mais un modèle ne sert à rien sur ses données d'entraînement : on les connaît, on a déjà les réponses ! Ce qu'on veut vraiment, c'est qu'il soit bon sur des données **nouvelles**, jamais vues.
+
+<Tournant titre="On postule une distribution sous-jacente">
+Pour donner un sens à « données nouvelles », on ajoute une hypothèse qui n'était pas là jusqu'ici : on suppose que les exemples $(x,y)$ sont tirés d'une **distribution de probabilité** $\mathcal{D}$ inconnue, et que les futurs exemples viendront de la *même* $\mathcal{D}$. C'est une hypothèse de modélisation, pas un théorème.
+</Tournant>
+
+Sous cette hypothèse, on peut définir l'erreur qui compte réellement, le **risque réel** (ou risque de généralisation) :
+
+$$ R_{\text{réel}}(\theta) = \mathbb{E}_{(x,y)\sim \mathcal{D}}\big[\,\ell(f_\theta(x), y)\,\big] $$
+
+C'est la perte **moyenne sur toutes les données possibles**, pas seulement les $n$ qu'on a. Et là est tout le drame : $R_{\text{réel}}$ est **incalculable** — on n'a pas accès à $\mathcal{D}$, seulement à un échantillon fini. On minimise donc $R(\theta)$ (qu'on peut mesurer) **en espérant** que $R_{\text{réel}}(\theta)$ baisse aussi (ce qui nous importe).
+
+<Badge niveau="boitenoire">Rien ne garantit en général que minimiser le risque empirique fasse baisser le risque réel. C'est exactement le **surapprentissage** : un modèle peut mémoriser ses données ($R \to 0$) tout en généralisant mal.</Badge>
+
+La théorie statistique de l'apprentissage fournit bien des **bornes** reliant les deux risques (elles se resserrent quand $n$ grandit et quand le modèle est « simple »). Mais pour les réseaux profonds, ces bornes sont souvent *vacuous* — si lâches qu'elles ne prédisent rien d'utile. On reviendra longuement sur ce point en Partie III.
+
+<Badge niveau="boitenoire">Pourquoi les grands réseaux généralisent si bien malgré une capacité énorme reste une **question ouverte**. Les bornes classiques ne l'expliquent pas.</Badge>
+
+À retenir : *on minimise ce qu'on peut mesurer, en faisant le pari que cela transfère.* Tout l'art de la régularisation (Partie III) servira à rendre ce pari raisonnable.
+
+## Pourquoi exiger une perte dérivable
+
+Reste une question pratique mais décisive : **quelle** perte choisir ? En classification, ce qu'on veut *vraiment* minimiser, c'est le **taux d'erreur**, formalisé par la perte **0-1** : $\ell_{0\text{-}1} = 0$ si la prédiction est correcte, $1$ sinon.
+
+Le problème : cette perte est **plate par morceaux** et **discontinue**. Sa dérivée est nulle presque partout, et indéfinie aux sauts. Or toute la machinerie qui arrive — la <Prereq href="/ia/partie-ii/derivees-gradient">descente de gradient</Prereq> que nous allons construire au chapitre suivant — a besoin de la **pente** de la perte pour savoir dans quelle direction corriger $\theta$. Une pente nulle ne dit rien ; on serait aveugle.
+
+<Encart type="intuition" titre="Pourquoi une pente nulle paralyse la correction">
+Imaginez un randonneur dans le brouillard cherchant le bas d'une vallée. La perte 0-1, c'est un paysage en **escaliers parfaitement plats** séparés de falaises : où qu'il pose le pied, le sol est horizontal — aucune indication de la direction à prendre. Une perte *lisse*, c'est une pente douce et continue : sous chaque pas, le sol s'incline légèrement et **désigne** la descente. La dérivabilité, c'est précisément ce qui donne au modèle une direction de correction en tout point.
+</Encart>
+
+La parade est un **choix d'ingénierie** : remplacer la perte 0-1, qu'on ne sait pas optimiser, par une **perte de substitution** (*surrogate*) — lisse, dérivable, et qui *majore* ou approche la 0-1. L'entropie croisée joue exactement ce rôle : c'est un substitut convexe et dérivable du taux d'erreur. On n'optimise pas tout à fait ce qu'on veut, mais on optimise quelque chose de **proche** qu'on sait, lui, faire décroître.
+
+<Badge niveau="recette">Choisir une perte lisse (entropie croisée, MSE) comme substitut de la 0-1 est un choix d'ingénierie justifié : il rend l'optimisation par gradient possible. La 0-1 reste l'objectif idéal, non l'outil.</Badge>
+
+Nous tenons donc un cadre complet : un modèle paramétré, une perte dérivable, un risque empirique à minimiser, et la lucidité sur ce que cette minimisation garantit (peu) et espère (beaucoup). Il manque l'outil pour *descendre* effectivement ce risque. Pour cela, il faut savoir lire la pente d'une fonction de plusieurs variables : c'est le **gradient**, et le théorème qui dit dans quelle direction il faut faire un pas. C'est l'objet du chapitre suivant.

@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le commutateur : du medium partage au reseau commute"
+chapter: commutation
+description: "Presente la commutation de niveau 2 : table d'apprentissage MAC, transmission selective, suppression des collisions, et les limites (boucles, broadcast)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Un commutateur n'est pas un répéteur
+
+Au chapitre précédent, nous avons vu un médium partagé : tout le monde parle sur le même fil, et <Prereq href="/reseaux/partie-iii/acces-medium">CSMA/CD</Prereq> sert à gérer les collisions inévitables. Plus on branche de machines, plus elles se marchent dessus, et plus le débit utile s'effondre. C'est frustrant : pourquoi diffuser un message à *tout le monde* alors qu'il n'est destiné qu'à *une* machine ?
+
+Le **commutateur** (en anglais *switch*) répond exactement à cette frustration. Au lieu de recopier bêtement chaque trame sur tous les ports — ce que fait un simple répéteur (*hub*) — il regarde *à qui* la trame est adressée et ne l'envoie *que* vers le bon port. Pour cela, il s'appuie sur une seule information : l'<Prereq href="/reseaux/partie-iii/mac-ethernet">adresse MAC</Prereq> inscrite dans l'en-tête de la trame Ethernet.
+
+<Encart type="intuition" titre="Le bureau de tri plutôt que le haut-parleur">
+Un répéteur, c'est un haut-parleur dans un open-space : chaque mot prononcé arrive à toutes les oreilles, et deux personnes qui parlent en même temps se brouillent. Un commutateur, c'est un employé de tri qui a appris, à force de voir passer le courrier, derrière quelle porte se trouve chaque destinataire. Il glisse chaque lettre directement sous la bonne porte. Deux échanges entre paires différentes peuvent alors avoir lieu *simultanément*, sans se gêner.
+</Encart>
+
+## Apprendre où sont les machines
+
+Le commutateur n'est configuré par personne : il **apprend** tout seul. Le mécanisme tient en deux idées, qu'on appelle *backward learning* (apprentissage par la source) et *forwarding* (transmission).
+
+Quand une trame arrive sur un port $p$, le commutateur lit son **adresse MAC source**. Il en déduit une chose certaine : « la machine qui porte cette MAC est joignable par le port $p$ ». Il inscrit donc le couple (MAC source, port $p$) dans sa **table de commutation** (ou table MAC). C'est l'apprentissage.
+
+Ensuite, il lit l'**adresse MAC destination** de la trame et consulte sa table :
+
+- si la MAC destination y figure, associée à un port $q$, il transmet la trame **uniquement** sur $q$ : c'est le *forwarding* sélectif ;
+- si la MAC destination est inconnue (jamais vue comme source), il ne peut pas deviner : il **inonde** (*flooding*) la trame sur tous les ports sauf celui d'arrivée, exactement comme un répéteur. Mais dès que la machine répondra, sa MAC sera apprise, et les échanges suivants seront ciblés.
+
+<Encart type="calcul" titre="Une trace pas à pas">
+Soit un commutateur à 4 ports, table vide au départ. A est sur le port 1, B sur le port 3.
+
+1. A envoie une trame vers B. Source = MAC(A), destination = MAC(B).
+2. Le switch lit la source : il apprend `MAC(A) → port 1`.
+3. Il cherche MAC(B) dans la table : absente. Il **inonde** sur les ports 2, 3, 4. B reçoit.
+4. B répond vers A. Source = MAC(B), destination = MAC(A).
+5. Le switch apprend `MAC(B) → port 3`, cherche MAC(A) : présente sur le port 1. Il transmet **seulement** sur le port 1.
+6. Désormais tout échange A↔B est ciblé : aucune autre machine ne le voit.
+
+L'apprentissage a coûté une seule inondation : celle de la première trame vers une destination encore inconnue. Tant que les entrées restent en table, les échanges suivants sont directs.
+</Encart>
+
+<Badge niveau="norme">Ce mécanisme « apprendre la source, commuter sur la destination, inonder si inconnu » est le comportement standardisé d'un pont/commutateur transparent (IEEE 802.1D). C'est une pratique normalisée, pas un choix d'opérateur.</Badge>
+
+La taille maximale de la table, sa politique d'expiration des entrées (*aging*), le découpage en VLAN ou la rapidité de commutation relèvent en revanche du matériel et de la configuration.
+
+<Badge niveau="deploiement">Capacité de la table MAC, délai d'aging, présence de VLAN, débit interne : tout cela varie d'un équipement et d'une config à l'autre. Non universel.</Badge>
+
+## Deux domaines à ne surtout pas confondre
+
+C'est ici que se joue le point le plus mal compris du chapitre. Le commutateur agit sur deux notions très différentes, et il les traite de façon *opposée*.
+
+Un **domaine de collision** est l'ensemble des machines qui peuvent entrer en collision sur le médium, c'est-à-dire qui partagent le même support physique au sens de CSMA/CD. Or chaque port d'un commutateur est un lien *dédié* à une seule machine (ou à un seul segment). Deux machines branchées sur deux ports différents n'écrivent jamais sur le même fil : **elles ne peuvent plus se télescoper**. Chaque port devient ainsi son propre domaine de collision.
+
+<Resultat label="Un domaine de collision par port">
+
+$$
+\text{nombre de domaines de collision} = \text{nombre de ports actifs}
+$$
+
+<Badge niveau="norme" slot="badge">Vrai lorsque chaque port porte un lien dédié (une seule machine par port) : la commutation isole alors chaque segment. Sur un tel lien point à point, le médium n'étant plus partagé, on passe en full-duplex (IEEE 802.3x) et CSMA/CD devient inutile. Si un port alimente un répéteur, son segment reste un seul domaine de collision partagé.</Badge>
+</Resultat>
+
+Comme il n'y a plus rien à partager sur un lien point à point, on peut émettre et recevoir *en même temps* : c'est le **full-duplex**. La détection de collision n'a plus lieu d'être ; le débit utile remonte.
+
+Un **domaine de diffusion** (*broadcast domain*), lui, est l'ensemble des machines qu'atteint une trame de **diffusion** (MAC destination `FF:FF:FF:FF:FF:FF`). Et là, le commutateur ne tranche rien : une trame de broadcast est toujours **inondée sur tous les ports**. Le switch laisse donc le domaine de diffusion **intact**.
+
+<Badge niveau="norme">Le commutateur supprime les domaines de collision (un par lien dédié) mais conserve UN domaine de diffusion unique : il relaie tout broadcast partout. Distinction normalisée, source classique de confusion.</Badge>
+
+<Encart type="rappel" titre="Pourquoi le broadcast existe">
+Certaines opérations nécessitent de parler « à qui veut l'entendre » sans connaître personne : c'est le cas, par exemple, de la résolution d'adresse (« qui possède telle adresse IP ? »). La diffusion est donc indispensable — mais elle traverse tout le domaine, et c'est précisément ce qui empêche de l'étendre à la planète entière.
+</Encart>
+
+## Le piège des boucles
+
+Pour gagner en robustesse, on relie souvent plusieurs commutateurs entre eux, parfois avec des liens redondants. Mais une trame de broadcast inondée partout, dans un réseau qui contient un *cycle* de commutateurs, tourne indéfiniment : aucun champ de la trame Ethernet ne décrémente à chaque saut pour la tuer. C'est la **tempête de broadcast**, qui sature le réseau en quelques instants.
+
+La parade s'appelle le **Spanning Tree Protocol** : les commutateurs se concertent pour désactiver juste assez de liens afin de transformer le maillage en un *arbre* (sans cycle), tout en gardant les liens coupés en réserve. Nous ne le détaillerons pas ici.
+
+<Badge niveau="heuristique">Le Spanning Tree est un algorithme d'ingénierie, parmi d'autres possibles (RSTP, agrégation de liens, routage au niveau 2), pour casser les boucles. Raisonnable, mais révisable et non unique.</Badge>
+
+## La limite : un switch ne route pas
+
+Le commutateur est brillant à son échelle, mais il bute sur un mur conceptuel. Il décide **uniquement** sur des adresses MAC, et ces adresses sont **plates** : un identifiant matériel de 48 bits, sans aucune structure géographique. Rien dans une MAC ne dit « cette machine est en Asie ». Pour commuter, le switch doit donc *avoir vu passer* chaque machine, et tenir une entrée par machine joignable.
+
+À l'échelle d'un bâtiment, c'est gérable. À l'échelle mondiale — des milliards de machines — c'est impossible : aucune table ne tient des milliards d'entrées, et aucune diffusion ne peut interroger la planète.
+
+<Badge niveau="norme">Une adresse MAC est plate et non hiérarchique : la commutation ne passe pas à l'échelle. Elle reste confinée au niveau 2 (lien), d'où la nécessité d'un adressage structuré au niveau supérieur.</Badge>
+
+Il nous manque donc une adresse qui *contienne* l'information « où ». Une adresse **hiérarchique**, où un préfixe désignerait un réseau entier, permettant de décider sans connaître chaque machine individuellement. C'est l'idée de l'adressage IP, qui ouvre la couche réseau — et le prochain chapitre.

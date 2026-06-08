@@ -1,0 +1,110 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Générer du texte : décodage et température"
+chapter: generation-decodage
+description: "Explique la génération autorégressive : à partir des probabilités du token suivant, comment en choisir un (greedy, échantillonnage, température, top-k/top-p) et boucler. Relie les réglages de décodage au compromis cohérence/diversité, et situe les hallucinations."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaTokenizer from '../../../components/interactive/IaTokenizer.astro';
+
+## Du prédicteur au générateur
+
+Au chapitre précédent, le <Prereq href="/ia/partie-vi/pre-entrainement">pré-entraînement</Prereq> nous a laissé un objet précis : un modèle qui, devant une suite de tokens $x_1, \dots, x_t$, produit une **distribution de probabilité** $p(x_{t+1} \mid x_1, \dots, x_t)$ sur tout le vocabulaire pour le token suivant. C'est tout ce qu'il fait. Il ne « rédige » pas, il ne « répond » pas : il assigne à chaque token candidat une probabilité.
+
+La question de ce chapitre est donc concrète : comment passe-t-on de cette **distribution unique** à un **texte entier** ? La réponse tient en une boucle, et le vrai sujet sera de comprendre *comment on choisit* à chaque pas — car ce choix gouverne tout, de la platitude à l'hallucination.
+
+<Encart type="intuition" titre="Écrire un mot à la fois, en se relisant">
+Imaginez quelqu'un qui écrit un texte mais ne peut voir qu'un seul mot à l'avance. Il regarde tout ce qu'il a déjà écrit, se demande « quel mot vient maintenant ? », en pose un, **le relit avec le reste**, et recommence. Le texte se construit par accumulation, chaque mot devenant une partie du contexte qui détermine le suivant. C'est exactement la génération autorégressive : le modèle se nourrit de sa propre sortie.
+</Encart>
+
+## La boucle autorégressive
+
+Formalisons. Le modèle définit, pour une séquence, la probabilité jointe par la **règle de la chaîne des probabilités** (une identité exacte, vraie pour toute distribution) :
+
+$$ p(x_1, \dots, x_n) = \prod_{t=1}^{n} p(x_t \mid x_1, \dots, x_{t-1}) $$
+
+Générer, c'est parcourir ce produit de gauche à droite. À chaque pas $t$, on calcule $p(x_t \mid x_{&lt;t})$, on **choisit** un token, on l'ajoute au contexte, et on relance la passe avant.
+
+<Resultat label="Génération autorégressive">
+
+$$ \text{contexte} \rightarrow \text{distribution } p(x_{t+1}\mid x_{\le t}) \rightarrow \text{choix d'un token} \rightarrow \text{ajout au contexte} \rightarrow \dots $$
+
+<Badge niveau="prouve" slot="badge">Conséquence directe de la factorisation exacte de la probabilité jointe (règle de la chaîne) : le modèle ne fournissant que les facteurs conditionnels, générer une séquence revient nécessairement à les enchaîner.</Badge>
+</Resultat>
+
+La boucle s'arrête quand le modèle produit un token spécial de fin de séquence, ou quand on atteint une longueur maximale fixée. Reste le cœur du sujet : à chaque pas, **quel token choisir** dans la distribution ?
+
+## Des logits à la décision
+
+Avant la softmax, le modèle produit un vecteur de **logits** $z = (z_1, \dots, z_V)$, un score réel par token du vocabulaire de taille $V$. La distribution s'en déduit :
+
+$$ p_i = \frac{e^{z_i}}{\sum_{j=1}^{V} e^{z_j}} $$
+
+La stratégie la plus simple est **greedy** : prendre l'argmax, c'est-à-dire le token le plus probable. C'est déterministe et localement optimal, mais myope — toujours choisir le mot le plus probable mène souvent à des textes plats, voire à des boucles répétitives. <Badge niveau="robuste">La tendance du décodage greedy à produire des répétitions et des textes ternes est une observation expérimentale très reproductible sur les modèles de langage ; elle n'a pas de preuve générale.</Badge>
+
+L'alternative est l'**échantillonnage** : on tire un token *au hasard selon $p$*. Un token de probabilité $0{,}3$ est tiré environ trois fois sur dix. On introduit ainsi de la diversité — au prix de pouvoir piocher, parfois, un token improbable et maladroit.
+
+## La température : étirer ou contracter la distribution
+
+Entre « toujours le plus probable » et « selon la distribution brute », on aimerait un **réglage continu**. C'est exactement le rôle de la **température** $T > 0$ : on divise les logits par $T$ avant la softmax.
+
+<Encart type="calcul" titre="Effet de la température sur la distribution">
+On définit la distribution tempérée :
+
+$$ p_i(T) = \frac{e^{z_i / T}}{\sum_{j} e^{z_j / T}} $$
+
+Examinons les deux limites. Soit $z_{\max}$ le plus grand logit, que l'on suppose ici **atteint par un seul** token (cas sans égalité de logits).
+
+Quand $T \to 0^{+}$, posons $\delta_i = z_i - z_{\max} \le 0$. Alors :
+
+$$ p_i(T) = \frac{e^{\delta_i / T}}{\sum_j e^{\delta_j / T}} $$
+
+Pour $i \ne \text{argmax}$, on a $\delta_i &lt; 0$, donc $e^{\delta_i/T} \to 0$. Seul le terme $\delta = 0$ survit : $p_i(T) \to 1$ pour l'argmax, $0$ ailleurs. **La température nulle redonne le greedy.** (En cas d'égalité au sommet, la masse se répartit uniformément entre les logits maximaux, mais le principe est le même.)
+
+Quand $T \to +\infty$, chaque $z_i / T \to 0$, donc $e^{z_i/T} \to 1$, et :
+
+$$ p_i(T) \to \frac{1}{V} $$
+
+**La distribution devient uniforme** : tous les tokens deviennent équiprobables, le texte devient un bruit aléatoire.
+
+À $T = 1$, on retrouve la distribution brute du modèle. Entre les deux : $T &lt; 1$ **accentue** les écarts (les probables deviennent plus probables), $T > 1$ les **aplanit**.
+</Encart>
+
+<Resultat label="Rôle de la température">
+
+$$ T \to 0 : \text{déterministe (greedy)} \qquad T = 1 : \text{distribution du modèle} \qquad T \to \infty : \text{uniforme} $$
+
+<Badge niveau="prouve" slot="badge">Les deux limites se démontrent directement à partir de la softmax (calcul ci-dessus). Le mécanisme est exact et entièrement calculable.</Badge>
+</Resultat>
+
+D'où le **compromis** central, lui de nature empirique : <Badge niveau="robuste">Température basse = sorties cohérentes mais répétitives et prévisibles ; température haute = sorties créatives mais de plus en plus incohérentes. Régularité observée massivement, sans seuil universel.</Badge> Le choix d'une valeur (souvent autour de $0{,}7$–$1{,}0$ pour du texte) est un réglage d'ingénierie. <Badge niveau="recette">La valeur de $T$ se règle à l'usage selon la tâche ; aucune théorie ne fixe l'optimum.</Badge>
+
+## Tronquer la queue : top-k et top-p
+
+La température réétale *toute* la distribution, y compris la longue **queue** de milliers de tokens absurdes mais de probabilité non nulle. Échantillonner peut y piocher. Deux recettes coupent cette queue avant de tirer.
+
+**Top-k** : on ne garde que les $k$ tokens les plus probables, on renormalise sur eux, et on échantillonne. Simple, mais $k$ fixe est rigide : parfois 3 tokens sont pertinents, parfois 50.
+
+**Top-p** (*nucleus sampling*) : on garde le plus petit ensemble de tokens dont la probabilité cumulée atteint un seuil $p$ (par exemple $0{,}9$), puis on renormalise. L'ensemble est **adaptatif** : large quand le modèle hésite, étroit quand il est sûr.
+
+<Badge niveau="recette">Top-k et top-p sont des heuristiques de troncature : elles marchent bien en pratique mais relèvent du choix d'ingénierie, pas d'un résultat démontré. On les combine souvent avec la température.</Badge>
+
+<IaTokenizer />
+
+## Les hallucinations : une conséquence, pas un bug
+
+Il faut nommer clairement un point souvent mal compris. Quand un modèle produit un énoncé **fluide mais faux** — une citation inventée, une date erronée, une référence inexistante — on parle d'**hallucination**. La tentation est de voir un accident à corriger. C'est plus profond que cela.
+
+Reprenons l'objectif. Le modèle a été entraîné à maximiser la **vraisemblance du token suivant** : à produire ce qui *ressemble* statistiquement à la suite plausible du texte. Or « plausible » n'est pas « vrai ». Une phrase fausse mais bien tournée peut être **plus probable** sous la distribution du modèle qu'une phrase vraie mais maladroite ou inhabituelle. L'objectif d'entraînement n'encode nulle part la notion de vérité — seulement de plausibilité.
+
+<Badge niveau="robuste">Les hallucinations sont une conséquence structurelle de l'objectif d'entraînement : optimiser la plausibilité statistique du token suivant n'est pas optimiser la vérité. Diagnostic largement étayé empiriquement et conceptuellement.</Badge>
+
+Deux précautions de langage. D'abord, le modèle ne **ment** pas : mentir suppose connaître la vérité et choisir de la travestir, ce qui prête au modèle une intention qu'il n'a pas. Il produit le token le plus plausible, c'est tout. Ensuite, on ne « corrige » pas les hallucinations par un simple réglage de température : baisser $T$ rend la sortie plus prévisible, pas plus *vraie* — une fausseté très probable le reste à $T$ basse. <Badge niveau="boitenoire">Éliminer les hallucinations de façon fiable est un problème ouvert. Les atténuations connues (ancrage sur des sources, vérification externe, alignement) réduisent le phénomène sans le supprimer ni le caractériser théoriquement.</Badge>
+
+Nous savons maintenant *générer* du texte, et pourquoi ce texte est de nature statistique. Mais une question demeure : pourquoi les modèles deviennent-ils si capables quand on les agrandit ? C'est l'objet du prochain chapitre, les **lois d'échelle**.

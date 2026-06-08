@@ -1,0 +1,92 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'alignement : du prédicteur de texte à l'assistant"
+chapter: alignement
+description: "Décrit l'alignement : affinage par instructions (SFT) puis apprentissage par renforcement sur retours humains (RLHF / variantes). Explique ce que l'alignement résout et ce qu'il ne résout pas, et conclut sur les questions ouvertes du domaine."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'alignement : du prédicteur de texte à l'assistant
+
+Nous avons construit un modèle capable de prédire le mot suivant avec une justesse stupéfiante. Et pourtant, si vous lui écrivez « Comment fabriquer une bombe ? », un modèle brut ne *répond* pas : il **complète**. Il pourrait poursuivre par « ...est une question fréquemment posée sur les forums », ou pire, par une recette. Il a appris à imiter le texte d'Internet, pas à *vous aider*. C'est tout l'objet de ce dernier chapitre — et c'est, assumons-le, la région la plus mouvante de notre carte.
+
+<Tournant titre="Tournant : on change d'objectif">
+Jusqu'ici, l'objectif était mathématiquement net : minimiser une entropie croisée sur la prédiction du token suivant (voir le <Prereq href="/ia/partie-vi/pre-entrainement">pré-entraînement</Prereq>). Cet objectif **imite** le texte. Désormais on veut autre chose : que le modèle soit **utile, honnête et inoffensif** — selon des *préférences humaines*. Or « bon comportement » n'a pas de définition mathématique. Il n'est pas déduit de ce qui précède ; il est posé par des jugements humains. C'est ce qui fait de l'alignement la partie la plus empirique et la plus ouverte de tout ce cours.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+
+1. **Modèle compétent.** On dispose d'un modèle pré-entraîné qui prédit bien le token suivant et a absorbé d'immenses connaissances (chapitres précédents).
+2. **On peut collecter des jugements humains.** On admet pouvoir recueillir (a) des *démonstrations* (un humain rédige la bonne réponse) et (b) des *préférences* : présenté à deux réponses A et B, un humain dit laquelle est meilleure. Cet étiquetage est **coûteux, lent et subjectif**.
+3. **« Bon comportement » n'a pas de définition formelle.** Il est défini *opérationnellement* par ces jugements humains. C'est l'hypothèse la moins déductive et la plus contestable du cours — nous la posons comme telle, les yeux ouverts.
+
+</Hypotheses>
+
+### Étape 1 — le SFT : montrer l'exemple
+
+La première idée est la plus simple. On reprend exactement la machinerie du pré-entraînement, mais sur un jeu de données différent : des **paires instruction → réponse** rédigées (ou validées) par des humains. « Explique la photosynthèse à un enfant. » suivi d'une réponse exemplaire.
+
+On minimise alors la même entropie croisée — prédire les tokens de la *réponse* sachant l'*instruction* — par <Prereq href="/ia/partie-ii/descente-de-gradient">descente de gradient</Prereq> sur les paramètres déjà entraînés. C'est ce qu'on appelle le **fine-tuning supervisé** (SFT, *supervised fine-tuning*). Le modèle apprend non plus à continuer du texte au hasard, mais à adopter le *format* d'une réponse d'assistant.
+
+<Resultat label="Objectif du SFT">
+
+$$ \mathcal{L}_{\text{SFT}}(\theta) = -\,\mathbb{E}_{(x,y)\sim\mathcal{D}}\!\left[\sum_{t} \log p_\theta\!\left(y_t \mid x, y_{<t}\right)\right] $$
+
+<Badge niveau="robuste" slot="badge">Même perte et même descente de gradient qu'au pré-entraînement, appliquées à des paires instruction→réponse. Le procédé fonctionne de façon très reproductible ; il rend le modèle « répondant ».</Badge>
+</Resultat>
+
+Le SFT suffit déjà à transformer un complèteur en quelque chose qui *ressemble* à un assistant. Mais il a une limite structurelle : il ne sait imiter que les réponses qu'on lui a *montrées*. Il n'a aucun signal sur ce qui distingue une réponse *correcte* d'une réponse *excellente*, ni sur ce qu'il faut *refuser*.
+
+### Étape 2 — le RLHF : apprendre des préférences
+
+Comment encoder « cette réponse est meilleure que celle-là » alors qu'on ne sait pas écrire à l'avance la réponse parfaite ? L'astuce du **RLHF** (*Reinforcement Learning from Human Feedback*) tient en trois temps.
+
+**(1) Collecter des préférences.** Pour une instruction, on génère plusieurs réponses (la génération est expliquée au <Prereq href="/ia/partie-vi/generation-decodage">décodage</Prereq>) et un humain les *classe* : A &gt; B.
+
+**(2) Entraîner un modèle de récompense.** On entraîne un second réseau $r_\phi(x,y)$ qui produit un *score* scalaire pour une réponse $y$ à l'instruction $x$. On veut qu'il donne un score plus élevé à la réponse préférée. Le modèle de Bradley-Terry transforme deux scores en une probabilité de préférence, et on l'ajuste par descente de gradient.
+
+<Encart type="calcul" titre="La perte du modèle de récompense, ligne à ligne">
+
+Pour une paire où l'humain a préféré $y_w$ (*winner*) à $y_l$ (*loser*), on pose la probabilité que $y_w$ soit préférée :
+
+$$ P(y_w \succ y_l) = \sigma\!\left(r_\phi(x,y_w) - r_\phi(x,y_l)\right) $$
+
+où $\sigma$ est la <Prereq href="/ia/partie-i/regression-logistique">sigmoïde</Prereq>. C'est, dans sa forme, une **régression logistique** sur la *différence* de scores : plus l'écart est grand, plus la préférence est probable. La différence avec la régression logistique du début du cours : ici le score $r_\phi$ n'est pas linéaire mais produit par un réseau profond.
+
+On maximise la vraisemblance, donc on minimise la log-loss :
+
+$$ \mathcal{L}(\phi) = -\,\mathbb{E}_{(x,\,y_w,\,y_l)}\!\left[\log \sigma\!\left(r_\phi(x,y_w) - r_\phi(x,y_l)\right)\right] $$
+
+Le gradient $\nabla_\phi \mathcal{L}$ se calcule par <Prereq href="/ia/partie-ii/retropropagation">rétropropagation</Prereq> ; rien de neuf dans la mécanique, seulement des briques déjà posées. <Badge niveau="robuste">Reformulation exacte du classement de préférences en log-loss ; le modèle de récompense apprend à *imiter* les jugements fournis — de façon reproductible, mais sans garantie qu'il capture ce qui compte vraiment.</Badge>
+
+</Encart>
+
+**(3) Optimiser le LLM contre cette récompense.** On dispose maintenant d'un *juge automatique* $r_\phi$. On ajuste alors les paramètres du LLM pour qu'il génère des réponses *mieux notées par ce juge*, tout en restant proche du modèle SFT (un terme de pénalité l'empêche de dériver vers du charabia qui tromperait la récompense). C'est un problème d'optimisation que l'on résout par **PPO** (*Proximal Policy Optimization*), une méthode d'apprentissage par renforcement.
+
+<Encart type="plusloin" titre="PPO, DPO — et pourquoi on ne détaille pas le RL ici">
+PPO traite la génération comme une suite d'actions (choisir chaque token) et remonte le signal de récompense par des gradients. C'est lourd : on jongle typiquement avec quatre modèles à la fois (la politique entraînée, une copie figée du SFT comme référence, le modèle de récompense, et un modèle de valeur). Une alternative récente, **DPO** (*Direct Preference Optimization*), évite tout le détour : on démontre algébriquement que l'optimum de l'objectif RLHF peut s'écrire directement comme une perte sur les *préférences*, optimisable par simple descente de gradient — sans modèle de récompense séparé ni boucle de RL. <Badge niveau="robuste">DPO retrouve, sur de nombreux cas, des résultats comparables à PPO pour une fraction de la complexité ; mais l'équivalence n'est exacte que sous les hypothèses du modèle, et la pratique réserve des écarts.</Badge> Dans les deux cas, le moteur reste celui que nous connaissons depuis la partie II : un gradient, un pas, on recommence.
+</Encart>
+
+### La boucle se referme : ce qu'« aligné » ne veut *pas* dire
+
+Nous tenons un assistant. Mais soyons rigoureux jusqu'au bout — c'est tout le contrat de ce cours.
+
+L'alignement **n'a pas de définition formelle**. Nous n'avons rien *démontré* sur le « bon comportement » : nous avons optimisé un *proxy* (le modèle de récompense) qui imite des étiqueteurs humains, eux-mêmes faillibles et biaisés. Optimiser fort un proxy imparfait a un nom — le **reward hacking** — et c'est exactement ce que la pénalité de proximité au SFT tente, sans garantie, de freiner.
+
+<Badge niveau="boitenoire">Aucune garantie qu'un modèle « aligné » se comporte bien hors des situations étiquetées. La généralisation du bon comportement est aussi mal comprise que la généralisation tout court. L'alignement reste un problème de recherche ouvert, pas un problème résolu.</Badge>
+
+Trois fissures bien documentées :
+
+- **Alignement superficiel.** Le fine-tuning semble surtout modifier le *style* de surface — la disposition à répondre poliment — sans toucher les connaissances sous-jacentes. Le « savoir » dangereux n'est pas effacé, juste recouvert d'un vernis. <Badge niveau="boitenoire">On observe que l'alignement modifie le comportement de surface bien plus que les représentations internes ; pourquoi, et jusqu'où, reste ouvert.</Badge>
+- **Jailbreaks.** Des formulations détournées contournent les garde-fous. Tant que le vernis est mince, il se gratte. <Badge niveau="boitenoire">Aucune défense connue n'est robuste ; c'est un jeu du chat et de la souris, sans solution générale en vue.</Badge>
+- **Qui étiquette ?** Les préférences encodent les valeurs, angles morts et biais culturels d'un groupe d'annotateurs particulier. Et le modèle peut apprendre à *flatter* le juge plutôt qu'à être juste — encore le **reward hacking**. <Badge niveau="recette">Le choix des annotateurs et des consignes est un réglage d'ingénierie qui marche en pratique, sans principe général qui dise *quelles* préférences sont les bonnes.</Badge>
+
+Et voilà la boucle bouclée. Souvenez-vous de notre grille à **quatre couleurs**. Le **prouvé** (🟢) : le gradient, la rétropropagation, le caractère convexe de la log-loss logistique. L'**empiriquement robuste** (🔵) : le SFT, le RLHF, le DPO, les lois d'échelle. La **recette** (🟡) : le learning rate, le dropout, le choix des annotateurs et des consignes. La **boîte noire** (🔴) : pourquoi tout cela généralise, pourquoi l'alignement reste superficiel, et ce que « aligné » signifie vraiment.
+
+L'IA moderne n'est ni magie ni science achevée. C'est un édifice dont nous avons posé chaque pierre — en marquant honnêtement, à chaque étage, ce qui tient par preuve, ce qui tient par l'expérience, ce qui ne tient que par convention, et ce qui ne tient encore que par notre ignorance assumée. L'alignement, justement, est l'étage où cette honnêteté compte le plus : nous savons *faire* un assistant, nous ne savons pas *prouver* qu'il est sûr. C'est précisément cette honnêteté qui sépare comprendre l'IA d'y croire. Et c'est, peut-être, le seul prérequis pour la rendre un jour vraiment digne de confiance.

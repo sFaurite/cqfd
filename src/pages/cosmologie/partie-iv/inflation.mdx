@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'inflation cosmique"
+chapter: inflation
+description: "Une expansion exponentielle dans la première fraction de seconde : le champ d'inflaton."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'inflation cosmique
+
+Le Big Bang chaud, dans sa version naïve, laisse derrière lui trois énigmes que nous avons posées au chapitre précédent : <Prereq href="/cosmologie/partie-iv/problemes-big-bang">le problème de l'horizon, celui de la platitude et celui des monopôles</Prereq>. Aucune n'est une contradiction logique : ce sont des **réglages fins** improbables, des coïncidences qui crient qu'il manque un ingrédient. En 1980, Alan Guth a proposé un ingrédient d'une élégance redoutable. Et si, dans la toute première fraction de seconde, l'univers avait connu une phase d'expansion **exponentielle**, étirant un volume microscopique jusqu'à des proportions cosmiques ? C'est l'**inflation**.
+
+<Encart type="intuition" titre="L'image à garder en tête">
+Prenez un ballon de baudruche tout fripé, couvert de plis et de poussières. Gonflez-le d'un facteur colossal en un instant. Trois choses arrivent à la fois : deux points proches, qui se « voyaient », se retrouvent à des distances inaccessibles (horizon) ; la surface, vue de près, devient **plate** (platitude) ; et les poussières (monopôles) sont diluées au point d'en devenir invisibles. Une seule cause, trois maux guéris. C'est ce qui rend l'inflation si séduisante.
+</Encart>
+
+### On change de cadre : l'inflaton
+
+L'inflation n'est pas déduite de ce qui précède. C'est une **hypothèse nouvelle**, ajoutée parce qu'elle résout d'un coup des énigmes empiriques. Soyons honnêtes sur ce point.
+
+<Tournant titre="Tournant : on ajoute des hypothèses, on ne déduit plus">
+Ici nous ne dérivons plus rien des chapitres antérieurs. Nous **postulons** un nouveau champ et une dynamique nouvelle, motivés uniquement par le fait qu'ils guérissent les trois problèmes. L'objet central — l'inflaton — n'est identifié à aucune particule connue. Nous explorons une proposition, pas un théorème.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de l'inflation">
+1. Un **champ scalaire**, l'inflaton $\phi$, domine l'énergie de l'univers à une époque très précoce, vers $t \sim 10^{-36}$ s.
+2. Son **énergie potentielle** $V(\phi)$ se comporte alors comme une constante cosmologique géante : pression négative $p \approx -\rho c^2$, donnant une expansion **exponentielle** $a(t) \propto e^{Ht}$.
+3. L'inflation dure assez longtemps (environ **60 e-folds**), puis se **termine** par un *réchauffement* qui convertit l'énergie de $\phi$ en un bain de particules : c'est le départ du Big Bang chaud usuel.
+</Hypotheses>
+
+### Pourquoi un champ produit une expansion exponentielle
+
+Tout repose sur l'équation d'état. Reprenons les <Prereq href="/cosmologie/partie-ii/equations-friedmann">équations de Friedmann</Prereq>. Avant de calculer, il faut savoir quelle densité d'énergie et quelle pression porte un champ scalaire : c'est un outil neuf, posons-le proprement.
+
+<Encart type="rappel" titre="Densité d'énergie et pression d'un champ scalaire">
+Un champ scalaire homogène $\phi(t)$ possède une énergie cinétique $\tfrac12\dot\phi^2$ (le champ « bouge ») et une énergie potentielle $V(\phi)$ (sa position sur la courbe de potentiel). La théorie des champs en relativité générale donne, pour un champ homogène, une densité d'énergie et une pression
+
+$$ \rho c^2 = \tfrac12\dot\phi^2 + V(\phi), \qquad p = \tfrac12\dot\phi^2 - V(\phi). $$
+
+On retient l'essentiel : le terme **cinétique** entre avec le **même signe** dans $\rho c^2$ et dans $p$ ; le terme **potentiel** entre avec des signes **opposés**. C'est cette opposition de signe sur $V$ qui rend une pression négative possible.
+</Encart>
+
+L'**hypothèse clé** est le **roulement lent** (*slow roll*) : le champ descend si doucement sa pente de potentiel que son énergie cinétique $\tfrac12\dot\phi^2$ est négligeable devant $V(\phi)$. Alors $\rho c^2 \approx V$ et $p \approx -V$, c'est-à-dire $p \approx -\rho c^2$, exactement le comportement d'une constante cosmologique $\Lambda$.
+
+<Encart type="calcul" titre="De la pression négative à $a \propto e^{Ht}$">
+
+**Étape 1 — L'équation de Friedmann avec un terme dominant constant.** Quand $V(\phi)$ domine et varie peu, la densité d'énergie est quasi constante : $\rho \approx \rho_\Lambda = V/c^2 = \text{cste}$. L'équation de Friedmann (univers spatialement plat, ou à courbure déjà négligeable) donne
+
+$$ \left(\frac{\dot a}{a}\right)^2 = \frac{8\pi G}{3}\,\rho_\Lambda \equiv H^2, $$
+
+avec $H$ **constant** puisque $\rho_\Lambda$ l'est.
+
+**Étape 2 — On résout.** Poser $\dot a / a = H$ constant, c'est résoudre l'équation différentielle $\dot a = H a$. Sa solution est l'exponentielle :
+
+$$ a(t) = a_0\, e^{H(t - t_0)}. $$
+
+**Étape 3 — Vérification par l'accélération.** L'équation d'accélération $\dfrac{\ddot a}{a} = -\dfrac{4\pi G}{3}\left(\rho + \dfrac{3p}{c^2}\right)$, avec $p = -\rho c^2$, donne
+
+$$ \frac{\ddot a}{a} = -\frac{4\pi G}{3}\left(\rho - 3\rho\right) = +\frac{8\pi G}{3}\,\rho > 0. $$
+
+L'expansion **accélère** — cohérent avec $a \propto e^{Ht}$, dont $\ddot a = H^2 a > 0$.
+
+$$ \boxed{a(t) \propto e^{Ht}, \qquad H = \sqrt{\tfrac{8\pi G}{3}\,\rho_\Lambda} = \text{cste}.} $$
+
+</Encart>
+
+Cette dynamique-là est solide. <Badge niveau="concordance">L'expansion exponentielle issue d'un terme de type $\Lambda$ (pression négative) est une conséquence rigoureuse des équations de Friedmann, déjà admises. La *mathématique* de l'inflation n'est pas en cause.</Badge> Ce qui est incertain, c'est l'**existence** du champ qui la déclenche.
+
+### Le nombre d'e-folds
+
+On mesure la durée de l'inflation par le facteur d'agrandissement, exprimé en **e-folds** $N$ : le nombre de fois où $a$ est multiplié par $e$.
+
+$$ N = \ln\!\left(\frac{a_{\text{fin}}}{a_{\text{début}}}\right) = \int_{t_i}^{t_f} H\,dt. $$
+
+Résoudre les problèmes de l'horizon et de la platitude exige $N \gtrsim 60$, soit un facteur d'expansion $e^{60} \approx 10^{26}$. Un volume de la taille d'un proton devient alors plus grand qu'une orange — en une fraction infime de seconde.
+
+<Resultat titre="Durée minimale de l'inflation">
+Pour effacer les problèmes de l'horizon et de la platitude, il faut au moins une soixantaine d'e-folds : $N \gtrsim 60$, soit $a$ multiplié par $e^{60} \approx 10^{26}$.
+</Resultat>
+
+### Comment les trois problèmes tombent
+
+| Problème | Mécanisme de résolution |
+|---|---|
+| **Horizon** | Les régions du ciel étaient en **contact causal** dans le minuscule volume pré-inflation, puis étirées hors de portée. Leur uniformité de température n'est plus une coïncidence : elle a été établie *avant* l'étirement. |
+| **Platitude** | La courbure entre dans Friedmann en $1/a^2$. Multiplier $a$ par $10^{26}$ divise le terme de courbure par $10^{52}$ : toute géométrie est aplatie. $\Omega$ est repoussé vers $1$. |
+| **Monopôles** | Leur densité $\propto 1/a^3$ est diluée d'un facteur $\sim 10^{78}$. S'ils existaient, il en reste statistiquement **moins d'un** dans l'univers observable. |
+
+<Badge niveau="extrapole">L'inflation résout les trois problèmes d'un seul mécanisme : c'est une proposition sérieuse, prédictive et largement adoptée, mais **extrapolée** au-delà du directement testé. Elle se situe à une échelle d'énergie ($\sim 10^{16}$ GeV) bien au-delà de tout accélérateur.</Badge>
+
+### Réchauffement, et ce qui manque encore
+
+Une fois $\phi$ parvenu au bas de son potentiel, il oscille et dissipe son énergie en particules : c'est le **réchauffement** (*reheating*), qui amorce le Big Bang chaud avec sa soupe de quarks, photons et neutrinos. L'univers « froid » et vide de l'inflation devient brûlant et peuplé. <Badge niveau="extrapole">Le mécanisme du réchauffement dépend du couplage de l'inflaton aux autres champs, lui aussi inconnu : il est extrapolé, pas observé.</Badge>
+
+Reste l'honnêteté épistémologique. <Badge niveau="extrapole">Le champ d'inflaton, son échelle d'énergie et la forme précise de son potentiel $V(\phi)$ ne sont pas connus : des centaines de modèles coexistent.</Badge> Pire — ou mieux, selon le tempérament : <Badge niveau="speculatif">aucune signature directe de l'inflation n'est confirmée. Sa prédiction phare, les **modes B** de polarisation du fond diffus laissés par les ondes gravitationnelles primordiales, n'a pas encore été détectée (les expériences type BICEP/Keck ne posent à ce jour que des bornes supérieures). Le détail microphysique reste spéculatif.</Badge>
+
+L'inflation est donc un édifice à deux étages : une dynamique exponentielle au socle solide, surplombée par un déclencheur encore fantôme. Reste à comprendre **comment**, à partir de cet univers fraîchement réchauffé, se sont formés les noyaux légers des premières minutes : c'est la nucléosynthèse primordiale, notre prochaine étape.

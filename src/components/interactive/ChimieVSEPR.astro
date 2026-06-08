@@ -1,0 +1,51 @@
+---
+/**
+ * ChimieVSEPR — modèle VSEPR manipulable. On choisit le nombre de doublets
+ * liants (X) et non liants (E) autour de l'atome central (type AXₙEₘ) ; le
+ * composant déduit la figure de répartition, place les directions, affiche la
+ * géométrie (avec rotation au glissé), les angles et le moment dipolaire
+ * résultant. Relie ainsi forme et polarité.
+ */
+---
+
+<div class="iw" data-iw="chimie-vsepr">
+  <div class="iw__head"><span class="tag">Interactif</span> VSEPR — géométrie AXₙEₘ et polarité</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="vs-x">Doublets liants X</label>
+      <input id="vs-x" type="range" min="1" max="6" step="1" value="2" data-x />
+      <output data-out-x>2</output>
+    </div>
+    <div class="iw__row">
+      <label for="vs-e">Doublets non liants E</label>
+      <input id="vs-e" type="range" min="0" max="3" step="1" value="2" data-e />
+      <output data-out-e>2</output>
+    </div>
+    <div class="iw__row">
+      <label for="vs-polar">Liaisons polaires</label>
+      <input id="vs-polar" type="checkbox" data-polar checked />
+      <output data-out-polar>oui</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">type</span> <b data-out-type>AX₂E₂</b></span>
+    <span class="iw__chip"><span class="k">figure</span> <b data-out-fig>tétraédrique</b></span>
+    <span class="iw__chip"><span class="k">géométrie</span> <b data-out-geo>coudée</b></span>
+    <span class="iw__chip"><span class="k">angle ≈</span> <b data-out-ang>104,5°</b></span>
+    <span class="iw__chip"><span class="k">molécule</span> <b data-out-dip>polaire</b></span>
+  </div>
+  <p class="iw__note">
+    Idée de VSEPR : les <em>doublets</em> de la couche de valence (liants X et non liants E) se
+    repoussent et s’écartent au maximum. Le nombre total de doublets fixe la <strong>figure de
+    répartition</strong> (linéaire, triangulaire, tétraédrique, bipyramide…) ; les doublets non liants,
+    plus encombrants, ne portent pas d’atome mais déforment les angles, d’où la <strong>géométrie</strong>
+    observée (coudée, pyramidale…). La <strong>polarité</strong> résulte de la somme vectorielle des
+    moments de liaison : une molécule à liaisons polaires peut être globalement <em>apolaire</em> par
+    symétrie (CO₂, CCl₄). Glisse sur la figure pour la faire tourner.
+  </p>
+</div>
+
+<script>
+  import './ChimieVSEPR.client.ts';
+</script>

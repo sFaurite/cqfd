@@ -1,0 +1,130 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le bit : mesurer l'information"
+chapter: bit-information
+description: "Pose la notion d'information de Shannon : le bit comme reponse a une question binaire equiprobable, l'entropie comme nombre moyen de bits, et la borne du codage de source."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'information, ça se mesure ?
+
+Avant de parler de fils, de signaux ou de paquets, posons une question presque philosophique : qu'est-ce que *l'information* ? Pas son contenu — un poème ou une liste de courses, peu importe — mais sa **quantité**. Peut-on dire qu'un message « contient deux fois plus d'information » qu'un autre ? Si la réponse était non, ce cours n'aurait pas de premier chapitre. Toute la pile réseau que nous allons monter sert à transporter de l'information ; il nous faut donc d'abord une unité pour la compter. Cette unité, ce sera le **bit**.
+
+Attention dès maintenant à une ambiguïté que nous traînerons tout le cours : le « bit » d'aujourd'hui est une **unité de mesure abstraite**, sans dimension physique. Ce n'est pas encore le petit créneau de tension 0 ou 1 sur un câble — celui-là, le *bit-symbole physique*, viendra au chapitre du codage de ligne. On comptera alors les **symboles par seconde** en *bauds* : un baud est un symbole physique transmis, tandis qu'un bit est une quantité d'information. Les deux ne coïncident que lorsqu'un symbole porte exactement un bit ; en général un symbole peut en porter plusieurs. Garder ces deux sens séparés est notre première discipline.
+
+<Tournant titre="Tournant : on adopte le cadre de la théorie de l'information">
+
+Tout ce chapitre repose sur un choix de modélisation, hérité de Claude Shannon (1948). Ce n'est pas une vérité tombée du ciel : c'est un **cadre**, fécond mais conventionnel dans son point de départ. Une fois ce cadre posé, en revanche, ses conséquences seront de vrais théorèmes.
+
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+
+On **admet** trois postulats fondateurs, qui ne se déduisent de rien d'antérieur :
+
+1. **Modélisation probabiliste.** Une source d'information est décrite par une distribution de probabilités $p_1, \dots, p_N$ sur un alphabet de $N$ symboles. Le symbole $i$ apparaît avec probabilité $p_i$, et les tirages successifs sont supposés **indépendants et de même loi** (source « sans mémoire »).
+2. **Additivité.** L'information de deux choix **indépendants** s'additionne : choisir parmi $N$ puis parmi $M$ apporte autant que choisir parmi $N \times M$ d'un coup.
+3. **Moyenne.** On s'intéresse à la quantité d'information **moyenne** par symbole, donc à une espérance.
+
+Ces trois choix *fondent* la théorie de l'information. Tout le reste en découle.
+
+</Hypotheses>
+
+## Du nombre de possibilités au logarithme
+
+Imaginons une source qui tire un symbole parmi $N$ possibilités **équiprobables** (chacune avec probabilité $1/N$). Combien d'information révèle ce tirage ? Notons cette quantité $I(N)$.
+
+L'intuition de l'additivité (hypothèse 2) la contraint fortement. Distinguer une possibilité parmi $N$, puis une autre parmi $M$ de façon indépendante, c'est distinguer une parmi $N \times M$. Donc $I$ doit vérifier $I(N \times M) = I(N) + I(M)$ : transformer un produit en somme. La seule fonction croissante qui fait cela est le **logarithme**.
+
+<Encart type="calcul" titre="Pourquoi le logarithme, et en base 2">
+
+On cherche $I$ définie sur les entiers $N \geq 1$, **croissante** (plus de possibilités = plus d'information), telle que $I(NM) = I(N) + I(M)$ pour tous entiers $N, M$.
+
+D'abord, $I(1) = I(1 \cdot 1) = 2\,I(1)$, donc $I(1) = 0$ : un tirage forcé n'apporte rien. Ensuite, en itérant l'additivité, $I(N^k) = k\,I(N)$ pour tout entier $k$.
+
+Soit alors $a = I(2)$. Pour deux entiers $N$ et $k$, encadrons $N^k$ entre deux puissances de 2 : il existe un entier $m$ tel que $2^m \leq N^k < 2^{m+1}$. La croissance de $I$ donne $m\,a \leq k\,I(N) \leq (m+1)\,a$, et la croissance du logarithme donne $m \leq k\log_2 N < m+1$. En divisant par $k$ et en faisant tendre $k \to \infty$, les deux quantités $\frac{I(N)}{a}$ et $\log_2 N$ sont coincées dans le même intervalle de largeur $\to 0$ : elles sont égales. Donc
+
+$$I(N) = a\,\log_2 N .$$
+
+Reste à fixer $a$. On **choisit l'unité** : distinguer entre $N = 2$ possibilités équiprobables (pile ou face) vaut **un bit**. Donc $I(2) = a = 1$.
+
+$$\boxed{I(N) = \log_2 N \ \text{bits}}$$
+
+</Encart>
+
+<Resultat label="Information d'un choix équiprobable">
+
+$$ I(N) = \log_2 N \ \text{bits} $$
+
+<Badge niveau="theoreme" slot="badge">Conséquence forcée de l'additivité posée en hypothèse : une fois le cadre admis, la forme logarithmique est démontrée, pas choisie.</Badge>
+
+</Resultat>
+
+Le bit est donc né : c'est la quantité d'information d'une question binaire équiprobable. Distinguer 4 états vaut $\log_2 4 = 2$ bits, 256 états valent $\log_2 256 = 8$ bits — un octet. La base 2 n'est qu'un choix d'unité : prendre le logarithme naturel donnerait des « nats ». Nous comptons en bits parce que les réseaux comptent en bits.
+
+## Quand les symboles ne sont pas équiprobables : l'entropie
+
+Une vraie source n'est presque jamais uniforme. En français, le « e » est bien plus fréquent que le « w ». Un symbole **rare** est plus surprenant, donc plus informatif, qu'un symbole fréquent. Généralisons : si un symbole survient avec probabilité $p$, on lui attribue une information (sa « surprise ») de $-\log_2 p = \log_2(1/p)$ bits. Plus $p$ est petit, plus la surprise est grande ; un événement certain ($p=1$) apporte $-\log_2 1 = 0$ bit, ce qui est rassurant. Pour une source équiprobable à $N$ symboles, chaque $p_i = 1/N$ et l'on retrouve bien $\log_2 N$ : la surprise généralise le compteur de possibilités.
+
+L'information **moyenne** par symbole (hypothèse 3) est l'espérance de cette surprise. On l'appelle l'**entropie** $H$.
+
+<Resultat label="Entropie de Shannon">
+
+$$ H = -\sum_{i=1}^{N} p_i \log_2 p_i \quad \text{bits/symbole} $$
+
+<Badge niveau="theoreme" slot="badge">Définie comme espérance de la surprise sous les hypothèses posées. La convention $0 \log_2 0 = 0$ se justifie par passage à la limite.</Badge>
+
+</Resultat>
+
+$H$ mesure l'**incertitude moyenne** : à quel point, en moyenne, on est surpris par chaque tirage. Maximale quand on n'a aucune idée de ce qui va sortir, nulle quand tout est certain.
+
+<Encart type="calcul" titre="Source binaire : la courbe d'entropie">
+
+Prenons l'alphabet $\{0, 1\}$ avec $P(1) = p$ et $P(0) = 1-p$. L'entropie vaut :
+
+$$H(p) = -p \log_2 p - (1-p)\log_2(1-p)$$
+
+Vérifions les extrêmes :
+
+- $p = 0$ ou $p = 1$ : la source est déterministe, $H = 0$. Aucune information : on sait déjà tout.
+- $p = \tfrac{1}{2}$ : $H = -\tfrac12\log_2\tfrac12 - \tfrac12\log_2\tfrac12 = \tfrac12 + \tfrac12 = 1$ bit.
+
+Cherchons le maximum. En dérivant terme à terme (rappel : la dérivée de $-x\log_2 x$ est $-\log_2 x - \tfrac{1}{\ln 2}$, et les deux constantes $\pm\tfrac{1}{\ln 2}$ se compensent), il vient :
+
+$$\frac{dH}{dp} = \log_2\!\Big(\frac{1-p}{p}\Big)$$
+
+Elle s'annule quand $\frac{1-p}{p} = 1$, soit $p = \tfrac{1}{2}$. La dérivée est positive pour $p < \tfrac12$ et négative pour $p > \tfrac12$ : $H$ croît puis décroît, donc $p = \tfrac12$ est bien un **maximum**, où $H = 1$, contre $0$ aux deux bords.
+
+</Encart>
+
+L'entropie d'une source binaire est donc maximale (1 bit) à $p = 1/2$ — la pièce parfaitement équilibrée — et s'effondre vers 0 quand la pièce est truquée. **L'incertitude maximale, c'est l'équiprobabilité.**
+
+## Le théorème du codage de source
+
+Voici le résultat qui fait du bit bien plus qu'une définition élégante. Shannon a montré que $H$ n'est pas qu'une mesure abstraite : c'est une **limite de compression** infranchissable.
+
+<Resultat label="Théorème du codage de source (Shannon, 1948)">
+
+$$ \text{débit moyen minimal de codage sans perte} = H \ \text{bits/symbole} $$
+
+<Badge niveau="theoreme" slot="badge">Théorème démontré : pour une source sans mémoire, aucun code sans perte ne descend en moyenne sous $H$ ; et on peut s'en approcher d'aussi près qu'on veut (par codage de blocs).</Badge>
+
+</Resultat>
+
+Autrement dit : on **ne peut pas** comprimer une source en dessous de $H$ bits par symbole en moyenne sans perdre de l'information, et c'est une borne **atteignable** à la limite. L'entropie est le plancher absolu de la compression sans perte.
+
+<Encart type="plusloin" titre="Limite théorique ≠ compresseur réel">
+
+Le théorème borne ce qui est **possible**, pas ce qu'un logiciel donné atteint. Un compresseur concret (gzip, un code de Huffman) produit un débit moyen $\geq H$, parfois bien supérieur, parce qu'il modélise mal la source ou code symbole par symbole. $H$ est la cible idéale ; aucun compresseur réel ne descend en dessous en moyenne, beaucoup restent au-dessus. Ne confondez jamais la **limite de Shannon** avec la performance d'un outil — pas plus que le débit théorique d'un canal avec le débit mesuré d'une connexion.
+
+</Encart>
+
+Ce statut épistémique compte. Sur notre échelle de fiabilité (voir <Prereq href="/reseaux/methodologie">la méthodologie des quatre niveaux</Prereq>), l'entropie et le théorème du codage de source sont des **théorèmes** : démontrés, non négociables. Mais le *choix initial* de modéliser la source par des probabilités, lui, était une hypothèse de cadre — d'où le `<Tournant>` en ouverture. On ne badge jamais une convention comme un théorème.
+
+Nous tenons notre unité : le bit, mesure de l'information, sans dimension, plancher de compression. Reste à le transporter. Pour cela il faudra un support physique et un signal qui s'y propage — ce qui nous amène, au chapitre suivant, à la notion de **signal, de fréquences et de bande passante**.

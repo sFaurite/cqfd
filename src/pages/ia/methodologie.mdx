@@ -1,0 +1,88 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « démontré », « empiriquement robuste », « recette » et « boîte noire » — l’axe de ce cours n’est pas la certitude absolue, mais le degré de justification.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+L’apprentissage profond n’est pas un bloc de vérités également « solides ». Certaines affirmations
+sont **mathématiquement démontrées** : elles ne pourraient pas être autrement, étant donné les
+définitions. D’autres sont des **régularités empiriques** extrêmement reproductibles, mais sans
+preuve générale — elles marchent, on l’observe, on ne sait pas toujours dire pourquoi. D’autres
+encore sont de simples **recettes d’ingénierie** : des réglages commodes, qui auraient pu être
+différents. Et certaines questions restent franchement **ouvertes**.
+
+Confondre ces statuts, c’est le grand malentendu sur l’IA — croire que tout est « prouvé » et
+rigoureux, ou à l’inverse que tout est « magie ». Pour l’éviter, **chaque affirmation notable** de
+ce cours porte l’un de ces quatre niveaux. L’axe n’est pas « à quel point est-ce impressionnant »
+mais **« à quel point est-ce justifié »**.
+
+## Les quatre niveaux
+
+### 🟢 Démontré <Badge niveau="prouve">Exemple : la rétropropagation calcule exactement le gradient.</Badge>
+
+Résultat **mathématiquement prouvé** : étant données les définitions, il ne pourrait pas en être
+autrement. C’est le socle dur du cours — la partie où l’IA est de la pure mathématique appliquée.
+
+> Exemples : le calcul du gradient d’une fonction, la rétropropagation comme application de la règle
+> de la chaîne, l’optimisation d’une fonction convexe, le théorème d’approximation universelle, la
+> dérivée de la sigmoïde ou du softmax.
+
+### 🔵 Empiriquement robuste <Badge niveau="robuste">Exemple : la descente de gradient stochastique entraîne de très grands réseaux.</Badge>
+
+Une **régularité expérimentale très reproductible**, constatée sur d’innombrables modèles et jeux de
+données — mais **sans preuve générale**. On peut s’y fier en pratique, tout en sachant qu’il s’agit
+d’un fait observé, pas d’un théorème. Reconnaître ce niveau, c’est garder à l’esprit qu’un
+contre-exemple reste concevable.
+
+> Exemples : le fait que la SGD trouve de bons minima sur des paysages non convexes, l’efficacité
+> des architectures convolutives et des transformers, les lois d’échelle, la stabilité de
+> l’entraînement avec normalisation.
+
+### 🟡 Recette / heuristique <Badge niveau="recette">Exemple : fixer le taux d’apprentissage à une petite valeur réglée à la main.</Badge>
+
+Un **choix d’ingénierie qui marche sans garantie** : un réglage commode, validé par l’expérience,
+mais qui **pourrait être différent** et qu’on ajuste au cas par cas. C’est « ça marche bien comme
+ça », pas « il le faut ». On signale ainsi les endroits où l’on règle plutôt qu’on ne démontre.
+
+> Exemples : le taux d’apprentissage et son ordonnancement, la taille des lots, le dropout,
+> l’initialisation des poids, le choix de l’optimiseur, la température de décodage.
+
+### 🔴 Boîte noire / ouvert <Badge niveau="boitenoire">Exemple : pourquoi un réseau surparamétré généralise-t-il quand même ?</Badge>
+
+**Mal compris ou non expliqué** théoriquement à ce jour. Il n’existe pas de réponse établie et
+consensuelle. On le marque pour éviter de prendre une intuition séduisante pour une certitude — et
+parce qu’une bonne part de la recherche actuelle vit précisément ici.
+
+> Exemples : pourquoi la généralisation des réseaux surparamétrés, l’interprétabilité interne d’un
+> grand modèle, l’origine exacte des capacités « émergentes », ce que « comprend » réellement un LLM.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau — quelle preuve, quelle observation, quelle recette, ou quelle incertitude.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « démontré » et « empiriquement robuste » ?">
+Parce que c’est la clé pour comprendre vraiment l’IA. « La rétropropagation calcule le gradient » est
+un **fait mathématique** : on peut le prouver au tableau, et aucune expérience ne le remettra en
+cause. « La descente de gradient stochastique trouve de bons minima » est une **observation
+empirique** : extrêmement fiable en pratique, mais sans démonstration générale — sur certains
+problèmes, elle pourrait échouer. Les deux sont utiles, mais pas *de la même façon*. Confondre les
+deux, c’est soit croire qu’on a prouvé ce qu’on a seulement constaté, soit douter d’un théorème
+solide. Le badge rend cette frontière visible à chaque ligne.
+</Encart>
+
+## Sur les valeurs numériques
+
+Quand une valeur est citée, on précise son statut :
+
+- **Constante mathématique ou résultat exact** : la dérivée de la sigmoïde, le nombre de paramètres
+  d’une couche donnée. <Badge niveau="prouve">Découle du calcul ; universel, indépendant de l’implémentation.</Badge>
+- **Ordre de grandeur d’ingénierie** : un taux d’apprentissage « de l’ordre de $10^{-3}$ », une
+  taille de lot « de quelques centaines », une dimension de plongement « de quelques centaines à
+  quelques milliers ». <Badge niveau="recette">Varie d’un modèle et d’une équipe à l’autre ; on en donne l’ordre de grandeur typique.</Badge>
+
+L’<a href="/ia/symboles">index des symboles</a> récapitule ces grandeurs et leur statut.

@@ -1,0 +1,125 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Classer : la régression logistique et la sigmoïde"
+chapter: regression-logistique
+description: "Introduit la fonction sigmoïde, l'interprétation probabiliste de la sortie, et l'entropie croisée comme perte naturelle pour la classification. Montre que cette perte reste convexe — dernier modèle où l'on a cette garantie."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaNeuronePlayground from '../../../components/interactive/IaNeuronePlayground.astro';
+
+## Du « oui/non » au « à quel point »
+
+Notre <Prereq href="/ia/partie-i/regression-lineaire">régression linéaire</Prereq> sait prédire un nombre : un prix, une température. Mais beaucoup de problèmes ne demandent pas un nombre — ils demandent une **décision**. Ce mail est-il un spam ? Cette tumeur est-elle maligne ? Ici la cible $y$ ne vaut que $0$ ou $1$. On pourrait faire passer une droite et dire « au-dessus de $0{,}5$ : classe 1 ». Mais une droite file vers $+\infty$ et $-\infty$ : prédire « $2{,}3$ » ou « $-1{,}7$ » pour une grandeur censée être un *oui/non* n'a aucun sens. Il nous faut un objet qui transforme n'importe quel score réel en une grandeur **bornée entre 0 et 1**, qu'on pourra lire comme une **probabilité**. Cet objet existe, il est élégant, et il va se révéler n'être qu'un <Prereq href="/ia/partie-i/neurone-formel">neurone</Prereq> avec une nouvelle activation.
+
+<Hypotheses titre="Hypothèses de départ">
+1. Les données sont des couples $(x^{(i)}, y^{(i)})$ avec $y^{(i)} \in \lbrace 0, 1 \rbrace$ (classification **binaire**).
+2. On garde le **score linéaire** $z = w \cdot x + b$ du neurone formel.
+3. On **postule** que $y$ suit, conditionnellement à $x$, une loi de **Bernoulli** de paramètre $p(x)$ — c'est-à-dire $P(y=1 \mid x) = p(x)$ — et que les exemples sont **indépendants**. C'est l'hypothèse de modélisation centrale du chapitre.
+</Hypotheses>
+
+## La sigmoïde : écraser $\mathbb{R}$ dans $[0,1]$
+
+On définit la fonction **sigmoïde** (ou logistique) :
+
+$$ \sigma(z) = \frac{1}{1 + e^{-z}} $$
+
+Elle prend un score réel $z$ et le « range » dans l'intervalle ouvert $]0,1[$. <Badge niveau="prouve">Comme $e^{-z} > 0$ pour tout $z$, le dénominateur $1+e^{-z}$ est **toujours** strictement supérieur à $1$, donc $\sigma(z) \in\,]0,1[$ pour tout $z$. Il tend vers $+\infty$ quand $z \to -\infty$ (alors $\sigma \to 0$) et décroît vers $1$ quand $z \to +\infty$ (alors $\sigma \to 1$). De plus $\sigma'(z) > 0$ (calculée ci-dessous), donc $\sigma$ est strictement croissante. Bornée par construction.</Badge> En $z=0$ elle vaut exactement $1/2$ — le point d'indécision.
+
+Une propriété la rend magique pour la suite : sa dérivée s'exprime avec elle-même.
+
+<Encart type="calcul" titre="Calcul de σ′(z)">
+Posons $u = 1 + e^{-z}$, de sorte que $\sigma = u^{-1}$. On dérive :
+
+$$ \sigma'(z) = -u^{-2} \cdot u' = -\frac{1}{(1+e^{-z})^2} \cdot \big(-e^{-z}\big) = \frac{e^{-z}}{(1+e^{-z})^2}. $$
+
+Maintenant la ruse. Écrivons le numérateur comme $e^{-z} = (1 + e^{-z}) - 1 = u - 1$ :
+
+$$ \sigma'(z) = \frac{u-1}{u^2} = \frac{1}{u} - \frac{1}{u^2} = \frac{1}{u}\left(1 - \frac{1}{u}\right). $$
+
+Or $\dfrac{1}{u} = \sigma(z)$, donc :
+
+$$ \sigma'(z) = \sigma(z)\,\big(1 - \sigma(z)\big). $$
+
+Au passage, comme $\sigma(z) \in\,]0,1[$, on a $\sigma'(z) = \sigma(z)\big(1-\sigma(z)\big) > 0$ : la sigmoïde est bien strictement croissante.
+</Encart>
+
+<Resultat label="Dérivée de la sigmoïde">
+
+$$ \sigma'(z) = \sigma(z)\,\big(1 - \sigma(z)\big) $$
+
+<Badge niveau="prouve" slot="badge">Démontré par dérivation directe. C'est ce qui rendra les gradients calculables sans jamais réévaluer d'exponentielle.</Badge>
+</Resultat>
+
+On a aussi une **symétrie** utile : $\sigma(-z) = 1 - \sigma(z)$ — la probabilité de la classe $0$ est le reflet de celle de la classe $1$. <Badge niveau="prouve">Immédiat : $\sigma(-z) = \frac{1}{1+e^{z}} = \frac{e^{-z}}{e^{-z}+1} = 1 - \sigma(z)$ (on a multiplié haut et bas par $e^{-z}$).</Badge>
+
+Notre modèle complet est donc $\hat y = p(x) = \sigma(w\cdot x + b)$, lu comme $P(y=1\mid x)$.
+
+<IaNeuronePlayground />
+
+## D'où vient la perte ? Le maximum de vraisemblance
+
+Quelle erreur minimiser ? On ne va **pas** la choisir au hasard : on va la *déduire* de l'hypothèse de Bernoulli. L'idée du **maximum de vraisemblance** : parmi tous les $(w,b)$ possibles, on garde ceux qui rendent les données observées **les plus probables**.
+
+<Encart type="rappel" titre="Loi de Bernoulli, écriture compacte">
+Une variable $y \in \lbrace 0,1 \rbrace$ de paramètre $p$ vérifie $P(y=1)=p$ et $P(y=0)=1-p$. On condense ces deux cas en **une** formule :
+
+$$ P(y) = p^{\,y}\,(1-p)^{\,1-y}. $$
+
+Si $y=1$ : $p^1(1-p)^0 = p$. Si $y=0$ : $p^0(1-p)^1 = 1-p$. L'exposant « éteint » le terme inutile.
+</Encart>
+
+Sous l'hypothèse d'indépendance, la probabilité de **tout** le jeu de données est le produit :
+
+$$ \mathcal{L}(w,b) = \prod_{i=1}^{n} \big(p^{(i)}\big)^{y^{(i)}}\,\big(1 - p^{(i)}\big)^{1-y^{(i)}}, \qquad p^{(i)} = \sigma(w\cdot x^{(i)} + b). $$
+
+<Encart type="calcul" titre="Du produit à l'entropie croisée">
+Un produit de $n$ probabilités (chacune $&lt; 1$) tend vers zéro et explose numériquement. On prend le **logarithme** : il transforme le produit en somme, est strictement croissant (donc préserve le point qui maximise), et reste numériquement stable.
+
+$$ \log \mathcal{L} = \sum_{i=1}^{n} \Big[\, y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log\big(1-p^{(i)}\big) \Big]. $$
+
+Maximiser $\log\mathcal{L}$, c'est **minimiser** son opposé. On normalise par $n$ pour obtenir une perte moyenne :
+
+$$ \mathcal{L}_{\text{CE}}(w,b) = -\frac{1}{n}\sum_{i=1}^{n} \Big[\, y^{(i)} \log p^{(i)} + (1-y^{(i)}) \log\big(1-p^{(i)}\big) \Big]. $$
+</Encart>
+
+<Resultat label="Entropie croisée binaire (log-loss)">
+
+$$ \mathcal{L}_{\text{CE}} = -\frac{1}{n}\sum_{i=1}^{n} \big[\, y^{(i)} \log \hat y^{(i)} + (1-y^{(i)}) \log(1-\hat y^{(i)}) \big] $$
+
+<Badge niveau="prouve" slot="badge">Dérivée du maximum de vraisemblance de Bernoulli. Ce n'est pas une recette : c'est la perte *imposée* par l'hypothèse probabiliste.</Badge>
+</Resultat>
+
+## Pourquoi cette perte, et pas la MSE ?
+
+Tentation naturelle : réutiliser les <Prereq href="/ia/partie-i/regression-lineaire">moindres carrés</Prereq>, $\frac{1}{n}\sum(\hat y^{(i)} - y^{(i)})^2$, avec $\hat y = \sigma(z)$. C'est un **piège**, pour deux raisons.
+
+**Raison 1 — gradients qui s'annulent (saturation).** La dérivée de la perte MSE d'un exemple par rapport au score $z$ vaut $2(\sigma(z) - y)\,\sigma'(z)$ : elle contient le facteur $\sigma'(z) = \sigma(z)(1-\sigma(z))$. Quand le modèle se trompe avec **assurance** ($z$ très grand alors que la vraie classe est $0$), $\sigma'(z) \to 0$ : le gradient s'évanouit alors même que l'erreur est maximale. Le modèle « n'apprend plus » de ses pires erreurs. <Badge niveau="prouve">Le facteur $\sigma'$ tend vers $0$ aux extrêmes — calculé ci-dessus. L'entropie croisée, elle, fait disparaître ce facteur dans son gradient : la dérivée de la log-loss d'un exemple par rapport à $z$ se simplifie en $\sigma(z) - y$ (le $\log$ et le $\sigma'$ se compensent), d'où un signal d'erreur qui reste fort même en saturation.</Badge>
+
+**Raison 2 — convexité.** La MSE composée avec la sigmoïde est **non convexe** en $(w,b)$ : elle peut présenter des minima locaux qui piègent l'optimisation. <Badge niveau="prouve">Composer une fonction non affine ($\sigma$) à l'intérieur d'un carré ne préserve pas la convexité en général ; on exhibe facilement des configurations où la surface présente plusieurs creux.</Badge>
+
+À l'inverse, l'entropie croisée est **convexe** en $(w,b)$.
+
+<Encart type="plusloin" titre="Pourquoi la log-loss est convexe">
+La perte d'un exemple est $\ell(z) = -y\log\sigma(z) - (1-y)\log(1-\sigma(z))$, où $z = w\cdot x + b$. En remarquant que $-\log\sigma(z) = \log(1+e^{-z})$ et $-\log(1-\sigma(z)) = \log(1+e^{z})$, on calcule la dérivée seconde et l'on trouve, dans les deux cas $y=0$ et $y=1$, $\ell''(z) = \sigma(z)(1-\sigma(z)) > 0$ : $\ell$ est **convexe en $z$**. Or $z$ est une fonction **affine** de $(w,b)$, et composer une fonction convexe avec une application affine préserve la convexité. Enfin, une somme de fonctions convexes est convexe : $\mathcal{L}_{\text{CE}}$ est donc convexe en $(w,b)$.
+</Encart>
+
+<Resultat label="Convexité de la log-loss">
+
+$$ \mathcal{L}_{\text{CE}}(w,b)\ \text{est convexe en } (w,b) $$
+
+<Badge niveau="prouve" slot="badge">Démontré : convexe en $z$ ($\ell'' = \sigma(1-\sigma) > 0$) puis composition affine et somme. Un minimum global, pas de piège local.</Badge>
+</Resultat>
+
+Un mot d'**honnêteté** avant de fermer ce chapitre : la sortie $\sigma(z)$ vit *toujours* dans $]0,1[$ — ça, c'est garanti. Mais cela ne veut **pas** dire qu'elle est une probabilité bien *calibrée* : qu'un modèle annonce « $0{,}9$ » ne garantit pas que, sur tous les cas où il dit $0{,}9$, la classe $1$ survienne vraiment $90\,\%$ du temps. <Badge niveau="boitenoire">« Sortie dans $]0,1[$ » (garanti par la sigmoïde) et « probabilité calibrée » (souvent fausse en pratique, surtout pour les gros réseaux) sont deux choses distinctes — la calibration reste un sujet empirique délicat.</Badge>
+
+## Un mur que la solution fermée ne franchit plus
+
+Bonne nouvelle : la log-loss est convexe, donc tout minimum local est global. Mauvaise nouvelle : contrairement aux moindres carrés et à leurs <Prereq href="/ia/partie-i/regression-lineaire">équations normales</Prereq>, annuler $\nabla\mathcal{L}_{\text{CE}} = 0$ ne se résout **pas** à la main : le $\sigma$ rend l'équation transcendante, sans formule fermée pour $(w,b)$. <Badge niveau="prouve">L'absence de solution analytique vient de la non-linéarité de $\sigma$ dans les conditions d'optimalité $\nabla\mathcal{L}_{\text{CE}} = 0$.</Badge>
+
+Nous tenons donc notre première impasse algébrique. Convexité assurée, mais pas de raccourci : il va falloir **descendre la pente** pas à pas. C'est exactement le programme de la partie suivante — mesurer l'erreur proprement, puis suivre le gradient.

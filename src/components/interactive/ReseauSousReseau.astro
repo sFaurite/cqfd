@@ -1,0 +1,50 @@
+---
+/**
+ * ReseauSousReseau — calculateur de sous-réseau IPv4.
+ * On saisit une adresse IPv4 et un masque CIDR (/n via curseur). Le canvas
+ * affiche en binaire l'adresse, le masque, et le ET binaire bit à bit qui donne
+ * le préfixe réseau ; la frontière préfixe/hôte est matérialisée. Les readouts
+ * donnent l'adresse réseau, le masque pointé, l'adresse de broadcast, la plage
+ * d'hôtes utilisables et le nombre d'hôtes. Rend tangible le découpage
+ * préfixe (fixe) / hôte (variable).
+ */
+---
+
+<div class="iw" data-iw="reseau-sousreseau">
+  <div class="iw__head"><span class="tag">Interactif</span> Calculateur de sous-réseau : le ET binaire en action</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="sr-ip">Adresse IPv4</label>
+      <input id="sr-ip" type="text" inputmode="numeric" value="192.168.10.130" data-ip
+        spellcheck="false" autocomplete="off" />
+      <output data-out-valid>ok</output>
+    </div>
+    <div class="iw__row">
+      <label for="sr-cidr">Masque /n (CIDR)</label>
+      <input id="sr-cidr" type="range" min="0" max="32" step="1" value="26" data-cidr />
+      <output data-out-cidr>/26</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">réseau</span> <b data-out-net></b></span>
+    <span class="iw__chip"><span class="k">masque</span> <b data-out-mask></b></span>
+    <span class="iw__chip"><span class="k">broadcast</span> <b data-out-bcast></b></span>
+    <span class="iw__chip"><span class="k">plage d'hôtes</span> <b data-out-range></b></span>
+    <span class="iw__chip"><span class="k">nb d'hôtes</span> <b data-out-hosts></b></span>
+  </div>
+  <p class="iw__note">
+    Une adresse IPv4 fait 32 bits. Le masque /n coupe l'adresse en deux : les n bits de
+    <span style="color:var(--c-blue)">préfixe réseau</span> (fixes pour toute la machine du
+    sous-réseau) et les 32−n bits d'<span style="color:var(--c-yellow)">hôte</span> (qui
+    numérotent les machines). L'<strong>adresse réseau</strong> s'obtient par un <em>ET binaire</em>
+    entre l'adresse et le masque : là où le masque vaut 0, le bit d'hôte est forcé à 0. Le
+    <strong>broadcast</strong> met tous les bits d'hôte à 1. Entre les deux, il reste 2^(32−n)−2
+    adresses utilisables (on retire le réseau et le broadcast). Déplace le curseur : la frontière
+    préfixe/hôte glisse, et la taille du sous-réseau double à chaque bit rendu à l'hôte.
+  </p>
+</div>
+
+<script>
+  import './ReseauSousReseau.client.ts';
+</script>

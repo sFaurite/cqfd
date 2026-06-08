@@ -1,0 +1,63 @@
+---
+/**
+ * HistoireCunePuzzle — atelier d'écriture cunéiforme.
+ * Deux temps :
+ *  1) Évolution d'un signe : du pictogramme concret (tête de bétail, épi…) vers
+ *     le signe abstrait stylisé (rotation 90°, traits en coins), puis son emploi
+ *     phonétique (rébus). Un curseur fait défiler les étapes.
+ *  2) Atelier du scribe : on reconstitue un petit compte de jarres et de grains
+ *     en composant un nombre (système sexagésimal sumérien) — pour comprendre que
+ *     l'écriture naît de la COMPTABILITÉ, et comment un dessin devient un son.
+ */
+---
+
+<div class="iw" data-iw="cune-puzzle">
+  <div class="iw__head"><span class="tag">Interactif</span> Atelier cunéiforme : du dessin au son, et la naissance des comptes</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="cp-signe">Signe</label>
+      <select id="cp-signe" data-signe>
+        <option value="boeuf">tête de bovin (GUD)</option>
+        <option value="epi">épi d’orge (ŠE)</option>
+        <option value="eau">eau (A)</option>
+        <option value="etoile">ciel / dieu (AN)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="cp-etape">Étape d’évolution</label>
+      <input id="cp-etape" type="range" min="0" max="3" step="1" value="0" data-etape />
+      <output data-out-etape>pictogramme</output>
+    </div>
+  </div>
+  <div class="iw__controls cols2" style="border-top:none;padding-top:0">
+    <div class="iw__row">
+      <label for="cp-jarres">Jarres (×10)</label>
+      <input id="cp-jarres" type="range" min="0" max="6" step="1" value="2" data-jarres />
+      <output data-out-jarres>2</output>
+    </div>
+    <div class="iw__row">
+      <label for="cp-grains">Unités (×1)</label>
+      <input id="cp-grains" type="range" min="0" max="9" step="1" value="3" data-grains />
+      <output data-out-grains>3</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">phase du signe</span> <b data-out-phase>—</b></span>
+    <span class="iw__chip"><span class="k">compte écrit</span> <b data-out-compte>—</b></span>
+    <span class="iw__chip"><span class="k">lecture</span> <b data-out-lecture>—</b></span>
+  </div>
+  <p class="iw__note">
+    <b>En haut</b> : un même signe traverse les âges. D'abord un <i>dessin</i> de la
+    chose (pictogramme), puis on le tourne de 90° et on l'imprime au calame en
+    <i>coins</i> (cunéiforme abstrait), enfin on s'en sert pour son <i>son</i> dans
+    un rébus — un dessin devient une syllabe. <b>En bas</b> : compose un compte de
+    jarres avec les chiffres sumériens (un <i>clou</i> vertical = 1, un <i>chevron</i>
+    = 10). Les premiers textes ne racontent pas de mythes : ils comptent des stocks.
+    L'écriture est née d'une comptabilité.
+  </p>
+</div>
+
+<script>
+  import './HistoireCunePuzzle.client.ts';
+</script>

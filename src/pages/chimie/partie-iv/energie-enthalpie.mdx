@@ -1,0 +1,122 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Énergie et enthalpie des réactions"
+chapter: energie-enthalpie
+description: "Premier principe de la thermodynamique appliqué à la chimie : énergie interne, enthalpie, enthalpie de réaction, loi de Hess, énergies de liaison."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieDiagrammeEnergie from '../../../components/interactive/ChimieDiagrammeEnergie.astro';
+
+## Énergie et enthalpie des réactions
+
+Jusqu'ici, tout descendait de la mécanique quantique : les orbitales, le tableau périodique, la liaison. Mais quand on demande *combien d'énergie* libère la combustion du méthane, ou *si* une réaction est spontanée, le quantique ne répond pas directement. Il nous faut un nouvel étage de description — la **thermodynamique** — qui ne parle plus d'électrons individuels mais de **bilans d'énergie** entre un état de départ et un état d'arrivée. C'est l'objet de toute la Partie IV.
+
+<Tournant titre="Nouveau cadre : la thermodynamique">
+Nous changeons d'outil. La thermodynamique repose sur des **principes posés**, imposés par des siècles d'expérience, et **non déduits** de la mécanique quantique des chapitres précédents. La conservation de l'énergie, l'existence de fonctions d'état : ce sont des hypothèses de travail, au fond compatibles avec le quantique mais formulées à un autre niveau. On ne triche pas : on les adopte parce que l'expérience ne les a jamais prises en défaut, pas parce qu'on les démontre ici.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. **Premier principe (conservation de l'énergie).** Pour toute transformation d'un système, la variation de son énergie interne $U$ vaut $\Delta U = Q + W$, où $Q$ est la chaleur reçue et $W$ le travail reçu. L'énergie ne se crée ni ne se détruit, elle se transfère. C'est un **principe imposé par l'expérience**, jamais pris en défaut, non démontré ici.
+2. **L'enthalpie est une fonction d'état.** On définit $H = U + PV$. À pression constante (le cas usuel en chimie, à l'air libre), sa variation égale la chaleur échangée : $\Delta H = Q_P$. « Fonction d'état » signifie que $H$ ne dépend que de l'état du système, jamais du chemin suivi.
+3. **État standard.** Convention de référence : pression $P^\circ = 1\ \text{bar}$, solutés à $1\ \text{mol/L}$, température $T$ précisée (souvent $298{,}15\ \text{K}$). Une grandeur standard se note $\Delta H^\circ$.
+</Hypotheses>
+
+On notera que la **loi de Hess** ne figure pas dans cette liste : ce n'est *pas* une hypothèse de plus. Elle se **déduit** de l'hypothèse 2, comme on le montre plus bas.
+
+### Exo- ou endothermique : le signe de ΔH
+
+À pression constante, l'hypothèse 2 nous dit que $\Delta H$ **est** la chaleur échangée par la réaction. La convention de signe découle alors directement du premier principe (le système reçoit $Q > 0$) :
+
+<Resultat label="Signe de l'enthalpie de réaction">
+
+$$
+\Delta H < 0 \ \text{(exothermique, libère de la chaleur)} \qquad \Delta H > 0 \ \text{(endothermique, en absorbe)}
+$$
+
+<Badge niveau="experimental" slot="badge">Mesuré par calorimétrie : on suit la chaleur dégagée à pression constante. C'est une définition opérationnelle directe.</Badge>
+</Resultat>
+
+Une combustion chauffe son environnement : $\Delta H < 0$. La fusion de la glace, vue au chapitre des <Prereq href="/chimie/partie-iii/etats-matiere-transitions">changements d'état</Prereq>, absorbe de la chaleur : $\Delta H > 0$.
+
+### Hess n'est pas une hypothèse de plus : c'est une conséquence
+
+La loi de Hess a un statut particulier. On ne l'admet pas *en plus* du reste — elle **se déduit** de l'hypothèse 2.
+
+<Encart type="plusloin" titre="Pourquoi Hess découle du caractère de fonction d'état">
+Si $H$ est une fonction d'état (hypothèse 2), alors la valeur de $H$ ne dépend que de l'état considéré. Pour une réaction qui mène d'un état initial $i$ à un état final $f$, on a donc $\Delta H = H_f - H_i$, *quel que soit le chemin*. Décomposons la réaction en deux étapes via un état intermédiaire $m$ : le premier chemin donne $\Delta H$, le second donne $(H_m - H_i) + (H_f - H_m) = H_f - H_i$. Les deux sont égaux — c'est exactement la loi de Hess. Si ce n'était pas vrai, on pourrait fabriquer de l'énergie en bouclant : aller de $i$ à $f$ par un chemin coûteux puis revenir par un chemin gratuit, en violation du premier principe.
+</Encart>
+
+<Resultat label="Loi de Hess (additivité des enthalpies)">
+
+$$
+\Delta H_{\text{réaction}} = \sum_i \Delta H_i \quad \text{pour toute décomposition en étapes menant des mêmes réactifs aux mêmes produits}
+$$
+
+<Badge niveau="quantique" slot="badge">Conséquence rigoureuse du statut de fonction d'état de H, lui-même adossé au premier principe. Une fois les hypothèses admises, ceci est démontré, pas mesuré.</Badge>
+</Resultat>
+
+C'est l'outil maître : on calcule le $\Delta H$ d'une réaction inaccessible directement en l'écrivant comme combinaison de réactions connues. On manipule alors un **cycle thermodynamique** — un diagramme où chaque flèche est une enthalpie et où la somme le long de toute boucle fermée est nulle.
+
+<ChimieDiagrammeEnergie />
+
+### Méthode exacte : les enthalpies de formation
+
+L'**enthalpie standard de formation** $\Delta H_f^\circ$ d'un composé est le $\Delta H^\circ$ de sa synthèse à partir des corps simples dans leur état le plus stable (par convention, $\Delta H_f^\circ = 0$ pour ces corps simples). Ces valeurs sont **tabulées**, et chacune est issue de la **mesure**.
+
+<Resultat label="Enthalpie de réaction par les formations">
+
+$$
+\Delta H_{\text{réaction}}^\circ = \sum_{\text{produits}} \nu_j\,\Delta H_f^\circ(j) \;-\; \sum_{\text{réactifs}} \nu_i\,\Delta H_f^\circ(i)
+$$
+
+<Badge niveau="experimental" slot="badge">Les ΔH_f° sont des grandeurs mesurées et reproductibles. La formule, elle, est une application directe de Hess (un cycle passant par les corps simples) : le résultat est donc EXACT.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Combustion du méthane, par les formations">
+Réaction : $\text{CH}_4(g) + 2\,\text{O}_2(g) \rightarrow \text{CO}_2(g) + 2\,\text{H}_2\text{O}(l)$.
+
+Données ($\text{kJ/mol}$) : $\Delta H_f^\circ(\text{CH}_4) = -74{,}9$ ; $\Delta H_f^\circ(\text{CO}_2) = -393{,}5$ ; $\Delta H_f^\circ(\text{H}_2\text{O},l) = -285{,}8$ ; $\Delta H_f^\circ(\text{O}_2) = 0$ (corps simple).
+
+$$
+\Delta H^\circ = \big[\Delta H_f^\circ(\text{CO}_2) + 2\,\Delta H_f^\circ(\text{H}_2\text{O})\big] - \big[\Delta H_f^\circ(\text{CH}_4) + 2 \times 0\big]
+$$
+
+$$
+\Delta H^\circ = \big[-393{,}5 + 2(-285{,}8)\big] - \big[-74{,}9\big]
+$$
+
+$$
+\Delta H^\circ = -965{,}1 + 74{,}9 = -890{,}2\ \text{kJ/mol}
+$$
+
+Fortement exothermique, comme attendu pour une combustion.
+</Encart>
+
+### Méthode approchée : les énergies de liaison
+
+On peut aussi raisonner sur les <Prereq href="/chimie/partie-ii/liaison-covalente-lewis">liaisons covalentes</Prereq> : **rompre une liaison coûte de l'énergie, en former une en rend**. Le principe est de casser toutes les liaisons des réactifs (coût $> 0$) puis de former celles des produits (gain $< 0$) :
+
+$$
+\Delta H \approx \sum E_{\text{liaisons rompues}} - \sum E_{\text{liaisons formées}}
+$$
+
+Mais attention au statut. L'énergie tabulée d'une liaison C–H est une **moyenne** sur de nombreuses molécules : la C–H d'un méthane et celle d'un alcool ne valent pas exactement pareil.
+
+<Resultat label="Estimation par énergies de liaison">
+
+$$
+\Delta H \approx \sum E_{\text{rompues}} - \sum E_{\text{formées}}
+$$
+
+<Badge niveau="empirique" slot="badge">Les énergies de liaison tabulées sont des moyennes : le calcul donne un ORDRE DE GRANDEUR, pas la valeur exacte. À distinguer nettement de la méthode par ΔH_f°, qui est exacte.</Badge>
+</Resultat>
+
+Retenez la hiérarchie : par **enthalpies de formation**, le résultat est *exact* (Hess appliqué à des grandeurs mesurées) ; par **énergies de liaison**, il est *approché* (on moyenne). Deux outils, deux niveaux de confiance.
+
+Nous savons maintenant chiffrer la chaleur d'une réaction. Mais un $\Delta H$ négatif suffit-il à dire qu'une réaction *se produit* ? Non — certaines réactions endothermiques sont pourtant spontanées. Il manque un ingrédient : le désordre. C'est l'**entropie**, et le second principe, qu'aborde le chapitre suivant.

@@ -1,0 +1,130 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'équilibre chimique"
+chapter: equilibre-chimique
+description: "L'équilibre chimique : constante d'équilibre K, quotient de réaction Q, relation ΔG° = −RT ln K, et le principe de modération de Le Chatelier."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'équilibre n'est pas un arrêt
+
+Imaginez deux villes reliées par une autoroute. Au début, tout le monde habite la ville A et roule vers B. Plus B se remplit, plus des gens repartent vers A. À un moment, le flux A→B égale exactement le flux B→A : les populations ne bougent plus. Pourtant, **personne n'est arrêté** — les voitures roulent toujours, dans les deux sens, et c'est précisément parce que les deux flux sont égaux que rien ne change en apparence. C'est ça, l'équilibre chimique.
+
+<Hypotheses titre="Hypothèses de départ">
+
+On admet ici deux choses, que nous justifierons plus loin dans le cours :
+
+- Toute réaction directe $\text{réactifs} \to \text{produits}$ possède une **réaction inverse** $\text{produits} \to \text{réactifs}$ ; les deux se déroulent simultanément. (La cinétique du chapitre suivant en donnera le mécanisme.)
+- Chaque réaction a une **vitesse** qui croît avec les concentrations des espèces qui la nourrissent. C'est l'objet du chapitre suivant ; nous l'utilisons ici comme hypothèse de travail.
+
+On s'appuie aussi sur l'enthalpie libre établie précédemment : <Prereq href="/chimie/partie-iv/enthalpie-libre-spontaneite">enthalpie libre et spontanéité ($\Delta G < 0 \Rightarrow$ évolution spontanée)</Prereq>.
+
+</Hypotheses>
+
+## L'équilibre dynamique
+
+Lançons une réaction $aA + bB \rightleftharpoons cC + dD$. Au départ, seuls $A$ et $B$ sont présents : la réaction directe est rapide, l'inverse nulle. À mesure que $C$ et $D$ apparaissent, la directe ralentit (moins de réactifs) et l'inverse accélère (plus de produits). Les deux vitesses se rejoignent inévitablement.
+
+<Resultat label="Critère d'équilibre">
+
+$$v_{\text{directe}} = v_{\text{inverse}}$$
+
+<Badge niveau="qualitatif" slot="badge">Égalité des vitesses opposées : conséquence des hypothèses cinétiques admises (réversibilité, vitesse croissant avec les concentrations).</Badge>
+
+</Resultat>
+
+À l'équilibre, les concentrations sont **constantes**, mais les deux réactions tournent toujours à plein régime : à l'échelle microscopique, A se transforme encore en B et B en A, simplement aux mêmes débits. C'est le point qu'on ne répétera jamais assez : l'équilibre est *dynamique*, pas un arrêt.
+
+## La constante d'équilibre $K$
+
+Quand l'égalité des vitesses est atteinte, les concentrations (ou pressions) se figent dans un rapport bien précis. On définit l'**activité** $a_i$ de chaque espèce : $a_i = [i]/c°$ pour un soluté ($c° = 1\,\text{mol·L}^{-1}$), $a_i = P_i/P°$ pour un gaz ($P° = 1\,\text{bar}$), et $a_i = 1$ pour un solide ou liquide pur. Ces grandeurs sont sans dimension — un détail crucial pour la suite.
+
+<Resultat label="Quotient réactionnel et constante d'équilibre">
+
+$$Q = \frac{a_C^{\,c}\, a_D^{\,d}}{a_A^{\,a}\, a_B^{\,b}}, \qquad K = Q_{\text{éq}}$$
+
+<Badge niveau="experimental" slot="badge">La valeur de $K$ se mesure ; sa forme se justifie thermodynamiquement (ci-dessous).</Badge>
+
+</Resultat>
+
+$Q$ est calculable **à tout instant** ; $K$ est sa valeur particulière une fois l'équilibre atteint. <Badge niveau="experimental">$K$ ne dépend que de la température, fait expérimental confirmé pour d'innombrables systèmes.</Badge>
+
+## La pierre angulaire : $\Delta G^\circ = -RT \ln K$
+
+Voici le résultat qui relie la thermodynamique au monde mesurable. Il ne se postule pas : il se **déduit** de l'expression de l'enthalpie libre de réaction. La démonstration mérite d'être détaillée.
+
+<Encart type="calcul" titre="De ΔG = ΔG° + RT ln Q à la relation finale">
+
+On admet (thermodynamique des mélanges) l'expression de l'enthalpie libre de réaction en fonction de l'avancement :
+
+$$\Delta_r G = \Delta_r G^\circ + RT \ln Q$$
+
+Ici $\Delta_r G^\circ$ est l'enthalpie libre standard (toutes activités égales à 1), et $\Delta_r G$ la valeur dans l'état réel.
+
+Or notre <Prereq href="/chimie/partie-iv/enthalpie-libre-spontaneite">critère de spontanéité</Prereq> dit : le système évolue tant que $\Delta_r G \neq 0$, et **cesse d'évoluer globalement quand $\Delta_r G = 0$**. Attention au mot « cesse » : il s'agit de l'arrêt de l'évolution *macroscopique* (les concentrations ne bougent plus), pas d'un arrêt des réactions — c'est exactement l'équilibre dynamique décrit plus haut. Donc à l'équilibre :
+
+$$\Delta_r G = 0 \quad \text{et} \quad Q = K$$
+
+On reporte dans l'expression :
+
+$$0 = \Delta_r G^\circ + RT \ln K$$
+
+D'où, en isolant :
+
+$$\boxed{\;\Delta_r G^\circ = -RT \ln K\;}$$
+
+La relation est donc une **conséquence logique** de l'expression admise de $\Delta_r G$ et du critère $\Delta_r G = 0$ : rien n'a été mesuré pour l'obtenir.
+
+</Encart>
+
+<Resultat label="Relation fondamentale">
+
+$$\Delta_r G^\circ = -RT \ln K$$
+
+<Badge niveau="quantique" slot="badge">Déduite (et non mesurée) du critère $\Delta_r G = 0$ et de l'expression admise $\Delta_r G = \Delta_r G^\circ + RT\ln Q$ ; c'est $\Delta_r G^\circ$, mesurable par ailleurs, et $K$, mesuré, qui ont un statut expérimental.</Badge>
+
+</Resultat>
+
+Lisons-la. Si $\Delta_r G^\circ < 0$, alors $\ln K > 0$ donc $K > 1$ : l'équilibre favorise les produits. Si $\Delta_r G^\circ > 0$, alors $K < 1$ : il favorise les réactifs. La constante mesure littéralement « de quel côté penche » la réaction. <Badge niveau="quantique" slot="badge">Le lien signe de $\Delta_r G^\circ$ ↔ position de $K$ est une conséquence mathématique exacte du logarithme.</Badge>
+
+Notez la cohérence : $R$ est la constante des gaz parfaits, $R = 8{,}314\,\text{J·mol}^{-1}\text{·K}^{-1}$ (constante fondamentale, statut quantique/fondamental). Comme $K$ est sans dimension, $RT\ln K$ a bien la dimension d'une énergie molaire — d'où l'importance des activités introduites plus haut.
+
+## Prévoir le sens d'évolution : comparer $Q$ et $K$
+
+Hors équilibre, $Q \neq K$. Réinjectons dans $\Delta_r G = \Delta_r G^\circ + RT \ln Q = -RT\ln K + RT\ln Q$ :
+
+$$\Delta_r G = RT \ln\!\left(\frac{Q}{K}\right)$$
+
+<Encart type="intuition" titre="Une boussole pour la réaction">
+
+Ce petit logarithme est une boussole. Si $Q < K$, alors $Q/K < 1$, $\ln(Q/K) < 0$, donc $\Delta_r G < 0$ : la réaction avance **vers les produits**. Si $Q > K$, c'est l'inverse, elle recule. Si $Q = K$, $\Delta_r G = 0$ : on est à l'équilibre. Le système « cherche » toujours à ramener $Q$ vers $K$.
+
+</Encart>
+
+<Badge niveau="quantique">La règle $Q < K \Rightarrow$ avancement direct découle directement du signe de $\Delta_r G$.</Badge>
+
+## Perturber l'équilibre : le principe de Le Chatelier
+
+Si l'on dérange un système à l'équilibre, il réagit pour **modérer** la perturbation. C'est une règle qualitative, prédictive mais non quantitative, remarquablement utile.
+
+- **Ajout d'un réactif** : $Q$ chute sous $K$ → la réaction repart vers les produits pour consommer l'excès.
+- **Température** : seule grandeur qui change $K$ lui-même. Pour une réaction exothermique, augmenter $T$ diminue $K$ (l'équilibre recule). <Badge niveau="experimental">L'effet de $T$ sur $K$ se quantifie par la relation de van't Hoff, vérifiée expérimentalement.</Badge>
+- **Pression (gaz)** : à $T$ et quantité de matière fixées, comprimer déplace l'équilibre vers le côté qui a **le moins de moles de gaz**.
+
+<Encart type="plusloin" titre="La subtilité du gaz inerte">
+
+Le principe de Le Chatelier a ses pièges. Ajouter un gaz inerte **à volume constant** ne change ni les pressions partielles, ni $Q$, ni $K$ : aucun déplacement. Mais l'ajouter **à pression totale constante** dilue les espèces réactives (le volume augmente, donc les pressions partielles baissent), et déplace l'équilibre vers le côté le plus riche en moles gazeuses. Même geste, effet opposé selon la contrainte. C'est pourquoi Le Chatelier reste qualitatif : seule la comparaison rigoureuse $Q$ vs $K$ tranche sans ambiguïté.
+
+</Encart>
+
+<Badge niveau="empirique">Le principe de Le Chatelier prédit le sens du déplacement, mais pas son ampleur, et souffre d'exceptions selon les conditions ($V$ vs $P$ constants) : c'est une règle de modération qualitative, à confirmer par $Q$ vs $K$.</Badge>
+
+Enfin, gardons la distinction nette : **$K$ ne dépend que de $T$** (c'est une grandeur thermodynamique), tandis que la **position d'équilibre** (les concentrations ou pressions effectives à l'équilibre) dépend, elle, de toutes les conditions initiales et des contraintes imposées. Deux réactions à même $K$ peuvent s'équilibrer à des compositions très différentes : ne jamais confondre la constante et la position. <Badge niveau="experimental">Invariance de $K$ avec les concentrations à $T$ fixée : fait expérimental.</Badge>
+
+Nous savons désormais *où* va une réaction et *jusqu'où*. Mais une réaction thermodynamiquement favorable peut être désespérément lente : le diamant devrait se transformer en graphite, et ne le fait pas. Place à la dimension du temps — la cinétique.

@@ -1,0 +1,140 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Polarité : moments dipolaires"
+chapter: polarite-moments-dipolaires
+description: "Polarité des liaisons (électronégativité) et des molécules (somme vectorielle des moments dipolaires), avec l'effet déterminant de la géométrie : CO₂ apolaire, H₂O polaire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieVSEPR from '../../../components/interactive/ChimieVSEPR.astro';
+
+## Une liaison qui tire d'un côté
+
+Imaginez deux enfants qui se partagent une corde. S'ils sont de force égale, le nœud central reste au milieu : aucun déséquilibre. Mais si l'un tire plus fort, le nœud glisse vers lui — il y a un *sens*, une *direction* au déséquilibre. C'est exactement ce qui se passe dans une liaison covalente entre deux atomes d'électronégativités différentes. Les électrons de liaison, partagés, ne sont pas centrés : ils penchent vers l'atome le plus électronégatif. Une extrémité de la liaison devient légèrement négative, l'autre légèrement positive. La liaison porte un **moment dipolaire**.
+
+Notre programme dans cette page : transformer cette image intuitive en une grandeur vectorielle, puis montrer comment on additionne ces vecteurs pour décider si une *molécule entière* est polaire ou non. Et nous verrons un fait magnifique : une molécule aux liaisons franchement polaires peut être globalement apolaire, par pure symétrie.
+
+<Hypotheses titre="Hypothèses de départ">
+
+Nous admettons deux acquis des chapitres précédents.
+
+- L'**électronégativité** $\chi$ mesure la tendance d'un atome à attirer vers lui les électrons d'une liaison. C'est une tendance périodique établie en <Prereq href="/chimie/partie-ii/tendances-periodiques">Tendances périodiques</Prereq>.
+- La **géométrie** d'une molécule (angles, disposition des liaisons dans l'espace) se prédit par la méthode <Prereq href="/chimie/partie-iii/vsepr-geometrie">VSEPR</Prereq>.
+
+Nous posons en plus une hypothèse de modélisation, indispensable pour parler de dipôle.
+
+</Hypotheses>
+
+<Tournant titre="Le modèle des charges partielles δ">
+
+Pour décrire le déséquilibre électronique, on attribue à chaque atome une **charge partielle** notée $\delta+$ ou $\delta-$, fraction de la charge élémentaire $e$. C'est une commodité, pas une observable : il n'existe pas de « charge atomique » unique et mesurable dans une molécule. La densité électronique, elle, est bien réelle et continue — mais la découper en charges attribuées à chaque atome relève d'un choix de définition. Plusieurs conventions cohabitent (charges de Mulliken, charges de Bader, ajustement au potentiel électrostatique) et donnent des valeurs différentes pour le même atome. Nous adoptons $\delta$ comme **modèle** dont nous testerons les prédictions, sans lui prêter le statut d'une grandeur mesurée.
+
+<Badge niveau="empirique">La charge partielle δ est une construction de modèle, pas une grandeur observable univoque.</Badge>
+
+</Tournant>
+
+## Le moment dipolaire d'une liaison
+
+Définissons proprement l'objet. Deux charges opposées $+q$ et $-q$ séparées d'une distance $d$ forment un **dipôle électrique**, auquel on associe un vecteur. Reste à fixer son orientation, et c'est ici qu'il faut être attentif.
+
+<Encart type="rappel" titre="Une convention d'orientation, à choisir et à tenir">
+
+L'orientation du vecteur dipôle relève d'une **convention**, et deux usages coexistent. Le mémoriser évite bien des erreurs de signe.
+
+- **Convention de la chimie** (celle de ce cours) : le vecteur pointe **du pôle $\delta+$ vers le pôle $\delta-$**, c'est-à-dire **vers l'atome le plus électronégatif**. C'est le sens de la « flèche barrée » dessinée sur les formules.
+- **Convention de la physique** : le vecteur $q\,\vec{d}$ pointe en sens inverse, de la charge $-$ vers la charge $+$.
+
+Les deux décrivent le même déséquilibre, simplement fléché à l'envers l'un de l'autre. Nous **adoptons la convention de la chimie** et nous nous y tenons dans toute la page : $\vec{\mu}$ pointe vers l'atome le plus électronégatif.
+
+</Encart>
+
+<Resultat label="Moment dipolaire d'une liaison">
+
+$$ \|\vec{\mu}\| = q \, d $$
+
+et $\vec{\mu}$ pointe du pôle $\delta+$ vers le pôle $\delta-$ (vers l'atome le plus électronégatif).
+
+<Badge niveau="experimental" slot="badge">Grandeur mesurable, exprimée en debyes.</Badge>
+
+</Resultat>
+
+Sa norme se mesure expérimentalement, typiquement par la réponse de la substance à un champ électrique (constante diélectrique, déviation de jets moléculaires). L'unité usuelle est le **debye** : $1\ \mathrm{D} \approx 3{,}336 \times 10^{-30}\ \mathrm{C\cdot m}$, une simple constante de conversion (valeur exacte par définition). À titre d'ordre de grandeur, la liaison $\mathrm{H{-}Cl}$ porte $\mu \approx 1{,}1\ \mathrm{D}$, et une liaison franchement ionique dépasse plusieurs debyes.
+
+<Badge niveau="experimental">Le moment dipolaire est une grandeur mesurée ; les valeurs en debyes proviennent de l'expérience.</Badge>
+
+<Encart type="intuition" titre="Pourquoi un vecteur, et pas un simple nombre ?">
+
+Parce que le déséquilibre a un *sens*. Dire « la liaison est polaire » sans direction ne suffit pas : pour prévoir le comportement de la molécule, il faut savoir *vers où* penche chaque liaison. C'est précisément cette information directionnelle qui permettra l'annulation par symétrie. Un scalaire perdrait ce que la géométrie a de plus important.
+
+</Encart>
+
+## De la liaison à la molécule : la somme vectorielle
+
+Une molécule possède plusieurs liaisons, chacune avec son petit vecteur $\vec{\mu}_i$. Le moment dipolaire de la molécule entière est leur **somme vectorielle**.
+
+<Resultat label="Moment dipolaire moléculaire">
+
+$$ \vec{\mu}_{\text{mol}} = \sum_i \vec{\mu}_i $$
+
+<Badge niveau="empirique" slot="badge">Déduction géométrique exacte, mais à partir du modèle approché des dipôles de liaison.</Badge>
+
+</Resultat>
+
+Ce résultat est subtil quant à son statut. **Une fois admis** le modèle des charges partielles, l'additivité vectorielle est une déduction rigoureuse : c'est de la géométrie pure, l'addition des vecteurs. Mais le *point de départ* — assimiler chaque liaison à un dipôle ponctuel localisé — reste un modèle empirique. La conclusion n'est donc pas plus fiable que son hypothèse : le dipôle réel mesuré peut s'écarter de cette somme (contributions des doublets non liants, redistribution de la densité électronique).
+
+<Badge niveau="empirique">La somme vectorielle est une déduction géométrique exacte, conditionnée à l'acceptation du modèle de dipôles de liaison.</Badge>
+
+## Le cœur du sujet : polarité de liaison ≠ polarité de molécule
+
+Voici le message à retenir absolument. Des liaisons polaires sont **nécessaires** pour une molécule polaire, mais elles ne **suffisent** pas. La géométrie peut tout annuler.
+
+<Encart type="calcul" titre="CO₂ : apolaire malgré deux liaisons très polaires">
+
+La molécule $\mathrm{CO_2}$ est **linéaire** (VSEPR : carbone central, deux directions de liaison, aucun doublet non liant sur le carbone → type $\mathrm{AX_2}$, angle $180^\circ$).
+
+- Chaque liaison $\mathrm{C{=}O}$ est très polaire : l'oxygène ($\chi \approx 3{,}44$) attire bien plus que le carbone ($\chi \approx 2{,}55$). On a deux vecteurs $\vec{\mu}_1$ et $\vec{\mu}_2$ de même norme $\mu$, pointant chacun du carbone vers son oxygène (vers l'atome le plus électronégatif, selon notre convention).
+- Disposition : les deux oxygènes sont **diamétralement opposés**. Les deux vecteurs sont donc **colinéaires et de sens contraires**.
+- Somme : $\vec{\mu}_{\text{mol}} = \vec{\mu}_1 + \vec{\mu}_2$, avec $\vec{\mu}_2 = -\vec{\mu}_1$.
+- D'où $\vec{\mu}_{\text{mol}} = \vec{\mu}_1 - \vec{\mu}_1 = \vec{0}$.
+
+Conclusion : $\mu_{\text{mol}} = 0$. **CO₂ est apolaire**, ce que l'expérience confirme. Les déséquilibres locaux existent bien, mais ils se compensent exactement.
+
+</Encart>
+
+<Encart type="calcul" titre="H₂O : polaire, car coudée">
+
+La molécule $\mathrm{H_2O}$ est **coudée** (VSEPR : oxygène central, deux directions de liaison + deux doublets non liants → type $\mathrm{AX_2E_2}$, angle $\approx 104{,}5^\circ$, donc *pas* $180^\circ$).
+
+- Chaque liaison $\mathrm{O{-}H}$ est polaire, vecteur pointant de H vers O (l'oxygène, plus électronégatif, attire).
+- Les deux vecteurs $\vec{\mu}_1$, $\vec{\mu}_2$ ont même norme $\mu_{\mathrm{OH}}$ et font entre eux l'angle $\theta \approx 104{,}5^\circ$.
+- Ils ne sont pas opposés : leur somme est non nulle. Par symétrie, elle pointe selon la bissectrice de l'angle HOH, vers l'oxygène.
+- Norme : en projetant les deux vecteurs sur cette bissectrice, chacun contribue pour $\mu_{\mathrm{OH}}\cos(\theta/2)$, d'où
+
+$$ \mu_{\text{mol}} = 2\,\mu_{\mathrm{OH}}\,\cos\!\left(\frac{\theta}{2}\right) = 2\,\mu_{\mathrm{OH}}\,\cos(52{,}25^\circ) \approx 1{,}22\,\mu_{\mathrm{OH}} $$
+
+Le résultat est non nul : **H₂O est polaire**, avec $\mu_{\text{mol}} \approx 1{,}85\ \mathrm{D}$ mesuré. C'est cette polarité qui fait de l'eau le solvant que l'on sait.
+
+</Encart>
+
+La leçon est claire : mêmes types de liaisons polaires, deux verdicts opposés, *uniquement* à cause de la géométrie. Linéaire et symétrique → annulation ; coudée → addition.
+
+<Badge niveau="empirique">Le critère « molécule polaire » combine polarité des liaisons ET géométrie ; la symétrie peut annuler le dipôle net.</Badge>
+
+## À manipuler vous-même
+
+Faites varier la géométrie et l'électronégativité, et observez la flèche du dipôle net apparaître, basculer, ou s'annuler.
+
+<ChimieVSEPR />
+
+<Encart type="plusloin" titre="La règle de symétrie, dite proprement">
+
+On peut généraliser CO₂. Si une molécule possède un **centre de symétrie** (toute liaison polaire a une jumelle exactement opposée), ou plus généralement si ses liaisons polaires se déduisent les unes des autres par les opérations d'un groupe de symétrie suffisamment riche, alors la somme vectorielle est contrainte d'être nulle : $\mu_{\text{mol}} = 0$. C'est le cas de $\mathrm{CO_2}$ (linéaire), $\mathrm{BF_3}$ (trigonale plane), $\mathrm{CH_4}$ et $\mathrm{CCl_4}$ (tétraédriques). Attention : $\mathrm{BF_3}$ et $\mathrm{CH_4}$ n'ont **pas** de centre de symétrie, et pourtant leur dipôle s'annule — c'est bien le critère plus général (l'action du groupe de symétrie), et non le seul centre d'inversion, qui force l'annulation. La théorie des groupes formalise rigoureusement cette intuition de compensation.
+
+</Encart>
+
+Nous savons maintenant lire la polarité d'une molécule à partir de sa structure électronique et de sa forme. Reste à voir ce que ces dipôles *font* : comment ils gouvernent l'attraction entre molécules voisines — c'est l'objet des **forces intermoléculaires**, au chapitre suivant.

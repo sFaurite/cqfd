@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les fluctuations primordiales"
+chapter: fluctuations-primordiales
+description: "Des fluctuations quantiques étirées par l'inflation deviennent les graines des structures."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les fluctuations primordiales
+
+Jusqu'ici, notre univers était parfait : exactement homogène, exactement isotrope, le même $\rho$ en tout point. Mais regardez autour de vous. Des galaxies, des amas, des filaments, d'immenses vides — l'univers est **grumeleux**. D'où viennent ces grumeaux ? La gravité, à elle seule, ne crée rien : elle ne fait qu'**amplifier** des écarts de densité préexistants. Il fallait donc, à l'origine, des graines minuscules — des régions un chouïa plus denses que la moyenne — pour que la gravité, patiemment, y attire la matière et bâtisse les structures. La question de ce chapitre est vertigineuse : **d'où viennent ces graines ?**
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez une nappe parfaitement lisse posée sur une table. Si elle est rigoureusement plate, elle le restera : rien ne brise la symétrie. Mais s'il y a un pli microscopique quelque part, la gravité (ou n'importe quelle instabilité) finira par le creuser en un vrai sillon. Les galaxies sont les sillons ; les plis microscopiques sont les **fluctuations primordiales**. Toute la cosmologie des structures consiste à trouver d'où venaient les plis — et à mesurer leur forme.
+</Encart>
+
+### Le tournant : des fluctuations *quantiques*
+
+<Tournant titre="Tournant : on change de cadre">
+Ici, nous **ajoutons une hypothèse nouvelle**, que rien dans les chapitres précédents ne permet de déduire. Nous postulons que les graines de structure ont une origine **quantique** : ce sont les fluctuations du vide du champ qui pilote l'<Prereq href="/cosmologie/partie-iv/inflation">inflation</Prereq>, l'**inflaton**. C'est un cadre théorique imposé par sa fécondité — il explique d'un coup l'amplitude *et* la forme du spectre observé — mais ce n'est **pas** une déduction des principes posés jusqu'ici. Nous le disons franchement et nous l'ancrerons, à la fin, dans ce qui est réellement mesuré.
+</Tournant>
+
+<Hypotheses titre="Les hypothèses nouvelles de ce chapitre">
+
+1. **Origine quantique des graines.** Les perturbations initiales de densité sont les fluctuations quantiques du vide d'un champ scalaire, l'inflaton, et non des conditions initiales posées à la main.
+2. **Étirement inflationnaire.** Une phase d'expansion quasi exponentielle (l'<Prereq href="/cosmologie/partie-iv/inflation">inflation</Prereq>) étire ces fluctuations jusqu'à des échelles cosmologiques et les « gèle » lorsqu'elles franchissent le rayon de Hubble.
+3. **Conversion en densité.** À la fin de l'inflation, ces fluctuations gelées se traduisent en perturbations de densité $\delta\rho/\rho$ de la matière-rayonnement.
+
+Aucun de ces trois postulats n'est déduit des chapitres antérieurs : ils sont adoptés parce qu'ils prédisent, d'un seul mécanisme, un spectre presque invariant d'échelle — ce que l'on mesure.
+
+</Hypotheses>
+
+L'idée est l'une des plus belles de la physique. Le principe d'incertitude de Heisenberg interdit à tout champ d'être strictement nul et immobile : même dans le vide, un champ « tremble », avec des fluctuations de toutes les longueurs d'onde. En temps normal, ces tremblements sont microscopiques et éphémères. Mais pendant l'inflation, l'espace se dilate de façon **quasi exponentielle**. Une fluctuation de longueur d'onde $\lambda$ voit cette longueur étirée par le facteur d'échelle, jusqu'à dépasser le **rayon de Hubble** $c/H$ — au-delà duquel les deux bords de la fluctuation ne peuvent plus communiquer.
+
+<Encart type="intuition" titre="Pourquoi l'étirement « gèle » la fluctuation">
+Tant qu'une ondulation tient à l'intérieur de l'horizon de Hubble, ses crêtes peuvent osciller et se réajuster. Mais quand l'inflation l'étire au-delà de $c/H$, ses deux extrémités perdent tout contact causal : l'ondulation ne peut plus évoluer, elle se **fige**, congelée à l'amplitude qu'elle avait au moment de la sortie. Comme l'inflation produit des modes de toutes tailles en continu, on obtient un océan de fluctuations gelées à toutes les échelles. Quand l'inflation cesse et que l'univers se remet à décélérer, l'horizon rattrape ces modes un à un : ils « rentrent », désormais sous forme de vraies **fluctuations de densité** $\delta\rho/\rho$ de l'univers chaud.
+</Encart>
+
+Le passage du tremblement quantique de l'inflaton à une perturbation de densité de matière-rayonnement est subtil, mais l'essentiel tient en une phrase : un retard local dans la fin de l'inflation se traduit par un **surplus local de densité**. Voilà nos graines.
+
+### Le spectre quasi invariant d'échelle
+
+Le résultat le plus testable concerne la **statistique** de ces fluctuations : comment leur amplitude varie-t-elle avec l'échelle ? On la résume par le **spectre de puissance** $P(k)$, où $k$ est le nombre d'onde comobile ($k \sim 1/\lambda$). Une façon commode est d'écrire la variance par octave d'échelle :
+
+$$ \mathcal{P}(k) \;\propto\; k^{\,n_s - 1}, $$
+
+où $n_s$ est l'**indice spectral scalaire**. Le cas $n_s = 1$ est le spectre dit **invariant d'échelle** (Harrison–Zel'dovich) : toutes les échelles entrent dans l'horizon avec la même amplitude. Pourquoi l'inflation prédit-elle quelque chose de si proche de $1$ ?
+
+<Encart type="calcul" titre="Pourquoi n_s est proche de 1, et un peu en dessous">
+
+**Étape 1 — Condition de gel.** Chaque mode est figé à l'instant où sa longueur d'onde franchit l'horizon, c'est-à-dire quand $k = a H$. L'amplitude gelée d'un mode est fixée par la valeur de $H$ à *cet* instant-là.
+
+**Étape 2 — Si $H$ était constant.** Une inflation parfaitement exponentielle a $H = \text{cte}$. Alors **tous** les modes, quelle que soit leur taille, sortent de l'horizon avec exactement la même $H$, donc la même amplitude. Le spectre est strictement plat :
+
+$$ H = \text{cte} \;\Longrightarrow\; n_s = 1. $$
+
+**Étape 3 — Mais $H$ décroît lentement.** L'inflation doit **finir**. Le champ inflaton dévale doucement son potentiel, et $H$ diminue donc lentement au cours de l'inflation. Les grandes échelles (sorties tôt) voient un $H$ légèrement plus grand que les petites échelles (sorties tard).
+
+**Étape 4 — Le sens de l'écart.** Comme $H$ décroît, l'amplitude gelée décroît un peu vers les petites échelles : le spectre est très légèrement **incliné**, avec un peu plus de puissance aux grandes échelles. Cela se traduit par :
+
+$$ n_s = 1 - (\text{petit terme positif}) \;<\; 1. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Indice spectral scalaire (mesuré)">
+
+$$ n_s = 0{,}965 \pm 0{,}004 $$
+
+<Badge niveau="observe" slot="badge">Valeur mesurée par le satellite Planck (2018) à partir des anisotropies du CMB. La déviation de $n_s$ par rapport à $1$ est établie à plus de $8\sigma$ : l'invariance d'échelle exacte est exclue par les données.</Badge>
+</Resultat>
+
+C'est ici qu'il faut être d'une honnêteté scrupuleuse, car deux statuts épistémiques très différents se côtoient. **La valeur de $n_s$ est mesurée** : c'est un fait. Mais le **mécanisme** qui l'explique — l'origine quantique, l'étirement par l'inflaton — est, lui, une extrapolation théorique.
+
+<Badge niveau="extrapole">Que ce spectre légèrement incliné provienne de fluctuations *quantiques* du vide étirées par l'inflation est une prédiction théorique sérieuse et féconde, mais non démontrée : on n'a observé ni l'inflaton, ni le régime d'énergie concerné. C'est l'explication standard, pas un fait établi.</Badge>
+
+La force de l'inflation est précisément cette **conjonction** : un modèle inventé pour résoudre les problèmes de l'horizon et de la platitude *prédit en prime* un spectre presque — mais pas tout à fait — invariant d'échelle, avec $n_s$ un peu en dessous de $1$. Et c'est exactement ce qu'on mesure. Ce n'est pas une preuve, c'est un succès.
+
+### Des graines aux galaxies, et aux pics du CMB
+
+Ces fluctuations laissent deux empreintes que nous pouvons confronter à l'observation.
+
+D'une part, dans le plasma primordial, les surdensités de matière noire attirent le gaz baryonique, tandis que la pression de radiation le repousse : il en résulte des **oscillations acoustiques** dont le spectre primordial fixe la mise en route. Leur figure d'interférence se lit aujourd'hui dans les pics des <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">anisotropies du CMB</Prereq>. La **hauteur relative et la position** de ces pics dépendent directement de $n_s$ : un spectre incliné incline aussi l'enveloppe des pics — et l'ajustement est remarquable.
+
+<Badge niveau="concordance">La forme complète du spectre de puissance du CMB, pics acoustiques inclus, est reproduite par le modèle ΛCDM avec un spectre primordial $\propto k^{\,n_s-1}$ : la concordance est l'un des piliers quantitatifs du modèle standard.</Badge>
+
+D'autre part, après le découplage, la gravité amplifie ces mêmes graines en galaxies et en amas. Le spectre primordial fixe donc la **statistique de la structure à grande échelle**, mesurable dans les grands relevés de galaxies — et l'on y retrouve la même empreinte acoustique (les BAO).
+
+<Badge niveau="observe">La statistique de la distribution des galaxies et l'empreinte acoustique baryonique (BAO) sont mesurées directement dans les grands relevés.</Badge> <Badge niveau="concordance">Leur cohérence avec le *même* spectre primordial $\propto k^{\,n_s-1}$ que le CMB relève, elle, de l'ajustement ΛCDM : c'est un test de concordance, pas une seconde mesure indépendante du mécanisme.</Badge>
+
+### Et les ondes gravitationnelles ?
+
+L'inflation prédit aussi des fluctuations **tensorielles** : des ondes gravitationnelles primordiales, quantifiées par le rapport tenseur/scalaire $r$. Elles imprimeraient une polarisation particulière du CMB, les **modes B**. À ce jour, on n'en a vu aucune trace : seules des bornes supérieures existent ($r \lesssim 0{,}03$).
+
+<Badge niveau="extrapole">Les ondes gravitationnelles primordiales et les modes B associés ne sont **pas détectés** : c'est une prédiction sérieuse de l'inflation, non confirmée, contrainte pour l'instant par de simples bornes supérieures. Leur amplitude sonderait l'échelle d'énergie de l'inflation ; tant qu'aucun signal n'est mesuré, leur existence reste une extrapolation théorique, pas un acquis.</Badge>
+
+Nous avons donc les graines — leur forme mesurée, leur origine plausible. Reste à voir comment la gravité les fait croître, du murmure $\delta\rho/\rho \sim 10^{-5}$ jusqu'aux galaxies : c'est l'**effondrement gravitationnel** et la <Prereq href="/cosmologie/partie-v/instabilite-jeans">formation des structures</Prereq>, que nous étudierons plus loin dans le cours.

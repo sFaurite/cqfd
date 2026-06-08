@@ -1,0 +1,108 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'univers chaud : remonter le temps, c'est chauffer"
+chapter: univers-chaud
+description: "L'équilibre thermique du plasma primordial : la thermodynamique cosmique entre en scène."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import ThermalHistory from '../../../components/interactive/ThermalHistory.astro';
+
+## L'univers chaud : remonter le temps, c'est chauffer
+
+Jusqu'ici, nous avons suivi un fil presque purement géométrique : un facteur d'échelle $a(t)$, son évolution dictée par le contenu, des composantes qui se diluent. Mais une question reste muette dans ce décor : *de quoi est faite cette densité, et dans quel état ?* Une galaxie d'aujourd'hui est un objet froid et structuré. En remontant le temps, l'univers se compresse — et la thermodynamique nous dit qu'un gaz comprimé chauffe. Nous allons voir que ce n'est pas une simple image : le passé de l'univers était littéralement **brûlant**.
+
+<Tournant titre="Tournant : on ajoute la thermodynamique">
+Ici, on ne déduit plus seulement de ce qui précède : **on ajoute une physique nouvelle au cadre**, la thermodynamique de l'équilibre. L'hypothèse est que l'univers primordial n'était pas seulement plus dense, mais formait un **plasma en équilibre thermique** — le « Big Bang chaud ». C'est une hypothèse, pas un théorème. Mais elle n'est pas gratuite : elle est **imposée par un fait observé**, le fond diffus cosmologique, un rayonnement de corps noir presque parfait qui baigne tout le ciel. Cette relique n'a de sens que si l'univers a traversé une phase chaude et opaque. C'est elle qui nous autorise — et nous oblige — à poser le cadre suivant.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. Le contenu de l'univers comprend un **rayonnement** (photons), en plus de la matière et de l'énergie noire — voir le <Prereq href="/cosmologie/partie-ii/contenu-univers">contenu de l'univers</Prereq>.
+2. Aux époques primordiales, ce rayonnement et la matière sont en **équilibre thermique local** : les interactions sont assez rapides pour qu'une température $T$ unique décrive le milieu.
+3. Le spectre du rayonnement à l'équilibre est celui du **corps noir** (loi de Planck), caractérisé par la seule température $T$.
+</Hypotheses>
+
+### Le corps noir, une signature à une seule variable
+
+Pourquoi insister sur le corps noir ? Parce que c'est l'empreinte sans équivoque de l'équilibre thermique. Un rayonnement de corps noir a un spectre dont la forme ne dépend **que** de $T$. Mesurer ce spectre, c'est mesurer une température — et constater qu'un spectre *est* de Planck, c'est attester qu'un équilibre thermique a existé.
+
+<Encart type="rappel" titre="Le spectre de Planck en deux nombres">
+La densité d'énergie du rayonnement par intervalle de fréquence suit la loi de Planck. On en retient deux conséquences :
+
+- la **loi de Wien** : la fréquence où l'émission est maximale est proportionnelle à $T$ ;
+- la **loi de Stefan** : la densité d'énergie totale croît comme $u \propto T^4$.
+
+Le point crucial pour nous : la forme du spectre est entièrement fixée par $T$. Deux corps noirs de même température ont un spectre identique, point.
+</Encart>
+
+### Le théorème central : $T \propto 1/a$
+
+Voici le résultat qui transforme la cosmologie en une histoire thermique. L'expansion étire les longueurs d'onde de tout photon par le <Prereq href="/cosmologie/partie-i/redshift-hubble">redshift cosmologique</Prereq> : $\lambda \propto a$, soit $1 + z = a_0/a$. La question est : qu'arrive-t-il à un **spectre de corps noir** que l'on étire ainsi ?
+
+<Encart type="intuition" titre="Étirer un corps noir, c'est juste le refroidir">
+Imaginez le spectre de Planck comme une montagne tracée le long de l'axe des longueurs d'onde. L'expansion déplace chaque photon vers de plus grandes $\lambda$ — la montagne entière glisse, sans changer de forme. Or une montagne de Planck décalée *est* encore une montagne de Planck, mais d'une température plus basse. L'expansion ne déforme pas le spectre : elle se contente d'en **abaisser la température**. Un corps noir reste un corps noir ; seul son thermomètre change.
+</Encart>
+
+<Encart type="calcul" titre="Pourquoi $T \propto 1/a$">
+
+**Étape 1 — Le redshift agit sur chaque fréquence.** Une fréquence $\nu$ émise devient, après expansion, observée à $\nu' = \nu \, (a_{\text{ém}}/a_{\text{obs}})$. Toutes les fréquences sont multipliées par le **même** facteur $a_{\text{ém}}/a_{\text{obs}}$.
+
+**Étape 2 — La forme de Planck est invariante par changement d'échelle de $\nu$.** Le spectre de Planck ne dépend de la fréquence et de la température que par la combinaison $h\nu / k_B T$. Si l'on remplace partout $\nu \to \nu\,(a_{\text{ém}}/a_{\text{obs}})$ **et** $T \to T\,(a_{\text{ém}}/a_{\text{obs}})$, le rapport $h\nu/k_B T$ est inchangé : le spectre garde exactement la forme de Planck.
+
+**Étape 3 — On identifie la température décalée.** Le spectre observé est donc encore un corps noir, à la température
+
+$$ T_{\text{obs}} = T_{\text{ém}} \, \frac{a_{\text{ém}}}{a_{\text{obs}}}. $$
+
+**Étape 4 — On l'écrit en fonction de $a$.** Comme $a_{\text{ém}} < a_{\text{obs}}$ dans un univers en expansion, $T_{\text{obs}} < T_{\text{ém}}$ : le rayonnement refroidit. Cette relation valant pour tout couple d'instants, la température varie inversement au facteur d'échelle :
+
+$$ T(a) \, a = \text{constante} \quad\Longrightarrow\quad T \propto \frac{1}{a}. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Température du rayonnement cosmologique">
+
+$$ T \propto \frac{1}{a} \quad\Longrightarrow\quad T = \frac{T_0}{a/a_0} = T_0\,(1+z) $$
+
+<Badge niveau="concordance" slot="badge">Déduite de l'étirement d'un spectre de corps noir par le redshift. La forme « corps noir » est une hypothèse d'équilibre, confirmée par le fond diffus ; la loi $T\propto 1/a$ en découle au sein du modèle.</Badge>
+</Resultat>
+
+Avec $T_0 \approx 2{,}725$ K aujourd'hui — une valeur **mesurée** sur le fond diffus, non posée par convention — un facteur d'échelle dix fois plus petit ($1+z=10$) signifie un univers à $\sim 27$ K, et ainsi de suite : plus on remonte, plus il fait chaud. Et le fait brut qu'un tel passé chaud ait existé n'est pas qu'une déduction théorique : <Badge niveau="observe">le fond diffus cosmologique, observé directement comme un corps noir à 2,725 K isotrope sur tout le ciel, est la relique mesurée de cette phase chaude et opaque.</Badge>
+
+### Énergie et température : un seul curseur
+
+Pour lire l'histoire qui suit, il faut traduire « chaud » en « énergétique ». L'énergie thermique typique d'une particule à la température $T$ est de l'ordre de $k_B T$, où $k_B \approx 1{,}38 \times 10^{-23}$ J/K est la **constante de Boltzmann** — une constante de conversion, fixée exactement par convention depuis 2019. Les physiciens mesurent volontiers les températures en énergie : $1$ eV correspond à $k_B T$ pour $T \approx 1{,}16 \times 10^4$ K. Ainsi, une température élevée donne accès à des énergies élevées : l'univers jeune était un **accélérateur de particules** géant, capable de produire ce qu'aucun laboratoire ne reproduit.
+
+### Pourquoi le rayonnement domine tôt
+
+Un dernier maillon avant la frise. Matière et rayonnement ne se diluent pas pareil quand $a$ croît : la densité de matière suit $\rho_m \propto a^{-3}$ (le volume gonfle), mais le rayonnement subit **en plus** le redshift de chaque photon, d'où $\rho_r \propto a^{-4}$. En remontant le temps ($a \to 0$), le terme en $a^{-4}$ croît plus vite : le rayonnement finit toujours par l'emporter.
+
+<Badge niveau="concordance">Aux temps précoces, $\rho_r/\rho_m \propto 1/a \to \infty$ : l'univers était **dominé par le rayonnement**. C'est cette domination, jointe à $T\propto 1/a$, qui justifie l'image d'un plasma chaud relativiste.</Badge>
+
+### La frise thermique, en remontant le temps
+
+Tout est en place pour dérouler les grandes époques — chacune définie par une température, donc une énergie caractéristique. Explorez-les ci-dessous, du froid actuel jusqu'aux confins.
+
+<ThermalHistory />
+
+<VideoManim src="histoire-thermique" scene="HistoireThermique" titre="La frise thermique de l'univers" legende="Remonter le temps revient à chauffer : du froid actuel jusqu'à l'ère de Planck." />
+
+Le tableau suivant résume les jalons — et, surtout, leur **statut épistémique**, car ils ne se valent pas :
+
+| Époque | Température | Statut |
+| --- | --- | --- |
+| Recombinaison (atomes neutres) | $\sim 3000$ K | <Badge niveau="observe">attestée par le fond diffus lui-même</Badge> |
+| Nucléosynthèse primordiale | $\sim 10^9$ K | <Badge niveau="observe">vérifiée par les abondances d'hélium et de deutérium</Badge> |
+| Confinement des quarks | $\sim 10^{12}$ K | <Badge niveau="concordance">physique connue, testée en collisionneurs, concordante avec ΛCDM</Badge> |
+| Brisure électrofaible | $\sim 10^{15}$ K | <Badge niveau="extrapole">mécanisme bien compris en accélérateur, mais non directement sondé en cosmologie</Badge> |
+| Ère de grande unification (GUT) | $\sim 10^{29}$ K | <Badge niveau="extrapole">extrapolation théorique au-delà du testé</Badge> |
+| Ère de Planck | $\sim 10^{32}$ K | <Badge niveau="speculatif">avant toute donnée : gravité quantique inconnue</Badge> |
+
+La leçon de cette frise est autant scientifique qu'épistémologique : nos certitudes décroissent à mesure que la température monte. La recombinaison et la nucléosynthèse sont des **mesures** ; la brisure électrofaible, une extrapolation solide d'une physique testée en accélérateur ; l'ère de Planck, un mur derrière lequel nos théories actuelles cessent de parler.
+
+Nous tenons désormais le thermomètre. Le premier jalon vraiment observable, celui qui nous a livré le fond diffus, est la **recombinaison** — l'instant où l'univers, en refroidissant sous $\sim 3000$ K, est devenu transparent. C'est lui que nous regardons de près au chapitre suivant.

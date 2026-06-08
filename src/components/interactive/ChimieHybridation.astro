@@ -1,0 +1,50 @@
+---
+/**
+ * ChimieHybridation — visualiseur d'hybridation du carbone. Bascule entre sp³,
+ * sp² et sp ; affiche la géométrie des liaisons σ (orbitales hybrides) et des
+ * liaisons π (orbitales p non hybridées), les angles caractéristiques et un
+ * exemple de molécule. Rappelle que l'hybridation est un modèle descriptif
+ * commode, pas une réalité physique imposée.
+ */
+---
+
+<div class="iw" data-iw="chimie-hybridation">
+  <div class="iw__head"><span class="tag">Interactif</span> Hybridation du carbone : sp³ · sp² · sp</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="hy-type">Hybridation</label>
+      <select id="hy-type" data-type>
+        <option value="sp3" selected>sp³ (tétraédrique)</option>
+        <option value="sp2">sp² (trigonale plane)</option>
+        <option value="sp">sp (linéaire)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="hy-pi">Montrer les liaisons π</label>
+      <input id="hy-pi" type="checkbox" data-pi checked />
+      <output data-out-pi>oui</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">orbitales hybrides</span> <b data-out-hyb>4 sp³</b></span>
+    <span class="iw__chip"><span class="k">liaisons σ</span> <b data-out-sigma>4</b></span>
+    <span class="iw__chip"><span class="k">liaisons π</span> <b data-out-pinb>0</b></span>
+    <span class="iw__chip"><span class="k">angle</span> <b data-out-ang>109,5°</b></span>
+    <span class="iw__chip"><span class="k">exemple</span> <b data-out-ex>CH₄ (alcane)</b></span>
+  </div>
+  <p class="iw__note">
+    L’hybridation combine l’orbitale 2s et une partie des 2p du carbone en orbitales <em>hybrides</em>
+    équivalentes, dirigées pour minimiser la répulsion : <strong>sp³</strong> (4 hybrides à 109,5°,
+    tétraèdre), <strong>sp²</strong> (3 hybrides à 120° dans un plan + 1 orbitale p restante),
+    <strong>sp</strong> (2 hybrides à 180° + 2 orbitales p). Les hybrides forment les liaisons
+    <span style="color:var(--c-blue)">σ</span> (recouvrement axial) ; les p non hybridées forment les
+    liaisons <span style="color:var(--c-red)">π</span> (recouvrement latéral) des doubles/triples
+    liaisons. C’est un <strong>modèle descriptif commode</strong> : il rend bien compte des géométries,
+    sans être une étape physique réelle. Affiche/masque les liaisons π.
+  </p>
+</div>
+
+<script>
+  import './ChimieHybridation.client.ts';
+</script>

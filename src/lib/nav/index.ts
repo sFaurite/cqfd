@@ -6,9 +6,22 @@
 import { PARTIES as P_MATHS, type Partie, type Chapitre } from './_maths';
 import { PARTIES as P_PHYS } from './_physique';
 import { PARTIES as P_PROC } from './_processeurs';
+import { PARTIES as P_COSMO } from './_cosmologie';
+import { PARTIES as P_CHIMIE } from './_chimie';
+import { PARTIES as P_RESEAUX } from './_reseaux';
+import { PARTIES as P_HISTOIRE } from './_histoire';
+import { PARTIES as P_IA } from './_ia';
 
 export type { Partie, Chapitre };
-export type CourseId = 'physique' | 'maths' | 'processeurs';
+export type CourseId =
+  | 'physique'
+  | 'maths'
+  | 'processeurs'
+  | 'cosmologie'
+  | 'chimie'
+  | 'reseaux'
+  | 'histoire'
+  | 'ia';
 
 /** Préfixe tous les `path` d'une arborescence par la base du cours. */
 function prefixer(parties: Partie[], base: string): Partie[] {
@@ -22,6 +35,11 @@ export const NAVS: Record<CourseId, Partie[]> = {
   physique: prefixer(P_PHYS, '/physique'),
   maths: prefixer(P_MATHS, '/maths'),
   processeurs: prefixer(P_PROC, '/processeurs'),
+  cosmologie: prefixer(P_COSMO, '/cosmologie'),
+  chimie: prefixer(P_CHIMIE, '/chimie'),
+  reseaux: prefixer(P_RESEAUX, '/reseaux'),
+  histoire: prefixer(P_HISTOIRE, '/histoire'),
+  ia: prefixer(P_IA, '/ia'),
 };
 
 const COURSE_IDS = Object.keys(NAVS) as CourseId[];

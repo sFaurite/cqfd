@@ -1,0 +1,36 @@
+---
+/**
+ * AcceleratingExpansion — le diagramme distance-redshift des supernovæ de type Ia.
+ * On compare un univers décéléré (Ω_m = 1) à un univers avec énergie noire : à
+ * grand z, les supernovæ apparaissent PLUS LOIN que ne le prédit la décélération.
+ * Le réglage de Ω_Λ (univers plat) fait passer de q₀ > 0 à q₀ < 0.
+ */
+---
+
+<div class="iw" data-iw="accelerating-expansion">
+  <div class="iw__head"><span class="tag">Interactif</span> Supernovæ Ia : l'expansion accélère</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="ae-ol">Ω<sub>Λ</sub> (univers plat)</label>
+      <input id="ae-ol" type="range" min="0" max="0.95" step="0.01" value="0.7" data-ol />
+      <output data-out-ol>0,70</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">Ω_m</span> <b data-out-om>0,30</b></span>
+    <span class="iw__chip"><span class="k">décélération q₀</span> <b data-out-q>−0,55</b></span>
+    <span class="iw__chip"><span class="k">expansion</span> <b data-out-acc>accélère</b></span>
+  </div>
+  <p class="iw__note">
+    La distance de luminosité <code>d_L(z)</code> dépend de l'histoire de l'expansion. Plus
+    l'univers a accéléré récemment, plus une supernova d'un <code>z</code> donné est lointaine — donc
+    faible. Les données (points jaunes) se posent au-dessus de la courbe décélérée
+    (<code>Ω_m = 1</code>, bleu) : il faut <code>Ω_Λ ≈ 0,7</code>. Le signe de
+    <code>q₀ = Ω_m/2 − Ω_Λ</code> dit si l'expansion freine ou accélère.
+  </p>
+</div>
+
+<script>
+  import './AcceleratingExpansion.client.ts';
+</script>

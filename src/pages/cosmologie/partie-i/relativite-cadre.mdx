@@ -1,0 +1,63 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Ce qu'on admet de la relativité générale"
+chapter: relativite-cadre
+description: "La gravité comme géométrie de l'espace-temps : le cadre que la cosmologie adopte sans le redémontrer."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Ce qu'on admet de la relativité générale
+
+<Tournant titre="Tournant : on adopte un nouveau cadre théorique">
+Jusqu'ici, le <Prereq href="/cosmologie/partie-i/principe-cosmologique">principe cosmologique</Prereq> nous a donné une *symétrie* — l'univers est homogène et isotrope — mais pas de *dynamique* : il ne dit rien de la façon dont la gravité agit à grande échelle. Pour cela, **nous adoptons ici un nouveau cadre : la relativité générale d'Einstein**. Et nous le faisons les yeux ouverts : nous ne la construisons pas, nous ne la démontrons pas dans ce cours. Nous **admettons explicitement** ce dont la cosmologie a besoin — l'idée que la gravité *est* la courbure de l'espace-temps, gouvernée par les équations d'Einstein. C'est une **hypothèse-cadre**, extrêmement bien testée par ailleurs, mais ici **posée, et non déduite de ce qui précède**.
+</Tournant>
+
+### Pourquoi la gravité de Newton ne suffit pas
+
+On pourrait espérer faire de la cosmologie avec la seule gravité de Newton. Après tout, elle décrit superbement les planètes, les marées, la chute des pommes. Mais à l'échelle de l'univers entier, trois fissures apparaissent — et chacune nous force à changer de cadre.
+
+**Premièrement, il n'y a pas d'espace absolu.** Newton suppose un espace fixe, un décor immuable dans lequel les masses se déplacent. Or la cosmologie veut précisément décrire un univers dont *l'espace lui-même* grandit. Dans le cadre newtonien, la question « par rapport à quoi l'univers grandit-il ? » n'a pas de réponse propre. <Badge niveau="observe">L'expansion est un fait mesuré directement (décalage vers le rouge des galaxies, dès Hubble en 1929), indépendant de tout modèle.</Badge> Il nous faut un cadre où la géométrie de l'espace est elle-même une variable physique.
+
+**Deuxièmement, la gravité de Newton est instantanée et infinie en portée.** Pour calculer la force en un point, il faudrait sommer l'attraction de *toute* la matière de l'univers, jusqu'à l'infini — une somme qui, pour une distribution homogène infinie, est mal définie. La relativité résout ce paradoxe en remplaçant la « force à distance » par une **géométrie locale** : ce qui se passe ici ne dépend que de ce qui est ici, et la gravitation se propage à la vitesse finie de la lumière.
+
+**Troisièmement, la lumière tombe.** Newton fait de la lumière soit un corpuscule, soit une onde sans masse. Un calcul newtonien naïf, traitant la lumière comme un corpuscule attiré par le Soleil, prédit une déviation, mais d'un angle deux fois trop petit. La mesure d'Eddington en 1919 a tranché : la lumière rasant le Soleil est déviée d'un angle d'environ $1{,}75''$ — exactement le double de la prédiction corpusculaire newtonienne, et conforme à la relativité générale. <Badge niveau="observe">La déviation de la lumière, l'avance du périhélie de Mercure, le fonctionnement du GPS, les ondes gravitationnelles (LIGO, 2015) : tous mesurés, tous en accord fin avec la relativité générale.</Badge>
+
+### Ce que dit la relativité générale, en une image
+
+Voici l'idée centrale, dépouillée de son formalisme. Imaginez que l'espace-temps soit un tissu élastique. Posez-y une masse : le tissu se creuse. Un objet qui passe à proximité ne subit aucune « force » à proprement parler — il suit simplement le chemin le plus droit possible *sur le tissu déformé*. Ce chemin le plus droit, dans une géométrie courbe, s'appelle une **géodésique**.
+
+<Encart type="intuition" titre="Deux explorateurs sur la Terre">
+Deux marcheurs partent de l'équateur, parfaitement parallèles, droit vers le nord. Ils ne tournent jamais le volant. Pourtant, à mesure qu'ils montent, ils se rapprochent — et se rejoignent au pôle. Aucune force ne les a attirés l'un vers l'autre : c'est la **courbure de la sphère** qui a fait converger deux trajectoires « droites ». La relativité générale affirme que la gravité est exactement de cette nature. Les corps en chute libre ne sont pas *tirés* ; ils suivent les lignes droites d'un espace-temps courbé par la matière. La pomme et la Lune « tombent » de la même manière : elles glissent dans la même vallée géométrique.
+</Encart>
+
+Cette image se condense en trois affirmations que nous **admettons**.
+
+<Hypotheses titre="Ce que nous admettons de la relativité générale">
+1. **Principe d'équivalence.** Localement, on ne peut distinguer un champ de gravitation d'une simple accélération. Un observateur enfermé dans un ascenseur ne peut dire, par une expérience interne, s'il est immobile dans un champ de gravité ou en accélération dans le vide. Conséquence : la gravité n'est pas une force comme les autres — elle peut s'annuler localement par un bon choix de référentiel. C'est ce qui ouvre la porte à une description **géométrique**.
+2. **Les corps libres suivent les géodésiques.** Une particule sur laquelle n'agit aucune force non gravitationnelle suit la trajectoire « la plus droite » de l'espace-temps courbe. La gravité n'est plus une force ajoutée : c'est la forme du décor.
+3. **Les équations d'Einstein relient matière et géométrie.** La matière-énergie courbe l'espace-temps, et cette courbure dicte le mouvement de la matière. Symboliquement, ce dialogue s'écrit par les **équations du champ d'Einstein**.
+</Hypotheses>
+
+### Les équations d'Einstein, au niveau conceptuel
+
+Nous ne résoudrons pas ces équations dans ce chapitre, mais il faut savoir ce qu'elles affirment. Dans leur forme la plus simple, sans terme cosmologique, elles s'écrivent de façon compacte :
+
+$$ G_{\mu\nu} = \frac{8\pi G}{c^4}\, T_{\mu\nu} $$
+
+À gauche, le **tenseur d'Einstein** $G_{\mu\nu}$ encode entièrement la **géométrie** : comment l'espace-temps est courbé en chaque point. À droite, le **tenseur énergie-impulsion** $T_{\mu\nu}$ encode le **contenu** : densité d'énergie, pression, flux de matière et de rayonnement. Le facteur $\frac{8\pi G}{c^4}$ contient la constante de gravitation $G$ et la vitesse de la lumière $c$. <Badge niveau="observe">Cette constante de couplage fixe « combien » une quantité d'énergie donnée courbe l'espace-temps ; sa valeur, ajustée pour retrouver la gravité de Newton à faible champ, est ce qui rend la théorie quantitative et testable.</Badge>
+
+Tout tient dans la lecture, devenue célèbre par John Wheeler : *la matière dit à l'espace-temps comment se courber ; l'espace-temps dit à la matière comment se mouvoir.* L'égalité ci-dessus est ce dialogue mis en équation. En cosmologie, nous injecterons dans $T_{\mu\nu}$ un contenu homogène et isotrope (imposé par le principe cosmologique), et les équations d'Einstein nous rendront la **dynamique de l'univers entier** — c'est exactement le programme des chapitres suivants.
+
+### Honnêteté : testée près de nous, extrapolée au loin
+
+Une distinction est capitale pour la suite. La relativité générale est **vérifiée avec une précision spectaculaire** — mais où ? <Badge niveau="observe">Dans le système solaire et en laboratoire : périhélie de Mercure, déviation de la lumière, GPS, ondes gravitationnelles. Ce sont des faits empiriques solides.</Badge> Or la cosmologie l'applique à des échelles des milliards de fois plus grandes, sur des durées de milliards d'années, dans des régimes (énergie noire, premiers instants) où elle n'a jamais été testée directement. <Badge niveau="extrapole">Étendre la relativité générale aux échelles cosmologiques est une extrapolation théorique sérieuse, mais non garantie par les tests locaux : c'est une partie de ce que nous admettons.</Badge>
+
+Soyons donc parfaitement clairs sur le statut de ce chapitre. <Badge niveau="concordance">Dans ce cours, la relativité générale est le **cadre adopté** : nous la posons en hypothèse-cadre, et l'édifice cosmologique que nous bâtirons dessus concorde finement avec l'ensemble des observations. Mais nous ne la démontrons pas — nous l'admettons.</Badge>
+
+Munis de ce cadre, nous pouvons maintenant traduire le principe cosmologique en géométrie concrète : la métrique d'un univers homogène et isotrope, et le facteur d'échelle qui mesure son expansion — c'est l'objet du chapitre suivant.

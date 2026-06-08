@@ -1,0 +1,52 @@
+---
+/**
+ * IaAttentionHeatmap — carte de chaleur de la matrice d'attention entre les
+ * tokens d'une phrase courte : chaque ligne (requête) montre comment elle se
+ * répartit sur les clés. Survol d'un token pour voir « sur quoi il regarde ».
+ * Inclut un avertissement intégré sur les limites de l'attention comme
+ * explication. Chapitres : mécanisme d'attention, transformer.
+ */
+---
+
+<div class="iw" data-iw="ia-attn">
+  <div class="iw__head"><span class="tag">Interactif</span> Carte d'attention entre les tokens</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>phrase</label>
+      <div class="iw__btns" role="group" aria-label="Phrase">
+        <button type="button" class="iw__btn active" data-sent="0">l'animal n'a pas traversé la rue car il était fatigué</button>
+        <button type="button" class="iw__btn" data-sent="1">la clé ouvre la porte</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label for="at-temp">netteté (température⁻¹)</label>
+      <input id="at-temp" type="range" min="0.3" max="4" step="0.1" value="1.4" data-temp />
+      <output data-out-temp>1,4</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">requête</span> <b data-out-q>survole une ligne</b></span>
+    <span class="iw__chip"><span class="k">regarde surtout</span> <b data-out-k>—</b></span>
+    <span class="iw__chip"><span class="k">poids</span> <b data-out-w>—</b></span>
+  </div>
+  <p class="iw__note iw__warn">
+    <b>À lire :</b> chaque ligne est une <b>requête</b> (le token qui « interroge »), chaque colonne une
+    <b>clé</b> ; la couleur donne le poids d'attention (chaque ligne somme à 1). Survole une ligne pour
+    voir sur quoi ce token se concentre — par exemple « il » qui pointe vers « animal ». La netteté
+    règle la concentration (softmax plus ou moins piqué).
+    <br /><b>⚠ Prudence :</b> un poids d'attention élevé n'est <i>pas</i> une explication causale. C'est
+    une statistique interne d'une seule tête, parmi des dizaines de couches. « Le modèle regarde X »
+    ne veut pas dire « le modèle décide à cause de X ».
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-attn'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+  .iw[data-iw='ia-attn'] .iw__warn { border-top: 1px solid var(--c-border); padding-top: 0.8em; }
+</style>
+
+<script>
+  import './IaAttentionHeatmap.client.ts';
+</script>

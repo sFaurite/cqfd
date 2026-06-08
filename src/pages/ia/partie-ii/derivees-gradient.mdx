@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Dérivées et gradient : la direction qui descend"
+chapter: derivees-gradient
+description: "Met en place l'outil mathématique : dérivée d'une fonction d'une variable, dérivées partielles, gradient comme vecteur des pentes. Démontre que l'opposé du gradient est la direction de plus forte décroissance."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaLossLandscape from '../../../components/interactive/IaLossLandscape.astro';
+
+## Dérivées et gradient : la direction qui descend
+
+Au chapitre précédent, nous avons posé un cadre unificateur : <Prereq href="/ia/partie-ii/fonction-de-perte">apprendre, c'est minimiser une fonction de perte $L(\theta)$</Prereq>, une grandeur scalaire qui mesure à quel point notre modèle se trompe, et qui dépend de tous ses paramètres $\theta = (\theta_1, \dots, \theta_n)$. Reste la question opérationnelle : **dans quel sens bouger $\theta$ pour faire baisser $L$ ?** Ce chapitre y répond par un théorème, propre et complet. La réponse — *« va dans la direction opposée au gradient »* — n'est pas une recette : c'est de la géométrie démontrée.
+
+<Encart type="intuition" titre="Le paysage de pertes et la bille">
+Imaginez la fonction $L$ comme un **relief** : à chaque réglage des paramètres correspond une altitude (la perte). Apprendre, c'est lâcher une bille sur ce relief et la laisser rouler vers le creux. À chaque instant, la bille « sent » la pente sous ses pieds et part dans la direction où le sol descend le plus vite. Tout l'apprentissage profond tient dans cette image. Notre seule tâche mathématique : transformer « la direction où ça descend le plus vite » en une formule. Le gradient est exactement l'outil qui mesure la pente dans toutes les directions à la fois.
+</Encart>
+
+### Rappel : la dérivée, c'est une pente
+
+Avant le relief en dimension $n$, revenons à une seule variable. Tout part de l'idée de Terminale : la dérivée mesure une pente locale.
+
+<Encart type="rappel" titre="Dérivée = taux de variation local (niveau Terminale)">
+Pour une fonction $f$ d'une variable, la **dérivée** en un point $x$ est la limite du taux d'accroissement :
+
+$$ f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}. $$
+
+C'est la **pente** de la tangente à la courbe en $x$. Interprétation que nous réutiliserons sans cesse : pour un petit déplacement $h$,
+
+$$ f(x+h) \approx f(x) + f'(x)\,h. $$
+
+Si $f'(x) > 0$, $f$ croît localement (monter en $x$ augmente $f$) ; si $f'(x) < 0$, $f$ décroît. Pour **diminuer** $f$, on déplace $x$ dans le sens **opposé** au signe de $f'(x)$.
+</Encart>
+
+### Dérivées partielles et gradient
+
+Notre perte ne dépend pas d'un seul nombre mais de $n$ paramètres. L'idée : dériver « une variable à la fois », en gelant les autres.
+
+La **dérivée partielle** $\dfrac{\partial L}{\partial \theta_i}$ mesure de combien varie $L$ quand on bouge **uniquement** $\theta_i$, toutes les autres composantes fixées. C'est une dérivée ordinaire, où $\theta_i$ est la seule variable. En empilant ces $n$ pentes dans un vecteur, on obtient le **gradient** :
+
+<Resultat label="Gradient de la perte">
+
+$$ \nabla L(\theta) = \left( \frac{\partial L}{\partial \theta_1},\ \frac{\partial L}{\partial \theta_2},\ \dots,\ \frac{\partial L}{\partial \theta_n} \right) $$
+
+<Badge niveau="prouve" slot="badge">Définition standard de l'analyse multivariée : le gradient est le vecteur des dérivées partielles. Il est bien défini dès que ces $n$ dérivées existent ; sa lecture comme « pente dans toutes les directions » exige en plus que $L$ soit différentiable (voir ci-dessous).</Badge>
+</Resultat>
+
+Le gradient vit dans le même espace que $\theta$ : c'est une flèche dans l'espace des paramètres. Tout l'enjeu du chapitre est de comprendre **où pointe cette flèche** et pourquoi elle gouverne l'apprentissage.
+
+### Le développement limité multivarié
+
+Pour relier le gradient à la variation de $L$, généralisons l'approximation tangente du rappel. Déplaçons $\theta$ d'un petit pas $\varepsilon > 0$ dans une direction $u$ (un vecteur **unitaire**, $\|u\| = 1$ : il indique le cap, pas la longueur).
+
+<Encart type="rappel" titre="Différentiabilité et dérivée directionnelle">
+Dire que $L$ est **différentiable** en $\theta$, c'est précisément affirmer qu'il existe un développement au premier ordre :
+
+$$ L(\theta + \varepsilon u) = L(\theta) + \varepsilon\, \nabla L(\theta) \cdot u + o(\varepsilon), $$
+
+où $\nabla L \cdot u = \sum_i \frac{\partial L}{\partial \theta_i} u_i$ est le produit scalaire, et $o(\varepsilon)$ un reste négligeable devant $\varepsilon$ quand $\varepsilon \to 0$. La quantité $\nabla L(\theta)\cdot u$ est la **dérivée directionnelle** : la pente de $L$ ressentie en partant dans le cap $u$. C'est l'analogue exact de $f'(x)$, mais orienté.
+</Encart>
+
+La variation de perte au premier ordre vaut donc $L(\theta + \varepsilon u) - L(\theta) \approx \varepsilon\, (\nabla L \cdot u)$. Pour **faire baisser** $L$, on veut cette quantité aussi **négative** que possible. Comme $\varepsilon > 0$, tout se joue sur le choix de $u$ qui minimise $\nabla L \cdot u$.
+
+### Le théorème : la plus forte pente est $-\nabla L$
+
+<Encart type="calcul" titre="Quelle direction descend le plus vite ?">
+On cherche le vecteur unitaire $u$ ($\|u\|=1$) qui **minimise** la dérivée directionnelle $\nabla L(\theta) \cdot u$. On suppose $\nabla L(\theta) \neq 0$ (sinon toutes les directions donnent une pente nulle).
+
+**Étape 1 — Inégalité de Cauchy–Schwarz.** Pour tous vecteurs $a, b$, on a $|a \cdot b| \le \|a\|\,\|b\|$. Appliquée à $a = \nabla L$ et $b = u$, avec $\|u\| = 1$ :
+
+$$ -\|\nabla L\| \ \le\ \nabla L \cdot u\ \le\ \|\nabla L\|. $$
+
+La dérivée directionnelle est donc **bornée inférieurement** par $-\|\nabla L\|$ : aucune direction ne peut faire descendre plus vite que cette valeur.
+
+**Étape 2 — Quand la borne est-elle atteinte ?** L'égalité dans Cauchy–Schwarz a lieu si et seulement si $u$ est **colinéaire** à $\nabla L$. Le cas $\nabla L \cdot u = -\|\nabla L\|$ (le minimum) correspond à $u$ pointant à l'**opposé** de $\nabla L$. Le vecteur unitaire opposé est
+
+$$ u^\star = -\frac{\nabla L(\theta)}{\|\nabla L(\theta)\|}. $$
+
+**Étape 3 — Vérification.** On calcule la dérivée directionnelle pour ce $u^\star$ :
+
+$$ \nabla L \cdot u^\star = \nabla L \cdot \left(-\frac{\nabla L}{\|\nabla L\|}\right) = -\frac{\nabla L \cdot \nabla L}{\|\nabla L\|} = -\frac{\|\nabla L\|^2}{\|\nabla L\|} = -\|\nabla L\|. $$
+
+La borne inférieure est bien atteinte. Donc $u^\star$ est la direction de **descente la plus raide**, et son opposé $+\nabla L/\|\nabla L\|$ est la direction de **montée** la plus raide.
+
+$$ \boxed{\,u^\star = -\dfrac{\nabla L(\theta)}{\|\nabla L(\theta)\|}\,} \qquad (\text{valable si } \nabla L(\theta) \neq 0). \qquad \blacksquare $$
+</Encart>
+
+<Resultat label="Direction de plus forte descente">
+
+$$ \arg\min_{\|u\|=1} \ \nabla L(\theta) \cdot u \ =\ -\frac{\nabla L(\theta)}{\|\nabla L(\theta)\|} $$
+
+<Badge niveau="prouve" slot="badge">Théorème démontré ci-dessus par développement au premier ordre et Cauchy–Schwarz. C'est de la géométrie pure : aucune hypothèse empirique.</Badge>
+</Resultat>
+
+Voilà le résultat fondateur de tout l'apprentissage par gradient : **pour réduire la perte, on déplace les paramètres dans le sens opposé au gradient.** La bille de notre intuition roule dans la direction $-\nabla L$.
+
+<IaLossLandscape />
+
+### Honnêteté sur la portée : ce que le théorème ne dit pas
+
+Le théorème est fort, mais sa portée est précise. Trois mises en garde, qui structureront les chapitres suivants.
+
+**1. Seulement localement, et pour un pas infinitésimal.** Le développement au premier ordre n'est exact qu'à la limite $\varepsilon \to 0$. Pour un pas fini, le reste $o(\varepsilon)$ peut dominer : suivre $-\nabla L$ trop loin peut **augmenter** $L$. Le théorème garantit donc la descente seulement pour un déplacement *infinitésimal*. La gestion du pas réel est le sujet du chapitre suivant. <Badge niveau="prouve">La garantie de descente est strictement locale : elle découle du développement au premier ordre, valable uniquement à l'ordre $\varepsilon$.</Badge>
+
+**2. $\nabla L = 0$ ne signifie pas « minimum ».** Là où le gradient s'annule, toutes les pentes directionnelles sont nulles : on parle de **point critique**. Mais un point critique peut être un minimum, un **maximum**, ou un **point-selle** (creux dans certaines directions, bosse dans d'autres). La descente s'y arrête sans qu'on sache lequel c'est. <Badge niveau="prouve">$\nabla L(\theta) = 0$ est une condition *nécessaire* d'extremum local pour $L$ différentiable, mais non suffisante : elle ne distingue pas minimum, maximum et point-selle.</Badge>
+
+<Encart type="intuition" titre="Le col de montagne (point-selle)">
+Sur un col entre deux sommets, le sol est plat sous vos pieds — gradient nul. Pourtant, en marchant le long de la crête vous montez, et en descendant vers la vallée vous descendez. Ni minimum, ni maximum : un **point-selle**. En grande dimension, ces points-selles sont omniprésents, ce qui rend l'optimisation des réseaux profonds bien plus subtile qu'une simple chute vers le fond d'un bol.
+</Encart>
+
+**3. Rien sur le minimum *global*.** Le théorème indique la meilleure direction *locale*. Il ne promet pas d'atteindre le creux le plus bas du paysage : sur un relief bosselé, la bille peut s'immobiliser dans une cuvette secondaire. Tant que $L$ n'est pas **convexe** — propriété que nous avons rencontrée pour <Prereq href="/ia/partie-i/regression-logistique">la régression logistique</Prereq> mais qui tombe dès qu'on empile des couches — la convergence vers le minimum global n'est **pas garantie**. <Badge niveau="boitenoire">Pourquoi la descente de gradient trouve néanmoins de bonnes solutions dans les réseaux profonds non convexes reste largement ouvert.</Badge>
+
+Nous tenons donc la **direction** de descente, démontrée et sans ambiguïté. Manque la **longueur** du pas : aller trop court traîne, aller trop loin déstabilise. C'est tout l'art du *pas d'apprentissage*, que nous transformons au prochain chapitre en un véritable algorithme : la descente de gradient.

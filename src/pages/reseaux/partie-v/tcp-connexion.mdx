@@ -1,0 +1,82 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "TCP : etablir une connexion fiable"
+chapter: tcp-connexion
+description: "Introduit TCP : flux d'octets ordonne et fiable, numeros de sequence/acquittement, three-way handshake d'etablissement, et fermeture de connexion."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauTcpHandshake from '../../../components/interactive/ReseauTcpHandshake.astro';
+
+## TCP : établir une connexion fiable
+
+Nous venons de rencontrer <Prereq href="/reseaux/partie-v/udp">UDP</Prereq>, le transport minimal : il pose un en-tête de ports et une somme de contrôle sur un datagramme, puis le confie à <Prereq href="/reseaux/partie-iv/adressage-ip">IP</Prereq> qui fait de son mieux. Or « de son mieux » signifie, honnêtement, *pas grand-chose de garanti* : IP peut **perdre** un paquet, le **dupliquer**, ou les **livrer dans le désordre**. Pour beaucoup d'applications, c'est inacceptable : une page web tronquée ou des octets permutés dans un fichier sont des bugs.
+
+Le défi de TCP est donc spectaculaire : **construire un tuyau fiable et ordonné par-dessus un transport qui ne l'est pas.** C'est de l'ingénierie d'illusion — au-dessus, l'application croit écrire dans un flux d'octets continu et sûr ; en dessous, le chaos d'IP.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez que vous dictiez un long texte par téléphone à un correspondant, sur une ligne grésillante qui parfois coupe un mot, parfois en répète un. Comment garantir qu'il écrira *exactement* votre texte ? Vous **numérotez** chaque mot, et vous lui demandez de confirmer : « j'ai bien reçu jusqu'au mot 412 ». Si la confirmation ne vient pas, vous **redites** la suite. TCP, c'est précisément ce protocole de bon sens, formalisé et automatisé.
+</Encart>
+
+### Numéroter les octets, accuser réception
+
+TCP voit les données comme un **flux d'octets**, et il numérote — non pas les paquets, mais **chaque octet**. Le champ *numéro de séquence* d'un segment indique la position du premier octet qu'il transporte dans ce flux. Le récepteur répond avec un *numéro d'acquittement* (ACK) : « j'attends maintenant l'octet numéro $N$ », ce qui signifie *j'ai reçu correctement tout ce qui précède*.
+
+<Resultat label="Acquittement cumulatif">
+
+$$ \text{ACK} = N \;\Longleftrightarrow\; \text{tous les octets de numéro} \lt N \text{ sont reçus} $$
+
+<Badge niveau="norme" slot="badge">Format des champs séquence/ACK et sémantique cumulative fixés par le RFC 793 et ses mises à jour (RFC 9293), universels.</Badge>
+</Resultat>
+
+Cet **acquittement cumulatif** est élégant : un seul ACK confirme tout le préfixe contigu reçu. Il a un corollaire immédiat : la numérotation rend triviale la **suppression des doublons** (un octet déjà reçu est ignoré) et le **réordonnancement** (les segments arrivés en désordre sont rangés selon leur numéro avant d'être livrés à l'application). <Badge niveau="norme">La numérotation sur les octets, et non sur les segments, est le choix structurant de TCP ; elle permet de découper et recoller le flux librement.</Badge>
+
+### La retransmission : récupérer ce qui est perdu
+
+Que se passe-t-il si un segment se perd ? L'émetteur ne reçoit pas l'ACK attendu. Il a armé, en envoyant, un **chronomètre** (timeout). Si le délai expire sans ACK, il **retransmet**. La logique de correction tient en une phrase :
+
+> Tant qu'un octet n'est pas acquitté, il reste retransmissible ; un octet acquitté ne sera jamais redemandé.
+
+<Encart type="plusloin" titre="Pourquoi ce mécanisme est correct (et pas seulement plausible)">
+La **correction** de l'accusé + retransmission se démontre par un invariant. Posons : un octet est « sûr » dès qu'il a été reçu *et* livré dans l'ordre au récepteur. Deux cas seulement existent pour un octet émis et non encore acquitté :
+
+1. **Il a été reçu**, mais l'ACK est en route ou perdu. Une retransmission produira un doublon, *éliminé* par le numéro de séquence — aucun dégât.
+2. **Il a été perdu.** L'absence d'ACK déclenche la retransmission, qui retente la livraison.
+
+Dans les deux cas, l'octet finit par être livré exactement une fois, ou l'émetteur réessaie indéfiniment. Donc : *si la connexion survit assez longtemps, chaque octet est livré une fois et dans l'ordre.* C'est une garantie **logique**, indépendante du taux de perte d'IP. <Badge niveau="norme">La sémantique « livraison fiable ordonnée » est la définition normative de TCP.</Badge>
+</Encart>
+
+**Honnêteté capitale.** TCP garantit la livraison fiable *à condition que la connexion survive* — il ne garantit **pas le délai**. Sur un lien catastrophique, il retransmettra peut-être très longtemps ; il peut même finir par abandonner. Et la **valeur** du timeout n'est pas, elle, déduite : c'est une heuristique (estimée à partir des temps d'aller-retour mesurés), que nous traiterons au chapitre suivant. <Badge niveau="heuristique">Le *choix* des valeurs de timeout (RTO) est révisable et dépend des mesures de RTT ; seule la *correction* du principe retransmission est fondée.</Badge>
+
+### Le three-way handshake : pourquoi trois temps ?
+
+Avant d'échanger des données, les deux parties doivent **se mettre d'accord sur les numéros de séquence initiaux**. Chaque sens a son propre flux, donc son propre point de départ. Ce point de départ — l'*ISN*, Initial Sequence Number — n'est pas choisi à zéro : il est tiré de façon imprévisible, et nous allons voir pourquoi.
+
+<ReseauTcpHandshake />
+
+L'ouverture se fait en trois messages :
+
+1. **SYN** : le client envoie son ISN, disons $x$. « Je commence à parler au numéro $x$. »
+2. **SYN-ACK** : le serveur acquitte ($x+1$) *et* annonce son propre ISN $y$. « J'ai noté ton $x$ ; moi je commence à $y$. »
+3. **ACK** : le client acquitte le $y$ du serveur ($y+1$). « J'ai noté ton $y$. »
+
+<Encart type="calcul" titre="Pourquoi deux messages ne suffisent pas">
+Tentons une ouverture en **deux** temps (SYN, puis SYN-ACK), et cherchons la faille.
+
+- Avec deux messages, le **client** apprend que le serveur a reçu son SYN. Mais le **serveur**, lui, n'a aucune confirmation que son propre ISN $y$ est arrivé.
+- Pire, supposons qu'un vieux SYN, **retardé puis dupliqué** par le réseau, resurgisse longtemps après la fin d'une connexion. En deux temps, le serveur l'accepterait et ouvrirait une **connexion fantôme** avec un ISN périmé — sur laquelle de vieilles données pourraient être injectées.
+- Le **troisième message** ferme la faille : il force le client à *prouver* qu'il a vu le $y$ frais du serveur. Un client fantôme, qui n'a pas reçu ce $y$, ne peut pas produire l'ACK $y+1$ correct. La connexion ne s'établit donc que si les **deux** parties ont confirmé l'ISN **courant** de l'autre.
+</Encart>
+
+Voilà le rôle profond de l'ISN imprévisible et du troisième message : ils prouvent que les deux pairs sont **vivants et synchronisés *maintenant***, et non victimes d'un écho du passé. <Badge niveau="norme">Le three-way handshake (SYN / SYN-ACK / ACK) et la synchronisation des ISN sont normalisés et universels.</Badge> Trois est le minimum : il faut un aller-retour complet *dans chaque sens* pour qu'un ISN soit annoncé **et** confirmé, et le SYN-ACK condense deux de ces messages en un seul.
+
+### Fermer proprement
+
+La fermeture suit la même prudence. Chaque sens du flux se ferme indépendamment par un segment **FIN**, acquitté par l'autre : on dit « je n'ai plus rien à envoyer », l'autre en prend acte, et symétriquement. <Badge niveau="norme">La séquence de fermeture (FIN/ACK, état d'attente) fait partie de la machine à états du RFC.</Badge>
+
+Nous avons donc un canal **fiable et ordonné**, ouvert, exploité et fermé. Mais une question reste béante : à *quelle vitesse* émettre ? Trop vite, on noie le récepteur ou on sature le réseau. C'est l'objet du prochain chapitre — le contrôle de flux et de congestion.

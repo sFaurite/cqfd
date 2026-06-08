@@ -1,0 +1,93 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Moduler : porter les bits sur une onde"
+chapter: modulation
+description: "Presente la modulation sur porteuse (ASK, FSK, PSK, QAM), la notion de constellation, et le lien direct avec le nombre de bits par symbole et la borne de Shannon."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauConstellation from '../../../components/interactive/ReseauConstellation.astro';
+
+## Pourquoi la bande de base ne suffit pas
+
+Au chapitre précédent, le <Prereq href="/reseaux/partie-ii/codage-ligne">codage de ligne</Prereq> nous a appris à écrire les bits directement sous forme de tensions sur un fil : un créneau haut, un créneau bas, et l'horloge récupérée dans les transitions. On appelle cela transmettre **en bande de base** : le signal occupe les fréquences à partir de zéro hertz.
+
+Le problème, c'est que beaucoup de canaux refusent ces basses fréquences. Une antenne radio ne rayonne efficacement qu'autour d'une fréquence précise ; une fibre optique transporte de la lumière vers $2 \times 10^{14}$ Hz, pas du continu ; un câble coaxial partagé réserve à chaque chaîne une **fenêtre** de fréquences bien à l'écart de zéro. Ces supports sont des canaux **passe-bande** : ils ne laissent passer qu'une plage centrée sur une fréquence porteuse $f_c$, loin du zéro.
+
+<Badge niveau="theoreme">La sélectivité en fréquence d'une antenne ou d'une fibre est une contrainte physique du support, pas une convention : un signal de bande de base centré sur 0 Hz ne s'y propage tout simplement pas.</Badge>
+
+Il faut donc **déplacer** notre information depuis le voisinage de 0 Hz vers le voisinage de $f_c$. C'est exactement ce que fait la modulation : prendre une onde porteuse pure et la déformer au rythme des bits.
+
+<Encart type="intuition" titre="Peindre l'information sur une onde déjà là">
+Imaginez une note de musique tenue, parfaitement pure : c'est la porteuse $\cos(2\pi f_c t)$. Toute seule, elle ne dit rien — elle est constante. Pour y inscrire un message, il faut la **faire varier** d'une façon que le récepteur saura relire. On peut jouer plus ou moins fort (l'amplitude), un peu plus aigu ou plus grave (la fréquence), ou décaler le départ de l'oscillation (la phase). Chacun de ces trois leviers est une famille de modulation.
+</Encart>
+
+## Les trois leviers : amplitude, fréquence, phase
+
+Une porteuse sinusoïdale s'écrit $s(t) = A\cos(2\pi f t + \varphi)$. Elle offre exactement trois paramètres que l'on peut faire varier au rythme des symboles :
+
+- **ASK** (*Amplitude-Shift Keying*) — on module $A$. Par exemple « porteuse forte » = 1, « porteuse faible » = 0.
+- **FSK** (*Frequency-Shift Keying*) — on module $f$. Une fréquence pour 0, une autre pour 1.
+- **PSK** (*Phase-Shift Keying*) — on module $\varphi$. Par exemple phase $0$ pour 0, phase $\pi$ pour 1.
+
+<Badge niveau="theoreme">Une sinusoïde n'a que trois degrés de liberté indépendants ($A$, $f$, $\varphi$) : amplitude, fréquence et phase épuisent les façons de la moduler. C'est une propriété de l'objet mathématique « onde », pas un choix d'ingénieur.</Badge>
+
+## La QAM : amplitude et phase ensemble
+
+Rien n'oblige à n'actionner qu'un levier. La **QAM** (*Quadrature Amplitude Modulation*) combine amplitude **et** phase. L'astuce repose sur un fait trigonométrique : toute sinusoïde à la fréquence $f_c$ se décompose sur deux porteuses **en quadrature** (déphasées de $90°$).
+
+<Encart type="calcul" titre="Une amplitude et une phase = deux nombres I et Q">
+Partons d'une porteuse d'amplitude $A$ et de phase $\varphi$, et développons à l'aide de l'identité $\cos(a+b) = \cos a \cos b - \sin a \sin b$ :
+
+$$ A\cos(2\pi f_c t + \varphi) = A\cos\varphi \cos(2\pi f_c t) - A\sin\varphi \sin(2\pi f_c t). $$
+
+Posons $I = A\cos\varphi$ et $Q = A\sin\varphi$. Le signal devient
+
+$$ s(t) = I\cos(2\pi f_c t) - Q\sin(2\pi f_c t). $$
+
+Choisir un couple $(I, Q)$ revient à choisir une amplitude $A = \sqrt{I^2 + Q^2}$ et une phase $\varphi$ telle que $\cos\varphi = I/A$ et $\sin\varphi = Q/A$ (l'arc-tangente seule ne distingue pas les quadrants, d'où le besoin des deux signes). Autrement dit, **un symbole QAM est un point du plan**, repéré par ses coordonnées $(I, Q)$.
+
+<Resultat label="Le symbole comme point du plan I/Q">
+
+$$ s(t) = I\cos(2\pi f_c t) - Q\sin(2\pi f_c t), \qquad (I, Q) \in \mathbb{R}^2. $$
+
+<Badge niveau="theoreme" slot="badge">Conséquence directe de l'identité trigonométrique d'addition : deux porteuses en quadrature forment une base, donc tout symbole se résume à deux nombres.</Badge>
+</Resultat>
+</Encart>
+
+## La constellation : compter les bits par symbole
+
+Si chaque symbole est un point du plan $(I, Q)$, alors un schéma de modulation est simplement un **ensemble fini de points autorisés** : c'est la **constellation**. Avec $M$ points distincts, chaque symbole distingue l'un des $M$ messages possibles, soit
+
+$$ \log_2 M \text{ bits par symbole}. $$
+
+Une QAM-16 ($M = 16$) porte $\log_2 16 = 4$ bits par symbole ; une QAM-256 en porte $\log_2 256 = 8$. <Badge niveau="theoreme">Le nombre de bits par symbole est exactement $\log_2 M$ : c'est la définition même du bit comme quantité d'information, établie au chapitre du <Prereq href="/reseaux/partie-i/bit-information">bit</Prereq>. Rien d'arbitraire ici.</Badge>
+
+Manipulez la constellation ci-dessous : ajoutez du bruit, changez l'ordre $M$, et regardez quand les points deviennent confondables.
+
+<ReseauConstellation />
+
+## Pourquoi on ne met pas l'ordre au maximum : le verrou de Shannon
+
+La tentation est grande : plus de points = plus de bits/symbole = plus de débit. Pourquoi ne pas passer en QAM-65536 partout ?
+
+Parce qu'à **puissance fixée**, plus on entasse de points dans le plan $(I, Q)$, plus ils sont **proches les uns des autres**. Or le <Prereq href="/reseaux/partie-i/bruit-shannon">bruit</Prereq> déplace aléatoirement chaque point reçu d'un petit nuage de rayon lié au bruit. Si deux points voisins sont plus rapprochés que ce nuage, le récepteur les confond : **erreur**.
+
+<Encart type="intuition" titre="Des maisons sur un terrain de surface fixe">
+Le SNR fixe la taille du terrain (la puissance disponible) et la taille minimale d'un jardin autour de chaque maison (l'incertitude due au bruit). On peut bâtir d'autant plus de maisons que le terrain est grand par rapport au jardin. Doubler le nombre de maisons sans agrandir le terrain, c'est coller les jardins : le facteur va finir par se tromper de boîte aux lettres. Le SNR plafonne donc le nombre de points que la constellation peut séparer **de façon fiable**.
+</Encart>
+
+Ce n'est pas une vague analogie : c'est précisément le contenu du théorème de Shannon. La capacité $C = B\log_2(1 + S/N)$ borne le débit fiable, et le terme $\log_2(1 + S/N)$ joue le rôle d'un « nombre de bits par symbole » maximal. Densifier la constellation au-delà de ce que le SNR autorise **ne crée pas de débit** : cela fait simplement exploser le taux d'erreur. <Badge niveau="theoreme">On ne triche jamais avec Shannon : une QAM-256 sur un canal trop bruité ne transmet pas 8 bits utiles par symbole, elle transmet des symboles erronés. La densité de constellation atteignable est bornée par $S/N$, point.</Badge>
+
+## Le choix de l'ordre : norme, puis adaptation
+
+Quels points exactement, à quelles positions ? Cela, c'est une **convention**. Le Wi-Fi, la 4G/5G, le DVB ou le câble fixent des constellations précises (QPSK, QAM-16, QAM-64, QAM-256, QAM-1024...) avec leurs coordonnées normalisées. <Badge niveau="norme">Les constellations utilisables et leur géométrie exacte sont définies par des standards (IEEE 802.11, 3GPP, DVB) pour que émetteur et récepteur s'accordent. C'est une convention partagée, non une déduction.</Badge>
+
+Mais le SNR d'un lien radio **varie sans cesse** : on s'éloigne du point d'accès, un mur s'interpose, une interférence surgit. Les systèmes modernes mesurent donc le canal en continu et **choisissent l'ordre de modulation** le plus dense que le SNR du moment tolère : QAM-256 quand le signal est excellent, repli vers QAM-16 ou QPSK quand il se dégrade. C'est la **modulation adaptative**. <Badge niveau="heuristique">Choisir l'ordre selon le canal mesuré est une stratégie d'ingénierie raisonnable mais révisable : seuils, hystérésis et table de correspondance SNR→modulation diffèrent d'un système à l'autre.</Badge> <Badge niveau="deploiement">L'ordre effectivement employé à un instant donné dépend du SNR réel, donc de la distance, des obstacles et de l'équipement : il varie d'une connexion à l'autre, voire d'une milliseconde à l'autre.</Badge>
+
+Nous savons désormais inscrire les bits sur un support, en bande de base comme sur une porteuse. Mais un flot de bits brut reste illisible : où commence un message, où finit-il, et comment savoir s'il est arrivé intact ? C'est l'affaire du chapitre suivant, où nous délimiterons la **trame** et poserons les premières défenses contre l'erreur avec le bit de **parité**.

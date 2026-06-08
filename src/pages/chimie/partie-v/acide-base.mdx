@@ -1,0 +1,144 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Réactions acide-base"
+chapter: acide-base
+description: "Les réactions acide-base au sens de Brønsted-Lowry : couples acide/base, force (Ka, pKa), pH, autoprotolyse de l'eau, et titrages."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieTitrage from '../../../components/interactive/ChimieTitrage.astro';
+
+## Réactions acide-base
+
+Un acide qui « pique », une base qui « rend savonneux » : derrière ces sensations se cache l'un des mouvements les plus simples de toute la chimie — le déplacement d'un seul proton, $\text{H}^+$, d'une molécule à une autre. Et nous allons voir que ce chapitre n'introduit presque rien de neuf : une réaction acide-base est un **équilibre chimique** comme un autre. Tout ce que nous avons bâti au chapitre précédent — la constante $K$, le sens d'évolution, la relation avec l'enthalpie libre — s'applique directement.
+
+<Encart type="intuition" titre="L'idée en une image">
+
+Imagine le proton comme une balle que deux joueurs se disputent. L'acide, c'est le joueur qui *lâche* la balle ; la base, c'est celui qui la *rattrape*. Une réaction acide-base n'est rien d'autre que cette passe. La seule question intéressante est : qui tient le plus fort à la balle ? Un acide « fort » la lâche sans résistance ; un acide « faible » la garde presque toujours et ne la passe que de temps en temps. C'est exactement ce que mesure une constante d'équilibre.
+
+</Encart>
+
+### Brønsted : transfert de proton
+
+Définissons proprement. Dans la théorie de **Brønsted-Lowry**, un **acide** est une espèce capable de céder un proton $\text{H}^+$, et une **base** une espèce capable d'en capter un. Quand un acide $\text{AH}$ cède son proton, il devient sa **base conjuguée** $\text{A}^-$ : ensemble ils forment un **couple acide/base** noté $\text{AH}/\text{A}^-$.
+
+<Badge niveau="empirique">Brønsted-Lowry est un modèle. Il élargit la définition d'Arrhenius (qui limitait les acides aux pourvoyeurs de $\text{H}^+$ et les bases à ceux d'$\text{OH}^-$ en solution aqueuse) en la recentrant sur le transfert de proton, valable dans tout solvant.</Badge>
+
+Comme un proton ne reste jamais seul, toute réaction acide-base met en jeu **deux** couples : l'un cède, l'autre capte. En solution aqueuse, le proton est capté par l'eau pour former l'ion oxonium $\text{H}_3\text{O}^+$ :
+
+$$
+\text{AH} + \text{H}_2\text{O} \;\rightleftharpoons\; \text{A}^- + \text{H}_3\text{O}^+
+$$
+
+<Encart type="plusloin" titre="Lewis généralise encore">
+
+Brønsted parle de protons. Mais on peut remonter d'un cran : un proton n'est qu'un accepteur de **doublet d'électrons**. Lewis définit alors un acide comme tout accepteur de doublet et une base comme tout donneur — ce qui englobe des espèces sans aucun $\text{H}^+$, comme $\text{BF}_3$ ou les cations métalliques. C'est la même logique que notre fil conducteur depuis le début : la réactivité se lit dans la structure électronique, ici dans la disponibilité d'un doublet. Pour ce chapitre, Brønsted suffit.
+
+</Encart>
+
+### La force d'un acide : la constante $K_a$
+
+La double flèche $\rightleftharpoons$ signale un **équilibre**. Appliquons-lui exactement l'outil du chapitre précédent : la <Prereq href="/chimie/partie-v/equilibre-chimique">constante d'équilibre</Prereq>. Pour la réaction de l'acide avec l'eau, on l'appelle **constante d'acidité** $K_a$ :
+
+<Resultat label="Constante d'acidité">
+
+$$
+K_a = \frac{[\text{A}^-]\,[\text{H}_3\text{O}^+]}{[\text{AH}]} \qquad pK_a = -\log_{10} K_a
+$$
+
+<Badge niveau="experimental" slot="badge">Le $pK_a$ est une grandeur mesurée, tabulée pour chaque couple. Il dépend du solvant : l'échelle dans l'eau diffère de celle dans l'ammoniac liquide, car le solvant participe au transfert.</Badge>
+
+</Resultat>
+
+Plus $K_a$ est grand (donc $pK_a$ petit), plus l'équilibre est déplacé vers la droite : l'acide cède facilement son proton, il est **fort**. Ici une distinction capitale : la force est une propriété **intrinsèque du couple** ($K_a$ ne dépend que de l'espèce, du solvant et de la température), alors que l'**acidité d'une solution** dépend en plus de la **concentration** qu'on y a mise. Un acide faible très concentré peut rendre une solution plus acide qu'un acide fort très dilué.
+
+<Badge niveau="qualitatif">« Acide fort/faible » classe les couples par $K_a$ ; « solution acide/basique » décrit un mélange précis. Confondre les deux est l'erreur la plus fréquente du domaine.</Badge>
+
+Et puisque $K_a$ est une constante d'équilibre, elle est gouvernée par la thermodynamique via la relation <Prereq href="/chimie/partie-v/equilibre-chimique">$\Delta_r G^\circ = -RT\ln K$</Prereq> établie au chapitre précédent, appliquée ici à $K_a$ : un $pK_a$ n'est, au fond, qu'une enthalpie libre standard déguisée.
+
+### L'eau réagit avec elle-même : $K_e$
+
+L'eau est à la fois acide (couple $\text{H}_3\text{O}^+/\text{H}_2\text{O}$) et base (couple $\text{H}_2\text{O}/\text{OH}^-$). Deux molécules d'eau peuvent donc s'échanger un proton — c'est l'**autoprotolyse** :
+
+$$
+2\,\text{H}_2\text{O} \;\rightleftharpoons\; \text{H}_3\text{O}^+ + \text{OH}^-
+$$
+
+Sa constante d'équilibre est le **produit ionique de l'eau** $K_e = [\text{H}_3\text{O}^+]\,[\text{OH}^-]$.
+
+<Resultat label="Produit ionique de l'eau">
+
+$$
+K_e = [\text{H}_3\text{O}^+]\,[\text{OH}^-] = 1{,}0\times 10^{-14} \;\;(\text{à } 25\,^\circ\text{C})
+$$
+
+<Badge niveau="experimental" slot="badge">Valeur mesurée, qui croît avec la température (l'autoprotolyse est endothermique). $K_e$ relie toujours les concentrations en $\text{H}_3\text{O}^+$ et $\text{OH}^-$ de n'importe quelle solution aqueuse.</Badge>
+
+</Resultat>
+
+### Le pH : une mesure opérationnelle
+
+Les concentrations en $\text{H}_3\text{O}^+$ s'étalent sur des facteurs $10^{14}$. Pour les manier, on définit le **pH** :
+
+<Resultat label="Définition du pH">
+
+$$
+\text{pH} = -\log_{10}[\text{H}_3\text{O}^+]
+$$
+
+<Badge niveau="experimental" slot="badge">Définition opérationnelle et conventionnelle, en réalité fondée sur l'activité de $\text{H}_3\text{O}^+$. Le pH se mesure (pH-mètre) ; cette forme logarithmique en est l'approximation usuelle en solution diluée.</Badge>
+
+</Resultat>
+
+À $25\,^\circ\text{C}$, $K_e = 10^{-14}$ impose qu'une solution neutre ($[\text{H}_3\text{O}^+]=[\text{OH}^-]$) ait $\text{pH}=7$ ; en dessous elle est acide, au-dessus basique.
+
+### Lire un titrage
+
+Un **titrage** verse progressivement une base de concentration connue dans un acide (ou l'inverse) et suit le pH. La courbe obtenue raconte toute l'histoire du couple. Manipule-la :
+
+<ChimieTitrage />
+
+Deux points sont remarquables. À l'**équivalence**, on a versé exactement la quantité de base nécessaire pour consommer tout l'acide : le saut de pH y est brutal et permet de doser. À la **demi-équivalence**, on a neutralisé la moitié de l'acide — et là, un résultat se déduit sans approximation.
+
+<Encart type="calcul" titre="Pourquoi pH = pKa à la demi-équivalence">
+
+Partons de la définition de $K_a$ et passons au logarithme :
+
+$$
+K_a = \frac{[\text{A}^-]\,[\text{H}_3\text{O}^+]}{[\text{AH}]}
+$$
+
+$$
+\log K_a = \log[\text{H}_3\text{O}^+] + \log\frac{[\text{A}^-]}{[\text{AH}]}
+$$
+
+En multipliant par $-1$ et en reconnaissant $pK_a = -\log K_a$ et $\text{pH} = -\log[\text{H}_3\text{O}^+]$ :
+
+$$
+\text{pH} = pK_a + \log\frac{[\text{A}^-]}{[\text{AH}]}
+$$
+
+À la demi-équivalence, la moitié de l'acide a été transformée en sa base conjuguée : $[\text{AH}] = [\text{A}^-]$. Le rapport vaut $1$, son logarithme est nul, et il reste $\text{pH} = pK_a$.
+
+</Encart>
+
+<Resultat label="Demi-équivalence">
+
+$$
+[\text{AH}]=[\text{A}^-] \;\Longrightarrow\; \text{pH} = pK_a
+$$
+
+<Badge niveau="quantique" slot="badge">Conséquence rigoureuse, déduite (et non mesurée) de la définition de $K_a$ et de celle du pH. C'est ce qui en fait la méthode de référence pour mesurer un $pK_a$ : lire le pH à mi-chemin de l'équivalence.</Badge>
+
+</Resultat>
+
+Autour de ce point, la relation $\text{pH} = pK_a + \log([\text{A}^-]/[\text{AH}])$ montre que le pH varie peu malgré l'ajout de base : la solution **tamponne** les variations. C'est la **zone tampon**, qui maintient le pH du sang ou des cellules à une valeur quasi constante.
+
+<Badge niveau="qualitatif">L'effet tampon est maximal lorsque $\text{pH}\approx pK_a$ : le mélange acide/base conjuguée résiste alors le mieux aux ajouts d'acide ou de base.</Badge>
+
+Le transfert d'un proton n'était qu'une variante du jeu des électrons. Reste un autre transfert, plus profond encore : celui des électrons eux-mêmes, qui nous mène à l'oxydoréduction.

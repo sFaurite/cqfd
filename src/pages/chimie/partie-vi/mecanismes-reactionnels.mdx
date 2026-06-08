@@ -1,0 +1,81 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Mécanismes : la danse des électrons"
+chapter: mecanismes-reactionnels
+description: "L'introduction aux mécanismes réactionnels : nucléophiles et électrophiles, flèches courbes, sites riches et pauvres en électrons, et l'idée que toute réaction est un mouvement d'électrons."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Mécanismes : la danse des électrons
+
+Nous avons construit les molécules, prédit leur géométrie, classé leurs <Prereq href="/chimie/partie-vi/groupes-fonctionnels">groupes fonctionnels</Prereq>. Mais une molécule n'est pas un objet figé sur une page : elle réagit. Et quand deux molécules réagissent, **que se passe-t-il vraiment** ? Toute la beauté de la chimie organique tient dans une réponse d'une simplicité déconcertante : il ne se passe qu'**une seule chose**. Des électrons se déplacent. Un site riche en électrons tend la main vers un site qui en manque. C'est tout. Le reste — la formation de liaisons, leur rupture, l'apparition de nouvelles molécules — n'est que la conséquence visible de ce déplacement.
+
+<Encart type="intuition" titre="Une réaction, c'est de l'électricité à l'échelle moléculaire">
+Pense à une réaction comme à un courant qui circule entre deux pôles. D'un côté, un atome ou une région **chargée d'électrons** : un doublet non liant qui dépasse, une liaison double gonflée d'électrons. De l'autre, un atome **affamé** : un carbone porteur d'une charge positive, ou simplement appauvri parce qu'un voisin électronégatif lui tire la couverture. L'image du courant qui « coule du riche vers le pauvre » est commode, mais reste une analogie : ce qui se déplace, ce ne sont pas des charges dans un fil, c'est de la densité électronique qui se réorganise. Apprendre les mécanismes, ce n'est pas mémoriser des centaines de réactions — c'est apprendre à **repérer ces deux pôles** et à suivre le sens du déplacement.
+</Encart>
+
+### Nucléophile et électrophile : le riche et le pauvre
+
+Donnons leurs noms aux deux protagonistes. Le **nucléophile** (« qui aime les noyaux ») est le site donneur : il possède une forte densité électronique — un doublet non liant, une charge négative, ou les électrons mobiles d'une liaison $\pi$. L'**électrophile** (« qui aime les électrons ») est le site accepteur : il porte une charge positive, une lacune électronique, ou un déficit partiel.
+
+Et d'où vient ce déficit ? **Exactement** de ce que nous avons posé dès la <Prereq href="/chimie/partie-iii/polarite-moments-dipolaires">polarité des liaisons</Prereq>. Un atome électronégatif déforme le nuage électronique et laisse son voisin avec une charge partielle $\delta^+$ : voilà un électrophile tout désigné. Boucle bouclée : la réactivité n'est pas une couche nouvelle ajoutée par-dessus la chimie, c'est **la structure électronique en mouvement**.
+
+<Resultat label="Le principe fondamental de la réactivité">
+
+$$
+\text{nucléophile} \;(\delta^- ,\ \text{doublet},\ \pi) \;\longrightarrow\; \text{électrophile} \;(\delta^+ ,\ \text{lacune})
+$$
+
+<Badge niveau="quantique" slot="badge">Une liaison se forme quand des électrons occupent une orbitale moléculaire liante : le don du nucléophile vers l'orbitale vide (ou antiliante basse) de l'électrophile en est la traduction directe.</Badge>
+</Resultat>
+
+Pourquoi est-ce un fait *fondamental* et non une simple règle commode ? Parce qu'il découle de ce que nous avons établi avec les <Prereq href="/chimie/partie-ii/orbitales-moleculaires">orbitales moléculaires</Prereq> : former une liaison, c'est peupler une orbitale liante. Le nucléophile apporte le doublet ; l'orbitale vide (ou antiliante basse) de l'électrophile l'accueille. Le « riche vers pauvre » est la version imagée d'un recouvrement orbitalaire.
+
+### Les flèches courbes : une grammaire, pas une photographie
+
+Pour **noter** ce déplacement, les chimistes utilisent un formalisme magnifique : la **flèche courbe**. Une flèche part d'un doublet d'électrons (sur un atome ou une liaison) et pointe vers l'endroit où ce doublet va former une nouvelle liaison ou se loger en doublet libre.
+
+La règle de lecture tient en une ligne : **une flèche déplace deux électrons**, de la queue vers la pointe.
+
+<Encart type="calcul" titre="Lire une flèche pas à pas : l'attaque d'un ion hydroxyde">
+Prenons $\text{HO}^-$ qui attaque un carbone électrophile portant un groupe partant, noté $\text{C}\!-\!\text{X}$ (avec X électronégatif).
+
+1. **Repérer les pôles.** Dans $\text{HO}^-$, l'oxygène porte la charge négative et trois doublets non liants (une liaison à H, trois doublets libres) : c'est le site nucléophile. Le carbone lié à X est appauvri ($\delta^+$) : électrophile.
+2. **Première flèche.** Elle part d'un doublet de l'oxygène et pointe vers le carbone : un nouveau doublet $\text{O}\!-\!\text{C}$ se forme. Comptage : l'oxygène engage 2 électrons dans la nouvelle liaison.
+3. **Deuxième flèche.** Le carbone ne peut pas dépasser quatre liaisons (octet, ch. 7). La liaison $\text{C}\!-\!\text{X}$ doit donc se rompre : une flèche part de cette liaison vers X, qui emporte le doublet.
+4. **Bilan de charge.** L'oxygène, qui a partagé son doublet, perd sa charge négative ; X, qui emporte le doublet liant, devient $\text{X}^-$. La charge $-1$ s'est conservée. $\;\checkmark$
+
+Le compte des électrons et des charges boucle : c'est précisément ce que la flèche courbe garantit. Que les deux flèches soient simultanées (mécanisme concerté) ou successives (par étapes), c'est l'expérience — pas le dessin — qui le tranchera.
+</Encart>
+
+Ce comptage est d'une fiabilité remarquable : il prédit **quel** produit se forme, où vont les charges, quelles liaisons cassent. Et pourtant, soyons honnêtes sur ce qu'il **est**.
+
+<Tournant titre="Honnêteté : la flèche est un modèle de comptage, pas le réel">
+La flèche courbe suggère un petit paquet de deux électrons glissant proprement d'un point à un autre. **Ce n'est pas ce qui se passe.** Les électrons ne sont pas des billes : ce sont, depuis le <Prereq href="/chimie/partie-i/postulats-quantiques">tout premier chapitre</Prereq>, des objets quantiques décrits par une fonction d'onde délocalisée. Le « mouvement » réel est une réorganisation continue de densité électronique, qu'on ne décrit exactement qu'en résolvant (approximativement) l'équation de Schrödinger du système. La flèche est une **convention de comptage** (un *bookkeeping*) : elle garantit que le compte d'électrons et de charges est juste, et elle prédit étonnamment bien quel produit se forme. Mais elle ne photographie rien, et n'affirme rien sur la trajectoire réelle des électrons.
+
+<Badge niveau="empirique">Le formalisme des flèches courbes est un modèle de comptage électronique : extrêmement prédictif, conventionnel, et délibérément approché. Ce n'est pas une description quantique exacte du mouvement des électrons.</Badge>
+</Tournant>
+
+### On ne démontre pas un mécanisme — on le confronte
+
+Voici le point de rigueur le plus important du chapitre, et peut-être du cours. **Un mécanisme ne se démontre pas.** On le *propose*, puis on le met à l'épreuve de l'expérience.
+
+Comment départage-t-on deux mécanismes plausibles ? Par les **preuves cinétiques** établies au chapitre 18. Si la <Prereq href="/chimie/partie-v/cinetique-chimique">loi de vitesse</Prereq> mesurée dépend de la concentration du nucléophile, c'est qu'il intervient à l'étape lente : le mécanisme « concerté » (les deux flèches en même temps) est compatible. Si la vitesse n'en dépend pas, c'est qu'une étape préalable, plus lente, gouverne tout : on penche pour un mécanisme « par étapes » passant par un intermédiaire. La cinétique n'impose jamais un mécanisme à elle seule : elle écarte ceux qui sont incompatibles avec la loi de vitesse observée.
+
+<Badge niveau="experimental">L'ordre d'une réaction est mesuré expérimentalement (ch. 18) ; c'est lui — avec la stéréochimie observée — qui réfute les mécanismes incompatibles et conforte celui qu'on propose.</Badge>
+
+S'ajoutent les **preuves stéréochimiques** : l'arrangement spatial du produit (inversion ou rétention de configuration) trahit la trajectoire de l'attaque. Un mécanisme est donc une **hypothèse réfutable**, jamais un théorème : il reste celui qui survit à toutes les preuves accumulées, et il peut être révisé si une expérience le contredit. <Badge niveau="qualitatif">La notion de « réactivité générale » d'un groupe reste une tendance : solvant, température et voisinage peuvent renverser le résultat attendu.</Badge>
+
+### Le fil rouge, refermé
+
+Reprenons le souffle du tout début. Nous étions partis d'un postulat : la matière est **quantique**, décrite par des fonctions d'onde. De là sont nées les orbitales, puis les configurations électroniques, le tableau périodique, l'électronégativité, la liaison, la géométrie, les forces intermoléculaires, l'énergie des réactions, les équilibres, les acides et les électrons échangés en oxydoréduction. Et nous arrivons ici, à la réactivité organique, pour découvrir qu'elle aussi — la plus foisonnante, la plus créative des chimies — se ramène à l'essentiel : **des électrons qui se déplacent d'un site riche vers un site pauvre**. <Badge niveau="quantique">Tout, de la première orbitale à la dernière flèche courbe, procède de la même structure électronique posée au chapitre 1.</Badge>
+
+Mais ne survendons pas. Ce socle quantique est solide ; ce qu'on en *déduit* sur des molécules réelles passe presque toujours par des modèles approchés — octet, VSEPR, flèches courbes — et par la mesure. La chimie demeure une science **largement expérimentale** : ses mécanismes sont des modèles testés, parfois révisés, jamais sacralisés. C'est précisément cette tension — un principe fondamental d'un côté, l'irréductible richesse du laboratoire de l'autre — qui la rend vivante.
+
+Vous savez désormais lire la danse. À vous, maintenant, de revenir au <Prereq href="/chimie/partie-i/postulats-quantiques">premier chapitre</Prereq> avec des yeux neufs : derrière chaque réaction du monde se cache une fonction d'onde qui se réorganise.

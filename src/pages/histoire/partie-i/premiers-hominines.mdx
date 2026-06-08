@@ -1,0 +1,80 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les premiers homininés : bipédie et buissonnement"
+chapter: premiers-hominines
+description: "Établit, à partir des fossiles et de l'anatomie comparée, l'émergence de la lignée humaine en Afrique : bipédie, diversité des espèces, et la réfutation de l'image téléologique d'une « marche du progrès »."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Lire un os comme une archive
+
+Aucun témoin n'a vu marcher le premier homininé. Pour ce chapitre, nous n'avons ni texte, ni récit, ni mémoire : seulement des **fragments minéralisés** — quelques os, parfois un seul, arrachés à des sédiments vieux de millions d'années. Notre tâche est de faire parler ces traces sans leur faire dire plus qu'elles ne savent. C'est l'exercice central de la paléoanthropologie, et son piège permanent : surinterpréter un fossile unique.
+
+<Hypotheses titre="Sources & cadre">
+1. **Les sources.** Des **fossiles** (os, dents, parfois empreintes), datés par les méthodes physiques vues au chapitre précédent <Prereq href="/histoire/partie-i/profondeur-du-temps">profondeur du temps et datation</Prereq>. S'y ajoutent l'**anatomie comparée** (comparer ces os à ceux des humains et des grands singes actuels) et, depuis peu, des données moléculaires sur les espèces vivantes.
+2. **Le mot « homininé ».** On appelle ici **homininés** les espèces de la lignée humaine *après* sa séparation d'avec celle des chimpanzés — c'est-à-dire « nous et nos parents éteints », à l'exclusion des autres grands singes. Le terme est une convention de classification, pas un jugement de valeur.
+3. **Ce qu'on cherche.** Non pas « qui est notre ancêtre direct » (souvent indécidable), mais : *que peut-on inférer honnêtement de la locomotion, du milieu et du régime à partir d'os incomplets ?*
+</Hypotheses>
+
+### Une erreur de phrase à corriger d'emblée
+
+On entend souvent « l'homme descend du singe ». C'est **faux** au sens strict. Humains et chimpanzés ne descendent pas l'un de l'autre : ils partagent un **ancêtre commun**, une espèce aujourd'hui disparue dont ni l'un ni l'autre n'est la copie. La comparaison des génomes vivants situe cette divergence il y a **environ 6 à 8 millions d'années**, fourchette cohérente avec les fossiles les plus anciens candidats au statut d'homininé (*Sahelanthropus*, *Orrorin*, vers 6-7 Ma).
+
+<Resultat label="Ancêtre commun, pas filiation">
+La lignée humaine et celle des chimpanzés divergent d'un ancêtre commun, vers 6-8 millions d'années avant le présent, en Afrique.
+<Badge niveau="probable" slot="badge">Convergence de l'horloge moléculaire (taux de mutation) et des plus anciens fossiles africains. La date est une fourchette ; l'idée de divergence à partir d'un ancêtre commun fait, elle, large consensus.</Badge>
+</Resultat>
+
+### Comment un os trahit la bipédie
+
+Le fait le plus solide de ce chapitre n'est pas une histoire, c'est une **observation anatomique** : certains homininés très anciens marchaient déjà sur deux jambes. On le lit dans trois endroits du squelette, indépendamment.
+
+<Encart type="calcul" titre="Critique des sources : trois indices osseux de la station debout">
+- **Le trou occipital** (foramen magnum, par où la moelle épinière quitte le crâne). Chez un quadrupède, il est placé à l'**arrière** du crâne ; chez un bipède, **dessous**, car la colonne arrive verticalement. Un crâne, même sans squelette, livre donc déjà un indice de posture.
+- **Le bassin.** Chez le chimpanzé, il est haut et étroit ; chez un bipède, **court et évasé** « en cuvette », car il doit soutenir les viscères à la verticale et ancrer les muscles qui stabilisent la hanche à chaque pas. Le bassin de **Lucy** (*Australopithecus afarensis*, Éthiopie, **~3,2 Ma**) présente cette forme.
+- **Le fémur.** Chez les bipèdes, il descend **en oblique** vers l'intérieur (genoux rapprochés sous le centre de gravité) : c'est l'**angle valgus**, absent chez les grands singes. On le retrouve sur les fémurs d'australopithèques.
+Ces trois indices **se recoupent** : ils ne dépendent pas d'un seul os ni d'un seul individu, ce qui rend l'inférence robuste.
+</Encart>
+
+À ces os s'ajoute une trace d'un autre genre, spectaculaire : à **Laetoli** (Tanzanie), une coulée de cendres volcaniques durcie a conservé une **piste d'empreintes** datée d'**environ 3,6 Ma**. La forme du pied — voûte plantaire, gros orteil **aligné** (non opposable comme chez le singe), répartition du poids talon-orteil — est celle d'une marche bipède. Ce n'est pas un os : c'est un geste fossilisé.
+
+<Resultat label="Bipédie attestée bien avant l'humain moderne">
+Des homininés marchaient debout dès ~3,5 Ma au moins (Laetoli, australopithèques d'Afrique de l'Est et du Sud).
+<Badge niveau="atteste" slot="badge">Convergence de l'anatomie (bassin, fémur, foramen) et d'une trace directe (empreintes de Laetoli), datées par téphrochronologie. Sources matérielles concordantes et indépendantes.</Badge>
+</Resultat>
+
+### Le bassin avant le cerveau
+
+Voici l'argument qui défait l'image populaire du « singe qui se redresse parce qu'il devient intelligent ». Les fossiles imposent l'**ordre inverse**. Lucy et ses semblables, vers 3 Ma, marchaient déjà debout — mais leur **boîte crânienne** restait petite, à peine plus grande que celle d'un chimpanzé (volume de l'ordre de 400-500 cm³). L'augmentation nette du cerveau, elle, apparaît **plus tard**, avec le genre *Homo*, bien après que la bipédie soit acquise.
+
+<Resultat label="Bipédie d'abord, encéphalisation ensuite">
+Dans l'archive fossile, la marche bipède précède de plus d'un million d'années l'augmentation marquée du volume cérébral.
+<Badge niveau="atteste" slot="badge">Lecture directe de la chronologie : squelettes bipèdes à petit cerveau (australopithèques) datés bien avant les premiers grands crânes. La séquence est observée, pas supposée.</Badge>
+</Resultat>
+
+*Pourquoi* la bipédie est-elle apparue, en revanche, reste ouvert. On a proposé l'économie d'énergie sur de longues distances, la libération des mains, la régulation thermique en savane, l'accès à la nourriture en hauteur. Aucune n'est tranchée. <Badge niveau="debattu">Plusieurs hypothèses sérieuses sur les causes de la bipédie coexistent sans preuve décisive : on observe *qu'*elle est apparue, on ignore *pourquoi*.</Badge>
+
+### Détruire « la marche du progrès »
+
+<Tournant titre="Tournant : nos sources changent">
+Tout le monde a en tête l'image en file indienne — un singe courbé devenant peu à peu un humain droit. **Cette icône est trompeuse.** Elle suggère une ligne unique et orientée, alors que les fossiles dessinent un **buisson** : à une même époque coexistaient **plusieurs espèces** d'homininés. Vers 2 Ma, par exemple, robustes *Paranthropus* à grosses mâchoires et premiers *Homo* graciles vivaient sur les mêmes terres. La lignée humaine n'est pas un couloir : c'est un arbre touffu dont la plupart des branches sont des **impasses** éteintes.
+</Tournant>
+
+Cette image du buisson a une conséquence d'honnêteté. Dire qu'une espèce est l'**ancêtre direct** d'une autre suppose de connaître la généalogie exacte — or les squelettes sont **fragmentaires** (Lucy elle-même n'est conservée qu'à 40 %), les espèces mal échantillonnées, et les liens de parenté se réévaluent à chaque découverte.
+
+<Encart type="plusloin" titre="Qui descend de qui ? Un débat permanent">
+Faut-il voir en *Australopithecus afarensis* l'ancêtre de notre genre *Homo*, ou un cousin sur une branche voisine ? Les spécialistes en discutent. Chaque nouveau fossile redessine l'arbre, déplace une branche, en supprime une autre. La prudence consiste à dire « apparenté à » plutôt que « ancêtre de », sauf preuve forte.
+</Encart>
+
+<Resultat label="Évolution buissonnante, parentés incertaines">
+L'évolution humaine est buissonnante (espèces coexistantes), et les relations d'ascendance précises entre la plupart des espèces restent ouvertes.
+<Badge niveau="debattu" slot="badge">L'existence du buissonnement est attestée (espèces contemporaines avérées) ; mais *qui descend de qui* repose sur des squelettes lacunaires et des phylogénies révisées à chaque fouille. Le détail reste controversé.</Badge>
+</Resultat>
+
+Nous tenons donc un humain encore lointain : déjà debout, mais à petit cerveau, perdu parmi des cousins. Reste à comprendre ce qui, dans cette troupe d'espèces, va faire émerger un genre nouveau — celui qui taille la pierre, mange de la viande et apprivoise le feu. C'est l'objet du chapitre suivant : le genre *Homo*.

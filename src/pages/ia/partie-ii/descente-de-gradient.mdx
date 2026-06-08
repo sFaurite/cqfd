@@ -1,0 +1,155 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La descente de gradient et le pas d'apprentissage"
+chapter: descente-de-gradient
+description: "Construit l'algorithme de descente de gradient à partir du résultat précédent. Analyse le rôle du taux d'apprentissage (learning rate) : trop petit, trop grand, divergence. Donne le résultat de convergence dans le cas convexe et son absence dans le cas général."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaLossLandscape from '../../../components/interactive/IaLossLandscape.astro';
+
+## Suivre la pente, pas après pas
+
+Au chapitre précédent, nous avons gagné une boussole : le gradient $\nabla L(\theta)$ pointe dans la direction de plus forte **montée** de la perte, et donc $-\nabla L(\theta)$ pointe vers la plus forte **descente** <Prereq href="/ia/partie-ii/derivees-gradient">(direction de descente la plus raide)</Prereq>. Mais une boussole ne marche pas à votre place. Il reste à transformer cette direction en un **algorithme** : un geste répété qui, à partir d'un point de départ quelconque, fait glisser les paramètres vers le creux de la vallée.
+
+L'idée est d'une simplicité presque gênante. On est quelque part sur le paysage de la perte. On regarde la pente locale. On fait un petit pas dans la direction qui descend. On recommence. C'est de la descente de gradient — et c'est, à quelques raffinements près, **la** méthode qui entraîne tous les réseaux de neurones d'aujourd'hui.
+
+<Encart type="intuition" titre="L'image à garder en tête">
+Vous êtes un randonneur dans le brouillard, sur un flanc de montagne. Vous ne voyez pas la vallée, mais vous sentez sous vos pieds **dans quel sens ça descend le plus fort**. Vous faites un pas de cette taille-là, vous re-sentez la pente, vous refaites un pas. La taille de vos pas est cruciale : à pas de fourmi vous y passerez la nuit ; à enjambées géantes vous risquez d'enjamber la vallée et de remonter le versant d'en face.
+</Encart>
+
+### 1. L'itération
+
+<Hypotheses titre="Ce dont on dispose">
+Une perte $L : \mathbb{R}^n \to \mathbb{R}$ **différentiable**, dont on sait calculer le gradient $\nabla L(\theta)$ en tout point. Un point de départ $\theta_0$ (choisi, ou tiré au hasard). Un nombre $\eta > 0$ appelé **pas d'apprentissage** (*learning rate*).
+</Hypotheses>
+
+La règle de mise à jour est :
+
+$$
+\theta_{t+1} = \theta_t - \eta\, \nabla L(\theta_t).
+$$
+
+On part de $\theta_0$, on applique cette formule encore et encore, et l'on espère que la suite $(\theta_t)$ converge vers un minimum de $L$. Géométriquement, à chaque étape on se déplace **à l'opposé du gradient**, donc vers le bas, d'une longueur proportionnelle à $\eta$ et à la raideur locale $\|\nabla L(\theta_t)\|$. Quand on approche d'un creux, le gradient s'aplatit, les pas raccourcissent automatiquement, et l'on ralentit — exactement le comportement souhaité.
+
+<Encart type="rappel" titre="Pourquoi « ça descend » à chaque petit pas">
+Le développement limité à l'ordre 1 (vu au chapitre précédent) donne, pour un déplacement $\theta_{t+1}-\theta_t = -\eta\,\nabla L(\theta_t)$ :
+
+$$
+L(\theta_{t+1}) \approx L(\theta_t) - \eta\,\|\nabla L(\theta_t)\|^2.
+$$
+
+Le terme retranché est positif (un carré). Donc **tant que $\eta$ est assez petit pour que l'approximation tienne**, chaque pas fait strictement baisser la perte. C'est la justification locale de la méthode. Tout le problème est ce « assez petit » : c'est une garantie **infinitésimale**, pas une garantie pour un pas fini.
+</Encart>
+
+### 2. Voir la descente sur un paysage convexe
+
+Prenons la <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq>. Sa perte (l'entropie croisée) est **convexe** en ses paramètres : son paysage est un grand bol lisse, sans bosse ni vallée parasite. Pas de creux parasite ; en l'absence de séparation parfaite des données (sinon le minimum file à l'infini), un unique fond, qui est le minimum global. Sur un tel terrain, la descente de gradient est dans son élément : où qu'on parte, on glisse vers ce fond.
+
+<IaLossLandscape />
+
+Faites varier $\eta$ : à pas modéré, la trajectoire descend en s'incurvant doucement vers le centre. Trop petit, elle rampe. Trop grand, elle se met à **zigzaguer** d'un bord à l'autre du bol, et au-delà d'un seuil elle **diverge** — elle s'éloigne du minimum à chaque pas. Comprenons ce seuil exactement.
+
+### 3. Le pas d'apprentissage, analysé sur une parabole
+
+Le cas le plus simple qui capture tout : une perte quadratique 1D,
+
+$$
+L(\theta) = \tfrac{1}{2}\,a\,(\theta - \theta^\star)^2, \qquad a > 0,
+$$
+
+dont le minimum est en $\theta^\star$. Ici $L''(\theta) = a$ est la **courbure** (constante). Suivons l'erreur $e_t = \theta_t - \theta^\star$ au fil des pas.
+
+<Encart type="calcul" titre="Condition de stabilité : |1 − ηa| < 1">
+
+**Étape 1 — le gradient.** En dérivant, $L'(\theta) = a\,(\theta - \theta^\star)$.
+
+**Étape 2 — l'itération.** La règle $\theta_{t+1} = \theta_t - \eta\,L'(\theta_t)$ devient
+
+$$
+\theta_{t+1} = \theta_t - \eta\,a\,(\theta_t - \theta^\star).
+$$
+
+**Étape 3 — passer à l'erreur.** Retranchons $\theta^\star$ des deux côtés. Comme $\theta_{t+1}-\theta^\star = e_{t+1}$ et $\theta_t - \theta^\star = e_t$ :
+
+$$
+e_{t+1} = e_t - \eta\,a\,e_t = (1 - \eta a)\,e_t.
+$$
+
+**Étape 4 — récurrence.** L'erreur est donc **multipliée par le même facteur $(1-\eta a)$ à chaque pas** :
+
+$$
+e_t = (1 - \eta a)^t\, e_0.
+$$
+
+**Étape 5 — conclusion.** Cette suite géométrique tend vers $0$ (pour tout $e_0$) si et seulement si le facteur a un module strictement inférieur à $1$. Comme $a > 0$ :
+
+$$
+|\,1 - \eta a\,| < 1 \;\Longleftrightarrow\; -1 < 1 - \eta a < 1 \;\Longleftrightarrow\; 0 < \eta a < 2 \;\Longleftrightarrow\; 0 < \eta < \frac{2}{a}.
+$$
+
+</Encart>
+
+Lisons ce résultat, c'est tout le métier du *learning rate* en miniature :
+
+- $\eta$ **proche de $0$** : facteur proche de $1$, l'erreur fond très lentement — convergence assurée mais poussive.
+- $\eta = 1/a$ : facteur nul, on atteint le minimum **en un seul pas** (cas idéal, propre au quadratique exact).
+- $1/a < \eta < 2/a$ : facteur négatif de module &lt; 1, l'erreur change de signe à chaque pas tout en rétrécissant — on **oscille** autour du minimum en s'en approchant.
+- $\eta \ge 2/a$ : module $\ge 1$, l'erreur ne décroît plus (elle se conserve si $\eta = 2/a$, elle **explose** si $\eta > 2/a$). Divergence.
+
+<Resultat label="Stabilité sur une quadratique de courbure a">
+
+$$
+\text{convergence} \iff 0 < \eta < \frac{2}{a}, \qquad e_t = (1-\eta a)^t e_0.
+$$
+
+<Badge niveau="prouve" slot="badge">Calcul exact ligne à ligne sur la quadratique : la convergence est démontrée, conditionnée à $\eta$.</Badge>
+</Resultat>
+
+La leçon est qu'il **n'existe pas de bon $\eta$ universel** : le seuil dépend de la courbure $a$, donc de la perte et des données. On le règle par essais. C'est l'archétype de l'ingénierie sans formule magique.
+
+<Badge niveau="recette">Le choix de $\eta$ est une recette : pas de valeur optimale fermée en général, on tâtonne (et plus tard on l'adapte automatiquement).</Badge>
+
+### 4. Le théorème : convexité = convergence garantie
+
+Ce qu'on a vu sur la parabole se généralise. Il faut juste borner la courbure dans **toutes** les directions, ce que fait la notion de gradient **$\beta$-lipschitzien** : il existe une constante $\beta > 0$ telle que $\|\nabla L(\theta) - \nabla L(\theta')\| \le \beta\,\|\theta - \theta'\|$ pour tous $\theta, \theta'$. (Intuitivement, la pente ne change jamais plus vite qu'au taux $\beta$ : la courbure est plafonnée par $\beta$.)
+
+<Resultat label="Convergence en convexe lisse">
+
+Si $L$ est **convexe**, admet un minimiseur $\theta^\star$ et a un gradient **$\beta$-lipschitzien**, alors pour $\eta \le \dfrac{1}{\beta}$ la descente de gradient vérifie
+
+$$
+L(\theta_t) - L(\theta^\star) \;\le\; \frac{\|\theta_0 - \theta^\star\|^2}{2\,\eta\,t}.
+$$
+
+<Badge niveau="prouve" slot="badge">Théorème classique de l'optimisation convexe : convergence vers le minimum global, vitesse $O(1/t)$. Démontré.</Badge>
+</Resultat>
+
+L'écart à l'optimum décroît au moins comme $1/t$ : on **converge vers le minimum global**. La borne sûre $\eta \le 1/\beta$ est l'écho, en dimension quelconque, du $\eta < 2/a$ de la parabole — pour la quadratique on a $\beta = a$, et $\eta \le 1/a$ tombe dans la moitié prudente de l'intervalle de stabilité. Pour la régression logistique, convexe et lisse, ce théorème s'applique (dès qu'un minimiseur fini existe) : la descente trouve réellement le meilleur modèle.
+
+<Encart type="plusloin" titre="L'idée de la preuve (esquisse)">
+Le caractère $\beta$-lipschitzien donne l'inégalité de descente $L(\theta_{t+1}) \le L(\theta_t) - \big(\eta - \tfrac{\beta\eta^2}{2}\big)\|\nabla L(\theta_t)\|^2$ ; avec $\eta \le 1/\beta$ le coefficient est $\ge \eta/2 > 0$, donc la perte baisse strictement à chaque pas non critique. La **convexité** ajoute que la perte est minorée par son plan tangent, ce qui relie cette baisse à l'écart $L(\theta_t)-L(\theta^\star)$. En sommant et en télescopant les inégalités sur $t$ pas, on obtient la borne en $1/t$. La convexité est indispensable : sans elle, baisser la perte ne dit rien sur la distance au minimum global.
+</Encart>
+
+### 5. Le tournant honnête : et hors du bol ?
+
+Tout ce qui précède repose sur une hypothèse qui ne tiendra **plus** dès le prochain chapitre.
+
+<Tournant titre="On quitte le monde convexe">
+Les réseaux de neurones profonds, eux, ont une perte **non convexe** : un paysage tourmenté, criblé de creux locaux, de plateaux et de points-selles. Le théorème de la section 4 **ne s'y applique pas**. Nous abandonnons donc la convexité — et avec elle, toute garantie de minimum global.
+</Tournant>
+
+Que reste-t-il alors ? Au mieux, la descente converge vers un **point critique** ($\nabla L = 0$) : un minimum local, voire un simple point-selle. Rien ne garantit que sa qualité approche celle du minimum global. Il serait donc **faux** de dire « la descente trouve le minimum » en général : ce n'est vrai que dans le bol convexe.
+
+<Badge niveau="prouve">En non convexe lisse (avec $\eta \le 1/\beta$), on démontre seulement que le gradient s'annule à la limite ($\min_{s \le t}\|\nabla L(\theta_s)\| \to 0$) : convergence vers un point critique, pas vers un minimum, encore moins le minimum global.</Badge>
+
+Et pourtant — c'est l'un des grands mystères de ce cours — **ça marche**. En pratique, la descente de gradient sur des réseaux gigantesques trouve des solutions excellentes, comme si les mauvais minima locaux étaient rares ou bénins. C'est massivement reproductible, mais **non démontré en général** : un fait empirique robuste, pas un théorème.
+
+<Badge niveau="boitenoire">Pourquoi la descente de gradient trouve de bonnes solutions en non convexe reste largement incompris : régularité empirique solide, sans théorie complète. Question ouverte.</Badge>
+
+Nous tenons donc notre moteur d'apprentissage, et nous savons exactement **où** il est prouvé (le bol convexe) et **où** il devient un pari empirique (les réseaux profonds). Reste un obstacle pratique majeur : pour appliquer $\theta \leftarrow \theta - \eta\,\nabla L$, encore faut-il **calculer** $\nabla L$ — et un réseau peut compter des millions de paramètres. Le prochain chapitre, le graphe de calcul, pose la structure qui rendra ce calcul possible et bon marché.

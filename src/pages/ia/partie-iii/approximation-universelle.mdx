@@ -1,0 +1,97 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le théorème d'approximation universelle"
+chapter: approximation-universelle
+description: "Énonce le théorème d'approximation universelle (Cybenko, Hornik) et donne l'intuition de la preuve (somme de bosses). Surtout, démarque rigoureusement ce que le théorème garantit (existence) de ce qu'il ne garantit pas (apprenabilité, taille raisonnable, généralisation)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaUniversalApprox from '../../../components/interactive/IaUniversalApprox.astro';
+
+## Le théorème d'approximation universelle
+
+Nous avons un outil puissant. Un <Prereq href="/ia/partie-i/neurone-formel">neurone formel</Prereq> calcule une somme pondérée suivie d'une fonction d'activation ; en empilant des neurones on obtient un perceptron multicouche, et les <Prereq href="/ia/partie-iii/non-linearites">non-linéarités</Prereq> garantissent que ce réseau ne se réduit pas à une simple fonction affine. Reste une question vertigineuse : **quelles fonctions ce modèle peut-il représenter ?** La réponse — le théorème d'approximation universelle — est l'un des résultats les plus célèbres, et de loin les plus mal interprétés, de tout le domaine. Notre travail ici est double : énoncer ce qu'il dit *exactement*, et démonter ce qu'il ne dit pas.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez que vous vouliez reproduire le profil d'une montagne avec des briques de Lego. Une seule brique ne ressemble à rien. Mais une « marche » bien placée monte d'un cran ; collez deux marches dos à dos et vous obtenez une **bosse** étroite. Avec assez de bosses, fines et de hauteurs ajustées, vous épousez n'importe quel relief d'aussi près que vous voulez. Un réseau de neurones fait exactement cela : chaque neurone fabrique une marche (ou un coude), et la couche de sortie les additionne pour sculpter la forme cible.
+</Encart>
+
+### L'énoncé précis
+
+Le théorème, dans sa version classique (Cybenko 1989, Hornik 1991), porte sur un réseau à **une seule couche cachée**.
+
+<Resultat label="Théorème d'approximation universelle">
+
+$$
+\forall f \in \mathcal{C}(K),\ \forall \varepsilon > 0,\ \exists N,\ (w_i, b_i, c_i)\ :\ \sup_{x \in K}\ \Big|\, f(x) - \sum_{i=1}^{N} c_i\,\sigma(w_i \cdot x + b_i) \,\Big| < \varepsilon
+$$
+
+<Badge niveau="prouve" slot="badge">Théorème mathématique démontré. Pour toute fonction continue $f$ sur un compact $K \subset \mathbb{R}^n$, tout seuil $\varepsilon$, il existe un réseau à une couche cachée qui approche $f$ à $\varepsilon$ près en norme du sup. Valide pour $\sigma$ sigmoïde (Cybenko 1989) et plus généralement toute activation continue non polynomiale (Leshno 1993).</Badge>
+</Resultat>
+
+Lisons chaque symbole. $K$ est un **compact** (intuitivement : une région fermée et bornée, comme un cube) — on n'approche pas $f$ sur l'infini, seulement sur une zone de travail. $\mathcal{C}(K)$ désigne les fonctions **continues** sur $K$. La quantité $\sup_{x \in K}|f(x) - g(x)|$ est la **norme du sup** : le pire écart sur tout le domaine. Dire qu'il est $< \varepsilon$, c'est dire que la courbe du réseau reste partout dans une bande d'épaisseur $\varepsilon$ autour de $f$. Et $N$ est le nombre de neurones de la couche cachée.
+
+<Encart type="rappel" titre="Compact, continu : pourquoi ces hypothèses ?">
+Un **compact** $K \subset \mathbb{R}^n$ est un ensemble fermé et borné. L'hypothèse est essentielle : sur un domaine non borné, une somme finie de sigmoïdes (qui se stabilisent à l'infini) ne peut pas suivre une fonction qui croît sans fin. La **continuité** de $f$ est tout aussi nécessaire : une fonction qui « saute » brutalement ne peut pas être collée à $\varepsilon$ près *partout* par une somme finie de fonctions continues. Ces hypothèses ne sont pas des détails techniques : ce sont les conditions sans lesquelles l'énoncé est faux.
+</Encart>
+
+### L'intuition de la preuve : marches, bosses, sommes
+
+Voyons en dimension 1 comment on fabrique l'approximation. C'est constructif, et c'est éclairant.
+
+<Encart type="calcul" titre="De la sigmoïde à la bosse, de la bosse à f">
+**Étape 1 — une marche.** La sigmoïde $\sigma(z) = 1/(1+e^{-z})$ passe en douceur de $0$ à $1$. En écrivant $\sigma(w(x-b))$ et en prenant $w$ grand, la transition devient abrupte : on obtient une **marche** quasi nette qui saute de $0$ à $1$ autour de $x = b$.
+
+**Étape 2 — une bosse.** Soustrayons deux marches voisines, l'une à $b_1$, l'autre à $b_2 > b_1$ :
+
+$$
+\sigma(w(x - b_1)) - \sigma(w(x - b_2)) \approx \mathbf{1}_{[b_1,\, b_2]}(x).
+$$
+
+Le résultat vaut $\approx 1$ entre $b_1$ et $b_2$, et $\approx 0$ ailleurs : c'est une **bosse** rectangulaire, aussi étroite qu'on veut. Cette différence de deux neurones est réalisée par la couche de sortie : il suffit de prendre les coefficients $c_i = +1$ et $-1$.
+
+**Étape 3 — sommer pour épouser $f$.** Découpons $K$ en petits intervalles. Sur chacun, plaçons une bosse de hauteur égale à la valeur de $f$ au milieu de l'intervalle. La somme de ces bosses pondérées :
+
+$$
+g(x) = \sum_{i} f(\xi_i)\,\big[\sigma(w(x-b_i)) - \sigma(w(x-b_{i+1}))\big]
+$$
+
+est une fonction « en escalier lissé » qui suit $f$. Comme $f$ est continue sur le compact $K$, elle y est **uniformément continue** (théorème de Heine) : en prenant les intervalles assez fins, $f$ varie de moins de $\varepsilon$ sur chacun, donc $\sup_x |f(x) - g(x)| < \varepsilon$. ∎ (idée)
+
+Cette construction donne l'intuition ; la preuve rigoureuse de Cybenko passe en réalité par un argument de dualité (théorème de Hahn–Banach et mesures signées), mais aboutit au même résultat.
+</Encart>
+
+La même mécanique fonctionne avec des **ReLU** : deux ReLU décalées font un coude, et l'on approche $f$ par une fonction affine par morceaux. Plus on ajoute de neurones, plus le maillage est fin, plus l'erreur tombe. L'interactif ci-dessous rend ce processus tangible : ajoutez des neurones et regardez la sortie se mouler sur la cible.
+
+<IaUniversalApprox />
+
+<Badge niveau="prouve">Le caractère constructif est réel : on sait fabriquer explicitement un réseau qui atteint la précision $\varepsilon$ voulue, en augmentant le nombre de bosses. L'existence n'est pas abstraite, elle est exhibée.</Badge>
+
+### Le piège : ce que le théorème ne dit pas
+
+Voici le cœur épistémique de cette page. Le théorème est vrai et beau — et il est constamment **sur-interprété**. On l'entend invoqué comme « donc les réseaux de neurones peuvent tout apprendre ». C'est un **sophisme** : le théorème garantit l'*existence* d'un réseau, pas qu'on saura le *construire par apprentissage*. Trois murs séparent ce que le théorème garantit de ce qu'on en conclut abusivement.
+
+<Tournant titre="Existence n'est pas apprenabilité, ni généralisation">
+Le théorème affirme qu'un bon réseau **existe**. Il ne dit rien sur trois choses, que nous posons explicitement comme limites distinctes :
+
+**(1) Existence ≠ apprenabilité.** Le théorème exhibe des poids $(w_i, b_i, c_i)$ qui marchent — mais notre seul outil pour *trouver* des poids est la <Prereq href="/ia/partie-ii/descente-de-gradient">descente de gradient</Prereq> sur une perte non convexe. Rien ne garantit qu'elle atteigne, ou même approche, ce réseau-là. <Badge niveau="boitenoire">« La descente de gradient trouvera-t-elle ce réseau ? » — non garanti. Le paysage de perte d'un réseau à activation non linéaire est non convexe ; aucune preuve générale ne relie l'existence d'un minimiseur à sa découverte par l'optimisation. Question ouverte.</Badge>
+
+**(2) La largeur peut être astronomique.** Le $N$ du théorème n'est pas borné. Pour une précision fine sur une fonction qui varie beaucoup, le nombre de bosses peut croître exponentiellement avec la dimension de l'entrée — le « fléau de la dimension ». Un réseau « universel » sur le papier peut être physiquement inentraînable. <Badge niveau="prouve">Le théorème ne contrôle pas $N$ ; pour certaines classes de fonctions, des bornes inférieures prouvées montrent que le nombre de neurones d'une couche cachée nécessaire croît exponentiellement avec la dimension d'entrée.</Badge>
+
+**(3) Approcher les données vues ≠ généraliser.** Même un réseau qui colle parfaitement aux points d'entraînement peut se comporter n'importe comment entre eux. Le théorème parle d'approcher une $f$ *connue partout* sur $K$ ; en pratique on ne voit que des échantillons. <Badge niveau="boitenoire">Pourquoi un réseau qui interpole les données généralise (parfois) à de nouvelles entrées reste théoriquement mal compris. C'est la question ouverte de la généralisation, abordée plus loin.</Badge>
+</Tournant>
+
+<Encart type="plusloin" titre="Et la profondeur, alors ?">
+Attention à un dernier raccourci. Ce théorème parle d'**une seule** couche cachée, large. Il **ne justifie donc pas la profondeur** des réseaux modernes. L'argument en faveur de la profondeur est *séparé* : certaines fonctions qu'un réseau profond représente avec peu de neurones exigeraient une couche peu profonde de largeur exponentielle. <Badge niveau="prouve">Des séparations profondeur/largeur sont démontrées : il existe des fonctions exprimables efficacement en profondeur et non en faible profondeur (Telgarsky 2016, Eldan–Shamir 2016).</Badge> Mais le fait que la profondeur *aide aussi à l'apprentissage et à la généralisation* en pratique relève d'un constat empirique, pas de ces théorèmes d'expressivité. <Badge niveau="robuste">L'avantage pratique des réseaux profonds est une régularité expérimentale massive ; ce n'est ni une conséquence du théorème d'approximation universelle, ni démontré en toute généralité.</Badge>
+</Encart>
+
+### Ce qu'il faut retenir
+
+Le théorème d'approximation universelle est un permis d'**expressivité** : la famille de fonctions « réseau à une couche cachée » est assez riche pour approcher toute fonction continue sur un compact. C'est un théorème, badge vert, point final. Mais l'expressivité n'est qu'un des maillons. Entre « un bon réseau existe » et « mon entraînement produira un modèle qui marche sur de nouvelles données », il y a l'optimisation et la généralisation — deux territoires bien moins balisés. Garder cette distinction vivante est la marque d'une compréhension honnête de l'apprentissage profond.
+
+Nous avons une famille de fonctions assez expressive ; reste à savoir si on peut réellement l'entraîner. Au chapitre suivant, nous quittons la théorie de la représentation pour le terrain : comment optimiser ces réseaux en pratique, avec le SGD, le momentum et Adam — là où l'existence garantie cède la place à l'art de l'ingénierie.

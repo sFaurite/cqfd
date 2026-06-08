@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "TCP : controle de flux et de congestion"
+chapter: tcp-flux-congestion
+description: "Traite le controle de flux (fenetre du recepteur) et le controle de congestion (slow start, AIMD, perte comme signal), et leur statut d'heuristiques revisables."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauCongestion from '../../../components/interactive/ReseauCongestion.astro';
+
+## Deux saturations, pas une
+
+Au chapitre précédent, nous avons obtenu de TCP un service de flux fiable et ordonné : grâce aux <Prereq href="/reseaux/partie-v/tcp-connexion">numéros de séquence, aux accusés de réception et à la retransmission</Prereq>, plus aucun octet ne se perd silencieusement. Mais « ne rien perdre » ne dit rien sur le **rythme**. À quelle vitesse l'émetteur doit-il injecter ses octets dans le réseau ?
+
+Si on émet trop vite, deux catastrophes distinctes guettent — et il est crucial de ne pas les confondre.
+
+- **Saturer le récepteur.** La machine d'en face a un tampon de réception fini. Si elle reçoit plus vite qu'elle ne consomme, le tampon déborde et les octets sont jetés.
+- **Saturer le réseau.** Les routeurs intermédiaires ont des files d'attente finies. Si *tous* les émetteurs poussent au maximum, ces files débordent : pertes massives, retransmissions, qui aggravent encore l'engorgement.
+
+Le premier problème oppose **deux machines** ; le second oppose **tous les flux du monde** à une ressource partagée. TCP répond à chacun par un mécanisme séparé : le **contrôle de flux** et le **contrôle de congestion**.
+
+<Encart type="intuition" titre="Le tuyau d'arrosage">
+Imaginez que vous remplissez un seau (le récepteur) en faisant passer l'eau par un tuyau (le réseau). Deux limites distinctes : la taille du seau (s'il déborde, inutile d'envoyer plus — c'est le **flux**) et le diamètre du tuyau partagé avec vos voisins (si tout le monde ouvre le robinet à fond, le tuyau commun se bouche — c'est la **congestion**). Vous ne réglez pas le même robinet pour les deux problèmes.
+</Encart>
+
+## Contrôle de flux : protéger le récepteur
+
+La solution est élégante et **explicite**. Dans chaque segment qu'il renvoie, le récepteur annonce la place restante dans son tampon : c'est la **fenêtre annoncée** (*receive window*, $\text{rwnd}$). L'émetteur s'interdit d'avoir plus de $\text{rwnd}$ octets « en vol » (envoyés mais non encore acquittés).
+
+C'est le principe de la **fenêtre glissante** : la fenêtre des octets autorisés avance au fur et à mesure que les ACK arrivent et que le récepteur vide son tampon. Si $\text{rwnd} = 0$, l'émetteur se tait jusqu'à ce que le récepteur signale de la place.
+
+<Resultat label="Contrainte de flux">
+
+$$ \text{octets en vol} \le \text{rwnd} $$
+
+<Badge niveau="norme" slot="badge">Le champ Window de l'en-tête TCP et la sémantique de la fenêtre glissante sont fixés par le standard TCP. C'est un mécanisme normalisé, pas une heuristique.</Badge>
+</Resultat>
+
+Le contrôle de flux est donc un dialogue **fermé et exact** entre deux machines : le récepteur sait précisément sa place libre, et il la dit. Rien d'aléatoire ici. La difficulté commence avec l'autre problème, où personne ne connaît l'état global du réseau.
+
+## Contrôle de congestion : protéger le réseau
+
+Voici le cœur du chapitre, et le point d'honnêteté le plus important du cours. Aucun émetteur ne voit l'intérieur des routeurs. Personne ne connaît le débit disponible ni le nombre de flux concurrents. TCP doit donc **deviner** la capacité du chemin à partir d'un seul indice observable.
+
+<Tournant titre="L'hypothèse fondatrice : perte = congestion">
+TCP fait un pari : **si un segment se perd, c'est qu'une file de routeur a débordé**, donc que le réseau est saturé. L'émetteur en déduit qu'il doit ralentir. <Badge niveau="heuristique">C'est une hypothèse d'ingénierie, pas une vérité. Sur une liaison radio (Wi-Fi, mobile), un paquet peut se perdre par bruit alors que le réseau n'est pas du tout congestionné — et TCP ralentira à tort. Le cours établit le principe (perte → ralentir), pas une loi physique.</Badge>
+</Tournant>
+
+L'émetteur maintient alors une seconde fenêtre, interne et invisible sur le réseau : la **fenêtre de congestion** ($\text{cwnd}$). La quantité réellement en vol est bornée par la **plus petite** des deux fenêtres :
+
+$$ \text{octets en vol} \le \min(\text{rwnd},\ \text{cwnd}) $$
+
+Tout l'enjeu est de faire varier $\text{cwnd}$ : grossir tant que le réseau encaisse, rétrécir dès qu'il se plaint.
+
+<ReseauCongestion />
+
+### Slow start : sonder vite
+
+Au démarrage, l'émetteur ignore tout de la capacité. Il commence petit (typiquement quelques segments) et **double** $\text{cwnd}$ à chaque aller-retour réussi (chaque RTT). Cette croissance exponentielle s'appelle le **slow start** — « lent » seulement parce qu'il part de bas, car il accélère en réalité très vite. Il cherche l'ordre de grandeur de la capacité en quelques RTT.
+
+<Badge niveau="deploiement">La taille initiale de $\text{cwnd}$ (l'*initial window*) et le seuil $\text{ssthresh}$ qui termine le slow start dépendent de l'implémentation et de la configuration. Linux, Windows et les CDN ne choisissent pas les mêmes valeurs.</Badge>
+
+### Congestion avoidance : approcher prudemment
+
+Une fois passé le seuil $\text{ssthresh}$, doubler serait téméraire : on est proche de la limite. L'émetteur passe en croissance **linéaire**, augmentant $\text{cwnd}$ d'environ un segment par RTT. Il s'approche de la saturation à petits pas, pour la frôler sans la provoquer brutalement.
+
+### AIMD : le rythme qui empêche l'effondrement
+
+Quand une perte survient, l'émetteur **divise** $\text{cwnd}$ (typiquement par deux). On obtient le schéma central, en régime d'évitement de congestion — l'incrément additif s'entendant par RTT :
+
+<Resultat label="AIMD — Additive Increase, Multiplicative Decrease">
+
+$$ \text{succès (par RTT)} : \text{cwnd} \leftarrow \text{cwnd} + 1 \qquad \text{perte} : \text{cwnd} \leftarrow \tfrac{1}{2}\, \text{cwnd} $$
+
+<Badge niveau="heuristique" slot="badge">AIMD est un choix d'ingénierie raisonnable, **non unique**. On monte doucement (additif) et on recule fort (multiplicatif) ; c'est cette asymétrie qui donne ses bonnes propriétés.</Badge>
+</Resultat>
+
+Pourquoi cette forme bizarre — additif d'un côté, multiplicatif de l'autre ? Parce qu'elle pousse des flux concurrents **vers l'équité**, sans qu'aucun ne se coordonne avec les autres.
+
+<Encart type="plusloin" titre="Pourquoi AIMD tend vers l'équité (esquisse)">
+Plaçons deux flux partageant un lien sur un graphe : en abscisse le débit du flux 1, en ordonnée celui du flux 2. La droite d'**équité** est la diagonale $x = y$ ; la droite d'**efficacité** est $x + y = C$ (capacité du lien).
+
+- L'**augmentation additive** ajoute le même $+1$ aux deux flux : sur le graphe, on se déplace à $45°$, **parallèlement** à la diagonale d'équité.
+- La **diminution multiplicative** multiplie les deux par $\tfrac12$ : on se déplace **vers l'origine**, donc **vers** la diagonale d'équité.
+
+En alternant ces deux mouvements (monter en diagonale jusqu'à saturation, puis se rapprocher de la diagonale en reculant), le point d'opération converge vers l'intersection $x = y$ : les flux **s'égalisent**. <Badge niveau="heuristique">C'est l'argument classique de Chiu et Jain (1989). Il montre qu'AIMD est *stable et équitable*, ce qui justifie le choix — mais ne prouve pas qu'il soit *optimal*. D'autres règles convergent aussi.</Badge>
+</Encart>
+
+Et c'est bien là l'essentiel : cette régulation est **distribuée**. Aucun chef d'orchestre ne répartit le débit. Chaque émetteur, en réagissant seul à ses propres pertes, contribue à un équilibre global. C'est précisément cette auto-discipline collective qui **empêche l'effondrement de congestion** d'Internet — un état où le réseau, saturé de retransmissions inutiles, ne transporterait presque plus rien d'utile.
+
+<Encart type="plusloin" titre="AIMD n'est pas la fin de l'histoire">
+Le schéma ci-dessus est l'algorithme classique (la lignée Tahoe/Reno). Les piles modernes utilisent d'autres lois :
+
+- **CUBIC** (défaut sous Linux) remplace la croissance linéaire par une courbe cubique, mieux adaptée aux liens très rapides à long délai.
+- **BBR** (Google) abandonne carrément l'hypothèse « perte = congestion » : il **mesure** débit et délai pour estimer directement la capacité, plutôt que d'attendre une perte.
+
+<Badge niveau="deploiement">L'algorithme de congestion est un paramètre du système, changeable sans modifier la norme TCP. Aucun n'est « le bon » : ils arbitrent différemment débit, latence et équité.</Badge> Il ne faut **jamais** présenter un algorithme de congestion comme optimal : c'est un compromis révisable, pas un théorème.
+</Encart>
+
+De même, les délais déclenchant une retransmission — le **RTO**, calculé à partir du RTT mesuré — relèvent de l'implémentation. <Badge niveau="deploiement">La formule d'estimation du RTT et les bornes du RTO varient selon la pile ; ce sont des réglages, pas des constantes universelles.</Badge>
+
+Nous tenons maintenant un transport fiable, poli envers le récepteur et discipliné envers le réseau. Mais pour ouvrir une connexion TCP vers `exemple.fr`, encore faut-il traduire ce nom en adresse IP. C'est le rôle du premier grand service réparti que nous allons monter : le **DNS**.

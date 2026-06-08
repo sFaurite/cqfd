@@ -1,0 +1,106 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La baryogenèse"
+chapter: baryogenese
+description: "L'asymétrie matière-antimatière et les conditions de Sakharov."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La baryogenèse
+
+Au moment où nous écrivons l'histoire de l'univers chaud, un détail apparemment anodin va se révéler être l'une des énigmes les plus profondes de toute la physique. Nous sommes faits de matière : protons, neutrons, électrons. Or les lois fondamentales que nous connaissons sont presque parfaitement **symétriques** entre matière et antimatière. À chaque particule correspond une antiparticule de charge opposée, et les processus qui créent l'une créent presque toujours l'autre, par paires. Alors une question naïve, mais redoutable, surgit : **pourquoi reste-t-il quelque chose ?**
+
+<Encart type="intuition" titre="Le tribunal de l'annihilation">
+Imaginez l'univers primordial comme une salle où l'on jette, à chaque instant, autant de billes blanches (matière) que de billes noires (antimatière). Quand une blanche touche une noire, les deux disparaissent dans un éclair de lumière. Si l'on en jette exactement autant des deux couleurs, à la fin il ne reste **que de la lumière** — pas une seule bille. Pour qu'il subsiste de la matière aujourd'hui, il a fallu, à un moment, jeter une bille blanche de trop, de temps en temps. La question de la baryogenèse, c'est : *qui a triché, et comment ?*
+</Encart>
+
+### L'énigme chiffrée : un baryon de trop par milliard
+
+Dans l'<Prereq href="/cosmologie/partie-iii/univers-chaud">univers chaud</Prereq> très jeune, la température est telle que photons, baryons et antibaryons coexistent en équilibre. Tant que l'énergie thermique dépasse l'énergie de masse, les paires matière-antimatière se créent et s'annihilent sans cesse. Puis l'univers refroidit : la création s'arrête, l'annihilation finit le travail. Si la symétrie était exacte, il ne resterait, par baryon, **aucun** baryon — juste des photons.
+
+L'observation dit autre chose. On mesure le rapport entre le nombre net de baryons et le nombre de photons du fond diffus, noté $\eta$ :
+
+$$ \eta \equiv \frac{n_B - n_{\bar B}}{n_\gamma} \approx 6{,}1 \times 10^{-10}. $$
+
+Lisons ce nombre comme une scène de crime. Pour chaque **milliard** de paires matière-antimatière qui se sont annihilées en photons, **un** baryon a survécu, faute de partenaire. Tout ce qui constitue les étoiles, les planètes et nous-mêmes est ce résidu d'un milliardième.
+
+<Badge niveau="observe">La valeur de $\eta$ est mesurée de **deux façons indépendantes** qui concordent : par l'abondance des éléments légers issus de la <Prereq href="/cosmologie/partie-iii/nucleosynthese">nucléosynthèse primordiale</Prereq> (qui dépend finement de $\eta$), et par la hauteur des pics acoustiques du fond diffus cosmologique. Cet accord entre deux sondes d'époques différentes est un fait empirique robuste.</Badge>
+
+Que la matière domine totalement l'antimatière dans l'univers observable est, lui aussi, un fait. On ne voit nulle part de grandes zones d'antimatière : leurs frontières avec la matière brilleraient en rayons gamma d'annihilation, ce qu'on n'observe pas.
+
+<Badge niveau="observe">L'absence d'antimatière en quantité macroscopique dans l'univers visible est établie par l'absence du rayonnement gamma d'annihilation aux interfaces et par le contenu des rayons cosmiques.</Badge>
+
+### Le tournant : il faut une asymétrie dynamique
+
+<Tournant titre="Tournant : on quitte la symétrie supposée">
+Jusqu'ici, on déduisait. Ici, on **constate** une asymétrie que les lois symétriques ne sauraient produire à elles seules — et l'on s'interroge sur les conditions qu'une physique doit remplir pour l'engendrer. Deux postures sont possibles. **Soit** $\eta$ est une **condition initiale** : l'univers serait né avec ce léger excès, point. C'est honnête mais frustrant — et l'inflation, en diluant tout, efface justement les conditions initiales. **Soit** $\eta$ a été **engendré dynamiquement** à partir d'un univers initialement symétrique. C'est l'hypothèse de la *baryogenèse*, et c'est elle que nous adoptons ici : non pas déduite de ce qui précède, mais motivée par le désir de ne pas mettre l'asymétrie « à la main ».
+</Tournant>
+
+<Hypotheses titre="Hypothèse nouvelle adoptée dans ce chapitre">
+1. **L'univers est né symétrique** ($\eta = 0$ aux temps les plus reculés), et l'asymétrie observée a été **engendrée dynamiquement** par une physique des particules, plutôt que posée comme condition initiale.
+
+Cette hypothèse n'est **pas déduite** des chapitres précédents : c'est un choix de cadre, motivé (notamment) par le fait que l'inflation effacerait toute asymétrie initiale. Tout ce qui suit (conditions de Sakharov, bilan du Modèle Standard) est en revanche un raisonnement rigoureux **sous** cette hypothèse.
+</Hypotheses>
+
+### Les trois conditions de Sakharov
+
+En 1967, Andreï Sakharov établit un résultat d'une élégance saisissante : pour qu'un univers parti **symétrique** ($\eta = 0$) engendre lui-même un excès de matière, **trois** conditions sont nécessaires simultanément. Le raisonnement est presque purement logique.
+
+<Encart type="calcul" titre="Pourquoi trois conditions, pas une de plus">
+
+**Condition 1 — Violation du nombre baryonique $B$.** Le nombre baryonique compte les baryons moins les antibaryons. S'il était conservé par **toute** interaction, alors $n_B - n_{\bar B}$ serait une constante du mouvement. Partant de $0$, il resterait $0$. Donc :
+
+$$ \text{il faut au moins un processus avec } \Delta B \neq 0. $$
+
+**Condition 2 — Violation de $C$ et de $CP$.** Supposons un processus $X \to \text{baryons}$ avec $\Delta B > 0$. Si la symétrie $C$ (conjugaison de charge, matière $\leftrightarrow$ antimatière) était exacte, le processus conjugué $\bar X \to \text{antibaryons}$ aurait **exactement le même taux**, et produirait autant d'antibaryons : l'excès net resterait nul. Il faut donc violer $C$. Mais cela ne suffit pas : une fois sommé sur les degrés de liberté de polarisation et de chiralité, c'est la combinaison $CP$ qui doit aussi être violée pour que le **bilan** baryons-antibaryons soit non nul. D'où :
+
+$$ \Gamma(X \to qq) \neq \Gamma(\bar X \to \bar q\,\bar q). $$
+
+**Condition 3 — Écart à l'équilibre thermodynamique.** Même avec $\Delta B \neq 0$ et $CP$ violée, à l'**équilibre** thermique parfait l'invariance $CPT$ impose $m_X = m_{\bar X}$, donc des abondances d'équilibre identiques pour $X$ et $\bar X$ : la réaction directe et son inverse se compensent exactement, et tout excès créé est aussitôt détruit. Il faut donc que les réactions se produisent **hors équilibre**, typiquement lorsque le taux de réaction $\Gamma$ chute sous le taux d'expansion $H$ :
+
+$$ \Gamma \lesssim H \quad\Longrightarrow\quad \text{les processus se découplent, l'excès se fige.} \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Conditions de Sakharov (1967)">
+
+$$ \boxed{\;\Delta B \neq 0 \;\;;\;\; C \text{ et } CP \text{ violées} \;\;;\;\; \text{écart à l'équilibre thermique}\;} $$
+
+<Badge niveau="concordance" slot="badge">Résultat théorique solidement établi : ce sont des conditions **nécessaires** dérivées des symétries fondamentales (notamment l'invariance $CPT$). Tout mécanisme de baryogenèse, quel qu'il soit, doit les satisfaire.</Badge>
+</Resultat>
+
+Remarquable : sans connaître *le* mécanisme, on connaît son **cahier des charges**. La beauté du résultat de Sakharov est qu'il transforme une énigme cosmologique en une liste précise d'exigences sur la physique des particules.
+
+### Le Modèle Standard sait-il le faire ?
+
+La question naturelle : nos lois actuelles, le Modèle Standard, remplissent-elles les trois conditions ? La réponse, fascinante, est *presque*.
+
+- Le nombre baryonique **est** violé, par un effet quantique subtil (les *sphalerons* électrofaibles) à haute température. Première condition : cochée, en principe.
+- $C$ et $CP$ **sont** violées : la violation de $CP$ a été observée dès 1964 dans les kaons, puis dans les mésons $B$. Deuxième condition : cochée.
+- L'écart à l'équilibre pourrait venir de la **transition de phase électrofaible**.
+
+Tout semble réuni. Et pourtant, le compte n'y est pas — quantitativement.
+
+<Encart type="plusloin" titre="Pourquoi le Modèle Standard échoue numériquement">
+Deux verrous, tous deux établis. **Premièrement**, la violation de $CP$ du Modèle Standard, encodée dans la matrice CKM, est trop **faible** : son effet sur l'asymétrie est mesuré par l'invariant de Jarlskog, si petit qu'il prédit un $\eta$ inférieur d'au moins **dix ordres de grandeur** à la valeur observée. **Deuxièmement**, l'écart à l'équilibre exige une transition de phase électrofaible du **premier ordre** (avec nucléation de bulles), or pour la masse mesurée du boson de Higgs ($\approx 125$ GeV), la transition s'avère être un simple *crossover* continu, sans le décrochage hors équilibre requis. Les deux ingrédients existent, mais aucun n'est assez fort.
+
+<Badge niveau="concordance">Que la violation de $CP$ du Modèle Standard et que sa transition électrofaible soient **insuffisantes** pour reproduire $\eta$ est un résultat de calcul établi et largement admis.</Badge>
+</Encart>
+
+### Honnêteté : le coupable court toujours
+
+Il faut donc une physique **au-delà du Modèle Standard**. Plusieurs pistes sérieuses existent. La plus en vue est la **leptogenèse** : des neutrinos droits très lourds se désintègreraient hors équilibre en violant $CP$, créant d'abord une asymétrie *leptonique* (entre leptons et antileptons), que les sphalerons convertiraient ensuite partiellement en asymétrie baryonique. Élégante, elle relie l'existence de la matière à la masse minuscule des neutrinos. D'autres scénarios invoquent une nouvelle source de violation de $CP$, des transitions de phase plus violentes, ou la grande unification.
+
+<Badge niveau="extrapole">La leptogenèse est une extrapolation théorique sérieuse, compatible avec les masses des neutrinos, mais non confirmée expérimentalement.</Badge>
+
+Soyons clairs sur ce que nous savons et ne savons pas. L'asymétrie $\eta$ est mesurée ; les conditions de Sakharov sont établies ; l'insuffisance du Modèle Standard est établie. Mais **quelle** physique a réellement engendré notre milliardième de matière reste ouvert.
+
+<Badge niveau="speculatif">Le **mécanisme concret** de la baryogenèse est inconnu. Aucun scénario n'est confirmé : la baryogenèse n'est, à ce jour, **pas expliquée**. Nous connaissons les règles du crime, pas son auteur.</Badge>
+
+Nous avons donc, à l'issue de ce chapitre, une matière qui existe sans qu'on sache pourquoi — mais qui existe. Au chapitre suivant, nous la suivons tandis que l'univers continue de refroidir, jusqu'au moment décisif où la lumière se libère enfin de la matière.

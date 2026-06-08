@@ -45,6 +45,56 @@ export const COURSES: Course[] = [
     home: '/processeurs',
     accent: 'var(--c-teal)',
   },
+  {
+    id: 'cosmologie',
+    title: 'La cosmologie, des premiers instants au monde actuel',
+    short: 'Cosmologie',
+    blurb:
+      'L’histoire de l’univers, de l’hypothèse d’homogénéité aux équations de Friedmann, du fond diffus à la formation des galaxies, jusqu’au modèle ΛCDM, à la matière et l’énergie noires.',
+    logo: 'Λ',
+    home: '/cosmologie',
+    accent: 'var(--c-orange)',
+  },
+  {
+    id: 'chimie',
+    title: 'La chimie depuis l’atome',
+    short: 'Chimie',
+    blurb:
+      'Toute la chimie remonte à un seul fait : l’atome est quantique. Des orbitales au tableau périodique, de la liaison à la thermodynamique, jusqu’à la chimie du carbone — on reconstruit la matière sans rien admettre en douce.',
+    logo: '⚗',
+    home: '/chimie',
+    accent: 'var(--c-red)',
+  },
+  {
+    id: 'reseaux',
+    title: 'Les réseaux depuis le bit',
+    short: 'Réseaux',
+    blurb:
+      'Du signal physique au web réparti : la limite de Shannon, la trame, l’adressage IP, le routage, TCP et sa fiabilité, puis DNS et HTTP. On distingue le théorème de la norme, de l’heuristique et du déploiement.',
+    logo: '🌐',
+    home: '/reseaux',
+    accent: 'var(--c-green)',
+  },
+  {
+    id: 'histoire',
+    title: 'L’histoire humaine : des premiers hommes aux temps modernes',
+    short: 'Histoire',
+    blurb:
+      'Des premiers Homo aux Temps modernes, non pas une liste de dates mais comment on sait : sources, archéologie, datations. Chaque affirmation porte un badge d’attestation — attesté, probable, reconstitué ou débattu.',
+    logo: '🏛️',
+    home: '/histoire',
+    accent: '#e08bbf',
+  },
+  {
+    id: 'ia',
+    title: 'L’IA moderne, de zéro',
+    short: 'IA',
+    blurb:
+      'Du neurone au transformer, brique par brique : perte et descente de gradient, rétropropagation, réseaux profonds, attention, grands modèles de langage. On sépare le démontré de l’empiriquement robuste, de la recette et de la boîte noire.',
+    logo: '🧠',
+    home: '/ia',
+    accent: 'var(--c-yellow)',
+  },
 ];
 
 export function courseById(id: CourseId | null): Course | undefined {

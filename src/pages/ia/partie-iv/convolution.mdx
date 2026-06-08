@@ -1,0 +1,156 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La convolution : exploiter la structure de l'image"
+chapter: convolution
+description: "Introduit l'opération de convolution discrète et ses deux idées clés : localité (champ réceptif) et partage de poids (invariance par translation). Montre pourquoi un MLP dense est inadapté aux images et comment la convolution encode un a priori structurel."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaConvFilter from '../../../components/interactive/IaConvFilter.astro';
+
+## Une architecture qui sait quelque chose sur ses données
+
+Jusqu'ici, nous avons construit des modèles *aveugles* à la nature de leurs entrées. Le <Prereq href="/ia/partie-iii/perceptron-multicouche">perceptron multicouche</Prereq> traite un vecteur d'entrée comme un sac de nombres : il ne sait pas que deux pixels voisins sont liés, ni qu'une image reste « la même » si on la décale d'un pixel. C'est sa force (il marche sur n'importe quelles données) et sa faiblesse (il doit *tout réapprendre* à partir de zéro). Sur une image, c'est un gaspillage colossal. Changeons de stratégie : et si l'architecture *incorporait* ce qu'on sait des images ?
+
+<Tournant titre="Tournant : on injecte un a priori dans l'architecture">
+On quitte le terrain du modèle générique pour entrer dans celui des modèles **spécialisés**. Le MLP ne suppose rien ; nous allons au contraire *imposer* à l'architecture une connaissance sur les données : les images ont une structure spatiale. Ce n'est **pas déduit** de ce qui précède. C'est un choix de design, motivé par la nature des images et validé par l'expérience, pas un théorème. Tout le reste du chapitre découlera proprement de ce choix une fois posé.
+
+<Badge niveau="recette">Incorporer un a priori spatial dans l'architecture est une décision d'ingénierie, justifiée a posteriori par les performances.</Badge>
+</Tournant>
+
+<Hypotheses titre="Ce qu'on pose en entrant">
+1. **Structure spatiale connue.** Les pixels voisins sont liés, et un motif local (un bord, une texture, un coin) garde son sens où qu'il apparaisse dans l'image : c'est l'**invariance par translation** des objets visuels.
+2. **Statut empirique de cet a priori.** On admet cette hypothèse comme imposée par la nature des images. Sa validité ne se démontre pas : elle se constate.
+3. **On garde tout l'appareil précédent.** Perte, <Prereq href="/ia/partie-ii/retropropagation">rétropropagation</Prereq>, optimiseurs, <Prereq href="/ia/partie-iii/non-linearites">non-linéarités</Prereq> : rien ne change. Seule l'architecture — la *forme* de la fonction paramétrée — est nouvelle.
+</Hypotheses>
+
+## La convolution discrète : un filtre qui glisse
+
+L'idée tient en une phrase : au lieu de connecter chaque sortie à *tous* les pixels, on la connecte à un petit **voisinage**, en réutilisant les mêmes poids partout. Ces poids forment un petit tableau, le **noyau** (ou *filtre*) $K$, typiquement $3\times 3$.
+
+Soit une image $I$ (un tableau de pixels indexé par $(i,j)$) et un noyau $K$ de taille $(2m+1)\times(2m+1)$. La sortie $S$ en position $(i,j)$ est :
+
+$$
+S(i,j) = \sum_{u=-m}^{m}\sum_{v=-m}^{m} K(u,v)\, I(i+u,\, j+v)
+$$
+
+On *pose* le noyau sur le voisinage, on multiplie terme à terme, on somme. Puis on glisse d'un cran et on recommence. (Au sens strict des mathématiques, c'est une *corrélation croisée* ; en apprentissage on l'appelle « convolution » par tradition, et comme $K$ est appris, la distinction est sans effet — le réseau apprend le noyau retourné si besoin.)
+
+<Encart type="calcul" titre="Détecter un bord vertical, à la main">
+Prenons le noyau de Sobel horizontal, qui répond fort là où la luminosité change de gauche à droite :
+
+$$
+K = \begin{pmatrix} -1 & 0 & 1 \\ -2 & 0 & 2 \\ -1 & 0 & 1 \end{pmatrix}
+$$
+
+Appliquons-le à un patch uniforme (zone plate, luminosité $5$ partout) :
+
+$$
+S = (-1)(5) + 0\cdot 5 + (1)(5) + (-2)(5) + 0\cdot 5 + (2)(5) + (-1)(5) + 0\cdot 5 + (1)(5)
+$$
+
+$$
+S = -5 + 5 - 10 + 10 - 5 + 5 = 0
+$$
+
+Zone uniforme → réponse nulle. Maintenant un bord : colonne gauche sombre ($0$), colonne droite claire ($9$). La colonne du milieu est multipliée par $0$, on l'omet :
+
+$$
+S = (-1)(0) + (1)(9) + (-2)(0) + (2)(9) + (-1)(0) + (1)(9) = 9 + 18 + 9 = 36
+$$
+
+Réponse forte. Le filtre **mesure le contraste local** : il « s'allume » sur les bords et reste muet sur les aplats. On n'a programmé aucune règle « détecte les bords » : la règle *est* le noyau, et dans un CNN ce noyau sera **appris**.
+</Encart>
+
+Manipule un noyau $3\times 3$ ci-dessous : passe d'un détecteur de bords à un flou (tous les coefficients égaux à $1/9$), observe en direct l'effet sur l'image.
+
+<IaConvFilter />
+
+## Les deux a priori : localité et partage de poids
+
+La convolution encode exactement deux hypothèses sur les données, et rien de plus.
+
+**Localité.** Chaque sortie ne dépend que d'un petit voisinage ($3\times 3$, $5\times 5$). On suppose que l'information utile est *locale* : un bord se reconnaît en regardant quelques pixels, pas l'image entière.
+
+**Partage de poids.** Le *même* noyau balaie toute l'image. On suppose qu'un motif a le même sens partout : un détecteur de bord utile en haut à gauche l'est aussi en bas à droite. C'est la traduction architecturale directe de l'invariance par translation posée en hypothèse.
+
+Ces deux a priori sont la *raison d'être* de la convolution. Le théorème qui suit montre qu'ils ont une conséquence mathématique exacte.
+
+## L'équivariance par translation, démontrée
+
+<Encart type="calcul" titre="Démonstration : la convolution commute avec la translation">
+Notons $T_{a,b}$ l'opérateur de translation : $(T_{a,b} I)(i,j) = I(i-a,\, j-b)$. Décaler l'image, c'est lui appliquer $T_{a,b}$. Notons $C_K$ l'opération de convolution par $K$. Affirmation : convoluer une image décalée donne le même résultat que décaler l'image convoluée.
+
+Calculons $C_K(T_{a,b} I)$ en position $(i,j)$ :
+
+$$
+\big(C_K(T_{a,b}I)\big)(i,j) = \sum_{u,v} K(u,v)\,(T_{a,b}I)(i+u, j+v) = \sum_{u,v} K(u,v)\, I(i+u-a,\; j+v-b)
+$$
+
+Or, par définition, $(C_K I)(i-a, j-b) = \sum_{u,v} K(u,v)\, I(i-a+u,\; j-b+v)$. Les deux sommes sont **identiques** (mêmes indices $i+u-a$, $j+v-b$). Donc :
+
+$$
+C_K(T_{a,b} I) = T_{a,b}(C_K I)
+$$
+
+L'égalité est exacte, valable pour tout noyau et toute translation : c'est la clé de voûte du partage de poids.
+</Encart>
+
+Autrement dit : si un motif se déplace dans l'image, sa réponse dans la carte de sortie se déplace exactement de la même façon. C'est l'**équivariance par translation**.
+
+<Resultat label="Équivariance par translation">
+$$
+C_K \circ T_{a,b} = T_{a,b} \circ C_K
+$$
+<Badge niveau="prouve" slot="badge">Conséquence exacte du partage de poids, démontrée ci-dessus.</Badge>
+</Resultat>
+
+Attention au mot juste : *équivariance* (la sortie se décale avec l'entrée), pas *invariance* (la sortie ne changerait pas). L'invariance vraie — « peu importe où est le chat, je réponds *chat* » — n'est qu'**approchée** dans un CNN, et obtenue plus tard par le *pooling*, que nous verrons au chapitre suivant. Ne confondons pas les deux.
+
+## Combien de paramètres ? La comparaison qui tranche
+
+Le gain devient concret quand on compte les paramètres. Prenons une image $200\times 200$ en niveaux de gris ($40\,000$ pixels).
+
+<Encart type="calcul" titre="MLP dense contre convolution">
+**Couche dense (MLP).** Pour produire une couche cachée de $40\,000$ unités, chaque sortie est reliée à chaque entrée :
+
+$$
+40\,000 \times 40\,000 = 1{,}6 \times 10^{9}\ \text{poids}
+$$
+
+Un milliard six cents millions de paramètres. Pour *une seule couche*.
+
+**Couche convolutionnelle.** Un noyau $3\times 3$, partagé sur toute l'image :
+
+$$
+3 \times 3 = 9\ \text{poids} \;(+\,1\ \text{biais})
+$$
+
+Même en empilant $64$ filtres pour extraire $64$ motifs différents : $64 \times 9 = 576$ poids. Le rapport dépasse le **million**. Et ce nombre ne grandit pas avec la taille de l'image : le même noyau balaie un mégapixel comme une vignette.
+</Encart>
+
+<Resultat label="Réduction du nombre de paramètres">
+$$
+\#\text{params}_{\text{conv}} = c_{\text{out}}\,(c_{\text{in}}\,k^2 + 1) \;\ll\; \#\text{params}_{\text{dense}} = (HW)^2
+$$
+<Badge niveau="prouve" slot="badge">Fait arithmétique : le partage de poids découple le nombre de paramètres de la taille de l'image.</Badge>
+</Resultat>
+
+Moins de paramètres, c'est moins à apprendre, moins de mémoire, et un a priori qui *guide* l'apprentissage vers les bonnes solutions au lieu de le laisser tout explorer.
+
+## Honnêteté : un excellent a priori, pas une nécessité
+
+Soyons rigoureux sur ce qu'on a et n'a *pas* démontré. L'équivariance et la réduction de paramètres sont des **faits**. Mais que les CNN soient *supérieurs sur les images* n'est pas un théorème :
+
+<Badge niveau="robuste">Sur les images naturelles, les architectures convolutives surpassent massivement les MLP denses : régularité empirique très robuste, vérifiée sur d'innombrables jeux de données — mais sans preuve générale.</Badge>
+
+Et il faut résister à la tentation de survendre. La convolution n'est **pas indispensable** : les *transformers de vision* (sans aucune convolution) rivalisent avec les meilleurs CNN, à condition d'assez de données. L'a priori convolutionnel est donc un *raccourci* particulièrement bien adapté aux images — un biais utile quand les données sont rares — pas une vérité forcée par la nature.
+
+<Badge niveau="recette">« Mettre de la convolution pour traiter des images » est une recette d'ingénierie excellente, pas une obligation théorique.</Badge>
+
+Nous tenons l'opération de base et son a priori. Reste à l'assembler en une **hiérarchie** — empiler des convolutions, intercaler des non-linéarités, réduire l'espace par *pooling* — pour passer du pixel à la catégorie. C'est l'objet du prochain chapitre : les réseaux convolutifs.

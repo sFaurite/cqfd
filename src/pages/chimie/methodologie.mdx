@@ -1,0 +1,89 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « quantique », « établi par l’expérience », « règle empirique » et « qualitatif » — l’axe de ce cours n’est pas la certitude, mais le degré de nécessité physico-chimique.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+La chimie n’est pas un bloc de vérités également « solides ». Certaines affirmations sont **imposées
+par la mécanique quantique** ou par les lois de conservation : elles ne pourraient pas être
+autrement. D’autres sont **établies par l’expérience** : mesurées, reproductibles, mais sans découler
+d’un principe simple. D’autres encore sont des **règles empiriques** — des modèles approchés, très
+prédictifs mais faillibles. Et beaucoup d’énoncés « généraux » ne sont enfin que des **tendances
+qualitatives**, fortement dépendantes du contexte.
+
+Confondre ces statuts, c’est le grand malentendu sur la chimie — croire que « les atomes veulent leur
+octet » est une loi de la nature au même titre que la conservation de la charge. Pour l’éviter,
+**chaque affirmation notable** de ce cours porte l’un de ces quatre niveaux. L’axe n’est pas « à quel
+point est-ce vrai » mais **« à quel point est-ce nécessaire »**.
+
+## Les quatre niveaux
+
+### 🟢 Quantique / fondamental <Badge niveau="quantique">Exemple : la structure électronique découle des principes quantiques.</Badge>
+
+Imposé par les **principes de la mécanique quantique** ou par les **lois de conservation** (matière,
+charge, énergie). Ce n’est pas un choix : étant donné le socle admis, il ne pourrait pas en être
+autrement. C’est le fondement dur du cours.
+
+> Exemples : la quantification des niveaux d’énergie, le principe de Pauli, la conservation de la
+> matière et de la charge dans une réaction, l’existence des orbitales.
+
+### 🔵 Établi par l’expérience <Badge niveau="experimental">Exemple : l’enthalpie standard de formation de l’eau.</Badge>
+
+**Mesuré de façon reproductible**, indépendamment de tout modèle particulier. C’est un **fait
+expérimental** : on l’a observé, mesuré, recoupé. Il repose sur la mesure plutôt que sur une
+déduction, mais il est solide et consensuel.
+
+> Exemples : les enthalpies de réaction, les constantes d’équilibre, les potentiels standard, la
+> périodicité observée des propriétés, les spectres de raies.
+
+### 🟡 Règle empirique <Badge niveau="empirique">Exemple : la règle de l’octet, ou VSEPR.</Badge>
+
+Un **modèle ou une règle prédictive mais approchée**, adopté parce qu’il marche bien dans la plupart
+des cas — mais qui **connaît des exceptions**. Très utile pour raisonner et prévoir, à condition de
+ne pas le prendre pour une vérité exacte. On signale ainsi les endroits où l’on **idéalise** la
+réalité.
+
+> Exemples : la règle de l’octet, VSEPR, l’échelle d’électronégativité, les nombres d’oxydation, les
+> pKa tabulés, le modèle de l’hybridation du carbone.
+
+### 🔴 Qualitatif / contextuel <Badge niveau="qualitatif">Exemple : « ce solvant favorise généralement cette réaction ».</Badge>
+
+Une **tendance qualitative** qui dépend **fortement du contexte** (température, solvant, concentration,
+catalyseur). Il n’existe pas de règle universelle : ce qui est vrai dans un cas ne l’est pas
+forcément dans un autre. On le marque pour éviter de prendre une tendance générale pour une loi.
+
+> Exemples : la « réactivité générale » d’une famille, les effets de solvant, les règles de
+> régiosélectivité, les énoncés du type « plus… donc plus… » sans valeur chiffrée.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau — quel principe quantique, quelle mesure, quelle règle empirique, quelle
+tendance.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « quantique » et « règle empirique » ?">
+Parce que c’est la clé pour comprendre vraiment la chimie. « Deux électrons ne peuvent partager les
+quatre mêmes nombres quantiques » est une **nécessité** : la nature l’impose, aucune molécule n’y
+échappe. « Un atome complète son octet » est une **règle empirique** : elle marche superbement pour
+le carbone, l’azote, l’oxygène, mais le soufre et le phosphore l’enfreignent allègrement
+(hypervalence), et O₂ est un cas que Lewis ne sait pas décrire. Les deux sont utiles — mais pas *de la
+même façon*. Confondre les deux, c’est soit s’étonner faussement d’une « exception » à une prétendue
+loi, soit douter d’un principe pourtant inviolable. Le badge rend cette frontière visible à chaque
+ligne.
+</Encart>
+
+## Sur les valeurs numériques
+
+Quand une valeur est citée, on précise son statut :
+
+- **Constante fondamentale** (mesurée ou définie) : la constante de Boltzmann $k_B$, le nombre
+  d’Avogadro $N_A$. <Badge niveau="quantique">Propriétés universelles de la nature, indépendantes du système étudié.</Badge>
+- **Grandeur mesurée** : une enthalpie de réaction, une constante d’équilibre, un potentiel
+  standard. <Badge niveau="experimental">Mesuré expérimentalement dans des conditions précisées ; valeur tabulée et reproductible.</Badge>
+- **Valeur tabulée d’un modèle** : une électronégativité de Pauling, un pKa. <Badge niveau="empirique">Issu d’un modèle prédictif mais approché ; utile pour comparer, pas une constante de la nature.</Badge>
+
+L’<a href="/chimie/symboles">index des symboles</a> récapitule ces grandeurs et leur statut.

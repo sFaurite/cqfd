@@ -1,0 +1,98 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les forces entre molécules"
+chapter: interactions-intermoleculaires
+description: "Les interactions intermoléculaires : forces de Van der Waals (London, Keesom, Debye), liaison hydrogène, leur intensité relative et leurs conséquences (points d'ébullition, solubilité)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi un gaz devient-il un jour liquide ?
+
+Si chaque molécule était parfaitement indifférente à ses voisines, rien ne se condenserait jamais : l'eau resterait un gaz à toute température, et nous avec. Pourtant l'eau bout à 100 °C, l'azote à $-196$ °C, et l'hélium ne se liquéfie qu'à un souffle du zéro absolu. Il existe donc, entre molécules électriquement neutres, des forces attractives — faibles devant la liaison chimique, mais décisives pour tout ce que la matière fait à notre échelle. Ce chapitre les classe, les hiérarchise, et s'en sert pour expliquer quelques anomalies spectaculaires.
+
+<Hypotheses titre="Hypothèses de départ">
+On admet que les molécules possèdent une distribution de charges (pôles permanents ou non) issue de leur structure électronique, et l'existence de moments dipolaires établie au chapitre précédent : <Prereq href="/chimie/partie-iii/polarite-moments-dipolaires">moment dipolaire de liaison et somme vectorielle</Prereq>. On admet l'électrostatique classique : deux charges de signe opposé s'attirent.
+</Hypotheses>
+
+## Le décor : trois forces de Van der Waals
+
+On regroupe sous le nom de **forces de Van der Waals** trois interactions attractives entre molécules, toutes d'origine électrostatique mais de mécanismes distincts.
+
+**1. Keesom — dipôle permanent / dipôle permanent.** Deux molécules polaires s'orientent en moyenne de façon à présenter pôle + face à pôle $-$. L'agitation thermique brouille cet alignement, si bien que l'attraction moyenne croît quand $T$ baisse. <Badge niveau="experimental">L'énergie d'interaction est mesurée ; après moyenne sur les orientations, elle décroît en $1/r^6$ avec la distance.</Badge>
+
+**2. Debye — dipôle permanent / dipôle induit.** Un dipôle permanent déforme le nuage électronique d'une molécule voisine, même apolaire, et y *induit* un dipôle. Le dipôle induit est toujours orienté pour attirer : l'interaction est donc systématiquement attractive. <Badge niveau="experimental">Mesurée ; dépend de la polarisabilité, c'est-à-dire de la facilité du nuage électronique à se déformer.</Badge>
+
+**3. London (dispersion) — universelle.** C'est la plus subtile et, en pratique, souvent la plus importante. Même une molécule strictement apolaire (un atome d'argon, une molécule de diazote) possède un nuage électronique qui *fluctue* à chaque instant. À un instant donné, les électrons ne sont pas répartis symétriquement : il existe un **dipôle instantané**. Ce dipôle fugace induit un dipôle dans le voisin, et les deux fluctuations se *corrèlent* de façon à s'attirer.
+
+<Encart type="intuition" titre="Pourquoi la dispersion attire toujours">
+Imaginez deux nuages électroniques côte à côte. Si, par hasard, le premier penche à droite, son champ pousse les électrons du second à pencher dans le sens qui crée une attraction. Les deux nuages se mettent à « danser en phase » : ce n'est pas un accident, c'est la configuration de plus basse énergie, donc celle que le système privilégie en moyenne. Cette corrélation permanente des fluctuations donne une attraction moyenne non nulle, même sans aucun dipôle permanent.
+</Encart>
+
+Cette danse corrélée n'est pas un effet classique : un électron classique localisé et immobile n'aurait pas de « fluctuation de densité ». C'est la nature probabiliste du nuage ($|\psi|^2$ = densité de probabilité) qui rend le phénomène inévitable. <Badge niveau="quantique">L'origine de la dispersion est la corrélation quantique des fluctuations de la densité électronique ; elle découle des principes quantiques, pas de l'électrostatique classique seule. Son énergie, elle, se mesure.</Badge>
+
+La dispersion croît avec le nombre d'électrons et la taille du nuage (plus de matière à fluctuer, nuage plus déformable). C'est pourquoi $\text{I}_2$ est solide et $\text{F}_2$ gazeux à température ambiante, alors que ce sont des molécules apolaires de même famille. <Badge niveau="qualitatif">Tendance : plus la molécule est grosse et polarisable, plus la dispersion est forte — tendance robuste mais sensible à la forme.</Badge>
+
+## La liaison hydrogène : un cran au-dessus
+
+Quand un atome d'hydrogène est lié à un atome très électronégatif **X = N, O ou F**, la liaison X–H est fortement polarisée : le H, presque dénudé de son électron, présente une charge partielle positive intense et un très petit volume. Il peut alors s'approcher d'un doublet non liant porté par un autre atome N, O ou F voisin. On écrit $X{-}H \cdots Y$.
+
+<Tournant titre="Une nouvelle classe d'interaction, posée par l'expérience">
+La liaison hydrogène n'est pas déductible des seules forces de Van der Waals : c'est une interaction particulière, identifiée et caractérisée expérimentalement, qu'on ajoute ici comme catégorie à part. Sa géométrie directionnelle et son énergie élevée la distinguent nettement.
+</Tournant>
+
+Attention à la confusion classique : malgré son nom, ce **n'est pas une liaison covalente**. Il n'y a pas de doublet d'électrons franchement partagé entre H et Y ; c'est une attraction essentiellement électrostatique, renforcée et directionnelle, entre un H très positif et un doublet riche en électrons. <Badge niveau="experimental">La liaison hydrogène est une interaction électrostatique forte, mesurée (énergie et géométrie). Sa description fine (léger caractère de partage) relève d'un modèle.</Badge> <Badge niveau="empirique">Le critère « X et Y parmi N, O, F » est une règle prédictive commode et approchée.</Badge>
+
+## L'échelle d'intensité
+
+Voici les ordres de grandeur des énergies d'interaction, tous **mesurés** :
+
+<Resultat label="Hiérarchie des énergies d'interaction">
+
+$$
+E_{\text{London}} \sim E_{\text{Keesom}} \sim E_{\text{Debye}} : 1\text{–}10\ \text{kJ/mol} \quad ; \quad E_{\text{liaison H}} : 10\text{–}40\ \text{kJ/mol}
+$$
+
+<Badge niveau="experimental" slot="badge">Valeurs mesurées ; à comparer aux ~400 kJ/mol d'une liaison covalente C–H, soit 10 à 100 fois plus.</Badge>
+</Resultat>
+
+Retenons l'échelle : Van der Waals quelques kJ/mol, liaison hydrogène jusqu'à environ 40 kJ/mol, liaison covalente plusieurs centaines. Sur l'ensemble, les interactions intermoléculaires couvrent grossièrement la plage $1$ à $40\ \text{kJ/mol}$. Elles sont donc faibles individuellement — mais multipliées par le nombre d'Avogadro, elles gouvernent la cohésion des liquides et des solides moléculaires.
+
+## L'exemple phare : l'anomalie de l'eau
+
+Suivons les températures d'ébullition des hydrures d'une même colonne. Pour le groupe du carbone, $\text{CH}_4, \text{SiH}_4, \text{GeH}_4$ : la $T_{\text{eb}}$ monte régulièrement avec la masse (dispersion croissante, molécules apolaires). Tout est normal.
+
+Mais comparez $\text{H}_2\text{O}$, $\text{NH}_3$ et $\text{HF}$ aux hydrures plus lourds de leurs colonnes. L'extrapolation de la tendance « plus lourd = plus chaud » prédirait pour l'eau une ébullition vers $-80$ °C. Elle bout à $+100$ °C : presque 200 degrés trop haut.
+
+<Encart type="calcul" titre="Décoder l'anomalie">
+Tendance attendue (dispersion seule). $\text{H}_2\text{S}$, plus lourd que $\text{H}_2\text{O}$, bout déjà à $-60\ \text{°C}$ ; en prolongeant la décroissance « plus léger = plus froid » vers $\text{H}_2\text{O}$ on attendrait
+
+$$
+T_{\text{eb}}^{\text{attendue}}(\text{H}_2\text{O}) \approx -80\ \text{°C}.
+$$
+
+Valeur mesurée :
+
+$$
+T_{\text{eb}}(\text{H}_2\text{O}) = +100\ \text{°C}.
+$$
+
+Écart : $\approx +180\ \text{°C}$.
+
+Cause : chaque molécule d'eau, avec deux H et deux doublets non liants sur O, peut former en moyenne jusqu'à **quatre** liaisons hydrogène avec ses voisines. Cette cohésion supplémentaire exige bien plus d'énergie thermique pour libérer les molécules à l'état gazeux, d'où une $T_{\text{eb}}$ très relevée.
+</Encart>
+
+<Badge niveau="experimental">Le point d'ébullition anormalement élevé de l'eau, et la série complète des hydrures, sont des faits mesurés expliqués par la liaison hydrogène.</Badge>
+
+Même origine pour la **glace moins dense que l'eau liquide** : les liaisons hydrogène imposent à la glace un réseau ouvert et ajouré, qui occupe plus de volume que le liquide désordonné. La glace flotte — et la vie aquatique sous la banquise lui doit beaucoup. <Badge niveau="experimental">La masse volumique de la glace ($0{,}917\ \text{g/cm}^3$) inférieure à celle de l'eau liquide ($\approx 1{,}00\ \text{g/cm}^3$) est mesurée.</Badge>
+
+## « Qui se ressemble s'assemble »
+
+Enfin, la règle de solubilité *semblable dissout semblable* se lit directement : un soluté se dissout bien quand les interactions qu'il peut former avec le solvant ressemblent à celles qu'il rompt. L'eau (très liée par liaisons H) dissout l'éthanol (qui en fait aussi) mais pas l'hexane (qui ne connaît que la dispersion). <Badge niveau="qualitatif">Règle d'orientation utile mais contextuelle : la miscibilité dépend de l'ensemble des interactions et de la structure.</Badge>
+
+Nous savons maintenant ce qui colle les molécules entre elles, et avec quelle énergie. Reste à voir comment cette cohésion, en lutte contre l'agitation thermique, décide de l'état — solide, liquide ou gaz — de la matière : c'est l'objet du prochain chapitre sur les états de la matière et les changements d'état.

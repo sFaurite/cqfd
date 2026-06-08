@@ -1,0 +1,128 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La métrique FLRW et le facteur d'échelle"
+chapter: metrique-flrw
+description: "La géométrie d'un univers homogène et isotrope : facteur d'échelle a(t) et courbure k."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La métrique FLRW et le facteur d'échelle
+
+Nous avons deux piliers entre les mains. D'un côté, le <Prereq href="/cosmologie/partie-i/principe-cosmologique">principe cosmologique</Prereq> : à grande échelle, l'univers est **homogène** (aucun lieu n'est privilégié) et **isotrope** (aucune direction n'est privilégiée). De l'autre, le <Prereq href="/cosmologie/partie-i/relativite-cadre">cadre de la relativité générale</Prereq> : la gravitation est la géométrie d'un espace-temps décrit par une **métrique** $ds^2$, qui mesure l'« intervalle » séparant deux événements voisins.
+
+La question de ce chapitre est d'une simplicité provocante : **quelle forme la métrique peut-elle prendre si l'on impose homogénéité et isotropie ?** Nous allons voir que la réponse est essentiellement unique. Ce n'est pas une observation que l'on rajoute, c'est un **théorème** : les symétries à elles seules verrouillent la géométrie, à une fonction du temps et un nombre près.
+
+<Hypotheses titre="Ce que l'on admet en entrant dans ce chapitre">
+
+Tout ce chapitre est **déduit** de deux acquis, posés ailleurs et repris ici tels quels :
+
+1. **Le principe cosmologique** : aux grandes échelles, l'univers est homogène et isotrope. <Badge niveau="observe">Cohérent avec le fond diffus et la répartition des structures à grande échelle ; consensus empirique.</Badge>
+2. **Le cadre de la relativité générale** : la gravitation *est* la géométrie de l'espace-temps, codée par une métrique. <Badge niveau="concordance">Cadre admis, vérifié dans tous ses tests, mais c'est un choix de théorie (et non une déduction).</Badge>
+
+On admettra en outre, comme **outil de géométrie différentielle**, la classification des espaces à courbure constante (théorème de Killing–Robertson–Walker). Nous ne posons **aucune hypothèse physique nouvelle** : la forme de la métrique va en *découler*, elle n'est pas postulée.
+
+</Hypotheses>
+
+<Encart type="intuition" titre="Le ballon qu'on gonfle">
+
+Dessinez des points fixes au feutre sur un ballon, puis gonflez-le. Chaque point s'éloigne de tous les autres, et plus deux points sont distants, plus vite ils s'écartent — pourtant **aucun point ne se déplace sur le caoutchouc** : ils gardent leurs coordonnées sur le ballon. Ce qui change, c'est le rayon du ballon, un seul nombre. La cosmologie, c'est cela : les galaxies sont les points au feutre, leurs coordonnées (dites *comobiles*) sont figées, et tout l'écartement vient d'un facteur global qui gonfle — le **facteur d'échelle** $a(t)$. Aucun « centre » sur la surface : l'expansion est la même vue de n'importe quel point.
+
+</Encart>
+
+### Séparer le temps et l'espace
+
+Construisons la métrique pas à pas. L'isotropie complète ne vaut qu'autour d'un point ; mais l'homogénéité dit que *tout* point se vaut. Combinées, ces deux symétries imposent qu'il existe un **temps cosmique** $t$ commun, celui que mesurerait un observateur comobile (au repos dans le flot d'expansion), tel que les sections à $t$ constant soient des espaces de courbure uniforme. On peut alors écrire la métrique sans terme croisé $dt\,dx$ (sinon une direction temporelle serait privilégiée) et avec un coefficient $-c^2$ devant $dt^2$ par convention de signature :
+
+$$ ds^2 = -c^2\,dt^2 + a(t)^2\, d\ell^2, $$
+
+où $d\ell^2$ est la métrique d'un espace **purement spatial**, et $a(t)$ un facteur sans dimension qui dilate uniformément cet espace au cours du temps. Toute la dépendance temporelle est dans $a(t)$ : c'est la traduction mathématique du « ballon » dont seul le rayon évolue.
+
+Reste à trouver $d\ell^2$. C'est ici que les symétries finissent le travail : un espace **homogène et isotrope** en trois dimensions n'a que trois géométries possibles, classées par une constante de courbure. C'est un résultat de géométrie différentielle (Killing, Robertson, Walker), que nous admettons comme outil.
+
+<Encart type="rappel" titre="Les trois espaces à courbure constante">
+
+À courbure **constante** et isotrope, un espace 3D est forcément l'un de ces trois modèles, distingués par un signe :
+
+- courbure **positive** : l'hypersphère (analogue 3D de la surface d'une sphère) — espace **fini sans bord** ;
+- courbure **nulle** : l'espace euclidien plat ordinaire — infini ;
+- courbure **négative** : l'espace hyperbolique (analogue d'une selle infinie) — infini.
+
+En coordonnées sphériques $(r,\theta,\varphi)$ centrées sur l'observateur, les trois s'écrivent d'un seul coup avec un paramètre $k$ :
+
+$$ d\ell^2 = \frac{dr^2}{1 - k r^2} + r^2\,d\Omega^2, \qquad d\Omega^2 = d\theta^2 + \sin^2\theta\, d\varphi^2. $$
+
+Le facteur $1/(1-kr^2)$ encode toute la courbure ; $d\Omega^2$ est juste l'angle solide habituel. Ici $a(t)$ étant sans dimension, $r$ a la dimension d'une longueur et $k$ celle de l'inverse d'une longueur au carré : son **signe** seul fixe la géométrie.
+
+</Encart>
+
+En assemblant le temps et l'espace, on obtient la forme générale cherchée.
+
+<Resultat label="Métrique de Friedmann–Lemaître–Robertson–Walker (FLRW)">
+
+$$ ds^2 = -c^2\,dt^2 + a(t)^2\left[\frac{dr^2}{1 - k r^2} + r^2\left(d\theta^2 + \sin^2\theta\, d\varphi^2\right)\right] $$
+
+<Badge niveau="concordance" slot="badge">Ce n'est pas une mesure mais un **théorème** : c'est la forme la plus générale compatible avec le principe cosmologique dans le cadre de la relativité générale (tous deux admis). Si les hypothèses tiennent, la métrique est nécessairement celle-ci.</Badge>
+</Resultat>
+
+### Lire la métrique : facteur d'échelle, comobiles, courbure
+
+Trois objets méritent qu'on s'y arrête, car toute la cosmologie repose sur leur distinction.
+
+**Le facteur d'échelle $a(t)$.** C'est l'unique fonction inconnue : un nombre **sans dimension** qui dit « de combien l'espace est dilaté » à l'instant $t$. Sa valeur absolue n'a pas de sens physique (seuls comptent les rapports), on peut donc **fixer une normalisation**. Par convention universelle, on pose
+
+$$ a_0 \equiv a(t_{\text{aujourd'hui}}) = 1. $$
+
+<Badge niveau="concordance">Le choix $a_0 = 1$ est une **convention** (un choix d'unité), pas un fait mesuré. Il rend simplement $a(t)$ égal au rapport des tailles entre l'époque $t$ et aujourd'hui.</Badge>
+
+**Les coordonnées comobiles.** Une galaxie typique (au repos dans le flot d'expansion) garde des coordonnées $(r,\theta,\varphi)$ **constantes au cours du temps**. Elles sont les « marques au feutre » : fixes sur le ballon. C'est l'expansion, via $a(t)$, qui éloigne réellement les galaxies, pas un mouvement à travers l'espace.
+
+**La courbure $k$.** Le nombre $k$ tranche la géométrie de l'espace :
+
+| $k$ | géométrie spatiale | étendue | nom |
+|---|---|---|---|
+| $k > 0$ | sphérique | finie | univers **fermé** |
+| $k = 0$ | euclidienne (plate) | infinie | univers **plat** |
+| $k < 0$ | hyperbolique | infinie | univers **ouvert** |
+
+<Badge niveau="observe">Que la géométrie soit l'**une** de ces trois est une conséquence des symétries ; mais **laquelle** est notre univers est, elle, une question expérimentale. Les mesures du fond diffus cosmologique donnent $k \approx 0$ : l'univers est **plat** à mieux que le pour-cent près. C'est mesuré, pas postulé.</Badge>
+
+### Distance physique = $a(t)\times$ distance comobile
+
+Voici la conséquence la plus utile de toute la construction. Prenons deux galaxies comobiles séparées par une coordonnée radiale fixe $\chi$ (la **distance comobile**, indépendante du temps). Quelle est leur distance **physique** réelle à l'instant $t$ ?
+
+<Encart type="calcul" titre="De la coordonnée à la distance physique">
+
+**Étape 1 — Mesurer une longueur à $t$ fixé.** Une « distance physique » se mesure à un instant donné : on pose $dt = 0$ dans $ds^2$. Le long du rayon ($d\theta = d\varphi = 0$), il ne reste que
+
+$$ ds = a(t)\,\frac{dr}{\sqrt{1 - k r^2}}. $$
+
+**Étape 2 — Sortir le facteur d'échelle.** À $t$ fixé, $a(t)$ est une constante vis-à-vis de l'intégration sur $r$. On peut donc le sortir de l'intégrale, de $r=0$ jusqu'à la galaxie :
+
+$$ D(t) = \int_0^{r} a(t)\,\frac{dr'}{\sqrt{1 - k r'^2}} = a(t)\int_0^{r}\frac{dr'}{\sqrt{1 - k r'^2}}. $$
+
+**Étape 3 — Nommer la part purement géométrique.** L'intégrale restante ne dépend **que** des coordonnées, pas du temps : c'est la distance comobile $\chi$,
+
+$$ \chi \equiv \int_0^{r}\frac{dr'}{\sqrt{1 - k r'^2}}. $$
+
+**Étape 4 — Conclure.** D'où, immédiatement :
+
+$$ \boxed{\,D(t) = a(t)\,\chi\,} \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Distance physique et distance comobile">
+
+$$ D(t) = a(t)\,\chi $$
+
+<Badge niveau="concordance">Conséquence directe de la métrique FLRW (admise) : la distance comobile $\chi$ est figée, et **toute** l'évolution de la distance physique vient du facteur $a(t)$.</Badge>
+</Resultat>
+
+Cette unique formule est le cœur battant de la cosmologie. Elle sépare proprement ce qui est **fixé** (la géométrie comobile $\chi$, gravée une fois pour toutes) de ce qui **évolue** (le facteur $a(t)$). Dériver par rapport au temps donnera la vitesse d'écartement $\dot D = \dot a\,\chi = (\dot a/a)\,D$ : la vitesse de récession est proportionnelle à la distance — la loi de Hubble surgira mécaniquement, sans rien postuler de plus.
+
+Il nous reste pourtant l'essentiel à faire. La métrique nous dit *que* l'univers gonfle selon $a(t)$, mais pas *comment* : qu'est-ce qui fixe l'évolution de $a(t)$ ? La réponse vient en injectant cette métrique dans les équations d'Einstein — ce sont les **équations de Friedmann**, et c'est le sujet du chapitre suivant.

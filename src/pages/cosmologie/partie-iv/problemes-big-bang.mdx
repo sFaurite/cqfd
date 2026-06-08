@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les problèmes du Big Bang chaud"
+chapter: problemes-big-bang
+description: "Horizon, platitude, monopôles : trois ajustements fins qui réclament une explication."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les problèmes du Big Bang chaud
+
+<Tournant titre="Tournant : trois ajustements fins que le modèle ne sait pas expliquer">
+Jusqu'ici, tout s'est enchaîné de façon déductive : la <Prereq href="/cosmologie/partie-i/metrique-flrw">métrique FLRW</Prereq>, les équations de Friedmann, la <Prereq href="/cosmologie/partie-iii/recombinaison-cmb">recombinaison et l'émission du fond diffus</Prereq>. Le modèle du **Big Bang chaud** — un univers en expansion partant d'un état dense et chaud — est remarquablement vérifié : il prédit le fond diffus, les abondances primordiales, la structure à grande échelle.
+
+Et pourtant, ce modèle bute sur **trois énigmes**. Ce ne sont pas des contradictions internes : aucune équation n'est violée. Ce sont des **conditions initiales** que le modèle doit poser à la main, et qui apparaissent extraordinairement *réglées*. Pour les résoudre, il faudra au chapitre suivant **ajouter une hypothèse nouvelle, non déduite de ce qui précède** : l'inflation. Ici, on ne déduit plus — on **pose le problème**, on ne le résout pas encore.
+</Tournant>
+
+### 1. Le problème de l'horizon
+
+Le fond diffus cosmologique a la **même température** dans toutes les directions : $T \approx 2{,}725\ \mathrm{K}$, à $10^{-5}$ près une fois retiré l'effet de notre propre mouvement. Cette isotropie est <Badge niveau="observe">mesurée directement par COBE, WMAP puis Planck : c'est un fait empirique robuste.</Badge>
+
+Pour deux objets, « avoir la même température » suppose en général qu'ils aient pu **échanger de l'information** — se thermaliser. Or l'information ne va pas plus vite que la lumière. La distance maximale qu'un signal a pu parcourir depuis le Big Bang jusqu'à l'émission du CMB définit l'**horizon causal** $d_H$ au moment de la recombinaison.
+
+<Encart type="rappel" titre="L'horizon causal">
+Dans un univers en expansion, deux points ne peuvent s'être influencés que si un rayon lumineux a eu le temps d'aller de l'un à l'autre. La distance maximale parcourue par la lumière entre $t=0$ et un temps $t$ (ramenée à l'échelle physique au temps $t$) est
+
+$$ d_H(t) = a(t) \int_0^{t} \frac{c\,\mathrm{d}t'}{a(t')}. $$
+
+Tout ce qui est plus éloigné que $d_H$ est, par définition, **hors de contact causal** : aucun signal n'a encore pu le relier.
+</Encart>
+
+<Encart type="calcul" titre="L'horizon au CMB ne couvre que ~1° sur le ciel">
+
+**Étape 1 — Taille de l'horizon à la recombinaison.** Aux époques considérées, l'univers est dominé par la matière, $a \propto t^{2/3}$. L'intégrale converge et donne un horizon **fini** au moment de la recombinaison ($z_\star \approx 1100$, soit $t_\star \approx 3{,}8\times 10^{5}\ \text{ans}$). En ordre de grandeur,
+
+$$ d_H(t_\star) \sim 3\,c\,t_\star \approx 0{,}3\ \text{Mpc} \sim 300\ \text{kpc (physique)}. $$
+
+**Étape 2 — Projection sur le ciel.** Vu depuis la Terre, cet horizon sous-tend un angle
+
+$$ \theta_H \approx \frac{d_H(t_\star)}{d_A} \sim 1^\circ\!-\!2^\circ, $$
+
+où $d_A$ est la distance de diamètre angulaire à la surface de dernière diffusion.
+
+**Étape 3 — Le décompte.** Le ciel entier couvre $4\pi$ stéradians, soit environ $4{,}1\times 10^{4}\ \text{deg}^2$ ; à raison de quelques degrés carrés par horizon, cela fait de l'ordre de $\sim 10^{4}$ « parcelles » causalement indépendantes. Chacune est isolée des autres au moment où le CMB est émis.
+
+$$ \boxed{\text{Le CMB se compose de } \sim 10^{4} \text{ régions jamais entrées en contact causal.}} $$
+
+</Encart>
+
+Voici le paradoxe. Ces $\sim 10^4$ régions n'ont **jamais pu s'échanger de la chaleur** — et pourtant elles affichent la même température à $10^{-5}$ près. Dans le Big Bang chaud standard, rien ne l'impose : il faut **postuler** que l'univers est né, partout, déjà à la même température. Que cette uniformité soit *naturelle* ou *suspecte* n'est pas une observation, c'est <Badge niveau="extrapole">un jugement théorique : le modèle ne l'interdit pas, mais la considérer comme un ajustement fin improbable suppose un préjugé sur ce qui constitue une « bonne » condition initiale.</Badge>
+
+### 2. Le problème de la platitude
+
+Reprenons l'équation de Friedmann. En divisant par $H^2$ et en introduisant le **paramètre de densité total** $\Omega \equiv \rho/\rho_c$ (avec $\rho_c = 3H^2/8\pi G$), on relie densité et courbure.
+
+<Encart type="calcul" titre="La courbure s'amplifie avec le temps">
+
+**Étape 1 — Forme adimensionnée.** L'équation de Friedmann $H^2 = \tfrac{8\pi G}{3}\rho - \tfrac{kc^2}{a^2}$ se réécrit, en divisant par $H^2$ :
+
+$$ 1 = \Omega - \frac{kc^2}{a^2 H^2} \quad\Longrightarrow\quad \Omega - 1 = \frac{kc^2}{a^2 H^2}. $$
+
+**Étape 2 — Évolution du terme de courbure.** Le produit $a^2 H^2 = \dot a^2$. En ère de rayonnement $a\propto t^{1/2}$ donc $\dot a \propto t^{-1/2}$ ; en ère de matière $a\propto t^{2/3}$ donc $\dot a \propto t^{-1/3}$. Dans les deux cas $\dot a$ **décroît** avec le temps.
+
+**Étape 3 — Conséquence.** Comme $\Omega - 1 = kc^2/\dot a^2 \propto 1/\dot a^2$, et que $\dot a$ diminue :
+
+$$ \boxed{|\Omega - 1| \text{ croît au cours du temps : la platitude est un état } \textit{instable}.} $$
+
+</Encart>
+
+C'est le cœur du problème : $\Omega = 1$ (univers plat) est un **point d'équilibre instable**. Le moindre écart s'amplifie. Or aujourd'hui on mesure $\Omega_0 = 1{,}000 \pm 0{,}002$ — l'univers est plat à la précision instrumentale, ce qui est <Badge niveau="observe">mesuré directement par la position du premier pic acoustique du CMB et par la structure à grande échelle.</Badge>
+
+Remontons le temps. Puisque l'écart s'amplifie, pour que $|\Omega_0 - 1| \lesssim 10^{-2}$ aujourd'hui, il fallait au temps de Planck $|\Omega - 1| \lesssim 10^{-60}$. Soixante décimales réglées dès le départ. Là encore, aucune loi n'est violée — mais qualifier ce réglage d'« improbable » relève d'<Badge niveau="extrapole">un jugement de naturalité : le modèle admet n'importe quelle valeur initiale ; c'est notre intuition que des conditions aussi fines ne peuvent être un accident qui en fait un « problème ».</Badge>
+
+<Encart type="intuition" titre="Un crayon en équilibre sur sa pointe">
+Imaginez un crayon parfaitement vertical, en équilibre sur sa pointe. Le retrouver droit après une heure exigerait un placement initial d'une précision folle, car le moindre déséquilibre s'accentue. Trouver l'univers plat aujourd'hui, alors que la platitude se *dégrade* avec le temps, c'est exactement retrouver ce crayon debout : soit un réglage initial vertigineux, soit un **mécanisme** qui le maintient droit. L'inflation sera ce mécanisme.
+</Encart>
+
+### 3. Le problème des monopôles
+
+La troisième énigme ne vient pas de l'observation, mais de la **physique des hautes énergies**. Les théories de **grande unification** (GUT) — qui fusionnent forces électrofaible et forte vers $10^{16}\ \mathrm{GeV}$ — prédisent, lors de la brisure de symétrie de l'univers primordial, la formation de **monopôles magnétiques** : des reliques ponctuelles, ultra-massives ($\sim 10^{16}\ \mathrm{GeV}/c^2$), stables et **abondantes**.
+
+Le décompte est sans appel : le Big Bang chaud, couplé aux GUT, prédit une abondance de monopôles telle que leur densité **dépasserait de plusieurs ordres de grandeur la densité critique** — bien au-delà de celle des baryons. De quoi *surfermer* l'univers (le rendre largement supercritique) et le recontracter en un temps très court. Or on n'en a **jamais détecté un seul**.
+
+Le statut de ce problème est particulier. L'absence d'observation de monopôles est un fait, mais l'existence d'une *surproduction prédite* repose sur les GUT, qui sont elles-mêmes <Badge niveau="extrapole">des extrapolations théoriques au-delà du domaine testé en accélérateur : sérieuses, motivées par l'unification des couplages, mais non confirmées.</Badge> Le « problème des monopôles » est donc <Badge niveau="extrapole">conditionnel : c'est un problème *si* les théories de grande unification sont correctes. Il signale une tension entre deux extrapolations, non une contradiction avec une donnée.</Badge>
+
+### Trois symptômes, un même diagnostic
+
+Récapitulons. Aucune de ces trois énigmes n'est une incohérence logique du modèle :
+
+| Problème | Fait sous-jacent | Pourquoi c'est « un problème » |
+|---|---|---|
+| Horizon | Isotropie du CMB (observée) | Régions jamais en contact, pourtant à même $T$ |
+| Platitude | $\Omega_0 \approx 1$ (observé) | État instable → réglage initial à $10^{-60}$ |
+| Monopôles | Aucun monopôle détecté | Surproduction prédite par les GUT (extrapolées) |
+
+Le diagnostic commun : ce sont des **conditions initiales jugées non naturelles**, pas des contradictions. Le Big Bang chaud *peut* les accommoder — à condition de poser à la main une uniformité, une platitude et une absence de reliques d'une finesse extravagante. C'est précisément ce qu'un physicien refuse de tenir pour un hasard.
+
+Il manque donc un mécanisme qui **rende ces conditions inévitables** plutôt que miraculeuses. Au chapitre suivant, nous franchissons le pas : nous **ajoutons** une hypothèse nouvelle — une phase d'expansion exponentielle ultra-rapide, l'**inflation** — et nous verrons comment, d'un seul geste, elle dissout les trois énigmes à la fois.

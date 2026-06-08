@@ -49,6 +49,13 @@ render d_flip_flop.py     DFlipFlop       d-flip-flop
 render fetch_execute.py   FetchExecute    fetch-execute
 render virtual_memory.py  VirtualMemory   virtual-memory
 render boot_sequence.py   BootSequence    boot-sequence
+# — cours « cosmologie » (des premiers instants au monde actuel)
+render expansion_univers.py      ExpansionUnivers      expansion-univers
+render friedmann_destins.py      FriedmannDestins      friedmann-destins
+render histoire_thermique.py     HistoireThermique     histoire-thermique
+render recombinaison_cmb.py      RecombinaisonCMB      recombinaison-cmb
+render courbe_rotation.py        CourbeRotation        courbe-rotation
+render acceleration_expansion.py AccelerationExpansion acceleration-expansion
 # ===================================================================
 
 echo "Terminé. Vidéos dans $OUT :"

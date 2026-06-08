@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Tendances périodiques : rayon, ionisation, électronégativité"
+chapter: tendances-periodiques
+description: "Évolution du rayon atomique, de l'énergie d'ionisation, de l'affinité électronique et de l'électronégativité dans le tableau, expliquée par la charge effective."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieTableauPeriodique from '../../../components/interactive/ChimieTableauPeriodique.astro';
+
+## Trois propriétés, deux nombres
+
+Imaginez que vous puissiez tenir un atome entre deux doigts. Trois questions naturelles surgissent. Quelle est sa taille ? Avec quelle force retient-il ses électrons ? Et quand il rencontre un partenaire, lequel des deux tire la couverture à lui ? Ces trois questions sont le **rayon atomique**, l'**énergie d'ionisation** et l'**électronégativité**. Tout l'enjeu de cette page est de montrer que ces trois comportements, en apparence indépendants, se lisent à partir de **deux nombres seulement** : la charge effective $Z^*$ que ressent un électron de valence, et le nombre quantique principal $n$ de la couche qu'il occupe.
+
+<Hypotheses titre="Hypothèses de départ">
+
+Nous partons de deux acquis et n'introduisons rien de nouveau.
+
+- La structure du tableau et la correspondance colonne ↔ configuration de valence sont posées dans <Prereq href="/chimie/partie-ii/tableau-periodique">Le tableau périodique</Prereq>.
+- La charge nucléaire effective $Z^*$ et le modèle d'écrantage sont établis dans <Prereq href="/chimie/partie-i/ecrantage-charge-effective">Écrantage et charge effective</Prereq>. On y retient l'idée force : un électron de valence ne « voit » pas la charge entière du noyau $Z$, mais une charge réduite $Z^* = Z - \sigma$, le terme $\sigma$ encodant l'écran des autres électrons.
+
+</Hypotheses>
+
+## Les deux leviers
+
+Le comportement d'un électron de valence est gouverné par l'attraction coulombienne du noyau. Or cette attraction dépend de deux choses : de l'intensité du tir ($Z^*$) et de la distance à la cible ($n$, qui fixe l'éloignement moyen de la couche). Rappelons comment ces deux nombres bougent dans le tableau.
+
+<Encart type="rappel" titre="Comment varient Z* et n">
+
+- **Le long d'une période** (on va vers la droite) : on ajoute un proton ET un électron, mais l'électron ajouté se place dans la **même** couche. Il écrante très mal ses voisins de couche. Bilan : $Z$ monte d'une unité, $\sigma$ presque pas, donc $Z^*$ **augmente** nettement. Le nombre $n$, lui, ne change pas.
+- **Le long d'une colonne** (on descend) : on change de période, donc $n$ **augmente** d'une unité à chaque ligne. Les électrons de valence occupent une couche plus grande, plus loin du noyau. La charge $Z^*$ vue par la valence reste, elle, à peu près constante (chaque couche interne pleine ajoutée écrante presque parfaitement les protons ajoutés).
+
+</Encart>
+
+Tout le reste se déduit de ce tableau de marche. Gardons en tête la loi de Coulomb : l'attraction ressentie est de l'ordre de $Z^* / r^2$, et l'énergie de liaison d'un électron de valence se comporte qualitativement comme
+
+$$E_{\text{liaison}} \sim \frac{(Z^*)^2}{n^2}$$
+
+calquée sur le modèle hydrogénoïde où l'énergie d'un niveau vaut $-13{,}6\,Z^2/n^2$ eV. Ce n'est pas une égalité exacte pour un atome polyélectronique, c'est un guide de lecture. <Badge niveau="qualitatif">Estimation qualitative calquée sur l'hydrogénoïde ; non exacte pour un atome à plusieurs électrons.</Badge>
+
+## Le rayon atomique
+
+**Intuition.** Plus le noyau tire fort sur les électrons de valence ($Z^*$ grand), plus le nuage électronique se contracte : l'atome rapetisse. Plus la couche de valence est haute ($n$ grand), plus elle est étendue : l'atome grossit.
+
+- **Dans une période** : $Z^*$ augmente, $n$ constant → le rayon **diminue** vers la droite.
+- **Dans une colonne** : $n$ augmente → le rayon **augmente** vers le bas (effet dominant, car $r$ croît comme $n^2/Z^*$ et $n$ l'emporte).
+
+<Resultat label="Sens d'évolution du rayon atomique">
+
+$$r_{\text{atomique}} : \searrow \text{ vers la droite}, \quad \nearrow \text{ vers le bas}$$
+
+<Badge niveau="empirique" slot="badge">Règle de tendance déduite de $Z^*$ et $n$ : robuste mais pas universelle (anomalies du bloc d).</Badge>
+
+</Resultat>
+
+Les valeurs numériques, elles, ne se déduisent pas : on les **mesure** (diffraction X, distances de liaison). Le rayon covalent passe ainsi de $\sim 128$ pm pour le lithium à $\sim 64$ pm pour le fluor sur la même période. <Badge niveau="experimental">Rayons covalents mesurés par diffraction, reproductibles.</Badge>
+
+## L'énergie d'ionisation
+
+L'énergie de première ionisation $E_{i1}$ est l'énergie qu'il faut fournir pour arracher l'électron le moins lié : $\mathrm{X}(g) \rightarrow \mathrm{X}^+(g) + e^-$. C'est exactement l'énergie de liaison de cet électron, donc le modèle $E \sim (Z^*)^2/n^2$ s'applique directement.
+
+- **Dans une période** : $Z^*$ augmente → l'électron est plus retenu → $E_{i1}$ **augmente** vers la droite.
+- **Dans une colonne** : $n$ augmente → l'électron de valence est plus loin et mieux écranté → $E_{i1}$ **diminue** vers le bas.
+
+<Resultat label="Sens d'évolution de l'énergie d'ionisation">
+
+$$E_{i1} : \nearrow \text{ vers la droite}, \quad \searrow \text{ vers le bas}$$
+
+<Badge niveau="empirique" slot="badge">Tendance déduite de $Z^*$ et $n$ ; les valeurs elles-mêmes sont mesurées.</Badge>
+
+</Resultat>
+
+Mais ici, la tendance « monte vers la droite » a deux ratés célèbres, et ces ratés sont **prévisibles**, ce qui est un beau test de notre modèle.
+
+<Encart type="plusloin" titre="Les deux anomalies de la 2e période">
+
+**Anomalie B &lt; Be.** On attendrait $E_{i1}(\text{B}) > E_{i1}(\text{Be})$ puisque le bore a un $Z^*$ plus grand. Or c'est l'inverse. Raison : le béryllium ($2s^2$) cède un électron $2s$, tandis que le bore ($2s^2\,2p^1$) cède un électron $2p$. L'orbitale $2p$ est en moyenne plus éloignée du noyau et mieux écrantée par les $2s$ : son électron est intrinsèquement moins lié. Le saut de sous-couche l'emporte sur la petite hausse de $Z^*$.
+
+**Anomalie O &lt; N.** On attendrait $E_{i1}(\text{O}) > E_{i1}(\text{N})$. Pourtant l'azote retient mieux son électron. Raison : l'azote ($2p^3$) a ses trois orbitales $p$ à demi-remplies, un électron par case, aucune répulsion d'appariement. L'oxygène ($2p^4$) doit en loger deux dans la même case $p$ : la répulsion électron-électron de cet **appariement** déstabilise l'orbitale et facilite l'arrachage. C'est cette répulsion, et non $Z^*$, qui pilote le résultat.
+
+</Encart>
+
+Ces deux exceptions ne contredisent pas le modèle : elles en sortent, parce que notre formule $E \sim (Z^*)^2/n^2$ ignorait deux ingrédients réels, le coût de sous-couche et la répulsion d'appariement. <Badge niveau="experimental">Le fait $E_{i1}(\text{O}) &lt; E_{i1}(\text{N})$ est mesuré ; son explication par l'appariement est qualitative.</Badge> Notons enfin qu'arracher un **deuxième** électron coûte toujours plus cher que le premier (on ionise un cation, plus attractif), avec des **sauts géants** dès qu'on entame une couche de cœur : c'est la signature directe des couches imposées par le principe de Pauli. <Badge niveau="experimental">Les sauts d'ionisations successives sont mesurés et tabulés.</Badge>
+
+## L'électronégativité
+
+L'électronégativité $\chi$ mesure la tendance d'un atome **engagé dans une liaison** à attirer vers lui le doublet partagé. Qualitativement, un atome qui retient bien ses propres électrons (grand $E_{i1}$) et qui aime en capter d'autres (grande affinité électronique) sera électronégatif. Donc $\chi$ suit les mêmes leviers : elle **augmente vers la droite** et **diminue vers le bas**, avec le fluor au sommet.
+
+<Resultat label="Sens d'évolution de l'électronégativité">
+
+$$\chi : \nearrow \text{ vers la droite}, \quad \searrow \text{ vers le bas} \quad (\chi_{\text{max}} = \text{F})$$
+
+<Badge niveau="qualitatif" slot="badge">Tendance contextuelle ; dépend de l'état de liaison de l'atome.</Badge>
+
+</Resultat>
+
+Mais il faut être honnête sur ce qu'est $\chi$. L'échelle de **Pauling** n'est pas une grandeur quantique fondamentale : c'est une construction **a posteriori**. Pauling a remarqué qu'une liaison A–B est plus solide que la moyenne des liaisons A–A et B–B, et a posé que cet « excès » d'énergie mesure l'écart d'électronégativité :
+
+$$|\chi_A - \chi_B| \propto \sqrt{E_{A\text{-}B} - \tfrac{1}{2}\,(E_{A\text{-}A} + E_{B\text{-}B})}$$
+
+La constante de proportionnalité et l'origine de l'échelle sont **fixées par convention** (on ancre $\chi_{\text{F}} = 3{,}98$ au sommet, $\chi_{\text{Cs}} \approx 0{,}79$ au bas). Il n'y a aucune unité fondamentale derrière : $\chi$ est sans dimension. <Badge niveau="empirique">Échelle de Pauling : construite sur des enthalpies de liaison mesurées, mais calibrée arbitrairement, sans statut quantique.</Badge> C'est un excellent outil prédictif — il annoncera la polarité des liaisons au chapitre suivant — à condition de ne jamais le confondre avec une propriété exacte de l'atome isolé.
+
+## Voir les tendances en un coup d'œil
+
+Survolez le tableau ci-dessous : les flèches de période et de colonne que nous venons de déduire s'y lisent d'un seul regard, et chaque case rappelle la configuration de valence d'où tout est parti.
+
+<ChimieTableauPeriodique />
+
+Nous savons désormais qui, dans une paire d'atomes, tire le plus fort sur les électrons. C'est précisément l'ingrédient qu'il nous manquait pour comprendre comment deux atomes se lient. Au chapitre suivant, nous mettons ces atomes en contact : place à la **liaison covalente et au modèle de Lewis**.

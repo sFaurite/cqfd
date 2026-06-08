@@ -15,6 +15,7 @@ RED = "#fc6255"
 GREEN = "#83c167"
 PURPLE = "#c39bd3"
 TEAL = "#5cd0b3"
+ORANGE = "#ff9f40"
 TEXT = "#e6edf3"
 MUTED = "#9da7b3"
 

@@ -1,0 +1,52 @@
+---
+/**
+ * ChimieLewisBuilder — constructeur de structures de Lewis guidé. On choisit une
+ * molécule (H₂O, CO₂, NH₃, BF₃, SF₆, NO, …), puis on ajuste l'ordre de la liaison
+ * centrale et le nombre de doublets non liants de l'atome central. Le composant
+ * vérifie la règle de l'octet, calcule les charges formelles et signale les cas
+ * hors-octet (hypovalence de B, hypervalence de S, radical de NO).
+ */
+---
+
+<div class="iw" data-iw="chimie-lewis">
+  <div class="iw__head"><span class="tag">Interactif</span> Structures de Lewis — octet et charges formelles</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="lw-mol">Molécule</label>
+      <select id="lw-mol" data-mol>
+        <option value="H2O" selected>H₂O (eau)</option>
+        <option value="CO2">CO₂ (dioxyde de carbone)</option>
+        <option value="NH3">NH₃ (ammoniac)</option>
+        <option value="CH4">CH₄ (méthane)</option>
+        <option value="BF3">BF₃ (trifluorure de bore)</option>
+        <option value="SF6">SF₆ (hexafluorure de soufre)</option>
+        <option value="NO">NO (monoxyde d’azote)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="lw-lp">Doublets non liants (centre)</label>
+      <input id="lw-lp" type="range" min="0" max="3" step="1" value="2" data-lp />
+      <output data-out-lp>2</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">électrons de valence</span> <b data-out-ve>8</b></span>
+    <span class="iw__chip"><span class="k">octet (centre)</span> <b data-out-octet>✓</b></span>
+    <span class="iw__chip"><span class="k">charge formelle centre</span> <b data-out-cf>0</b></span>
+    <span class="iw__chip"><span class="k">statut</span> <b data-out-flag>structure correcte</b></span>
+  </div>
+  <p class="iw__note">
+    Une structure de Lewis répartit les électrons de valence en <em>doublets liants</em> (traits) et
+    <em>non liants</em> (points). La <strong>règle de l’octet</strong> (8 électrons autour d’un atome)
+    est un modèle empirique très utile mais limité : B reste <em>hypovalent</em> (sextet, BF₃), S peut
+    être <em>hypervalent</em> (12 électrons, SF₆), et un radical comme NO a un électron célibataire que
+    l’octet seul ne décrit pas. La <strong>charge formelle</strong> = (e⁻ de valence) − (non liants) −
+    (liants)/2 aide à choisir la structure la plus plausible. Ajuste les doublets : le composant
+    valide ou signale l’écart.
+  </p>
+</div>
+
+<script>
+  import './ChimieLewisBuilder.client.ts';
+</script>

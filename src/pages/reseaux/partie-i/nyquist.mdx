@@ -1,0 +1,99 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le theoreme de Nyquist : combien de symboles ?"
+chapter: nyquist
+description: "Etablit la limite de Nyquist : le debit symbole maximal d'un canal sans bruit est 2B bauds, et le debit binaire depend du nombre de niveaux par symbole."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le pari de Nyquist : compter les symboles
+
+Au chapitre précédent, nous avons posé qu'un canal possède une <Prereq href="/reseaux/partie-i/signal-bande-passante">bande passante $B$ en hertz</Prereq>, et qu'un signal aux contours nets exige des fréquences élevées. Posons maintenant LA question d'ingénieur : combien de fois par seconde puis-je changer l'état du signal — la tension, la phase, l'amplitude — en restant sûr que le récepteur saura distinguer chaque changement ? Chaque « état distinct » envoyé s'appelle un **symbole**. Le nombre de symboles par seconde, c'est le **débit symbole**, mesuré en **bauds**.
+
+L'intuition est limpide. Un canal de bande $B$ se comporte comme un filtre passe-bas : il laisse passer les fréquences jusqu'à $B$, et gomme tout ce qui va plus vite. Si j'essaie de faire claquer le signal trop rapidement, le canal lisse mes transitions, et deux symboles trop rapprochés fusionnent en une seule bouillie indistincte. Il existe donc un débit symbole maximal. Tout l'enjeu est de le chiffrer.
+
+<Hypotheses titre="Hypothèses de départ">
+
+- Le canal est **idéal et sans bruit** : il transmet parfaitement toute fréquence inférieure ou égale à $B$, et coupe net au-delà. Aucune perturbation aléatoire ne vient brouiller le signal. C'est une idéalisation, pas une description du monde réel ; nous la lèverons au chapitre suivant.
+- Le récepteur connaît le rythme d'horloge et échantillonne le signal aux bons instants.
+- Le signal peut prendre $M$ niveaux (ou états) distincts par symbole, tous parfaitement séparables puisqu'il n'y a pas de bruit.
+
+</Hypotheses>
+
+### Pourquoi le facteur 2 ?
+
+Le cœur du raisonnement est un résultat sur l'échantillonnage, le **théorème d'échantillonnage de Shannon-Nyquist**. Un signal dont le spectre tient entièrement sous la fréquence $B$ est **entièrement déterminé** par ses valeurs prises à la cadence de $2B$ échantillons par seconde. Réciproquement, $2B$ échantillons indépendants par seconde, c'est tout ce que le canal peut porter d'information « instantanée » distincte : au-delà, les échantillons supplémentaires sont redondants, reconstituables à partir des autres.
+
+<Encart type="intuition" titre="Le compte des degrés de liberté">
+
+Pensez à une sinusoïde pure de fréquence $B$, la plus rapide que le canal accepte. Pour la décrire sans ambiguïté, il faut au moins **deux points par période** : un seul point par période ne distinguerait pas une montée d'une descente (c'est l'aliasing — la roue de chariot qui semble tourner à l'envers au cinéma). Or une période de la fréquence $B$ dure $1/B$ seconde. Deux points par période, cela fait $2B$ points par seconde. Voilà le facteur 2 : il ne sort pas d'un chapeau, c'est le nombre d'instants où le signal peut « décider » quelque chose de nouveau par seconde, sur une bande $B$.
+
+</Encart>
+
+Chaque symbole occupe exactement un de ces instants de décision. Le débit symbole ne peut donc pas dépasser $2B$ symboles par seconde.
+
+<Resultat label="Débit symbole maximal (Nyquist)">
+
+$$ D_{\text{symb}} = 2B \quad \text{bauds} $$
+
+<Badge niveau="theoreme" slot="badge">Théorème de Nyquist : conséquence du théorème d'échantillonnage de Shannon-Nyquist, valable **sans bruit**.</Badge>
+</Resultat>
+
+Ce résultat est un **théorème**, pas une convention d'ingénieur : il découle directement des mathématiques de l'échantillonnage et de la définition de la bande passante. <Badge niveau="theoreme">La borne $2B$ bauds est imposée par la physique du signal filtré, indépendamment de toute technologie.</Badge> Mais attention à son statut : il vaut dans le monde idéalisé sans bruit. C'est une borne haute, atteignable seulement dans cet idéal.
+
+### Baud n'est pas bit : la confusion à désamorcer
+
+Voici l'erreur la plus répandue de tout le domaine : confondre le **baud** (symboles par seconde) et le **bit par seconde** (bits par seconde). Ce ne sont pas la même chose, et l'écart entre les deux est tout l'art de la modulation.
+
+Un symbole ne transporte pas forcément un seul bit. S'il ne peut prendre que 2 états (disons, tension haute ou basse), alors oui : un symbole = un bit, et le débit binaire égale le débit symbole. Mais si le signal peut prendre $M = 4$ niveaux distincts, alors chaque symbole choisit parmi 4 possibilités, et 4 possibilités, c'est $\log_2 4 = 2$ bits d'information par symbole. Avec $M = 256$ niveaux, chaque symbole vaut $\log_2 256 = 8$ bits.
+
+<Encart type="rappel" titre="Pourquoi log base 2 ?">
+
+Au chapitre <Prereq href="/reseaux/partie-i/bit-information">« Le bit : mesurer l'information »</Prereq>, nous avons établi que distinguer parmi $M$ possibilités équiprobables demande exactement $\log_2 M$ bits. Un symbole capable de $M$ états transporte donc $\log_2 M$ bits. C'est une déduction directe, pas une nouvelle hypothèse.
+
+</Encart>
+
+Le débit binaire est donc le débit symbole multiplié par le nombre de bits par symbole.
+
+<Encart type="calcul" titre="Du débit symbole au débit binaire">
+
+On part du débit binaire défini comme bits par symbole fois symboles par seconde :
+
+$$ D_{\text{bin}} = (\text{bits par symbole}) \times (\text{symboles par seconde}) $$
+
+Le nombre de bits par symbole vaut $\log_2 M$ (rappel ci-dessus) :
+
+$$ D_{\text{bin}} = \log_2 M \times D_{\text{symb}} $$
+
+On y injecte le débit symbole maximal de Nyquist, $D_{\text{symb}} = 2B$ :
+
+$$ D_{\text{bin}} = 2B \log_2 M $$
+
+</Encart>
+
+<Resultat label="Débit binaire maximal sans bruit (Nyquist)">
+
+$$ C_{\text{Nyquist}} = 2B \log_2 M \quad \text{bits/s} $$
+
+<Badge niveau="theoreme" slot="badge">Théorème, mais **uniquement** dans le canal idéal sans bruit. Ce n'est PAS la limite ultime du débit.</Badge>
+</Resultat>
+
+### La tentation de l'infini, et pourquoi elle échoue
+
+Regardez bien cette formule. La bande $B$ est fixée par le canal physique. Mais $M$ ? Rien dans Nyquist ne le borne. Augmentons $M$ : avec $M = 1000$, chaque symbole vaut près de 10 bits ; avec $M = 10^6$, vingt bits ; avec $M$ aussi grand qu'on veut, le débit binaire grimpe vers l'infini, sur une bande aussi étroite soit-elle.
+
+<Tournant titre="Ce que Nyquist ne dit pas — et la fissure qui en résulte">
+
+La conclusion « débit infini possible » est **physiquement fausse**, et c'est précisément le signe qu'une hypothèse nous manque. Le coupable est notre idéalisation : « canal sans bruit ». <Badge niveau="theoreme">Empiler des niveaux $M$ revient à les rapprocher en tension ; dès qu'un bruit réel, même infime, brouille le signal, des niveaux trop serrés deviennent indistinguables.</Badge> Le bruit met donc un plafond à $M$ — et c'est ce plafond, et non Nyquist, qui fixe la vraie limite. Nous n'avons pas le droit de l'invoquer ici : nous l'avons explicitement exclu de nos hypothèses. Il faudra le poser au grand jour.
+
+</Tournant>
+
+Retenons la leçon de méthode : $2B \log_2 M$ n'est pas la limite ultime du débit, c'est la limite *dans un monde sans bruit*. Le facteur $2B$ est solide — c'est de la physique du signal. C'est le facteur $\log_2 M$ qui est trompeusement libre.
+
+Au chapitre suivant, nous introduisons le bruit et le rapport signal sur bruit, et nous verrons Shannon transformer cette borne ouverte en une **borne fermée et absolue** : la capacité $C = B \log_2(1 + S/N)$, qui dira enfin combien de niveaux $M$ le canal tolère vraiment.

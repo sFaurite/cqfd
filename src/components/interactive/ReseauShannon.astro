@@ -1,0 +1,47 @@
+---
+/**
+ * ReseauShannon — capacité de Shannon C = B·log2(1 + S/N).
+ * Deux curseurs (bande passante B en Hz, rapport signal/bruit S/N linéaire),
+ * affichage en direct du débit maximal C, du S/N converti en décibels, et
+ * comparaison à la borne de Nyquist sans bruit (2·B·log2(M) pour un nombre de
+ * niveaux M imposé). Une courbe C(S/N en dB) situe le point courant et montre
+ * la croissance logarithmique : doubler le débit coûte de plus en plus de SNR.
+ */
+---
+
+<div class="iw" data-iw="reseau-shannon">
+  <div class="iw__head"><span class="tag">Interactif</span> La capacité de Shannon : la borne infranchissable</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="sh-b">Bande passante B</label>
+      <input id="sh-b" type="range" min="1000" max="20000000" step="1000" value="4000000" data-b />
+      <output data-out-b>4 MHz</output>
+    </div>
+    <div class="iw__row">
+      <label for="sh-snr">Rapport signal/bruit S/N</label>
+      <input id="sh-snr" type="range" min="0" max="60" step="0.5" value="30" data-snr-db />
+      <output data-out-snr-db>30,0 dB</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">S/N (linéaire)</span> <b data-out-snr-lin></b></span>
+    <span class="iw__chip"><span class="k">capacité C = B·log₂(1+S/N)</span> <b data-out-c></b></span>
+    <span class="iw__chip"><span class="k">bits/symbole utile log₂(1+S/N)</span> <b data-out-eff></b></span>
+    <span class="iw__chip"><span class="k">borne Nyquist (M=4, sans bruit)</span> <b data-out-nyq></b></span>
+  </div>
+  <p class="iw__note">
+    Le théorème de Shannon (1948) fixe un débit <strong>maximal</strong> sur un canal bruité :
+    C = B·log₂(1 + S/N) bits/s, où B est la bande passante et S/N le rapport puissance
+    signal sur puissance bruit. Aucun codage, aussi malin soit-il, ne dépasse cette borne sans
+    erreur — elle est <em>infranchissable</em>. Augmente B et le débit croît linéairement ;
+    augmente le S/N et il ne croît que comme son <em>logarithme</em> : passer de 30 à 60 dB ne
+    fait que doubler l'efficacité spectrale. La borne de Nyquist sans bruit, 2·B·log₂(M),
+    suppose un canal <em>parfait</em> à M niveaux : elle ignore le bruit et surestime donc le
+    débit réellement atteignable.
+  </p>
+</div>
+
+<script>
+  import './ReseauShannon.client.ts';
+</script>

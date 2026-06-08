@@ -1,0 +1,94 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'adressage IP : une adresse hierarchique"
+chapter: adressage-ip
+description: "Introduit l'adresse IP comme adresse logique hierarchique (reseau + hote), le format IPv4 (32 bits), la notation pointee, et la motivation d'une adresse routable mondialement."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand un réseau ne suffit plus
+
+Jusqu'ici, nous avons construit un monde clos et confortable. Une <Prereq href="/reseaux/partie-iii/mac-ethernet">adresse MAC</Prereq> identifie une carte, et le commutateur apprend où elle se trouve pour lui livrer ses trames. Mais ce monde a une frontière nette : le **domaine de diffusion** établi au <Prereq href="/reseaux/partie-iii/mac-ethernet">chapitre Ethernet</Prereq>. Tant qu'on reste dedans, tout va bien ; dès qu'on veut parler à une machine d'un *autre* réseau — sur un autre continent, derrière une liaison radio, au bout d'un câble série — la jolie machinerie du commutateur s'arrête net. Il est temps de changer d'échelle.
+
+<Tournant titre="On quitte le lien local pour interconnecter des réseaux">
+Toute la Partie III vivait à l'intérieur d'**un** lien : un médium, des cartes, des trames qui ne franchissent jamais le pont vers l'extérieur. Nous franchissons maintenant ce pont. L'objet d'étude n'est plus *un* réseau, mais l'**interconnexion** de réseaux hétérogènes en un seul tissu logique mondial. Ce changement de point de vue exige une adresse d'un type nouveau — et un service d'un type nouveau pour la porter.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+On admet désormais l'existence de **multiples réseaux locaux hétérogènes** (Ethernet, Wi-Fi, liaison série…) que l'on veut interconnecter en un seul réseau logique mondial. Cela exige une couche d'abstraction **au-dessus** des liens : une adresse indépendante du matériel, **hiérarchique** et **routable**. IP est la convention qui remplit ce rôle. On la pose volontairement comme un service **best-effort** : sans garantie de livraison ni d'ordre.
+</Hypotheses>
+
+## Pourquoi l'adresse MAC ne peut pas router le monde
+
+Reprenons l'adresse MAC. Elle est **plate** : 48 bits attribués à l'usine, sans la moindre structure exploitable pour la géographie ou la topologie. Deux cartes voisines sur mon bureau ont des MAC sans rapport ; deux cartes aux antipodes peuvent avoir des MAC presque consécutives. L'adresse dit *qui*, jamais *où*.
+
+Quelle serait alors la table de routage d'un nœud central de l'Internet ? Pour acheminer vers n'importe quelle carte du monde, il lui faudrait **une entrée par carte** — soit, à 48 bits, jusqu'à $2^{48}\approx 2{,}8\times10^{14}$ destinations. Aucune table ne tient cette charge, et surtout aucune **agrégation** n'est possible : on ne peut pas dire « tout ce qui commence par tel motif part à droite », puisque le motif ne veut rien dire.
+
+<Encart type="intuition" titre="L'adresse postale contre le numéro de série">
+Imaginez livrer un colis en ne connaissant que le **numéro de série** de l'ordinateur du destinataire. Il faudrait un annuaire mondial reliant chaque numéro à un lieu — irréaliste. L'**adresse postale**, elle, est hiérarchique : pays, ville, rue, numéro. Le facteur n'a pas besoin de connaître chaque maison du globe ; il lit « France », transmet au centre de tri français, qui lit « Lyon », et ainsi de suite. Chacun ne décide qu'à son échelle. C'est exactement ce qu'apporte l'adresse IP, et que l'adresse MAC ne pourra jamais apporter.
+</Encart>
+
+L'argument est un argument de **passage à l'échelle**, pas un théorème : aucune limite physique à la Shannon n'interdit de router des adresses plates. C'est la structure hiérarchique d'IP — un choix de conception de la RFC 791 — qui rend l'agrégation possible et le routage mondial praticable.
+
+<Badge niveau="norme">Une adresse plate (MAC) interdit l'agrégation : router à l'échelle mondiale réclame une adresse hiérarchique. La structure hiérarchique d'IP est un choix de conception (RFC 791), efficace mais non imposé par un théorème.</Badge>
+
+## L'adresse IP : logique et hiérarchique
+
+L'adresse **IP** est une adresse **logique** : elle n'est pas gravée dans le matériel, mais **attribuée** à une interface selon sa place dans le réseau. Si je déplace mon portable d'un réseau à l'autre, sa MAC ne change pas, mais son IP, elle, change — parce que sa *position logique* a changé.
+
+Sa force tient en deux morceaux. Une adresse IP se découpe en une **partie réseau** (le préfixe), **commune à toutes les machines d'un même sous-réseau**, et une **partie hôte**, qui distingue les machines à l'intérieur de ce sous-réseau.
+
+<Resultat label="Structure hiérarchique d'une adresse IP">
+
+$$ \text{adresse IP} = \underbrace{\text{préfixe réseau}}_{\text{commun au sous-réseau}} \;\Vert\; \underbrace{\text{identifiant hôte}}_{\text{propre à la machine}} $$
+
+<Badge niveau="norme" slot="badge">Le découpage préfixe / hôte est la convention fondatrice d'IP (RFC 791). C'est lui qui rend l'agrégation et le routage à grande échelle possibles.</Badge>
+</Resultat>
+
+Tout l'intérêt est là : un routeur n'a pas besoin de connaître chaque machine, seulement chaque **préfixe**. Des millions d'hôtes derrière un même préfixe ne pèsent qu'**une** ligne dans sa table. Nous verrons au chapitre suivant comment ce préfixe se calcule (le masque), et au chapitre d'après comment on choisit la sortie (le *longest prefix match*).
+
+## Le format IPv4 : 32 bits en notation pointée
+
+IP version 4 fixe une adresse sur **32 bits**, soit **4 octets**. On l'écrit en **notation décimale pointée** : chaque octet en décimal de $0$ à $255$, séparé par des points. Par exemple `192.168.1.42` correspond aux quatre octets binaires :
+
+$$ \texttt{11000000}\,.\,\texttt{10101000}\,.\,\texttt{00000001}\,.\,\texttt{00101010} $$
+
+<Encart type="calcul" titre="Lire le premier octet">
+Décodons `11000000`, en pondérant chaque bit par sa puissance de deux :
+
+$$ 1\cdot2^7 + 1\cdot2^6 + 0\cdot2^5 + 0\cdot2^4 + 0\cdot2^3 + 0\cdot2^2 + 0\cdot2^1 + 0\cdot2^0 $$
+
+$$ = 128 + 64 = 192 $$
+
+D'où le `192` de tête. On vérifie de même les trois autres octets : $168 = 128+32+8$, $1$, et $42 = 32+8+2$. La notation pointée n'est qu'un habillage lisible des 32 bits — le réseau, lui, ne manipule que des bits.
+</Encart>
+
+Combien d'adresses au total ? Trente-deux bits, donc $2^{32}$ combinaisons :
+
+$$ 2^{32} = 4\,294\,967\,296 \approx 4{,}3 \text{ milliards} $$
+
+<Badge niveau="norme">32 bits, 4 octets, notation pointée : ce sont des choix d'en-tête fixés par la RFC 791, adoptés mondialement. Aucune physique n'impose 32 plutôt que 40 ; c'est une convention, devenue standard de fait.</Badge>
+
+Quatre milliards paraissait infini en 1981. Avec le nombre d'appareils connectés aujourd'hui, le pool est **épuisé** — l'IANA a alloué ses derniers blocs IPv4 en 2011. C'est un fait constaté, pas une prédiction. La réponse normalisée est **IPv6**, qui porte l'adresse à **128 bits** — soit $2^{128}$ adresses, un nombre si grand qu'il dépasse l'entendement. Nous le mentionnons sans nous y noyer : la logique hiérarchique reste la même, seul le nombre de bits change.
+
+<Badge niveau="deploiement">L'attribution des plages (IANA, puis registres régionaux RIR), l'usage des adresses privées vs publiques, le rythme de migration vers IPv6 : tout cela dépend des opérateurs et des configurations. Non universel.</Badge>
+
+## Le pari du best-effort
+
+Reste une décision d'architecture, peut-être la plus profonde. IP **ne garantit rien**. Il ne promet pas que le paquet arrivera ; s'il arrive, il ne promet ni l'ordre, ni l'unicité, ni l'absence d'erreur en route. Chaque routeur fait *de son mieux* — *best-effort* — puis se débarrasse du paquet vers le suivant, sans mémoire ni accusé de réception.
+
+Ce n'est pas une faiblesse subie : c'est un **choix**, et un choix fécond. En rejetant toute garantie hors du réseau, IP reste **simple et neutre** : un routeur n'a qu'à regarder un préfixe et faire suivre. Toute l'intelligence coûteuse — détecter une perte, réordonner, retransmettre — est repoussée **aux extrémités**, dans les machines terminales. C'est le **principe de bout en bout**, et il explique pourquoi le même réseau best-effort sait porter aussi bien un transfert fiable que de la voix temps réel : chaque application choisit le niveau de garantie qu'elle veut bâtir par-dessus.
+
+<Badge niveau="norme">Le modèle best-effort est un choix d'architecture fondamental d'IP (RFC 791), pas une fatalité : on aurait pu concevoir un réseau garantissant la livraison. Le pari du bout en bout a été préféré, et adopté mondialement.</Badge>
+
+## Logique contre physique : deux adresses, deux rôles
+
+Gardons en tête la distinction qui structure toute la suite. L'adresse **MAC** est **physique** et **fixe** : gravée dans la carte, elle ne quitte jamais le lien local — c'est elle qui livre la trame d'une carte à la suivante sur **un** médium. L'adresse **IP** est **logique** et **mobile** : attribuée selon la position réseau, elle voyage *de bout en bout*, traversant tous les liens hétérogènes du chemin. Les deux coexistent dans chaque paquet : l'IP dit la destination finale, la MAC dit le prochain saut. La traduction entre les deux fera l'objet d'un mécanisme dédié plus loin.
+
+Nous avons l'adresse hiérarchique. Mais où, exactement, s'arrête le préfixe réseau et où commence l'hôte ? Cette frontière n'est pas figée dans l'adresse : il faut un outil pour la tracer. C'est le rôle du **masque de sous-réseau** et de la notation **CIDR**, que nous abordons au chapitre suivant.

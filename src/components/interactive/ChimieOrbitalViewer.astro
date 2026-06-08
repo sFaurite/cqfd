@@ -1,0 +1,56 @@
+---
+/**
+ * ChimieOrbitalViewer — coupe de la densité de probabilité |ψ|² des orbitales
+ * hydrogénoïdes. On choisit les nombres quantiques n, l, m ; le composant trace
+ * une coupe dans le plan xz de la densité (échelle de couleur) et marque les
+ * nœuds radiaux et angulaires. But : montrer que l'orbitale est une distribution
+ * de probabilité, pas une trajectoire.
+ */
+---
+
+<div class="iw" data-iw="chimie-orbital">
+  <div class="iw__head"><span class="tag">Interactif</span> Densité de probabilité |ψ|² des orbitales</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="orb-n">n (principal)</label>
+      <input id="orb-n" type="range" min="1" max="4" step="1" value="2" data-n />
+      <output data-out-n>2</output>
+    </div>
+    <div class="iw__row">
+      <label for="orb-l">ℓ (azimutal)</label>
+      <input id="orb-l" type="range" min="0" max="3" step="1" value="1" data-l />
+      <output data-out-l>1 (p)</output>
+    </div>
+    <div class="iw__row">
+      <label for="orb-m">m (magnétique)</label>
+      <input id="orb-m" type="range" min="-3" max="3" step="1" value="0" data-m />
+      <output data-out-m>0</output>
+    </div>
+    <div class="iw__row">
+      <label for="orb-mode">Affichage</label>
+      <select id="orb-mode" data-mode>
+        <option value="densite" selected>Densité |ψ|²</option>
+        <option value="signe">Signe de ψ (phases)</option>
+      </select>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">orbitale</span> <b data-out-name>2p</b></span>
+    <span class="iw__chip"><span class="k">nœuds radiaux</span> <b data-out-nr>0</b></span>
+    <span class="iw__chip"><span class="k">nœuds angulaires</span> <b data-out-na>1</b></span>
+    <span class="iw__chip"><span class="k">nœuds totaux</span> <b data-out-nt>1</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque point coloré indique la <em>probabilité de présence</em> de l’électron à cet endroit, pas
+    sa position. Une orbitale n’est pas une orbite : il n’y a pas de trajectoire, seulement un nuage
+    de probabilité |ψ|². Les <span style="color:var(--c-red)">lignes pointillées</span> marquent les
+    <strong>nœuds</strong>, surfaces où ψ s’annule (la densité y est nulle) : ℓ nœuds angulaires et
+    n − ℓ − 1 nœuds radiaux, soit n − 1 au total. En mode « phases », le bleu et le rouge montrent
+    les régions où ψ change de signe — utile pour comprendre les liaisons.
+  </p>
+</div>
+
+<script>
+  import './ChimieOrbitalViewer.client.ts';
+</script>

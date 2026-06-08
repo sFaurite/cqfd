@@ -1,0 +1,116 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le CRC : detecter serieusement les erreurs"
+chapter: crc
+description: "Etablit le controle de redondance cyclique (CRC) : arithmetique polynomiale modulo 2, division par un generateur, et garanties de detection (erreurs en rafale, simples, doubles)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le problème : la parité voit trop peu
+
+Au chapitre précédent, le <Prereq href="/reseaux/partie-ii/trame-parite">bit de parité</Prereq> nous a appris une idée précieuse — **ajouter de la redondance** pour repérer une altération — mais aussi sa faiblesse : il rate toute erreur portant sur un nombre *pair* de bits. Or les erreurs réelles sur un fil arrivent rarement isolées ; elles surviennent en **rafales** (un parasite de quelques microsecondes corrompt plusieurs bits d'affilée). Il nous faut un détecteur qui attrape ces rafales de façon *garantie*. C'est le **CRC** (Cyclic Redundancy Check), et sa force tient à un changement de regard : voir une trame non comme une suite de bits, mais comme un **polynôme**.
+
+## Une trame est un polynôme sur GF(2)
+
+L'idée centrale, avant tout formalisme : si l'on traite les bits comme les **coefficients** d'un polynôme, les opérations de décalage et de masquage deviennent des multiplications et des divisions, et l'on hérite d'un siècle d'algèbre toute prête. Une trame de $n$ bits $b_{n-1}\,b_{n-2}\dots b_1\,b_0$ devient le polynôme
+
+$$ M(x) = b_{n-1}x^{n-1} + b_{n-2}x^{n-2} + \dots + b_1 x + b_0 . $$
+
+Ainsi `1011` $\leftrightarrow x^3 + x + 1$. Le bit de poids $k$ est simplement le coefficient de $x^k$. <Badge niveau="theoreme">Pure bijection bits ↔ coefficients : une réécriture exacte, rien de physique.</Badge>
+
+Les coefficients vivent dans **GF(2)**, le corps à deux éléments $\{0, 1\}$, où l'on calcule *modulo 2*.
+
+<Encart type="rappel" titre="L'arithmétique de GF(2) : addition = XOR, sans retenue">
+Dans GF(2), il n'y a que deux nombres, et tout calcul se ramène à eux modulo 2 :
+
+$$ 0+0=0,\quad 0+1=1,\quad 1+1=0 . $$
+
+L'addition est donc le **OU exclusif (XOR)** : $a + b = a \oplus b$. Conséquence remarquable : $1+1=0$, donc **addition et soustraction sont identiques** ($-1 = +1$). Il n'y a **pas de retenue** d'une colonne à l'autre — chaque colonne se traite indépendamment. La multiplication, elle, est le ET logique : $1\cdot 1 = 1$, le reste vaut $0$. <Badge niveau="theoreme">$(\{0,1\}, \oplus, \cdot)$ est un corps (structure algébrique exacte) ; toutes les règles qui suivent en découlent.</Badge>
+</Encart>
+
+## L'algorithme : multiplier, diviser, prendre le reste
+
+Soit un polynôme **générateur** $G(x)$ de degré $r$, fixé et connu de l'émetteur et du récepteur. La recette pour fabriquer le CRC d'un message $M(x)$ :
+
+1. **Décaler** : on multiplie $M(x)$ par $x^r$ — concrètement, on ajoute $r$ zéros à droite de la trame, réservant $r$ colonnes pour le contrôle.
+2. **Diviser** : on divise $x^r M(x)$ par $G(x)$ dans GF(2). On obtient un quotient $Q(x)$ et un **reste** $R(x)$ de degré $< r$.
+3. **Émettre** : le CRC est ce reste $R(x)$. On transmet la trame $T(x) = x^r M(x) + R(x)$ — soit le message suivi des $r$ bits du reste.
+
+Pourquoi est-ce malin ? Par définition de la division euclidienne, $x^r M(x) = Q(x)\,G(x) + R(x)$. Comme dans GF(2) soustraire $=$ additionner, $T(x) = x^r M(x) + R(x) = Q(x)\,G(x)$. **La trame émise est exactement divisible par $G(x)$.** Le récepteur n'a qu'à rediviser : reste nul $\Rightarrow$ trame *a priori* saine ; reste non nul $\Rightarrow$ erreur certaine. <Badge niveau="theoreme">Conséquence algébrique stricte de la division euclidienne dans l'anneau des polynômes sur GF(2).</Badge>
+
+## Une division complète à la main
+
+Prenons un exemple concret et déroulons-le. La « division » n'est qu'une cascade de **XOR alignés** : à chaque étape, si le bit de tête courant vaut $1$, on XOR avec $G$ ; sinon on descend d'un cran sans rien faire.
+
+<Encart type="calcul" titre="Division de 1101011011 par G = 10011">
+Message $M = $ `1101011011` (degré 9). Générateur $G = $ `10011`, soit $x^4 + x + 1$, de degré $r = 4$. On ajoute $r=4$ zéros à droite : le dividende est $x^r M(x) = $ `11010110110000`.
+
+À chaque ligne, le diviseur `10011` est aligné sous le `1` de tête le plus à gauche encore présent, puis on XOR (addition mod 2, sans retenue). Lorsque le bit de tête vaut $0$, on glisse d'un cran sans soustraire :
+
+```
+11010110110000   ÷ 10011
+10011                       XOR : tête = 1
+-----
+01001110110000
+ 10011                      XOR : tête = 1
+ -----
+00000010110000              têtes 0 aux rangs suivants → on glisse
+      10011                 XOR : tête = 1 (rang 6)
+      -----
+00000000101000
+        10011               XOR : tête = 1 (rang 8)
+        -----
+00000000001110              ← plus aucun 1 ne dépasse le rang r = 4
+```
+
+Le **reste** est formé des $r = 4$ derniers bits : `1110`. C'est le CRC.
+
+On émet donc $T = M \,\Vert\, \text{CRC} = $ `1101011011` `1110` $=$ `11010110111110`.
+
+Vérification — le récepteur redivise $T$ par $G$ : le reste doit être nul. On a bien vérifié numériquement que `11010110111110` $\bmod$ `10011` $=$ `0000`.
+
+$$ T(x) = Q(x)\,G(x) \;\Longrightarrow\; T(x) \bmod G(x) = 0 . $$
+
+<Resultat label="Trame protégée par CRC">
+
+$$ T(x) = x^{r}M(x) + \big(x^{r}M(x) \bmod G(x)\big) \;\equiv\; 0 \pmod{G(x)} . $$
+
+<Badge niveau="theoreme" slot="badge">Démontré : par construction du reste, $T$ est un multiple de $G$.</Badge>
+</Resultat>
+</Encart>
+
+## Pourquoi ça détecte : l'algèbre du polynôme d'erreur
+
+Modélisons une transmission bruitée. Le récepteur reçoit $T'(x) = T(x) + E(x)$, où $E(x)$ est le **polynôme d'erreur** : il a un $1$ exactement aux positions des bits inversés (un canal qui inverse les bits 2 et 5 donne $E = x^5 + x^2$). Le récepteur calcule $T'(x) \bmod G(x)$. Comme $T$ est divisible par $G$ :
+
+$$ T'(x) \bmod G(x) = \big(T(x) + E(x)\big) \bmod G(x) = E(x) \bmod G(x) . $$
+
+Tout se joue donc sur $E(x)$. **L'erreur est détectée si et seulement si $E(x)$ n'est *pas* divisible par $G(x)$.** Et voici le point d'honnêteté capital : si $E(x)$ *est* un multiple de $G(x)$, le reste est nul et l'erreur **passe inaperçue**. <Badge niveau="theoreme">Égalité exacte : le syndrome ne dépend que de l'erreur, pas du message. Mais les $E$ multiples de $G$ sont les angles morts.</Badge>
+
+De ce critère unique découlent toutes les garanties, par simple théorie de la divisibilité.
+
+<Encart type="plusloin" titre="Les garanties, déduites une à une">
+**Erreur simple.** $E(x) = x^i$ (un seul bit faux). Un monôme $x^i$ n'est divisible par $G$ que si $G$ est lui-même un monôme. Donc si $G$ possède **au moins deux termes**, toute erreur simple est détectée. <Badge niveau="theoreme">Conséquence de l'unicité de la factorisation des monômes.</Badge>
+
+**Erreur double.** $E(x) = x^i + x^j = x^j(x^{i-j}+1)$ avec $i > j$. Comme $x^j$ n'apporte aucun facteur de $G$ (si $G$ a un terme constant non nul), il faut que $G$ divise $x^{i-j}+1$. On choisit $G$ **primitif** de degré $r$ : son ordre vaut exactement $2^r-1$, c'est-à-dire que le plus petit $k$ tel que $G \mid x^k+1$ est $k = 2^r-1$. Toute erreur double dont l'écart $i-j$ reste $< 2^r-1$ — donc toute trame de taille raisonnable — est alors détectée. <Badge niveau="norme">La propriété vient du *choix* d'un $G$ primitif — c'est le travail des concepteurs de la norme.</Badge>
+
+**Nombre impair d'erreurs.** Si $G(x)$ contient le facteur $(x+1)$, alors tout $E(x)$ ayant un nombre impair de termes vaut $1$ en $x=1$, donc n'est pas divisible par $(x+1)$, donc pas par $G$ : détecté. C'est le bit de parité, *généralisé et absorbé* dans le CRC. <Badge niveau="theoreme">Évaluation en $x=1$ : $E(1) = $ (nombre de termes mod 2).</Badge>
+
+**Rafales.** Une rafale de longueur $L$ s'écrit $E(x) = x^j\,B(x)$ avec $\deg B = L-1$ et $B(0)=1$. Si $L \le r$, alors $\deg B \le r-1 < r = \deg G$. Comme $G$ a un terme constant, $G \nmid x^j$ ; et $G \nmid B$ car $\deg B < \deg G$ avec $B \ne 0$. Donc **toute rafale de longueur $\le r$** (le degré de $G$) est détectée — sans exception. <Badge niveau="theoreme">Une rafale courte ne peut être un multiple de $G$ : c'est le résultat phare du CRC.</Badge>
+</Encart>
+
+## Le générateur n'est pas un théorème : c'est une norme
+
+Les garanties ci-dessus sont des **mathématiques démontrées**. Mais leur *force* dépend entièrement de $G(x)$ : un mauvais générateur laisse passer des erreurs doubles, un bon les attrape. Le choix du polynôme n'est donc **pas déductible** — c'est un standard, sélectionné après une analyse minutieuse de ses propriétés algébriques. Ethernet emploie **CRC-32** ($r = 32$ bits), de générateur $x^{32}+x^{26}+x^{23}+x^{22}+x^{16}+\dots+x^2+x+1$, qui détecte toutes les rafales jusqu'à 32 bits et la quasi-totalité au-delà. C'est le champ **FCS** de la trame Ethernet. D'autres mondes utilisent CRC-16-CCITT, CRC-8, etc. <Badge niveau="norme">CRC-32 d'Ethernet (IEEE 802.3) : aucun théorème n'impose *ce* polynôme ; il est fixé par la norme pour ses bonnes propriétés de détection.</Badge>
+
+## Honnêteté : détecter n'est pas corriger, ni être infaillible
+
+Deux limites à graver. D'abord, le CRC **détecte** mais ne **corrige pas** : il signale qu'une trame est abîmée, on la jette et (le cas échéant) on la redemande, mais il ne dit pas *où* est l'erreur. <Badge niveau="theoreme">Le reste est un syndrome de présence, non une localisation.</Badge> Ensuite, il n'est **pas infaillible** : les polynômes d'erreur multiples de $G$ — il en existe, en proportion d'environ $2^{-r}$ des configurations d'erreur aléatoires — passent silencieusement. Avec $r = 32$, cela fait environ une erreur non détectée sur quatre milliards ($2^{32} \approx 4{,}3 \times 10^9$) : excellent, jamais parfait. <Badge niveau="theoreme">Probabilité résiduelle $\approx 2^{-r}$ : faible, strictement non nulle. Ne jamais dire « infaillible ».</Badge>
+
+Nous savons désormais délimiter une trame *et* y détecter sérieusement les erreurs. Mais sur un câble partagé, plusieurs machines voudront parler en même temps : il nous faut une adresse pour désigner chacune, et un format de trame standard. C'est l'objet du chapitre suivant — l'adresse MAC et la trame Ethernet.

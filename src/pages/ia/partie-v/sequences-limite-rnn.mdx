@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les séquences et la limite des modèles récurrents"
+chapter: sequences-limite-rnn
+description: "Pose le problème du traitement de séquences et présente les réseaux récurrents (RNN/LSTM) comme première réponse. Diagnostique leurs deux verrous — dépendances longues (gradient évanescent dans le temps) et calcul séquentiel non parallélisable — qui motivent l'attention."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les séquences et la limite des modèles récurrents
+
+Jusqu'ici, nos modèles voyaient le monde comme une grille de taille fixe : un vecteur de pixels, un vecteur de mesures. Mais une phrase n'a pas de longueur fixe. « Le chat dort » et « Le chat noir que ma voisine a recueilli l'hiver dernier dort » sont deux entrées de tailles différentes, et pourtant la même tâche : comprendre, traduire, prédire la suite. Comment construire un réseau qui digère une **séquence** de longueur arbitraire ? La réponse historique — le réseau récurrent — est élégante, mais elle bute sur deux murs. Comprendre ces deux murs, c'est comprendre *pourquoi* le transformer a été inventé.
+
+### Une séquence, une tâche
+
+Formalisons. Une séquence est une liste ordonnée $x_1, x_2, \dots, x_T$ où chaque $x_t$ est un vecteur (par exemple le <Prereq href="/ia/partie-iv/plongements">plongement</Prereq> d'un mot) et $T$ varie d'un exemple à l'autre. Les tâches typiques :
+
+- **Prédire le mot suivant** : à partir de $x_1, \dots, x_t$, deviner $x_{t+1}$.
+- **Traduire** : transformer une séquence (français) en une autre (anglais), de longueur possiblement différente.
+
+Le défi central : l'ordre porte du sens (« le chien mord l'homme » $\neq$ « l'homme mord le chien »), et la longueur est libre. Il nous faut une **mémoire**.
+
+### Le réseau récurrent : un même réseau, recyclé
+
+L'idée du RNN (*Recurrent Neural Network*) tient en une image : on dispose d'une **petite cellule** — un réseau aux paramètres fixes — et on la fait tourner sur la séquence, un pas à la fois, en lui passant un **état caché** $h_t$ qui résume tout ce qui a été lu jusqu'à l'instant $t$.
+
+<Encart type="intuition" titre="Lire en gardant une note en tête">
+Imagine lire une phrase mot à mot, en tenant un petit carnet. À chaque mot, tu mets à jour ton carnet (l'état caché) en combinant ce que tu y avais écrit et le mot que tu lis. Le carnet a une taille fixe — disons une page — quelle que soit la longueur du texte. Le RNN, c'est exactement ça : une même règle d'écriture appliquée à chaque mot, et une page de mémoire transmise de proche en proche.
+</Encart>
+
+La règle de mise à jour, posée par construction :
+
+$$ h_t = \tanh\!\big(W_h\, h_{t-1} + W_x\, x_t + b\big) $$
+
+Les matrices $W_h, W_x$ et le biais $b$ sont **partagés** sur tous les pas de temps — exactement comme le partage de poids d'une convolution, mais dans le temps. On part de $h_0 = 0$, et la sortie au pas $t$ se lit sur $h_t$ (par exemple $y_t = W_y h_t + b_y$).
+
+<Resultat label="Cellule récurrente">
+
+$$ h_t = \tanh\!\big(W_h\, h_{t-1} + W_x\, x_t + b\big) $$
+
+<Badge niveau="robuste" slot="badge">Architecture standard, longtemps l'état de l'art en séquences (traduction, parole) avant les transformers.</Badge>
+</Resultat>
+
+### Apprendre : la rétropropagation dans le temps
+
+Comment ajuster $W_h, W_x, b$ ? On déroule la boucle : un RNN sur $T$ pas est un réseau à $T$ couches qui partagent leurs poids. C'est donc un <Prereq href="/ia/partie-ii/retropropagation">graphe de calcul ordinaire</Prereq>, et l'on applique la rétropropagation à ce graphe déroulé. On appelle cela la **rétropropagation dans le temps** (BPTT). <Badge niveau="prouve">BPTT n'est que la backprop sur le graphe déroulé : la règle de la chaîne s'applique sans modification.</Badge>
+
+Tout va bien ? Pas tout à fait. Et le problème est dans les chiffres.
+
+### Le premier mur : le gradient évanescent dans le temps
+
+Pour mesurer combien un poids influence la perte via un état lointain, la règle de la chaîne nous force à remonter la chaîne des états. La sensibilité de $h_t$ par rapport à un état ancien $h_k$ (avec $k \ll t$) est un **produit de matrices jacobiennes** :
+
+$$ \frac{\partial h_t}{\partial h_k} = \prod_{s=k+1}^{t} \frac{\partial h_s}{\partial h_{s-1}} = \prod_{s=k+1}^{t} \operatorname{diag}\!\big(\tanh'(\cdot)\big)\, W_h $$
+
+<Encart type="rappel" titre="Norme spectrale et valeur singulière">
+La **norme spectrale** d'une matrice $A$, notée $\Vert A\Vert$, mesure de combien $A$ peut au plus étirer un vecteur : $\Vert A\Vert = \max_{u \neq 0} \Vert Au\Vert / \Vert u\Vert$. Cette valeur est exactement la **plus grande valeur singulière** de $A$. Deux propriétés nous serviront : elle est **sous-multiplicative**, $\Vert AB\Vert \le \Vert A\Vert\,\Vert B\Vert$ ; et pour une matrice diagonale, elle vaut la plus grande valeur absolue de ses coefficients.
+</Encart>
+
+<Encart type="calcul" titre="Pourquoi le produit explose ou s'éteint">
+Raisonnons sur la « taille » de ce produit, mesurée par la norme spectrale. Notons $\sigma = \Vert W_h\Vert$ la plus grande valeur singulière de $W_h$. Chaque facteur du produit est $\operatorname{diag}(\tanh'(\cdot))\,W_h$. Comme $\tanh'(z) = 1 - \tanh^2(z) \in [0,1]$, la matrice diagonale a une norme spectrale au plus égale à $1$ ; par sous-multiplicativité, chaque facteur a donc une norme au plus $\sigma$ :
+
+$$ \big\Vert \operatorname{diag}(\tanh'(\cdot))\, W_h \big\Vert \;\le\; 1 \cdot \sigma \;=\; \sigma $$
+
+En réappliquant la sous-multiplicativité aux $t-k$ facteurs du produit, la norme du produit est bornée :
+
+$$ \left\Vert \frac{\partial h_t}{\partial h_k} \right\Vert \;\le\; \sigma^{\,t-k} $$
+
+Lis cette inégalité comme une compétition entre $\sigma$ et $1$ :
+
+- Si $\sigma &lt; 1$ : $\sigma^{t-k} \to 0$ quand l'écart $t-k$ grandit. Le gradient s'**évanouit** : les pas lointains n'influencent plus rien.
+- Si $\sigma &gt; 1$ : la borne supérieure croît exponentiellement, et le produit peut **exploser**.
+
+Avec $\tanh$, dont la dérivée est presque toujours strictement inférieure à $1$, le facteur effectif de chaque pas tombe en pratique en dessous de $\sigma$, ce qui aggrave encore le régime évanescent. Le cas borné « idéal » ($\sigma = 1$ et dérivées proches de $1$) est un fil de rasoir qu'un réseau entraîné ne tient pas.
+</Encart>
+
+La conclusion est nette : la borne sur la dépendance entre la perte et un événement ancien décroît, dans le régime $\sigma &lt; 1$, de façon **exponentielle** avec la distance temporelle. <Badge niveau="prouve">La borne $\Vert \partial h_t/\partial h_k\Vert \le \sigma^{t-k}$ est un fait de calcul exact (sous-multiplicativité de la norme spectrale et $\Vert\operatorname{diag}(\tanh')\Vert \le 1$).</Badge> Le RNN « oublie » donc typiquement le début d'une longue phrase : non par choix, mais par arithmétique. <Badge niveau="robuste">L'incapacité des RNN simples à capter les dépendances longues est une régularité empirique massive et reproductible — l'inégalité borne, sans à elle seule prouver, ce comportement.</Badge>
+
+### Des rustines : LSTM et GRU
+
+On a inventé des cellules plus malignes — le **LSTM** et le **GRU** — qui ajoutent des **portes** : de petits réseaux qui décident, à chaque pas, quoi écrire, quoi effacer, quoi laisser passer. L'astuce maîtresse du LSTM est une « cellule mémoire » mise à jour de façon quasi additive, créant une autoroute où le gradient circule sans être systématiquement écrasé par un facteur $&lt; 1$.
+
+<Encart type="plusloin" titre="Pourquoi les portes aident — et ne suffisent pas">
+Dans un LSTM, l'état mémoire $c_t$ suit $c_t = f_t \odot c_{t-1} + i_t \odot \tilde{c}_t$, où la porte d'oubli $f_t \in [0,1]$ contrôle la conservation. Quand $f_t \approx 1$, $\partial c_t / \partial c_{t-1} \approx 1$ : la chaîne ne s'éteint plus mécaniquement, le réseau peut *apprendre* à mémoriser longtemps. Mais rien ne garantit que $f_t$ reste près de $1$ ; sur des dépendances très longues, l'atténuation revient. Les portes **repoussent** le mur, elles ne le suppriment pas. (Pour l'explosion, plutôt que le LSTM, on utilise en pratique le *gradient clipping* — on plafonne la norme du gradient ; c'est une recette efficace, sans garantie.)
+</Encart>
+
+<Badge niveau="robuste">Les LSTM/GRU atténuent empiriquement le gradient évanescent et ont dominé le traitement des séquences vers 2015. Aucune preuve générale ne garantit la capture de dépendances arbitrairement longues.</Badge>
+
+### Le second mur, décisif : la séquentialité
+
+Le premier mur concerne la *qualité*. Le second concerne la *vitesse*, et c'est lui qui scelle le sort des RNN. Regarde la récurrence $h_t = \dots(h_{t-1})\dots$ : pour calculer $h_t$, il **faut** d'abord connaître $h_{t-1}$. Le calcul est intrinsèquement **séquentiel** : $T$ pas à enchaîner, impossibles à mener de front. <Badge niveau="prouve">La dépendance $h_t \!\leftarrow\! h_{t-1}$ interdit structurellement de paralléliser le long de la séquence : c'est une propriété du graphe de calcul, pas un détail d'implémentation.</Badge>
+
+Or le matériel moderne (les GPU) ne va vite que parallélisé. Un modèle qui force $T$ étapes en série gaspille cette puissance et plafonne le passage à l'échelle — sur des séquences longues comme sur de gros corpus. <Badge niveau="robuste">C'est ce verrou d'échelle, autant qu'une supériorité de qualité, qui a fait supplanter les RNN par les transformers.</Badge>
+
+Soyons honnêtes sur le statut de ce verdict. Les RNN ne sont pas « obsolètes par théorème » : un LSTM bien réglé reste un modèle valable, et l'on a vu récemment des architectures récurrentes parallélisables revenir dans la course. Ils ont été **supplantés empiriquement** par une architecture qui, elle, se parallélise et capte les liens lointains directement — pour des raisons d'ingénierie et d'échelle autant que de finesse. <Badge niveau="boitenoire">Pourquoi exactement les modèles parallèles à très grande échelle généralisent si bien reste, comme toujours, mal compris.</Badge>
+
+Deux murs, donc : un gradient qui s'éteint avec la distance, et un calcul qu'on ne peut pas paralléliser. Le chapitre suivant introduit le mécanisme qui démolit les deux d'un coup — en laissant chaque position **regarder directement** toutes les autres, en parallèle : l'attention.

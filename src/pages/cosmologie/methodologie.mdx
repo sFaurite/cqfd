@@ -1,0 +1,86 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « observé », « concordant », « extrapolé » et « spéculatif » — et comment on classe chaque affirmation en cosmologie.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+La cosmologie est une science singulière : on ne peut ni refaire l’univers en laboratoire, ni le
+regarder de l’extérieur. Tout ce que l’on sait, on le lit dans la lumière qui nous parvient.
+Pourtant, certaines de ses conclusions sont aussi solides qu’une mesure de paillasse — l’univers
+**est** en expansion, le fond diffus **existe** — tandis que d’autres restent des **cadres de
+modèle** très bien ajustés, des **extrapolations** théoriques, ou de franches **spéculations**.
+Mélanger ces statuts est la source de beaucoup de malentendus sur « ce que dit la cosmologie ».
+
+Pour éviter cela, **chaque affirmation notable** de ce cours porte l’un de ces quatre niveaux.
+L’axe n’est ni la « certitude empirique » de la physique de laboratoire, ni le « statut
+mathématique » : c’est le **degré d’ancrage observationnel**.
+
+## Les quatre niveaux
+
+### 🟢 Observé <Badge niveau="observe">Exemple : l’expansion de l’univers, l’existence du fond diffus.</Badge>
+
+**Mesuré directement**, avec un **consensus total**. Ce n’est pas « probablement vrai » : c’est lu
+dans les données, reproduit par des instruments indépendants.
+
+> Exemples : l’expansion (redshifts des galaxies), le fond diffus cosmologique et son spectre de
+> corps noir, les abondances primordiales d’hélium et de deutérium, la distribution à grande
+> échelle des galaxies.
+
+### 🔵 Concordant (ΛCDM) <Badge niveau="concordance">Exemple : la matière noire froide, l’univers spatialement plat.</Badge>
+
+**Prédit par le modèle standard ΛCDM** et **concordant avec toutes les observations**, mais
+reposant sur le **modèle** : on infère l’existence de composants (matière noire froide, constante
+cosmologique) qu’on ne « voit » pas directement. On a d’excellentes raisons d’y croire, tout en
+sachant que c’est une description.
+
+> Exemples : la matière noire froide, la valeur des paramètres $\Omega$, la platitude de
+> l’univers, l’âge de $13{,}8$ milliards d’années.
+
+### 🟡 Extrapolé <Badge niveau="extrapole">Exemple : l’inflation, la nature physique de l’énergie noire.</Badge>
+
+**Extrapolation théorique** au-delà du directement testé. Hypothèse **sérieuse**, souvent
+nécessaire pour expliquer ce qu’on observe, mais **non tranchée** : plusieurs scénarios
+concurrents restent possibles.
+
+> Exemples : l’inflation et le champ d’inflaton, la baryogenèse, la nature physique de l’énergie
+> noire (constante cosmologique vraie ? champ dynamique ?).
+
+### 🔴 Spéculatif <Badge niveau="speculatif">Exemple : avant le temps de Planck, le multivers.</Badge>
+
+**Au-delà de toute donnée.** On constate qu’une question existe, mais aucune réponse n’est
+établie, et parfois aucune ne semble testable à court terme. Ce sont les frontières de la
+discipline.
+
+> Exemples : l’état de l’univers avant le temps de Planck, la gravité quantique, l’existence d’un
+> multivers, ce qui a « précédé » le Big Bang.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau a été attribué — quelle observation, quel statut de modèle.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « observé » et « concordant » ?">
+Parce que la nature de la preuve diffère. « L’univers est en expansion » est un **fait mesuré** :
+on observe le redshift croître avec la distance. « 27 % du contenu est de la matière noire
+froide » est l’**explication de modèle** la mieux ajustée que nous ayons — elle rend compte de la
+rotation des galaxies, des lentilles et du spectre du CMB d’un seul coup —, mais c’est une
+inférence dans le cadre ΛCDM, pas une détection directe de la particule. Les deux sont très
+fiables ; elles ne le sont pas *de la même façon*. Le badge rend cette nuance visible.
+</Encart>
+
+## Sur les constantes et les grands nombres
+
+Quand une valeur numérique est citée, on précise son **statut** :
+
+- **Défini par convention** : la valeur est fixée *par décision*. C’est le cas de la vitesse de la
+  lumière $c = 299\,792\,458$ m/s, et de la normalisation du facteur d’échelle $a_0 = 1$
+  aujourd’hui. <Badge niveau="observe">Conventions : $c$ définit le mètre depuis 1983 ; $a_0=1$ est un simple choix d’échelle.</Badge>
+- **Mesuré** : la valeur provient de l’observation, avec une incertitude. C’est le cas de la
+  constante de Hubble ($H_0 \approx 70$ km/s/Mpc), de la température du fond diffus
+  ($T_{\rm CMB} = 2{,}7255$ K) et des paramètres $\Omega$. <Badge niveau="observe">$T_{\rm CMB}$ mesurée à $10^{-4}$ près par COBE et Planck ; $H_0$ encore en tension entre méthodes.</Badge>
+
+L’<a href="/cosmologie/symboles">index des symboles</a> récapitule ces valeurs et leur statut.

@@ -1,0 +1,113 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La liaison covalente et le modèle de Lewis"
+chapter: liaison-covalente-lewis
+description: "La liaison covalente comme partage d'électrons, le modèle de Lewis, la règle de l'octet, les structures de Lewis et leurs limites (exceptions, hypervalence, charges formelles)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieLewisBuilder from '../../../components/interactive/ChimieLewisBuilder.astro';
+
+## De l'atome isolé à la molécule
+
+Jusqu'ici, nous avons regardé des atomes **seuls** : leur structure électronique, leur électronégativité, leur place dans le tableau. Mais la matière qui nous entoure n'est presque jamais faite d'atomes isolés. Elle est faite de **molécules** : des atomes accrochés les uns aux autres. Comment, et pourquoi, s'accrochent-ils ?
+
+<Tournant titre="On change d'échelle, et on change d'outil">
+Le traitement *exact* d'une molécule relève de la mécanique quantique : il faut résoudre l'équation de Schrödinger pour plusieurs noyaux et plusieurs électrons à la fois — c'est lourd, et on le fera (en partie) au chapitre suivant. Avant cela, on introduit un **modèle empirique** d'une efficacité redoutable, dû à Gilbert Lewis (1916) : on représente les électrons de valence par des **points**, on les regroupe en **doublets**, et on impose une règle commode, la **règle de l'octet**. Ce modèle n'est pas la vérité quantique ; c'est un outil prédictif, qu'on pose au grand jour comme tel.
+</Tournant>
+
+## Pourquoi deux atomes se lient : l'énergie baisse
+
+L'intuition d'abord. Prenons deux atomes d'hydrogène très loin l'un de l'autre. Rapprochons-les. Chaque électron, au départ confiné autour d'*un seul* noyau, peut désormais s'**étaler** sur la région *entre* les deux noyaux : il est attiré par les deux à la fois et, surtout, son nuage est moins « comprimé ». Cette **délocalisation** abaisse son énergie. La liaison covalente, c'est cela : **un partage d'électrons qui rend le système plus stable que les atomes séparés.** (L'origine fine de cet abaissement — répartition entre énergie cinétique et potentielle, terme d'échange — relève de la mécanique quantique ; on n'en a besoin ici que du résultat : l'énergie descend.)
+
+Ce n'est pas une vue de l'esprit : on **mesure** l'énergie qu'il faut fournir pour casser la liaison H–H, soit $436\ \mathrm{kJ\cdot mol^{-1}}$. Si les deux atomes liés ont une énergie plus basse de cette quantité, c'est qu'il y a bien eu un puits d'énergie à la formation.
+
+<Resultat label="Origine énergétique de la liaison covalente">
+
+$$
+E_{\text{molécule}} < E_{\text{atomes séparés}}
+$$
+
+<Badge niveau="quantique" slot="badge">L'abaissement d'énergie quand un électron est partagé entre deux noyaux découle directement du traitement quantique (délocalisation, échange). Nécessaire.</Badge>
+</Resultat>
+
+Que la liaison stabilise est **quantique** ; que H–H vaille précisément $436\ \mathrm{kJ\cdot mol^{-1}}$ est **mesuré**. <Badge niveau="experimental">Les énergies de liaison sont des grandeurs tabulées, obtenues par calorimétrie et spectroscopie de façon reproductible.</Badge>
+
+## Le langage de Lewis : doublets liants et non liants
+
+Lewis ne calcule pas cette énergie. Il en garde l'**idée** — partager des électrons stabilise — et la transforme en règle de comptage. On ne dessine que les **électrons de valence** (ceux de la couche externe, voir <Prereq href="/chimie/partie-i/structure-electronique">la structure électronique</Prereq>).
+
+- Un **doublet liant** est une paire d'électrons *partagée* entre deux atomes : c'est une liaison, qu'on trace par un trait. Deux traits = liaison double, trois = triple.
+- Un **doublet non liant** (ou libre) est une paire qui reste sur un seul atome.
+
+## La règle de l'octet : un modèle, pas une loi
+
+L'observation empirique qui frappe Lewis : les éléments de la 2ᵉ période sont stables quand ils s'entourent de **huit électrons de valence** (un octet), comme le gaz noble le plus proche. L'hydrogène et l'hélium, eux, visent **deux** électrons (la configuration de l'hélium).
+
+<Resultat label="Règle de l'octet">
+
+$$
+\text{8 électrons de valence autour de chaque atome de la 2}^{\text{e}}\text{ période}
+$$
+
+<Badge niveau="empirique" slot="badge">L'octet est une règle prédictive **approchée**, qui marche remarquablement pour C, N, O, F mais souffre d'exceptions franches. Ce n'est PAS une loi quantique.</Badge>
+</Resultat>
+
+Insistons, car c'est le cœur de l'honnêteté de ce chapitre : **rien dans la mécanique quantique n'impose « huit »**. L'octet est un *résumé* de tendances, pas un théorème. <Badge niveau="empirique">Toute prédiction tirée de l'octet hérite de ce statut empirique : commode, souvent juste, jamais garantie.</Badge>
+
+## La charge formelle : départager les structures
+
+Quand plusieurs structures de Lewis sont possibles, on les départage avec la **charge formelle**. L'idée : on attribue à un atome *tous* ses électrons non liants et *la moitié* de chaque doublet liant, puis on compare au nombre d'électrons de valence de l'atome neutre.
+
+<Encart type="calcul" titre="Charge formelle, ligne à ligne — l'azote dans HCN">
+On veut la charge formelle de N dans H–C≡N.
+
+1. Électrons de valence de l'azote neutre : $N_{\text{val}} = 5$.
+2. Doublets non liants sur N : un seul, soit $N_{\text{nl}} = 2$ électrons.
+3. N porte la triple liaison (3 doublets liants partagés) : $N_{\text{liant}} = 6$ électrons, dont la moitié lui est attribuée, soit $\tfrac{6}{2} = 3$.
+4. Charge formelle : $CF = N_{\text{val}} - N_{\text{nl}} - \tfrac{1}{2}N_{\text{liant}}$.
+5. Application : $CF = 5 - 2 - 3 = 0$.
+
+L'azote est neutre dans cette structure : bon signe, c'est celle qu'on retient.
+</Encart>
+
+<Resultat label="Charge formelle d'un atome dans une structure de Lewis">
+
+$$
+CF = N_{\text{val}} - N_{\text{non liants}} - \tfrac{1}{2}\,N_{\text{liants}}
+$$
+
+<Badge niveau="empirique" slot="badge">La charge formelle est un outil de comptage **conventionnel** : elle suppose un partage *à parts égales* des doublets, ce qui ignore l'électronégativité. Bonne heuristique, pas une charge réelle.</Badge>
+</Resultat>
+
+La règle de tri : on préfère les structures où les charges formelles sont **les plus proches de zéro**, et où une charge négative, si elle existe, est portée par l'atome le **plus électronégatif** (voir <Prereq href="/chimie/partie-ii/tendances-periodiques">les tendances périodiques</Prereq>). <Badge niveau="qualitatif">C'est un critère de plausibilité, qui dépend du contexte et n'a pas valeur de preuve.</Badge>
+
+## À vous : construisez des structures de Lewis
+
+Comptez les électrons de valence, formez le squelette, distribuez les doublets pour satisfaire l'octet, puis vérifiez les charges formelles.
+
+<ChimieLewisBuilder />
+
+## Quand l'octet échoue (et c'est fréquent)
+
+Un modèle empirique se juge à ses échecs assumés. Voici les principaux.
+
+- **Octet incomplet (lacune électronique).** Dans $BF_3$, le bore ne s'entoure que de **6** électrons. Il s'en accommode très bien — et c'est justement ce déficit qui le rend avide d'un doublet (acide de Lewis).
+- **Espèces déficientes par nature.** $H$ et $He$ plafonnent à **2** électrons, jamais 8.
+- **Espèces radicalaires.** Le monoxyde d'azote $NO$ possède un **nombre impair** d'électrons : un électron reste *célibataire*, l'octet est mathématiquement impossible.
+- **« Octet étendu » (hypervalence).** $SF_6$ entoure le soufre de **12** électrons, $PCl_5$ de **10**. Lewis, pris au pied de la lettre, l'interdit.
+
+<Badge niveau="empirique">Ces exceptions ne *réfutent* pas Lewis : elles délimitent honnêtement son domaine de validité. Le modèle reste excellent pour la grande majorité des molécules organiques.</Badge>
+
+<Encart type="plusloin" titre="Hypervalence : attention à la vieille explication">
+On lit souvent que $SF_6$ « promeut » des électrons dans des **orbitales $d$** pour loger ses 12 électrons. Cette explication, longtemps enseignée, est **aujourd'hui largement contestée** : les calculs montrent que les orbitales $d$ du soufre sont trop hautes en énergie pour participer significativement. La description moderne fait appel à des **liaisons à 3 centres** et à la **délocalisation** des électrons sur plusieurs atomes — exactement ce que le modèle de Lewis, avec ses doublets bien localisés *entre deux atomes*, est incapable de représenter.
+
+<Badge niveau="empirique" slot="badge">L'invocation des orbitales $d$ pour l'hypervalence est une interprétation dépassée ; on ne la présente pas comme une vérité. La délocalisation (liaisons à 3 centres) est la lecture moderne.</Badge>
+</Encart>
+
+Ce dernier point n'est pas un détail : il pointe la **limite structurelle** de Lewis. En localisant chaque doublet entre deux atomes précis, le modèle ne sait décrire ni la délocalisation, ni le caractère magnétique de $O_2$, ni l'hypervalence. Pour aller plus loin, il faudra abandonner les points et les traits, et revenir aux **orbitales** — non plus atomiques, mais étendues à toute la molécule. C'est l'objet du chapitre suivant.

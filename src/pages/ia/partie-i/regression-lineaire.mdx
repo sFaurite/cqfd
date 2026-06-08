@@ -1,0 +1,136 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La régression linéaire : le premier ajustement"
+chapter: regression-lineaire
+description: "Présente la régression linéaire comme le neurone le plus simple (activation identité). Pose l'erreur quadratique moyenne, et donne la solution exacte (moindres carrés) avant même d'introduire la descente de gradient."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaLossLandscape from '../../../components/interactive/IaLossLandscape.astro';
+
+## La régression linéaire : le premier ajustement
+
+Nous avons un neurone. <Prereq href="/ia/partie-i/neurone-formel">Le neurone formel</Prereq> nous l'a donné comme une fonction $f(x) = a(w \cdot x + b)$, une famille de fonctions indexée par les paramètres $(w, b)$. Mais une question reste suspendue : parmi toutes ces fonctions possibles, **laquelle choisir** ? Sur quel critère ? C'est ici que le mot « apprendre » prend, pour la première fois, un sens précis et calculable.
+
+Pour commencer, prenons le cas le plus simple : pas de fonction d'activation ($a = \mathrm{identité}$). Le neurone devient une pure relation linéaire, et le problème devient la **régression linéaire**, le grand-père de tout l'apprentissage automatique. Et bonne nouvelle, rare et précieuse : ici, tout se démontre exactement.
+
+<Encart type="intuition" titre="L'idée en une image">
+On vous donne un nuage de points sur une feuille. On vous demande de tracer LA droite qui passe « au mieux » au milieu. Votre œil sait le faire instinctivement. La régression linéaire, c'est rendre ce « au mieux » mathématiquement précis — au point qu'une formule, et non un tâtonnement, donne directement la droite parfaite.
+</Encart>
+
+### Poser le problème : prédiction et erreur
+
+On dispose de $n$ exemples $(x_i, y_i)$ : pour chaque entrée $x_i$, une valeur cible $y_i$ qu'on voudrait reproduire. Le modèle prédit, pour chaque $x_i$ :
+
+$$ \hat{y}_i = w \cdot x_i + b $$
+
+<Hypotheses titre="Hypothèses de départ">
+On suppose donné un jeu de $n$ couples $(x_i, y_i)$ avec $x_i \in \mathbb{R}^d$ et $y_i \in \mathbb{R}$. On cherche les paramètres $(w, b)$, avec $w \in \mathbb{R}^d$ et $b \in \mathbb{R}$, qui rendent les prédictions $\hat{y}_i$ aussi proches que possible des cibles $y_i$. On ne fait aucune hypothèse sur la « vraie » loi qui a produit les données.
+</Hypotheses>
+
+Il faut maintenant chiffrer « proche ». L'écart sur l'exemple $i$ est le **résidu** $\hat{y}_i - y_i$. On pourrait sommer les valeurs absolues, mais l'expérience et le calcul plaident pour le **carré** : il pénalise fortement les grosses erreurs et, surtout, il est partout dérivable. On définit l'**erreur quadratique moyenne** (MSE, *mean squared error*) :
+
+<Resultat label="Erreur quadratique moyenne (MSE)">
+
+$$ L(w, b) = \frac{1}{n} \sum_{i=1}^{n} \left( w \cdot x_i + b - y_i \right)^2 $$
+
+<Badge niveau="recette" slot="badge">Le choix du carré (plutôt que valeur absolue ou autre) est une convention d'ingénierie ; il se justifie *a posteriori* par sa dérivabilité et, sous hypothèse de bruit gaussien, par le maximum de vraisemblance.</Badge>
+</Resultat>
+
+Voilà ce qu'on appelle une **fonction de perte** : un nombre, fonction des paramètres, qui mesure à quel point le modèle se trompe. **Apprendre, c'est minimiser $L$.** Tout le cours tient dans cette phrase.
+
+### La forme du paysage : un bol
+
+Avant de chercher le minimum, regardons à quoi ressemble $L$ vue comme fonction de $(w, b)$. C'est une somme de carrés de fonctions **affines** des paramètres. Or un carré d'une quantité affine est une fonction quadratique, et une somme de fonctions quadratiques reste quadratique. La perte $L$ est donc une **forme quadratique** en $(w, b)$ : géométriquement, une surface en forme de **bol** (un paraboloïde) posé au-dessus du plan des paramètres.
+
+<IaLossLandscape />
+
+Faites tourner ce bol. Le point le plus bas, le fond de la cuvette, c'est le couple $(w^*, b^*)$ qui minimise l'erreur. Et tout l'intérêt vient de ce que ce bol n'a **qu'un seul** fond.
+
+### La convexité : un seul minimum, et il est global
+
+Que le bol n'ait qu'un fond n'est pas un dessin, c'est un théorème. Une fonction est **convexe** si le segment reliant deux points de son graphe reste au-dessus du graphe ; concrètement, elle ne peut pas avoir deux creux séparés par une bosse. Pour une fonction deux fois dérivable, la convexité équivaut à ce que sa **matrice hessienne** (la matrice des dérivées secondes) soit **semi-définie positive** partout.
+
+<Encart type="rappel" titre="Matrice semi-définie positive">
+Une matrice symétrique $H$ est dite **semi-définie positive** si, pour tout vecteur $u$, on a $u^\top H\, u \ge 0$. Intuition : $H$ ne « courbe » jamais vers le bas, dans aucune direction. Si de plus $u^\top H\, u > 0$ pour tout $u \neq 0$, $H$ est dite **définie positive** : la courbure est strictement positive partout, et le bol a un fond unique et pointu.
+</Encart>
+
+<Encart type="calcul" titre="La hessienne de la MSE est semi-définie positive">
+
+Regroupons les paramètres en un seul vecteur $\theta = (w, b)$ et notons $\tilde{x}_i = (x_i, 1)$ l'entrée augmentée, de sorte que $\hat{y}_i = \theta \cdot \tilde{x}_i$.
+
+**Étape 1.** La perte s'écrit $\displaystyle L(\theta) = \frac{1}{n} \sum_{i=1}^{n} (\theta \cdot \tilde{x}_i - y_i)^2$.
+
+**Étape 2.** Dérivée première (gradient), par la règle de dérivation d'un carré (dérivée de $u^2$ égale $2u\,u'$, ici avec $u = \theta \cdot \tilde{x}_i - y_i$ et $u' = \tilde{x}_i$) :
+
+$$ \nabla L(\theta) = \frac{2}{n} \sum_{i=1}^{n} (\theta \cdot \tilde{x}_i - y_i)\, \tilde{x}_i $$
+
+**Étape 3.** Dérivée seconde (hessienne) : on dérive le gradient — un vecteur — par rapport à $\theta$, ce qui produit une matrice. Le terme constant $-y_i$ disparaît, et la matrice jacobienne de $\tilde{x}_i\,(\theta \cdot \tilde{x}_i)$ par rapport à $\theta$ est le produit extérieur $\tilde{x}_i \tilde{x}_i^\top$ (chaque composante du gradient étant linéaire en $\theta$, de coefficients donnés par $\tilde{x}_i$) :
+
+$$ H = \nabla^2 L(\theta) = \frac{2}{n} \sum_{i=1}^{n} \tilde{x}_i \tilde{x}_i^\top $$
+
+Remarquons que $H$ ne dépend pas de $\theta$ : la courbure est la même partout, ce qui confirme la forme de paraboloïde.
+
+**Étape 4.** Pour tout vecteur $u$, on calcule la forme quadratique associée :
+
+$$ u^\top H\, u = \frac{2}{n} \sum_{i=1}^{n} u^\top \tilde{x}_i \tilde{x}_i^\top u = \frac{2}{n} \sum_{i=1}^{n} (\tilde{x}_i \cdot u)^2 \ge 0. $$
+
+C'est une somme de carrés : elle est toujours positive ou nulle. Donc $H$ est semi-définie positive en tout point. ∎
+</Encart>
+
+<Resultat label="Convexité de la MSE">
+
+$$ \nabla^2 L \succeq 0 \quad\Longrightarrow\quad L \text{ est convexe} $$
+
+<Badge niveau="prouve" slot="badge">Théorème démontré ci-dessus : la hessienne de la MSE est une somme de produits extérieurs, donc semi-définie positive partout, donc $L$ est convexe.</Badge>
+</Resultat>
+
+La conséquence est capitale : pour une fonction convexe, **tout minimum local est global**. Il n'y a pas de fausse cuvette où se piéger. <Badge niveau="prouve">Propriété classique de l'analyse convexe : pour une fonction convexe différentiable sur un domaine convexe, tout point où $\nabla L = 0$ est un minimiseur global.</Badge> Annuler le gradient suffit donc à trouver la meilleure solution. Savourez ce confort : c'est précisément ce que nous **perdrons** dès que des non-linéarités entreront en jeu.
+
+### Résoudre exactement : le cas 1D, ligne à ligne
+
+Plaçons-nous en dimension $1$ ($x_i \in \mathbb{R}$). On cherche $(w, b)$ qui annulent les deux dérivées partielles de $L$.
+
+<Encart type="calcul" titre="Les moindres carrés en 1D">
+
+**Condition sur $b$.** On annule $\partial L / \partial b$ :
+
+$$ \frac{\partial L}{\partial b} = \frac{2}{n} \sum_i (w x_i + b - y_i) = 0 \;\Longrightarrow\; b = \bar{y} - w\bar{x}, $$
+
+où $\bar{x} = \frac{1}{n}\sum_i x_i$ et $\bar{y} = \frac{1}{n}\sum_i y_i$ sont les moyennes. La droite passe par le centre de gravité du nuage.
+
+**Condition sur $w$.** On annule $\partial L / \partial w$ :
+
+$$ \frac{\partial L}{\partial w} = \frac{2}{n} \sum_i (w x_i + b - y_i)\, x_i = 0. $$
+
+On y injecte $b = \bar{y} - w\bar{x}$, puis on regroupe les termes en $w$ :
+
+$$ w \sum_i (x_i - \bar{x}) x_i = \sum_i (y_i - \bar{y}) x_i. $$
+
+En centrant (le terme $\bar{x} \sum_i (x_i - \bar{x}) = 0$ s'élimine de chaque côté), on a $\sum_i (x_i - \bar{x}) x_i = \sum_i (x_i - \bar{x})^2$ et $\sum_i (y_i - \bar{y}) x_i = \sum_i (x_i - \bar{x})(y_i - \bar{y})$, d'où :
+
+$$ \boxed{\; w^* = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{\sum_i (x_i - \bar{x})^2}, \qquad b^* = \bar{y} - w^* \bar{x} \;} $$
+
+On reconnaît $w^* = \mathrm{cov}(x,y)/\mathrm{var}(x)$ : la pente optimale est la covariance normalisée par la variance. La formule suppose le dénominateur non nul, c'est-à-dire que les $x_i$ ne sont pas tous égaux (sans quoi aucune pente n'est déterminée). ∎
+</Encart>
+
+Aucune itération, aucun pas d'apprentissage : une **formule fermée** crache la réponse. <Badge niveau="prouve">Solution exacte démontrée : la condition $\nabla L = 0$, suffisante par convexité, donne directement le minimiseur.</Badge>
+
+<Encart type="plusloin" titre="Forme matricielle : les équations normales">
+Empilons les entrées augmentées en lignes d'une matrice $X \in \mathbb{R}^{n \times (d+1)}$ et les cibles dans $y \in \mathbb{R}^n$. Annuler le gradient $\nabla L = \frac{2}{n} X^\top (X\theta - y) = 0$ donne les **équations normales** :
+
+$$ X^\top X\, \theta = X^\top y \;\Longrightarrow\; \theta^* = (X^\top X)^{-1} X^\top y. $$
+
+**Avertissement.** Cette inversion suppose $X^\top X$ **inversible**, ce qui exige que $X$ soit de **rang plein** en colonnes (colonnes indépendantes, donc pas de variable redondante ni d'exemples trop peu nombreux : il faut $n \ge d+1$). Sous cette condition, $X^\top X$ est définie positive, $L$ est strictement convexe et le minimum est **unique**. <Badge niveau="prouve">Existence et unicité garanties sous rang plein.</Badge> Si $X^\top X$ est singulière (ou mal conditionnée), on régularise en ajoutant $\lambda I$ : c'est la **régression ridge**, $\theta^* = (X^\top X + \lambda I)^{-1} X^\top y$, qui restaure l'inversibilité (la somme d'une matrice semi-définie positive et de $\lambda I$, avec $\lambda > 0$, est définie positive). Nous y reviendrons. <Badge niveau="recette">La pénalité $\lambda$ est un choix d'ingénierie.</Badge>
+</Encart>
+
+### Ce que la régression linéaire ne sait pas faire
+
+Ne survendons rien. Cette machine ajuste une **droite** (ou un hyperplan) : elle ne capture que des relations **linéaires**. Donnez-lui une parabole, un cycle, un XOR, et elle échouera, non par manque d'entraînement, mais par incapacité structurelle. <Badge niveau="prouve">Le modèle est, par définition, contraint à l'espace des fonctions affines.</Badge> C'est précisément cette limite qui motivera, plus tard, l'empilement de couches et les non-linéarités.
+
+Nous tenons pourtant l'acquis fondateur : **apprendre = minimiser une perte sur des paramètres**. Ici, par chance, le minimum était accessible d'un seul coup de formule. Mais dès que le modèle se complique, plus de formule magique : il faudra **descendre** vers le fond du bol pas à pas. Pour cela, attaquons d'abord l'outil qui pointe vers le bas : la **fonction de perte** et sa pente, le gradient.

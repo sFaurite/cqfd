@@ -1,0 +1,144 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce cours
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’échelle de fiabilité cosmologique, et la promesse exacte. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce cours raconte l’histoire de l’univers **d’un seul tenant**, de l’**hypothèse d’homogénéité**
+jusqu’aux galaxies, à la matière noire et à l’énergie noire d’aujourd’hui. La règle, non
+négociable : *on ne vous demande jamais de croire sur parole.* Chaque résultat est soit **posé
+explicitement comme hypothèse**, soit **déduit** de ce qui précède, soit **mesuré**.
+
+Une précision d’honnêteté, dès maintenant : **la cosmologie n’est pas une pure déduction.** On
+part d’un petit nombre d’hypothèses (le principe cosmologique, le cadre de la relativité
+générale), on en déduit énormément (l’expansion, les équations de Friedmann, l’évolution du
+contenu) — et on **confronte** sans cesse à l’observation. Mais à plusieurs reprises, l’univers
+nous force à **ajouter** une hypothèse nouvelle : la thermodynamique du plasma primordial,
+l’inflation, l’existence de la matière noire. Chaque fois, on le **dit clairement** (un bandeau
+« Tournant » le signale) et on l’**ancre dans un fait mesuré**. La promesse exacte est donc :
+*rien n’est utilisé sans être, soit une hypothèse posée au grand jour, soit une déduction, soit
+une observation.*
+
+Cette page vous explique les **outils** qui reviennent partout : les encadrés d’hypothèses (et
+les bandeaux « Tournant »), les encarts dépliables, et les badges de fiabilité.
+
+## À qui s’adresse ce cours ?
+
+Le niveau de départ visé est la **Terminale / début de licence** : vous êtes à l’aise avec les
+dérivées, la notation scientifique et un peu de physique (énergie, gravitation de Newton).
+**Aucun prérequis de relativité générale n’est exigé** : on en admet explicitement ce dont on a
+besoin, sans le redémontrer. Dès qu’un outil nouveau apparaît, un encart « Rappel » le ramène
+aux acquis du lycée.
+
+<Encart type="rappel" titre="Exemple de rappel — la notation des grandes échelles">
+Les distances cosmiques se comptent en **mégaparsecs** : $1\ \text{Mpc} \approx 3{,}26$ millions
+d’années-lumière $\approx 3{,}09 \times 10^{22}\ \text{m}$. La constante de Hubble s’exprime
+alors en km/s par mégaparsec :
+
+$$ H_0 \approx 70\ \text{km}\,\text{s}^{-1}\,\text{Mpc}^{-1}. $$
+
+Autrement dit, une galaxie située à $1$ Mpc s’éloigne de nous à environ $70$ km/s, et deux fois
+plus vite si elle est deux fois plus loin.
+</Encart>
+
+## Les encadrés « Hypothèses de départ »
+
+Au début de chaque grande partie, un encadré liste **noir sur blanc** ce qui est admis sans
+démonstration. C’est le contrat : tout le reste de la partie devra en découler.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente comme ceci, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **change de cadre** — quand on cesse de déduire pour adopter de nouvelles hypothèses
+(par exemple en introduisant la thermodynamique de l’univers chaud, ou l’inflation) —, un
+**bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, ce qui précède ne suffit plus. On **ajoute** une hypothèse nouvelle, **imposée par
+l’observation** et non déduite — et on le dit clairement, plutôt que de la faire passer en
+contrebande. La déduction reprend ensuite à partir d’elle.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — démonstrations
+ligne à ligne, rappels, approfondissements — sont rangés dans des encarts que vous **dépliez
+d’un clic** (ou avec la touche <kbd>Entrée</kbd> au clavier). Il en existe quatre familles,
+reconnaissables à leur couleur et à leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ils sont **ouverts par défaut**
+parce qu’ils aident à comprendre *avant* de calculer. Exemple : « l’expansion, ce n’est pas les
+galaxies qui foncent dans l’espace, c’est l’espace lui-même qui se dilate entre elles ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent une démonstration **ligne à ligne**, sans étape sautée. Par exemple,
+on y dérive l’équation de Friedmann
+
+$$ \left(\frac{\dot a}{a}\right)^2 = \frac{8\pi G}{3}\,\rho - \frac{k c^2}{a^2} $$
+
+à partir de la conservation de l’énergie d’une coquille en expansion. Chaque ligne est justifiée
+par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil au programme du lycée : énergie mécanique, théorème de Gauss,
+dérivée d’une fonction… Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors-programme** : la dérivation relativiste
+complète, un lien avec une théorie plus avancée. Facultatifs : on peut les sauter sans perdre
+le fil.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent
+sur tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce cours. **Chaque affirmation notable** porte une pastille
+colorée qui dit *à quel point on en est sûr*. Survolez un badge (ou donnez-lui le focus au
+clavier) pour lire **pourquoi** il porte ce niveau. L’échelle est propre à la cosmologie : elle
+mesure le **degré d’ancrage observationnel**.
+
+- L’univers est en expansion <Badge niveau="observe">Mesuré directement par le redshift de milliers de galaxies depuis Hubble (1929) : un fait empirique robuste.</Badge>
+- L’univers contient de la matière noire froide <Badge niveau="concordance">Prédit et requis par ΛCDM, concordant avec rotation des galaxies, lentilles et CMB ; mais c’est un cadre de modèle, la particule n’est pas détectée.</Badge>
+- L’univers a connu une phase d’inflation <Badge niveau="extrapole">Extrapolation théorique très séduisante (elle résout horizon et platitude), mais non directement testée ni tranchée.</Badge>
+- Notre univers est une bulle parmi un multivers <Badge niveau="speculatif">Au-delà de toute donnée observable : aucune réponse établie.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et
+la page <a href="/cosmologie/methodologie">Méthodologie</a> détaille ce que chaque niveau signifie.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur dans un encadré, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat — loi de Hubble-Lemaître">
+$$ v = H_0\, d $$
+<Badge niveau="observe" slot="badge">La proportionnalité vitesse-distance est mesurée sur d’innombrables galaxies : c’est la signature directe de l’expansion.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat démontré ailleurs, un lien **prérequis** vous y
+renvoie d’un clic : par exemple, on invoquera plus tard les <Prereq href="/cosmologie/partie-ii/equations-friedmann">équations de Friedmann</Prereq> en pointant vers leur démonstration.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (disponible sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? Tout commence par une seule hypothèse sur la forme de l’univers : le principe cosmologique.

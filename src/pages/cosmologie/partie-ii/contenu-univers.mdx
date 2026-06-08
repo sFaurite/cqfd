@@ -1,0 +1,165 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le contenu de l'univers : matière, rayonnement, Λ"
+chapter: contenu-univers
+description: "Équations d'état et dilution : comment ρ évolue avec a pour chaque composante."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import DensityEvolution from '../../../components/interactive/DensityEvolution.astro';
+
+## Le contenu de l'univers : matière, rayonnement, Λ
+
+L'équation de Friedmann nous a appris une chose décisive : c'est la densité $\rho$ qui pilote l'expansion. Mais nous l'avons traitée comme un seul nombre, comme si l'univers était rempli d'une pâte uniforme. La réalité est plus riche — et plus intéressante. Il y a au moins **trois sortes de contenu** dans l'univers, et chacune réagit différemment quand l'espace se dilate. Comprendre *comment chaque ingrédient se dilue* avec le facteur d'échelle $a(t)$, c'est obtenir gratuitement toute l'histoire thermique du cosmos : pourquoi il fut dominé par le rayonnement, puis par la matière, et enfin par cette mystérieuse constante cosmologique.
+
+<Encart type="intuition" titre="Trois façons de remplir une boîte qu'on agrandit">
+Imaginez une boîte qu'on dilate dans les trois dimensions, son côté passant de $1$ à $a$. Des **billes** dedans (la matière) voient simplement leur concentration chuter : même nombre de billes, volume $a^3$ fois plus grand. Des **ondes** (le rayonnement) subissent *deux* effets : elles se diluent comme les billes, *et* chaque onde s'étire, perdant de l'énergie. Et puis il y a une troisième possibilité, contre-intuitive : une énergie attachée à l'**espace lui-même**, qui ne se dilue pas du tout — plus il y a d'espace, plus il y a d'elle. Tout le chapitre tient dans ces trois comportements.
+</Encart>
+
+### L'équation d'état : un seul paramètre $w$
+
+Pour distinguer ces composantes, on a besoin de relier leur pression $p$ à leur densité d'énergie. On **adopte** ici une **équation d'état linéaire**, que l'on justifie ensuite pour chacun des fluides cosmologiques :
+
+$$ p = w\,\rho c^2 $$
+
+où le nombre sans dimension $w$ caractérise la nature du fluide. Trois valeurs nous suffisent.
+
+| Composante | $w$ | Pression | Origine |
+|---|---|---|---|
+| Matière (poussière, matière noire) | $0$ | négligeable | particules massives lentes, $v \ll c$ |
+| Rayonnement (photons, neutrinos relativistes) | $1/3$ | $p=\tfrac13\rho c^2$ | gaz de particules ultra-relativistes |
+| Énergie du vide / $\Lambda$ | $-1$ | $p=-\rho c^2$ | densité d'énergie du vide |
+
+<Badge niveau="concordance">Les valeurs $w=0$ et $w=1/3$ se **démontrent** en théorie cinétique : gaz parfait non relativiste pour la matière (pression négligeable devant $\rho c^2$), gaz de photons isotrope pour le rayonnement, où la pression vaut exactement le tiers de la densité d'énergie. Elles sont solidement ancrées dans le modèle standard.</Badge>
+
+<Badge niveau="extrapole">En revanche, $w=-1$ découle de l'**identification** — non déduite — de $\Lambda$ à une densité d'énergie du vide. La nature physique de l'énergie noire (constante cosmologique exacte, ou champ dont $w$ varie ?) n'est pas tranchée : les données sont compatibles avec $w=-1$, sans l'imposer.</Badge>
+
+<Hypotheses titre="Ce que nous admettons dans ce chapitre">
+1. **Chaque composante obéit à une équation d'état linéaire** $p = w\,\rho c^2$ avec un $w$ constant. C'est un choix de modélisation : il est exact pour un gaz parfait non relativiste ($w=0$) et pour un gaz de photons ($w=1/3$), et il définit ce qu'on entend par « constante cosmologique » ($w=-1$).
+2. **Les composantes n'échangent pas d'énergie entre elles** sur les périodes considérées : chacune se conserve séparément, ce qui permet d'intégrer l'équation de continuité fluide par fluide.
+
+Tout le reste du chapitre est **déduit** de ces deux admissions (plus les résultats déjà établis : équations de Friedmann, redshift, métrique FLRW).
+</Hypotheses>
+
+### L'équation de continuité : la conservation de l'énergie
+
+D'où viennent les lois de dilution ? D'un principe que nous **posons** : dans un volume comobile qui se dilate, l'énergie se conserve, mais la pression **travaille** lors de cette dilatation. C'est exactement la première loi de la thermodynamique ($\mathrm{d}E = -p\,\mathrm{d}V$, sans flux de chaleur, car l'univers homogène n'a pas d'« extérieur » plus froid) appliquée à un volume $V \propto a^3$. On en tire l'**équation de continuité cosmologique**.
+
+<Encart type="rappel" titre="D'où sort cette équation ?">
+On peut la dériver de la thermodynamique, ou la lire directement dans les équations de Friedmann. En combinant la <Prereq href="/cosmologie/partie-ii/equations-friedmann">première équation de Friedmann</Prereq> et l'équation d'accélération, le terme de courbure s'élimine et il reste une relation purement locale entre $\rho$, $p$ et l'expansion — c'est la conservation $\nabla_\mu T^{\mu\nu}=0$ du tenseur énergie-impulsion. Nous l'adoptons donc comme **conséquence** du cadre déjà établi, pas comme hypothèse nouvelle.
+</Encart>
+
+$$ \dot\rho + 3H\left(\rho + \frac{p}{c^2}\right) = 0 $$
+
+<Badge niveau="concordance">Cette équation est une **conséquence exacte** des équations de Friedmann dans la métrique FLRW (équivalente à $\nabla_\mu T^{\mu\nu}=0$). Elle n'ajoute aucune hypothèse au cadre déjà posé.</Badge>
+
+### On en déduit les lois de dilution
+
+Injectons l'équation d'état $p = w\rho c^2$ et intégrons. Le résultat est d'une élégance frappante.
+
+<Encart type="calcul" titre="Intégration : ρ en fonction de a">
+
+**Étape 1 — On remplace la pression.** Avec $p/c^2 = w\rho$ dans l'équation de continuité :
+
+$$ \dot\rho + 3H\,\rho\,(1+w) = 0. $$
+
+**Étape 2 — On explicite $H = \dot a/a$ :**
+
+$$ \dot\rho + 3\,\frac{\dot a}{a}\,(1+w)\,\rho = 0. $$
+
+**Étape 3 — On sépare les variables.** En divisant par $\rho$ et en réarrangeant :
+
+$$ \frac{\dot\rho}{\rho} = -3(1+w)\,\frac{\dot a}{a}. $$
+
+**Étape 4 — On intègre des deux côtés** (avec $\dot\rho/\rho = \tfrac{\mathrm d}{\mathrm dt}\ln\rho$ et $\dot a/a = \tfrac{\mathrm d}{\mathrm dt}\ln a$) :
+
+$$ \ln\rho = -3(1+w)\,\ln a + \text{const}. $$
+
+**Étape 5 — On exponentie :**
+
+$$ \rho(a) = \rho_0\,a^{-3(1+w)}. \qquad\blacksquare $$
+
+(on a normalisé $a_0 = 1$ aujourd'hui, donc $\rho(a_0)=\rho_0$.)
+
+</Encart>
+
+Il ne reste qu'à substituer les trois valeurs de $w$ :
+
+<Resultat label="Lois de dilution des trois composantes">
+
+$$ \rho_m \propto a^{-3}, \qquad \rho_r \propto a^{-4}, \qquad \rho_\Lambda = \text{const.} $$
+
+<Badge niveau="concordance" slot="badge">Conséquences **exactes** de l'équation de continuité dans FLRW, une fois admise l'équation d'état de chaque fluide. Le cadre est testé par l'ensemble des observations cosmologiques.</Badge>
+</Resultat>
+
+La matière en $a^{-3}$ est intuitive : c'est la simple dilution d'un nombre fixe de particules dans un volume qui croît comme $a^3$. La constante cosmologique en $a^0$ l'est moins, mais c'est sa **signature** : une densité d'énergie qui reste rigoureusement constante quand l'espace s'étire — chaque mètre cube neuf arrive avec sa propre énergie de vide. Reste le cas le plus subtil, le rayonnement.
+
+### Pourquoi le rayonnement va en $a^{-4}$ : dilution **et** redshift
+
+Le facteur $a^{-4}$ surprend toujours. Il vient de la superposition de **deux** effets distincts qu'il ne faut surtout pas confondre.
+
+<Encart type="calcul" titre="Décomposition du a⁻⁴ : nombre de photons × énergie par photon">
+
+**Effet 1 — La densité de *nombre* de photons.** Le nombre $N$ de photons est conservé (hors interactions), réparti dans un volume $V\propto a^3$. Donc la **densité de nombre** se dilue comme la matière :
+
+$$ n_\gamma = \frac{N}{V} \propto a^{-3}. $$
+
+C'est le seul effet pour des particules massives lentes — d'où le $a^{-3}$ de la matière.
+
+**Effet 2 — L'énergie de *chaque* photon chute.** L'expansion étire toute longueur d'onde : $\lambda \propto a$. Or l'énergie d'un photon est $E = hc/\lambda$, donc
+
+$$ E_\gamma = \frac{hc}{\lambda} \propto a^{-1}. $$
+
+C'est le **redshift cosmologique** : chaque photon rougit, perd de l'énergie, à mesure que l'univers grandit.
+
+**On combine.** La densité d'**énergie** du rayonnement est le produit *densité de nombre × énergie par photon* :
+
+$$ \rho_r c^2 = n_\gamma \, E_\gamma \propto a^{-3}\times a^{-1} = a^{-4}. $$
+
+$$ \boxed{\;\rho_r \propto a^{-4}\;}\qquad\blacksquare $$
+
+</Encart>
+
+<Badge niveau="concordance">Le facteur supplémentaire $a^{-1}$, propre au rayonnement, est exactement le redshift établi au chapitre <Prereq href="/cosmologie/partie-i/redshift-hubble">redshift &amp; loi de Hubble</Prereq> ($1+z = 1/a$). On vérifie d'ailleurs que $w=1/3$ redonne bien $-3(1+w) = -4$ : les deux dérivations sont cohérentes.</Badge>
+
+Insistons, car c'est une source d'erreur classique : la **densité de nombre** de photons va en $a^{-3}$ (comme la matière), mais leur **densité d'énergie** va en $a^{-4}$. Le quatrième facteur n'est pas de la matière en plus — c'est de l'énergie qui s'en va, photon par photon.
+
+### La succession des ères
+
+Ces trois pentes différentes ont une conséquence spectaculaire. Comme $\rho_r$ décroît plus vite que $\rho_m$, qui décroît plus vite que $\rho_\Lambda$ (constante), **l'ingrédient dominant change au cours du temps**. En remontant vers le passé ($a\to 0$), c'est l'inverse : le rayonnement, le plus dilué aujourd'hui, devenait le plus dense autrefois. L'univers a donc traversé trois grandes **ères** successives.
+
+<DensityEvolution />
+
+Les transitions se lisent aux **croisements** des courbes. L'égalité rayonnement–matière survient quand $\rho_r = \rho_m$, soit $a_\text{eq} = \rho_{r,0}/\rho_{m,0}$.
+
+<Encart type="calcul" titre="Le facteur d'échelle d'égalité rayonnement-matière">
+
+À l'égalité, $\rho_{r,0}\,a_\text{eq}^{-4} = \rho_{m,0}\,a_\text{eq}^{-3}$. En multipliant les deux membres par $a_\text{eq}^{4}$ :
+
+$$ \rho_{r,0} = \rho_{m,0}\, a_\text{eq}. $$
+
+D'où, avec les abondances mesurées ($\Omega_{r,0}\approx 9\times10^{-5}$, $\Omega_{m,0}\approx 0{,}31$) :
+
+$$ a_\text{eq} = \frac{\Omega_{r,0}}{\Omega_{m,0}} \approx \frac{9\times10^{-5}}{0{,}31} \approx 2{,}9\times10^{-4}, \quad\text{soit}\quad 1+z_\text{eq} = \frac{1}{a_\text{eq}} \approx 3400. $$
+
+(Ici $\Omega_{r,0}$ inclut les photons **et** les neutrinos relativistes : c'est bien la densité d'**énergie** du rayonnement qui intervient, pas sa seule densité de nombre.)
+
+</Encart>
+
+<Resultat label="Les trois ères de l'univers">
+
+$$ \underbrace{\rho_r \propto a^{-4}}_{\text{ère du rayonnement}} \;\xrightarrow{\;z_\text{eq}\approx 3400\;}\; \underbrace{\rho_m \propto a^{-3}}_{\text{ère de la matière}} \;\xrightarrow{\;z_\Lambda\approx 0{,}3\;}\; \underbrace{\rho_\Lambda = \text{const.}}_{\text{ère de }\Lambda} $$
+
+<Badge niveau="observe" slot="badge">L'égalité $z_\text{eq}\approx 3400$ est **inférée des observations du fond diffus** : la position et la hauteur des pics acoustiques fixent $\Omega_m$ et $\Omega_r$, donc leur rapport.</Badge>
+</Resultat>
+
+L'ordre n'est pas un hasard : il est **imposé par les pentes**. Plus une composante se dilue vite, plus elle a dominé tôt. Le rayonnement (pente $-4$) d'abord, la matière (pente $-3$) ensuite, et la constante cosmologique (pente $0$), qui finit toujours par l'emporter puisqu'elle ne décroît jamais — c'est le régime accéléré dans lequel nous venons d'entrer ($z_\Lambda \approx 0{,}3$, soit il y a quelques milliards d'années).
+
+<Badge niveau="concordance">La transition vers la domination de $\Lambda$ et la valeur $z_\Lambda$ reposent sur l'identification de l'énergie noire à une constante cosmologique ($w=-1$) ; c'est le cœur du modèle ΛCDM, en accord avec les supernovæ et le CMB.</Badge>
+
+Nous savons maintenant *comment* chaque ingrédient évolue. Mais quelle est, aujourd'hui, la **proportion** de chacun — et combien faut-il de densité totale pour que l'espace soit plat ? C'est l'objet du chapitre suivant : la densité critique et les paramètres $\Omega$.

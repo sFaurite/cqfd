@@ -1,0 +1,45 @@
+---
+/**
+ * ChimieConfigElectronique — constructeur de configuration électronique. On
+ * choisit Z (1 à 36) ; le composant remplit les cases quantiques dans l'ordre
+ * de Klechkowski en respectant Pauli (2 e⁻ max par case) et Hund (cases d'une
+ * sous-couche remplies à 1 électron avant appariement), et signale les
+ * exceptions (Cr, Cu). Sépare la nécessité (Pauli) de la règle approchée.
+ */
+---
+
+<div class="iw" data-iw="chimie-config">
+  <div class="iw__head"><span class="tag">Interactif</span> Configuration électronique (Pauli · Klechkowski · Hund)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="cfg-z">Numéro atomique Z</label>
+      <input id="cfg-z" type="range" min="1" max="36" step="1" value="24" data-z />
+      <output data-out-z>24</output>
+    </div>
+    <div class="iw__row">
+      <label for="cfg-hund">Règle de Hund</label>
+      <input id="cfg-hund" type="checkbox" data-hund checked />
+      <output data-out-hund>oui</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">élément</span> <b data-out-sym>Cr</b></span>
+    <span class="iw__chip"><span class="k">configuration</span> <b data-out-conf>[Ar] 3d⁵ 4s¹</b></span>
+    <span class="iw__chip"><span class="k">e⁻ non appariés</span> <b data-out-unp>6</b></span>
+    <span class="iw__chip"><span class="k">cas</span> <b data-out-flag>exception</b></span>
+  </div>
+  <p class="iw__note">
+    Le principe de <strong>Pauli</strong> est une <em>nécessité</em> : deux électrons d’un même atome
+    ne peuvent partager les quatre nombres quantiques, d’où 2 électrons (spins opposés) au plus par
+    case. La règle de <strong>Klechkowski</strong> (ordre de remplissage par n+ℓ croissant) et celle de
+    <strong>Hund</strong> (on occupe d’abord chaque case d’une sous-couche avec un électron de même spin)
+    sont des <em>règles approchées</em>, justifiées par la minimisation de l’énergie. Le chrome (Cr) et
+    le cuivre (Cu) les enfreignent : une sous-couche d à demi ou totalement remplie est plus stable —
+    le composant le signale.
+  </p>
+</div>
+
+<script>
+  import './ChimieConfigElectronique.client.ts';
+</script>

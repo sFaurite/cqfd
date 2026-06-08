@@ -1,0 +1,61 @@
+---
+/**
+ * IaScalingLaw — tracé en échelle log-log de la perte en fonction de la taille
+ * du modèle / des données / du calcul, illustrant la loi de puissance des lois
+ * d'échelle. Curseur de budget de calcul montrant le compromis taille/données
+ * (Chinchilla) et le plateau attendu. Affiche le statut empirique (pas de
+ * théorie). Chapitre : lois d'échelle.
+ */
+---
+
+<div class="iw" data-iw="ia-scaling">
+  <div class="iw__head"><span class="tag">Interactif</span> Lois d'échelle : la perte en loi de puissance</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>axe</label>
+      <div class="iw__btns" role="group" aria-label="Axe">
+        <button type="button" class="iw__btn active" data-axis="params">paramètres N</button>
+        <button type="button" class="iw__btn" data-axis="data">données D</button>
+        <button type="button" class="iw__btn" data-axis="compute">calcul C</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label for="sc-budget">budget de calcul C</label>
+      <input id="sc-budget" type="range" min="18" max="26" step="0.1" value="22" data-budget />
+      <output data-out-budget>10²²</output>
+    </div>
+    <div class="iw__row">
+      <label>plateau (limite irréductible)</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn active" data-floor>afficher</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">N* (Chinchilla)</span> <b data-out-n>—</b></span>
+    <span class="iw__chip"><span class="k">D* (Chinchilla)</span> <b data-out-d>—</b></span>
+    <span class="iw__chip"><span class="k">perte estimée</span> <b data-out-loss>—</b></span>
+    <span class="iw__chip"><span class="k">D*/N*</span> <b data-out-ratio>—</b></span>
+  </div>
+  <p class="iw__note iw__warn">
+    En log-log, la perte décroît comme une <b>droite</b> : c'est une loi de puissance L ≈ A·X⁻ᵅ + E.
+    Doubler la taille ne divise pas la perte par deux, mais la grignote régulièrement, jusqu'à un
+    <b>plateau E</b> (perte irréductible). Le curseur fixe un <b>budget de calcul</b> C ≈ 6·N·D : le
+    point optimal de Chinchilla répartit ce budget entre taille N* et données D* — empiriquement, on
+    a intérêt à augmenter les deux <i>ensemble</i> (D*/N* ≈ 20), pas seulement N.
+    <br /><b>⚠ Statut :</b> ces lois sont <i>empiriques</i>, ajustées sur des mesures. Pas de théorie qui
+    les démontre, ni de garantie qu'elles tiennent au-delà de la plage observée.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-scaling'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+  .iw[data-iw='ia-scaling'] .iw__warn { border-top: 1px solid var(--c-border); padding-top: 0.8em; }
+</style>
+
+<script>
+  import './IaScalingLaw.client.ts';
+</script>

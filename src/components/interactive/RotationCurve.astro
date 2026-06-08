@@ -1,0 +1,33 @@
+---
+/**
+ * RotationCurve — la courbe de rotation d'une galaxie. La matière visible seule
+ * prédit une vitesse qui décline (à la Kepler) au-delà du disque ; l'observation
+ * montre une courbe plate. Ajouter un halo de matière noire la fait coïncider.
+ */
+---
+
+<div class="iw" data-iw="rotation-curve">
+  <div class="iw__head"><span class="tag">Interactif</span> Courbe de rotation : la preuve du halo</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="rc-h">halo de matière noire (km/s)</label>
+      <input id="rc-h" type="range" min="0" max="200" step="2" value="0" data-halo />
+      <output data-out-h>0</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">v à 25 kpc</span> <b data-out-v>84 km/s</b></span>
+    <span class="iw__chip"><span class="k">accord avec l'observation</span> <b data-out-fit>non</b></span>
+  </div>
+  <p class="iw__note">
+    Avec la seule matière visible (bleu), la vitesse décline en <code>1/√r</code> au-delà du disque,
+    comme les planètes autour du Soleil. Or les étoiles lointaines tournent <em>aussi vite</em> que
+    les proches (points jaunes) : il faut un halo invisible dont la masse croît avec le rayon. Montez
+    le halo jusqu'à aplatir la courbe (orange) sur les observations.
+  </p>
+</div>
+
+<script>
+  import './RotationCurve.client.ts';
+</script>

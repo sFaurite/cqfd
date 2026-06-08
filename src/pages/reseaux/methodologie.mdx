@@ -1,0 +1,89 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les quatre niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « théorème », « norme », « heuristique » et « déploiement » — l’axe de ce cours n’est pas la certitude, mais le degré de nécessité.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+Un réseau n’est pas un bloc de vérités également « solides ». Certaines affirmations sont
+**imposées par la physique** ou par un théorème : elles ne pourraient pas être autrement. D’autres
+sont des **normes** — des accords écrits dans des RFC, adoptés par tout l’Internet, mais qui
+auraient pu être différents. D’autres encore sont des **heuristiques d’ingénierie** : des
+algorithmes qui marchent bien, sans être les seuls possibles. Et beaucoup de « détails » dépendent
+enfin du **réseau précis** que vous avez sous la main.
+
+Confondre ces statuts, c’est le grand malentendu sur les réseaux — croire que « ça marche comme ça »
+alors qu’une part relève de lois physiques et l’autre de décisions humaines révisables. Pour
+l’éviter, **chaque affirmation notable** de ce cours porte l’un de ces quatre niveaux. L’axe n’est
+pas « à quel point est-ce vrai » mais **« à quel point est-ce nécessaire »**.
+
+## Les quatre niveaux
+
+### 🟢 Théorème / limite physique <Badge niveau="theoreme">Exemple : la capacité d’un canal bruité est bornée par C = B·log₂(1+S/N).</Badge>
+
+Imposé par un **théorème démontré** (Shannon, Nyquist) ou par la **physique du signal**. Ce n’est
+pas un choix : étant donné le canal, la limite ne pourrait pas être franchie. C’est le socle dur du
+cours — une **borne infranchissable**.
+
+> Exemples : le débit maximal de Shannon, la cadence maximale de symboles de Nyquist, le fait que
+> le bruit limite le nombre de niveaux distinguables, la mesure d’information par le bit.
+
+### 🔵 Norme / standard <Badge niveau="norme">Exemple : une adresse IPv4 fait 32 bits.</Badge>
+
+Un **standard** fixé par une norme ou un RFC adopté **mondialement** — mais qui **aurait pu être
+différent**. C’est « vrai par convention » : universel et cohérent parce que tout le monde l’a
+adopté, pas parce que la nature l’impose. Reconnaître une norme, c’est comprendre que d’autres choix
+existaient (et coexistent parfois, comme IPv4 et IPv6).
+
+> Exemples : le format de la trame Ethernet, la taille d’une adresse IP, le déroulé du three-way
+> handshake TCP, la numérotation des ports, le protocole DNS, les méthodes HTTP.
+
+### 🟡 Heuristique d’ingénierie <Badge niveau="heuristique">Exemple : la croissance de la fenêtre de congestion (slow start, AIMD).</Badge>
+
+Un **choix d’algorithme** raisonnable mais **révisable**, qu’on adopte parce qu’il fonctionne bien
+en pratique — sans qu’il soit le seul ni le meilleur dans tous les cas. On signale ainsi les
+endroits où l’on a **opté pour une recette** plutôt que déduit une nécessité.
+
+> Exemples : l’algorithme de contrôle de congestion (Reno, CUBIC, BBR), le calcul du délai de
+> retransmission, la taille de MTU choisie, les valeurs de temporisation, les stratégies de cache DNS.
+
+### 🔴 Dépend du déploiement <Badge niveau="deploiement">Exemple : la présence d’un NAT entre vous et l’Internet.</Badge>
+
+Dépend de l’**implémentation, de l’opérateur ou de la configuration**. Il n’existe pas de valeur
+universelle : ce qui est vrai sur un réseau ne l’est pas forcément sur un autre. On le marque pour
+éviter de prendre un détail particulier pour une loi générale.
+
+> Exemples : la présence d’un NAT ou d’un pare-feu, les politiques de routage d’un opérateur, le
+> débit réel d’une liaison, les valeurs de RTT observées, la configuration DNS d’un fournisseur.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau — quel théorème, quelle norme, quelle heuristique, ou quel paramètre de
+déploiement.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « théorème » et « norme » ?">
+Parce que c’est la clé pour comprendre vraiment un réseau. « La capacité de Shannon ne peut pas être
+dépassée » est un **fait physique** : aucun ingénieur n’a décidé cela, le bruit l’impose. « Un port
+se code sur 16 bits » est une **norme** : c’est un accord, pas une loi, et une autre architecture
+aurait pu en choisir 32. Les deux sont parfaitement fiables — mais pas *de la même façon*. Confondre
+les deux, c’est soit croire qu’on pourrait « battre Shannon » avec un meilleur protocole, soit
+prendre une convention humaine pour une nécessité éternelle. Le badge rend cette frontière visible à
+chaque ligne.
+</Encart>
+
+## Sur les valeurs numériques
+
+Quand une valeur est citée, on précise son statut :
+
+- **Borne théorique** (imposée par un théorème) : la capacité $C = B\log_2(1+S/N)$, la cadence de
+  $2B$ symboles/s. <Badge niveau="theoreme">Limite physique : indépendante du protocole et de l’équipement.</Badge>
+- **Valeur normalisée** : 32 bits pour une adresse IPv4, 16 bits pour un port, 1500 octets de MTU
+  Ethernet. <Badge niveau="norme">Fixée par une norme mondiale ; cohérente partout, mais elle aurait pu être autre.</Badge>
+- **Valeur de déploiement** : un RTT « de l’ordre de quelques dizaines de ms », un débit de lien,
+  une politique de file d’attente. <Badge niveau="deploiement">Varie d’un réseau, d’un opérateur et d’un instant à l’autre ; on en donne l’ordre de grandeur typique.</Badge>
+
+L’<a href="/reseaux/symboles">index des symboles</a> récapitule ces grandeurs et leur statut.

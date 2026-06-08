@@ -1,0 +1,33 @@
+---
+/**
+ * DensityEvolution — diagramme log-log des densités d'énergie en fonction du
+ * facteur d'échelle a : rayonnement ∝ a⁻⁴, matière ∝ a⁻³, constante cosmologique
+ * = constante. Les croisements marquent les grandes époques (égalités).
+ */
+---
+
+<div class="iw" data-iw="density-evolution">
+  <div class="iw__head"><span class="tag">Interactif</span> Comment les densités diluent : ρ(a)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="de-a">log₁₀ a (curseur)</label>
+      <input id="de-a" type="range" min="-6" max="0" step="0.02" value="-3" data-loga />
+      <output data-out-a>a = 1e-3</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">redshift</span> <b data-out-z>z ≈ 999</b></span>
+    <span class="iw__chip"><span class="k">composante dominante</span> <b data-out-dom>rayonnement</b></span>
+  </div>
+  <p class="iw__note">
+    En remontant le temps (a diminue), le rayonnement se dilue le plus vite (son énergie chute en
+    <code>a⁻⁴</code> : la densité de photons en <code>a⁻³</code>, plus un redshift en <code>a⁻¹</code>).
+    Il a donc dominé l'univers très jeune, puis la matière (<code>a⁻³</code>), et enfin la constante
+    cosmologique (constante), qui l'emporte aujourd'hui.
+  </p>
+</div>
+
+<script>
+  import './DensityEvolution.client.ts';
+</script>

@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les lois d'échelle : plus grand, plus capable"
+chapter: lois-echelle
+description: "Présente les lois d'échelle (scaling laws) : la perte décroît comme une loi de puissance en fonction de la taille du modèle, des données et du calcul. Discute les capacités émergentes et le statut purement empirique de ces lois, sans théorie fondatrice."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaScalingLaw from '../../../components/interactive/IaScalingLaw.astro';
+
+## Les lois d'échelle : plus grand, plus capable
+
+On a passé tout le cours à construire des briques : un neurone, une perte, un gradient, l'attention, le bloc transformer, puis le <Prereq href="/ia/partie-vi/pre-entrainement">pré-entraînement</Prereq> qui transforme une montagne de texte en un prédicteur de mot suivant. Reste une question d'ingénieur, presque vulgaire : **si je double la taille du modèle, qu'est-ce que je gagne ?** La réponse est l'un des résultats les plus stupéfiants — et les plus mal compris — de l'IA récente. On va voir qu'elle est *si régulière* qu'on peut prédire le futur d'un modèle… avant même de l'entraîner. Et on va voir, tout aussi honnêtement, **pourquoi personne ne sait vraiment l'expliquer**.
+
+<Encart type="intuition" titre="L'intuition : une ligne droite cachée">
+Entraîne dix modèles, de minuscule à énorme. Note la perte finale de chacun. Si tu portes ces points sur un graphe normal, tu obtiens une courbe qui dégringole puis s'aplatit — banal. Mais change d'axes : mets la taille **et** la perte en échelle logarithmique. Le miracle apparaît : les points s'alignent sur une **droite**. Pas approximativement — sur quatre, cinq, parfois sept ordres de grandeur. Une droite dans un diagramme log-log, c'est la signature mathématique d'une **loi de puissance**. La nature de l'apprentissage profond, à grande échelle, semble obéir à une règle d'une simplicité presque insultante.
+</Encart>
+
+### Énoncé : la perte suit une loi de puissance
+
+Notons $L$ la perte d'entropie croisée de test (celle du pré-entraînement) et $N$ le nombre de paramètres du modèle. L'observation empirique est que, sur une large plage,
+
+$$ L(N) \approx L_\infty + \frac{a}{N^{\alpha}} $$
+
+où $a > 0$ et $\alpha > 0$ sont des constantes **ajustées sur les données** (typiquement $\alpha$ de l'ordre de $0{,}05$ à $0{,}1$ pour le langage), et $L_\infty \ge 0$ est une perte irréductible — le bruit intrinsèque du langage, qu'aucun modèle ne peut franchir. La même forme vaut si on fait varier la **quantité de données** $D$ ou le **budget de calcul** $C$ : chacun donne sa propre droite log-log.
+
+<Resultat label="Loi d'échelle (forme empirique)">
+
+$$ L(N) - L_\infty \;\approx\; a\,N^{-\alpha} $$
+
+<Badge niveau="robuste" slot="badge">Régularité empirique extraordinairement reproductible, sur plusieurs ordres de grandeur et plusieurs modalités (texte, image, code). Mais sans théorie fondatrice prouvée.</Badge>
+</Resultat>
+
+Pourquoi cette forme *exactement* ? On peut faire le test soi-même : c'est ce que trace l'interactif ci-dessous. Joue avec l'exposant et la constante, et regarde la même courbe basculer entre échelle linéaire et log-log.
+
+<IaScalingLaw />
+
+### Une propriété de la loi de puissance : pourquoi la droite
+
+Si $L - L_\infty = a\,N^{-\alpha}$, prenons le logarithme des deux côtés.
+
+<Encart type="calcul" titre="D'une loi de puissance à une droite">
+On part de la relation supposée :
+
+$$ L - L_\infty = a\,N^{-\alpha} $$
+
+On applique $\log$ (n'importe quelle base) :
+
+$$ \log(L - L_\infty) = \log\!\big(a\,N^{-\alpha}\big) $$
+
+Le log d'un produit est la somme des logs :
+
+$$ \log(L - L_\infty) = \log a + \log\!\big(N^{-\alpha}\big) $$
+
+Et $\log(N^{-\alpha}) = -\alpha\,\log N$ :
+
+$$ \log(L - L_\infty) = \log a \;-\; \alpha\,\log N $$
+
+C'est une équation de la forme $y = b - \alpha\,x$ avec $x = \log N$ et $y = \log(L - L_\infty)$ : **une droite de pente $-\alpha$**. <Badge niveau="prouve">Pure manipulation algébrique : SI la perte suit une loi de puissance, ALORS le diagramme log-log est rectiligne. C'est une implication exacte.</Badge>
+</Encart>
+
+Attention au statut de ce qu'on vient de faire : on a **prouvé** que *forme loi de puissance* $\Leftrightarrow$ *droite log-log*. Ce qu'on n'a pas prouvé, c'est que la perte d'un réseau **doive** suivre une loi de puissance. Ça, c'est un fait observé, pas un théorème. <Badge niveau="boitenoire">On ne sait pas démontrer, à partir de l'architecture et de la descente de gradient, pourquoi l'exposant vaut ce qu'il vaut, ni même pourquoi la forme est une loi de puissance. Le « pourquoi » reste ouvert.</Badge>
+
+### Ce que ça change : prédire avant d'entraîner
+
+C'est là que la régularité devient un outil. Entraîner un modèle géant coûte des millions et des semaines. Mais si la droite log-log est fiable, on peut entraîner une poignée de **petits** modèles, lire la pente $\alpha$ et l'ordonnée $\log a$, puis **extrapoler** : « un modèle dix fois plus gros atteindra telle perte ». On planifie un investissement colossal sur la foi d'une régression linéaire faite sur des modèles jouets. <Badge niveau="robuste">Cette extrapolation a guidé la conception des grands modèles récents et s'est révélée remarquablement fidèle en pratique — tant qu'on reste dans le domaine où la droite a été mesurée.</Badge>
+
+Reste le piège du naïf : **trois** leviers (taille $N$, données $D$, calcul $C$) ne sont pas indépendants. À budget de calcul fixé, gonfler $N$ oblige à réduire $D$ (moins de tokens vus), et inversement. Quel est le meilleur compromis ?
+
+<Tournant titre="Tournant : on adopte une régularité, pas un théorème">
+À partir d'ici, on ne **déduit** plus rien. On **adopte comme hypothèse de travail** une régularité mesurée empiriquement : la perte décroît en loi de puissance avec la taille, les données et le calcul, et il existe une allocation calcul-optimale entre taille et données. Aucune preuve générale ne la garantit ; on s'en sert parce qu'elle marche, en gardant à l'esprit qu'elle peut cesser de valoir hors du domaine où on l'a mesurée. <Badge niveau="robuste">Empiriquement robuste, théoriquement non fondé.</Badge>
+</Tournant>
+
+L'étude dite **Chinchilla** (DeepMind, 2022) a mesuré ce compromis et conclu que les premiers grands modèles étaient **trop gros pour trop peu de données** : à calcul égal, un modèle plus petit nourri de bien plus de tokens fait mieux. La règle empirique qui en ressort, approximativement, est de faire croître $N$ et $D$ **ensemble**, dans des proportions comparables.
+
+<Resultat label="Allocation calcul-optimale (Chinchilla)">
+
+$$ N_{\text{opt}} \propto C^{\,p}, \qquad D_{\text{opt}} \propto C^{\,q}, \qquad p,\,q \approx 0{,}5 $$
+
+<Badge niveau="robuste" slot="badge">Exposants ajustés sur des centaines d'entraînements ; valeurs indicatives, dépendantes du protocole. Pas une loi universelle.</Badge>
+</Resultat>
+
+### Les capacités émergentes — et la controverse
+
+Le fait le plus médiatisé : sur certaines tâches (arithmétique à plusieurs chiffres, raisonnement en plusieurs étapes), la performance reste au ras du sol… puis **bondit brusquement** au-delà d'une certaine taille. On parle de **capacités émergentes**, et la tentation est de les voir comme magiques.
+
+Méfiance. Une grande partie de ces sauts s'explique par la **métrique choisie**. Si on mesure « réponse exacte au caractère près » (tout ou rien), une amélioration *continue et lisse* de la probabilité du bon token produit, après seuillage, une courbe en **marche d'escalier**. Remplace la métrique discontinue par une métrique continue (la log-vraisemblance, par exemple) et la marche redevient une pente douce. C'est l'argument central du débat ouvert par l'étude « *Are Emergent Abilities of Large Language Models a Mirage?* » (Schaeffer et al., 2023). <Badge niveau="boitenoire">Le débat n'est pas tranché : certaines « émergences » sont des artefacts de métrique, d'autres semblent réelles. On ne sait pas prédire quelle capacité apparaîtra, ni à quelle échelle.</Badge>
+
+Deux honnêtetés s'imposent, en miroir des promesses qu'on entend partout. **Première** : les lois finiront par **plafonner**. La perte tend vers son plancher $L_\infty$, le réservoir de texte humain de qualité n'est pas infini, et chaque point de perte gagné coûte exponentiellement plus cher — c'est le sens même de l'exposant $\alpha$ petit (rendements décroissants). Comme pour toute extrapolation, rien ne garantit que la droite tienne **au-delà** du domaine mesuré ; on l'a déjà vu avec le risque de <Prereq href="/ia/partie-iii/regularisation-overfitting">surapprentissage</Prereq> quand on quitte le régime des données vues. **Seconde** : « plus grand $\Rightarrow$ plus capable » est une régularité de perte, **pas** une garantie d'intelligence générale. Réduire l'entropie croisée sur du texte n'est pas démontré équivalent à raisonner, ni à dire vrai. <Badge niveau="boitenoire">Ce que l'échelle produit *en plus* d'une meilleure prédiction de token reste une question ouverte.</Badge>
+
+On a donc un modèle énorme, prédictible dans sa perte, doté de capacités générales mais brutes : il complète du texte, il ne *vous obéit* pas encore. Au chapitre suivant, on aborde la dernière étape — l'alignement — qui transforme ce prédicteur statistique en assistant.

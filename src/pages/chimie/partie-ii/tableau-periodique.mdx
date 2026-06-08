@@ -1,0 +1,92 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le tableau périodique : une carte de la structure électronique"
+chapter: tableau-periodique
+description: "Construction du tableau périodique à partir des configurations électroniques : blocs s, p, d, f, périodes, groupes, et le sens physique de la classification."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieTableauPeriodique from '../../../components/interactive/ChimieTableauPeriodique.astro';
+
+## Le tableau périodique : une carte de la structure électronique
+
+Au chapitre précédent, nous savons écrire la configuration électronique de n'importe quel atome dans son état fondamental — voir <Prereq href="/chimie/partie-i/structure-electronique">construire les atomes : Pauli, Klechkowski, Hund</Prereq>. Mais nous avons aussi remarqué quelque chose de troublant : à mesure que $Z$ augmente, **l'ordre de remplissage se répète**. On ouvre une couche $s$, on remplit un bloc $p$, on retombe sur un $s$, etc. Cette répétition n'est pas un détail : c'est la **clé** du tableau périodique. Mais attention à ne pas réécrire l'histoire.
+
+<Encart type="intuition" titre="Deux histoires, dans l'ordre inverse">
+On présente souvent le tableau comme « déduit » de la mécanique quantique. C'est faux historiquement. Mendeleïev publie son tableau en **1869** — un demi-siècle **avant** la mécanique quantique — en classant les éléments par masse et surtout par **ressemblance de propriétés chimiques**. Il observe que ces propriétés **reviennent périodiquement**. C'est un fait brut, mesuré au laboratoire. La quantique est venue **ensuite** expliquer *pourquoi* cette périodicité existe. Nous suivrons donc le bon sens : le fait d'abord, l'explication ensuite.
+</Encart>
+
+### La périodicité : un fait expérimental
+
+Avant toute orbitale, il y a une observation. Le lithium, le sodium, le potassium sont des métaux mous qui réagissent violemment avec l'eau et forment des ions $+1$. Le fluor, le chlore, le brome sont des gaz ou liquides colorés, avides d'électrons, formant des ions $-1$. L'hélium, le néon, l'argon ne réagissent presque avec rien. Rangés par numéro atomique croissant, ces familles **réapparaissent à intervalles réguliers**.
+
+<Badge niveau="experimental">La récurrence périodique des propriétés chimiques (réactivité, valence, type d'ions formés) est un fait **mesuré**, établi par Mendeleïev et ses contemporains bien avant toute théorie atomique. C'est elle qui fonde le tableau.</Badge>
+
+La force de cette régularité : elle est **prédictive**. Là où une case du tableau restait vide, Mendeleïev a osé prédire l'existence et les propriétés d'éléments encore inconnus.
+
+<Encart type="plusloin" titre="Eka-aluminium et eka-silicium : la périodicité qui prédit">
+En 1871, Mendeleïev laisse des trous dans son tableau et **décrit les éléments manquants** par interpolation entre voisins. Il annonce un « eka-aluminium » de masse $\approx 68$ et de densité $\approx 5{,}9$. En 1875, on isole le **gallium** : masse $69{,}7$, densité $5{,}9$. Idem pour l'« eka-silicium », découvert en 1886 sous le nom de **germanium**, aux propriétés conformes à la prédiction.
+
+<Badge niveau="experimental">Prédictions vérifiées expérimentalement. Le succès de ces prédictions a établi le tableau comme un outil et non une simple classification commode.</Badge>
+</Encart>
+
+### L'explication quantique : un bloc par sous-couche
+
+Pourquoi cette périodicité ? Parce que les propriétés chimiques d'un atome sont gouvernées par ses **électrons de valence** (établi au chapitre précédent), et que la **configuration de valence se répète périodiquement** quand on parcourt les $Z$ croissants. Le tableau n'est rien d'autre que le diagramme de remplissage des sous-couches, déplié sur une grille.
+
+<Encart type="calcul" titre="Pourquoi les périodes ont les longueurs 2, 8, 8, 18…">
+La longueur d'une période est le nombre d'électrons qu'on ajoute avant de **recommencer** sur une nouvelle couche $s$. Suivons l'ordre de remplissage (Klechkowski) et comptons les capacités $N_{\max}(\ell)=2(2\ell+1)$ établies au chapitre précédent :
+
+$$
+1s \rightarrow 2 \quad\Rightarrow\quad \text{période 1 : } 2 \text{ éléments}
+$$
+
+$$
+2s + 2p \rightarrow 2+6 = 8 \quad\Rightarrow\quad \text{période 2 : } 8
+$$
+
+$$
+3s + 3p \rightarrow 2+6 = 8 \quad\Rightarrow\quad \text{période 3 : } 8
+$$
+
+$$
+4s + 3d + 4p \rightarrow 2+10+6 = 18 \quad\Rightarrow\quad \text{période 4 : } 18
+$$
+
+Les longueurs $2, 8, 8, 18, 18, 32$ ne sont donc **pas arbitraires** : ce sont les capacités cumulées des sous-couches remplies entre deux ouvertures de couche $s$. La structure du tableau **est** l'arithmétique de Pauli.
+</Encart>
+
+<Badge niveau="quantique">L'**explication** de la périodicité — chaque période = un cycle de remplissage, chaque longueur = une somme de capacités $2(2\ell+1)$ — découle nécessairement de l'exclusion de Pauli et de l'ordre des niveaux. Ce qui est mesuré, c'est la périodicité ; ce qui est déduit, c'est sa cause.</Badge>
+
+### Lire la carte : blocs, périodes, groupes
+
+Le tableau encode toute la configuration de valence dans une simple **position** :
+
+- **Bloc** = la sous-couche en cours de remplissage. Bloc **s** (2 colonnes de gauche), bloc **p** (6 colonnes de droite), bloc **d** (10 colonnes centrales, métaux de transition), bloc **f** (14 colonnes, lanthanides et actinides, sortis en bas pour la lisibilité).
+- **Période** (la ligne) = le nombre quantique principal $n$ **maximal** de la configuration, c'est-à-dire le numéro de la couche en cours.
+- **Groupe** (la colonne) = le nombre d'**électrons de valence**, donc une **configuration de valence commune** à toute la colonne.
+
+<Badge niveau="quantique">La correspondance position $\leftrightarrow$ configuration de valence est exacte par construction : le tableau **est** le diagramme de remplissage. Position et configuration se déduisent l'une de l'autre.</Badge>
+
+C'est ce dernier point qui fait toute la puissance du tableau : **même colonne $\Rightarrow$ même configuration de valence $\Rightarrow$ propriétés chimiques analogues.** Le sodium $[\text{Ne}]\,3s^1$ et le potassium $[\text{Ar}]\,4s^1$ partagent leur unique électron de valence $s^1$ : voilà pourquoi ils se ressemblent.
+
+<Encart type="rappel" titre="Trois familles à connaître par leur configuration">
+- **Alcalins** (groupe 1, hors H) : valence $n s^1$. Un électron $s$ facile à perdre $\Rightarrow$ ions $+1$, très réactifs.
+- **Halogènes** (groupe 17) : valence $n s^2\, n p^5$. Il manque **un** électron pour saturer la couche $\Rightarrow$ avides d'électrons, ions $-1$.
+- **Gaz nobles** (groupe 18) : valence $n s^2\, n p^6$ (couche $p$ pleine ; He = $1s^2$). Configuration saturée $\Rightarrow$ quasi inertes.
+
+Ces comportements, observés par Mendeleïev, **se lisent** maintenant directement dans la configuration de valence.
+</Encart>
+
+### Manipuler la carte
+
+Survole les éléments ci-dessous : à chaque case, sa configuration, son bloc et la grandeur cartographiée. Active la coloration des blocs pour voir l'architecture $s/p/d/f$, et change la grandeur pour deviner les tendances — que nous démontrerons au chapitre suivant.
+
+<ChimieTableauPeriodique />
+
+Nous tenons maintenant la carte **et** sa légende quantique. Reste à la faire parler quantitativement : pourquoi un atome est-il plus gros à gauche ? pourquoi arrache-t-on plus facilement un électron en bas qu'en haut ? Toutes ces **tendances périodiques** s'expliquent par la charge effective $Z^*$ — c'est l'objet du chapitre suivant.

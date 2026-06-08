@@ -1,0 +1,111 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le neurone formel : une somme pondérée et un seuil"
+chapter: neurone-formel
+description: "Construit le neurone artificiel (McCulloch-Pitts puis perceptron) comme une fonction paramétrée : combinaison linéaire des entrées plus un biais, suivie d'une fonction d'activation. Pose la notation vectorielle qui servira tout le cours."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaNeuronePlayground from '../../../components/interactive/IaNeuronePlayground.astro';
+
+## Le neurone formel : une somme pondérée et un seuil
+
+Avant la moindre équation, posons l'idée qui porte tout ce cours. Nous voulons une machine qui, recevant une entrée, produit une sortie utile : reconnaître un chiffre, prédire un prix, traduire une phrase. Mais nous ne savons pas écrire à la main la fonction qui fait ça. Le pari, le **seul** pari, c'est de remplacer « écrire la fonction » par « régler les molettes d'une fonction toute prête ». Tout le reste du cours — descente de gradient, rétropropagation, transformers — n'est que la mise en œuvre de plus en plus fine de cette unique idée.
+
+<Tournant titre="Le choix fondateur : un modèle paramétré">
+Nous ne *déduisons* rien ici. Nous **choisissons** un cadre. Plutôt que de chercher la bonne fonction parmi toutes les fonctions imaginables, nous fixons une *famille* de fonctions — une forme, avec des molettes réglables appelées **paramètres** — et nous nous donnerons (plus tard) le droit de tourner ces molettes pour réduire nos erreurs.
+
+Ce choix s'inspire **très librement** du neurone biologique, qui reçoit des signaux, les pondère et « décharge » au-delà d'un seuil. Mais sa justification n'est pas biologique : elle est empirique. Ça marche, prodigieusement. Pas parce que le cerveau fonctionne ainsi.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. **On dispose de données.** Des exemples $(\mathbf{x}, y)$, où $\mathbf{x} \in \mathbb{R}^n$ est un vecteur d'entrée (les *features*) et $y$ une cible à prédire.
+2. **On admet l'algèbre linéaire de base** : vecteurs de $\mathbb{R}^n$, addition, produit scalaire — rappelés au besoin.
+3. **Hypothèse fondatrice (connexionnisme).** On approche la relation $\mathbf{x} \mapsto y$ par une fonction **paramétrée** $f_\theta$, dont on ajustera les paramètres $\theta$. La pertinence de ce choix est *empirique*, pas démontrée a priori.
+</Hypotheses>
+
+<Encart type="rappel" titre="Le produit scalaire en une ligne">
+Pour deux vecteurs $\mathbf{w}=(w_1,\dots,w_n)$ et $\mathbf{x}=(x_1,\dots,x_n)$ de $\mathbb{R}^n$, le **produit scalaire** est la somme des produits coordonnée à coordonnée :
+
+$$ \mathbf{w}\cdot\mathbf{x} \;=\; \sum_{i=1}^{n} w_i\,x_i \;=\; w_1 x_1 + w_2 x_2 + \dots + w_n x_n. $$
+
+C'est un *nombre* (un scalaire). Géométriquement, $\mathbf{w}\cdot\mathbf{x} = \lVert\mathbf{w}\rVert\,\lVert\mathbf{x}\rVert\cos\vartheta$ : il mesure à quel point $\mathbf{x}$ « pointe dans la direction » de $\mathbf{w}$. Il est positif si l'angle est aigu, nul si les vecteurs sont orthogonaux, négatif sinon. Cette dernière remarque sera la clé de l'interprétation géométrique.
+</Encart>
+
+### La définition
+
+Un **neurone formel** prend en entrée un vecteur $\mathbf{x}$, calcule une combinaison linéaire de ses coordonnées plus une constante, puis applique une fonction $a$ à ce résultat.
+
+<Resultat label="Le neurone formel">
+
+$$ z = \mathbf{w}\cdot\mathbf{x} + b, \qquad \text{sortie} = a(z) = a(\mathbf{w}\cdot\mathbf{x} + b) $$
+
+<Badge niveau="prouve" slot="badge">Ceci est une **définition**, posée clairement, pas un résultat à prouver. Tout ce que nous en déduirons sera rigoureux dès lors que cette forme est admise.</Badge>
+</Resultat>
+
+Fixons le vocabulaire une fois pour toutes, car ces mots reviendront dans chaque chapitre :
+
+- **Poids** $\mathbf{w} \in \mathbb{R}^n$ : l'importance accordée à chaque coordonnée de l'entrée. Un poids grand amplifie sa feature, un poids négatif l'inhibe.
+- **Biais** $b \in \mathbb{R}$ : un décalage constant, indépendant de l'entrée.
+- **Paramètres** $\theta = (\mathbf{w}, b)$ : l'ensemble des molettes réglables. Ce sont *eux* qu'on ajustera.
+- **Pré-activation** $z$ : la somme pondérée brute.
+- **Activation** $a$ : la fonction appliquée à $z$. Elle donne sa « non-trivialité » au neurone.
+
+Notez bien : un neurone n'est pas *une* fonction, c'est **une famille** de fonctions, une par valeur de $\theta$. Changer $\theta$, c'est changer de fonction au sein de cette famille. Cette idée — *un modèle est une famille de fonctions indexée par ses paramètres* — est la colonne vertébrale du cours.
+
+### L'interprétation géométrique : un hyperplan séparateur
+
+Prenons d'abord le cas le plus simple d'activation, l'activation **seuil** (fonction de Heaviside), historiquement la toute première (McCulloch–Pitts, 1943) :
+
+$$ a(z) = H(z) = \begin{cases} 1 & \text{si } z \geq 0 \\ 0 & \text{si } z < 0 \end{cases} $$
+
+Le neurone répond alors $1$ ou $0$ selon le signe de $z = \mathbf{w}\cdot\mathbf{x} + b$. La frontière entre les deux réponses est l'ensemble des points où $z = 0$.
+
+<Encart type="calcul" titre="Pourquoi $\mathbf{w}\cdot\mathbf{x} + b = 0$ est un hyperplan, et $\mathbf{w}$ sa normale">
+
+**Étape 1 — La frontière.** Le neurone bascule de $0$ à $1$ exactement quand $z$ change de signe, c'est-à-dire sur l'ensemble
+
+$$ \mathcal{H} = \{\, \mathbf{x} \in \mathbb{R}^n : \mathbf{w}\cdot\mathbf{x} + b = 0 \,\}. $$
+
+**Étape 2 — C'est un hyperplan.** L'équation $\mathbf{w}\cdot\mathbf{x} + b = 0$ est *linéaire* en $\mathbf{x}$. En dimension $n=2$, $w_1 x_1 + w_2 x_2 + b = 0$ est l'équation d'une **droite** ; en dimension $n=3$, d'un **plan** ; en général, d'un **hyperplan** (un sous-espace affine de dimension $n-1$).
+
+**Étape 3 — $\mathbf{w}$ est orthogonal à l'hyperplan.** Soient $\mathbf{x}_1, \mathbf{x}_2$ deux points de $\mathcal{H}$. Alors $\mathbf{w}\cdot\mathbf{x}_1 + b = 0$ et $\mathbf{w}\cdot\mathbf{x}_2 + b = 0$. En soustrayant :
+
+$$ \mathbf{w}\cdot(\mathbf{x}_1 - \mathbf{x}_2) = 0. $$
+
+Le vecteur $\mathbf{w}$ est donc orthogonal à *toute* direction tracée dans $\mathcal{H}$ : c'est la **normale** à l'hyperplan. Il pointe vers le côté $z > 0$.
+
+**Étape 4 — Le rôle du biais.** Pour $\mathbf{x} = \mathbf{0}$, on a $z = b$. L'hyperplan passe par l'origine si et seulement si $b = 0$. Faire varier $b$ **translate** l'hyperplan parallèlement à lui-même, sans changer son orientation (fixée par $\mathbf{w}$). $\blacksquare$
+</Encart>
+
+On tient là le résultat central de ce chapitre.
+
+<Resultat label="Le neurone à seuil calcule une séparation linéaire">
+
+$$ \text{sortie} = H(\mathbf{w}\cdot\mathbf{x} + b) \;\Longrightarrow\; \text{frontière} = \text{hyperplan de normale } \mathbf{w},\ \text{décalé par } b $$
+
+<Badge niveau="prouve" slot="badge">Conséquence **démontrée** ci-dessus de la définition et de l'algèbre linéaire : $\mathbf{w}$ oriente l'hyperplan, $b$ le déplace.</Badge>
+</Resultat>
+
+Manipule toi-même $\mathbf{w}$ et $b$ et regarde la droite séparatrice bouger en temps réel — incline-la avec $\mathbf{w}$, translate-la avec $b$ :
+
+<IaNeuronePlayground />
+
+### Deux mises au point honnêtes
+
+D'abord, l'**analogie biologique**. Le neurone formel ressemble de loin à un neurone réel, mais un vrai neurone est une cellule électrochimique d'une complexité vertigineuse (dynamique temporelle, milliers de synapses, plasticité non linéaire). Le neurone formel n'en est *pas* un modèle fidèle.
+
+<Badge niveau="boitenoire">Le rapport entre réseaux artificiels et cerveau biologique reste mal compris et largement métaphorique. L'inspiration est réelle, la fidélité ne l'est pas. À manier avec prudence.</Badge>
+
+Ensuite, l'**activation seuil**. Le Heaviside est commode pour l'intuition géométrique, mais il a un défaut rédhibitoire pour la suite : il est **non dérivable** en $0$ et de dérivée nulle partout ailleurs.
+
+<Badge niveau="prouve">$H'(z) = 0$ pour tout $z \neq 0$, et $H$ n'est pas dérivable en $0$ : un fait d'analyse élémentaire qui, on le verra, interdit d'« ajuster les molettes » par le gradient.</Badge>
+
+C'est précisément ce blocage qui motivera, dans les chapitres à venir, le remplacement du seuil par des activations *lisses* (sigmoïde, ReLU). Mais nous courons déjà : ici, nous n'avons fait que **décrire** une fonction, pas l'apprendre. Régler $\mathbf{w}$ et $b$ pour qu'ils collent aux données — voilà le vrai travail.
+
+Pour cela, il faut d'abord une cible mesurable : une *erreur* à minimiser. Au chapitre suivant, nous donnons à notre neurone son premier objectif chiffré avec la **régression linéaire**, et nous découvrons que minimiser une erreur quadratique admet, parfois, une solution exacte.

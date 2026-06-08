@@ -1,0 +1,137 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le bruit et le theoreme de Shannon"
+chapter: bruit-shannon
+description: "Introduit le bruit thermique, le rapport signal/bruit, et etablit le theoreme de Shannon-Hartley : la capacite maximale d'un canal bruite est C = B log2(1+S/N)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauShannon from '../../../components/interactive/ReseauShannon.astro';
+
+## Le bruit et le théorème de Shannon
+
+Au chapitre précédent, Nyquist nous a donné une borne sur le débit : un canal de bande passante $B$ laisse passer au plus $2B$ symboles par seconde, et chaque symbole transporte $\log_2 M$ bits si l'on s'autorise $M$ niveaux. La formule $D = 2B\log_2 M$ semblait alors promettre l'infini : il suffirait d'empiler les niveaux, $M = 1000$, $M = 10^6$… et le débit explose à bande constante. Quelque chose cloche dans cette promesse, et ce quelque chose, c'est le **bruit**.
+
+<Encart type="intuition" titre="Pourquoi entasser des niveaux ne marche pas">
+Imaginez un escalier dont vous lisez la hauteur dans le noir, à la main. Si les marches sont espacées d'un mètre, vous ne vous trompez jamais. Si elles sont espacées d'un millimètre, votre main tremble assez pour confondre deux marches voisines. Le tremblement de votre main, c'est le bruit : une perturbation aléatoire qui s'ajoute au signal. Plus vous serrez les niveaux pour transporter plus de bits par symbole, plus ils deviennent indiscernables sous le tremblement. Il existe donc un nombre maximal de niveaux *fiables* — et donc un débit maximal — fixé non par Nyquist, mais par le rapport entre la taille du signal et celle du bruit.
+</Encart>
+
+### D'où vient le bruit : l'agitation thermique
+
+Le bruit n'est pas un défaut de fabrication que l'on pourrait éliminer en payant plus cher. Il est inscrit dans la physique. Dans tout conducteur à température $T > 0$, les électrons sont agités thermiquement et créent une tension fluctuante aléatoire, même sans signal : c'est le **bruit thermique** (ou bruit de Johnson-Nyquist). Sa puissance disponible dans une bande $B$ vaut $N = k_B T \, B$, où $k_B = 1{,}380649 \times 10^{-23}\ \mathrm{J/K}$ est la constante de Boltzmann.
+
+<Encart type="rappel" titre="Statut de la constante de Boltzmann">
+Depuis la révision du Système international de 2019, $k_B$ n'est plus mesurée mais **fixée par convention** à la valeur exacte $1{,}380649 \times 10^{-23}\ \mathrm{J/K}$ : c'est elle qui *définit* le kelvin. La présence inévitable de $k_B T$ dans le bruit dit l'essentiel : tant que la matière a une température, elle vibre, et toute mesure baigne dans ce fond aléatoire.
+</Encart>
+
+Retenons le point décisif : le bruit existe toujours, il croît avec la température et avec la bande, et il interdit de distinguer deux niveaux trop proches.
+
+<Badge niveau="theoreme">Le bruit thermique $N = k_B T B$ découle de la thermodynamique statistique : c'est une limite physique, pas un choix d'ingénieur.</Badge>
+
+### Mesurer le bruit : le rapport signal sur bruit
+
+Ce qui compte n'est pas la puissance du bruit dans l'absolu, mais sa taille **relative** à celle du signal. On définit le rapport signal sur bruit (SNR) comme le rapport des puissances :
+
+$$ \mathrm{SNR} = \frac{S}{N} \quad\text{(puissance du signal / puissance du bruit)}. $$
+
+Ce nombre s'étend sur des ordres de grandeur énormes — de $10$ à $10^7$ — on le comprime donc sur une échelle logarithmique, en **décibels** :
+
+$$ \mathrm{SNR_{dB}} = 10 \, \log_{10}\!\left(\frac{S}{N}\right). $$
+
+<Encart type="calcul" titre="Convertir des décibels en rapport linéaire">
+
+Une ligne téléphonique de bonne qualité annonce un SNR de $30\ \mathrm{dB}$. Quel rapport $S/N$ linéaire cela représente-t-il ?
+
+**Étape 1 — Poser l'équation.** Par définition, $30 = 10\log_{10}(S/N)$.
+
+**Étape 2 — Isoler le logarithme.** On divise par $10$ : $\log_{10}(S/N) = 3$.
+
+**Étape 3 — Exponentier.** On applique $10^{(\cdot)}$ aux deux membres :
+
+$$ \frac{S}{N} = 10^{3} = 1000. $$
+
+Le signal est donc **mille fois** plus puissant que le bruit.
+
+<Resultat label="SNR linéaire pour 30 dB">$$ \mathrm{SNR} = 1000 $$ <Badge niveau="deploiement" slot="badge">La valeur 30 dB est typique d'une ligne téléphonique, mais le SNR réel dépend de la longueur du câble et de l'environnement.</Badge></Resultat>
+
+</Encart>
+
+### Le théorème de Shannon-Hartley
+
+Voici le résultat central de toute cette partie. En 1948, Claude Shannon a démontré qu'il existe une borne supérieure absolue au débit qu'on peut transmettre **avec un taux d'erreur arbitrairement faible** sur un canal bruité de bande $B$ et de rapport signal sur bruit $S/N$ :
+
+<Resultat label="Capacité de canal de Shannon-Hartley">$$ C = B \, \log_2\!\left(1 + \frac{S}{N}\right) \quad \text{(bits/s)} $$ <Badge niveau="theoreme" slot="badge">Borne infranchissable, démontrée par Shannon (1948), valable quel que soit le codage employé.</Badge></Resultat>
+
+Le sens de ce théorème mérite d'être énoncé avec une précision chirurgicale, car il est presque toujours mal cité.
+
+- **En dessous de $C$**, c'est-à-dire pour tout débit $D < C$, il existe un codage qui permet de transmettre avec un taux d'erreur *aussi petit qu'on veut*. On peut s'approcher de zéro erreur — sans jamais l'atteindre exactement à débit non nul, mais d'aussi près que l'on souhaite.
+- **Au-dessus de $C$**, c'est impossible : aucun codage, aussi astucieux soit-il, ne peut maintenir un taux d'erreur faible. La fiabilité s'effondre.
+
+<Encart type="plusloin" titre="Ce que Shannon prouve — et ne prouve pas">
+La démonstration de Shannon est **existentielle** : elle établit qu'un bon code *existe* (par un argument de codage aléatoire sur de longs blocs), mais elle **ne construit aucun code explicite**. Pendant un demi-siècle, atteindre $C$ resta un horizon théorique ; les turbo-codes (1993) puis les codes LDPC (introduits par Gallager en 1962, redécouverts dans les années 1990) ne s'en approchèrent qu'à une fraction de décibel. Deux pièges à éviter absolument : (1) Shannon ne dit pas qu'on *atteint* $C$ en pratique, seulement qu'on peut s'en *approcher* ; (2) le débit commercial vendu par un opérateur n'est pas $C$ — c'est un chiffre marketing, plafonné par la norme et l'équipement, qui reste sous la borne physique.
+</Encart>
+
+### Articulation avec Nyquist
+
+Nyquist et Shannon ne se contredisent pas : ils se complètent. Nyquist <Prereq href="/reseaux/partie-i/nyquist">fixe la cadence des symboles</Prereq> à $2B$ par seconde et exprime le débit comme $D = 2B\log_2 M$. Mais il laisse $M$ libre. Shannon vient dire : le bruit **plafonne** le $M$ réellement utilisable.
+
+<Encart type="calcul" titre="Le nombre maximal de niveaux distinguables">
+
+On cherche le plus grand $M$ tel que le débit de Nyquist reste sous la borne de Shannon. À la limite, les deux débits coïncident :
+
+$$ 2B\log_2 M = B\log_2\!\left(1 + \frac{S}{N}\right). $$
+
+**Étape 1 — Diviser par $B$.** La bande $B > 0$ se simplifie :
+
+$$ 2\log_2 M = \log_2\!\left(1 + \frac{S}{N}\right). $$
+
+**Étape 2 — Rentrer le facteur 2 dans le logarithme.** Comme $2\log_2 M = \log_2 M^2$ :
+
+$$ \log_2 M^2 = \log_2\!\left(1 + \frac{S}{N}\right). $$
+
+**Étape 3 — Identifier les arguments.** Le $\log_2$ étant injectif, $M^2 = 1 + S/N$, d'où :
+
+$$ M_{\max} = \sqrt{1 + \frac{S}{N}}. $$
+
+</Encart>
+
+<Badge niveau="theoreme">C'est l'articulation exacte : Nyquist compte les symboles, Shannon borne l'information par symbole. Ensemble, ils encadrent le débit.</Badge>
+
+### Un exemple chiffré complet
+
+<Encart type="calcul" titre="De la ligne téléphonique à l'ADSL">
+
+**Cas 1 — Ligne téléphonique.** Bande $B = 3100\ \mathrm{Hz}$ (de 300 à 3400 Hz), SNR de $30\ \mathrm{dB}$ donc $S/N = 1000$.
+
+$$ C = 3100 \times \log_2(1 + 1000) = 3100 \times \log_2(1001). $$
+
+Or $\log_2(1001) = \dfrac{\ln 1001}{\ln 2} \approx 9{,}97$, soit presque $\log_2(1024) = 10$ (à $0{,}03$ près). Donc :
+
+$$ C \approx 3100 \times 9{,}97 \approx 30\,900\ \mathrm{bits/s} \approx 31\ \mathrm{kbit/s}. $$
+
+C'est exactement pourquoi les modems analogiques plafonnaient vers $33{,}6\ \mathrm{kbit/s}$ : ils butaient sur la borne de Shannon de la bande vocale.
+
+**Cas 2 — ADSL.** L'ADSL ne se contente plus de la bande vocale : il exploite tout le câble de cuivre, soit $B \approx 1\ \mathrm{MHz} = 10^6\ \mathrm{Hz}$, avec un SNR d'ordre $1000$ ($30\ \mathrm{dB}$) :
+
+$$ C \approx 10^6 \times 9{,}97 \approx 9{,}97 \times 10^6\ \mathrm{bits/s} \approx 10\ \mathrm{Mbit/s}. $$
+
+<Resultat label="Capacités comparées">$$ C_{\text{tél}} \approx 31\ \mathrm{kbit/s}, \qquad C_{\text{ADSL}} \approx 10\ \mathrm{Mbit/s} $$ <Badge niveau="deploiement" slot="badge">Les valeurs de $B$ et de SNR dépendent du câble et de la distance au central ; ce sont des ordres de grandeur réalistes, pas des constantes.</Badge></Resultat>
+
+Le saut d'un facteur 300 ne vient pas d'un meilleur codage : il vient de la **bande**, élargie d'un facteur 300. La leçon de Shannon est là — pour gagner du débit, élargissez la bande ou améliorez le SNR.
+
+</Encart>
+
+<Hypotheses titre="Une vue simplifiée de l'ADSL">
+Le calcul ci-dessus traite l'ADSL comme un canal unique de bande $1\ \mathrm{MHz}$ et de SNR uniforme. En réalité, l'ADSL découpe le spectre en centaines de sous-canaux (modulation DMT), chacun avec son propre SNR — fort en bas du spectre, plus faible en haut où l'atténuation domine — et alloue les bits sous-canal par sous-canal en sommant les capacités de Shannon. La formule $C = B\log_2(1+S/N)$ reste l'outil de base ; c'est le découpage spectral et la distance au central qui font varier le débit réel.
+</Hypotheses>
+
+Le composant ci-dessous permet de manipuler $B$ et $S/N$ et de voir $C$ répondre, tout en visualisant comment les niveaux se confondent sous le bruit.
+
+<ReseauShannon />
+
+Nous tenons maintenant la borne ultime. Mais une borne théorique reste muette sur le *comment* : par quel signal physique pose-t-on réellement les bits sur un fil de cuivre ? C'est l'objet du prochain chapitre, le codage de ligne.

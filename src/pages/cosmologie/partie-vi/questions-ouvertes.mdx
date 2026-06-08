@@ -1,0 +1,77 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les questions ouvertes"
+chapter: questions-ouvertes
+description: "Nature de la matière et de l'énergie noires, avant le temps de Planck, le multivers."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les questions ouvertes
+
+Nous voici au bord de la carte. Tout au long de ce cours, nous avons suivi une règle stricte : ne rien affirmer qui ne soit posé en hypothèse, mesuré, ou démontré. Cette discipline a une vertu rare — elle rend visibles ses propres limites. Là où la chaîne déductive s'interrompt, là où l'observation se tait, commencent les **questions ouvertes**. Ce chapitre n'apporte aucune réponse nouvelle : il fait l'inventaire honnête de ce que nous ne savons pas, et — c'est le plus important — il **hiérarchise** ces ignorances. Car toutes les questions ouvertes ne se valent pas.
+
+<Encart type="intuition" titre="Quatre cercles concentriques">
+Imaginez le savoir cosmologique comme une cible. Au centre, le **disque dur** : l'expansion, le fond diffus, les abondances primordiales, la croissance des structures — mesurés, robustes, badge <em>observé</em>. Autour, un anneau de **modèle concordant** : le cadre ΛCDM, qui s'ajuste à tout cela à condition d'admettre matière noire froide et constante cosmologique — badge <em>concordant</em>. Plus loin encore, deux couronnes de plus en plus floues : ce qu'on **extrapole** sérieusement au-delà du testé (badge <em>extrapolé</em>), et ce qui est franchement **spéculatif** (badge <em>spéculatif</em>). La rigueur ne consiste pas à tout colorier en blanc ou en noir, mais à savoir dans quel anneau on se trouve.
+</Encart>
+
+### Premier anneau : extrapolations sérieuses
+
+Ce sont des questions où l'on dispose d'**indices observationnels solides** qu'il se passe quelque chose, mais où la **nature physique** du phénomène nous échappe. On extrapole : la théorie est sérieuse, étayée, mais non tranchée.
+
+**La nature de la matière noire.** Que de la masse manque à l'appel — que les galaxies tournent trop vite pour leur matière visible, que le gaz chaud des amas trahit un puits de potentiel plus profond que celui des seules étoiles, que les lentilles gravitationnelles pèsent plus que la lumière émise — est <Badge niveau="observe">établi par des mesures gravitationnelles indépendantes et concordantes (courbes de rotation, dynamique et gaz X des amas, lentilles, fond diffus). Le déficit de masse est un fait empirique robuste, largement indépendant du modèle.</Badge> Mais **de quoi** est-elle faite ? Une particule massive encore inconnue (WIMP, axion), un secteur sombre plus riche, ou une modification de la gravité ? Aucune détection directe n'a abouti à ce jour, et l'hypothèse particulaire n'est pas la seule sur la table. La <Prereq href="/cosmologie/partie-v/matiere-noire">matière noire</Prereq> en tant que **substance** est donc <Badge niveau="extrapole">une extrapolation : l'effet gravitationnel est observé, mais l'identité de ce qui le produit (particule, ou autre) reste à établir et n'est pas tranchée par l'expérience.</Badge>
+
+**La nature de l'énergie noire et le problème de $\Lambda$.** L'expansion **accélère** : c'est <Badge niveau="observe">mesuré par les supernovae de type Ia, et corroboré indépendamment par le fond diffus et les oscillations acoustiques baryoniques.</Badge> Le modèle l'attribue à une composante de pression négative, la <Prereq href="/cosmologie/partie-v/energie-noire">constante cosmologique $\Lambda$</Prereq>. Que ΛCDM rende compte de cette accélération est <Badge niveau="concordance">concordant avec ΛCDM : l'ajustement est excellent, mais il repose sur le modèle (une constante $\Lambda$ posée, sans mécanisme physique sous-jacent).</Badge> Mais qu'est-ce, **physiquement** ? Si l'on identifie $\Lambda$ à l'énergie du vide quantique, l'estimation naïve donne un désastre.
+
+<Encart type="calcul" titre="Le pire écart de la physique : le problème de la constante cosmologique">
+
+Tous les ordres de grandeur ci-dessous sont des **estimations** : il n'existe pas de coupure « exacte » du vide. On vise la magnitude, pas un chiffre précis.
+
+**Étape 1 — Côté théorie (unités naturelles).** En théorie quantique des champs, chaque mode du vide porte une énergie. En sommant les modes jusqu'à l'échelle où l'on suppose la physique connue — l'échelle de Planck $E_P \sim 1{,}2\times 10^{19}\,\text{GeV}$ — la densité d'énergie du vide attendue est, en unités naturelles ($\hbar = c = 1$, où une densité d'énergie a la dimension d'une puissance quatrième d'énergie),
+
+$$ \rho_{\text{vide}}^{\text{théo}} \sim E_P^4 \;\sim\; (10^{19}\,\text{GeV})^4 \;=\; 10^{76}\ \text{GeV}^4. $$
+
+**Étape 2 — Conversion en unités CGS.** Pour comparer à une mesure, on rétablit $\hbar$ et $c$. Avec $1\,\text{GeV} \approx 1{,}6\times 10^{-3}\,\text{erg}$ et $\hbar c \approx 2\times 10^{-14}\,\text{GeV}\cdot\text{cm}$, le facteur $\text{GeV}^4 \to \text{erg}\cdot\text{cm}^{-3}$ est $\,(1{,}6\times 10^{-3})/(2\times 10^{-14})^3 \approx 2\times 10^{38}$. D'où
+
+$$ \rho_{\text{vide}}^{\text{théo}} \;\sim\; 10^{76}\times 10^{38} \;\sim\; 10^{114}\ \text{erg}\cdot\text{cm}^{-3}. $$
+
+**Étape 3 — Côté observation.** La densité d'énergie noire mesurée (soit $\sim 0{,}7$ fois la densité critique) vaut
+
+$$ \rho_\Lambda^{\text{obs}} \;\sim\; 10^{-8}\ \text{erg}\cdot\text{cm}^{-3}. $$
+
+**Étape 4 — Le rapport.** L'écart entre estimation théorique et mesure est
+
+$$ \frac{\rho_{\text{vide}}^{\text{théo}}}{\rho_\Lambda^{\text{obs}}} \;\sim\; \frac{10^{114}}{10^{-8}} \;\sim\; 10^{122}. \qquad\blacksquare $$
+
+</Encart>
+
+Cent vingt ordres de grandeur, à quelques unités près — selon la coupure et les conventions retenues, on cite communément un écart de $10^{120}$ à $10^{123}$. C'est, de très loin, le pire désaccord quantitatif entre une estimation théorique et une mesure dans toute l'histoire de la physique. Soit notre estimation du vide est profondément fausse, soit un mécanisme inconnu annule presque exactement cette énergie en laissant une miette non nulle. Le <Badge niveau="extrapole">problème de la constante cosmologique est ouvert : l'énergie noire est mesurée, mais son interprétation comme énergie du vide n'est pas comprise. Aucune solution n'est admise.</Badge>
+
+**La réalité et le mécanisme de l'inflation.** L'<Prereq href="/cosmologie/partie-iv/inflation">inflation</Prereq> résout élégamment les problèmes de l'horizon et de la platitude, et prédit un spectre de perturbations primordiales presque invariant d'échelle qui **concorde** remarquablement avec le fond diffus. Mais le **champ** qui la pilote (l'inflaton), son potentiel, le mécanisme exact de sortie — rien de cela n'est identifié. Il existe des centaines de modèles. L'inflation est donc <Badge niveau="extrapole">une extrapolation sérieuse : ses prédictions génériques sont confirmées, mais le mécanisme physique reste indéterminé et beaucoup de ses variantes ne sont pas distinguables par les données actuelles.</Badge>
+
+### Second anneau : le franchement spéculatif
+
+Ici, nous quittons le domaine du testé. Ce ne sont pas des théories incomplètes mais étayées : ce sont des questions où **aucune donnée** ne tranche, parfois par principe.
+
+<Tournant titre="Tournant : on cesse de déduire">
+À partir d'ici, **on n'extrapole même plus depuis une observation** : on raisonne dans des régimes où la physique connue cesse de s'appliquer et où, souvent, aucune expérience concevable à court terme ne pourra trancher. Tout ce qui suit est posé comme **spéculation assumée**, jamais comme conséquence de ce qui précède. Le lecteur doit lire chaque phrase de cette section avec le badge <em>spéculatif</em> à l'esprit.
+</Tournant>
+
+**Avant le temps de Planck et la singularité initiale.** En remontant l'<Prereq href="/cosmologie/partie-iii/univers-chaud">univers chaud</Prereq>, les équations classiques pointent vers une **singularité** — densité et courbure formellement infinies — au temps zéro. Mais avant le temps de Planck, $t_P \sim 10^{-43}\,\text{s}$, les effets quantiques de la gravitation deviennent dominants et la relativité générale, théorie classique, **cesse d'être valide**. La singularité est donc très probablement un **artefact** de l'extrapolation d'une théorie hors de son domaine, et non un fait physique. Mais que faut-il mettre à sa place ? <Badge niveau="speculatif">L'état de l'univers avant le temps de Planck est au-delà de toute donnée et de toute théorie validée. Aucune réponse n'est établie.</Badge>
+
+**Une théorie quantique de la gravitation.** Décrire cet instant exige de marier mécanique quantique et relativité générale en une seule théorie cohérente. Cordes, gravité quantique à boucles, autres approches : des candidats existent, aucun n'est confirmé par l'expérience, et leurs échelles d'énergie caractéristiques sont hors de portée de tout accélérateur imaginable. <Badge niveau="speculatif">La gravité quantique est un objectif théorique non atteint et non testé : aucune des approches n'est validée.</Badge>
+
+**Inflation éternelle, multivers, et le « pourquoi ces lois ».** Beaucoup de modèles d'inflation, poussés à leurs conséquences, **ne s'arrêtent jamais partout** : l'inflation continuerait ailleurs, engendrant une infinité de « bulles »-univers — un **multivers**. Cela offre une explication tentante au réglage fin (dont notre $\Lambda$ minuscule) : avec assez de bulles aux lois variées, certaines sont habitables, et nous nous y trouverions par nécessité (argument anthropique). Mais ces autres univers seraient, par construction, **hors de notre horizon causal** : inobservables. <Badge niveau="speculatif">L'inflation éternelle et le multivers sont au-delà de toute donnée et possiblement non testables par principe. Aucune réponse établie ; certains contestent même qu'il s'agisse de science empirique.</Badge> Quant à la question ultime — **pourquoi ces lois, ces constantes, plutôt que d'autres ?** — elle est aujourd'hui sans réponse scientifique, et il n'est pas même certain qu'elle en admette une.
+
+### Ce que « ne pas savoir » veut dire
+
+Il faut conclure sur le sens de ces aveux d'ignorance, car ils sont souvent mal lus. En science, dire « nous ne savons pas » n'est pas un échec : c'est une **information précise**. Cela signifie que les données disponibles ne contraignent pas encore la réponse — et cela balise exactement où chercher. C'est l'opposé du dogme. Une théorie qui « explique tout » sans rien interdire n'explique rien ; une théorie féconde, elle, **désigne ses propres trous**.
+
+Remarquez surtout la **gradation** que nous avons tenue : du fait observé, au modèle concordant, à l'extrapolation sérieuse, à la spéculation assumée. Habiller une spéculation en certitude — présenter le multivers comme acquis, ou l'inflaton comme identifié — serait trahir la démarche entière de ce cours. La frontière du savoir n'est pas une muraille mais un **front mouvant** : la matière noire pourrait être détectée demain et passer d'<em>extrapolé</em> à <em>observé</em> ; l'énergie noire pourrait révéler une dynamique et faire tomber $\Lambda$. C'est précisément parce que nous avons étiqueté chaque résultat selon sa fiabilité que ces déplacements futurs seront lisibles.
+
+Ce chapitre referme la chaîne déductive, mais il ouvre quelque chose de plus durable : une manière de regarder l'univers en distinguant, à chaque instant, ce que l'on sait de ce que l'on suppose — la posture même que la conclusion du cours va maintenant rassembler.

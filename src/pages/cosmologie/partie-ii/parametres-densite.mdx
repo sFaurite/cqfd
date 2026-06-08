@@ -1,0 +1,149 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Densité critique et paramètres Ω"
+chapter: parametres-densite
+description: "La densité critique, les Ω, et le lien entre densité totale et géométrie de l'univers."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Densité critique et paramètres Ω
+
+Nous tenons l'<Prereq href="/cosmologie/partie-ii/equations-friedmann">équation de Friedmann</Prereq>, et nous savons que le <Prereq href="/cosmologie/partie-ii/contenu-univers">contenu de l'univers</Prereq> mêle matière, rayonnement et énergie du vide. Mais cette équation, telle quelle, est un peu intimidante : elle mélange une densité $\rho$ en kilogrammes par mètre cube, une courbure $k$, un facteur d'échelle $a$… Comment un cosmologiste range-t-il tout ça dans sa tête ? La réponse est une **idée de comptable de génie** : on choisit une densité de référence, et on mesure tout le reste *en proportion* d'elle. Cette densité de référence, c'est la **densité critique** — et les proportions, ce sont les fameux paramètres $\Omega$ qui pavent tous les articles de cosmologie.
+
+Tout ce chapitre est de la **pure déduction** : nous ne posons aucune hypothèse physique nouvelle. Nous réécrivons simplement Friedmann dans un habit plus parlant, puis nous y injectons des nombres mesurés.
+
+### L'idée : une densité-pivot
+
+<Encart type="intuition" titre="Le point de bascule">
+Reprenons l'image de la bille lancée vers le haut. Sa vitesse de libération dépend de la masse de la planète : trop dense, la bille retombe ; pas assez, elle s'échappe. Pour l'univers, c'est pareil — mais on peut inverser la question. Fixons le taux d'expansion $H$ d'aujourd'hui, observé. Il existe alors **une seule** densité qui rend l'univers exactement à la frontière : ni assez dense pour se recontracter, ni trop peu pour s'envoler en s'incurvant. Cette densité « de bascule » est la densité critique. Tout l'univers se juge par rapport à elle : plus dense, il se referme ; moins dense, il s'ouvre ; pile dessus, il est plat.
+</Encart>
+
+### On obtient $\rho_c$ depuis Friedmann
+
+La définition rigoureuse tombe directement de l'équation, en imposant la platitude $k=0$.
+
+<Encart type="calcul" titre="Dérivation de la densité critique">
+
+**Étape 1 — On part de Friedmann.** Elle s'écrit
+
+$$ H^2 = \frac{8\pi G}{3}\,\rho - \frac{k c^2}{a^2}. $$
+
+**Étape 2 — On impose la platitude.** Un univers spatialement plat correspond à $k=0$. Le terme de courbure disparaît :
+
+$$ H^2 = \frac{8\pi G}{3}\,\rho. $$
+
+**Étape 3 — On isole la densité.** Cette densité particulière, celle qui accompagne $k=0$, mérite un nom : on la note $\rho_c$. On résout :
+
+$$ \rho_c = \frac{3 H^2}{8\pi G}. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Densité critique">
+
+$$ \rho_c = \frac{3 H^2}{8\pi G} $$
+
+<Badge niveau="concordance" slot="badge">Définie comme la densité rendant l'univers plat ($k=0$) dans l'équation de Friedmann, elle-même issue de la relativité générale. C'est une grandeur de définition, exacte au sein du modèle.</Badge>
+</Resultat>
+
+Remarquons que $\rho_c$ **n'est pas une constante** : elle contient $H$, qui décroît au cours de l'histoire de l'univers. Quand on parle de « la » densité critique sans préciser, on sous-entend sa valeur **aujourd'hui**, calculée avec $H_0$.
+
+<Encart type="calcul" titre="Valeur numérique aujourd'hui (~6 protons par m³)">
+
+On prend $H_0 \approx 67{,}7\ \mathrm{km\,s^{-1}\,Mpc^{-1}}$, soit en unités SI, après conversion ($1\ \mathrm{Mpc} = 3{,}086\times10^{22}\ \mathrm{m}$) :
+
+$$ H_0 \approx \frac{6{,}77\times10^{4}}{3{,}086\times10^{22}}\ \mathrm{s^{-1}} = 2{,}19\times10^{-18}\ \mathrm{s^{-1}}. $$
+
+Avec $G = 6{,}674\times10^{-11}\ \mathrm{m^3\,kg^{-1}\,s^{-2}}$ (mesuré) :
+
+$$ \rho_c = \frac{3\,(2{,}19\times10^{-18})^2}{8\pi\,(6{,}674\times10^{-11})} \approx 8{,}6\times10^{-27}\ \mathrm{kg\,m^{-3}}. $$
+
+C'est **prodigieusement ténu**. Un proton pèse $m_p = 1{,}67\times10^{-27}\ \mathrm{kg}$, donc
+
+$$ \frac{\rho_c}{m_p} = \frac{8{,}6\times10^{-27}}{1{,}67\times10^{-27}} \approx 5{,}2\ \text{protons par } \mathrm{m^3}. \qquad\blacksquare $$
+
+</Encart>
+
+Soit **environ cinq à six protons par mètre cube** : le « vide » le plus poussé de nos laboratoires est des milliards de fois plus dense. <Badge niveau="observe">La valeur de $H_0$ et donc de $\rho_c$ découle de mesures (chaîne des distances, fond diffus). Les constantes $G$ et $m_p$ sont mesurées en laboratoire.</Badge>
+
+### Les paramètres de densité $\Omega$
+
+Voici le coup de génie comptable. Pour chaque composante $i$ du contenu (matière, rayonnement, énergie noire), on définit son **paramètre de densité** comme sa fraction de la densité critique :
+
+$$ \Omega_i \equiv \frac{\rho_i}{\rho_c}. $$
+
+Un $\Omega$ est un pur nombre sans dimension : c'est « combien de fois la densité critique » cette composante apporte. On distingue ainsi $\Omega_m$ (toute la **matière**), $\Omega_r$ (le **rayonnement**) et $\Omega_\Lambda$ (l'**énergie du vide**, traduite en densité équivalente $\rho_\Lambda = \Lambda c^2 / 8\pi G$).
+
+<Encart type="rappel" titre="Matière totale Ω_m contre baryons Ω_b">
+Attention à une confusion fréquente. $\Omega_m$ désigne **toute** la matière qui se dilue comme $a^{-3}$ et gravite, **matière noire incluse**. Les seuls atomes ordinaires (protons, neutrons) forment $\Omega_b$, les **baryons**. Les mesures donnent $\Omega_b \approx 0{,}049$ contre $\Omega_m \approx 0{,}31$ : la matière ordinaire ne représente qu'environ un sixième de la matière totale. Le reste, $\Omega_m - \Omega_b \approx 0{,}26$, est la matière noire. Écrire $\Omega_m$ là où il faudrait $\Omega_b$ est une erreur de facteur six.
+</Encart>
+
+<Badge niveau="observe">La densité de baryons $\Omega_b \approx 0{,}049$ est mesurée par deux sondes indépendantes et concordantes : les pics acoustiques du fond diffus et l'abondance primordiale des éléments légers (nucléosynthèse). </Badge> <Badge niveau="concordance">L'écart $\Omega_m - \Omega_b \approx 0{,}26$, attribué à la matière noire (froide, non baryonique), est requis par le modèle ΛCDM et concorde avec la dynamique des galaxies, les lentilles et la formation des structures.</Badge>
+
+### Friedmann en habit de proportions : $\sum \Omega = 1$
+
+Maintenant la mécanique se révèle. Reprenons Friedmann et divisons-la entièrement par $H^2$.
+
+<Encart type="calcul" titre="Réécriture en paramètres Ω">
+
+**Étape 1.** L'équation, avec $\rho = \rho_m + \rho_r + \rho_\Lambda$ regroupant toutes les composantes :
+
+$$ H^2 = \frac{8\pi G}{3}\,\rho - \frac{k c^2}{a^2}. $$
+
+**Étape 2 — On divise par $H^2$.** Chaque terme devient adimensionné :
+
+$$ 1 = \frac{8\pi G\,\rho}{3 H^2} - \frac{k c^2}{a^2 H^2}. $$
+
+**Étape 3 — On reconnaît $\rho_c$.** Le premier terme est $\dfrac{\rho}{\rho_c}$, car $\dfrac{8\pi G}{3H^2} = \dfrac{1}{\rho_c}$ :
+
+$$ 1 = \frac{\rho}{\rho_c} - \frac{k c^2}{a^2 H^2} = \Omega_m + \Omega_r + \Omega_\Lambda - \frac{k c^2}{a^2 H^2}. $$
+
+**Étape 4 — On nomme le terme de courbure.** Posons $\Omega_k \equiv -\dfrac{k c^2}{a^2 H^2}$ (qui n'est pas une densité, mais joue le même rôle dans le bilan). Alors :
+
+$$ \Omega_m + \Omega_r + \Omega_\Lambda + \Omega_k = 1. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Bilan de Friedmann">
+
+$$ \Omega_m + \Omega_r + \Omega_\Lambda + \Omega_k = 1 $$
+
+<Badge niveau="concordance" slot="badge">Simple réécriture exacte de l'équation de Friedmann. Aucune hypothèse nouvelle : c'est la même physique, en proportions.</Badge>
+</Resultat>
+
+Cette ligne est l'une des plus utiles de toute la cosmologie : **les contenus de l'univers, exprimés en fractions critiques, somment à un**. Si l'on connaît trois des termes, le quatrième est déterminé.
+
+### Densité totale et géométrie
+
+Définissons la densité totale **de matière-énergie** (hors courbure) : $\Omega_{\text{tot}} = \Omega_m + \Omega_r + \Omega_\Lambda$. Le bilan donne $\Omega_{\text{tot}} = 1 - \Omega_k = 1 + \dfrac{kc^2}{a^2 H^2}$. Le signe de $\Omega_{\text{tot}}-1$ est donc exactement le signe de $k$ :
+
+| $\Omega_{\text{tot}}$ | $\Omega_k$ | courbure $k$ | géométrie |
+|---|---|---|---|
+| $>1$ | $<0$ | $k>0$ | **fermée** (sphérique) |
+| $=1$ | $=0$ | $k=0$ | **plate** (euclidienne) |
+| $<1$ | $>0$ | $k<0$ | **ouverte** (hyperbolique) |
+
+<Badge niveau="concordance">Conséquence directe et rigoureuse du bilan de Friedmann : la densité totale, comparée à la critique, dicte la géométrie spatiale globale de l'univers.</Badge>
+
+C'est spectaculaire : **peser** l'univers (mesurer $\Omega_{\text{tot}}$) revient à mesurer la **forme** de l'espace. Densité et géométrie ne sont plus deux questions, mais une seule.
+
+### Les valeurs de notre univers
+
+Que disent les observations ? Le fond diffus cosmologique mesure la courbure avec une précision redoutable :
+
+$$ \Omega_m \approx 0{,}31, \qquad \Omega_\Lambda \approx 0{,}69, \qquad \Omega_r \sim 10^{-4}, \qquad \Omega_k \approx 0. $$
+
+<Badge niveau="observe">La platitude $\Omega_k \approx 0$ est mesurée à mieux que $0{,}5\,\%$ près par le fond diffus (Planck) : l'univers est plat à la précision de nos instruments.</Badge> <Badge niveau="concordance">La répartition $\Omega_m \approx 0{,}31$ / $\Omega_\Lambda \approx 0{,}69$ est ajustée dans le cadre ΛCDM et concorde avec toutes les sondes (supernovæ, structures, fond diffus).</Badge>
+
+Le rayonnement est aujourd'hui négligeable, et la somme $\Omega_m + \Omega_\Lambda \approx 1{,}00$ tombe juste sur la platitude. Cette platitude n'est pas expliquée par les équations que nous venons d'écrire : elle est posée, ici, comme un **fait mesuré**. Le modèle standard la fait découler d'un épisode d'expansion accélérée dans l'univers primordial, l'**inflation** — mais c'est là une couche théorique nouvelle, au-delà de la simple réécriture de Friedmann. <Badge niveau="extrapole">L'inflation rendrait compte de la platitude (et de l'homogénéité) en aplatissant l'espace lors d'une expansion violente précoce. Scénario sérieux et populaire, mais non directement testé : une extrapolation, pas un acquis observationnel.</Badge>
+
+<Tournant titre="Tournant : la platitude est posée, non déduite">
+Soyons honnêtes sur le statut de cette section. Tout ce qui précède — la densité critique, les $\Omega$, le bilan $\sum\Omega = 1$ — est de la **pure déduction** à partir de Friedmann. Mais les **valeurs** $\Omega_m \approx 0{,}31$, $\Omega_\Lambda \approx 0{,}69$, $\Omega_k \approx 0$ ne se déduisent de rien : ce sont des **nombres mesurés**, injectés de l'extérieur. Et le *pourquoi* de la platitude ($\Omega_k$ si proche de zéro) sort entièrement du cadre de ce chapitre : il appelle l'inflation, une hypothèse nouvelle. Nous quittons donc ici le terrain du strictement déduit pour celui de l'observé et de l'extrapolé.
+</Tournant>
+
+Reste à comprendre *pourquoi* ces composantes pèsent ce qu'elles pèsent, et comment leurs proportions ont basculé au fil du temps : c'est l'histoire que raconte le chapitre suivant.

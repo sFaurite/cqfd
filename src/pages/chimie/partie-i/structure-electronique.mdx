@@ -1,0 +1,120 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Construire les atomes : Pauli, Klechkowski, Hund"
+chapter: structure-electronique
+description: "Principe de construction (Aufbau) des configurations électroniques : exclusion de Pauli, ordre de Klechkowski, règle de Hund, et ce qu'elles imposent ou approximent."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieConfigElectronique from '../../../components/interactive/ChimieConfigElectronique.astro';
+
+## Construire les atomes : Pauli, Klechkowski, Hund
+
+Au chapitre précédent, nous avons résolu **un seul** atome : l'hydrogène, avec son unique électron. Ses orbitales — étiquetées par les nombres quantiques $(n, \ell, m_\ell)$ — et son spectre de raies sont établis ici : <Prereq href="/chimie/partie-i/atome-hydrogene">l'atome d'hydrogène : niveaux et orbitales</Prereq>. Mais toute la chimie commence à un électron de plus. Comment passe-t-on de l'hydrogène à l'oxygène, au fer, à l'uranium ? L'idée — et c'est une **approximation** qu'il faut assumer — est de garder les orbitales hydrogénoïdes comme « cases » et d'y **déposer** les électrons un par un. Reste à savoir : combien par case, dans quel ordre, et comment les répartir. Trois réponses, trois statuts très différents.
+
+<Encart type="intuition" titre="Un immeuble d'appartements">
+Imagine les orbitales comme des chambres dans un immeuble. La question « combien d'électrons par chambre ? » a une réponse **absolue**, dictée par la nature (Pauli). La question « dans quel ordre remplit-on les étages ? » a une réponse **approchée** : en général on monte étage par étage (Klechkowski), mais certains paliers sont si proches que l'ordre se brouille. Et « comment se répartissent des colocataires dans des chambres identiques ? » : chacun prend d'abord sa propre chambre avant de partager (Hund). Une nécessité, deux habitudes commodes.
+</Encart>
+
+### Pauli : une nécessité, pas un conseil
+
+<Tournant titre="Tournant : on ajoute un principe quantique">
+La quantification des niveaux était déjà admise au socle quantique du cours. Mais rien dans ce que nous avons posé n'interdit à deux, dix, mille électrons d'occuper la **même** orbitale fondamentale. Pour les atomes polyélectroniques, on doit **ajouter une hypothèse** : le **principe d'exclusion de Pauli**. Il ne se déduit pas de ce qui précède ; il s'ancre dans une propriété profonde des électrons (ce sont des fermions, de spin $\tfrac{1}{2}$) et il est massivement confirmé par l'expérience — sans lui, la matière n'aurait ni volume ni tableau périodique.
+</Tournant>
+
+<Hypotheses titre="Principe d'exclusion de Pauli">
+1. À chaque électron d'un atome on associe **quatre** nombres quantiques : $n$ (couche), $\ell$ (forme), $m_\ell$ (orientation) et $m_s = \pm\tfrac{1}{2}$ (spin).
+2. **Deux électrons d'un même atome ne peuvent jamais avoir leurs quatre nombres quantiques identiques.**
+</Hypotheses>
+
+La conséquence est immédiate et structurante.
+
+<Encart type="calcul" titre="Combien d'électrons par orbitale, par sous-couche ?">
+Une **orbitale** est fixée par un triplet $(n, \ell, m_\ell)$. Pauli interdit deux électrons avec les **quatre** mêmes nombres : s'ils partagent $(n, \ell, m_\ell)$, ils doivent **différer par le spin** $m_s$.
+
+$$
+m_s \in \left\{ +\tfrac{1}{2},\ -\tfrac{1}{2} \right\} \;\Rightarrow\; \text{au plus } 2 \text{ électrons par orbitale.}
+$$
+
+Pour une sous-couche de nombre $\ell$, le nombre magnétique prend $m_\ell \in \{-\ell, \dots, +\ell\}$, soit $2\ell + 1$ orbitales. D'où la capacité :
+
+$$
+N_{\max}(\ell) = 2\,(2\ell + 1).
+$$
+
+Ce qui donne $s\ (\ell{=}0):2$, $p\ (\ell{=}1):6$, $d\ (\ell{=}2):10$, $f\ (\ell{=}3):14$.
+
+$$
+\boxed{\;s:2 \quad p:6 \quad d:10 \quad f:14\;}
+$$
+</Encart>
+
+<Resultat label="Capacité d'une sous-couche (conséquence de Pauli)">
+
+$$
+N_{\max}(\ell) = 2(2\ell + 1) \;:\quad s{:}2,\; p{:}6,\; d{:}10,\; f{:}14
+$$
+
+<Badge niveau="quantique" slot="badge">Découle directement de l'exclusion de Pauli et du décompte des orbitales $(2\ell+1)$ avec deux états de spin. Aucune exception possible.</Badge>
+</Resultat>
+
+### Klechkowski : un classement énergétique, pas une loi
+
+Dans l'hydrogène, l'énergie ne dépendait **que** de $n$ : toutes les orbitales d'une couche étaient dégénérées. Dès qu'il y a **plusieurs** électrons, ils se repoussent. Cette répulsion lève la dégénérescence : un électron $s$, qui plonge plus près du noyau qu'un électron $p$ ou $d$ de même $n$, ressent davantage la charge nucléaire et s'enfonce en énergie. Résultat : **l'énergie d'une orbitale dépend désormais de $n$ ET de $\ell$.**
+
+<Encart type="rappel" titre="Pourquoi ℓ entre en jeu : pénétration">
+Les orbitales de petit $\ell$ (les $s$) ont une densité de probabilité non nulle **tout près du noyau** : elles « pénètrent » le nuage des électrons internes et voient une charge nucléaire moins écrantée. On formalisera cela au chapitre suivant avec la <Prereq href="/chimie/partie-i/ecrantage-charge-effective">charge effective $Z^*$</Prereq>. Retenons ici l'effet : à $n$ fixé, plus $\ell$ est petit, plus l'orbitale est basse en énergie.
+</Encart>
+
+La **règle de Klechkowski** (ou règle $n+\ell$) résume empiriquement l'ordre observé de remplissage :
+
+> On remplit les sous-couches par valeurs croissantes de $n + \ell$ ; à $n+\ell$ égal, par $n$ croissant.
+
+Cela donne l'enchaînement $1s,\,2s,\,2p,\,3s,\,3p,\,4s,\,3d,\,4p,\dots$ Le célèbre « croisement » $4s$ avant $3d$ vient de là : $4s$ a $n+\ell = 4$, contre $5$ pour $3d$.
+
+<Badge niveau="empirique">Klechkowski est un **classement énergétique approché**, pas une loi : il reproduit l'ordre des niveaux dans la plupart des cas mais échoue là où des sous-couches sont **quasi dégénérées**.</Badge>
+
+Et il échoue précisément où le modèle est le plus fragile. Quand $3d$ et $4s$ sont presque à la même énergie, un infime gain de stabilité suffit à inverser l'ordre.
+
+<Encart type="plusloin" titre="Les exceptions Cr et Cu — pourquoi elles ne sont pas des « bugs »">
+La règle prédit $\text{Cr}\ (Z{=}24): [\text{Ar}]\,3d^4 4s^2$ et $\text{Cu}\ (Z{=}29): [\text{Ar}]\,3d^9 4s^2$ — non posé jusqu'ici, $[\text{Ar}]$ est l'abréviation de la configuration de l'argon, $1s^2 2s^2 2p^6 3s^2 3p^6$. Or l'expérience (spectroscopie) donne :
+
+$$
+\text{Cr}: [\text{Ar}]\,3d^5 4s^1 \qquad \text{Cu}: [\text{Ar}]\,3d^{10} 4s^1.
+$$
+
+Un électron $4s$ « bascule » en $3d$ pour atteindre une **sous-couche $d$ exactement demi-remplie** ($d^5$) ou **pleine** ($d^{10}$). Comme $3d$ et $4s$ sont quasi dégénérées, le léger surcroît de stabilité de ces configurations symétriques l'emporte. Ce n'est pas une violation d'une loi : c'est la limite attendue d'un **classement approché** appliqué là où l'écart d'énergie est plus petit que les effets qu'il néglige.
+
+<Badge niveau="experimental" slot="badge">Configurations de Cr et Cu mesurées par spectroscopie atomique ; ce sont des **faits**, et ils invalident Klechkowski sur ces cas précis.</Badge>
+</Encart>
+
+### Hund : peupler les orbitales dégénérées
+
+Reste un dernier choix. Quand on remplit une sous-couche $p$ ou $d$, dont les orbitales sont **dégénérées**, faut-il apparier les électrons ou les disperser ? La **règle de Hund** tranche :
+
+> À spins parallèles d'abord : on place un électron dans **chaque** orbitale d'une sous-couche dégénérée, tous de même spin, avant d'en apparier aucun.
+
+<Encart type="intuition" titre="Pourquoi des spins parallèles ?">
+Deux électrons de **même spin** ne peuvent jamais se trouver dans le même état (Pauli) : ils s'évitent « automatiquement », ce qui réduit leur répulsion électrostatique moyenne. Cet effet purement quantique — l'**énergie d'échange** — abaisse l'énergie des configurations à spins parallèles. C'est pourquoi l'azote, $[\text{He}]\,2s^2 2p^3$, a ses trois électrons $p$ seuls et parallèles : il est plus stable ainsi.
+</Encart>
+
+<Badge niveau="empirique">Hund est une règle **justifiée** (par l'énergie d'échange et la moindre répulsion des spins parallèles) mais énoncée comme recette ; elle prédit l'état fondamental dans l'immense majorité des cas.</Badge>
+
+### Mettre les trois ensemble — et l'expérimenter
+
+Pauli (combien), Klechkowski (dans quel ordre), Hund (comment répartir) suffisent à écrire la configuration de presque tout atome. Manipule les trois en faisant varier $Z$ ci-dessous : observe le remplissage case par case et le moment où Cr et Cu trahissent la règle.
+
+<ChimieConfigElectronique />
+
+### Les électrons de valence
+
+Tous les électrons ne se valent pas pour la chimie. Les électrons des **couches internes** (le « cœur », noté $[\text{gaz noble}]$) sont liés trop profondément pour participer aux liaisons. Ce sont les **électrons de valence** — ceux de la couche de plus grand $n$, plus le cas échéant la sous-couche $d$ en cours de remplissage — qui réagissent. L'azote $1s^2\,2s^2 2p^3$ a **5** électrons de valence ($2s^2 2p^3$) ; c'est ce $5$ qui gouvernera ses liaisons.
+
+<Badge niveau="qualitatif">La frontière cœur/valence est commode et très prédictive, mais sa limite exacte (les $d$ comptent-ils ?) dépend du contexte chimique. C'est une distinction opératoire, pas une coupure nette.</Badge>
+
+Nous savons désormais remplir n'importe quel atome. Mais regarde de près l'ordre des remplissages : il se **répète** périodiquement. C'est cette répétition, et la pénétration que nous avons effleurée, qui dessinent le tableau de Mendeleïev — et c'est l'objet du prochain chapitre, après un détour par l'**écrantage** qui en donne la clé quantitative.

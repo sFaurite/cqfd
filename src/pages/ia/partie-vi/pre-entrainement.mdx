@@ -1,0 +1,90 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le pré-entraînement : prédire le mot suivant"
+chapter: pre-entrainement
+description: "Décrit le pré-entraînement auto-supervisé d'un transformer décodeur : objectif de prédiction du token suivant, perte d'entropie croisée à grande échelle, et le constat empirique central — des capacités générales émergent de ce seul objectif."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Un seul objectif, des milliards de fois
+
+Reprenons le fil. Nous avons construit, brique par brique, une machine capable de transformer une séquence de tokens en une autre séquence : le <Prereq href="/ia/partie-v/transformer">transformer</Prereq>. Et nous savons découper le texte en unités grâce à la <Prereq href="/ia/partie-vi/tokenisation">tokenisation</Prereq>. Il nous reste la question la plus simple — et la plus vertigineuse : **que faut-il lui demander d'apprendre ?**
+
+La réponse tient en cinq mots : **prédire le token suivant**. Donnez au modèle le début d'une phrase, et demandez-lui de deviner ce qui vient après. C'est tout. De cet objectif d'une banalité confondante vont émerger — sans qu'on les ait jamais programmées — la grammaire, des connaissances factuelles, et des bribes de raisonnement. Comment un but aussi pauvre peut-il produire tant de richesse ? C'est le cœur de ce chapitre, et l'une des plus belles énigmes ouvertes de l'IA.
+
+<Encart type="intuition" titre="Le jeu du texte à trous">
+Imaginez qu'on vous fasse lire la moitié d'Internet, mais qu'à chaque mot on vous cache le suivant et qu'on vous demande de le deviner. Pour bien jouer à ce jeu sur « Le ciel est… », il suffit de connaître un peu de grammaire. Mais pour « La capitale de l'Italie est… », il faut un **fait**. Pour « 17 + 25 font… », il faut **calculer**. Pour « L'assassin était en réalité… » à la fin d'un roman policier, il faut avoir **suivi l'intrigue**. Un seul jeu, prédire le mot d'après, mais pour y exceller il faut, en passant, attraper tout le reste. C'est l'intuition centrale du pré-entraînement.
+</Encart>
+
+## La tâche, précisément
+
+Posons le cadre sans détour.
+
+<Hypotheses titre="Le cadre du pré-entraînement">
+1. On dispose d'un **corpus** : une longue suite de tokens $x_1, x_2, \dots, x_T$ issus de textes réels (web, livres, code…).
+2. Le modèle est un **décodeur causal** : grâce à l'**attention masquée** (déjà vue), la prédiction à la position $t$ ne peut regarder que les tokens $x_1, \dots, x_{t-1}$ — jamais le token-cible $x_t$ ni au-delà. Sans ce masque, prédire le mot suivant serait trivial : la cible étant visible en entrée, il suffirait de la recopier.
+3. À chaque position $t$, le modèle produit un vecteur de **logits** $z_t \in \mathbb{R}^V$ (un score par token du vocabulaire de taille $V$), transformé en distribution de probabilité par la **softmax**.
+</Hypotheses>
+
+La sortie à la position $t$ est donc une probabilité prédite pour **chaque** token possible $v$ du vocabulaire :
+
+$$ p_\theta(v \mid x_{1:t-1}) = \frac{e^{z_t[v]}}{\sum_{u=1}^{V} e^{z_t[u]}} $$
+
+C'est exactement la softmax que nous avons rencontrée en <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq>, simplement étendue à $V$ classes au lieu de deux. Le modèle ne fait rien de plus exotique qu'une **classification à $V$ classes**, répétée à chaque position : « quel est, parmi tout le vocabulaire, le prochain token ? » <Badge niveau="prouve">La sortie est une softmax sur les logits : une distribution de probabilité (positive, de somme 1) bien définie, exactement comme en classification multiclasse.</Badge>
+
+## La perte : rien de nouveau
+
+Quelle erreur minimise-t-on ? La cible à la position $t$ est connue : c'est le token réel $x_t$ du corpus. On veut donc que $p_\theta(x_t \mid x_{1:t-1})$ soit le plus grand possible. C'est précisément l'**entropie croisée** établie en régression logistique, ici réduite à un seul terme par position (la « vraie » distribution est un Dirac sur $x_t$) :
+
+<Encart type="calcul" titre="De la vraisemblance à l'entropie croisée">
+On veut maximiser la **vraisemblance** du corpus, c'est-à-dire la probabilité que le modèle assigne au texte réel. En factorisant par la règle des probabilités conditionnelles :
+
+$$ p_\theta(x_1, \dots, x_T) = \prod_{t=1}^{T} p_\theta(x_t \mid x_{1:t-1}) $$
+
+Maximiser un produit de termes minuscules est instable ; on passe au logarithme (qui transforme le produit en somme et est croissant, donc préserve l'argmax) et on prend l'opposé pour **minimiser** :
+
+$$ \mathcal{L}(\theta) = -\frac{1}{T} \sum_{t=1}^{T} \log p_\theta(x_t \mid x_{1:t-1}) $$
+
+Chaque terme $-\log p_\theta(x_t \mid x_{1:t-1})$ est l'entropie croisée entre la cible réelle (un seul token) et la distribution prédite. C'est la **log-loss** déjà dérivée du maximum de vraisemblance, appliquée token par token.
+</Encart>
+
+<Resultat label="Objectif du pré-entraînement (next-token prediction)">
+
+$$ \mathcal{L}(\theta) = -\frac{1}{T} \sum_{t=1}^{T} \log p_\theta\!\left(x_t \mid x_{1:t-1}\right) $$
+
+<Badge niveau="prouve" slot="badge">La perte est l'entropie croisée moyenne sur les positions — exactement la log-loss issue du maximum de vraisemblance, déjà établie. Mécanique entièrement comprise et dérivable : la rétropropagation calcule son gradient.</Badge>
+</Resultat>
+
+On minimise $\mathcal{L}$ par descente de gradient stochastique sur mini-lots de séquences, le gradient étant obtenu par rétropropagation à travers le transformer. **Aucun outil nouveau** : nous avons tout construit dans les parties précédentes.
+
+## Auto-supervisé : le texte est son propre professeur
+
+Voici le tour de force. Pour entraîner notre <Prereq href="/ia/partie-i/regression-logistique">classifieur logistique</Prereq>, il fallait des étiquettes fournies par des humains. Ici, **l'étiquette à la position $t$ est simplement le token suivant du texte** — déjà présent dans le corpus. Personne n'a annoté quoi que ce soit : le texte fournit lui-même ses cibles. On appelle cela l'**apprentissage auto-supervisé**.
+
+C'est la clé de l'échelle. Comme on n'a pas besoin d'annotateurs, on peut s'entraîner sur des corpus colossaux — tout le texte qu'on peut rassembler. <Badge niveau="robuste">L'auto-supervision lève le goulot d'étranglement de l'annotation humaine : c'est ce qui permet d'entraîner sur des corpus gigantesques, et donc d'accéder au régime des lois d'échelle. Régularité d'ingénierie très solidement établie.</Badge>
+
+Les ordres de grandeur donnent le vertige : corpus de l'ordre de **$10^{12}$ tokens** (mille milliards), modèles de **$10^9$ à $10^{12}$ paramètres**, et un coût de calcul de l'ordre de **$10^{23}$ à $10^{25}$ opérations flottantes** pour un seul entraînement. <Badge niveau="recette">Ces chiffres sont des choix d'ingénierie et de budget d'une époque, pas des constantes : ils croissent d'année en année et varient selon les modèles.</Badge>
+
+## Le constat qui dérange : l'émergence
+
+Et maintenant, le fait qui devrait nous arrêter. De ce seul objectif — minimiser une entropie croisée sur la prédiction du mot suivant — **émergent** des capacités que personne n'a spécifiées : grammaire correcte, connaissances factuelles, traduction, arithmétique rudimentaire, embryons de raisonnement. On n'a jamais écrit « apprends la grammaire » ni « mémorise la capitale de l'Italie ». On a juste demandé : devine le token suivant.
+
+<Encart type="plusloin" titre="Pourquoi est-ce un mystère, et pas une explication ?">
+On peut donner une **histoire plausible** : pour mieux prédire, le modèle a « intérêt » à modéliser les régularités du monde reflétées dans le texte, donc il les capture. Cette histoire est séduisante — mais elle n'a rien d'une preuve. Elle ne prédit pas *quelles* capacités apparaîtront, *à quelle échelle*, ni *pourquoi* ce procédé précis y parvient là où d'autres échouent. Aucune théorie ne déduit l'émergence de la grammaire ou du raisonnement à partir de l'objectif de prédiction. On **observe** que ça marche ; on ne sait pas démontrer pourquoi. C'est le statut épistémique honnête : un constat empirique profond, largement inexpliqué.
+</Encart>
+
+<Badge niveau="boitenoire">Que des capacités générales (grammaire, faits, raisonnement) émergent d'un objectif aussi simple est un constat empirique robuste mais théoriquement non expliqué. Question ouverte : on ne sait pas pourquoi « prédire le mot suivant » produit cela.</Badge>
+
+Il faut tenir une ligne de crête, sans tomber d'aucun côté. D'un côté, le **mysticisme** : « le modèle pense », « il comprend ». De l'autre, la **fausse explication** : « ce n'est qu'un perroquet statistique, il n'y a rien à expliquer ». Les deux esquivent le réel. Distinguons donc soigneusement deux énoncés : **« le modèle calcule une distribution sur le token suivant »** est un fait, mécaniquement vrai et prouvé. **« Le modèle comprend »** est une formulation contestée, dont le contenu n'est pas défini rigoureusement et qui relève de la boîte noire. <Badge niveau="boitenoire">« Prédire » est un fait établi ; « comprendre » est une interprétation non définie et débattue. Ne pas confondre les deux.</Badge>
+
+## Pré-entraînement n'est pas alignement
+
+Une dernière précision, car elle structure tout ce qui suit. Le modèle que nous venons d'obtenir est un **prédicteur de texte** : il continue n'importe quel texte de façon plausible. Ce n'est **pas encore** un assistant. Demandez-lui une question, et il pourrait tout aussi bien répondre… par une autre question — parce que sur le web, les questions sont souvent suivies d'autres questions. Le rendre **serviable et honnête** relèvera d'une étape distincte, l'alignement (à venir). Pour l'instant, retenons l'acquis : un objectif unique et auto-supervisé suffit à faire naître, à grande échelle, un modèle du langage d'une richesse inattendue.
+
+Reste à savoir comment, à partir de ce prédicteur, **fabriquer du texte nouveau** — token après token, avec ses choix et ses pièges. C'est l'objet du prochain chapitre, consacré à la génération et au décodage.

@@ -1,0 +1,50 @@
+---
+/**
+ * ChimieEntropieMicroetats — simulation de micro-états. N particules discernables
+ * sont réparties sur des cases/niveaux ; le composant compte le nombre de
+ * configurations Ω compatibles (multiplicité) et calcule S = k·ln Ω. Une
+ * animation tire des micro-états au hasard pour montrer que les macro-états
+ * « étalés » sont écrasants en nombre — l'entropie comme nombre de configurations
+ * accessibles, pas comme « désordre ».
+ */
+---
+
+<div class="iw" data-iw="chimie-entropie">
+  <div class="iw__head"><span class="tag">Interactif</span> Micro-états et entropie S = k·ln Ω</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="et-n">Particules N</label>
+      <input id="et-n" type="range" min="2" max="12" step="1" value="8" data-n />
+      <output data-out-n>8</output>
+    </div>
+    <div class="iw__row">
+      <label for="et-cases">Cases (compartiments)</label>
+      <input id="et-cases" type="range" min="2" max="6" step="1" value="2" data-cases />
+      <output data-out-cases>2</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-shuffle type="button">Tirer un micro-état</button>
+      <button class="iw__btn" data-play type="button">▶ Animer</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">macro-état (n par case)</span> <b data-out-macro>4 | 4</b></span>
+    <span class="iw__chip"><span class="k">Ω (multiplicité)</span> <b data-out-omega>70</b></span>
+    <span class="iw__chip"><span class="k">Ω total</span> <b data-out-omegatot>256</b></span>
+    <span class="iw__chip"><span class="k">S = k·ln Ω</span> <b data-out-s>5,9 k</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque particule (numérotée, donc <em>discernable</em>) occupe une case : une attribution complète
+    est un <strong>micro-état</strong>. Le <strong>macro-état</strong> ne retient que le <em>nombre</em>
+    de particules par case. Sa multiplicité Ω compte combien de micro-états le réalisent : le macro-état
+    le plus « étalé » (équipartition) en a de loin le plus. L’entropie est S = k·ln Ω : elle mesure
+    <strong>le nombre de configurations accessibles</strong>, pas un « désordre » subjectif. Tire des
+    micro-états au hasard : tu retombes presque toujours sur la répartition la plus probable — c’est le
+    sens du second principe.
+  </p>
+</div>
+
+<script>
+  import './ChimieEntropieMicroetats.client.ts';
+</script>

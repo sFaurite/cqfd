@@ -1,0 +1,94 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le graphe de calcul et la règle de la chaîne"
+chapter: graphe-de-calcul
+description: "Représente un calcul comme un graphe orienté (variables, opérations). Rappelle la règle de la chaîne pour les fonctions composées, en une et plusieurs variables, comme préparation directe à la rétropropagation."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaBackpropGraph from '../../../components/interactive/IaBackpropGraph.astro';
+
+## Le graphe de calcul et la règle de la chaîne
+
+Jusqu'ici, nous savions deux choses : qu'**apprendre, c'est minimiser une perte** en ajustant des paramètres, et que pour descendre cette perte il faut son <Prereq href="/ia/partie-ii/derivees-gradient">gradient</Prereq>, le vecteur des dérivées partielles. Mais un réseau, même modeste, est un empilement de multiplications, d'additions et de fonctions non linéaires. Comment dériver une perte par rapport à un poids enfoui trois couches plus loin, perdu au milieu de milliers d'autres ? La réponse tient en une idée d'une élégance redoutable : **dessiner le calcul comme un graphe, puis dériver en remontant ses arêtes**. C'est, littéralement, le moteur de tous les frameworks modernes.
+
+### Un calcul est un graphe
+
+L'intuition d'abord. Quand vous évaluez une expression comme $L = (w\,x + b - y)^2$, vous ne le faites pas d'un bloc : vous calculez d'abord $u = w\,x$, puis $v = u + b$, puis l'écart $r = v - y$, et enfin $L = r^2$. Chaque opération élémentaire prend des entrées et produit une sortie qui alimente l'opération suivante.
+
+<Encart type="intuition" titre="Une recette de cuisine, pas une formule">
+Pensez à une recette : « hacher l'oignon », « faire revenir », « ajouter le bouillon ». Chaque étape consomme le résultat des précédentes. Le **graphe de calcul** est exactement cela : une carte des étapes et de qui dépend de qui. La différence cruciale avec une simple formule écrite sur papier, c'est qu'un ordinateur peut *parcourir* cette carte — dans un sens pour évaluer, dans l'autre pour dériver.
+</Encart>
+
+Formalisons. Un **graphe de calcul** est un graphe orienté acyclique (DAG) : les **nœuds** sont des variables ou des opérations élémentaires (somme, produit, sigmoïde…), et une **arête** $a \to b$ signifie « la valeur de $b$ se calcule à partir de celle de $a$ ». L'acyclicité garantit qu'on peut ordonner les nœuds : on évalue chacun une fois ses entrées connues, depuis les feuilles (entrées et paramètres) jusqu'à la racine (la perte).
+
+<Encart type="rappel" titre="Graphe orienté acyclique (DAG)">
+Un graphe **orienté** est fait de nœuds reliés par des flèches (les arêtes) qui ont un sens. Il est **acyclique** quand on ne peut jamais revenir à un nœud en suivant les flèches : aucune boucle. Cette propriété est ce qui rend l'évaluation bien définie — il existe toujours un ordre où chaque nœud est calculé *après* ceux dont il dépend (un *tri topologique*). Sans elle, un nœud pourrait dépendre de lui-même, et le calcul n'aurait pas de point de départ.
+</Encart>
+
+<Badge niveau="prouve">Tout calcul composé d'opérations élémentaires admet une représentation en DAG ; c'est une reformulation structurelle, pas une approximation. Et ce n'est pas qu'une image pédagogique : ce graphe est exactement la structure de données que construisent et manipulent les bibliothèques d'autodifférentiation (l'*autograd* de PyTorch, de JAX).</Badge>
+
+Prenons un neurone unique de la <Prereq href="/ia/partie-ii/fonction-de-perte">perte</Prereq> précédente. Avec entrée $x$, poids $w$, biais $b$, activation $a(\cdot)$, prédiction $\hat y = a(w x + b)$ et perte $L(\hat y, y)$, le graphe se lit ainsi : les feuilles $w$, $x$ et $b$ convergent vers $z = w x + b$, puis $z \to \hat y = a(z) \to L$. Pour atteindre $w$ depuis la perte, la dérivation remontera la chaîne $L \to \hat y \to z \to w$ — trois arêtes, qu'il faudra parcourir à rebours.
+
+### La règle de la chaîne, le théorème central
+
+Pour dériver le long du graphe, un seul outil suffit. En une dimension, dériver une composition $f(g(x))$ se fait en multipliant les dérivées locales.
+
+<Encart type="rappel" titre="La chaîne en 1D">
+Si $y = f(u)$ et $u = g(x)$, alors $y$ dépend de $x$ *à travers* $u$, et
+
+$$
+\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u}\cdot\frac{\mathrm{d}u}{\mathrm{d}x}.
+$$
+
+L'image juste : si $u$ varie 3 fois plus vite que $x$, et $y$ 2 fois plus vite que $u$, alors $y$ varie $2 \times 3 = 6$ fois plus vite que $x$. Les sensibilités se *multiplient* le long de la chaîne.
+</Encart>
+
+<Badge niveau="prouve">La règle de la chaîne est un théorème de l'analyse, démontré pour toute composition de fonctions dérivables. Elle n'est ni une approximation ni une heuristique : c'est un fait mathématique exact.</Badge>
+
+Mais un graphe n'est pas une simple chaîne linéaire. Une variable peut influencer la sortie par **plusieurs chemins** à la fois. C'est ici qu'est tapie l'erreur classique — et la subtilité qui fait toute la richesse de la rétropropagation. Avant de l'appliquer, énonçons donc proprement la version qui vaut sur un graphe quelconque.
+
+<Encart type="calcul" titre="Multivarié : on somme sur les chemins">
+Supposons que $L$ dépende de deux quantités intermédiaires $u$ et $v$, toutes deux fonctions d'un même $x$ : $L = F(u, v)$ avec $u = g(x)$ et $v = h(x)$. Une petite variation $\mathrm{d}x$ se propage par les **deux** branches.
+
+**Étape 1 — variation par la branche $u$ :** à $v$ figé, faire varier $x$ de $\mathrm{d}x$ change $u$ de $\dfrac{\mathrm{d}u}{\mathrm{d}x}\,\mathrm{d}x$, ce qui change $L$ via $F$ de $\dfrac{\partial F}{\partial u}\,\dfrac{\mathrm{d}u}{\mathrm{d}x}\,\mathrm{d}x$.
+
+**Étape 2 — variation par la branche $v$ :** de même, à $u$ figé, la contribution est $\dfrac{\partial F}{\partial v}\,\dfrac{\mathrm{d}v}{\mathrm{d}x}\,\mathrm{d}x$.
+
+**Étape 3 — on additionne.** Au premier ordre, la variation totale de $L$ est la **différentielle** $\mathrm{d}L = \dfrac{\partial F}{\partial u}\,\mathrm{d}u + \dfrac{\partial F}{\partial v}\,\mathrm{d}v$ ; c'est une application **linéaire**, donc les deux effets se superposent sans interférer. En divisant par $\mathrm{d}x$ :
+
+$$
+\frac{\mathrm{d}L}{\mathrm{d}x} = \frac{\partial F}{\partial u}\,\frac{\mathrm{d}u}{\mathrm{d}x} + \frac{\partial F}{\partial v}\,\frac{\mathrm{d}v}{\mathrm{d}x}.
+$$
+
+C'est la **règle de la chaîne multivariée** : on multiplie les dérivées le long de *chaque* chemin reliant $x$ à $L$, puis on **somme sur tous les chemins**. ∎
+</Encart>
+
+<Tournant titre="Le piège du nœud partagé">
+Retenez ceci avant tout le reste : **quand une variable alimente plusieurs branches du graphe, sa dérivée totale est la somme des contributions de chaque chemin.** Oublier un chemin, ou *écraser* une contribution au lieu de l'*ajouter*, est l'erreur n°1 quand on implémente une dérivation à la main. Si un poids partagé (cas des couches convolutives, plus tard) apparaît à dix endroits, son gradient additionne dix termes — pas un seul.
+</Tournant>
+
+<Badge niveau="prouve">La loi « somme sur les chemins » découle de la linéarité de la différentielle ; elle est démontrée, pas conventionnelle. La justesse du résultat ne dépend pas de l'ordre dans lequel on parcourt le graphe.</Badge>
+
+### Forward et backward : deux parcours du même graphe
+
+Le graphe se traverse dans deux sens, et c'est là tout le vocabulaire à fixer.
+
+La **passe avant** (*forward*) part des feuilles et calcule la valeur de chaque nœud jusqu'à la perte $L$. C'est l'évaluation ordinaire du modèle. On stocke au passage les valeurs intermédiaires — on en aura besoin.
+
+La **passe arrière** (*backward*) part de la racine et propage les **dérivées** $\dfrac{\partial L}{\partial(\text{nœud})}$ en remontant les arêtes. À chaque nœud, on multiplie par la dérivée locale (chaîne) et, là où plusieurs arêtes convergent, on additionne (somme sur les chemins).
+
+<IaBackpropGraph />
+
+Observez sur le graphe : en avant, les nombres se calculent de gauche à droite ; en arrière, les dérivées se calculent de droite à gauche, chaque arête portant sa dérivée locale. Le gradient d'un poids n'est rien d'autre que le produit des dérivées rencontrées en remontant jusqu'à lui — et, s'il existe plusieurs chemins de remontée, la somme de ces produits.
+
+<Encart type="plusloin" titre="Validité ≠ efficacité">
+Tout ce qui précède garantit que la valeur calculée est **correcte** : la règle de la chaîne est exacte, point. Mais elle ne dit rien sur le *coût*. On pourrait dériver chaque paramètre par une passe arrière séparée — naïf et ruineux pour un million de poids. Le génie du chapitre suivant sera d'organiser **une seule** passe arrière qui produit *tous* les gradients d'un coup, pour un prix comparable à la passe avant. Ne confondons jamais la justesse mathématique (acquise ici, démontrée) avec l'efficacité algorithmique (à conquérir au chapitre suivant).
+</Encart>
+
+Nous tenons la structure — le graphe — et l'outil exact — la règle de la chaîne avec sa somme sur les chemins. Reste à les marier en un algorithme d'une efficacité stupéfiante : la **rétropropagation**.

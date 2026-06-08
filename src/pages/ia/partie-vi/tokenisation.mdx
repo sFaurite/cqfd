@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Tokenisation : découper le texte en unités"
+chapter: tokenisation
+description: "Explique pourquoi et comment le texte est découpé en tokens (sous-mots), via des algorithmes type BPE. Montre les compromis (taille de vocabulaire, mots rares, langues) et les conséquences concrètes sur le comportement des modèles."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaTokenizer from '../../../components/interactive/IaTokenizer.astro';
+
+## Tokenisation : découper le texte en unités
+
+Nous avons construit le <Prereq href="/ia/partie-v/transformer">transformer</Prereq> : une machine qui dévore une **suite de vecteurs** et en recrache une autre. Mais un texte n'est pas une suite de vecteurs — c'est une chaîne de caractères. Avant même la première couche, il faut donc résoudre une question d'apparence triviale et pourtant lourde de conséquences : **comment transformer « Bonjour ! » en une liste de nombres ?**
+
+Cette étape s'appelle la **tokenisation**. Elle découpe le texte en *unités* (les *tokens*), chacune recevant ensuite un vecteur via la table de plongement que nous connaissons déjà. C'est la toute première brique du pipeline d'un grand modèle de langage, et l'une des plus sous-estimées.
+
+<Encart type="intuition" titre="Pourquoi ce n'est pas évident">
+Le réseau ne manipule que des indices dans un vocabulaire **fini** $V = \{0, 1, \dots, N-1\}$. Tokeniser, c'est choisir la liste des « briques » autorisées. Trop grosses (un token par mot) : le vocabulaire explose et le moindre mot jamais vu devient un trou. Trop petites (un token par caractère) : chaque phrase devient une séquence interminable. Tout l'art est de trouver le bon grain.
+</Encart>
+
+### Les deux extrêmes, et pourquoi ils échouent
+
+Posons d'abord clairement le cadre.
+
+<Hypotheses titre="Hypothèses de départ">
+On dispose d'un grand **corpus** de texte. On veut le représenter avec un vocabulaire **fini** de taille $N$ fixée à l'avance, et tout texte futur (même inédit) doit être *encodable* sans échec.
+</Hypotheses>
+
+**Premier extrême — un token par mot.** Séduisant : « chat » est une seule unité, sémantiquement pleine. Mais le nombre de mots d'une langue est ouvert (néologismes, noms propres, fautes, mots composés). On ne peut pas borner $N$, et tout mot absent du vocabulaire devient un token spécial « inconnu » qui détruit l'information. <Badge niveau="prouve">Conséquence directe de l'hypothèse de finitude : un vocabulaire fini ne peut pas couvrir un ensemble de mots non borné sans introduire d'inconnus.</Badge>
+
+**Second extrême — un token par caractère.** Le vocabulaire reste petit pour un système d'écriture donné, et **rien** n'est jamais inconnu : tout mot se réécrit symbole à symbole — et si l'on descend au niveau des **octets UTF-8**, il suffit même de $256$ valeurs pour coder n'importe quel texte. Le prix est la **longueur**. Or l'attention coûte $O(L^2)$ en longueur de séquence — un résultat que nous avons établi pour le <Prereq href="/ia/partie-v/mecanisme-attention">mécanisme d'attention</Prereq>. Multiplier $L$ par cinq, c'est multiplier le coût d'attention par vingt-cinq. <Badge niveau="prouve">Le coût quadratique de l'attention est démontré ; allonger les séquences le dégrade mécaniquement.</Badge>
+
+La bonne réponse vit **entre** les deux : des **sous-mots**. Les mots fréquents restent entiers (« le », « chat »), les mots rares se décomposent (« tokeniseur » → « token » + « iseur »). On borne $N$, on n'a jamais d'inconnu, et les séquences restent courtes.
+
+### Le BPE : compresser le corpus, pas à pas
+
+L'algorithme le plus répandu est le **Byte Pair Encoding** (BPE). L'idée vient de la compression : on part des caractères (ou des octets), et on **fusionne itérativement la paire de symboles adjacents la plus fréquente** dans le corpus.
+
+<Encart type="calcul" titre="BPE pas à pas sur un mini-corpus">
+Corpus (déjà séparé en caractères) :
+
+$$ \texttt{b a n a n e} \quad\times 5, \qquad \texttt{a n a n a s} \quad\times 3 $$
+
+**Étape 1.** On compte les paires adjacentes. Dans « banane » la paire $\texttt{(a, n)}$ apparaît $2$ fois, et dans « ananas » elle apparaît aussi $2$ fois ; au total $2\times 5 + 2\times 3 = 16$ — c'est la plus fréquente. On crée le token $\texttt{an}$.
+
+**Étape 2.** Le corpus devient $\texttt{b an an e}$ ($\times 5$) et $\texttt{an an a s}$ ($\times 3$). La paire la plus fréquente est maintenant $\texttt{(an, an)}$, présente $1$ fois dans chaque mot, soit $5 + 3 = 8$ occurrences. On crée $\texttt{anan}$.
+
+**Étape 3.** On répète jusqu'à atteindre la taille de vocabulaire voulue $N$. La **liste ordonnée des fusions** apprises *est* le tokeniseur.
+</Encart>
+
+Pour encoder un texte nouveau, on rejoue simplement les fusions dans l'ordre où elles ont été apprises. Deux statuts cohabitent ici, et il faut les distinguer.
+
+<Resultat label="BPE = algorithme déterministe + choix d'ingénierie">
+
+$$ \text{tokeniseur} = \underbrace{\text{procédure de fusion}}_{\text{déterministe}} \;\circ\; \underbrace{\text{corpus d'entraînement}}_{\text{convention}} $$
+
+<Badge niveau="prouve" slot="badge">Au sens algorithmique : à corpus, règle de fréquence et règle de départage des égalités fixés, la suite de fusions est entièrement déterminée et reproductible.</Badge>
+</Resultat>
+
+La détermination est totale une fois qu'on a tranché un point souvent passé sous silence : **que faire en cas d'égalité de fréquence ?** Deux paires aussi fréquentes l'une que l'autre doivent être départagées par une règle fixe (ordre d'apparition, ordre lexicographique…), sinon le résultat n'est plus reproductible. <Badge niveau="recette">Le critère de départage est une convention d'implémentation : il rend l'algorithme déterministe, mais son choix précis n'a pas d'optimalité prouvée.</Badge>
+
+Restent les vraies questions d'ingénierie. Quel corpus ? quelle taille $N$ ? faut-il pré-découper sur les espaces, travailler sur les octets bruts (UTF-8) plutôt que sur les caractères ? <Badge niveau="recette">Ce sont des choix d'ingénierie sans optimum prouvé. Le découpage *exact* d'un mot dépend du corpus du tokeniseur, et **varie donc d'un modèle à l'autre** — un même mot peut être 1 token ici, 3 ailleurs.</Badge>
+
+### Du token au vecteur, puis au transformer
+
+Une fois le texte découpé, chaque token est un **indice** dans le vocabulaire. Cet indice sélectionne une ligne de la **matrice de plongement** d'entrée — exactement la représentation dense apprise que nous avons étudiée avec les <Prereq href="/ia/partie-iv/plongements">plongements</Prereq>. La tokenisation est donc le pont entre le texte brut et l'espace géométrique où vit le transformer : *texte → tokens → indices → vecteurs appris*.
+
+### Les conséquences pratiques, bien réelles
+
+Ce découpage n'est **pas neutre**. Il imprime sa marque sur le comportement observable des modèles.
+
+- **Mots rares = plusieurs tokens.** Un terme technique ou un nom propre rare se fragmente, occupant plus de place dans la fenêtre de contexte.
+- **Arithmétique fragilisée.** Les nombres ne sont pas découpés de façon régulière : selon le tokeniseur, « 1234 » peut devenir « 123 » + « 4 », ou « 12 » + « 34 », ou rester d'un bloc. Le modèle ne « voit » pas des chiffres alignés sur les unités, dizaines, centaines, mais des fragments dont la frontière dépend du corpus — d'où une partie des erreurs de calcul. <Badge niveau="robuste">Effet reproductible : on observe de façon fiable qu'un découpage irrégulier des nombres dégrade l'arithmétique, et que forcer un découpage chiffre par chiffre l'améliore.</Badge>
+- **Langues sous-représentées = plus de tokens.** Un corpus dominé par l'anglais apprend peu de fusions pour, disons, le vietnamien ou le swahili : ces langues se rapprochent du découpage caractère-par-caractère, coûtant plus de tokens (donc plus cher, et plus court en contexte utile) pour dire la même chose. <Badge niveau="robuste">Disparité mesurée empiriquement : à contenu équivalent, le nombre de tokens varie fortement d'une langue à l'autre.</Badge>
+
+Et le fameux « combien de **r** dans *fraise* ? » que les modèles ratent parfois ? Le mot leur arrive en **blocs**, pas en lettres : compter des caractères à travers une frontière de tokens demande un raisonnement que rien dans l'architecture ne facilite. <Badge niveau="boitenoire">L'interaction exacte entre tokenisation et raisonnement symbolique reste mal comprise — on constate l'effet sans en avoir la théorie complète.</Badge>
+
+Touchons concrètement du doigt ce découpage. Saisis un texte ci-dessous et observe en quelles unités il se brise.
+
+<IaTokenizer />
+
+Nous tenons la première marche du pipeline d'un LLM : du texte vers des tokens, des tokens vers des vecteurs. Reste à savoir comment le modèle **apprend** sur ces tokens, sans la moindre étiquette humaine — c'est tout l'objet du chapitre suivant : le pré-entraînement par prédiction du mot suivant.

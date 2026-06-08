@@ -1,0 +1,98 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les tensions cosmologiques"
+chapter: tensions-cosmologiques
+description: "La tension de Hubble (H₀) et la tension S₈ : des fissures dans le modèle de concordance ?"
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les tensions cosmologiques
+
+Le modèle <Prereq href="/cosmologie/partie-vi/modele-lcdm">ΛCDM</Prereq> est un succès rare : avec une poignée de paramètres, il ajuste le <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">fond diffus cosmologique</Prereq>, les abondances primordiales et la structure à grande échelle. Mais un bon modèle se juge à ses fissures. Or, depuis une dizaine d'années, deux nombres que ΛCDM devrait prédire de façon univoque sont mesurés *différemment* selon qu'on les lit dans l'univers jeune ou dans l'univers proche. Ce ne sont pas des approximations qui flottent : ce sont des mesures précises qui se contredisent. On les appelle les **tensions cosmologiques**, et la principale porte le nom de la constante qui a fondé la discipline : $H_0$.
+
+<Encart type="intuition" titre="Deux montres, deux heures">
+Imaginez deux horloges d'atelier réputées exactes. L'une, calibrée sur un signal lointain et ancien, indique 13h07. L'autre, lue directement sous vos yeux, indique 13h13. Tant que chacune avait sa marge d'incertitude de plusieurs minutes, on haussait les épaules. Mais à mesure qu'on a affiné les deux, leurs barres d'erreur ont rétréci sans que les aiguilles se rejoignent. Le désaccord, lui, n'a pas bougé. Soit l'une des deux horloges a un défaut caché, soit notre théorie du temps qui les relie est incomplète.
+</Encart>
+
+### La tension de Hubble : deux routes vers $H_0$
+
+Le paramètre de Hubble actuel $H_0$ donne le taux d'expansion d'aujourd'hui (voir <Prereq href="/cosmologie/partie-i/redshift-hubble">loi de Hubble</Prereq>). Il existe deux manières indépendantes de le déterminer.
+
+**La route précoce (CMB).** On ne mesure pas $H_0$ directement dans le fond diffus : on mesure la taille angulaire des fluctuations à $z \approx 1100$, puis on en *déduit* $H_0$ en supposant que ΛCDM décrit toute l'histoire entre $z = 1100$ et nous. C'est donc une valeur **dérivée du modèle**. Le satellite Planck (2018) obtient :
+
+$$ H_0^{\text{CMB}} \approx 67{,}4 \pm 0{,}5 \ \text{km}\cdot\text{s}^{-1}\cdot\text{Mpc}^{-1}. $$
+
+<Badge niveau="concordance">La donnée brute — le spectre des anisotropies — est observée. Mais la traduire en $H_0$ exige de propager ΛCDM sur toute l'histoire cosmique : la valeur précoce est une prédiction du modèle, pas une mesure locale.</Badge>
+
+**La route locale (échelle des distances).** Ici on mesure $H_0$ « à la main », sans présupposer l'expansion entière. On construit une **échelle des distances** : on calibre d'abord la luminosité des **céphéides** (étoiles pulsantes dont la période donne la luminosité absolue) par des parallaxes géométriques ; on s'en sert pour étalonner les **supernovæ de type Ia** (chandelles standard visibles très loin) ; puis on relie distance et redshift. L'équipe SH0ES obtient :
+
+$$ H_0^{\text{local}} \approx 73{,}0 \pm 1{,}0 \ \text{km}\cdot\text{s}^{-1}\cdot\text{Mpc}^{-1}. $$
+
+<Badge niveau="observe">Cette valeur est une mesure directe de l'expansion dans l'univers proche, par une chaîne de calibrations empiriques largement indépendante des hypothèses cosmologiques sur l'univers jeune.</Badge>
+
+<Encart type="rappel" titre="L'échelle des distances cosmiques">
+Mesurer une distance dans l'univers proche, c'est empiler des « barreaux » qui se calibrent l'un l'autre.
+
+1. **Parallaxes.** Pour les étoiles voisines, on observe leur léger déplacement apparent quand la Terre change de côté du Soleil : pure trigonométrie, sans aucune hypothèse astrophysique. C'est le barreau zéro, géométrique.
+2. **Céphéides.** Ces étoiles pulsent avec une période d'autant plus longue qu'elles sont lumineuses (relation période–luminosité). Calibrées par les parallaxes, elles deviennent des indicateurs de distance dans les galaxies proches.
+3. **Supernovæ de type Ia.** L'explosion thermonucléaire d'une naine blanche libère toujours à peu près la même énergie : une **chandelle standard**, assez brillante pour être vue à des centaines de Mpc. On l'étalonne grâce aux céphéides repérées dans les mêmes galaxies hôtes.
+
+Chaque barreau hérite de l'incertitude du précédent ; une erreur sur un seul échelon se propage jusqu'au bout. C'est précisément là que se cacherait une éventuelle systématique.
+</Encart>
+
+### Le désaccord est-il sérieux ? Quantifions
+
+Comparer deux mesures, ce n'est pas regarder si les nombres diffèrent : c'est regarder si l'écart dépasse les incertitudes. On combine les deux barres d'erreur en quadrature et on compte combien d'écarts-types $\sigma$ séparent les deux valeurs.
+
+<Encart type="calcul" titre="La signification statistique de l'écart">
+
+**Étape 1 — L'écart central.** La différence des deux estimations :
+
+$$ \Delta H_0 = 73{,}0 - 67{,}4 = 5{,}6 \ \text{km}\cdot\text{s}^{-1}\cdot\text{Mpc}^{-1}. $$
+
+**Étape 2 — L'incertitude combinée.** Les deux mesures étant indépendantes, leurs incertitudes s'additionnent **en quadrature** (la variance d'une somme de variables indépendantes est la somme des variances) :
+
+$$ \sigma_{\text{comb}} = \sqrt{\sigma_{\text{CMB}}^2 + \sigma_{\text{local}}^2} = \sqrt{0{,}5^2 + 1{,}0^2} = \sqrt{0{,}25 + 1{,}00} = \sqrt{1{,}25} \approx 1{,}12. $$
+
+**Étape 3 — On compte les sigmas.** La tension exprimée en écarts-types :
+
+$$ n_\sigma = \frac{\Delta H_0}{\sigma_{\text{comb}}} = \frac{5{,}6}{1{,}12} \approx 5{,}0. $$
+
+$$ \boxed{n_\sigma \approx 5\,\sigma} $$
+
+</Encart>
+
+Cinq sigmas. En physique, ce seuil est précisément celui qu'on exige pour proclamer une **découverte** (la probabilité qu'un tel écart soit un simple hasard statistique est inférieure à un sur un million). Selon les analyses et les jeux de données retenus, la tension de Hubble se situe entre **4 et 6 σ**.
+
+<Badge niveau="observe">Que les deux mesures existent et soient en désaccord à ce niveau est un fait robuste, confirmé par des méthodes locales variées (céphéides, mais aussi étoiles de la branche des géantes rouges, lentilles gravitationnelles à délai temporel).</Badge>
+
+### La tension $S_8$ : les structures trop lisses
+
+Une seconde fissure, plus discrète, concerne l'**amplitude des structures**. On la résume par le paramètre $S_8 = \sigma_8 \sqrt{\Omega_m / 0{,}3}$, où $\sigma_8$ mesure l'amplitude des fluctuations de densité à l'échelle de $8\,h^{-1}\,\text{Mpc}$. Le CMB, extrapolé par ΛCDM, prédit la croissance des structures et donc une valeur de $S_8$. Les **relevés de cisaillement gravitationnel** (la faible déformation des images de galaxies lointaines par la matière intercalée, qui cartographie directement la matière) la mesurent dans l'univers récent. Les relevés trouvent un $S_8$ systématiquement **plus bas** que la prédiction CMB : l'univers proche semble un peu *moins grumeleux* qu'il ne le devrait.
+
+<Badge niveau="observe">L'écart sur $S_8$ est réel et reproduit par plusieurs relevés indépendants de lentillage faible (KiDS, DES). Sa signification, autour de 2 à 3 σ, est plus modeste que pour $H_0$, et il s'est atténué dans certaines analyses récentes.</Badge>
+
+### Systématiques, ou physique nouvelle ?
+
+<Tournant titre="Tournant : on quitte le terrain établi">
+Jusqu'ici, tout était mesuré ou déduit de ΛCDM. À partir d'ici, on entre dans le **débat ouvert**. Les modèles évoqués plus bas (énergie noire évolutive, énergie noire « précoce », rayonnement supplémentaire) ne sont **pas** des conséquences déduites de ce qui précède : ce sont des hypothèses *candidates*, ajoutées pour tenter de résorber l'écart. La page ne les adopte pas ; elle expose honnêtement les deux camps. Aucune des deux lectures n'est, à ce jour, établie.
+</Tournant>
+
+Tout l'enjeu tient dans une bifurcation, et l'honnêteté impose de ne pas trancher. Deux lectures s'affrontent.
+
+| Lecture | Idée | Ce qu'elle implique |
+|---|---|---|
+| **Systématiques** | Une erreur cachée dans la calibration des céphéides, dans la modélisation des supernovæ, ou dans l'analyse du CMB | ΛCDM est sauf ; il faut traquer le biais |
+| **Physique nouvelle** | ΛCDM est incomplet entre $z = 1100$ et aujourd'hui | énergie noire évolutive, énergie noire « précoce », rayonnement supplémentaire... |
+
+Pour $H_0$, le piquant est que la tension persiste justement parce que chaque équipe a *éliminé* ses systématiques évidentes les unes après les autres sans la résorber. Cela renforce les partisans d'une physique nouvelle — par exemple une composante d'**énergie noire précoce** qui, agissant juste avant la recombinaison, réduirait l'horizon sonore et réconcilierait les deux $H_0$. Mais aucun modèle alternatif ne résout proprement *à la fois* $H_0$ et $S_8$ sans en casser un autre, et une systématique subtile et corrélée reste pleinement possible.
+
+<Badge niveau="extrapole">Que ces tensions signalent une nouvelle physique au-delà de ΛCDM, ou des systématiques non identifiées, demeure une question ouverte et sérieusement débattue. Aucune des deux interprétations n'est établie.</Badge>
+
+C'est pourquoi ces écarts sont scrutés avec une telle intensité : ils sont aujourd'hui le canal le plus prometteur pour faire craquer le modèle standard, ou pour le consolider définitivement. La cosmologie de précision a fait son travail — les barres d'erreur sont devenues si fines que la nature ne peut plus se cacher derrière elles. Reste à savoir laquelle de nos certitudes devra plier : c'est sur cet horizon ouvert que se referme notre parcours, et que s'ouvre le chapitre de synthèse.

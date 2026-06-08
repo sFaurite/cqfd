@@ -1,0 +1,86 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le principe cosmologique"
+chapter: principe-cosmologique
+description: "Homogénéité et isotropie à grande échelle, posées en hypothèse et ancrées dans l'observation."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le principe cosmologique
+
+Avant d'écrire la moindre équation sur l'univers, il faut affronter une difficulté qui n'existe nulle part ailleurs en physique : nous n'avons qu'**un seul** exemplaire de notre objet d'étude, et nous l'observons depuis **un seul** point, à une seule époque, sans pouvoir en sortir pour le regarder de l'extérieur. Comment, dans ces conditions, espérer faire de la science ? La réponse de la cosmologie moderne tient en une décision de méthode aussi audacieuse que féconde, et c'est le point de départ de tout ce cours.
+
+<Tournant titre="Tournant : on pose des hypothèses, on ne déduit plus">
+On ne déduit pas la structure de l'univers à partir de rien. Ici, **on ajoute des hypothèses** — deux symétries : l'**homogénéité** et l'**isotropie** à grande échelle. Elles ne se démontrent pas a priori ; aucun raisonnement pur ne peut les établir. Elles sont **motivées par l'observation** et adoptées comme socle de travail. À partir d'elles, tout le reste du cours sera déduit ou confronté à l'expérience — mais elles-mêmes restent un point de départ posé, jamais prouvé de l'intérieur.
+</Tournant>
+
+<Hypotheses titre="Le principe cosmologique">
+1. **Homogénéité à grande échelle.** Au-delà d'une échelle de l'ordre de $100$ à $300$ Mpc, les propriétés moyennes de l'univers (densité, composition, taux d'expansion) sont **les mêmes en tout lieu**. Aucun endroit n'est spécial.
+2. **Isotropie.** L'univers présente le **même aspect statistique dans toutes les directions** : il n'existe pas de direction privilégiée.
+3. **Universalité des lois.** Les **mêmes lois physiques** s'appliquent en tout lieu et à toute époque (mêmes constantes, mêmes équations qu'au laboratoire).
+</Hypotheses>
+
+### Deux mots à définir avec soin
+
+Il faut distinguer nettement les deux premières hypothèses, car on les confond souvent.
+
+L'**homogénéité** est une invariance par **translation** : déplacez-vous d'un grand pas dans l'espace, le paysage cosmique moyen ne change pas. L'**isotropie** est une invariance par **rotation** depuis un point : tournez sur vous-même, toutes les directions se ressemblent. Ce sont deux symétries logiquement indépendantes — on peut imaginer l'une sans l'autre.
+
+<Encart type="intuition" titre="Forêt, oignon, et le bon zoom">
+Imaginez une immense forêt vue d'avion. De près, c'est tout sauf uniforme : des arbres, des clairières, des chemins. Mais reculez assez, et chaque grand carré de forêt ressemble en moyenne à n'importe quel autre — voilà l'homogénéité. Le principe cosmologique ne dit pas que l'univers est *lisse* : il dit qu'il le devient **quand on regarde assez large**. Les galaxies, les amas, les filaments sont les « arbres » — des inhomogénéités **locales**, parfaitement réelles, qui s'effacent dans la moyenne à grande échelle.
+</Encart>
+
+C'est crucial : à petite échelle, l'univers est manifestement grumeleux. Une galaxie est environ $10^{5}$ fois plus dense que la moyenne cosmique ; entre deux amas s'étendent de vastes vides. Le principe cosmologique n'est **pas** contredit par ces structures — il ne s'applique qu'au-delà de l'**échelle d'homogénéité**, de l'ordre de quelques centaines de Mpc.
+
+<Encart type="rappel" titre="Le mégaparsec (Mpc)">
+Un parsec vaut environ $3{,}26$ années-lumière, soit $\approx 3{,}086\times 10^{16}$ m (valeur **définie** par convention géométrique, à partir de la seconde d'arc et de l'unité astronomique). Un mégaparsec est un million de parsecs : $1\ \text{Mpc} \approx 3{,}26$ millions d'années-lumière. C'est l'unité naturelle des distances entre galaxies : nos voisines les plus proches sont à quelques Mpc, et l'échelle d'homogénéité $\sim 100$–$300$ Mpc représente quelques centaines de millions d'années-lumière.
+</Encart>
+
+### Pourquoi une hypothèse, et non un théorème
+
+Pourquoi ne pas simplement *vérifier* que l'univers est homogène ? Parce que la vérification directe est hors de portée. Pour confirmer l'homogénéité, il faudrait comparer notre voisinage à des régions lointaines **au même instant cosmique** — mais regarder loin, c'est regarder dans le **passé** (la lumière met du temps à nous parvenir). Et pour la tester pleinement, il faudrait des points de vue extérieurs au nôtre, que nous n'aurons jamais. L'homogénéité reste donc **inférée**, jamais constatée de l'extérieur.
+
+Ce choix n'est pourtant pas arbitraire : il s'enracine dans le **principe copernicien**, l'idée que **nous n'occupons aucune position privilégiée** dans l'univers. Copernic a retiré la Terre du centre du Système solaire ; le principe cosmologique étend cette humilité à l'échelle de l'univers entier. C'est une hypothèse de modestie : si notre point de vue est typique, alors ce que nous voyons autour de nous ressemble à ce que verrait n'importe quel observateur ailleurs.
+
+### Un argument décisif : isotropie partout &rArr; homogénéité
+
+Voici l'élégance cachée du principe. Les deux hypothèses ne sont pas indépendantes si l'on invoque le principe copernicien, et cela se démontre.
+
+<Encart type="plusloin" titre="De l'isotropie universelle à l'homogénéité">
+**Affirmation.** Si l'univers est isotrope **autour de tout point** (et non du seul nôtre), alors il est homogène.
+
+**Idée de preuve.** Prenons deux points quelconques $A$ et $B$. On veut montrer qu'une propriété physique scalaire (la densité moyenne, par exemple) y prend la même valeur.
+
+Considérons un observateur en $A$. L'isotropie autour de $A$ signifie que cette propriété ne dépend pas de la direction depuis $A$ : sur toute **sphère** centrée en $A$, elle est constante. Elle ne peut donc varier qu'avec la **distance** à $A$.
+
+Relions $A$ et $B$ par une chaîne de points-pivots intermédiaires, chacun à distance modérée du précédent, et tels que les sphères concernées se recoupent. Autour de **chacun** de ces pivots, l'isotropie impose à son tour que la propriété soit constante sur les sphères centrées en lui. En combinant ces contraintes le long de la chaîne, la seule possibilité compatible avec « constante sur toutes les sphères, autour de tout centre » est que la propriété soit **partout la même**. Donc sa valeur en $A$ égale sa valeur en $B$. Comme $A$ et $B$ sont quelconques, l'univers est homogène. $\blacksquare$
+
+(La version rigoureuse se formule en géométrie différentielle : un espace isotrope en tout point est nécessairement **maximalement symétrique**, donc homogène.)
+</Encart>
+
+La conséquence est précieuse pour le cosmologue. Nous ne pouvons constater l'isotropie que **depuis chez nous** — mais si nous acceptons le principe copernicien (notre point n'a rien de spécial), alors l'isotropie *locale* devient isotrope *partout*, et l'homogénéité **suit logiquement**. C'est ainsi que l'observation la plus accessible (« le ciel se ressemble dans toutes les directions ») se transforme en l'hypothèse de structure dont nous avons besoin.
+
+### Ce que l'observation dit vraiment
+
+Que mesure-t-on, concrètement ?
+
+L'**isotropie** est, elle, **directement observée**, et c'est la preuve la plus spectaculaire de la cosmologie. Le **fond diffus cosmologique** — le rayonnement le plus ancien que nous puissions capter — a la même température dans toutes les directions du ciel à environ **une partie sur $100\,000$** près.
+
+<Resultat label="Isotropie du fond diffus cosmologique">
+
+$$ \frac{\Delta T}{T} \sim 10^{-5} $$
+
+<Badge niveau="observe" slot="badge">Mesuré directement par COBE, WMAP puis Planck : le ciel micro-onde est isotrope à $\sim 10^{-5}$ près après soustraction du mouvement local. C'est un fait empirique de premier ordre.</Badge>
+</Resultat>
+
+L'**homogénéité**, on l'a vu, ne se constate pas de l'extérieur — mais elle est **soutenue** par les grands relevés de galaxies. En cartographiant des millions de galaxies, le **SDSS** (Sloan Digital Sky Survey) montre qu'au-delà de $\sim 100$ Mpc, les fluctuations de densité d'un grand volume à l'autre s'amenuisent : les comptages convergent vers une moyenne commune. <Badge niveau="observe">La transition vers l'homogénéité statistique aux grandes échelles est mesurée dans les catalogues 3D de galaxies (SDSS et relevés ultérieurs) : au-delà de quelques centaines de Mpc, l'univers est statistiquement uniforme.</Badge>
+
+Il faut néanmoins rester honnête sur le **statut** de l'ensemble. L'isotropie est un fait ; l'homogénéité globale, elle, ne peut être vérifiée de l'extérieur. Comme **fondement** du modèle, le principe cosmologique demeure donc une **hypothèse de travail** — remarquablement appuyée, jamais démontrée. <Badge niveau="concordance">Le principe cosmologique est le postulat de base du modèle standard ΛCDM : il n'est pas prouvé, mais toutes ses conséquences testées (expansion uniforme, fond diffus, structure à grande échelle) concordent avec l'observation.</Badge>
+
+Forts de ces deux symétries, nous pouvons maintenant chercher la **forme géométrique** la plus générale d'un univers homogène et isotrope en expansion — et c'est cette métrique qui ouvrira le chapitre suivant.

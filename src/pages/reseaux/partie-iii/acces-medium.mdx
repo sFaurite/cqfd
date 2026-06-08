@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Partager le medium : CSMA/CD et collisions"
+chapter: acces-medium
+description: "Traite le controle d'acces au medium : le probleme des collisions sur un medium partage, CSMA/CD, et le backoff exponentiel binaire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand tout le monde parle en même temps
+
+Imaginez une grande table de réunion sans animateur. Une seule règle : on entend tout ce qui est dit, mais si deux personnes parlent en même temps, leurs voix se mélangent et plus personne ne comprend rien. C'est exactement le problème d'un **médium partagé** : un câble unique, ou un brin de fibre, sur lequel plusieurs machines sont branchées et où une seule transmission peut occuper le support à la fois.
+
+Nous avons déjà la trame et son adresse de destination grâce au chapitre précédent.
+
+<Prereq href="/reseaux/partie-iii/mac-ethernet">Adresses MAC et trame Ethernet</Prereq>
+
+Mais savoir *à qui* on parle ne dit pas *quand* on a le droit de parler. C'est tout l'enjeu de ce chapitre.
+
+<Hypotheses titre="Hypothèses de départ">
+
+- Le médium est un **bus partagé** : un seul canal physique, vu par toutes les stations. Tout signal émis se propage vers toutes les autres (rappel du domaine de diffusion établi au chapitre précédent).
+- La propagation n'est **pas instantanée** : un signal met un temps $\tau$ pour aller d'un bout à l'autre du câble. C'est imposé par la physique : rien ne va plus vite que la lumière dans le support.
+- Une station peut **écouter** le médium pendant qu'elle émet (elle compare ce qu'elle envoie à ce qu'elle lit).
+
+</Hypotheses>
+
+## La collision : un fait physique, pas un bug
+
+Si deux stations émettent « assez près » dans le temps, leurs signaux se superposent sur le câble. Le résultat est un signal corrompu : c'est une **collision**. Aucune des deux trames n'arrive intacte. Notez bien que ce n'est pas une panne, c'est une conséquence inévitable d'un support unique partagé sans coordination.
+
+<Badge niveau="theoreme">La superposition de deux signaux électriques sur un même conducteur est un phénomène physique : deux émissions simultanées se brouillent nécessairement.</Badge>
+
+Une première idée naturelle : **écouter avant de parler**. C'est le *Carrier Sense* (CS). Avant d'émettre, une station vérifie que le médium est silencieux. S'il est occupé, elle attend. Cela évite beaucoup de collisions... mais pas toutes, à cause de $\tau$.
+
+<Encart type="intuition" titre="Pourquoi écouter ne suffit pas">
+
+Supposons deux stations A et B aux deux extrémités du câble. A commence à émettre à l'instant $t=0$. Son signal n'atteint B qu'à $t=\tau$. Si B écoute à $t = \tau/2$, elle entend... le silence, car le signal de A n'est pas encore arrivé chez elle. Elle se croit autorisée à émettre, et émet. À $t=\tau$, les deux signaux se rencontrent : collision. L'écoute ne supprime donc pas les collisions, elle les rend seulement plus rares.
+
+</Encart>
+
+## CSMA/CD : écouter, et détecter pendant qu'on parle
+
+D'où l'ajout du *Collision Detection* (CD). L'idée : continuer à écouter **pendant** qu'on émet. Si une station lit sur le câble autre chose que ce qu'elle y a mis, c'est qu'une autre station émet en même temps : collision détectée. Le protocole complet s'appelle **CSMA/CD** (*Carrier Sense Multiple Access with Collision Detection*).
+
+<Badge niveau="norme">CSMA/CD est la méthode d'accès standardisée de l'Ethernet historique à médium partagé (IEEE 802.3).</Badge>
+
+Le déroulé d'une station qui veut émettre :
+
+1. **Écouter** (carrier sense). Si le médium est occupé, attendre qu'il se libère.
+2. **Émettre** la trame, tout en continuant d'écouter.
+3. Si une collision est détectée : **arrêter immédiatement** l'émission et envoyer un bref signal de *jam* pour que tout le monde soit certain qu'il y a eu collision.
+4. **Attendre un délai aléatoire**, puis recommencer en 1.
+
+Les trois premières étapes sont robustes et bien fondées. C'est l'étape 4 qui mérite qu'on s'y arrête, car elle cache un choix d'ingénieur.
+
+## Le backoff exponentiel binaire : laisser le hasard trancher
+
+Après une collision, les deux stations veulent ré-émettre. Si elles attendaient toutes deux le même délai fixe, elles re-collisionneraient... indéfiniment. Il faut **briser la symétrie**. La solution retenue par Ethernet : le **backoff exponentiel binaire** (*Binary Exponential Backoff*).
+
+Après la $n$-ième collision consécutive d'une trame, la station tire un entier $k$ au hasard, uniformément, dans un intervalle qui **double** à chaque collision :
+
+$$ k \in \{0, 1, 2, \dots, 2^{m}-1\}, \quad m = \min(n, 10) $$
+
+puis attend $k$ tranches de temps (chaque tranche valant $2\tau$, le temps d'aller-retour maximal).
+
+<Encart type="calcul" titre="Pourquoi le doublement réduit la probabilité de re-collision">
+
+Plaçons-nous après la 1ʳᵉ collision : $n=1$, donc $m=1$ et $k \in \{0, 1\}$. Deux stations, chacune tire 0 ou 1.
+
+- $P(\text{même tirage}) = P(0,0) + P(1,1) = \tfrac{1}{2}\cdot\tfrac{1}{2} + \tfrac{1}{2}\cdot\tfrac{1}{2} = \tfrac{1}{2}$.
+
+Si elles re-collisionnent, on passe à $n=2$, $m=2$, $k \in \{0,1,2,3\}$ :
+
+- $P(\text{même tirage}) = 4 \times \left(\tfrac{1}{4}\cdot\tfrac{1}{4}\right) = \tfrac{4}{16} = \tfrac{1}{4}$.
+
+Et à $n=3$ : $k \in \{0,\dots,7\}$, donc $P(\text{même tirage}) = 8 \times \left(\tfrac{1}{8}\right)^2 = \tfrac{1}{8}$.
+
+À chaque échec, la fenêtre double, donc la probabilité que deux stations retombent sur le même créneau est **divisée par deux**. Les collisions répétées deviennent exponentiellement improbables : le système se « désengorge » tout seul.
+
+</Encart>
+
+Voilà l'intuition centrale : **le hasard** brise la symétrie entre stations, et **le doublement** adapte automatiquement l'attente à la charge. Peu de monde en compétition ? Les fenêtres restent petites, on attend peu. Beaucoup de collisions ? Les fenêtres s'élargissent, on s'étale dans le temps.
+
+<Badge niveau="heuristique">Le backoff exponentiel binaire est une heuristique d'ingénierie, pas un optimum. D'autres règles de recul (linéaire, fenêtres différentes) marcheraient ; ce choix est un compromis simple entre équité, stabilité et facilité d'implémentation.</Badge>
+
+Il faut être honnête sur ses défauts : le backoff favorise légèrement les stations qui viennent d'arriver (fenêtre petite) face à celles qui ont déjà beaucoup attendu (effet de capture), et il plafonne à $m=10$ pour ne pas faire diverger les délais. Ce n'est pas « la » bonne solution, c'est « une » solution raisonnable.
+
+## L'efficacité s'effondre sous la charge
+
+Que vaut un médium partagé en pratique ? Tant que peu de stations émettent, CSMA/CD est excellent : presque pas de collisions, le câble est bien utilisé. Mais plus la charge monte, plus les collisions se multiplient, et **chaque collision est du temps de câble gaspillé** : on a émis du signal qui n'a transporté aucune trame utile.
+
+<Badge niveau="heuristique">Le taux d'utilisation utile d'un bus CSMA/CD chute quand la charge augmente : au-delà d'un certain point, on passe plus de temps à collisionner et à reculer qu'à transmettre.</Badge>
+
+La fraction de temps perdu dépend du rapport entre $\tau$ (durée de propagation) et la durée d'une trame : plus le câble est long ou les trames courtes, plus une collision coûte cher relativement. C'est pourquoi Ethernet impose une **taille minimale de trame** : il faut que l'émission dure au moins $2\tau$ pour qu'une collision soit détectable avant la fin de l'envoi.
+
+<Badge niveau="norme">La taille minimale de trame (64 octets sur Ethernet 10/100 Mbit/s) est fixée par la norme IEEE 802.3 : elle garantit que toute collision se produit avant la fin de l'émission, donc reste détectable.</Badge>
+
+## Et aujourd'hui ?
+
+Ce mécanisme est aujourd'hui largement **historique**. L'Ethernet moderne n'utilise plus un bus partagé : chaque machine a son propre lien dédié vers un **commutateur**, en *full-duplex* (émission et réception simultanées sur des paires séparées). Sans support partagé, il n'y a plus de collision possible : CSMA/CD est désactivé.
+
+<Badge niveau="deploiement">Sur une infrastructure commutée full-duplex moderne, les collisions ont quasiment disparu et CSMA/CD ne joue plus de rôle. Cela dépend entièrement de l'infrastructure déployée.</Badge>
+
+Faut-il donc oublier ce chapitre ? Surtout pas. Le **problème** qu'il résout — l'accès multiple à un canal partagé sans chef d'orchestre — reste universel. Le Wi-Fi, où l'air est par nature un médium partagé, repose sur un cousin direct : **CSMA/CA** (*Collision Avoidance*), qui réutilise le carrier sense et le backoff aléatoire, en les adaptant au fait qu'on ne peut pas détecter une collision en émettant sur les ondes radio.
+
+<Encart type="plusloin" titre="Pourquoi le Wi-Fi évite au lieu de détecter">
+
+Sur un câble, écouter en émettant est faisable. En radio, le signal qu'une carte émet est des millions de fois plus fort que celui qu'elle reçoit : impossible d'entendre une collision « par-dessus » sa propre émission. Le Wi-Fi renonce donc à *détecter* (CD) et mise sur *éviter* (CA) : réservation du canal et acquittements explicites, mais le cœur — écouter et reculer aléatoirement — vient en droite ligne de CSMA/CD.
+
+</Encart>
+
+Nous savons maintenant coordonner l'accès à un médium partagé. Au chapitre suivant, nous verrons comment le **commutateur** change la donne : en donnant à chaque station son propre lien, il supprime les collisions à la racine et fait passer le réseau du « tout le monde s'entend » au « chacun sa ligne ».

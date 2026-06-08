@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le DNS : des noms aux adresses"
+chapter: dns
+description: "Presente le DNS : espace de noms hierarchique, delegation, resolution recursive/iterative, role du cache et des TTL, et son transport (UDP/TCP)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi des noms ? Le premier service rendu à l'humain
+
+<Tournant titre="Tournant : on monte au niveau applicatif">
+Depuis le premier bit, nous avons construit une machinerie qui *transporte des octets* d'un point à un autre du monde. Mais transporter n'est pas *servir*. À partir de ce chapitre, nous quittons la plomberie pour les **services** : des protocoles dont le but n'est plus d'acheminer, mais de rendre quelque chose d'utile à un être humain. Et le tout premier de ces services répond à un besoin si évident qu'on l'oublie : personne ne veut taper `142.250.179.110` pour atteindre un site. On veut taper un *nom*.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. On admet désormais une **couche transport fonctionnelle** : <Prereq href="/reseaux/partie-v/udp">UDP</Prereq> (datagramme léger, sans connexion) et TCP (flux fiable) sont disponibles au-dessus d'IP. Un programme peut envoyer une requête à une `(IP, port)` et recevoir une réponse.
+2. On admet le <Prereq href="/reseaux/partie-iv/routage">routage IP</Prereq> : si l'on connaît l'adresse IP de destination, le réseau sait y acheminer un paquet.
+3. **Nouveau besoin, de nature humaine et non technique** : le réseau route des *adresses*, mais les humains retiennent des *noms*. Il faut une traduction nom → adresse. À l'échelle mondiale, cette traduction doit être **distribuée** et **déléguée** — d'où le **DNS** (*Domain Name System*), dont la structure (hiérarchie, racine, domaines de premier niveau) est une **convention/norme** adoptée mondialement.
+</Hypotheses>
+
+Le besoin est clair ; la difficulté est l'**échelle**. On pourrait imaginer un gigantesque fichier `nom → adresse`, copié sur chaque machine. C'est d'ailleurs ainsi que cela a commencé : un unique fichier `HOSTS.TXT`. Mais avec des centaines de millions de noms changeant chaque seconde, un fichier central est ingérable : qui le met à jour ? comment le distribuer assez vite ? La seule réponse tenable est de **découper et déléguer**.
+
+## L'espace de noms : un arbre, et qui décide de quoi
+
+Le DNS organise tous les noms du monde en un **arbre**. À la cime, la **racine** (notée par un point implicite). Juste en dessous, les **TLD** (*Top-Level Domains*) : `.fr`, `.com`, `.org`… En dessous encore, les domaines (`cerema` sous `.fr`), puis les sous-domaines, à volonté.
+
+<Encart type="intuition" titre="Lire un nom à l'envers">
+Un nom comme `www.cerema.fr` se lit **de droite à gauche**, du plus général au plus précis : la racine (invisible), puis le TLD `.fr`, puis le domaine `cerema`, puis l'hôte `www`. C'est exactement une **adresse postale lue à l'envers** : pays, ville, rue, numéro. Chaque niveau délègue au suivant le soin de connaître ses propres habitants. La racine ne sait pas qui est `www.cerema.fr` ; elle sait seulement *à qui demander* pour `.fr`.
+</Encart>
+
+L'idée structurante est la **délégation par zones**. Une *zone* est une portion de l'arbre dont une organisation est responsable. Le gestionnaire de la racine ne connaît pas tous les noms en `.fr` ; il connaît seulement les serveurs **faisant autorité** pour `.fr`. Ceux-ci, à leur tour, ne connaissent pas l'intérieur de `cerema.fr` ; ils délèguent à ses serveurs. La responsabilité descend ainsi de proche en proche.
+
+<Resultat label="Hiérarchie et délégation du DNS">
+
+$$ \texttt{.} \;\to\; \texttt{.fr} \;\to\; \texttt{cerema.fr} \;\to\; \texttt{www.cerema.fr} $$
+
+<Badge niveau="norme" slot="badge">L'arbre de noms, les TLD et le mécanisme de délégation par zones sont fixés par les standards DNS (RFC 1034/1035), adoptés mondialement. C'est une convention universelle, pas une loi physique.</Badge>
+</Resultat>
+
+Cette structure n'est imposée par aucun théorème : c'est un **choix de conception** brillant, mais conventionnel. On aurait pu organiser les noms autrement ; le monde a normalisé *celui-ci*.
+
+## La résolution : descendre l'arbre, requête après requête
+
+Comment passe-t-on concrètement de `www.cerema.fr` à une IP ? Votre machine confie la question à un **résolveur récursif** : un serveur dont le métier est de mener l'enquête *à votre place* et de vous rendre une réponse finale. Le résolveur, lui, interroge l'arbre de façon **itérative** : il pose une question à chaque niveau, et chaque serveur lui répond soit la réponse, soit *« je ne sais pas, mais demande à celui-ci »*.
+
+<Encart type="calcul" titre="Résoudre www.cerema.fr, étape par étape">
+1. Le résolveur interroge un **serveur racine** : « adresse de `www.cerema.fr` ? »
+2. La racine ne connaît pas ce nom, mais elle délègue `.fr` : « je ne sais pas, voici les serveurs de noms faisant **autorité pour `.fr`** ».
+3. Le résolveur interroge un serveur **`.fr`** : « adresse de `www.cerema.fr` ? »
+4. Réponse : « je ne sais pas, voici les serveurs **faisant autorité pour `cerema.fr`** ».
+5. Le résolveur interroge un serveur **`cerema.fr`** : « adresse de `www.cerema.fr` ? »
+6. Celui-ci **fait autorité** sur cette zone : il répond l'**IP finale**.
+7. Le résolveur renvoie cette IP à votre machine.
+</Encart>
+
+Notez la division du travail : *votre* machine pose **une** question (mode récursif) ; le *résolveur* pose **plusieurs** questions en descendant l'arbre (mode itératif). Cette articulation récursif/itératif est, elle aussi, standardisée. <Badge niveau="norme">La résolution récursive (résolveur ↔ client) et itérative (résolveur ↔ serveurs faisant autorité) est définie par les RFC DNS.</Badge>
+
+Attention : un résolveur public connu comme `8.8.8.8` n'est **pas** « le DNS ». C'est *un* résolveur récursif parmi d'innombrables autres (celui de votre FAI, de votre entreprise, le vôtre…). Lequel vous utilisez relève de votre configuration. <Badge niveau="deploiement">Le résolveur récursif effectivement employé dépend de la configuration du poste, du réseau ou de l'opérateur. Aucun n'est « le » DNS.</Badge>
+
+## Cache et TTL : ce qui rend l'échelle tenable
+
+Si chaque clic déclenchait les sept étapes ci-dessus jusqu'à la racine, les serveurs racine s'effondreraient. La parade est le **cache** : tout résolveur **mémorise** les réponses obtenues. La quasi-totalité des requêtes pour `.fr` ou pour les gros domaines sont alors servies depuis la mémoire locale, sans toucher la racine.
+
+Mais une adresse peut changer. Combien de temps garder une réponse en cache ? C'est le rôle du **TTL** (*Time To Live*) : chaque enregistrement DNS est livré avec une durée de validité. Pendant le TTL, on réutilise la réponse cachée ; ensuite, on réinterroge.
+
+<Resultat label="Compromis du TTL">
+
+$$ \text{TTL grand} \Rightarrow \text{moins de trafic, propagation lente} \quad ; \quad \text{TTL petit} \Rightarrow \text{plus de trafic, mises à jour rapides} $$
+
+<Badge niveau="deploiement" slot="badge">La valeur du TTL et le comportement réel du cache sont fixés par l'administrateur de chaque zone et par chaque résolveur. C'est un réglage de déploiement, pas une constante.</Badge>
+</Resultat>
+
+## UDP d'abord, TCP en repli — et la question de la sécurité
+
+Une requête DNS typique tient en quelques dizaines d'octets, et sa réponse aussi. Établir une connexion TCP (trois messages d'ouverture) pour si peu serait du gaspillage. Le DNS envoie donc d'abord sa requête en **UDP** : un datagramme, une réponse, fini. Si la réponse est trop grande pour tenir dans un datagramme (ou tronquée), il **bascule sur TCP**.
+
+<Badge niveau="heuristique">« UDP d'abord, TCP en repli » est un choix d'efficacité d'ingénierie : économiser le coût d'une connexion pour des échanges minuscules. Raisonnable, mais révisable — d'autres transports (TCP systématique, voire HTTPS) sont parfois préférés.</Badge>
+
+Reste une vérité gênante, qu'il faut poser honnêtement. Le DNS **historique n'authentifie rien** : une réponse n'est qu'un datagramme UDP, qu'un attaquant bien placé peut **falsifier ou empoisonner** pour vous diriger vers une fausse adresse. Ce n'est pas un détail : c'est une **faille de conception** du protocole originel. <Badge niveau="norme">Le DNS de base (RFC 1035) ne prévoit ni authentification ni chiffrement des réponses ; elles sont en clair et falsifiables.</Badge> Des ajouts *ultérieurs* corrigent cela : **DNSSEC** (signatures pour l'intégrité), **DoT/DoH** (DNS chiffré sur TLS/HTTPS pour la confidentialité). Mais ce sont des couches greffées par-dessus, pas le cœur du DNS.
+
+Cette fragilité nous mène droit aux chapitres suivants : pour *chiffrer* et *authentifier* sérieusement nos échanges, il nous faut d'abord comprendre <Prereq href="/reseaux/partie-vi/http-web">comment on parle au web</Prereq>, puis comment on <Prereq href="/reseaux/partie-vi/tls-securite">sécurise ce dialogue</Prereq>. C'est l'objet de TLS.

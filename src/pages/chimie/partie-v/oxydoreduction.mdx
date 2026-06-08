@@ -1,0 +1,126 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Oxydoréduction et potentiels"
+chapter: oxydoreduction
+description: "Les réactions d'oxydoréduction : nombre d'oxydation, couples redox, potentiels standard, équation de Nernst, piles et électrolyse, lien avec ΔG."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'oxydoréduction : une chimie de l'électron
+
+Jusqu'ici, presque toutes nos réactions consistaient à **déplacer des doublets** ou des **protons**. Avec l'oxydoréduction, on s'attaque à la particule la plus mobile de toutes : l'**électron** lui-même. L'idée est d'une simplicité désarmante — une espèce *donne* des électrons, une autre les *prend* — mais elle débouche sur les piles, la corrosion, la respiration cellulaire et la photosynthèse. Et, surprise, elle se branche directement sur la thermodynamique que nous venons de construire.
+
+<Hypotheses titre="Hypothèses de départ">
+On admet la conservation de la charge et de la matière dans toute réaction. On admet aussi le cadre thermodynamique déjà établi : l'enthalpie libre comme critère de spontanéité et la relation $\Delta_r G = \Delta_r G^\circ + RT\ln Q$, démontrés en <Prereq href="/chimie/partie-iv/enthalpie-libre-spontaneite">enthalpie libre</Prereq> et <Prereq href="/chimie/partie-v/equilibre-chimique">équilibre chimique</Prereq>.
+</Hypotheses>
+
+### Oxydant, réducteur : qui donne, qui prend
+
+Posons le vocabulaire, qui est une **définition** (donc vraie par construction) :
+
+- un **réducteur** *cède* des électrons ; en les cédant, il s'**oxyde** ;
+- un **oxydant** *capte* des électrons ; en les captant, il se **réduit**.
+
+Un moyen mnémotechnique : « réducteur réduit l'autre » — il donne ses électrons à l'oxydant, le réduisant, et s'oxyde lui-même. Comme la charge se conserve, **tout électron cédé est capté** : oxydation et réduction sont indissociables, d'où le mot *oxydo-réduction*.
+
+On découpe alors toute réaction redox en deux **demi-équations** couplées, chacune associée à un **couple** oxydant/réducteur noté $\text{Ox}/\text{Red}$ :
+
+$$\text{Ox} + n\,e^- \rightleftharpoons \text{Red}$$
+
+Par exemple $\text{Cu}^{2+}/\text{Cu}$ ou $\text{Zn}^{2+}/\text{Zn}$. La réaction globale s'obtient en additionnant les deux demi-équations de façon à ce que les électrons s'éliminent.
+
+### Le nombre d'oxydation : un compteur, pas une charge
+
+Pour repérer qui s'oxyde et de combien, on attribue à chaque atome un **nombre d'oxydation** (n.o.), comme s'il « possédait » entièrement les électrons des liaisons les plus électronégatives. C'est un outil de comptage redoutablement efficace, mais il faut être honnête sur sa nature.
+
+<Badge niveau="empirique">Le nombre d'oxydation est une **convention de comptage**, pas une charge physique réelle : dans une liaison covalente partagée, attribuer tous les électrons à l'atome le plus électronégatif est une fiction commode. C'est une règle empirique, calibrée sur l'électronégativité, dont l'utilité justifie l'usage sans qu'elle décrive une réalité mesurable.</Badge>
+
+Règles usuelles : n.o. $= 0$ pour un corps simple, $= +\text{I}$ pour H (sauf hydrures), $= -\text{II}$ pour O (sauf peroxydes), et la **somme des n.o. égale la charge globale**. Une **oxydation** est une *augmentation* du n.o. (perte d'électrons) ; une **réduction**, une *diminution*. La variation de n.o. donne directement le nombre d'électrons échangés.
+
+<Encart type="calcul" titre="Équilibrer Cu²⁺ + Zn → Cu + Zn²⁺">
+Couples en jeu : $\text{Cu}^{2+}/\text{Cu}$ et $\text{Zn}^{2+}/\text{Zn}$.
+
+1. Demi-équation de réduction (le cuivre) :
+
+$$\text{Cu}^{2+} + 2\,e^- \rightarrow \text{Cu}$$
+
+2. Demi-équation d'oxydation (le zinc) :
+
+$$\text{Zn} \rightarrow \text{Zn}^{2+} + 2\,e^-$$
+
+3. Les deux échangent $n=2$ électrons : on additionne, les $2\,e^-$ s'annulent.
+
+$$\text{Cu}^{2+} + \text{Zn} \rightarrow \text{Cu} + \text{Zn}^{2+}$$
+
+Vérification par les n.o. : Cu passe de $+\text{II}$ à $0$ (gain de 2 e⁻, réduction) ; Zn passe de $0$ à $+\text{II}$ (perte de 2 e⁻, oxydation). La charge totale est conservée ($+2$ de chaque côté).
+</Encart>
+
+### La pile : faire passer les électrons par un fil
+
+Voici l'idée géniale. Dans le mélange ci-dessus, les électrons passent *directement* du zinc au cuivre, et l'énergie se dissipe en chaleur. Mais si l'on **sépare physiquement** les deux demi-réactions dans deux compartiments reliés par un fil conducteur (et un pont salin pour la neutralité), les électrons sont *forcés* de circuler dans le fil : on récupère un **courant électrique**. C'est une **pile**, et elle transforme l'enthalpie libre de la réaction en **travail électrique** utile.
+
+On mesure entre les deux électrodes une **force électromotrice** $E$ (une tension). Comment la relier à la chimie ? Par la définition même du travail électrique : déplacer une charge $Q$ sous une tension $E$ fournit un travail $W = Q\,E$. Pour $n$ moles d'électrons échangées, la charge transportée vaut $Q = nF$, où $F$ est la **constante de Faraday** ($F \approx 96\,485\ \text{C·mol}^{-1}$, valeur **expérimentale** = charge d'une mole d'électrons). Or le travail utile maximal récupérable à $T$ et $P$ constantes est précisément $-\Delta_r G$ (résultat de la page enthalpie libre). D'où :
+
+<Resultat label="Pont chimie ↔ électricité">
+
+$$\Delta_r G = -\,n F E$$
+
+<Badge niveau="quantique" slot="badge">Déduit de l'identification du travail électrique $nFE$ au travail utile maximal $-\Delta_r G$, lui-même issu du second principe. C'est une conséquence rigoureuse de la thermodynamique.</Badge>
+</Resultat>
+
+Conséquence immédiate et lumineuse : $\Delta_r G < 0$ (réaction spontanée) **équivaut** à $E > 0$. Une pile débite spontanément si et seulement si sa tension est positive.
+
+### Potentiels standard : une échelle de référence
+
+Une tension se mesure toujours *entre deux* électrodes : on ne peut pas attribuer une valeur absolue à un seul couple. On **choisit donc une origine** : l'**électrode standard à hydrogène** (ESH), couple $\text{H}^+/\text{H}_2$, à laquelle on attribue par convention le potentiel $E^\circ = 0\ \text{V}$. Tout autre couple reçoit alors un **potentiel standard** $E^\circ(\text{Ox}/\text{Red})$, mesuré par rapport à elle.
+
+<Badge niveau="experimental">Les potentiels standard sont **mesurés** par rapport à l'ESH, dont le zéro est posé **par convention**. Les valeurs ($E^\circ(\text{Cu}^{2+}/\text{Cu}) = +0{,}34$ V, $E^\circ(\text{Zn}^{2+}/\text{Zn}) = -0{,}76$ V…) sont reproductibles et tabulées ; seul leur point de référence est arbitraire.</Badge>
+
+Règle de prévision : la réaction spontanée fait réagir l'**oxydant du couple au $E^\circ$ le plus élevé** avec le **réducteur du couple au $E^\circ$ le plus bas**. Pour notre pile, $E^\circ_{\text{pile}} = E^\circ(\text{Cu}^{2+}/\text{Cu}) - E^\circ(\text{Zn}^{2+}/\text{Zn}) = 0{,}34 - (-0{,}76) = +1{,}10\ \text{V} > 0$ : le cuivre se dépose, le zinc se dissout, comme observé.
+
+### L'équation de Nernst : sortir des conditions standard
+
+Hors conditions standard, le potentiel dépend des concentrations. On le déduit *sans nouvelle hypothèse* en injectant $\Delta_r G = -nFE$ et $\Delta_r G^\circ = -nFE^\circ$ dans la relation déjà connue $\Delta_r G = \Delta_r G^\circ + RT\ln Q$.
+
+<Encart type="calcul" titre="Démonstration de l'équation de Nernst">
+On part de la relation établie en thermochimie :
+
+$$\Delta_r G = \Delta_r G^\circ + RT\ln Q$$
+
+On remplace chaque enthalpie libre par son expression électrique :
+
+$$-nFE = -nFE^\circ + RT\ln Q$$
+
+On divise par $-nF$ :
+
+$$E = E^\circ - \frac{RT}{nF}\ln Q$$
+
+C'est l'**équation de Nernst**. À $T = 298\ \text{K}$, le facteur $\frac{RT}{F}\ln 10 \approx 0{,}059\ \text{V}$, d'où la forme usuelle :
+
+$$E = E^\circ - \frac{0{,}059}{n}\log Q$$
+</Encart>
+
+<Resultat label="Équation de Nernst">
+
+$$E = E^\circ - \frac{RT}{nF}\ln Q$$
+
+<Badge niveau="quantique" slot="badge">Déduite de $\Delta_r G = \Delta_r G^\circ + RT\ln Q$ et de $\Delta_r G = -nFE$, toutes deux déjà établies. Aucune hypothèse nouvelle.</Badge>
+</Resultat>
+
+Au fur et à mesure que la pile débite, $Q$ évolue, $E$ diminue, et la pile est « plate » quand $E = 0$, c'est-à-dire $Q = K$ : l'**équilibre** est atteint. On retrouve ainsi $\Delta_r G^\circ = -RT\ln K = -nFE^\circ$, qui boucle parfaitement avec le chapitre sur l'équilibre.
+
+### Une mise en garde indispensable
+
+<Encart type="intuition" titre="Prévoir n'est pas réaliser">
+Tout ce qui précède relève de la **thermodynamique** : $E > 0$ dit qu'une réaction *peut* se produire, pas qu'elle *se produira vite*. Une réaction redox prévue spontanée peut être bloquée cinétiquement — c'est le phénomène de **surtension**. L'eau « devrait » oxyder de nombreux métaux ; elle ne le fait que lentement. Comme l'a martelé la <Prereq href="/chimie/partie-v/equilibre-chimique">page sur l'équilibre</Prereq>, et comme le précisera la cinétique : *favorable ne signifie pas rapide*.
+</Encart>
+
+<Badge niveau="qualitatif">La surtension et les blocages cinétiques font dévier le comportement réel des prévisions thermodynamiques. Leur ampleur dépend fortement des électrodes, de l'état de surface et du milieu : c'est une tendance contextuelle, non universelle.</Badge>
+
+Nous avons ainsi fermé une grande boucle : la **structure électronique** dictait les électronégativités, qui dictent qui cède et qui capte les électrons ; le transfert de ces électrons se mesure en volts ; et ces volts se traduisent en enthalpie libre, donc en spontanéité. Reste une dernière étape de notre voyage : comprendre pourquoi un seul élément, le **carbone**, engendre à lui seul des millions de molécules.

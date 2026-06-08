@@ -1,0 +1,126 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le perceptron multicouche : empiler des neurones"
+chapter: perceptron-multicouche
+description: "Construit le perceptron multicouche (MLP) : couches de neurones, propagation avant en notation matricielle. Montre par l'exemple du XOR pourquoi une seule couche linéaire ne suffit pas et qu'il faut de la profondeur."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaNetworkBuilder from '../../../components/interactive/IaNetworkBuilder.astro';
+
+## Un seul neurone ne suffit pas
+
+Nous avons un neurone : <Prereq href="/ia/partie-i/neurone-formel">une somme pondérée suivie d'une activation</Prereq>, $f(\mathbf{x}) = a(\mathbf{w}\cdot\mathbf{x} + b)$, qui trace un **hyperplan séparateur** dans l'espace des entrées. C'est élégant, mais c'est aussi une prison géométrique : un seul hyperplan ne sait découper le plan qu'en deux demi-espaces. Tant que le découpage cherché reste d'un seul tenant, tout va bien. Mais le monde, lui, n'est pas toujours coupé en deux par une droite.
+
+Pour le voir crûment, prenons le problème-jouet le plus célèbre de l'histoire des réseaux : le **XOR** (le « ou exclusif »). Et montrons, preuve à l'appui, qu'aucun neurone seul ne peut l'apprendre — puis comment une simple couche cachée brise la malédiction.
+
+## Le XOR : quatre points qui résistent à toute droite
+
+Le XOR prend deux bits et renvoie $1$ si et seulement s'ils diffèrent :
+
+| $x_1$ | $x_2$ | XOR |
+|:---:|:---:|:---:|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+
+Géométriquement, on a quatre points aux coins d'un carré : les deux **diagonales** sont étiquetées différemment. La classe $1$ occupe $(0,1)$ et $(1,0)$ ; la classe $0$ occupe $(0,0)$ et $(1,1)$. Intuitivement, aucune droite ne peut isoler une diagonale de l'autre — il faudrait que la frontière « passe entre » des points qui se font face. Formalisons cette intuition.
+
+<Encart type="calcul" titre="Preuve : le XOR n'est pas linéairement séparable">
+Un neurone (perceptron) classe selon le signe de $g(\mathbf{x}) = w_1 x_1 + w_2 x_2 + b$ : il prédit $1$ si $g(\mathbf{x}) > 0$, et $0$ sinon. Supposons par l'absurde qu'un tel $(w_1, w_2, b)$ sépare correctement les quatre points. Alors, en notant la condition exacte ligne à ligne :
+
+$$
+g(0,0) = b \le 0 \quad\text{(classe 0)}
+$$
+
+$$
+g(1,0) = w_1 + b > 0 \quad\text{(classe 1)}
+$$
+
+$$
+g(0,1) = w_2 + b > 0 \quad\text{(classe 1)}
+$$
+
+$$
+g(1,1) = w_1 + w_2 + b \le 0 \quad\text{(classe 0)}
+$$
+
+Additionnons les deux lignes de la **classe 1** :
+
+$$
+(w_1 + b) + (w_2 + b) > 0 \;\Longrightarrow\; w_1 + w_2 + 2b > 0
+$$
+
+Additionnons les deux lignes de la **classe 0** :
+
+$$
+b + (w_1 + w_2 + b) \le 0 \;\Longrightarrow\; w_1 + w_2 + 2b \le 0
+$$
+
+La même quantité $w_1 + w_2 + 2b$ est à la fois strictement positive et négative ou nulle. **Contradiction.** Aucun choix de poids ne convient.
+
+$$
+\boxed{\;\text{Le XOR n'est séparable par aucun hyperplan.}\;}
+$$
+
+<Badge niveau="prouve" slot="badge">Démontré par l'absurde : la somme des deux contraintes par classe se contredit. C'est une impossibilité, pas une difficulté d'apprentissage.</Badge>
+</Encart>
+
+Ce résultat n'est pas une anecdote : c'est un théorème d'impossibilité. Il a, historiquement, gelé le domaine pendant des années. La leçon est claire : **augmenter la puissance d'un modèle linéaire ne peut pas passer par plus d'entraînement, mais par plus de structure.**
+
+## Empiler des neurones : le perceptron multicouche
+
+L'idée est d'organiser des neurones en **couches** : une couche d'entrée, une ou plusieurs couches **cachées**, une couche de sortie. La sortie d'une couche devient l'entrée de la suivante. On note $\mathbf{a}^{(0)} = \mathbf{x}$ l'entrée, puis pour chaque couche $\ell = 1, \dots, L$ :
+
+<Resultat label="Propagation avant d'un MLP">
+
+$$
+\mathbf{z}^{(\ell)} = W^{(\ell)} \mathbf{a}^{(\ell-1)} + \mathbf{b}^{(\ell)}, \qquad \mathbf{a}^{(\ell)} = \sigma\!\left(\mathbf{z}^{(\ell)}\right)
+$$
+
+<Badge niveau="prouve" slot="badge">Définition matricielle exacte : $W^{(\ell)}$ regroupe en lignes les poids des neurones de la couche, $\sigma$ s'applique composante par composante.</Badge>
+</Resultat>
+
+Ici $W^{(\ell)}$ est une matrice de taille $n_\ell \times n_{\ell-1}$ (une ligne par neurone de la couche $\ell$, une colonne par entrée), $\mathbf{b}^{(\ell)}$ le vecteur de biais, et $\sigma$ une **activation** appliquée terme à terme. Empiler des neurones, c'est exactement composer ces fonctions affines suivies d'activations.
+
+<IaNetworkBuilder />
+
+## L'avertissement crucial : sans non-linéarité, on tourne en rond
+
+Attention à un piège tentant. Et si on empilait des couches **sans** activation, c'est-à-dire avec $\sigma = \text{identité}$ ? On pourrait croire que la profondeur, à elle seule, apporte de la puissance. C'est faux, et c'est démontrable en deux lignes.
+
+<Encart type="calcul" titre="Composer des couches affines redonne une couche affine">
+Prenons deux couches purement affines :
+
+$$
+\mathbf{a}^{(1)} = W^{(1)}\mathbf{x} + \mathbf{b}^{(1)}, \qquad \mathbf{a}^{(2)} = W^{(2)}\mathbf{a}^{(1)} + \mathbf{b}^{(2)}
+$$
+
+Substituons la première dans la seconde :
+
+$$
+\mathbf{a}^{(2)} = W^{(2)}\!\left(W^{(1)}\mathbf{x} + \mathbf{b}^{(1)}\right) + \mathbf{b}^{(2)} = \underbrace{\left(W^{(2)} W^{(1)}\right)}_{W'}\mathbf{x} + \underbrace{\left(W^{(2)}\mathbf{b}^{(1)} + \mathbf{b}^{(2)}\right)}_{\mathbf{b}'}
+$$
+
+On obtient $\mathbf{a}^{(2)} = W'\mathbf{x} + \mathbf{b}'$ : **une seule transformation affine**. Par récurrence, $n$ couches affines équivalent à une seule.
+
+<Badge niveau="prouve" slot="badge">Le produit de matrices est une matrice, la composée d'applications affines est affine : c'est une identité algébrique.</Badge>
+</Encart>
+
+Donc un MLP « linéaire » de mille couches reste un perceptron simple — et bute sur le XOR exactement comme avant. **La profondeur n'apporte rien sans non-linéarité.** C'est précisément ce qui rendra l'activation $\sigma$ indispensable ; nous lui consacrons le chapitre suivant.
+
+Avec une non-linéarité, en revanche, une seule couche cachée résout le XOR. L'idée géométrique : deux neurones cachés tracent deux droites, transformant le carré d'origine en un nouvel espace de coordonnées où les deux diagonales **deviennent** séparables par une dernière droite. C'est ce repliement de l'espace que vous voyez se déformer dans le composant ci-dessus à mesure que vous ajoutez des neurones. <Badge niveau="prouve">L'existence d'une solution exacte du XOR par un MLP à une couche cachée se vérifie en exhibant des poids explicites — un calcul fini.</Badge>
+
+## Et l'apprentissage ? Backprop s'applique tel quel
+
+Reste une question : comment *trouver* les poids $W^{(\ell)}, \mathbf{b}^{(\ell)}$ ? Bonne nouvelle, nous avons déjà l'outil. Le MLP n'est qu'un **graphe de calcul** : une chaîne d'opérations matricielles et d'activations. La <Prereq href="/ia/partie-ii/retropropagation">rétropropagation</Prereq> calcule donc le gradient de la perte par rapport à *tous* les paramètres, en un coût comparable à une passe avant — sans aucune adaptation. Profondeur quelconque, largeur quelconque : la règle de la chaîne se propage de la sortie vers l'entrée, couche après couche.
+
+<Badge niveau="prouve">Que backprop calcule exactement le gradient du MLP découle de la validité de la règle de la chaîne sur le graphe de calcul : c'est démontré.</Badge> <Badge niveau="robuste">Mais qu'une descente de gradient *trouve effectivement* une bonne solution sur un MLP n'est garanti par aucun théorème en général : la perte y est non convexe. Que ça marche si souvent est une régularité empirique, pas une certitude.</Badge>
+
+Nous savons désormais construire un réseau profond et le dériver. Il manque la pièce qui débloque tout : l'**activation non linéaire**. Quelles fonctions choisir, et pourquoi ReLU plutôt que la sigmoïde ? C'est l'objet du chapitre suivant.

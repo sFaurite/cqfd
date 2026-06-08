@@ -1,0 +1,120 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Masques et sous-reseaux (CIDR)"
+chapter: sous-reseaux
+description: "Etablit le sous-reseautage : masque de sous-reseau, notation CIDR (/n), separation prefixe/hote par ET binaire, adresses reseau et broadcast, et agregation de routes."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauSousReseau from '../../../components/interactive/ReseauSousReseau.astro';
+
+## Là où l'adresse se coupe en deux
+
+Au chapitre précédent, nous avons posé qu'une <Prereq href="/reseaux/partie-iv/adressage-ip">adresse IPv4 est hiérarchique</Prereq> : ses 32 bits se lisent en deux morceaux, un **préfixe réseau** (commun à toutes les machines d'un même réseau) suivi d'un **identifiant d'hôte** (propre à la machine). Mais une question est restée ouverte : *où*, exactement, passe la frontière ? À quel bit s'arrête le réseau et commence l'hôte ?
+
+Rien dans l'adresse `192.168.10.37` ne le dit. La coupure n'est pas écrite dans les bits eux-mêmes : il faut une information **supplémentaire**. Cette information, c'est le **masque de sous-réseau**.
+
+<Hypotheses titre="Hypothèses de départ">
+On part d'une adresse IPv4 de 32 bits, hiérarchique (préfixe réseau + hôte) comme établi au chapitre précédent. On suppose connue l'arithmétique binaire (le ET bit à bit, les puissances de deux). On admet que router à grande échelle se fait sur le **préfixe**, pas sur l'hôte — ce que le chapitre 14 exploitera.
+</Hypotheses>
+
+## Le masque : un mur de 1 puis de 0
+
+L'idée est d'une simplicité désarmante. Le masque est lui aussi un mot de 32 bits, mais **contraint** : une suite ininterrompue de `1`, suivie d'une suite ininterrompue de `0`. Les `1` marquent les positions « réseau » ; les `0` marquent les positions « hôte ». La frontière, c'est l'endroit où l'on passe de `1` à `0`.
+
+Comme le masque est toujours « des `1` groupés à gauche », il suffit d'**un seul nombre** pour le décrire : *combien* de `1`. C'est la **notation CIDR** : on écrit `/n`, où $n$ est le nombre de bits réseau. Ainsi `/24` signifie 24 bits de `1` puis 8 de `0`, soit le masque `255.255.255.0`.
+
+<Badge niveau="norme">CIDR (Classless Inter-Domain Routing) est le format d'adressage adopté mondialement, défini par le RFC 1519 (1993) puis le RFC 4632. La notation /n est un standard, pas un choix local.</Badge>
+
+<Encart type="rappel" titre="Du masque pointé au /n">
+Un masque comme `255.255.255.0` se traduit bloc par bloc : $255 = \texttt{11111111}$ (huit `1`), $0 = \texttt{00000000}$ (huit `0`). Trois octets pleins plus un octet vide donnent $8+8+8 = 24$ bits réseau, d'où `/24`. De même `/26` = `255.255.255.192`, car $192 = \texttt{11000000}$ ajoute deux `1` au quatrième octet. Les deux écritures désignent **le même** masque.
+</Encart>
+
+## Extraire le préfixe : le ET binaire
+
+Comment l'ordinateur calcule-t-il le préfixe réseau d'une adresse ? Par un **ET bit à bit** entre l'adresse et le masque. Le ET logique ($1 \cdot 1 = 1$, tout le reste $= 0$) a une vertu parfaite ici : un bit du masque à `1` **laisse passer** le bit de l'adresse ; un bit du masque à `0` le **force à `0`**. Résultat : les bits réseau sont conservés, les bits hôte sont effacés. Il ne reste que le préfixe.
+
+<Encart type="calcul" titre="Préfixe de 192.168.10.37 /26">
+Adresse et masque, octet par octet, puis ET ligne à ligne sur le dernier octet (le seul non trivial) :
+
+$$ 37_{10} = \texttt{00100101}_2 \quad ; \quad 192_{10} = \texttt{11000000}_2 $$
+
+ET bit à bit sur ces 8 bits :
+
+$$ \texttt{00100101} \ \text{ET}\ \texttt{11000000} = \texttt{00000000} = 0_{10} $$
+
+Les trois premiers octets, masqués par `255`, sont inchangés. D'où l'adresse réseau :
+
+$$ \texttt{192.168.10.37} \ \text{ET}\ \texttt{255.255.255.192} = \texttt{192.168.10.0} $$
+
+L'hôte `.37` tombe dans le réseau `192.168.10.0/26`.
+</Encart>
+
+<Badge niveau="theoreme">Le préfixe = adresse ET masque est une identité d'arithmétique binaire, démontrée ci-dessus. Le résultat est forcé, pas conventionnel.</Badge>
+
+Manipulez vous-même le ET binaire : changez l'adresse, faites glisser la frontière du masque, et regardez le préfixe se recalculer bit à bit en direct.
+
+<ReseauSousReseau />
+
+## Compter les hôtes d'un /n
+
+Si $n$ bits servent au réseau, il reste $32 - n$ bits pour l'hôte. Chaque combinaison de ces bits désigne une machine ; il y a donc $2^{32-n}$ combinaisons. Mais **deux** d'entre elles ne peuvent pas être attribuées à une machine.
+
+<Encart type="calcul" titre="Pourquoi 2^(32−n) − 2 hôtes utilisables">
+Nombre total de combinaisons des bits hôte :
+
+$$ N_{\text{total}} = 2^{\,32 - n} $$
+
+On en retire deux configurations réservées des bits hôte :
+
+$$ \underbrace{\texttt{00\ldots0}}_{\text{adresse réseau}} \qquad \text{et} \qquad \underbrace{\texttt{11\ldots1}}_{\text{adresse de diffusion}} $$
+
+D'où le nombre d'adresses **attribuables** à une machine :
+
+$$ N_{\text{hôtes}} = 2^{\,32 - n} - 2 $$
+
+Exemple, un /26 : $N_{\text{hôtes}} = 2^{6} - 2 = 64 - 2 = 62$ hôtes.
+</Encart>
+
+Pourquoi ces deux exclusions ? Les bits hôte **tout à zéro** désignent le réseau lui-même (`192.168.10.0`) ; les bits hôte **tout à un** désignent l'adresse de **diffusion** (broadcast, `192.168.10.63`), qui s'adresse à toutes les machines du réseau d'un coup. Aucune des deux ne peut nommer *une* machine particulière.
+
+<Badge niveau="theoreme">Le décompte $2^{32-n}$ est un dénombrement de combinaisons binaires : exact par construction.</Badge>
+<Badge niveau="norme">Réserver l'adresse réseau (bits à 0) et l'adresse de diffusion (bits à 1) est une convention de l'architecture IP, fixée par les standards, et non une nécessité mathématique. Le « −2 » en découle.</Badge>
+
+## Découper un bloc en sous-réseaux
+
+Le vrai pouvoir du masque, c'est de **subdiviser**. Une organisation reçoit `10.0.0.0/24` (256 adresses) et veut quatre réseaux séparés, par exemple pour quatre services. Allonger le préfixe de 2 bits ($/24 \to /26$) crée $2^2 = 4$ sous-réseaux, chacun de 64 adresses :
+
+| Sous-réseau | Plage | Réseau | Diffusion | Hôtes |
+|---|---|---|---|---|
+| /26 n°0 | `.0`–`.63` | `10.0.0.0` | `10.0.0.63` | 62 |
+| /26 n°1 | `.64`–`.127` | `10.0.0.64` | `10.0.0.127` | 62 |
+| /26 n°2 | `.128`–`.191` | `10.0.0.128` | `10.0.0.191` | 62 |
+| /26 n°3 | `.192`–`.255` | `10.0.0.192` | `10.0.0.255` | 62 |
+
+Les deux bits empruntés à l'hôte (`00`, `01`, `10`, `11`) numérotent les quatre sous-réseaux : c'est *exactement* la frontière du masque qu'on déplace vers la droite. <Badge niveau="theoreme">Le découpage est une partition des combinaisons binaires des bits empruntés : exhaustive et sans recouvrement par construction.</Badge>
+
+Quel /n choisir, et combien de sous-réseaux tracer ? Cela, en revanche, dépend des besoins réels de l'organisation. <Badge niveau="deploiement">Le plan d'adressage concret (taille des blocs, allocation par service) varie d'une organisation à l'autre : il relève du déploiement, pas d'une règle universelle.</Badge>
+
+## Agréger : le chemin inverse, qui prépare le routage
+
+Si raccourcir le masque divise, **rallonger les zéros** réunit. Deux réseaux contigus `192.168.0.0/24` et `192.168.1.0/24` partagent les 23 premiers bits : on peut les annoncer comme un seul `192.168.0.0/23`. C'est l'**agrégation** (ou *supernetting*) : un préfixe court qui en résume plusieurs longs.
+
+<Badge niveau="norme">L'agrégation de préfixes est le mécanisme central de CIDR (RFC 1519) ; elle est ce qui a freiné l'explosion des tables de routage de l'Internet.</Badge>
+
+C'est précisément ce mécanisme qui rend possible le **routage** : une table peut contenir à la fois un préfixe agrégé large et des préfixes plus spécifiques. Laquelle gagne ? Le chapitre suivant établira la règle du **longest prefix match** — le plus long préfixe correspondant l'emporte.
+
+<Encart type="plusloin" titre="Les classes A/B/C : l'ancêtre rigide de CIDR">
+Avant CIDR, la frontière réseau/hôte était figée à $/8$ (classe A), $/16$ (classe B) ou $/24$ (classe C), lue dans les premiers bits de l'adresse. Une organisation trop grande pour un /24 sautait au /16 — d'un coup 65 534 hôtes, souvent un énorme gaspillage. CIDR a supprimé ces paliers : le masque devient un nombre *quelconque* entre 0 et 32. C'est un progrès historique, pas une vérité éternelle ; on l'historicise donc honnêtement.
+</Encart>
+
+<Encart type="intuition" titre="Masque n'est pas passerelle">
+Une confusion fréquente : le masque dit *où coupe la frontière réseau/hôte* ; la **passerelle** (default gateway) est l'adresse du routeur vers lequel envoyer ce qui sort du réseau local. Le masque sert à *décider* si une destination est locale ou distante ; la passerelle est l'*adresse à qui parler* quand elle est distante. Deux rôles distincts, à ne jamais mélanger.
+</Encart>
+
+Nous savons maintenant découper et agréger l'espace d'adresses. Reste à décider, paquet par paquet, **où l'envoyer** : c'est le rôle du routage et de sa règle du plus long préfixe, que nous abordons au chapitre suivant.

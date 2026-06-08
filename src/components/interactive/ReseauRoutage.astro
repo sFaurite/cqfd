@@ -1,0 +1,52 @@
+---
+/**
+ * ReseauRoutage — simulateur de longest prefix match.
+ * Une petite table de routage (plusieurs préfixes CIDR avec next hop, dont une
+ * route par défaut 0.0.0.0/0) et un champ adresse de destination. Le canvas
+ * dessine la table ; les routes qui « matchent » (destination dans le préfixe)
+ * sont surlignées, et la plus spécifique (préfixe le plus long) est mise en
+ * évidence comme la route effectivement choisie, avec son next hop.
+ */
+---
+
+<div class="iw" data-iw="reseau-routage">
+  <div class="iw__head"><span class="tag">Interactif</span> Longest prefix match : quelle route gagne ?</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 11"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="rt-dst">Destination</label>
+      <input id="rt-dst" type="text" inputmode="numeric" value="10.1.2.200" data-dst
+        spellcheck="false" autocomplete="off" />
+      <output data-out-valid>ok</output>
+    </div>
+    <div class="iw__row">
+      <label for="rt-preset">Exemples</label>
+      <select id="rt-preset" data-preset>
+        <option value="10.1.2.200">10.1.2.200</option>
+        <option value="10.1.5.9">10.1.5.9</option>
+        <option value="10.2.0.1">10.2.0.1</option>
+        <option value="192.168.4.4">192.168.4.4</option>
+        <option value="8.8.8.8">8.8.8.8</option>
+      </select>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">routes qui correspondent</span> <b data-out-matches></b></span>
+    <span class="iw__chip"><span class="k">route choisie (la plus longue)</span> <b data-out-chosen></b></span>
+    <span class="iw__chip"><span class="k">next hop</span> <b data-out-hop></b></span>
+  </div>
+  <p class="iw__note">
+    Pour acheminer un paquet, le routeur compare l'adresse de destination à <em>chaque</em>
+    préfixe de sa table. Plusieurs peuvent correspondre à la fois (par exemple 10.1.0.0/16 et
+    10.1.2.0/24 contiennent tous deux 10.1.2.200). La règle du <strong>longest prefix match</strong>
+    tranche : on garde la route dont le préfixe est le <em>plus long</em>, donc la plus
+    <em>spécifique</em>. La route par défaut <span style="color:var(--c-muted)">0.0.0.0/0</span>
+    (préfixe de longueur 0) correspond à tout : c'est le filet de sécurité, choisi seulement si
+    rien de plus précis ne convient. Change la destination : les routes vertes correspondent, la
+    route encadrée est celle qui l'emporte.
+  </p>
+</div>
+
+<script>
+  import './ReseauRoutage.client.ts';
+</script>

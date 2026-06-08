@@ -1,0 +1,110 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La nucléosynthèse primordiale (BBN)"
+chapter: nucleosynthese
+description: "Les trois premières minutes : abondances primordiales d'hydrogène, d'hélium et de lithium."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La nucléosynthèse primordiale (BBN)
+
+Trois minutes. C'est, en gros, tout le temps qu'il a fallu à l'univers pour fabriquer la quasi-totalité de son hélium et déposer une pincée de deutérium, d'hélium-3 et de lithium-7. Tout le reste — le carbone de nos cellules, l'oxygène que nous respirons, le fer de notre sang — viendra bien plus tard, cuit dans le cœur des étoiles. La **nucléosynthèse primordiale** (en anglais *Big Bang Nucleosynthesis*, BBN) est le récit de ces trois premières minutes, et c'est l'un des tests les plus spectaculaires du modèle du Big Bang chaud.
+
+Pourquoi spectaculaire ? Parce qu'à partir d'un <Prereq href="/cosmologie/partie-iii/univers-chaud">univers chaud et dense en expansion</Prereq>, dont le contenu en particules est posé par ailleurs, la physique nucléaire connue en laboratoire prédit des proportions chiffrées — et qu'on les retrouve dans le ciel.
+
+<Encart type="intuition" titre="Une cuisine qui se referme">
+Imaginez une cuisine cosmique où la température baisse à toute vitesse. Tant qu'il fait assez chaud, les ingrédients (protons, neutrons) s'assemblent et se cassent sans cesse : rien ne « prend ». Puis, en quelques minutes, la marmite refroidit juste assez pour que les liaisons tiennent — mais trop vite pour aller au-delà des recettes les plus simples. On fige une soupe de noyaux légers, et la cuisine ferme avant le dessert. Pas de noyaux lourds : le four s'est éteint trop tôt.
+</Encart>
+
+<Hypotheses titre="Ce que nous admettons dans ce chapitre">
+1. **L'univers primordial est un plasma à l'équilibre thermique en expansion**, dont la température et le contenu en particules (photons, neutrinos, électrons-positrons, baryons) sont fixés par le chapitre précédent (<Prereq href="/cosmologie/partie-iii/univers-chaud">l'univers chaud</Prereq>). Nous ne redémontrons pas la thermodynamique cosmique : nous la prenons comme acquise.
+2. **La physique nucléaire et l'interaction faible mesurées en laboratoire valent aussi dans l'univers primordial** : mêmes masses, mêmes énergies de liaison, mêmes taux de réaction. C'est l'hypothèse forte — mais c'est précisément ce que la concordance des abondances va tester.
+3. **Le rapport baryons/photons $\eta$ est un paramètre libre unique**, fixé par ailleurs (fond diffus). Toutes les abondances en découlent.
+
+Tout le reste du chapitre est **déduit** de ces admissions et de la physique nucléaire connue.
+</Hypotheses>
+
+### Le décor : un bain de particules qui refroidit
+
+Au départ (vers $t \sim 1$ s, $T \sim 10^{10}$ K, soit $\sim 1$ MeV par particule), l'univers est un plasma de photons, neutrinos, électrons-positrons, et une trace de **baryons** : protons et neutrons. Ces deux derniers s'interconvertissent par interaction faible, $n + \nu_e \rightleftharpoons p + e^-$ et $n + e^+ \rightleftharpoons p + \bar\nu_e$. Tant que ces réactions sont rapides devant l'expansion, l'équilibre thermique fixe le rapport des populations par un **facteur de Boltzmann**, gouverné par la différence de masse neutron-proton.
+
+<Encart type="rappel" titre="Facteur de Boltzmann et masses">
+À l'équilibre thermique à la température $T$, le rapport des nombres de deux espèces séparées par une énergie $\Delta E$ vaut $\exp(-\Delta E/k_B T)$. Ici $\Delta E = (m_n - m_p)c^2$. Les masses sont **mesurées** en laboratoire : $m_n c^2 = 939{,}565$ MeV, $m_p c^2 = 938{,}272$ MeV, d'où $(m_n - m_p)c^2 = 1{,}293$ MeV. La constante de Boltzmann $k_B$ est **fixée par convention** (SI 2019) à $1{,}380649\times10^{-23}$ J/K.
+</Encart>
+
+### Premier acte : le gel du rapport neutrons/protons
+
+À haute température, $k_B T \gg 1{,}3$ MeV, l'exponentielle vaut presque 1 : autant de neutrons que de protons. En refroidissant, les neutrons (plus lourds) deviennent défavorisés.
+
+<Encart type="calcul" titre="Le rapport n/p au gel">
+
+**Étape 1 — Équilibre.** Tant que l'interaction faible suit, le rapport des abondances est
+
+$$ \frac{n_n}{n_p} = \exp\!\left(-\frac{(m_n - m_p)c^2}{k_B T}\right). $$
+
+**Étape 2 — Le gel.** Les réactions faibles ont un taux qui chute comme $\Gamma \propto T^5$, tandis que le taux d'expansion $H \propto T^2$ (univers dominé par le rayonnement). Quand $\Gamma$ tombe sous $H$, vers $T_{\text{gel}} \approx 10^{10}$ K ($k_B T_{\text{gel}} \approx 0{,}8$ MeV), les conversions s'arrêtent : le rapport se **fige**.
+
+**Étape 3 — Valeur figée.** On évalue l'exponentielle à $k_B T_{\text{gel}} \approx 0{,}8$ MeV :
+
+$$ \frac{n_n}{n_p} \approx \exp\!\left(-\frac{1{,}293}{0{,}8}\right) \approx e^{-1{,}6} \approx 0{,}20 \approx \frac{1}{5}. $$
+
+**Étape 4 — Désintégration $\beta$.** Les neutrons libres se désintègrent ($n \to p + e^- + \bar\nu_e$, demi-vie $\approx 880$ s). Avant que la fusion ne les piège (vers $t \approx 200$ s), le rapport glisse de $1/5$ à environ
+
+$$ \boxed{\dfrac{n_n}{n_p} \approx \dfrac{1}{7}.} $$
+
+</Encart>
+
+Ce $1/7$ est la clé de tout : il fixe à lui seul la quantité d'hélium à venir. <Badge niveau="concordance">La valeur du gel suppose le taux d'expansion $H \propto T^2$ d'un univers dominé par le rayonnement : elle repose donc sur le modèle thermique du chapitre précédent, pas sur une mesure directe du rapport $n/p$.</Badge>
+
+### Deuxième acte : le goulot du deutérium
+
+Pour fabriquer de l'hélium-4, il faut d'abord passer par le **deutérium** $D$ (un proton + un neutron), via $p + n \to D + \gamma$. Or le deutérium est fragile : son énergie de liaison n'est que de $2{,}22$ MeV. <Badge niveau="observe">Cette énergie de liaison est **mesurée** en laboratoire avec une grande précision.</Badge> Tant que le bain de photons est chaud, les photons les plus énergétiques le cassent aussitôt qu'il se forme. C'est le **goulot du deutérium** : la synthèse attend que $T$ tombe vers $10^9$ K ($t \approx 3$ min) pour que $D$ survive — alors tout s'enchaîne d'un coup. <Badge niveau="concordance">Ce délai s'explique parce que les photons sont environ un milliard de fois plus nombreux que les baryons ; le nombre exact dépend du paramètre $\eta$, fixé par ailleurs.</Badge>
+
+### Troisième acte : presque tout part en hélium-4
+
+Dès que $D$ tient, une cascade rapide ($D + D$, $D + p \to {}^3\text{He}$, etc.) conduit à l'**hélium-4**, exceptionnellement lié ($28{,}3$ MeV). <Badge niveau="observe">L'énergie de liaison de $^4$He est, elle aussi, mesurée en laboratoire.</Badge> Comme c'est l'état le plus stable accessible, **presque tous les neutrons disponibles y finissent**.
+
+<Encart type="calcul" titre="De n/p = 1/7 à 25 % d'hélium">
+
+**Étape 1 — Comptage.** Sur 16 nucléons, le rapport $1/7$ donne 2 neutrons pour 14 protons.
+
+**Étape 2 — Appariement.** Chaque noyau d'hélium-4 contient 2 neutrons et 2 protons. Les 2 neutrons captent 2 protons : on forme **un** noyau de $^4$He (4 nucléons), il reste 12 protons (hydrogène).
+
+**Étape 3 — Fraction de masse.** La fraction de masse en hélium-4, notée $Y_p$, est
+
+$$ Y_p = \frac{\text{masse en }^4\text{He}}{\text{masse totale}} = \frac{4}{16} = 0{,}25. $$
+
+</Encart>
+
+<Resultat label="Abondance primordiale d'hélium-4">
+
+$$ Y_p \approx 0{,}25 \quad (\text{soit } \approx 25\,\% \text{ de la masse baryonique}) $$
+
+<Badge niveau="observe" slot="badge">Prédite ET mesurée (régions HII pauvres en métaux, atmosphères stellaires) autour de $0{,}245$. Cet accord est l'un des trois piliers empiriques du Big Bang chaud.</Badge>
+</Resultat>
+
+Restent des **traces** : un peu de deutérium et d'hélium-3 qui n'ont pas eu le temps de brûler, et une infime quantité de **lithium-7**. <Badge niveau="observe">Le deutérium résiduel ($D/H \sim 2{,}5\times10^{-5}$) est mesuré dans les nuages de gaz primitifs absorbant la lumière de quasars lointains.</Badge>
+
+### Pourquoi ça s'arrête là
+
+Pourquoi pas de carbone, pas de fer ? Deux verrous. D'abord, il n'existe **aucun noyau stable de masse 5 ni de masse 8** : ajouter un nucléon à $^4$He, ou en coller deux, donne un noyau qui se désintègre quasi instantanément. <Badge niveau="observe">Cette absence de noyaux stables aux masses 5 et 8 est un fait de physique nucléaire mesuré en laboratoire.</Badge> Ensuite, à 3 minutes l'univers est déjà trop **dilué et froid** pour forcer le passage par triple collision (le processus triple-alpha des étoiles). <Badge niveau="observe">Les éléments lourds (carbone, oxygène, fer) ne viennent donc PAS de la BBN : ils sont forgés bien plus tard dans les <Prereq href="/cosmologie/partie-ii/contenu-univers">étoiles et leurs explosions</Prereq>.</Badge>
+
+### Le verdict : un thermomètre à baryons
+
+Toutes les abondances dépendent d'un seul nombre libre, le rapport **baryons/photons** $\eta = n_b/n_\gamma$. Plus $\eta$ est grand (plus de baryons), plus la fusion est efficace : moins de deutérium survivant, un peu plus d'hélium. C'est un véritable thermomètre.
+
+<Encart type="intuition" titre="Une seule molette pour tout régler">
+Tournez la molette $\eta$ et toutes les abondances bougent ensemble, chacune à sa façon. Le miracle : il existe **une seule** valeur de $\eta$ qui ajuste simultanément deutérium, hélium-3, hélium-4 et (presque) lithium. Que quatre prédictions indépendantes pointent vers le même réglage, c'est ce qui rend la BBN si convaincante.
+</Encart>
+
+<Badge niveau="concordance">La valeur de $\eta \approx 6\times10^{-10}$ qui ajuste les abondances coïncide remarquablement avec celle, totalement indépendante, tirée du fond diffus cosmologique. Deux fenêtres séparées par 380 000 ans donnent le même chiffre : c'est un pilier du modèle ΛCDM.</Badge>
+
+Une ombre subsiste : le **problème du lithium**. La BBN prédit environ trois fois plus de $^7$Li que ce qu'on mesure dans les vieilles étoiles pauvres en métaux. <Badge niveau="extrapole">Tension réelle mais mineure : elle n'ébranle pas la BBN (qui réussit deutérium et hélium), et tient peut-être à la destruction du lithium dans les étoiles ou à une physique encore mal cernée. Aucune résolution n'est tranchée.</Badge>
+
+Trois minutes d'horloge cosmique, et déjà un univers fait à 75 % d'hydrogène et 25 % d'hélium en masse — figé pour des milliards d'années. Mais cette soupe reste un plasma opaque, ionisé. Il faudra attendre que les électrons se lient aux noyaux pour que la lumière soit enfin libérée : c'est l'objet du prochain chapitre, le fond diffus cosmologique.

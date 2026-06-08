@@ -1,0 +1,144 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le routage et le longest prefix match"
+chapter: routage
+description: "Presente le routage IP : table de routage, transmission de saut en saut, regle du longest prefix match, route par defaut, et un mot sur les protocoles de routage."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauRoutage from '../../../components/interactive/ReseauRoutage.astro';
+
+## L'idée : personne ne connaît le chemin entier
+
+Imaginez que vous voulez envoyer une lettre de Brest à Tokyo. Vous ne tracez pas l'itinéraire complet, ville par ville, rue par rue. Vous la déposez simplement dans la boîte la plus proche. Le facteur la porte au centre de tri, qui la confie à un avion, qui la remet à un tri japonais, et ainsi de suite. **Chaque maillon ne connaît qu'une chose : à qui passer la lettre maintenant.** Aucun ne connaît le trajet de bout en bout.
+
+Le routage IP fonctionne exactement ainsi. C'est une succession de **décisions locales**. Un paquet traverse parfois quinze routeurs ; aucun de ces routeurs ne sait par où passeront les quatorze autres. Chacun ne répond qu'à une seule question : *« étant donné l'adresse de destination, à quel voisin dois-je transmettre ce paquet ? »* Ce voisin s'appelle le **prochain saut** (next hop).
+
+Insistons, car c'est le principe fondamental de tout le chapitre : **un routeur ne connaît pas le chemin de bout en bout.** Il ne possède ni la liste des routeurs traversés en amont, ni celle des routeurs à venir. Il connaît une seule chose, le **prochain saut** vers la destination — la suite ne le regarde pas.
+
+<Resultat label="Principe du routage saut par saut">
+
+$$\text{décision locale} : \text{adresse destination} \longmapsto \text{prochain saut}$$
+
+<Badge niveau="norme" slot="badge">Modèle de transfert d'IP : routage sans état, fondé sur la seule adresse de destination (RFC 1812, « Requirements for IP Version 4 Routers »). Un choix de conception, pas une nécessité physique.</Badge>
+</Resultat>
+
+Ce principe est libérateur. Une adresse <Prereq href="/reseaux/partie-iv/adressage-ip">IP hiérarchique</Prereq> permet justement de raisonner par préfixe : le routeur n'a pas besoin de connaître chaque machine du monde, seulement la *direction générale* vers son réseau.
+
+## La table de routage
+
+Chaque routeur détient une **table de routage** : une liste de lignes de la forme
+
+$$\text{préfixe (CIDR)} \;\longrightarrow\; \text{prochain saut (et interface de sortie)}$$
+
+Le préfixe est exprimé en <Prereq href="/reseaux/partie-iv/sous-reseaux">notation CIDR</Prereq> : `192.168.1.0/24`, `10.0.0.0/8`, etc. Pour décider, le routeur fait, pour chaque ligne, le **ET binaire** entre l'adresse de destination et le masque, et compare au préfixe — exactement le calcul d'appartenance à un sous-réseau déjà établi.
+
+<Encart type="rappel" titre="Le « /n » et son masque (CIDR)">
+Un préfixe `P/n` fixe les `n` bits de poids fort. Son **masque** est fait de `n` bits à 1 suivis de `32 - n` bits à 0. Une adresse `dst` **appartient** au préfixe si
+
+$$\text{dst} \wedge \text{masque} = P$$
+
+où `∧` est le ET binaire. Plus `n` est grand, plus le bloc est petit : il contient $2^{32-n}$ adresses. Ce calcul a été établi au chapitre <Prereq href="/reseaux/partie-iv/sous-reseaux">Masques et sous-réseaux</Prereq>.
+</Encart>
+
+Le problème : une même adresse peut **tomber dans plusieurs préfixes** à la fois. Que faire alors ?
+
+## La règle du longest prefix match
+
+<Tournant titre="On pose la règle de décision">
+Quand plusieurs lignes de la table correspondent à l'adresse de destination, on choisit **la plus spécifique**, c'est-à-dire celle dont le préfixe est le **plus long** (le `/n` le plus grand). C'est le *longest prefix match*. Cette règle n'est pas un théorème : c'est une **convention de conception normalisée**, posée pour rester cohérente avec la hiérarchie des adresses.
+</Tournant>
+
+Pourquoi « le plus long gagne » ? Intuitivement, un préfixe long décrit un voisinage **étroit** : il en sait davantage sur la destination. `192.168.1.0/24` désigne 256 adresses ; `192.168.0.0/16` en désigne 65 536. Si les deux conviennent, le `/24` est l'information la plus précise — comme préférer « 12 rue de Paris, Lyon » à « quelque part en France ».
+
+<Resultat label="Longest prefix match">
+
+$$\text{route choisie} = \arg\max_{\substack{\text{routes } r \text{ telles que} \\ \text{dst} \in \text{préfixe}(r)}} \; \big(\text{longueur du préfixe de } r\big)$$
+
+<Badge niveau="norme" slot="badge">Règle de transfert standardisée (RFC 1812). Choix de conception cohérent avec l'agrégation CIDR, pas une loi physique.</Badge>
+</Resultat>
+
+Cet `arg max` est bien **unique** : deux préfixes qui contiennent tous deux la même adresse sont forcément **emboîtés** (l'un inclus dans l'autre), jamais croisés. Il existe donc une seule route la plus longue parmi celles qui correspondent — il n'y a pas d'ambiguïté à trancher.
+
+### Un exemple détaillé
+
+Soit la table suivante, et un paquet destiné à **`10.2.3.4`** :
+
+| Préfixe | Prochain saut |
+|---|---|
+| `0.0.0.0/0` | R-défaut |
+| `10.0.0.0/8` | R-A |
+| `10.2.0.0/16` | R-B |
+| `10.2.3.0/24` | R-C |
+
+<Encart type="calcul" titre="Quelle route pour 10.2.3.4 ?">
+
+On teste l'appartenance de `10.2.3.4` à chaque préfixe (ET binaire avec le masque) :
+
+`0.0.0.0/0` : masque tout à zéro, aucun bit fixé, **toute** adresse correspond. ✔ (longueur 0)
+
+`10.0.0.0/8` : premier octet `10` = `10`. ✔ (longueur 8)
+
+`10.2.0.0/16` : deux premiers octets `10.2` = `10.2`. ✔ (longueur 16)
+
+`10.2.3.0/24` : trois premiers octets `10.2.3` = `10.2.3`. ✔ (longueur 24)
+
+Quatre routes correspondent ! Le longest prefix match tranche : on garde la plus longue.
+
+$$\max(0,\;8,\;16,\;24) = 24$$
+
+→ prochain saut = **R-C**.
+
+</Encart>
+
+L'exemple est instructif : les quatre préfixes désignent des directions **différentes** (R-défaut, R-A, R-B, R-C), et pourtant ils sont tous valides pour `10.2.3.4`. La règle ne cherche pas « la bonne réponse parmi des fausses » — toutes mènent quelque part — mais **la plus informée**. Faisons varier la destination :
+
+- **`10.2.9.9`** : correspond à `/0`, `/8` et `/16` (mais pas à `10.2.3.0/24`). Le plus long est `/16` → **R-B**.
+- **`10.5.0.1`** : seuls `0.0.0.0/0` et `10.0.0.0/8` correspondent ; le plus long est `/8` → **R-A**.
+- **`8.8.8.8`** : aucune route spécifique ne correspond ; seul `0.0.0.0/0` reste → **R-défaut**.
+
+Une même table, quatre destinations, quatre prochains sauts différents : c'est le longest prefix match qui, à chaque fois, sélectionne la ligne la plus spécifique.
+
+Cette dernière ligne, `0.0.0.0/0`, est la **route par défaut** : un préfixe de longueur nulle qui attrape *tout* ce qui n'a trouvé aucune route plus précise. C'est le « dans le doute, envoie vers la sortie » — typiquement vers le fournisseur d'accès.
+
+À vous de manipuler la table et de voir quelle route gagne :
+
+<ReseauRoutage />
+
+## Pourquoi l'agrégation est vitale
+
+Il y a plusieurs centaines de milliers de réseaux dans l'Internet mondial. Si chaque routeur de cœur devait stocker une ligne par réseau de destination, les tables exploseraient. C'est ici que le <Prereq href="/reseaux/partie-iv/sous-reseaux">CIDR</Prereq> sauve la mise : un opérateur qui possède `203.0.0.0/16` … `203.0.255.0/24` peut les **agréger** en une seule annonce `203.0.0.0/16`. Une ligne au lieu de 256.
+
+<Encart type="intuition" titre="L'agrégation, c'est résumer une direction">
+Le longest prefix match et l'agrégation forment un couple. L'agrégation comprime la table en remplaçant beaucoup de préfixes longs par un préfixe court ; le longest prefix match permet malgré tout d'insérer une **exception** plus spécifique quand il le faut (par exemple un sous-bloc routé différemment). La règle « le plus long gagne » garantit que l'exception l'emporte sur le résumé.
+</Encart>
+
+<Badge niveau="deploiement">La taille et le contenu réels des tables dépendent de chaque opérateur, de ses accords de peering et de sa configuration. Rien d'universel : la table de routage globale comptait déjà plus de 900 000 préfixes IPv4 au milieu des années 2020, et chaque réseau n'en voit qu'une partie.</Badge>
+
+## D'où viennent ces tables ? Statique vs dynamique
+
+Une table peut être remplie **à la main** (routage statique) : simple, prévisible, mais ingérable à grande échelle et incapable de réagir à une panne.
+
+Ou bien des **protocoles de routage dynamiques** échangent des informations entre routeurs et recalculent les chemins automatiquement :
+
+- **RIP** repose sur l'algorithme de Bellman-Ford (vecteur de distance) ; **OSPF** sur celui de Dijkstra (état de liens, plus court chemin dans un graphe).
+- **BGP** relie les grands opérateurs entre eux et choisit ses routes selon des **politiques** (préférences commerciales, accords) bien plus que selon une simple distance.
+
+Le point essentiel : ces protocoles ne changent **pas** la règle de transfert. Ils remplissent la table ; c'est toujours le **longest prefix match** qui décide, paquet par paquet, du prochain saut. Algorithme de calcul des routes et règle de sélection dans la table sont deux étages distincts.
+
+<Badge niveau="heuristique">RIP/OSPF reposent sur des algorithmes de plus court chemin (Bellman-Ford, Dijkstra) : des choix d'ingénierie révisables, avec des compromis convergence/charge, non uniques.</Badge>
+
+<Badge niveau="deploiement">BGP mêle algorithme et politique : la route « préférée » dépend des accords commerciaux et de la configuration de chaque opérateur, pas d'une optimalité mathématique.</Badge>
+
+## Et si une boucle se forme ?
+
+Le routage saut par saut a un risque : deux routeurs mal synchronisés peuvent se renvoyer indéfiniment le même paquet. Pour borner ces boucles, l'en-tête IP porte un champ **TTL** (Time To Live) : un compteur décrémenté à chaque saut. À zéro, le paquet est **détruit**. Ce n'est pas une garantie d'absence de boucle, mais une limite dure qui empêche un paquet de tourner éternellement.
+
+<Badge niveau="norme">Le TTL et sa décrémentation par saut sont fixés par la norme IP (RFC 791, complétée par RFC 1812) : une borne mécanique sur la durée de vie d'un paquet.</Badge>
+
+Nous savons maintenant acheminer un paquet d'une machine à l'autre, de bout en bout, à travers le monde. Mais une fois arrivé sur la bonne machine, à *quel programme* le remettre ? Le navigateur, le client mail, le jeu en ligne tournent en même temps. Il nous faut un dernier niveau d'adressage — celui des **processus** — et c'est l'objet du chapitre suivant.

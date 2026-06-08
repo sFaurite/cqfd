@@ -1,0 +1,134 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Optimiser en pratique : SGD, momentum, Adam"
+chapter: optimiseurs-sgd-adam
+description: "Passe de la descente de gradient idéale au stochastique (SGD sur mini-lots), puis aux raffinements : momentum, taux adaptatifs (RMSProp, Adam). Distingue ce qui a un fondement (le gradient stochastique est un estimateur non biaisé) de ce qui est purement empirique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaLossLandscape from '../../../components/interactive/IaLossLandscape.astro';
+
+## La descente de gradient, version réaliste
+
+Nous savons faire descendre une perte : on calcule $\nabla L$, on fait un pas $\theta \leftarrow \theta - \eta\,\nabla L$, on recommence (<Prereq href="/ia/partie-ii/descente-de-gradient">la descente de gradient</Prereq>). Et nous savons calculer ce gradient efficacement sur tout un réseau (<Prereq href="/ia/partie-ii/retropropagation">la rétropropagation</Prereq>). En théorie, l'affaire est close. En pratique, deux obstacles surgissent. D'abord, le gradient « vrai » est une moyenne sur **toutes** les données : avec des millions d'exemples, chaque pas coûte une fortune. Ensuite, le paysage de pertes d'un réseau profond est un relief tourmenté de vallées, de cols et de plateaux, et la descente naïve s'y traîne. Ce chapitre montre comment l'on contourne ces deux obstacles — et, surtout, ce qui est **prouvé** là-dedans et ce qui n'est qu'une recette qui marche.
+
+## Le gradient stochastique : estimer plutôt que calculer
+
+Le risque empirique est une moyenne (<Prereq href="/ia/partie-ii/fonction-de-perte">la fonction de perte</Prereq>) :
+
+$$
+L(\theta) = \frac{1}{N}\sum_{i=1}^{N} \ell_i(\theta), \qquad \ell_i(\theta) = \ell\big(f_\theta(x_i),\,y_i\big)
+$$
+
+Son gradient est donc lui aussi une moyenne : $\nabla L(\theta) = \frac{1}{N}\sum_i \nabla \ell_i(\theta)$. L'idée du **gradient stochastique** (SGD) est radicale : au lieu de sommer sur les $N$ exemples, on tire un **mini-lot** $B$ de $m \ll N$ exemples au hasard, et on l'utilise comme estimation.
+
+<Resultat label="Gradient sur mini-lot">
+
+$$
+g_B(\theta) = \frac{1}{m}\sum_{i \in B} \nabla \ell_i(\theta)
+$$
+
+<Badge niveau="prouve" slot="badge">Estimateur non biaisé du gradient complet : on le démontre ci-dessous.</Badge>
+</Resultat>
+
+Pourquoi a-t-on le droit de remplacer une moyenne sur tout par une moyenne sur un échantillon ? Parce qu'**en moyenne, on ne se trompe pas**. C'est le résultat central, et il est démontrable.
+
+<Encart type="calcul" titre="Le gradient mini-lot est non biaisé">
+Tirons les $m$ indices du mini-lot **uniformément** parmi $\{1, \dots, N\}$ (chaque exemple a la probabilité $1/N$ d'être tiré à chaque position). Calculons l'espérance de $g_B$ sur ce tirage aléatoire :
+
+$$
+\mathbb{E}[g_B(\theta)] = \mathbb{E}\!\left[\frac{1}{m}\sum_{i \in B} \nabla \ell_i(\theta)\right] = \frac{1}{m}\sum_{k=1}^{m} \mathbb{E}\big[\nabla \ell_{I_k}(\theta)\big]
+$$
+
+par linéarité de l'espérance, où $I_k$ est l'indice tiré en position $k$. Chaque $I_k$ étant uniforme sur $\{1,\dots,N\}$ :
+
+$$
+\mathbb{E}\big[\nabla \ell_{I_k}(\theta)\big] = \sum_{j=1}^{N} \frac{1}{N}\,\nabla \ell_j(\theta) = \nabla L(\theta)
+$$
+
+On somme $m$ termes tous égaux à $\nabla L(\theta)$, puis on divise par $m$ :
+
+$$
+\mathbb{E}[g_B(\theta)] = \frac{1}{m}\cdot m\cdot \nabla L(\theta) = \nabla L(\theta)
+$$
+
+<Badge niveau="prouve" slot="badge">L'espérance du gradient mini-lot est exactement le gradient complet. Pur calcul d'espérance, aucune hypothèse cachée hormis le tirage uniforme.</Badge>
+</Encart>
+
+Le SGD suit donc, **en moyenne**, la bonne direction. Mais chaque pas individuel est entaché d'un **bruit** : $g_B = \nabla L + (\text{erreur d'échantillonnage})$. Loin d'être seulement un défaut, ce bruit a une vertu.
+
+<Encart type="intuition" titre="Le bruit, ce maladroit utile">
+Imaginez une bille qui dévale le relief. La descente exacte la fait rouler tout droit ; si elle tombe dans une cuvette peu profonde (un mauvais minimum local) ou se pose sur un plateau, elle s'y immobilise. Le SGD, lui, fait trembler la bille à chaque pas. Ce tremblement lui permet de **ressauter hors des petites cuvettes** et de quitter les plateaux. Le bruit est exploratoire.
+</Encart>
+
+Quant à la **convergence**, elle est prouvée — mais seulement dans un cadre restreint et sous condition sur le pas.
+
+<Encart type="plusloin" titre="Convergence du SGD : le théorème de Robbins-Monro">
+Pour une fonction **convexe**, le SGD converge vers le minimum si la suite des pas $\eta_t$ (le pas peut décroître au cours du temps) satisfait les **conditions de Robbins-Monro** :
+
+$$
+\sum_{t=1}^{\infty} \eta_t = \infty \qquad \text{et} \qquad \sum_{t=1}^{\infty} \eta_t^2 < \infty
+$$
+
+La première (somme divergente) garantit qu'on peut atteindre n'importe quel point, aussi loin soit-il. La seconde (somme des carrés finie) force le pas à décroître assez vite pour que le bruit s'éteigne et qu'on se stabilise. Un choix classique est $\eta_t \propto 1/t$. <Badge niveau="prouve" slot="badge">Convergence garantie en convexe sous ces conditions sur le pas.</Badge>
+
+Hors du convexe — c'est-à-dire pour tout vrai réseau profond — **aucune garantie de ce type ne tient**. <Badge niveau="boitenoire">Pourquoi le SGD trouve de bonnes solutions dans des paysages non convexes reste mal compris théoriquement.</Badge>
+</Encart>
+
+## Le momentum : donner de l'inertie à la bille
+
+Le SGD pur zigzague dans les vallées étroites : il rebondit d'un versant à l'autre au lieu d'avancer le long du fond. Le remède est physique : donnons à la bille une **masse**. Au lieu de repartir à neuf à chaque pas, on accumule une **vitesse** $v$, moyenne mobile des gradients passés.
+
+<Resultat label="Descente avec momentum">
+
+$$
+v_t = \beta\,v_{t-1} + (1-\beta)\,g_t, \qquad \theta_t = \theta_{t-1} - \eta\,v_t
+$$
+
+<Badge niveau="robuste" slot="badge">Accélère l'entraînement de façon très reproductible ; $\beta \approx 0{,}9$ est une recette éprouvée.</Badge>
+</Resultat>
+
+Les composantes du gradient qui pointent **toujours** dans la même direction (le fond de la vallée) s'additionnent et l'élan grandit ; celles qui **oscillent** (les versants) s'annulent en moyenne. La bille lisse sa trajectoire et accélère là où le sol descend régulièrement.
+
+## RMSProp et Adam : un pas par paramètre
+
+Autre difficulté : certains paramètres ont des gradients énormes, d'autres minuscules. Un pas $\eta$ unique est forcément trop grand pour les uns, trop petit pour les autres. L'idée de **RMSProp** est de **normaliser** chaque composante par la magnitude récente de son propre gradient — on garde une moyenne mobile des **carrés** $g^2$ et on divise par sa racine. **Adam** combine cette normalisation avec le momentum.
+
+<Encart type="calcul" titre="Les équations d'Adam">
+On maintient deux moyennes mobiles, du gradient (moment d'ordre 1) et de son carré (ordre 2), composante par composante :
+
+$$
+m_t = \beta_1 m_{t-1} + (1-\beta_1)\,g_t, \qquad v_t = \beta_2 v_{t-1} + (1-\beta_2)\,g_t^2
+$$
+
+Comme $m_0 = v_0 = 0$, ces estimateurs sont biaisés vers zéro au début ; on les **corrige** :
+
+$$
+\hat{m}_t = \frac{m_t}{1-\beta_1^{\,t}}, \qquad \hat{v}_t = \frac{v_t}{1-\beta_2^{\,t}}
+$$
+
+Puis on met à jour chaque paramètre avec un pas adapté à sa propre échelle :
+
+$$
+\theta_t = \theta_{t-1} - \eta\,\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \varepsilon}
+$$
+
+Valeurs usuelles : $\beta_1 = 0{,}9$, $\beta_2 = 0{,}999$, $\varepsilon = 10^{-8}$ (constante de garde contre la division par zéro). <Badge niveau="recette" slot="badge">Ces hyperparamètres sont des réglages empiriques par défaut, non des valeurs déduites.</Badge>
+</Encart>
+
+Comparez les trajectoires sur un même relief — SGD, momentum, Adam — et voyez comment chacun négocie cols et vallées :
+
+<IaLossLandscape />
+
+Attention au piège classique. Adam converge souvent **plus vite en début d'entraînement** et demande moins de réglage du pas, ce qui le rend très populaire. Mais cela n'en fait **pas** une méthode « mathématiquement supérieure ».
+
+<Tournant titre="Adam n'est pas garanti">
+Il existe des problèmes **convexes** simples sur lesquels Adam, tel que publié, **ne converge pas** vers la solution — un résultat connu et démontré dans la littérature, qui a motivé des variantes correctives. <Badge niveau="robuste">Adam et le momentum accélèrent l'entraînement des réseaux profonds de façon très reproductible, mais sans garantie de convergence en non-convexe — et même pas dans certains cas convexes pathologiques.</Badge> On adopte donc Adam parce qu'**il marche en pratique**, pas parce qu'un théorème l'impose.
+</Tournant>
+
+Trois statuts à ne jamais confondre : le caractère non biaisé du gradient mini-lot et la convergence du SGD en convexe sont **prouvés** ; l'accélération apportée par momentum et Adam est **empiriquement robuste** ; le choix de $\beta_1, \beta_2, \eta$ et de la taille de lot relève de la **recette**. Nos optimiseurs savent désormais descendre vite. Mais descendre *trop bien* sur les données d'entraînement cache un autre danger : un modèle qui mémorise au lieu d'apprendre. C'est le surapprentissage, et la régularisation, que nous attaquons maintenant.

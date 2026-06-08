@@ -1,0 +1,142 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce cours
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’échelle de fiabilité « réseaux », et la promesse exacte. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce cours raconte **d’un seul tenant** comment quelques bits posés sur un fil deviennent un web
+chiffré et mondial. On part de la **mesure de l’information** — le bit — et on remonte, étage par
+étage : signal → trame → lien → réseau (IP) → transport (TCP) → services (DNS, HTTP, TLS).
+La règle, non négociable : *on ne vous demande jamais de croire sur parole.* Chaque maillon est
+soit **posé explicitement comme hypothèse**, soit **construit** à partir du précédent.
+
+Une précision d’honnêteté, dès maintenant. « Tout se déduit » serait **trompeur** ici, et pour
+deux raisons opposées :
+
+- En bas, deux **théorèmes** bornent tout le reste : Nyquist et Shannon. On les admet (ou on les
+  esquisse), mais ils sont notre socle dur — des limites physiques infranchissables, posées au
+  grand jour.
+- À chaque étage, les concepteurs **ont fixé des choix** que la physique n’impose pas : le format
+  de la trame Ethernet, la longueur d’une adresse IP, le déroulé du handshake TCP, le découpage
+  en couches. Ce ne sont pas des déductions : ce sont des **normes**, écrites dans des RFC, et on
+  les signale comme telles (un bandeau « Tournant » le dit).
+
+La promesse exacte est donc : *rien n’est utilisé sans être, soit un théorème / une norme posée au
+grand jour, soit une déduction de ce qui précède.* C’est tout l’intérêt de l’échelle de fiabilité
+de ce cours — elle distingue, à chaque ligne, **ce que la physique impose** de **ce que les
+ingénieurs ont décidé**, et de **ce qui dépend du réseau qu’on a sous la main**.
+
+## À qui s’adresse ce cours ?
+
+Le niveau de départ visé est la **fin du lycée / début de licence** : vous êtes à l’aise avec les
+puissances de 2, le logarithme en base 2, et un peu de logique. **Aucun prérequis en
+télécommunications ou en réseau n’est supposé.** Dès qu’un outil nouveau apparaît, un encart
+« Rappel » le ramène à des bases simples.
+
+<Encart type="rappel" titre="Exemple de rappel — le logarithme en base 2 et le binaire">
+Le **logarithme en base 2** répond à la question « 2 à quelle puissance ? » : $\log_2 8 = 3$ car
+$2^3 = 8$. Il compte le nombre de bits nécessaires pour distinguer un certain nombre de cas.
+
+Et **compter en binaire**, c’est compter avec deux chiffres seulement, 0 et 1 : chaque position
+vaut une puissance de 2. Ainsi $1011_2 = 8 + 0 + 2 + 1 = 11$. Une adresse IPv4 n’est rien d’autre
+que 32 tels bits, qu’on regroupe par paquets de 8 pour la lire.
+</Encart>
+
+## Les encadrés « Hypothèses » et les « Tournants »
+
+Au début d’une partie qui **pose** quelque chose (un théorème de départ, un format de trame, un
+protocole), un encadré liste **noir sur blanc** ce qui est admis.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente ainsi, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **cesse de déduire pour adopter une norme** — le format Ethernet, le déroulé du
+handshake TCP —, un **bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, la physique ne dicte plus la suite. On **adopte une norme**, parce qu’elle est commune à tout
+l’Internet — et on le dit, plutôt que de la faire passer pour une loi de la nature. La construction
+reprend ensuite à partir de ce choix.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — calculs, rappels,
+approfondissements — sont rangés dans des encarts que vous **dépliez d’un clic** (ou avec la
+touche <kbd>Entrée</kbd>). Quatre familles, reconnaissables à leur couleur et leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ouverts par défaut, car ils aident
+à comprendre *avant* de formaliser. Exemple : « une adresse IP, c’est la ville et la rue ; le port,
+c’est le numéro d’appartement ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent un calcul **ligne à ligne**, sans étape sautée. Par exemple, on y
+montrerait la capacité d’un canal de bande passante $B$ et de rapport signal/bruit $S/N$ :
+
+$$ C = B \log_2\!\left(1 + \frac{S}{N}\right), $$
+
+en explicitant le passage du rapport en décibels au rapport linéaire. Chaque ligne est justifiée
+par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil à des bases simples : un ET binaire, une puissance de 2, ce qu’est
+une fréquence. Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors fil principal** : le détail d’un algorithme
+de contrôle de congestion, le calcul exact d’un CRC. Facultatifs : on peut les sauter.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent sur
+tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce cours. **Chaque affirmation notable** porte une pastille
+colorée qui dit *à quel point elle est nécessaire* — imposée par la physique, fixée par une norme,
+choisie comme heuristique, ou dépendante du déploiement. Survolez un badge (ou donnez-lui le focus
+au clavier) pour lire **pourquoi**.
+
+- La capacité d’un canal bruité est bornée par $C = B\log_2(1+S/N)$ <Badge niveau="theoreme">Théorème de Shannon : aucune méthode de codage ne permet de dépasser cette limite. Une borne physique.</Badge>
+- Une adresse IPv4 fait 32 bits <Badge niveau="norme">Fixé par une norme adoptée mondialement (IPv4). IPv6 en a choisi 128 : la valeur aurait pu être autre.</Badge>
+- TCP double sa fenêtre à chaque RTT pendant le slow start <Badge niveau="heuristique">Choix d’algorithme révisable : d’autres lois de croissance (CUBIC, BBR) existent et sont déployées.</Badge>
+- La présence d’un NAT entre vous et l’Internet <Badge niveau="deploiement">Dépend de l’opérateur et de la configuration de votre réseau ; ce n’est pas universel.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et la
+page <a href="/reseaux/methodologie">Méthodologie</a> détaille les quatre niveaux.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ \text{sur un canal de bande } B \text{ sans bruit, au plus } 2B \text{ symboles par seconde.} $$
+<Badge niveau="theoreme" slot="badge">Théorème de Nyquist : une bande passante finie limite la cadence de symboles distinguables.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat établi ailleurs, un lien **prérequis** vous y renvoie :
+par exemple, on invoquera plus tard le <Prereq href="/reseaux/partie-i/bruit-shannon">théorème de Shannon</Prereq> en pointant vers la page qui l’établit.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? La construction commence tout en bas : un bit, et la mesure de l’information.

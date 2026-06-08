@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Qualite de service et ouverture"
+chapter: qos-ouverture
+description: "Ouvre sur la qualite de service (delai, gigue, perte, debit), les mecanismes de priorisation, leurs limites, et fait la synthese complete de la pile, du bit a l'application."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Mesurer une promesse : les métriques de qualité de service
+
+Nous avons monté toute la pile : du bit posé sur un fil jusqu'à la requête HTTPS chiffrée. Reste une question pragmatique que l'utilisateur, lui, pose en premier : *est-ce que ça marche bien ?* « Bien » n'est pas un mot d'ingénieur. Il faut le transformer en grandeurs mesurables. C'est l'objet de la **qualité de service** (QoS) : non pas *acheminer* les données — IP le fait déjà — mais caractériser *à quel point* l'acheminement satisfait un usage.
+
+<Encart type="intuition" titre="Le réseau comme une autoroute aux heures de pointe">
+Imaginez une autoroute. Le **débit utile** (goodput), c'est combien de voitures passent réellement par minute. La **latence**, c'est le temps qu'une voiture met pour traverser. La **gigue** (jitter), c'est l'irrégularité de ce temps : si une voiture met 10 min puis la suivante 25 min, votre flux de voitures arrive en désordre. La **perte**, c'est le pourcentage de voitures qui n'arrivent jamais (accidents, sorties forcées). Un appel vidéo supporte mal la gigue ; un téléchargement de fichier s'en moque mais veut du débit. *Même réseau, exigences opposées.*
+</Encart>
+
+Définissons proprement les quatre métriques. Le **délai** (ou latence) $D$ d'un paquet est le temps entre son émission et sa réception ; il se décompose en délai de propagation (borné par la vitesse de la lumière dans le médium), délai de transmission, et surtout **délai d'attente en file**. La **gigue** $J$ est la variation de ce délai d'un paquet à l'autre. Le **taux de perte** $p$ est la fraction de paquets jamais arrivés. Le **débit utile** est le débit des données applicatives effectivement délivrées, déduction faite des en-têtes et des retransmissions.
+
+Le délai d'attente est la part *contrôlable* — et c'est là que tout se joue.
+
+<Encart type="rappel" titre="Deux outils : le modèle M/M/1 et la loi de Little">
+Pour raisonner sur une file d'attente, on a besoin de deux repères classiques de la théorie des files.
+
+Le **modèle M/M/1** est le plus simple : un seul serveur (le routeur), des arrivées de paquets « sans mémoire » au taux moyen $\lambda$ (paquets/s), et des durées de service « sans mémoire » au taux moyen $\mu$ (paquets/s). Une seule file, servie dans l'ordre d'arrivée. C'est un *modèle idéalisé* — le trafic réel n'est pas exactement sans mémoire — mais il capture l'essentiel du phénomène.
+
+La **loi de Little** relie le nombre moyen de clients présents $\langle N \rangle$, le taux d'arrivée $\lambda$ et le temps moyen passé dans le système $\langle D \rangle$ par l'égalité, valable pour *tout* système stationnaire :
+
+$$ \langle N \rangle = \lambda \, \langle D \rangle $$
+
+C'est une égalité exacte (pas une approximation), et elle ne suppose aucune loi particulière. <Badge niveau="theoreme">La loi de Little est un théorème de la théorie des files : elle découle de la seule conservation des clients en régime stationnaire, indépendamment des lois d'arrivée et de service.</Badge>
+</Encart>
+
+<Encart type="calcul" titre="Pourquoi une file qui se remplit explose le délai">
+Plaçons-nous dans le modèle M/M/1 : arrivées au taux $\lambda$, service au taux $\mu$. On pose le **taux d'utilisation** :
+
+$$ \rho = \frac{\lambda}{\mu} \qquad (0 \le \rho < 1) $$
+
+En régime stationnaire, la probabilité d'avoir $n$ paquets dans le système suit une loi géométrique $P(n) = (1 - \rho)\,\rho^{\,n}$. Le nombre moyen de paquets présents est donc :
+
+$$ \langle N \rangle = \sum_{n=0}^{\infty} n\,(1-\rho)\,\rho^{\,n} = (1-\rho)\,\rho \sum_{n=1}^{\infty} n\,\rho^{\,n-1} = (1-\rho)\,\rho \cdot \frac{1}{(1-\rho)^2} = \frac{\rho}{1 - \rho} $$
+
+Il ne reste qu'à appliquer la loi de Little, $\langle D \rangle = \langle N \rangle / \lambda$ :
+
+$$ \langle D \rangle = \frac{1}{\lambda} \cdot \frac{\rho}{1 - \rho} = \frac{1}{\lambda} \cdot \frac{\lambda/\mu}{1 - \lambda/\mu} = \frac{1/\mu}{(\mu - \lambda)/\mu} = \frac{1}{\mu - \lambda} $$
+
+Lisons ce résultat. Quand $\lambda \to \mu$ (la demande approche la capacité), $\rho \to 1$ et $\langle D \rangle \to +\infty$ : **le délai diverge avant même que le lien soit "plein"**. C'est la raison pour laquelle un réseau chargé à 95 % devient inutilisable bien avant 100 %.
+</Encart>
+
+<Resultat label="Divergence du délai à saturation">
+$$ \langle D \rangle = \frac{1}{\mu - \lambda} \xrightarrow[\lambda \to \mu]{} +\infty $$
+<Badge niveau="theoreme" slot="badge">Conséquence de la théorie des files d'attente (M/M/1 + loi de Little) : dès que la charge approche la capacité de service, le délai d'attente diverge. C'est mathématique, pas négociable.</Badge>
+</Resultat>
+
+## Le best-effort : IP ne promet rien
+
+Voici l'honnêteté fondatrice de l'Internet. IP est un service **best-effort** : il *essaie* de livrer chaque paquet, sans aucune garantie de délai, d'ordre, ni même de livraison. <Badge niveau="norme">Le modèle best-effort est inscrit dans l'architecture IP elle-même (RFC 791) : un datagramme peut être retardé, dupliqué, réordonné ou détruit, et le réseau n'en informe personne.</Badge> Toute la fiabilité que nous avons construite au-dessus — l'ordre et la retransmission de <Prereq href="/reseaux/partie-v/tcp-flux-congestion">TCP</Prereq> — est une *réparation de bout en bout*, faite par les hôtes, pas par le réseau.
+
+Conséquence directe : **les quatre métriques de QoS ne sont garanties par rien**. Un paquet vidéo traverse les mêmes files que vos téléchargements, et attend son tour à égalité. Pour offrir mieux, il faut *ajouter une convention* par-dessus le best-effort.
+
+## Prioriser : arbitrer la pénurie, pas la supprimer
+
+L'idée de la QoS active est de **traiter différemment** les paquets dans les files des routeurs. On classe le trafic, puis on sert les classes prioritaires d'abord.
+
+<Encart type="rappel" titre="DiffServ : un champ de 6 bits dans l'en-tête IP">
+Le mécanisme dominant aujourd'hui est **DiffServ** (Differentiated Services). Il réutilise un champ de l'en-tête IPv4/IPv6, le **DSCP** (6 bits), pour marquer chaque paquet d'une *classe de service* (par exemple « voix temps réel », « interactif », « best-effort »). Chaque routeur lit ce marquage et applique un **comportement par saut** (Per-Hop Behavior) : files prioritaires, partage pondéré de la bande, ou rejet sélectif quand ça déborde. <Badge niveau="norme">Le format du champ DSCP et les PHB standard sont normalisés (RFC 2474, RFC 2475).</Badge>
+</Encart>
+
+Mais voici le point que rien n'efface : **prioriser ne crée pas de capacité**. Donner la priorité à la voix, c'est *retirer* du temps de service aux autres flux. La capacité totale du lien reste bornée — tout en bas — par le théorème de Shannon : un canal de bande $B$ et de rapport signal/bruit donné ne peut dépasser $C = B\log_2(1 + S/N)$ bits/s, point final. <Badge niveau="theoreme">La QoS redistribue un gâteau de taille fixée par la physique du canal ; elle n'en cuit pas un plus grand. La borne de Shannon est en dessous de tout.</Badge>
+
+La QoS est donc un **arbitrage de la pénurie** : elle ne supprime pas la rareté, elle la répartit. Et un arbitrage, ça se décide. *Quelles* classes existent, *quels* poids, *quelle* application est « prioritaire » : tout cela varie radicalement.
+
+<Tournant titre="Tournant : ici on quitte le nécessaire pour le décidé">
+Jusqu'à DiffServ, chaque résultat était soit imposé par la physique (Shannon, les files), soit fixé par une norme adoptée mondialement. À partir des *politiques* de QoS, nous entrons dans un domaine où **rien n'est universel** : les règles sont posées par chaque opérateur, pour ses propres objectifs. Ce ne sont plus des théorèmes ni des normes communes, mais des choix locaux. Nous le signalons clairement plutôt que de faire passer une décision pour une loi.
+</Tournant>
+
+<Badge niveau="heuristique">Le choix des classes de trafic, des algorithmes de file (WFQ, priority queuing, RED/CoDel contre le bufferbloat) est un ensemble d'heuristiques d'ingénierie : raisonnables, mais ni uniques ni démontrées optimales.</Badge> <Badge niveau="deploiement">Les politiques effectives — quels DSCP sont honorés, lesquels sont remis à zéro à la frontière d'un opérateur, quels flux sont priorisés — dépendent entièrement du déploiement. Un marquage DSCP n'a aucune valeur garantie hors du domaine qui l'a posé.</Badge>
+
+### Une tension qui n'est plus technique
+
+Si un opérateur peut prioriser, il peut aussi *dé-prioriser*. La **neutralité du net** est le principe selon lequel tous les flux doivent être traités également, indépendamment de leur source, destination ou contenu. La QoS, par construction, *permet* de violer ce principe. <Badge niveau="deploiement">Le degré de neutralité appliqué relève de la régulation et du choix de l'opérateur, pas de la technique. La même boîte DiffServ peut servir une priorisation légitime de la voix d'urgence ou une discrimination commerciale.</Badge> C'est un arbitrage devenu, en partie, **politique** — et ce cours s'arrête honnêtement à la frontière où la technique cède la place au choix de société.
+
+## Synthèse : relire la pile, du bit à HTTPS
+
+Nous voici au sommet. Reprenons toute l'ascension d'un seul regard, en marquant à chaque étage *ce qui était nécessaire* et *ce qui était une convention ajoutée*.
+
+| Étage | Ce qu'on a établi | Statut dominant |
+|---|---|---|
+| Bit & signal | $C = B\log_2(1+S/N)$ : la capacité est bornée par la physique | theoreme |
+| Codage/modulation | NRZ, Manchester, constellations limitées par le bruit | heuristique |
+| Trame & CRC | Division polynomiale, garanties de détection de rafales | norme + theoreme |
+| Ethernet / MAC | Adresse 48 bits, format de trame, FCS | norme |
+| IP & <Prereq href="/reseaux/partie-iv/routage">routage</Prereq> | Adresse hiérarchique, longest prefix match, best-effort | norme |
+| Transport (TCP/UDP) | Ports, fiabilité de bout en bout, congestion AIMD | norme + heuristique |
+| DNS, HTTP, <Prereq href="/reseaux/partie-vi/tls-securite">TLS</Prereq> | Noms, requête/réponse, chiffrement et certificats | norme |
+| QoS | Arbitrage de la pénurie sous la borne de Shannon | heuristique + deploiement |
+
+Lisez cette table comme la morale du cours. **Les couches ne se déduisent pas les unes des autres.** On ne *dérive* pas TCP d'IP, ni Ethernet de Shannon. À chaque étage, on a **posé de nouvelles conventions** — un format de trame, un numéro de port, un handshake — sur une **base physique contrainte** par le bas. Le seul vrai *théorème* de toute la pile vit tout en bas : Shannon fixe le plafond, et rien au-dessus ne peut le percer.
+
+C'était la promesse de la première page. Tout ce qui n'était pas déduit a été **posé au grand jour**, par un `<Tournant>` ou une hypothèse explicite ; tout le reste a été **déduit**. Nous n'avons rien sur-vendu : IP ne garantit rien, TCP *répare* sans certitude absolue, la congestion est une heuristique révisable, la QoS arbitre une pénurie qu'elle ne supprime pas. Un réseau, au fond, c'est une cathédrale de conventions posée sur un unique pilier physique — et savoir distinguer le pilier des conventions, c'est exactement ce que vous emportez de ce cours.
+
+Le fil est tendu jusqu'au bout. Pour retrouver d'un coup d'œil chaque grandeur, chaque symbole et son statut épistémique, tournez-vous vers l'<Prereq href="/reseaux/symboles">index des symboles et grandeurs</Prereq> qui referme l'ouvrage.

@@ -1,0 +1,109 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les anisotropies du fond diffus"
+chapter: anisotropies-cmb
+description: "Les minuscules fluctuations du CMB et comment elles fixent les paramètres cosmologiques."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les anisotropies du fond diffus
+
+Le fond diffus cosmologique est d'une douceur stupéfiante : où qu'on pointe l'antenne, on lit la même température, $T_0 \approx 2{,}725\ \mathrm{K}$. C'est la signature de la <Prereq href="/cosmologie/partie-iii/recombinaison-cmb">recombinaison</Prereq>, la lumière libérée quand l'univers est devenu transparent. Mais « la même » cache une nuance que toute la cosmologie moderne s'emploie à lire : la température varie d'un point à l'autre d'environ **une partie sur cent mille**. Ces écarts minuscules — les *anisotropies* — sont la photographie la plus ancienne et la plus précise que nous possédions. Ce chapitre raconte comment on les déchiffre.
+
+<Encart type="intuition" titre="Écouter le ciel comme un instrument">
+Pincez la corde d'une guitare : elle ne sonne pas n'importe comment, mais à des fréquences précises — fondamentale et harmoniques — fixées par sa longueur et sa tension. Le plasma primordial est exactement cela : un fluide qui « sonne ». Les taches chaudes et froides du fond diffus sont la photographie figée de ces ondes sonores au moment où la lumière s'est échappée. Mesurer leurs « hauteurs de notes », c'est mesurer la composition et la géométrie de l'univers.
+</Encart>
+
+### D'abord, retirer notre propre mouvement
+
+La toute première anisotropie n'a rien de primordial : c'est nous. La Terre, le Soleil, la Galaxie tout entière se déplacent par rapport au référentiel où le fond diffus est isotrope. Par effet Doppler, le ciel apparaît un peu plus chaud dans la direction de notre course, un peu plus froid à l'opposé. On obtient un **dipôle** : un hémisphère chaud, l'autre froid.
+
+<Encart type="calcul" titre="Le dipôle Doppler">
+
+**Étape 1 — Décalage Doppler.** Pour une vitesse $v \ll c$ faisant un angle $\theta$ avec la ligne de visée, la température observée se décale au premier ordre :
+
+$$ T(\theta) \simeq T_0\left(1 + \frac{v}{c}\cos\theta\right). $$
+
+**Étape 2 — Amplitude.** L'écart maximal ($\theta = 0$) vaut $\Delta T_{\max} = T_0\,\tfrac{v}{c}$. Avec $\Delta T \approx 3{,}36\ \mathrm{mK}$ mesuré et $T_0 = 2{,}725\ \mathrm{K}$ :
+
+$$ \frac{v}{c} = \frac{\Delta T_{\max}}{T_0} = \frac{3{,}36\times 10^{-3}}{2{,}725} \approx 1{,}23\times 10^{-3}. $$
+
+**Étape 3 — Vitesse propre.** En multipliant par $c \approx 3{,}00\times 10^{5}\ \mathrm{km\,s^{-1}}$ :
+
+$$ v \approx 1{,}23\times 10^{-3}\times c \approx 370\ \mathrm{km\,s^{-1}}. \qquad\blacksquare $$
+
+</Encart>
+
+Ce dipôle, à $10^{-3}$, est cent fois plus grand que tout le reste — et entièrement *local*. <Badge niveau="observe">Le dipôle est mesuré directement ; il fixe la vitesse du Système solaire par rapport au fond diffus, cohérente avec les autres déterminations du mouvement galactique.</Badge> On le **soustrait**. Ce qui demeure alors, à $\sim 10^{-5}$, est cosmologique : ce sont les fluctuations primordiales.
+
+### Les oscillations acoustiques du plasma
+
+Avant la recombinaison, photons et baryons forment un seul fluide étroitement couplé : les photons diffusent sans cesse sur les électrons libres (diffusion Thomson). Deux effets antagonistes l'animent. La **gravité** attire le fluide vers les surdensités et le comprime ; la **pression de radiation** des photons, énorme, le repousse et fournit la force de rappel. Compression, rebond, compression : le fluide **oscille**. Ce sont des ondes acoustiques, de vraies ondes sonores, dans le plasma de l'univers jeune.
+
+<Encart type="rappel" titre="L'horizon sonore">
+La perturbation ne se propage qu'à la vitesse du son du fluide, $c_s$. Tant que les photons dominent, $c_s \approx c/\sqrt{3} \approx 0{,}58\,c$ — une fraction notable de la vitesse de la lumière. La distance comobile que le son a pu parcourir depuis le Big Bang jusqu'à la recombinaison est l'**horizon sonore** $r_s$ :
+
+$$ r_s = \int_0^{t_\star} \frac{c_s}{a(t)}\,\mathrm{d}t. $$
+
+Avec les paramètres standard, $r_s \approx 147\ \mathrm{Mpc}$ (comobile). C'est une longueur **physique et calculable** : elle servira de mètre étalon.
+</Encart>
+
+À la recombinaison, le couplage cesse brutalement : la photo est prise. Les modes capturés au maximum de compression ou de raréfaction laissent l'empreinte la plus marquée. Comme tous les modes d'une longueur d'onde donnée ont commencé à osciller au même instant, ils sont **en phase** : un mode qui atteint juste sa première compression maximale à $t_\star$ ressort privilégié, de même que celui qui en est à sa première raréfaction, et ainsi de suite. D'où une série de tailles angulaires préférées sur le ciel.
+
+L'origine commune de cette mise en phase est, dans le modèle standard, la fin de l'**inflation** : un épisode d'expansion accélérée primordiale qui aurait engendré simultanément les perturbations. <Badge niveau="extrapole">L'inflation fournit le mécanisme rendant les modes cohérents (en phase), ce qui explique la nature *piquée* du spectre. Scénario sérieux et largement adopté, mais non directement testé : une extrapolation théorique, pas un acquis observationnel.</Badge>
+
+### Le spectre de puissance angulaire
+
+Pour quantifier cela, on décompose la carte de température en harmoniques sphériques et l'on mesure la puissance $C_\ell$ à chaque multipôle $\ell$ (un grand $\ell$ correspond à une petite échelle angulaire, $\theta \sim 180^\circ/\ell$). Le graphe de $\ell(\ell+1)C_\ell$ en fonction de $\ell$ révèle une succession de **pics acoustiques**.
+
+<Badge niveau="observe">Ce spectre est mesuré : COBE (1992) a détecté les premières anisotropies à $10^{-5}$ aux grandes échelles ; WMAP puis Planck (2013–2018) ont cartographié les pics avec une précision exquise.</Badge> <Badge niveau="concordance">Son interprétation — pics = oscillations acoustiques d'un fluide photon-baryon — est une prédiction du modèle, concordante jusqu'au septième pic environ.</Badge>
+
+Chaque caractéristique du spectre encode un paramètre :
+
+| Caractéristique | Ce qu'elle contraint |
+|---|---|
+| Position du **premier pic** ($\ell \approx 220$) | Géométrie / courbure |
+| Hauteur relative **1ᵉʳ vs 2ᵉ pic** | Densité de baryons $\Omega_b$ |
+| Hauteur du **3ᵉ pic** | Densité de matière (noire) $\Omega_m$ |
+
+### L'horizon sonore, règle standard
+
+Voici le cœur de l'affaire. On **connaît** la taille physique $r_s$ de l'horizon sonore. On **observe** la taille angulaire $\theta_\star$ sous laquelle il apparaît (la position du premier pic). Le rapport relie la distance à la surface de dernière diffusion — et donc la géométrie de l'espace traversé par la lumière.
+
+<Encart type="calcul" titre="Position du premier pic et platitude">
+
+**Étape 1 — Angle d'une règle standard.** Pour un objet de taille comobile $r_s$ vu à une distance comobile $D_\star$ jusqu'à la surface de dernière diffusion :
+
+$$ \theta_\star \approx \frac{r_s}{D_\star}, \qquad \ell_{\text{pic}} \approx \frac{\pi}{\theta_\star} \approx \pi\,\frac{D_\star}{r_s}. $$
+
+**Étape 2 — Rôle de la courbure.** Dans un espace **courbe**, les rayons lumineux divergent (courbure négative, ouvert) ou convergent (positive, fermé). Une même règle $r_s$ paraît donc **plus petite** si l'univers est ouvert (pic à plus grand $\ell$), **plus grande** s'il est fermé (pic à plus petit $\ell$).
+
+**Étape 3 — Lecture numérique.** L'observation place le premier pic à $\ell_{\text{pic}} \approx 220$, soit $\theta_\star \approx 180^\circ/220 \approx 0{,}8^\circ$ — exactement la valeur attendue pour un espace **plat** ($k=0$). Confronté à l'ensemble du spectre, cela se traduit par :
+
+$$ \boxed{\ \ell_{\text{pic}} \approx 220 \ \Longrightarrow\ \Omega_{\text{tot}} = 1{,}000 \pm 0{,}005\ } \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Platitude de l'univers">
+
+$$ \Omega_{\text{tot}} = 1{,}000 \pm 0{,}005 $$
+
+<Badge niveau="observe" slot="badge">La position angulaire du premier pic est mesurée.</Badge>
+<Badge niveau="concordance" slot="badge">Sa traduction en courbure $\approx 0$ suppose le cadre FLRW et la valeur calculée de $r_s$ : platitude établie *dans* le modèle.</Badge>
+</Resultat>
+
+### Une mise en garde nécessaire
+
+Il est tentant de dire « le premier pic *donne* la courbure, le rapport des deux premiers *donne* les baryons ». C'est une commodité pédagogique, non la réalité du calcul. <Badge niveau="concordance">L'extraction des paramètres est un **ajustement global** : un modèle à six paramètres (ΛCDM) est confronté d'un coup à l'ensemble du spectre, avec des dégénérescences entre paramètres. Chaque pic *contraint surtout* une quantité, mais aucun ne la fixe isolément.</Badge> La force de la méthode tient justement à cette redondance : un seul jeu de six nombres reproduit des centaines de points de mesure indépendants.
+
+<Tournant titre="Tournant : ce qui est lu, ce qui est supposé">
+Soyons explicites sur le statut épistémologique de ce chapitre. Les **anisotropies elles-mêmes** — le dipôle, le spectre $C_\ell$, la position du premier pic — sont *mesurées* : ce sont des faits empiriques robustes. Mais leur **lecture** ne va pas sans hypothèses : interpréter les pics comme des oscillations acoustiques, calculer $r_s$, traduire $\theta_\star$ en courbure, tout cela suppose le cadre FLRW et le modèle ΛCDM. La platitude $\Omega_{\text{tot}} = 1$ est donc *observée + concordante*, jamais « lue » d'un seul nombre isolé : elle sort d'un ajustement global. Et la cohérence *en phase* des modes repose sur l'inflation, une couche théorique extrapolée. Nous mêlons ici, en toute honnêteté, du strictement observé et du dépendant-du-modèle.
+</Tournant>
+
+Ces mêmes oscillations laissent une empreinte jumelle dans la distribution des galaxies, à des milliards d'années-lumière de là : les **oscillations acoustiques baryoniques** (BAO), que nous suivrons dans la structuration de la matière au chapitre suivant.

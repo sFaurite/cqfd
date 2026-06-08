@@ -1,0 +1,84 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SYMBOLES } from '../../data/chimie/symbols';
+import katex from 'katex';
+
+// Rendu KaTeX au build pour chaque symbole.
+const lignes = SYMBOLES.map((s) => ({
+  ...s,
+  html: katex.renderToString(s.katex, { throwOnError: false, displayMode: false }),
+}));
+---
+
+<BaseLayout title="Index des symboles et constantes" courseId="chimie" currentPath={Astro.url.pathname} description="ψ, Zeff, χ, ΔrG, S = k ln Ω, pKa, E°… chaque grandeur et constante du cours, son unité et son statut.">
+  <div class="lesson-wrap">
+    <article id="contenu" class="prose" data-pagefind-body>
+      <h1>Index des symboles et constantes</h1>
+      <p class="lead">
+        Toutes les grandeurs et constantes utilisées dans le cours, avec leur signification, leur unité,
+        et — pour les grandeurs de référence — leur valeur et son statut (<strong>quantique</strong>,
+        <strong>établi par l’expérience</strong> ou <strong>règle empirique</strong>).
+      </p>
+
+      <div class="tablewrap">
+        <table class="symboles">
+          <thead>
+            <tr>
+              <th>Symbole</th>
+              <th>Nom</th>
+              <th>Signification</th>
+              <th>Unité</th>
+              <th>Valeur / statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              lignes.map((s) => (
+                <tr>
+                  <td class="sym" set:html={s.html} />
+                  <td>
+                    {s.voir ? <a href={s.voir}>{s.nom}</a> : s.nom}
+                  </td>
+                  <td>{s.desc}</td>
+                  <td class="unite">{s.unite ?? '—'}</td>
+                  <td class="val">{s.valeur ?? '—'}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+
+  <style>
+    .lesson-wrap {
+      padding: 1.4rem clamp(1rem, 3vw, 2.4rem) 3rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .tablewrap {
+      overflow-x: auto;
+    }
+    .symboles {
+      display: table;
+      width: 100%;
+    }
+    .sym {
+      text-align: center;
+      font-size: 1.15rem;
+      background: var(--c-bg-elev);
+      min-width: 3.2em;
+    }
+    .unite {
+      white-space: nowrap;
+      color: var(--c-muted);
+      font-size: 0.9rem;
+    }
+    .val {
+      font-size: 0.88rem;
+      color: var(--c-muted);
+      min-width: 12em;
+    }
+  </style>
+</BaseLayout>

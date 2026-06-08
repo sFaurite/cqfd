@@ -1,0 +1,126 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'instabilité gravitationnelle de Jeans"
+chapter: instabilite-jeans
+description: "Effondrement gravitationnel et croissance des perturbations dans un univers en expansion."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'instabilité gravitationnelle de Jeans
+
+L'univers que nous avons décrit jusqu'ici est lisse : homogène, isotrope, le même partout. Mais quand on lève les yeux, on voit l'inverse — des galaxies, des amas, d'immenses filaments séparés par des vides. D'où vient cette structure ? La réponse tient en une phrase : **la gravité amplifie les moindres irrégularités**. Là où il y a un peu trop de matière, ce surplus attire encore plus de matière ; le « riche » s'enrichit. Ce chapitre rend cette intuition quantitative, et nous mène à une conclusion saisissante : sans matière noire, les structures n'auraient pas eu le temps de se former.
+
+Nous partons des <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">fluctuations primordiales</Prereq> — de minuscules écarts à l'homogénéité parfaite — et nous demandons : grandissent-elles, ou se dissipent-elles ?
+
+<Encart type="intuition" titre="Le bras de fer">
+Deux forces s'affrontent dans tout nuage de matière. La **gravité** veut contracter : plus on comprime, plus l'attraction augmente. La **pression** veut s'étaler : comprimez un gaz, il pousse en retour, et l'information « il y a trop de monde ici » se propage à la **vitesse du son** $c_s$. Tout dépend de qui gagne. Si la région est petite, le son la traverse vite, rééquilibre la pression, et la perturbation oscille (c'est une onde sonore). Si la région est trop grande, le son n'arrive pas à temps : la gravité l'emporte avant que la pression réagisse, et l'effondrement s'enclenche. La taille critique qui sépare ces deux régimes porte un nom : la **longueur de Jeans**.
+</Encart>
+
+### Le critère de Jeans
+
+Formalisons ce bras de fer par une comparaison de **temps caractéristiques**. Soit une région de taille $\lambda$ et de densité $\rho$.
+
+Le temps d'effondrement gravitationnel, ou **temps de chute libre**, est le temps qu'il faut à la région pour s'effondrer sous sa propre gravité. Une analyse dimensionnelle (et le calcul exact) donne $t_{\rm grav} \sim 1/\sqrt{G\rho}$.
+
+Le temps de réponse de la pression est le temps que met une onde sonore pour traverser la région : $t_{\rm pres} \sim \lambda / c_s$.
+
+L'effondrement gagne quand la gravité est plus rapide que la pression, soit $t_{\rm grav} < t_{\rm pres}$, c'est-à-dire $\lambda$ assez **grand**.
+
+<Encart type="calcul" titre="Dérivation de la longueur de Jeans">
+
+**Étape 1 — Condition d'effondrement.** La gravité l'emporte quand son temps caractéristique est plus court que celui de la pression :
+
+$$ t_{\rm grav} < t_{\rm pres} \quad\Longleftrightarrow\quad \frac{1}{\sqrt{G\rho}} < \frac{\lambda}{c_s}. $$
+
+**Étape 2 — On isole $\lambda$.** En multipliant les deux membres par $c_s$ et en réarrangeant, l'effondrement requiert :
+
+$$ \lambda > c_s\,\frac{1}{\sqrt{G\rho}} = \frac{c_s}{\sqrt{G\rho}}. $$
+
+**Étape 3 — On nomme le seuil.** La taille critique, à un facteur d'ordre 1 près que fournit le calcul complet (analyse des perturbations linéaires du fluide auto-gravitant), est la **longueur de Jeans** :
+
+$$ \boxed{\;\lambda_J = c_s\sqrt{\frac{\pi}{G\rho}}\;} $$
+
+Toute perturbation de taille $\lambda > \lambda_J$ s'effondre ; toute perturbation plus petite oscille comme une onde sonore.
+
+</Encart>
+
+<Resultat label="Critère de Jeans">
+
+$$ \lambda > \lambda_J = c_s\sqrt{\dfrac{\pi}{G\rho}} \quad\Longrightarrow\quad \text{effondrement gravitationnel} $$
+
+<Badge niveau="concordance" slot="badge">Le critère découle de l'analyse linéaire d'un fluide auto-gravitant — physique établie. Le préfacteur dépend des conventions, mais la dépendance $\lambda_J \propto c_s/\sqrt{G\rho}$ est robuste.</Badge>
+</Resultat>
+
+On lit ce critère comme une compétition limpide : **plus la vitesse du son $c_s$ est grande** (matière « raide », forte pression), **plus le seuil $\lambda_J$ est élevé** et plus il est difficile de s'effondrer. À l'inverse, une matière **froide et sans pression** ($c_s \to 0$) a $\lambda_J \to 0$ : toute perturbation, si petite soit-elle, s'effondre. Retenez bien ce point, il sera décisif.
+
+### La croissance dans un univers en expansion
+
+Dans un univers **statique**, l'effondrement d'une région super-Jeans est **exponentiel** : le contraste de densité $\delta \equiv \delta\rho/\rho$ explose en $\delta \propto e^{t/t_{\rm grav}}$. La gravité agit sans frein.
+
+Mais notre univers **n'est pas statique** : il est en expansion. Et l'expansion joue contre l'effondrement — elle dilue continûment la matière, elle « tire » sur la surdensité naissante. C'est un point que l'on confond trop souvent : **en espace en expansion, la croissance n'est plus exponentielle, mais en loi de puissance**, bien plus lente.
+
+<Encart type="rappel" titre="L'équation de croissance linéaire">
+Pour de petites perturbations ($\delta \ll 1$) de matière sans pression, l'évolution du contraste de densité, dérivée à partir des <Prereq href="/cosmologie/partie-ii/equations-friedmann">équations de Friedmann</Prereq> perturbées, obéit à :
+
+$$ \ddot\delta + 2H\dot\delta = 4\pi G \rho_m\, \delta. $$
+
+Le terme de droite est la **gravité** (le moteur, comme dans le cas statique). Le terme $2H\dot\delta$ est nouveau : c'est un **frottement de Hubble**, un freinage dû à l'expansion. C'est lui qui transforme l'explosion exponentielle en lente croissance.
+</Encart>
+
+<Encart type="calcul" titre="Croissance en ère de matière : δ ∝ a">
+
+**Étape 1 — Données de l'ère de matière.** En ère dominée par la matière, $\rho_m \propto a^{-3}$, et l'équation de Friedmann donne $a \propto t^{2/3}$, d'où $H = \dot a/a = \tfrac{2}{3t}$ et $4\pi G\rho_m = \tfrac{2}{3t^2}$ (car $\rho_m$ vaut, à un facteur près, la densité critique $\sim H^2/G$).
+
+**Étape 2 — On cherche une solution en puissance.** Essayons $\delta \propto t^{\,n}$. Alors $\dot\delta = n\,\delta/t$ et $\ddot\delta = n(n-1)\,\delta/t^2$. On reporte :
+
+$$ n(n-1)\frac{\delta}{t^2} + 2\cdot\frac{2}{3t}\cdot n\frac{\delta}{t} = \frac{2}{3t^2}\,\delta. $$
+
+**Étape 3 — On simplifie par $\delta/t^2$.** Tout le facteur commun disparaît, laissant une équation purement algébrique en $n$ :
+
+$$ n(n-1) + \frac{4}{3}n - \frac{2}{3} = 0 \quad\Longleftrightarrow\quad n^2 + \frac{1}{3}n - \frac{2}{3} = 0. $$
+
+**Étape 4 — On résout.** Le discriminant vaut $\tfrac{1}{9} + \tfrac{8}{3} = \tfrac{25}{9}$, donc $n = \dfrac{-\tfrac13 \pm \tfrac53}{2}$, soit $n = \tfrac{2}{3}$ ou $n = -1$.
+
+**Étape 5 — On garde le mode croissant.** Le mode $n=-1$ décroît (il s'efface) ; le mode physique qui bâtit les structures est $n = \tfrac{2}{3}$. Comme $a \propto t^{2/3}$, on obtient :
+
+$$ \boxed{\;\delta \propto t^{2/3} \propto a\;} $$
+
+</Encart>
+
+<Resultat label="Croissance linéaire en ère de matière">
+
+$$ \delta(a) \propto a $$
+
+<Badge niveau="concordance" slot="badge">Résultat dérivé ci-dessus de la théorie des perturbations sur fond Friedmann ; pilier du modèle ΛCDM, en accord avec la structure observée à grande échelle.</Badge>
+</Resultat>
+
+Le contraste croît donc **proportionnellement au facteur d'échelle** : quand l'univers double de taille, les surdensités doublent leur contraste. C'est lent — une loi de puissance, pas une exponentielle — et ce caractère poussif est précisément ce qui va poser problème aux baryons.
+
+### Pourquoi il faut de la matière noire
+
+<Tournant titre="Tournant : on pose une composante nouvelle, on ne déduit plus">
+Jusqu'ici tout découlait de la gravité et de la physique du fluide. Le raisonnement qui suit oblige à **ajouter une hypothèse** que les chapitres précédents ne fournissent pas : l'existence d'une **matière noire froide**, électriquement neutre, sans pression ($c_s \approx 0$) et **découplée des photons**. Ce n'est pas une déduction mais un **postulat du modèle** $\Lambda$CDM — fortement motivé par l'argument quantitatif ci-dessous, mais dont la **nature physique** reste inconnue (aucune particule détectée à ce jour). Nous le posons explicitement, et nous montrons pourquoi il est nécessaire.
+</Tournant>
+
+Voici l'argument décisif. Comptons. Du <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">fond diffus cosmologique</Prereq>, on mesure le contraste de densité à la recombinaison : $\delta \sim 10^{-5}$. Aujourd'hui, les galaxies ont $\delta \gg 1$. Il a donc fallu amplifier d'un facteur $\sim 10^5$. Or depuis la recombinaison, $a$ n'a grandi que d'un facteur $\sim 1100$. Avec $\delta \propto a$, les baryons seuls n'amplifient que d'un facteur $\sim 1100$ — **cent fois trop peu**.
+
+<Encart type="intuition" titre="Le verrou des photons">
+Avant la recombinaison, les baryons sont **collés aux photons** par diffusion Thomson : ils forment un unique fluide photon-baryon, ultra-rigide, à la vitesse du son colossale $c_s \approx c/\sqrt{3}$. Avec un $c_s$ aussi grand, la longueur de Jeans est gigantesque : rien ne peut s'effondrer. Pire, la pression de radiation **efface** activement les surdensités baryoniques. Tant que les photons sont là, les baryons sont prisonniers — ils ne peuvent **pas commencer** à croître. Ils n'en sont libérés qu'à la recombinaison, bien trop tard.
+</Encart>
+
+La matière noire, elle, ne voit pas les photons : neutre, **froide** ($c_s \approx 0$, donc $\lambda_J \approx 0$), elle commence à s'effondrer **bien avant** la recombinaison, dès l'égalité matière-rayonnement. Elle creuse de profonds **puits de potentiel** pendant que les baryons sont encore verrouillés. À la recombinaison, libérés des photons, les baryons **tombent dans des puits déjà creusés** — et rattrapent en une fraction du temps l'amplification manquante.
+
+<Resultat label="Nécessité de la matière noire">
+
+$$ \frac{\delta_0}{\delta_{\rm rec}} \sim 10^5 \gg a_0/a_{\rm rec} \sim 10^3 \;\Rightarrow\; \text{une composante froide doit amorcer la croissance avant le découplage} $$
+
+<Badge niveau="concordance" slot="badge">Argument quantitatif fort : sans matière noire froide, la croissance $\delta\propto a$ depuis $\delta\sim10^{-5}$ ne produit pas les structures observées. Repose sur le modèle ΛCDM (nature de la matière noire non encore identifiée).</Badge>
+</Resultat>
+
+La structure du cosmos n'est donc pas un détail : c'est une **preuve gravitationnelle** de l'existence d'une matière invisible qui domine la matière ordinaire. Reste à comprendre comment ces puits de potentiel, peuplés de baryons retardataires, allument leurs premières étoiles — c'est l'objet du chapitre suivant.

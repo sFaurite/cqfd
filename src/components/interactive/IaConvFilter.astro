@@ -1,0 +1,69 @@
+---
+/**
+ * IaConvFilter — application d'un filtre de convolution 3×3 réglable
+ * (coefficients éditables, presets bord / flou / netteté / identité) sur une
+ * petite image. Affiche côte à côte l'image d'origine, le noyau et la carte de
+ * réponse, en faisant glisser visiblement la fenêtre. Rend tangibles localité,
+ * partage de poids et détection de motifs. Chapitre : convolution.
+ */
+---
+
+<div class="iw" data-iw="ia-conv">
+  <div class="iw__head"><span class="tag">Interactif</span> Un filtre 3×3 qui glisse sur l'image</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>préréglage</label>
+      <div class="iw__btns" role="group" aria-label="Préréglage du noyau">
+        <button type="button" class="iw__btn active" data-preset="identite">identité</button>
+        <button type="button" class="iw__btn" data-preset="bord">bords</button>
+        <button type="button" class="iw__btn" data-preset="flou">flou</button>
+        <button type="button" class="iw__btn" data-preset="nettete">netteté</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>image</label>
+      <div class="iw__btns" role="group" aria-label="Image">
+        <button type="button" class="iw__btn active" data-img="disque">disque</button>
+        <button type="button" class="iw__btn" data-img="diag">diagonale</button>
+        <button type="button" class="iw__btn" data-img="croix">croix</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>animation</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-play>faire glisser ▶</button>
+        <button type="button" class="iw__btn" data-step>pas à pas</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label for="cv-edit">noyau éditable</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-edit id="cv-edit">éditer les coefficients</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">position</span> <b data-out-pos>—</b></span>
+    <span class="iw__chip"><span class="k">somme pondérée</span> <b data-out-val>—</b></span>
+  </div>
+  <p class="iw__note">
+    À chaque position, le filtre multiplie ses 9 coefficients par les 9 pixels sous la fenêtre et
+    additionne : c'est une <b>somme pondérée locale</b>. Le <i>même</i> noyau parcourt toute l'image —
+    c'est le <b>partage de poids</b>, qui détecte un motif où qu'il soit. Le préréglage « bords »
+    réagit aux contrastes, « flou » moyenne, « netteté » accentue. Clique sur une case du noyau pour
+    en changer le coefficient et observe la carte de réponse se transformer.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-conv'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaConvFilter.client.ts';
+</script>

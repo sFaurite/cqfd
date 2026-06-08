@@ -1,0 +1,45 @@
+---
+/**
+ * HistoireDatationCarbone14 — simulateur de datation au carbone 14.
+ * Courbe de décroissance exponentielle (demi-vie ≈ 5 730 ans). Un curseur fixe
+ * la proportion de C-14 restante mesurée dans l'échantillon ; on lit l'âge
+ * correspondant et une zone d'incertitude (barre d'erreur ±). Montre comment une
+ * mesure physique donne une FOURCHETTE de dates, et où la méthode atteint sa
+ * limite (~50 000 ans), quand il ne reste presque plus de C-14 à mesurer.
+ */
+---
+
+<div class="iw" data-iw="datation-c14">
+  <div class="iw__head"><span class="tag">Interactif</span> Datation au carbone 14 : de la mesure à la fourchette de dates</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="c14-frac">C-14 restant</label>
+      <input id="c14-frac" type="range" min="0.2" max="100" step="0.1" value="50" data-frac />
+      <output data-out-frac>50 %</output>
+    </div>
+    <div class="iw__row">
+      <label for="c14-err">Incertitude mesure</label>
+      <input id="c14-err" type="range" min="0.5" max="5" step="0.1" value="1.5" data-err />
+      <output data-out-err>±1,5 %</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">âge estimé</span> <b data-out-age>—</b></span>
+    <span class="iw__chip"><span class="k">fourchette</span> <b data-out-range>—</b></span>
+    <span class="iw__chip"><span class="k">demi-vies écoulées</span> <b data-out-hl>—</b></span>
+  </div>
+  <p class="iw__note">
+    Tant que l'organisme vit, son carbone se renouvelle. À sa mort, le C-14 qu'il
+    contient décroît : il en reste la moitié après une <b>demi-vie</b> (≈ 5 730
+    ans), un quart après deux, etc. En mesurant la proportion restante, on remonte
+    à l'âge. Mais la mesure a une incertitude : elle se traduit en une
+    <b>fourchette</b> de dates (barre d'erreur). Quand il ne reste qu'un soupçon de
+    C-14, la courbe devient presque plate : la fourchette explose — c'est la
+    <b>limite</b> de la méthode, vers 50 000 ans.
+  </p>
+</div>
+
+<script>
+  import './HistoireDatationCarbone14.client.ts';
+</script>

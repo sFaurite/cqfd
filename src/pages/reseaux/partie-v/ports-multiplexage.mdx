@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Des machines aux processus : ports et multiplexage"
+chapter: ports-multiplexage
+description: "Introduit la couche transport : le besoin d'adresser un processus (port), le multiplexage/demultiplexage, le quadruplet de connexion, et le role de la couche transport."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand l'adresse ne suffit plus
+
+Imagine que tu envoies une lettre. L'adresse postale te conduit jusqu'à un immeuble — disons une grande tour de bureaux. Mais une fois la lettre déposée dans le hall, il faut encore savoir à *qui* la remettre : le service comptabilité ? le bureau 412 ? Une adresse de bâtiment ne distingue pas les destinataires *à l'intérieur*. C'est exactement le mur sur lequel nous venons de buter.
+
+<Tournant titre="Tournant : on passe de la machine au processus communicant">
+
+Jusqu'ici, tout notre travail visait à conduire un paquet d'une **machine** à une autre. Le <Prereq href="/reseaux/partie-iv/routage">routage par longest prefix match</Prereq> nous a appris à choisir le prochain saut jusqu'à l'hôte de destination. Mais une machine moderne fait tourner *des dizaines de programmes en même temps* : un navigateur, un client mail, un agenda qui se synchronise, une mise à jour qui se télécharge. IP livre le paquet à la bonne carte réseau — et s'arrête là. Il ne sait pas *lequel* de ces programmes attend ces octets. Nous changeons donc d'échelle : non plus *quelle machine*, mais *quel processus sur cette machine*.
+
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+
+- On **admet** désormais qu'IP sait acheminer un paquet jusqu'à une **machine** identifiée par son adresse IP, en best-effort (sans garantie de remise, vu en <Prereq href="/reseaux/partie-iv/routage">routage</Prereq>).
+- On **ajoute un besoin nouveau** : identifier le **processus destinataire** sur cette machine, et distinguer **plusieurs conversations simultanées** vers ou depuis ce processus. Ce besoin ne se déduit pas d'IP : c'est la **raison d'être de la couche transport**.
+- On pose que l'identifiant de processus prendra la forme d'un **numéro de port**, dont l'attribution suit une **convention** (et non une nécessité physique).
+
+</Hypotheses>
+
+## Le port : un numéro pour désigner un programme
+
+Posons la solution la plus simple qui réponde au besoin. À côté de l'adresse IP qui désigne la machine, on attache un **numéro de port** : un entier sur 16 bits, donc compris entre 0 et 65535. Le système d'exploitation tient une table associant chaque port *ouvert* à un processus. Quand un paquet arrive, la couche transport lit le port de destination et remet les données au programme correspondant.
+
+<Resultat label="Frontière réseau / transport">
+
+$$ \text{IP} : \text{machine} \longleftrightarrow \text{machine} \qquad ; \qquad \text{port} : \text{processus} \longleftrightarrow \text{processus} $$
+
+<Badge niveau="norme" slot="badge">Le port 16 bits est défini par les en-têtes UDP et TCP (RFC standardisés), pas par la physique.</Badge>
+
+</Resultat>
+
+Retiens bien cette frontière : **IP adresse entre machines**, le **transport adresse entre processus**. Ce découpage est *logique*, pas physique : dès qu'on accepte le besoin d'adresser un processus, un identifiant numérique local à la machine s'impose presque de lui-même. Mais la **largeur** (16 bits) et l'**emplacement** (dans l'en-tête transport) sont, eux, des conventions gravées dans les standards.
+
+## Ports bien connus, ports éphémères
+
+Pour qu'un client puisse joindre un serveur *sans le connaître à l'avance*, il faut un point de rendez-vous public. C'est le rôle des **ports bien connus** (well-known, de 0 à 1023), enregistrés par l'**IANA** :
+
+<Encart type="rappel" titre="Quelques ports bien connus (par convention)">
+
+- **80** → HTTP (web non chiffré)
+- **443** → HTTPS (web chiffré via <Prereq href="/reseaux/partie-vi/tls-securite">TLS</Prereq>, qu'on étudiera plus tard)
+- **53** → DNS (résolution de noms)
+
+Ce sont des **conventions** : rien dans la physique ni dans IP n'impose que HTTP « soit » sur le port 80. Un serveur web peut parfaitement tourner sur le port 8080 ou 1234 ; il fonctionnera, à condition que le client sache où frapper.
+
+</Encart>
+
+<Resultat label="L'attribution des ports est une convention">
+
+$$ 80 \equiv \text{HTTP}, \quad 443 \equiv \text{HTTPS}, \quad 53 \equiv \text{DNS} $$
+
+<Badge niveau="norme" slot="badge">Registre IANA : convention adoptée mondialement, modifiable, pas une loi physique.</Badge>
+
+</Resultat>
+
+Côté client, c'est différent. Quand ton navigateur ouvre une connexion, il n'a pas besoin d'un numéro *public* : le système lui en attribue un libre, pris dans la plage des **ports éphémères** (souvent autour de 49152–65535, mais la plage exacte dépend du système). Il sert juste, le temps de la conversation, à reconnaître les réponses qui reviennent.
+
+<Badge niveau="deploiement">La plage éphémère réelle dépend du système d'exploitation et de sa configuration (Linux et Windows n'utilisent pas la même par défaut).</Badge>
+
+## Multiplexage et démultiplexage
+
+Voici le cœur du chapitre. Une seule pile réseau, une seule adresse IP, une seule carte — mais des dizaines de flux qui doivent cohabiter.
+
+- **Multiplexage** (à l'émission) : la couche transport collecte les données issues de plusieurs processus, étiquette chacune avec son port source, et les confie à IP comme un flux unique de paquets.
+- **Démultiplexage** (à la réception) : à l'arrivée, elle lit le port de destination de chaque paquet et **aiguille** les octets vers le bon processus.
+
+C'est l'analogie du standard téléphonique : une seule arrivée de câbles, mais chaque appel routé vers le bon poste interne.
+
+<Encart type="intuition" titre="Pourquoi le port de destination ne suffit pas toujours">
+
+Imagine deux onglets ouverts sur le *même* site web. Les deux parlent à `443` du même serveur, depuis ta *même* machine. Côté serveur, comment distinguer les deux conversations ? Le port de destination est identique (443), l'IP source aussi (la tienne), l'IP de destination aussi. Le seul élément qui diffère est le **port source éphémère**, distinct pour chaque onglet. Il faut donc *quatre* informations pour identifier une conversation sans ambiguïté.
+
+</Encart>
+
+## Le quadruplet : l'identité d'une conversation
+
+On admet le besoin de distinguer toute paire de conversations simultanées. Montrons qu'il suffit de combiner les quatre champs disponibles.
+
+<Encart type="calcul" titre="Construction de l'identifiant de connexion">
+
+Une conversation met en jeu deux extrémités. Chaque extrémité est un couple (machine, processus), soit (adresse IP, port) :
+
+$$ \text{extrémité} = (\text{IP}, \text{port}) $$
+
+Une conversation relie une extrémité source à une extrémité destination :
+
+$$ \text{conversation} = \big( \text{IP}_{\text{src}},\ \text{port}_{\text{src}},\ \text{IP}_{\text{dst}},\ \text{port}_{\text{dst}} \big) $$
+
+Deux flux qui partagent les quatre valeurs sont, par définition, le même flux. Dès qu'**au moins un** des quatre champs diffère — typiquement le port source — les flux sont distincts et démultiplexables séparément.
+
+</Encart>
+
+<Resultat label="Le quadruplet identifie une conversation unique">
+
+$$ \big(\,\text{IP}_{\text{src}},\ \text{port}_{\text{src}},\ \text{IP}_{\text{dst}},\ \text{port}_{\text{dst}}\,\big) $$
+
+<Badge niveau="norme" slot="badge">Le démultiplexage par quadruplet est le mécanisme fondé dès qu'on accepte le besoin d'adresser des processus ; sa forme (ces quatre champs) est fixée par les en-têtes standardisés.</Badge>
+
+</Resultat>
+
+Une dernière honnêteté : savoir *quels ports sont réellement joignables* sur une machine ne dépend ni d'IP ni d'un théorème. Un **pare-feu** peut bloquer un port pourtant « ouvert » côté serveur ; le **NAT** peut réécrire les ports en chemin. La carte des ports accessibles relève du terrain.
+
+<Badge niveau="deploiement">Les ports effectivement ouverts ou filtrés dépendent du pare-feu, du NAT et de la configuration réseau.</Badge>
+
+Nous avons donc nommé les processus et identifié leurs conversations. Reste à choisir *comment* transporter les octets entre eux. Deux philosophies s'offrent à nous : livrer vite sans rien promettre, ou garantir l'arrivée ordonnée et complète. Commençons par la plus dépouillée — **UDP**, le transport minimal — avant d'affronter la mécanique fiable de **TCP**.

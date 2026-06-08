@@ -1,0 +1,56 @@
+---
+/**
+ * ChimieDiagrammeEnergie — profil réactionnel interactif. On règle ΔH (réaction
+ * exo/endothermique), l'énergie d'activation Eₐ, la température et la présence
+ * d'un catalyseur. Le composant trace le profil énergétique (réactifs → état de
+ * transition → produits), et montre que le catalyseur abaisse Eₐ (donc accélère)
+ * sans modifier ΔH (ni ΔG) ni la position de l'état final.
+ */
+---
+
+<div class="iw" data-iw="chimie-energie">
+  <div class="iw__head"><span class="tag">Interactif</span> Profil énergétique d’une réaction</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="en-dh">ΔH (kJ/mol)</label>
+      <input id="en-dh" type="range" min="-120" max="120" step="5" value="-60" data-dh />
+      <output data-out-dh>−60</output>
+    </div>
+    <div class="iw__row">
+      <label for="en-ea">Eₐ directe (kJ/mol)</label>
+      <input id="en-ea" type="range" min="20" max="200" step="5" value="100" data-ea />
+      <output data-out-ea>100</output>
+    </div>
+    <div class="iw__row">
+      <label for="en-temp">Température (K)</label>
+      <input id="en-temp" type="range" min="200" max="800" step="10" value="298" data-temp />
+      <output data-out-temp>298</output>
+    </div>
+    <div class="iw__row">
+      <label for="en-cat">Catalyseur</label>
+      <input id="en-cat" type="checkbox" data-cat />
+      <output data-out-cat>non</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">ΔH</span> <b data-out-dhr>−60 kJ/mol</b></span>
+    <span class="iw__chip"><span class="k">Eₐ effective</span> <b data-out-eaeff>100 kJ/mol</b></span>
+    <span class="iw__chip"><span class="k">Eₐ inverse</span> <b data-out-eainv>160 kJ/mol</b></span>
+    <span class="iw__chip"><span class="k">vitesse relative</span> <b data-out-k>×1</b></span>
+    <span class="iw__chip"><span class="k">nature</span> <b data-out-nat>exothermique</b></span>
+  </div>
+  <p class="iw__note">
+    L’axe vertical est l’énergie potentielle ; l’horizontal, la <em>coordonnée de réaction</em>. Le
+    sommet est l’<strong>état de transition</strong> ; sa hauteur au-dessus des réactifs est
+    l’<strong>énergie d’activation Eₐ</strong>, qui contrôle la <em>vitesse</em> (loi d’Arrhenius
+    k ∝ e<sup>−Eₐ/RT</sup>). Monter la température accélère la réaction sans changer le profil. Un
+    <strong>catalyseur</strong> ouvre un chemin à Eₐ plus basse : il <em>accélère</em> la réaction
+    mais ne touche <strong>ni à ΔH ni à ΔG</strong> — les niveaux des réactifs et des produits sont
+    inchangés. ΔH &lt; 0 : exothermique ; ΔH &gt; 0 : endothermique.
+  </p>
+</div>
+
+<script>
+  import './ChimieDiagrammeEnergie.client.ts';
+</script>

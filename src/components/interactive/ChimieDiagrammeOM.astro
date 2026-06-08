@@ -1,0 +1,50 @@
+---
+/**
+ * ChimieDiagrammeOM — diagramme d'orbitales moléculaires des diatomiques
+ * homonucléaires (H₂, He₂, N₂, O₂, F₂). Les OM liantes/antiliantes sont remplies
+ * par le principe de remplissage (aufbau + Hund), le composant calcule l'ordre de
+ * liaison et met en évidence le paramagnétisme de O₂ (deux électrons célibataires
+ * en π*), que le modèle de Lewis ne prévoit pas.
+ */
+---
+
+<div class="iw" data-iw="chimie-om">
+  <div class="iw__head"><span class="tag">Interactif</span> Diagramme d’orbitales moléculaires (diatomiques)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 11"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="om-mol">Molécule</label>
+      <select id="om-mol" data-mol>
+        <option value="H2">H₂</option>
+        <option value="He2">He₂</option>
+        <option value="N2">N₂</option>
+        <option value="O2" selected>O₂</option>
+        <option value="F2">F₂</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="om-hund">Règle de Hund</label>
+      <input id="om-hund" type="checkbox" data-hund checked />
+      <output data-out-hund>oui</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">e⁻ de valence</span> <b data-out-ne>12</b></span>
+    <span class="iw__chip"><span class="k">ordre de liaison</span> <b data-out-ol>2</b></span>
+    <span class="iw__chip"><span class="k">e⁻ célibataires</span> <b data-out-unp>2</b></span>
+    <span class="iw__chip"><span class="k">magnétisme</span> <b data-out-mag>paramagnétique</b></span>
+  </div>
+  <p class="iw__note">
+    Les orbitales atomiques de valence se combinent en orbitales moléculaires <em>liantes</em> (σ, π,
+    plus basses) et <em>antiliantes</em> (σ*, π*, plus hautes). On les remplit du bas vers le haut
+    (Hund pour les niveaux dégénérés π/π*). L’<strong>ordre de liaison</strong> =
+    (e⁻ liants − e⁻ antiliants)/2 : il vaut 0 pour He₂ (pas de molécule stable), 3 pour N₂, 2 pour O₂.
+    Surtout, O₂ place <strong>deux électrons célibataires</strong> en π* : il est
+    <strong>paramagnétique</strong> — un fait que la structure de Lewis O=O (tous appariés) ne prédit
+    pas. (Pour N₂ et au-dessous, l’inversion σ/π des niveaux p est prise en compte.)
+  </p>
+</div>
+
+<script>
+  import './ChimieDiagrammeOM.client.ts';
+</script>

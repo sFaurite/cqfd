@@ -1,0 +1,78 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La toile cosmique"
+chapter: toile-cosmique
+description: "Filaments, amas et vides : les grandes structures et ce que les simulations reproduisent."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La toile cosmique
+
+Reculons d'un cran. Jusqu'ici nous avons regardé l'univers comme un fluide lisse, ou bien une galaxie isolée. Mais si l'on cartographie la position de **millions** de galaxies réelles, que voit-on ? Pas un saupoudrage uniforme, ni un amas central unique. On découvre quelque chose d'à la fois inattendu et magnifiquement organisé : une **toile**. Des galaxies enfilées le long de **filaments** lumineux, ces filaments se croisant en **nœuds** où s'entassent les amas les plus massifs, le tout entourant d'immenses régions presque vides — les **vides cosmiques**. C'est l'architecture à grande échelle de l'univers, et tout l'enjeu de ce chapitre est de comprendre comment une distribution quasi parfaitement lisse, juste après le Big Bang, a pu accoucher de cette dentelle.
+
+<Encart type="intuition" titre="L'image en une phrase">
+Pensez à la mousse de savon. Les bulles sont les vides — gigantesques, presque sans galaxies. Les galaxies se collent sur les **parois** entre bulles voisines (des « murs »), et là où trois murs se rencontrent, elles se concentrent en **filaments**. Aux carrefours de filaments, là où la matière a le plus afflué, siègent les **amas**. La toile cosmique, c'est la mousse vue de l'intérieur.
+</Encart>
+
+### Ce que l'on mesure vraiment
+
+Cette structure n'est pas une vue de l'esprit : on la **voit**. Les grands relevés spectroscopiques — le **Sloan Digital Sky Survey (SDSS)** au premier chef — mesurent le redshift de chaque galaxie, le convertissent en distance via la loi de Hubble, et reconstruisent ainsi une carte **3D** de centaines de milliers de galaxies. Le résultat, ces fameuses « tranches » en éventail, montre sans ambiguïté les filaments, les nœuds et les vides.
+
+<Badge niveau="observe">La toile cosmique — filaments, amas aux nœuds, vides — est directement cartographiée par les relevés de redshift (SDSS, 2dF, et leurs successeurs). C'est un fait empirique robuste, indépendant de tout modèle de formation.</Badge>
+
+On quantifie cette structure par la **fonction de corrélation à deux points** $\xi(r)$ : elle mesure l'excès de probabilité, par rapport au pur hasard, de trouver une seconde galaxie à la distance $r$ d'une première. Concrètement, si $\bar n$ est la densité moyenne de galaxies, la probabilité de trouver une galaxie dans un petit volume $\mathrm{d}V$ à distance $r$ d'une galaxie donnée est
+
+$$ \mathrm{d}P = \bar n\,\bigl[\,1 + \xi(r)\,\bigr]\,\mathrm{d}V. $$
+
+Un univers sans structure aurait $\xi = 0$ partout. Les données donnent $\xi(r) > 0$ aux petites échelles (les galaxies se groupent), décroissant comme une loi de puissance $\xi(r) \approx (r/r_0)^{-1{,}8}$ avec $r_0 \approx 5\ \text{Mpc}$. <Badge niveau="observe">Cette loi de puissance du regroupement galactique est mesurée de façon cohérente dans tous les grands relevés.</Badge>
+
+### Pourquoi une toile, et pas autre chose ?
+
+Voici le pont avec ce que nous avons déjà bâti. Au départ, le champ de densité est presque lisse : de minuscules surdensités, de l'ordre de $\delta \equiv \delta\rho/\rho \sim 10^{-5}$ (l'amplitude lue dans le fond diffus). Or nous savons que la gravité amplifie ces grumeaux : c'est l'<Prereq href="/cosmologie/partie-v/instabilite-jeans">instabilité de Jeans</Prereq>. Une région un peu plus dense attire davantage, devient encore plus dense, et s'effondre — pendant que les régions sous-denses se vident au profit de leurs voisines. Les vides grandissent, la matière fuit vers les parois, puis vers les filaments, puis vers les nœuds. La toile **est** la signature géométrique de l'effondrement gravitationnel d'un champ de densité initialement gaussien.
+
+Avant d'aller plus loin, explicitons ce que ce raisonnement **suppose** : ce sont des hypothèses du modèle de formation, posées ici et non démontrées sur cette page.
+
+<Hypotheses titre="Ce que nous admettons pour expliquer la toile">
+1. Le champ de densité initial est un **champ gaussien aléatoire** de très faible amplitude ($\delta \sim 10^{-5}$), avec un spectre de fluctuations proche de l'invariance d'échelle — conditions lues dans le <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">fond diffus</Prereq>.
+2. La croissance des structures se fait **sous la seule gravité** (régime non collisionnel pour la matière noire), dans un univers en expansion — l'<Prereq href="/cosmologie/partie-v/instabilite-jeans">instabilité de Jeans</Prereq> appliquée au champ cosmologique.
+3. La matière dominante est une **matière noire froide** (CDM) : non relativiste à l'époque de formation des structures. C'est l'hypothèse centrale de ce chapitre, justifiée plus bas mais reposant sur le modèle ΛCDM.
+</Hypotheses>
+
+Mais il manque un ingrédient décisif. La matière ordinaire (baryonique) ne pouvait pas commencer à s'effondrer avant le **découplage** (~380 000 ans) : couplée au rayonnement, sa pression la maintenait lisse. Si elle avait été seule, il n'y aurait pas eu le temps de former les structures qu'on observe. C'est la <Prereq href="/cosmologie/partie-v/matiere-noire">matière noire</Prereq> qui sauve la mise : neutre, elle n'interagit pas avec le rayonnement et a donc pu commencer à s'effondrer **bien avant**, creusant les puits de potentiel dans lesquels les baryons sont tombés après le découplage.
+
+<Badge niveau="concordance">Que les baryons seuls n'aient pas eu le temps de former les structures, et que la matière noire ait creusé les puits de potentiel avant le découplage, est le mécanisme prédit par ΛCDM. Il rend compte de l'amplitude observée des structures, mais repose sur l'existence d'une matière noire non baryonique.</Badge>
+
+<Encart type="rappel" titre="Pourquoi « froide » ?">
+La matière noire est dite **froide** (Cold Dark Matter, CDM) si ses particules sont **non relativistes** au moment où les structures se forment — leur vitesse d'agitation thermique est négligeable. C'est essentiel : une matière noire **chaude** (rapide, comme des neutrinos légers) « gommerait » les petites fluctuations en s'échappant des petits puits de potentiel (free streaming), et la première chose à se former serait alors de très grandes structures. La matière noire **froide**, elle, conserve les fluctuations à toutes les échelles, y compris les plus petites.
+</Encart>
+
+### La formation hiérarchique « de bas en haut »
+
+Le caractère froid impose un scénario précis. Comme les fluctuations survivent à petite échelle, ce sont les **petits** halos qui s'effondrent **en premier**. Puis ces petits halos fusionnent en halos plus gros, qui fusionnent à leur tour : la structure se bâtit **du bas vers le haut** (*bottom-up*, ou formation **hiérarchique**). Les galaxies naines précèdent les galaxies, qui précèdent les groupes, qui précèdent les amas.
+
+<Badge niveau="concordance">La formation hiérarchique de bas en haut est une **prédiction** directe du modèle à matière noire froide (CDM). Elle s'oppose au scénario « de haut en bas » d'une matière noire chaude, que les observations excluent.</Badge>
+
+Peut-on vérifier que cela produit *quantitativement* la bonne toile ? Oui — par les **simulations à N corps**. On place des millions (aujourd'hui des milliards) de particules de matière noire dans un cube représentant un morceau d'univers, on leur donne les conditions initiales mesurées dans le fond diffus, et on laisse la seule gravité agir, en tenant compte de l'expansion. La simulation **Millennium** (2005) fut emblématique : avec environ $10^{10}$ particules, elle a fait émerger spontanément filaments, nœuds et vides — visuellement et statistiquement indiscernables de ce que voit le SDSS.
+
+<Badge niveau="concordance">Que des simulations ΛCDM purement gravitationnelles reproduisent la toile cosmique observée, jusqu'à sa fonction de corrélation, est l'un des **succès les plus spectaculaires** du modèle standard. Cela repose toutefois sur l'hypothèse de matière noire froide.</Badge>
+
+Honnêteté oblige : l'accord est superbe aux **grandes** échelles, moins parfait aux **petites**. Le CDM prédit plus de petits satellites autour des galaxies qu'on n'en observe (« problème des satellites manquants ») et des profils de densité un peu différents au cœur des halos. <Badge niveau="extrapole">Ces tensions à petite échelle ne sont pas tranchées : elles tiennent peut-être à la physique des baryons (vents, supernovæ) mal modélisée, peut-être à une nature de la matière noire à raffiner. Sujet ouvert, sérieux mais non résolu.</Badge>
+
+### Une règle gravée dans la toile : les BAO
+
+Il reste une merveille cachée dans $\xi(r)$. Avant le découplage, le plasma baryon-photon oscillait : des ondes acoustiques s'y propageaient. Au découplage, ces ondes se figent, laissant une échelle privilégiée — le **rayon de l'horizon sonore**, $r_s \approx 150\ \text{Mpc}$ (en distance comobile). Cette échelle se traduit par une **légère bosse** dans la fonction de corrélation : il y a un petit excès de paires de galaxies séparées d'environ $\sim 150\ \text{Mpc}$. Ce sont les **oscillations acoustiques baryoniques** (BAO).
+
+<Resultat label="Le pic BAO comme règle standard">
+
+$$ r_s \approx 150\ \text{Mpc} \quad\text{(comobile)} \;\Longrightarrow\; \text{bosse de } \xi(r) \text{ à } r \approx r_s $$
+
+<Badge niveau="observe" slot="badge">Le pic BAO est **détecté** dans la corrélation des galaxies (SDSS et 2dF, 2005). Comme sa longueur physique est calculable, il sert de **règle standard** pour mesurer les distances cosmologiques — un test géométrique de l'expansion, en bon accord avec ΛCDM.</Badge>
+</Resultat>
+
+La toile cosmique n'est donc pas qu'un décor : c'est une carte qui porte, gravée à 150 mégaparsecs près, le souvenir du son qui parcourait l'univers-bébé. Reste à dire ce qui pousse aujourd'hui cette expansion à **accélérer** — l'énergie noire, dont nous traquons l'empreinte au chapitre suivant.

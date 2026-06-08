@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Coder les bits sur un fil : le codage de ligne"
+chapter: codage-ligne
+description: "Presente les codages de ligne en bande de base : representer 0 et 1 par des niveaux ou des transitions, et le probleme de la synchronisation d'horloge (codage auto-synchronisant)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Coder les bits sur un fil
+
+<Tournant titre="Tournant : du signal idéalisé aux conventions d'ingénierie">
+Jusqu'ici, **la physique commandait**. Nyquist et Shannon nous ont dit *combien* de symboles un canal peut transporter, et *combien* de bits chaque symbole peut porter. Ce sont des **bornes** : aucune astuce ne les franchit. Mais elles ne nous disent pas *comment* fabriquer le signal.
+
+À partir d'ici, **nous décidons**. Quelle tension représente un `1` ? Quelle forme d'onde dessine la suite `0 1 1 0` sur le cuivre ? Rien dans la nature ne fixe la réponse. Ce sont des **conventions d'ingénierie** : contraintes par la physique (on ne peut pas violer Nyquist), mais **non déterminées** par elle. Plusieurs codes sont corrects ; ils diffèrent par leurs compromis. C'est le premier vrai pas vers le monde des conventions, qui occupera une grande partie de ce cours.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. On travaille désormais sur un **support physique réel** déjà caractérisé par sa bande passante $B$ et son bruit (donc son SNR).
+2. À partir d'ici, les choix — quelle tension pour un `1`, quelle forme d'onde — ne sont **plus dictés par un théorème** mais par l'ingénierie : ce sont des conventions, contraintes par la physique (<Prereq href="/reseaux/partie-i/nyquist">Nyquist</Prereq>, <Prereq href="/reseaux/partie-i/bruit-shannon">Shannon</Prereq>) mais non fixées par elle.
+3. Émetteur et récepteur sont deux horloges **indépendantes** : aucun fil ne les synchronise a priori.
+</Hypotheses>
+
+## Le vrai problème : où commence chaque bit ?
+
+Imaginez recevoir une tension constante et haute pendant un certain temps. Est-ce **trois** `1` ? **Cinq** `1` ? **Cinquante** ? Pour le savoir, il faut découper le temps en intervalles d'égale durée — les **temps-bit** — et lire la tension dans chacun. Or pour découper le temps, il faut une **horloge**. L'émetteur a la sienne. Le récepteur a la sienne. Et les deux dérivent : un quartz à $100\,\text{ppm}$ près, c'est un bit de décalage tous les $10\,000$ bits environ.
+
+La contrainte est donc inévitable : **le récepteur doit reconstituer l'horloge de l'émetteur à partir du signal lui-même**. Là où le signal change de niveau (une **transition**), le récepteur tient un repère temporel pour recaler son horloge. Pas de transition pendant longtemps, pas de repère : la dérive s'installe et la lecture déraille.
+
+<Badge niveau="theoreme">La nécessité d'un découpage temporel commun est **fondamentale** : sans horloge partagée, distinguer « trois `1` » de « cinq `1` » est impossible en principe. C'est une contrainte d'information, pas un caprice de design. (En revanche, la *façon* de récupérer l'horloge — par les transitions du signal — est un choix d'ingénierie.)</Badge>
+
+## NRZ : le plus simple, et son défaut
+
+Le codage **NRZ** (*Non Return to Zero*) est l'évidence : tension haute pour `1`, tension basse pour `0`, et c'est tout. Un symbole par bit, bande occupée minimale.
+
+Le défaut saute aux yeux à la lumière de ce qui précède. Pour la séquence `1 1 1 1 1 1`, le signal reste **plat** : aucune transition, aucun repère d'horloge. Le récepteur, livré à sa seule dérive, finit par compter un `1` de trop ou de moins. NRZ **perd l'horloge** sur les longues suites de bits identiques.
+
+<Badge niveau="heuristique">NRZ est un **choix d'ingénierie**, économe en bande mais fragile à la synchronisation. Sa faiblesse n'est pas une fatalité physique : d'autres codes la corrigent. C'est un compromis, pas une vérité.</Badge>
+
+## NRZI : coder le changement plutôt que le niveau
+
+Le **NRZI** (*NRZ Inverted*) déplace l'information sur la **transition**. Convention courante : un `1` provoque une **transition** (le niveau bascule), un `0` laisse le niveau **inchangé**.
+
+Astucieux : une longue suite de `1` devient alors une suite de transitions — l'horloge tient. Mais le problème a simplement **changé de symbole** : une longue suite de `0` reste plate, et l'on retombe sur la perte d'horloge. NRZI ne supprime pas le défaut, il le déplace.
+
+<Badge niveau="heuristique">NRZI est une convention parmi d'autres (on aurait aussi pu faire transiter sur `0`). Elle améliore un cas au prix d'un autre : preuve qu'aucun code n'est « le meilleur » dans l'absolu.</Badge>
+
+## Manchester : l'horloge garantie
+
+L'idée de Manchester est de **forcer** une transition dans **chaque** temps-bit, en plaçant le repère **au milieu**. Une convention répandue (celle d'IEEE 802.3) : `0` = transition haut→bas au milieu, `1` = transition bas→haut au milieu.
+
+Quelle que soit la séquence — même mille `0` d'affilée — il y a **toujours** une transition au milieu de chaque bit. L'horloge n'est jamais perdue : Manchester est dit **auto-synchronisant**. C'est un gain réel… qui a un coût, et ce coût se lit directement dans Nyquist.
+
+<Encart type="calcul" titre="Le coût de Manchester en bande passante">
+Comparons, pour les deux codes, la **fréquence la plus haute** que le signal peut contenir — car c'est elle qui fixe la bande nécessaire. On note $D$ le débit binaire et $T_b = 1/D$ la durée d'un bit.
+
+**NRZ.** Sur une longue suite de bits identiques, le signal est plat : aucune transition, fréquence nulle (c'est justement son défaut de synchronisation). Le cas le plus exigeant en fréquence est au contraire l'alternance `0 1 0 1` : le signal monte et descend, et une période complète couvre **deux** bits. La fréquence maximale vaut donc
+
+$$ f_{\max}^{\text{NRZ}} = \frac{1}{2T_b} = \frac{D}{2}. $$
+
+**Manchester.** Le pire cas est une suite de bits **identiques**, disons `0 0 0 0` : chaque bit contient sa propre transition au milieu, donc le signal monte puis redescend **à chaque temps-bit**. La période fondamentale vaut alors un temps-bit, soit
+
+$$ f_{\max}^{\text{Manch}} = \frac{1}{T_b} = D. $$
+
+(Sur une alternance `0 1 0 1`, certaines transitions de bord fusionnent et la fréquence n'augmente pas : la suite constante reste bien le cas le plus exigeant pour Manchester.)
+
+Le rapport est sans appel : Manchester contient des composantes **deux fois plus hautes** en fréquence. Or, par <Prereq href="/reseaux/partie-i/nyquist">le théorème de Nyquist</Prereq>, transmettre une fréquence maximale $f_{\max}$ exige une bande $B \ge f_{\max}$. Doubler la fréquence maximale, c'est exiger une bande **deux fois plus large**.
+
+<Resultat label="Manchester double la bande occupée">
+
+$$ B_{\text{Manch}} \;\approx\; 2\,B_{\text{NRZ}} \quad\text{pour le même débit binaire } D. $$
+
+<Badge niveau="theoreme" slot="badge">Le **lien** transitions → fréquence → bande est imposé par Nyquist : c'est une conséquence physique inattaquable. (Le *choix* de Manchester, lui, reste une convention.)</Badge>
+</Resultat>
+</Encart>
+
+Voilà le compromis nu : Manchester **achète** une horloge infaillible en **payant** le double de bande. Sur un support où la bande est rare et chère, c'est un mauvais marché ; sur un support large à débit modeste, c'est une excellente affaire.
+
+<Badge niveau="norme">Manchester est **normalisé** pour l'Ethernet historique à $10\,\text{Mbit/s}$ (IEEE 802.3, notamment 10BASE-T). Là, la simplicité et la synchronisation garantie l'emportaient : c'est un standard adopté, pas une opinion.</Badge>
+
+## Aucun code n'est « le meilleur »
+
+Retenons la leçon de méthode. La **contrainte** est fondée : il faut une horloge récupérable, et la bande occupée suit Nyquist. Le **choix** du code, lui, est une convention d'ingénierie qui dépend du support et du débit visé. NRZ minimise la bande mais sacrifie la synchronisation ; Manchester garantit l'horloge mais double la bande. Demander « lequel est le meilleur ? » sans préciser le support n'a **pas de sens**.
+
+<Badge niveau="heuristique">Le verdict NRZ-vs-Manchester **dépend du contexte** (support, débit, contraintes d'horloge). Présenter l'un comme universellement supérieur serait une faute épistémique.</Badge>
+
+C'est précisément pourquoi, sur les supports à **large bande** et haut débit, on abandonne Manchester — son facteur 2 devient ruineux — au profit de codes plus subtils : le **scrambling** (brouillage pseudo-aléatoire qui casse les longues suites sans doubler la bande) et les codages par blocs comme le **4B/5B**, qui n'insèrent qu'un surcoût de $25\,\%$ (5 bits transmis pour 4 bits utiles) tout en garantissant assez de transitions.
+
+<Badge niveau="norme">Le 4B/5B et le scrambling sont **normalisés** dans des standards comme le 100BASE-TX (Fast Ethernet, IEEE 802.3u) : des choix de codage fixés par la norme, et non des recettes universelles.</Badge>
+
+Mais avant cela, une question reste ouverte : sur un support **radio** ou un câble longue distance, on ne peut pas envoyer de simples créneaux de tension — il faut porter les bits sur une **onde porteuse**. C'est la **modulation**, où l'on retrouvera Shannon : combien de points peut-on placer dans une constellation avant que le bruit ne les confonde ? C'est l'objet du chapitre suivant.

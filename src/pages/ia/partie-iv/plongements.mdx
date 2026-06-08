@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les plongements : transformer le sens en géométrie"
+chapter: plongements
+description: "Introduit les word embeddings (one-hot → vecteurs denses appris, façon word2vec) et la notion plus générale de représentation distribuée. Montre que la géométrie de l'espace de plongement encode des relations sémantiques, tout en restant lucide sur les limites."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaEmbeddingSpace from '../../../components/interactive/IaEmbeddingSpace.astro';
+
+## Un mot, c'est d'abord un numéro — et c'est le problème
+
+Jusqu'ici nos modèles digéraient des **nombres** : un pixel, une mesure, une coordonnée. Mais un mot comme *chat* n'est pas un nombre. La première idée, la plus naïve, consiste à donner un **numéro de série** à chaque mot du vocabulaire, puis à le représenter par un vecteur tout à zéro sauf un seul `1` à la position de ce numéro. C'est le codage **one-hot**.
+
+Avec un vocabulaire de $V$ mots, *chat* devient un vecteur de dimension $V$ : un `1` à l'indice de *chat*, et $V-1$ zéros partout ailleurs. Pour un vrai corpus, $V$ avoisine les dizaines de milliers : chaque mot est un vecteur de 50 000 dimensions presque entièrement vide.
+
+<Encart type="calcul" titre="Le one-hot ignore le sens, par construction">
+Mesurons la « proximité » entre deux mots par le produit scalaire de leurs vecteurs one-hot. Soit $\mathbf{u}$ le vecteur de *chat* et $\mathbf{v}$ celui de *chien*. Par définition, $\mathbf{u}$ vaut $1$ à l'indice de *chat* et $0$ ailleurs ; $\mathbf{v}$ vaut $1$ à l'indice de *chien* et $0$ ailleurs. Ces deux indices sont **distincts**, donc à chaque position au moins l'un des deux facteurs est nul :
+
+$$ \mathbf{u}\cdot\mathbf{v} = \sum_{i=1}^{V} u_i\, v_i = 0 $$
+
+dès que *chat* et *chien* sont deux mots distincts. Le même calcul donne $\mathbf{u}\cdot\mathbf{u} = 1$. Conclusion : **tous** les mots distincts sont à distance identique les uns des autres. *Chat* n'est ni plus ni moins proche de *chien* que de *parallélépipède*.
+
+<Badge niveau="prouve">Orthogonalité exacte : deux vecteurs indicateurs d'indices différents ont un produit scalaire nul. C'est une déduction, pas une approximation.</Badge>
+</Encart>
+
+Le one-hot encode l'**identité** d'un mot mais détruit toute notion de **ressemblance**. C'est un répertoire, pas une carte. Il gaspille aussi une dimension par mot. On voudrait l'inverse : peu de dimensions, et une géométrie où la proximité spatiale traduise la parenté de sens.
+
+## Le plongement : une matrice apprise vers un espace dense
+
+L'idée du **plongement** (*embedding*) est d'apprendre une fonction qui envoie chaque mot vers un vecteur **dense** de dimension modeste $d$ (typiquement $d = 100$ à $1000$, bien moindre que $V$). Concrètement, on range ces vecteurs dans une matrice $E$ de taille $V \times d$ : la ligne $i$ est le vecteur du mot d'indice $i$. Récupérer le plongement d'un mot, c'est multiplier son one-hot par $E$ — ce qui **sélectionne** simplement la bonne ligne.
+
+<Resultat label="Plongement comme sélection de ligne">
+
+$$ \mathbf{e}_{\text{mot}} = \mathbf{x}_{\text{one-hot}}^\top E \in \mathbb{R}^d, \qquad E \in \mathbb{R}^{V \times d} $$
+
+<Badge niveau="prouve" slot="badge">Multiplier un one-hot par $E$ extrait exactement la ligne correspondante : c'est l'algèbre linéaire élémentaire. Seul le **contenu** de $E$ est appris.</Badge>
+</Resultat>
+
+La matrice $E$ est faite de paramètres, exactement comme les poids d'un <Prereq href="/ia/partie-i/neurone-formel">neurone formel</Prereq>. On l'ajuste par descente de gradient pour réduire une erreur — fidèle au fil conducteur du cours. Mais réduire **quelle** erreur ? Un mot n'a pas d'étiquette numérique évidente. Il faut une idée pour fabriquer un signal d'apprentissage à partir de texte brut.
+
+## L'hypothèse distributionnelle : le sens vient du contexte
+
+<Tournant titre="Un principe empirique, pas un théorème">
+Nous posons une hypothèse de travail, héritée de la linguistique (Firth, 1957) : **un mot se caractérise par les contextes dans lesquels il apparaît**. Si deux mots apparaissent dans des phrases similaires (« le ___ ronronne », « le ___ chasse »), ils ont des sens voisins. C'est l'**hypothèse distributionnelle**. Rien ne la démontre : c'est un postulat fécond, validé par ses résultats, pas par une preuve.
+
+<Badge niveau="boitenoire">Principe linguistique empirique. Il fonctionne remarquablement bien, mais reste une hypothèse posée, jamais établie comme théorème.</Badge>
+</Tournant>
+
+Cette hypothèse transforme un texte non étiqueté en problème d'apprentissage **auto-supervisé** : le contexte d'un mot devient sa propre cible. C'est exactement ce qu'exploite **word2vec** (Mikolov, 2013). Deux variantes :
+
+- **Skip-gram** : depuis le mot central, prédire les mots du voisinage.
+- **CBOW** : depuis le voisinage, prédire le mot central.
+
+Dans les deux cas, on entraîne $E$ pour que le vecteur d'un mot rende ses contextes probables, via une sortie softmax et une perte d'entropie croisée. Les détails — fenêtre de contexte, échantillonnage négatif, dimension $d$ — sont des choix d'ingénierie qui se règlent à l'essai.
+
+<Badge niveau="recette">Architecture skip-gram/CBOW, taille de fenêtre, négatifs échantillonnés : réglages empiriques sans garantie théorique, justifiés par la performance.</Badge>
+
+Le résultat est saisissant : les mots **sémantiquement proches** se retrouvent **géométriquement proches** dans $\mathbb{R}^d$. La carte que le one-hot ne pouvait pas dessiner émerge toute seule de la pression d'optimisation.
+
+<Badge niveau="robuste">Que les plongements denses capturent une géométrie sémantique utile est une régularité expérimentale très reproductible, à travers langues et corpus. Robuste — mais sans preuve générale.</Badge>
+
+## La géométrie du sens — et ses promesses surévaluées
+
+L'observation devenue emblématique : certaines relations de sens semblent correspondre à des **translations** constantes dans l'espace. La fameuse analogie
+
+$$ \mathbf{e}_{\text{roi}} - \mathbf{e}_{\text{homme}} + \mathbf{e}_{\text{femme}} \approx \mathbf{e}_{\text{reine}} $$
+
+suggère qu'un axe « genre » et un axe « royauté » coexistent géométriquement. C'est réel, et c'est beau. Mais il faut être **honnête** sur sa portée.
+
+<Encart type="plusloin" titre="L'arithmétique des analogies : réelle mais sur-vendue">
+La « magie » des analogies a été largement nuancée par la recherche. Plusieurs points de prudence :
+
+- Le calcul standard **exclut explicitement** les trois mots de départ de la réponse. Sans cette exclusion, le plus proche voisin de *roi − homme + femme* est souvent... *roi* lui-même. La belle propriété doit être aidée.
+- Les succès se concentrent sur des relations **fréquentes et régulières** (capitales, genres, pluriels). Sur des relations rares ou abstraites, le taux d'échec grimpe.
+- La structure dépend de la **normalisation**, de la métrique et du corpus. Ce n'est pas une loi universelle de l'espace.
+
+Les analogies vectorielles sont donc un **phénomène partiel**, vrai sur des cas choisis, pas une garantie offerte par tout plongement.
+
+<Badge niveau="boitenoire">Les analogies marchent sur des cas sélectionnés, échouent ailleurs, et dépendent de choix d'évaluation. Présentées comme universelles, elles seraient trompeuses.</Badge>
+</Encart>
+
+Et la question profonde — **pourquoi** une géométrie continue encode-t-elle le sens, et pourquoi des directions linéaires émergent-elles — reste largement ouverte. Nous constatons que ça marche ; nous ne savons pas pleinement l'expliquer.
+
+<Badge niveau="boitenoire">La raison structurelle pour laquelle le sens devient géométrie linéaire est mal comprise théoriquement. Question ouverte.</Badge>
+
+## Voir l'espace de ses propres yeux
+
+Un plongement vit en haute dimension ($d \gg 3$), invisible directement. On le **projette** en 2D pour l'observer — en gardant à l'esprit que toute projection écrase de l'information. Déplacez les mots, comparez les voisinages, testez une analogie et regardez si la translation tombe juste... ou à côté.
+
+<IaEmbeddingSpace />
+
+## Une brique de représentation, réutilisée partout
+
+Le point le plus important dépasse word2vec. Un plongement est la **première couche de représentation** : il convertit des symboles discrets en vecteurs qu'un réseau peut manipuler. Tout comme les <Prereq href="/ia/partie-iv/reseaux-convolutifs">réseaux convolutifs</Prereq> apprennent des features d'image réutilisables, la matrice $E$ apprend des features de mots. Et elle ne reste pas un objet à part : dans un transformer, la toute première opération est précisément un plongement des tokens, ensuite raffiné couche après couche.
+
+Nous tenons donc l'idée centrale — *une représentation s'apprend* — mais nos plongements sont encore **statiques** : *banque* a un seul vecteur, qu'il s'agisse d'une rivière ou d'un guichet. Pour que la représentation dépende du contexte de la phrase, il faut une machinerie qui fasse **dialoguer les mots entre eux**. C'est le rôle de l'attention — mais avant, voyons pourquoi les modèles séquentiels classiques échouent à l'orchestrer.

@@ -1,0 +1,135 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Redshift cosmologique et loi de Hubble-Lemaître"
+chapter: redshift-hubble
+description: "L'expansion étire la lumière : redshift z, loi v = H₀ d, et ce qu'elle mesure vraiment."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import ExpansionScaleFactor from '../../../components/interactive/ExpansionScaleFactor.astro';
+import HubbleDiagram from '../../../components/interactive/HubbleDiagram.astro';
+
+## Redshift cosmologique et loi de Hubble-Lemaître
+
+Une galaxie lointaine nous envoie sa lumière. À l'arrivée, ses raies spectrales — ces signatures précises des atomes qui la composent — sont toutes décalées vers le rouge, vers les grandes longueurs d'onde. C'est le fait empirique le plus important de toute la cosmologie. Notre tâche dans ce chapitre est double : **comprendre d'où vient ce décalage** à partir de la géométrie que nous avons posée, et le **distinguer soigneusement** de l'effet Doppler ordinaire — car cette confusion, très répandue, fausse toute l'intuition.
+
+<Encart type="intuition" titre="L'image juste : la mer qui s'étire">
+Ne pensez pas à une sirène d'ambulance qui s'éloigne. Pensez plutôt à une onde dessinée sur une feuille de caoutchouc que l'on étire dans toutes les directions. Pendant que la lumière voyage, l'espace lui-même grandit sous elle, et la « crête à crête » de l'onde s'écarte. La lumière n'a pas perdu d'énergie en luttant contre une vitesse : c'est la règle qui mesure les longueurs qui a changé pendant le trajet. Le redshift n'est pas une vitesse à travers l'espace ; c'est l'espace qui grandit.
+</Encart>
+
+<Hypotheses titre="Ce que nous admettons dans ce chapitre">
+
+1. La métrique <Prereq href="/cosmologie/partie-i/metrique-flrw">FLRW</Prereq> : l'univers homogène et isotrope est décrit par un facteur d'échelle $a(t)$ qui dilate les distances physiques par rapport aux distances comobiles (fixes). C'est le seul ingrédient géométrique, posé au chapitre précédent.
+2. La lumière suit une **géodésique nulle** de cette métrique : pour un rayon radial, $c\,dt = a(t)\,d\chi$.
+
+Tout le reste — la formule du redshift, la loi de Hubble-Lemaître, le temps de Hubble — en est **déduit**. Nous n'introduisons ici aucune hypothèse physique nouvelle.
+
+</Hypotheses>
+
+### D'où vient l'étirement : la lumière dans la métrique FLRW
+
+Tout le travail repose sur ces deux acquis : le facteur d'échelle $a(t)$ et la propagation sur une géodésique nulle, $c\,dt = a(t)\,d\chi$, où $\chi$ est la coordonnée comobile, constante pour une galaxie donnée. Ces ingrédients sont déjà posés : nous ne faisons ici que **déduire**.
+
+<Encart type="calcul" titre="Dérivation du redshift cosmologique">
+
+**Étape 1 — Deux crêtes successives.** Une galaxie à la coordonnée comobile $\chi$ émet une crête d'onde à l'instant $t_e$ et la suivante à $t_e + \delta t_e$. Nous les recevons en $\chi = 0$ aux instants $t_0$ et $t_0 + \delta t_0$. La distance comobile parcourue est la même pour les deux crêtes (même trajet) :
+
+$$ \int_{t_e}^{t_0} \frac{c\,dt}{a(t)} = \chi = \int_{t_e+\delta t_e}^{t_0+\delta t_0} \frac{c\,dt}{a(t)}. $$
+
+**Étape 2 — On soustrait.** En retranchant l'intégrale de gauche de celle de droite, les portions communes s'annulent et il reste les deux petits bouts aux extrémités :
+
+$$ \int_{t_0}^{t_0+\delta t_0} \frac{c\,dt}{a(t)} = \int_{t_e}^{t_e+\delta t_e} \frac{c\,dt}{a(t)}. $$
+
+**Étape 3 — Intervalles infinitésimaux.** Les durées $\delta t$ entre deux crêtes sont minuscules (une période optique $\sim 10^{-15}$ s) devant le temps cosmique : $a(t)$ ne varie pas sur cet intervalle. Chaque intégrale vaut donc simplement la largeur divisée par $a$ :
+
+$$ \frac{c\,\delta t_0}{a(t_0)} = \frac{c\,\delta t_e}{a(t_e)} \quad\Longrightarrow\quad \frac{\delta t_0}{\delta t_e} = \frac{a(t_0)}{a(t_e)}. $$
+
+**Étape 4 — Période et longueur d'onde.** Une période vaut $\delta t = \lambda / c$, donc le rapport des périodes est le rapport des longueurs d'onde :
+
+$$ \frac{\lambda_0}{\lambda_e} = \frac{a(t_0)}{a(t_e)}. $$
+
+**Étape 5 — Définition du redshift.** On définit $z$ par $1 + z \equiv \lambda_0 / \lambda_e$ (décalage relatif observé). D'où :
+
+$$ \boxed{\,1 + z = \frac{a(t_0)}{a(t_e)} = \frac{a_0}{a}\,} \qquad\blacksquare $$
+
+</Encart>
+
+Le résultat est d'une élégance frappante : **la longueur d'onde s'étire exactement comme le facteur d'échelle**.
+
+<Resultat label="Redshift cosmologique">
+
+$$ 1 + z = \frac{\lambda_{\text{obs}}}{\lambda_{\text{ém}}} = \frac{a_0}{a(t_{\text{ém}})} $$
+
+<Badge niveau="observe" slot="badge">Le redshift des galaxies est mesuré directement (des milliers de spectres depuis Hubble, 1929) : c'est un fait empirique robuste. La formule $1+z = a_0/a$ le déduit rigoureusement de la métrique FLRW, et son interprétation « étirement de l'espace » est la lecture correcte au sein du modèle.</Badge>
+</Resultat>
+
+Mesurer $z$ revient donc à mesurer de combien l'univers a grandi depuis l'émission. Une galaxie à $z = 1$ a émis sa lumière quand l'univers était **deux fois plus petit** ($a = a_0/2$). C'est une machine à remonter le temps cosmique. Faites varier le facteur d'échelle et lisez le redshift correspondant.
+
+<ExpansionScaleFactor />
+
+### Pourquoi ce n'est pas un Doppler
+
+L'erreur classique consiste à écrire $1 + z = \sqrt{(1+\beta)/(1-\beta)}$ et à en tirer une « vitesse de fuite ». C'est faux en général. Dans notre dérivation, **aucune vitesse n'apparaît** : pas de $\beta = v/c$, pas de référentiel en mouvement. Les galaxies sont au repos dans leurs coordonnées comobiles ($\chi$ constant) ; ce qui change, c'est $a(t)$ entre elles. À $z = 7$, un Doppler relativiste donnerait une vitesse proche de $c$, alors que rien ne se déplace plus vite que la lumière *à travers* l'espace.
+
+<Badge niveau="concordance">Traiter le redshift cosmologique comme un pur Doppler relativiste est une erreur conceptuelle. Dans le cadre FLRW, le décalage vient de l'évolution de $a(t)$ pendant le trajet, pas d'un mouvement dans l'espace ; la formule Doppler n'en est qu'une approximation valable à très faible distance, là où les deux images coïncident.</Badge>
+
+<VideoManim src="expansion-univers" scene="ExpansionUnivers" titre="L'expansion de l'univers" legende="L'espace se dilate entre les galaxies ; la lumière émise s'étire, d'où le redshift." />
+
+### La loi de Hubble-Lemaître
+
+Pour les galaxies **proches**, le temps de trajet $\Delta t = t_0 - t_e$ est petit, et l'on peut développer $a(t)$ au premier ordre.
+
+<Encart type="calcul" titre="De la métrique à $v = H_0 d$">
+
+**Étape 1 — Développement de Taylor.** Au voisinage de $t_0$, avec $H_0 \equiv \dot a(t_0)/a_0$ le paramètre de Hubble actuel :
+
+$$ a(t_e) \approx a_0\left[\,1 + H_0\,(t_e - t_0)\,\right] = a_0\left[\,1 - H_0\,\Delta t\,\right]. $$
+
+**Étape 2 — On reporte dans le redshift.** Comme $1 + z = a_0/a(t_e)$ et que $H_0\,\Delta t \ll 1$ :
+
+$$ 1 + z = \frac{1}{1 - H_0\Delta t} \approx 1 + H_0\,\Delta t \quad\Longrightarrow\quad z \approx H_0\,\Delta t. $$
+
+**Étape 3 — Petit redshift et petite distance.** Pour de faibles $z$, l'interprétation en vitesse de récession est légitime : $v \approx c\,z$. Et la distance vaut $d \approx c\,\Delta t$. En combinant :
+
+$$ v \approx c z \approx c\,H_0\,\Delta t = H_0\,(c\,\Delta t) = H_0\,d. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Loi de Hubble-Lemaître">
+
+$$ v = H_0\, d $$
+
+<Badge niveau="observe" slot="badge">Loi directement observée : Hubble (1929) puis des relevés de milliers de galaxies confirment la proportionnalité vitesse-distance. Lemaître l'avait prédite dès 1927 à partir de la relativité générale.</Badge>
+</Resultat>
+
+La proportionnalité est exactement ce qu'impose l'**homogénéité** : tout observateur comobile voit ses voisins fuir à une vitesse proportionnelle à leur distance, sans qu'aucun point ne soit un centre. La pente du diagramme vitesse-distance, c'est $H_0$.
+
+<HubbleDiagram />
+
+### La constante de Hubble et l'âge naïf
+
+Sa valeur mesurée vaut $H_0 \approx 70 \ \text{km}\cdot\text{s}^{-1}\cdot\text{Mpc}^{-1}$ : une galaxie située à $1$ mégaparsec ($1\ \text{Mpc} \approx 3{,}09 \times 10^{19}\ \text{km}$) s'éloigne à $\sim 70$ km/s, et deux fois plus vite à $2$ Mpc.
+
+<Badge niveau="observe">$H_0$ est mesuré, mais en **tension** : l'échelle des distances locales (céphéides, supernovae) donne $\sim 73$, tandis que le fond diffus cosmologique interprété via ΛCDM donne $\sim 67$. Cet écart de plusieurs sigmas n'est pas résolu à ce jour.</Badge>
+
+Comme $H_0$ a la dimension de l'inverse d'un temps, son inverse fournit une première estimation de l'âge de l'univers.
+
+<Encart type="calcul" titre="Le temps de Hubble">
+
+On convertit le Mpc en km puis on inverse :
+
+$$ H_0 = \frac{70\ \text{km/s}}{3{,}09\times 10^{19}\ \text{km}} \approx 2{,}27\times 10^{-18}\ \text{s}^{-1}. $$
+
+$$ t_H = \frac{1}{H_0} \approx 4{,}4\times 10^{17}\ \text{s} \approx 14\ \text{milliards d'années}. \qquad\blacksquare $$
+
+</Encart>
+
+<Badge niveau="concordance">$1/H_0 \approx 14$ Ga suppose une expansion à vitesse **constante**, ce qui est faux : l'univers a d'abord décéléré puis accéléré. Que l'âge réel ΛCDM ($\approx 13{,}8$ Ga) soit si proche de $1/H_0$ est une coïncidence des paramètres actuels.</Badge>
+
+Reste une question : qu'est-ce qui **gouverne** l'évolution de $a(t)$, et donc la valeur même de $H_0$ ? Pour y répondre, il faut relier l'expansion au contenu de l'univers — c'est l'objet des <Prereq href="/cosmologie/partie-ii/equations-friedmann">équations de Friedmann</Prereq>.

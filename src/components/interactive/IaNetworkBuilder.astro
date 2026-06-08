@@ -1,0 +1,69 @@
+---
+/**
+ * IaNetworkBuilder — construction d'un petit perceptron multicouche : on
+ * ajoute/retire des neurones cachés et on (dé)active la couche cachée, puis
+ * on observe la frontière de décision sur un jeu non linéairement séparable
+ * (XOR ou cercles). Montre pourquoi une couche cachée débloque les frontières
+ * courbes. Chapitre : perceptron multicouche.
+ */
+---
+
+<div class="iw" data-iw="ia-netbuild">
+  <div class="iw__head"><span class="tag">Interactif</span> Une couche cachée courbe la frontière</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>jeu de données</label>
+      <div class="iw__btns" role="group" aria-label="Jeu de données">
+        <button type="button" class="iw__btn active" data-data="xor">XOR</button>
+        <button type="button" class="iw__btn" data-data="cercles">cercles</button>
+        <button type="button" class="iw__btn" data-data="spirale">spirale</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>couche cachée</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn active" data-toggle>activée</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>neurones cachés</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-minus>−</button>
+        <button type="button" class="iw__btn" data-plus>+</button>
+      </div>
+      <output data-out-h>4</output>
+    </div>
+    <div class="iw__row">
+      <label>entraînement</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-train>entraîner ▶</button>
+        <button type="button" class="iw__btn" data-reset>réinitialiser</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">époque</span> <b data-out-epoch>0</b></span>
+    <span class="iw__chip"><span class="k">perte</span> <b data-out-loss>—</b></span>
+    <span class="iw__chip"><span class="k">précision</span> <b data-out-acc>—</b></span>
+    <span class="iw__chip"><span class="k">architecture</span> <b data-out-arch>2-4-1</b></span>
+  </div>
+  <p class="iw__note">
+    Sans couche cachée, le réseau ne sait tracer qu'une <b>droite</b> : sur XOR ou les cercles, il
+    plafonne autour de 50–75 %. Active la couche cachée et entraîne : la frontière devient
+    <b>courbe</b> et épouse les classes. Ajoute des neurones pour des frontières plus riches (et
+    plus longues à apprendre). Le réseau est minuscule et entraîné en direct dans ton navigateur —
+    d'où une convergence parfois capricieuse, comme dans la vraie vie.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-netbuild'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaNetworkBuilder.client.ts';
+</script>

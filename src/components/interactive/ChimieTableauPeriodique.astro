@@ -1,0 +1,48 @@
+---
+/**
+ * ChimieTableauPeriodique — tableau périodique interactif. On survole (ou clique)
+ * un élément : configuration, bloc et la grandeur sélectionnée s'affichent. La
+ * grandeur choisie (rayon atomique, énergie de première ionisation,
+ * électronégativité) est cartographiée en couleur sur tout le tableau, rendant
+ * visibles les tendances périodiques (lignes / colonnes).
+ */
+---
+
+<div class="iw" data-iw="chimie-tableau">
+  <div class="iw__head"><span class="tag">Interactif</span> Tableau périodique et tendances</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="tp-grandeur">Grandeur cartographiée</label>
+      <select id="tp-grandeur" data-grandeur>
+        <option value="rayon">Rayon atomique</option>
+        <option value="ei" selected>Énergie de 1ʳᵉ ionisation</option>
+        <option value="en">Électronégativité (Pauling)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="tp-bloc">Colorer les blocs</label>
+      <input id="tp-bloc" type="checkbox" data-bloc />
+      <output data-out-bloc>non</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">élément</span> <b data-out-sym>—</b></span>
+    <span class="iw__chip"><span class="k">Z</span> <b data-out-z>—</b></span>
+    <span class="iw__chip"><span class="k">config.</span> <b data-out-conf>—</b></span>
+    <span class="iw__chip"><span class="k">bloc</span> <b data-out-bloctxt>—</b></span>
+    <span class="iw__chip"><span class="k">valeur</span> <b data-out-val>—</b></span>
+  </div>
+  <p class="iw__note">
+    Survole une case (ou touche-la). La couleur encode la grandeur choisie : on lit alors les
+    <strong>tendances périodiques</strong>. Le rayon atomique <em>diminue</em> de gauche à droite sur
+    une période (la charge nucléaire attire davantage le nuage) et <em>augmente</em> vers le bas (une
+    couche de plus). L’énergie d’ionisation et l’électronégativité varient à l’inverse. Active
+    « colorer les blocs » pour distinguer s, p, d. (Valeurs tabulées, certaines approchées ;
+    lanthanides/actinides omis.)
+  </p>
+</div>
+
+<script>
+  import './ChimieTableauPeriodique.client.ts';
+</script>

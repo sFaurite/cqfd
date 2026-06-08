@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Adresses MAC et trame Ethernet"
+chapter: mac-ethernet
+description: "Introduit l'adressage physique (MAC sur 48 bits, OUI constructeur), la structure de la trame Ethernet, et la portee locale d'une adresse MAC."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand le fil n'a plus deux extrémités
+
+Jusqu'ici, tout reposait sur une image confortable : un émetteur, un récepteur, un fil entre les deux. Sur un tel **lien point à point**, une question ne se pose même pas : « à qui est destinée cette trame ? » Il n'y a qu'un seul destinataire possible — celui d'en face. Tout ce que l'émetteur pose sur le fil est *pour lui*.
+
+<Tournant titre="Tournant : du lien point à point au médium partagé">
+Nous quittons le monde à deux. Imaginons maintenant un même câble — un **bus** — sur lequel sont branchées dix machines, ou un **commutateur** qui relie des dizaines de ports. Quand une machine émet, le signal atteint potentiellement *tout le monde*. Surgissent alors deux besoins entièrement nouveaux : **nommer** les machines (pour dire « ce paquet est pour toi, pas pour les autres ») et **arbitrer** l'accès au médium (pour éviter que tous parlent en même temps). Aucun de ces besoins ne se déduit du signal, de Nyquist ou de Shannon : ils n'existent *que* parce qu'on a quitté le lien point à point. Ce sont des problèmes d'organisation, pas de physique.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. **Un médium relie désormais plusieurs machines** (bus historique, puis commutateur), pas seulement deux. Une trame émise est, en principe, visible par plusieurs destinataires.
+2. **Il faut donc nommer les machines** par une *adresse*, pour qu'un récepteur sache si une trame le concerne.
+3. **Les choix de format sont des conventions** : la taille de l'adresse (48 bits), la structure de la trame, le mécanisme de détection d'erreurs sont fixés par une **norme** (IEEE 802.3 / Ethernet), non par un théorème. Une autre taille d'adresse aurait parfaitement marché.
+
+Ces hypothèses ne descendent pas des chapitres précédents : elles apparaissent au moment précis où l'on passe à un médium partagé. Nous les **posons**.
+</Hypotheses>
+
+## L'adresse MAC : un nom pour chaque carte réseau
+
+Pour nommer les machines, Ethernet attribue à chaque interface réseau une **adresse MAC** (*Media Access Control*) de **48 bits**. <Badge niveau="norme">Les 48 bits sont fixés par IEEE 802. Rien de physique ne l'impose : 32 ou 64 bits auraient aussi fonctionné. C'est une convention, pas une limite de canal.</Badge>
+
+On la note en hexadécimal, six octets séparés par des deux-points, par exemple `00:1B:44:11:3A:B7`. Ces 48 bits se découpent en deux moitiés :
+
+- les **24 premiers bits** forment l'**OUI** (*Organizationally Unique Identifier*), attribué à un constructeur par l'IEEE ;
+- les **24 derniers** sont un numéro de série choisi par ce constructeur pour distinguer ses cartes.
+
+L'idée est qu'en combinant « identité du fabricant » et « numéro de série », chaque carte fabriquée dans le monde reçoive une adresse différente. <Badge niveau="norme">Le découpage OUI + numéro de série, et l'administration centralisée des OUI par l'IEEE, relèvent de la norme et d'une autorité d'enregistrement.</Badge>
+
+Mais attention : l'unicité *mondiale réelle* est plus fragile qu'elle n'en a l'air. <Badge niveau="deploiement">Une adresse MAC peut être réécrite par logiciel (MAC spoofing), et il existe des plages d'adresses « localement administrées » non garanties uniques. L'unicité effective dépend donc du déploiement, pas d'une loi : la norme attribue des OUI distincts, mais ne peut empêcher qu'une adresse soit rejouée ou collisionne sur un réseau local.</Badge>
+
+Deux bits du premier octet ont un sens particulier et permettent de classer les destinataires :
+
+- **unicast** : l'adresse désigne *une seule* carte ;
+- **multicast** : un groupe de machines abonnées ;
+- **broadcast** : l'adresse `FF:FF:FF:FF:FF:FF`, que *toutes* les cartes du médium acceptent.
+
+<Badge niveau="norme">La sémantique unicast / multicast / broadcast, le bit individuel/groupe et le bit local/universel du premier octet, ainsi que la valeur tout-à-un du broadcast, sont définis par IEEE 802.</Badge>
+
+## La trame Ethernet, champ par champ
+
+Une trame Ethernet est une suite d'octets délimitée et structurée — exactement la notion de **trame** que nous avions posée pour la <Prereq href="/reseaux/partie-ii/trame-parite">détection d'erreurs</Prereq>. Voici ses champs, dans l'ordre :
+
+| Champ | Taille | Rôle |
+|---|---|---|
+| Préambule + SFD | 8 octets | Synchroniser l'horloge du récepteur, marquer le début |
+| MAC destination | 6 octets | À qui ? |
+| MAC source | 6 octets | De qui ? |
+| Type / Longueur | 2 octets | Quel protocole transporté (ex. IPv4) |
+| Données (payload) | 46 à 1500 octets | Le contenu utile |
+| FCS | 4 octets | Détection d'erreurs |
+
+<Badge niveau="norme">L'ordre et la taille de chaque champ sont fixés par IEEE 802.3. Le payload minimal de 46 octets, par exemple, est une contrainte de norme (liée à la détection de collision), pas une vérité physique.</Badge>
+
+Le **préambule** rejoue le rôle du codage de ligne : il donne au récepteur de quoi caler son horloge avant que les données utiles n'arrivent. Les champs **MAC destination** puis **source** répondent enfin à la question née du médium partagé : *pour qui*, *de qui*. Chaque carte compare la MAC destination à la sienne ; si elle ne correspond pas (et n'est ni broadcast ni un multicast auquel elle est abonnée), elle ignore la trame.
+
+### Le FCS, c'est notre CRC-32
+
+Le dernier champ, le **FCS** (*Frame Check Sequence*), n'est rien d'autre qu'un **CRC sur 32 bits** — précisément l'outil que nous avons construit au chapitre précédent. <Badge niveau="norme">Ethernet impose le polynôme générateur du CRC-32 ; c'est une norme.</Badge>
+
+Nous n'avons donc *rien de neuf* à démontrer ici. Tout ce que nous savons du <Prereq href="/reseaux/partie-ii/crc">CRC</Prereq> s'applique tel quel : l'émetteur calcule le reste de la division polynomiale modulo 2 sur tous les champs (sauf préambule et SFD), l'inscrit dans le FCS ; le récepteur rejoue le calcul et rejette la trame si le reste ne colle pas.
+
+<Encart type="rappel" titre="Pourquoi le CRC-32 et pas la parité ?">
+La <Prereq href="/reseaux/partie-ii/trame-parite">parité</Prereq> ne détecte qu'un nombre **impair** d'erreurs et rate les rafales. Le <Prereq href="/reseaux/partie-ii/crc">CRC</Prereq>, lui, détecte **toute rafale d'erreurs de longueur inférieure ou égale au degré** du générateur (ici 32), ainsi que toutes les erreurs simples et doubles avec un bon polynôme. Pour une trame qui peut faire 1500 octets, c'est indispensable.
+</Encart>
+
+## Le domaine de diffusion, et une question qui reste ouverte
+
+Appelons **domaine de diffusion** l'ensemble des machines qu'une trame de **broadcast** atteint. Sur un bus, c'est tout le segment ; ce périmètre est l'horizon naturel de l'adresse MAC. <Badge niveau="norme">Le broadcast et son périmètre (la couche liaison Ethernet) sont définis par IEEE 802.3.</Badge>
+
+Et c'est là que le bât blesse. L'adresse MAC est **plate** (aucune structure : un OUI désigne un fabricant, mais ne dit *rien* sur l'emplacement géographique ou topologique de la carte) et **purement locale** : elle répond à « qui, sur *ce* médium ? », jamais à « où, dans le monde ? ». <Badge niveau="norme">Cette structure plate et cette portée locale sont un choix de la norme : Ethernet identifie une carte sur un lien, sans jamais coder de localisation. Rien n'obligeait à cela — mais c'est ce qui a été fixé.</Badge>
+
+Or une adresse plate ne se *route* pas à l'échelle mondiale : sans aucune structure géographique, acheminer une trame supposerait de connaître la position de chacune des milliards de cartes, table impossible à tenir et à diffuser. <Badge niveau="heuristique">C'est un argument de **passage à l'échelle**, pas un théorème : aucune limite physique à la Shannon ne l'impose. C'est la conséquence d'ingénierie du choix d'adresses plates — on *pourrait* router des adresses plates sur un petit réseau, mais pas sur la planète.</Badge>
+
+D'où la question qui ouvre toute la suite du cours : **pourquoi faudra-t-il une seconde adresse ?** Une adresse *hiérarchique* et *logique*, dont la structure même indique vers où acheminer, et qui permet de router de proche en proche à travers la planète. C'est l'**adresse IP**, et c'est précisément ce que nous construisons au chapitre suivant.

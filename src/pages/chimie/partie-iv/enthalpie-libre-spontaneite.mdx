@@ -1,0 +1,127 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Enthalpie libre et spontanéité"
+chapter: enthalpie-libre-spontaneite
+description: "L'enthalpie libre de Gibbs G = H − TS, le critère de spontanéité ΔG < 0, la compétition enthalpie/entropie selon la température, et le lien avec le travail utile."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieDiagrammeEnergie from '../../../components/interactive/ChimieDiagrammeEnergie.astro';
+
+## Enthalpie libre et spontanéité
+
+Nous savons calculer la chaleur d'une réaction à pression constante, $\Delta H$ (<Prereq href="/chimie/partie-iv/energie-enthalpie">cf. énergie et enthalpie</Prereq>), et nous savons que la vraie boussole de l'évolution spontanée n'est pas l'énergie mais l'**entropie de l'univers**, qui ne peut qu'augmenter (<Prereq href="/chimie/partie-iv/entropie-second-principe">cf. entropie et second principe</Prereq>). Mais qui veut mesurer en pratique l'entropie de l'univers entier à chaque réaction ? Personne. Tout l'art de ce chapitre est de **ramener un critère sur l'univers à un critère portant uniquement sur le système** — la fiole, le bécher, ce qu'on tient dans la main. Cette grandeur magique s'appelle l'**enthalpie libre de Gibbs**.
+
+<Encart type="intuition" titre="L'idée en une image">
+
+Une réaction libère ou absorbe de la chaleur. Cette chaleur ne disparaît pas : elle file dans le **milieu extérieur** (le bain thermostaté, l'air de la pièce) et y modifie *son* désordre. Le second principe parle de l'univers = système + extérieur. L'idée de Gibbs : si l'extérieur est juste un grand réservoir à température $T$ fixe, alors son changement d'entropie se calcule **à partir de la chaleur que le système lui donne**. On peut donc tout réexprimer avec des grandeurs du système seul. L'enthalpie libre, c'est le second principe « vu de l'intérieur du bécher ».
+
+</Encart>
+
+### Du second principe au critère $\Delta G$
+
+Posons clairement le cadre, puis déduisons.
+
+<Hypotheses titre="Hypothèses de départ">
+
+- La réaction se déroule à **température $T$ constante** et **pression $P$ constante** (conditions du laboratoire ouvert à l'air).
+- Le système échange de la chaleur avec un **réservoir extérieur** à la même température $T$, assez grand pour que sa température ne bouge pas.
+- Le second principe s'applique : pour tout processus réel, $\Delta S_{\text{univers}} = \Delta S_{\text{syst}} + \Delta S_{\text{ext}} \geq 0$, l'égalité ne valant qu'à l'équilibre (<Prereq href="/chimie/partie-iv/entropie-second-principe">cf. second principe</Prereq>).
+
+</Hypotheses>
+
+À pression constante, la chaleur reçue par le système est par définition $q_{\text{syst}} = \Delta H$. Par conservation, le réservoir reçoit l'opposé : $q_{\text{ext}} = -\Delta H$. Comme le réservoir est un grand système à $T$ fixe qui reçoit cette chaleur de façon réversible de son point de vue, son entropie varie de $\Delta S_{\text{ext}} = q_{\text{ext}}/T = -\Delta H / T$.
+
+<Encart type="calcul" titre="De ΔS(univers) ≥ 0 à ΔG ≤ 0">
+
+**Étape 1 — Le second principe :**
+
+$$ \Delta S_{\text{univers}} = \Delta S_{\text{syst}} + \Delta S_{\text{ext}} \geq 0. $$
+
+**Étape 2 — On exprime l'extérieur avec une grandeur du système** ($\Delta S_{\text{ext}} = -\Delta H / T$) :
+
+$$ \Delta S_{\text{syst}} - \frac{\Delta H}{T} \geq 0. $$
+
+**Étape 3 — On multiplie par $-T$** (or $T > 0$, donc le sens de l'inégalité s'inverse) :
+
+$$ \Delta H - T\,\Delta S_{\text{syst}} \leq 0. $$
+
+**Étape 4 — On baptise** le membre de gauche : c'est l'**enthalpie libre** $\Delta G \equiv \Delta H - T\,\Delta S$, où $\Delta S$ désigne désormais celle du *système*. ∎
+
+</Encart>
+
+Le tour est joué : « l'entropie de l'univers augmente » devient « l'enthalpie libre du système diminue ».
+
+<Resultat label="Critère de spontanéité (T, P constantes)">
+
+$$ \Delta G = \Delta H - T\,\Delta S < 0 $$
+
+<Badge niveau="experimental" slot="badge">Déduit ligne à ligne du second principe — donc aussi solide que lui. Le second principe est lui-même un fait expérimental universel (jamais de violation observée). On classe donc ce critère au niveau « établi par l'expérience » : il hérite directement de la fiabilité du principe dont il découle.</Badge>
+
+</Resultat>
+
+Trois cas se lisent d'un coup : $\Delta G < 0$, la réaction est **spontanée** (thermodynamiquement possible) dans le sens écrit ; $\Delta G > 0$, elle est spontanée dans le sens **inverse** ; $\Delta G = 0$, c'est l'**équilibre**, plus aucune tendance nette — la porte d'entrée du chapitre suivant.
+
+### Les quatre cas de signes et la température d'inversion
+
+Le critère a une beauté redoutable : il met en compétition deux moteurs, l'**enthalpie** ($\Delta H$, préférence pour l'état de plus basse énergie) et l'**entropie** ($\Delta S$, préférence pour le plus grand nombre de micro-états), arbitrés par la **température** $T$.
+
+<Encart type="intuition" titre="La balance enthalpie / entropie">
+
+Pensez à $\Delta G = \Delta H - T\,\Delta S$ comme à une balance dont $T$ règle le bras de levier de l'entropie. À basse température, le terme $T\,\Delta S$ est petit : c'est l'enthalpie qui décide. À haute température, $T\,\Delta S$ écrase tout : c'est l'entropie qui décide. Faire varier $T$, c'est déplacer le pouvoir entre les deux camps.
+
+</Encart>
+
+Détaillons les quatre combinaisons de signes :
+
+- $\Delta H < 0$ (exothermique) et $\Delta S > 0$ : alors $-T\,\Delta S < 0$, donc $\Delta G < 0$ **à toute température**. Spontanée toujours. <Badge niveau="experimental">Conséquence directe du signe des deux termes dans la formule établie.</Badge>
+- $\Delta H > 0$ et $\Delta S < 0$ : les deux termes poussent vers $\Delta G > 0$. **Jamais** spontanée (mais l'inverse l'est toujours). <Badge niveau="experimental">Idem, lecture directe des signes.</Badge>
+- $\Delta H < 0$ et $\Delta S < 0$ : l'enthalpie favorise, l'entropie défavorise. Spontanée **à basse $T$** seulement.
+- $\Delta H > 0$ et $\Delta S > 0$ : l'inverse. Spontanée **à haute $T$** seulement.
+
+Dans les deux derniers cas, le signe de $\Delta G$ **bascule** à une température précise, la **température d'inversion**, obtenue en posant $\Delta G = 0$ :
+
+<Encart type="calcul" titre="Température d'inversion">
+
+À l'équilibre du basculement, $\Delta G = 0$, donc :
+
+$$ \Delta H - T_{\text{inv}}\,\Delta S = 0 \quad\Longrightarrow\quad T_{\text{inv}} = \frac{\Delta H}{\Delta S}. $$
+
+Exemple : la fusion de la glace, $\text{H}_2\text{O(s)} \to \text{H}_2\text{O(l)}$, a $\Delta H > 0$ et $\Delta S > 0$. À $P = 1~\text{bar}$, $T_{\text{inv}} = 273{,}15~\text{K} = 0~\text{°C}$ : en dessous la glace est stable, au-dessus l'eau liquide. La « température de fusion » *est* une température d'inversion d'enthalpie libre.
+
+Au passage, cette formule suppose $\Delta H$ et $\Delta S$ à peu près constants sur l'intervalle de température considéré — une approximation excellente sur quelques dizaines de kelvins, mais à manier avec prudence sur de larges plages. ∎
+
+</Encart>
+
+<ChimieDiagrammeEnergie />
+
+### Ce que $\Delta G$ dit — et ne dit PAS
+
+Deux pièges, et ils sont capitaux.
+
+**Premier piège : $\Delta G$ contre $\Delta G^\circ$.** La grandeur $\Delta G^\circ$ est l'enthalpie libre **standard**, calculée dans l'état standard de référence ($P = 1~\text{bar}$, solutés à l'activité $1$, soit en pratique $1~\text{mol·L}^{-1}$, espèces pures). C'est une constante tabulée. Mais une réaction réelle ne part presque jamais de l'état standard ! Le $\Delta G$ **réel** dépend des quantités effectivement présentes, et c'est *lui* — pas $\Delta G^\circ$ — qui décide de l'évolution à un instant donné. <Badge niveau="experimental">$\Delta G^\circ$ se mesure et se tabule ; $\Delta G$ réel s'en déduit via les quantités présentes. Le lien quantitatif entre les deux ($\Delta G = \Delta G^\circ + RT\ln Q$) sera établi au chapitre suivant.</Badge> Une réaction peut très bien avoir $\Delta G^\circ > 0$ et pourtant avancer un peu, simplement parce que partir de réactifs purs lui donne, au début, un $\Delta G < 0$.
+
+**Second piège, le plus trompeur : spontané ne veut PAS dire rapide.** $\Delta G < 0$ affirme que la réaction est thermodynamiquement *autorisée*, qu'elle « descend la pente ». Il ne dit **rien** sur le temps qu'elle mettra. <Badge niveau="qualitatif">La thermodynamique ignore le temps : elle compare un état initial et un état final, jamais le chemin ni sa durée. C'est une limite structurelle, pas un détail.</Badge>
+
+<Encart type="intuition" titre="Le diamant qui ne devient jamais graphite">
+
+À température et pression ordinaires, la transformation diamant $\to$ graphite a $\Delta G < 0$ : le graphite est la forme stable, le diamant ne l'est pas. Votre bague *devrait* se transformer en mine de crayon. Pourquoi ne le fait-elle pas ? Parce qu'il faudrait briser tout le réseau d'atomes de carbone d'un coup : une **barrière** colossale s'y oppose. La réaction est spontanée *et* infiniment lente. « Spontané » signifie « possible en descente », pas « instantané ». Ce qui gouverne la vitesse — la barrière d'activation — est une tout autre histoire, celle de la **cinétique** (qui fera l'objet d'un chapitre dédié).
+
+</Encart>
+
+### $\Delta G$ comme travail maximal récupérable
+
+Une dernière lecture, splendide. Reprenons l'étape 3 du calcul, mais en gardant trace du travail *autre* que celui des forces de pression (un travail électrique, par exemple). On montre qu'à $T$ et $P$ constants, la diminution d'enthalpie libre fixe le **travail utile maximal** que la réaction peut fournir :
+
+$$ w_{\text{utile, max}} = -\Delta G. $$
+
+<Badge niveau="experimental">Découle du second principe : tout travail récupéré au-delà de $-\Delta G$ exigerait $\Delta S_{\text{univers}} < 0$, impossible. Le maximum n'est atteint que pour une transformation idéalement réversible ; toute irréversibilité réelle en récupère moins. C'est exactement ce qu'exploite une pile, dont nous verrons qu'elle relie $\Delta G$ à une tension mesurable.</Badge>
+
+Voilà pourquoi $\Delta G$ s'appelle enthalpie libre : c'est la part de l'énergie « libérable » en travail utile, le terme $T\,\Delta S$ étant, lui, la chaleur inévitablement échangée avec l'univers pour satisfaire le second principe.
+
+Nous tenons donc le critère universel de spontanéité, et l'avons honnêtement borné : il dit *si* une réaction peut avancer, jamais *à quelle vitesse*. Reste une question naturelle : une réaction spontanée s'arrête-t-elle quand tout est consommé, ou bien atteint-elle un point d'arrêt partiel où $\Delta G = 0$ ? Ce point d'arrêt, c'est l'**équilibre chimique** — et le lien $\Delta G^\circ = -RT\ln K$ qui le gouverne fait l'objet du chapitre suivant.

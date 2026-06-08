@@ -1,0 +1,97 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'invention de l'écriture : compter, puis dire"
+chapter: invention-ecriture
+description: "Établit la genèse de l'écriture en Mésopotamie (du calcul des jetons au cunéiforme) et son déchiffrement, et montre pourquoi l'écriture redéfinit la frontière préhistoire/histoire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import HistoireCunePuzzle from '../../../components/interactive/HistoireCunePuzzle.astro';
+
+## Tournant : l'entrée dans les sources écrites
+
+<Tournant titre="Tournant : nos sources changent">
+Jusqu'ici, nous avons fait parler des os, des graines, des murs et des objets : l'archéologie reconstituait des gestes que personne n'avait notés. À partir de la fin du IVe millénaire avant notre ère, en Mésopotamie, une source neuve apparaît : le **texte**. Pour la première fois, des humains écrivent ce qu'ils pensent devoir consigner. On bascule, par convention, de la « préhistoire » vers l'« histoire ».
+
+Attention pourtant : cette frontière est **conventionnelle**, pas une coupure de valeur. Les sociétés sans écriture ne sont ni « moins » humaines ni privées de mémoire ; et les premiers textes ne sont pas un miroir neutre du monde. Les plus anciens sont des **comptes** rédigés par et pour des élites de temple et de palais : ils nous disent combien de moutons et d'orge, rarement ce que ressentait le paysan. Entrer dans les sources écrites, c'est gagner une voix — celle, partiale, des scribes — et apprendre à la critiquer.
+</Tournant>
+
+## Avant la lettre : compter avec des cailloux
+
+L'écriture ne tombe pas du ciel comme une illumination. La séquence la plus discutée — et la plus stimulante — est celle proposée par l'archéologue **Denise Schmandt-Besserat** à partir des années 1970.
+
+Bien avant les tablettes, dès le Néolithique, on trouve dans tout le Proche-Orient de petits **jetons d'argile** (les *calculi*) de formes variées : cônes, sphères, disques, cylindres. L'hypothèse : chaque forme code une quantité d'un bien précis (une mesure d'orge, un mouton). On compte les choses en manipulant leurs symboles.
+
+<Encart type="calcul" titre="Critique des sources : la séquence de Schmandt-Besserat">
+La reconstruction enchaîne plusieurs étapes matériellement attestées, mais leur **liaison causale** reste une interprétation.
+
+1. **Jetons libres** (calculi), répandus dès le VIIIe millénaire : c'est un fait archéologique massif. Mais qu'ils soient *tous* comptables, et non parfois des amulettes ou des jeux, est débattu.
+2. **Enveloppes scellées** (*bullae*) : des sphères d'argile creuses contenant des jetons, fermées et marquées de sceaux, vers le IVe millénaire à Uruk et Suse. Pour vérifier le contenu sans briser le sceau, on **imprime** les jetons sur la surface molle avant de les enfermer.
+3. **Marques imprimées** : dès lors, la sphère porte à l'extérieur l'image de ce qu'elle contient. Le contenant devient redondant : pourquoi garder les jetons ? On aplatit l'argile : naît la **tablette**.
+4. **Pictogrammes tracés** : on cesse d'imprimer des objets, on les *dessine* au calame.
+
+La force de la thèse : elle relie par une chaîne d'usages des objets qu'on retrouve réellement, sur les mêmes sites, dans le bon ordre stratigraphique. Sa fragilité : la correspondance terme à terme entre formes de jetons et signes écrits est partielle, et certains signes archaïques n'ont pas d'ancêtre-jeton connu. La continuité **comptable** est solide ; la filiation **graphique** précise l'est moins.
+
+<Badge niveau="debattu">La séquence jetons ⇒ enveloppes ⇒ tablettes est influente et largement enseignée, mais sa version forte (chaque signe dérive d'un jeton) reste contestée.</Badge>
+</Encart>
+
+<Resultat label="Origine comptable de l'écriture">L'écriture mésopotamienne naît d'un besoin de **gestion économique** des biens du temple et du palais, à Uruk vers ~3300 av. J.-C. <Badge slot="badge" niveau="probable">probable</Badge></Resultat>
+
+Cela tient à ce que les plus anciennes tablettes lisibles, celles d'Uruk IV, sont des **listes** : rations, troupeaux, surfaces de champs, noms de fonctions. On y compte d'abord, on y raconte ensuite. C'est le prolongement direct des cités à institutions redistributives que nous avons décrites avec la <Prereq href="/histoire/partie-iii/naissance-cites-mesopotamie">naissance des premières cités sumériennes</Prereq>.
+
+## Le saut décisif : du dessin de la chose au son
+
+Un système de pictogrammes a une limite redoutable. Dessiner un bœuf, une jarre, une étoile : facile. Mais comment dessiner un **nom propre**, un **verbe**, une **idée abstraite** comme « justice » ou « hier » ? On ne dessine pas la grammaire.
+
+La solution est le coup de génie de toute l'histoire de l'écriture : le **principe du rébus** (le phonétisme). On cesse d'utiliser le signe pour ce qu'il *représente* et on l'utilise pour ce qu'il *sonne*.
+
+<Encart type="intuition" titre="Le rébus, ou écrire avec les oreilles">
+En français : pour écrire « Jean », on pourrait dessiner un *geai* (l'oiseau) suivi d'une *dent*. Le sens des images disparaît ; seul reste le son **/ʒã/ + /dã/**. C'est exactement ce qu'ont fait les Sumériens : un signe-objet dont le nom sonnait comme la syllabe voulue sert à **noter cette syllabe**, où qu'elle apparaisse dans la langue. D'un coup, on peut transcrire un nom de roi, une action, une négation — tout ce qui se dit.
+</Encart>
+
+Avec ce saut, l'écriture cesse d'être un aide-mémoire comptable pour devenir un **enregistrement de la langue parlée**. Les pictogrammes, tracés de plus en plus vite au calame à pointe triangulaire, se schématisent en faisceaux de **coins** (*cunei* en latin) : c'est le **cunéiforme**, qui servira pendant trois millénaires à écrire le sumérien, puis l'akkadien, le hittite et bien d'autres langues.
+
+<HistoireCunePuzzle />
+
+<Badge niveau="atteste">Le passage du logogramme au phonétisme syllabique est lisible dans l'évolution des signes eux-mêmes et dans l'apparition de noms propres et de formes grammaticales sur les tablettes.</Badge>
+
+<Encart type="rappel" titre="Ne pas confondre système et langue">
+Un **système d'écriture** est une technique de notation ; une **langue** est ce qu'on note. Le cunéiforme est un système (logo-syllabique) qui a noté des langues très différentes. À l'inverse, le français peut s'écrire en alphabet latin ou en braille. Trois grandes familles de systèmes : **logographique** (un signe = un mot, comme les sinogrammes), **syllabique** (un signe = une syllabe), **alphabétique** (un signe = un son élémentaire). Aucun n'est « supérieur » : chacun est adapté à la langue qu'il sert.
+</Encart>
+
+## Le déchiffrement, une enquête policière
+
+Ces écritures sont restées muettes pendant des siècles. Les rouvrir fut un travail de détective, fondé sur des **textes bilingues** servant de pont.
+
+<Encart type="calcul" titre="Critique des sources : deux clés, Rosette et Behistun">
+**L'égyptien (hiéroglyphes).** La pierre de Rosette (1799) porte le même décret en trois écritures : hiéroglyphique, démotique et **grec**, langue connue. **Jean-François Champollion** (1822) comprend que les hiéroglyphes ne sont pas purement symboliques mais notent aussi des **sons** : en repérant des noms royaux (Ptolémée, Cléopâtre) encadrés de cartouches, il calibre des valeurs phonétiques, puis déroule le système.
+
+**Le cunéiforme.** L'inscription de **Behistun** (Iran), gravée par Darius Ier vers 520 av. J.-C., répète le même texte en vieux-perse, élamite et babylonien. **Henry Rawlinson**, suspendu à la falaise pour la copier (années 1830-1840), part du vieux-perse — moins complexe — pour remonter aux autres.
+
+La méthode est la même : un **point d'ancrage bilingue**, des **noms propres** comme amorces phonétiques, puis vérification par cohérence interne. C'est une démarche faillible et révisable, exactement comme notre travail historique : une hypothèse qu'on teste, pas une révélation.
+
+<Badge niveau="atteste">Les deux déchiffrements sont validés par la lecture cohérente de milliers de textes indépendants découverts depuis.</Badge>
+</Encart>
+
+Reste une honnêteté nécessaire : **tout n'est pas lu**. Des écritures résistent encore (l'**indus**, le **linéaire A**) faute de bilingue ou de langue identifiée ; et même des systèmes déchiffrés notent des **langues mortes** dont la grammaire ou le vocabulaire restent en partie obscurs.
+
+## Plusieurs inventions, pas une seule
+
+Le réflexe diffusionniste — « tout vient de Sumer » — est à écarter. L'écriture a été **inventée plusieurs fois, indépendamment**, en réponse à des besoins comparables.
+
+<Resultat label="Foyers indépendants d'écriture">Au moins quatre foyers ont créé une écriture sans l'emprunter : la **Mésopotamie** (~3300), l'**Égypte** (~3200), la **Chine** des Shang (~1250 av. J.-C., os oraculaires) et la **Mésoamérique** maya/zapotèque (Ier millénaire av. J.-C.). <Badge slot="badge" niveau="probable">probable</Badge></Resultat>
+
+L'argument décisif : la **distance** (la Chine et les Mayas n'avaient aucun contact avec le Proche-Orient) et la **divergence des signes**, qui ne dérivent visiblement pas les uns des autres. La Mésoamérique, totalement coupée de l'Ancien Monde, suffit à elle seule à briser le diffusionnisme.
+
+<Encart type="plusloin" titre="Sumer ou l'Égypte : qui fut la première ?">
+On lit souvent que « Sumer a inventé l'écriture en premier ». Prudence : les datations des plus anciens signes égyptiens (étiquettes d'Abydos) sont **très proches** de celles d'Uruk, et les marges d'incertitude se chevauchent. Plutôt que de couronner un vainqueur, mieux vaut retenir deux émergences quasi simultanées, peut-être stimulées par des **contacts d'idée** sans copie de signes.
+
+<Badge niveau="debattu">L'antériorité absolue de l'une sur l'autre n'est pas tranchée ; les fourchettes de datation se recouvrent.</Badge>
+</Encart>
+
+Désormais, les sociétés que nous étudions peuvent nous parler en leur nom — listes de rois, lois, prières, lettres. C'est avec cet outil neuf, mais partial, que nous aborderons l'**Égypte**, cet État territorial bâti sur le Nil et lisible dans ses archives autant que dans ses pierres.

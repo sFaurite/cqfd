@@ -1,0 +1,110 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le point de départ : la matière est quantique"
+chapter: postulats-quantiques
+description: "Les hypothèses quantiques fondatrices admises pour le cours : dualité, quantification, fonction d'onde et probabilité, sur lesquelles repose toute la structure électronique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieOrbitalViewer from '../../../components/interactive/ChimieOrbitalViewer.astro';
+
+## Le moment où la physique classique abdique
+
+Imaginez un physicien de la fin du XIXᵉ siècle, sûr de lui. Il sait décrire le mouvement d'une planète, la propagation d'une onde sur l'eau, le rayonnement d'une lampe. Puis on lui montre la lumière émise par un gaz d'hydrogène chauffé : non pas un arc-en-ciel continu, mais quelques raies fines, isolées, à des couleurs précises. Et l'on observe qu'éclairer un métal n'arrache des électrons qu'au-delà d'une certaine fréquence, jamais en dessous, quelle que soit l'intensité. Sa physique, magnifique, n'explique ni l'un ni l'autre. Quelque chose, dans la matière, est **granulaire**, **discret** — quantifié.
+
+Nous ne reconstruirons pas ici la mécanique quantique : ce serait un cours entier. Nous faisons un choix de méthode, le tout premier du cours.
+
+<Tournant titre="On adopte la mécanique quantique comme jeu d'hypothèses">
+
+C'est le premier cadre déductif du cours, et il faut être honnête sur sa nature. La mécanique quantique n'est **pas déduite** d'une physique antérieure : c'est une théorie nouvelle, **imposée par l'expérience** quand la physique classique a échoué. Les spectres de raies de l'hydrogène et l'effet photoélectrique sont les faits qui ont forcé ce changement de paradigme.
+
+Nous posons donc ses postulats minimaux en **hypothèses de départ**. Tout le reste de la Partie I — orbitales, niveaux d'énergie, structure des atomes — en sera **déduit**. Mais les postulats eux-mêmes, nous les **admettons** : ce chapitre ne les démontre pas.
+
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ : les postulats quantiques minimaux">
+
+1. **Fonction d'onde.** L'état d'un système physique est entièrement décrit par une fonction d'onde $\psi$ (en général à valeurs complexes). Le carré de son module, $|\psi|^2$, donne la **densité de probabilité de présence** : la probabilité de trouver la particule dans un petit volume $\mathrm{d}V$ vaut $|\psi|^2\,\mathrm{d}V$.
+
+2. **Quantification pour un système lié.** Lorsqu'un système est **lié** (confiné, comme un électron retenu par un noyau), ses grandeurs observables — au premier rang desquelles l'énergie — ne prennent que des valeurs **discrètes**, séparées par des écarts finis.
+
+3. **Dualité onde-corpuscule (de Broglie).** À toute particule de quantité de mouvement $p$ est associée une longueur d'onde $\lambda = h/p$, où $h$ est la **constante de Planck**, $h \approx 6{,}626 \times 10^{-34}~\text{J·s}$ (constante fondamentale, dont la valeur est fixée par définition du SI depuis 2019).
+
+4. **Exclusion de Pauli.** Deux fermions identiques (l'électron en est un) ne peuvent occuper le même état quantique. Nous l'admettons ici et l'exploiterons au chapitre sur la structure électronique.
+
+</Hypotheses>
+
+Ces quatre énoncés portent tous, par construction, le même statut. <Badge niveau="quantique">Ce sont des postulats fondamentaux : on ne les démontre pas, on les pose, et on en déduit le reste.</Badge> Pourquoi y croire ? Parce que l'expérience les a imposés. <Badge niveau="experimental">Les spectres de raies de l'hydrogène et l'effet photoélectrique sont mesurés, reproductibles, et incompatibles avec la physique classique : ce sont les faits qui ont forcé la quantification.</Badge> Distinguer ces deux lignes est exactement le genre de prudence que résume notre <Prereq href="/chimie/methodologie">échelle des quatre niveaux de fiabilité</Prereq> : le postulat n'est pas le fait expérimental, même s'il en découle historiquement.
+
+## Pourquoi « confiné » signifie « quantifié »
+
+L'hypothèse 2 peut sembler tombée du ciel. Elle ne l'est pas tout à fait : si l'on accepte l'hypothèse 3 (la particule est une onde), la quantification de l'énergie d'un système lié **se déduit**. C'est l'un des plus beaux résultats du cours, et il tient en une image.
+
+<Encart type="intuition" titre="La corde de guitare">
+
+Pincez une corde tendue entre deux points fixes. Elle ne vibre pas à n'importe quelle fréquence : seules « rentrent » les ondes dont un nombre **entier** de demi-longueurs d'onde tient exactement entre les deux extrémités (fondamentale, harmoniques). Le confinement entre deux bornes **sélectionne** un ensemble discret de modes.
+
+Une particule confinée est une onde (hypothèse 3) coincée dans une « boîte ». Même cause, même effet : seules certaines longueurs d'onde sont permises. Et puisque $\lambda$ fixe $p$ (hypothèse 3) et que $p$ fixe l'énergie, **seules certaines énergies sont permises**. La quantification n'est pas un décret arbitraire : c'est ce qu'une onde confinée *ne peut pas éviter*.
+
+</Encart>
+
+Formalisons sur le modèle le plus simple : une particule de masse $m$ libre de se mouvoir sur un segment de longueur $L$, mais à qui il est interdit d'en sortir (« puits infini »).
+
+<Encart type="rappel" titre="Énergie cinétique et quantité de mouvement">
+
+Pour une particule libre (sans énergie potentielle), toute l'énergie est cinétique. En reliant l'énergie cinétique $E = \tfrac{1}{2}mv^2$ à la quantité de mouvement $p = mv$, on élimine la vitesse :
+
+$$E = \frac{1}{2}mv^2 = \frac{(mv)^2}{2m} = \frac{p^2}{2m}$$
+
+Cette relation $E = p^2/(2m)$ est de la mécanique classique ; elle reste valable ici tant que la particule n'est pas relativiste. Elle servira à passer de $p$ (donné par de Broglie) à l'énergie.
+
+</Encart>
+
+<Encart type="calcul" titre="Particule dans une boîte 1D : les niveaux d'énergie">
+
+L'onde doit s'annuler aux deux bords (la particule n'y est jamais). Comme une corde fixée, les seules ondes stationnaires admises vérifient :
+
+$$L = n\,\frac{\lambda}{2}, \qquad n = 1, 2, 3, \dots$$
+
+On en tire les longueurs d'onde permises :
+
+$$\lambda_n = \frac{2L}{n}$$
+
+La quantité de mouvement vient de de Broglie (hypothèse 3), $p = h/\lambda$ :
+
+$$p_n = \frac{h}{\lambda_n} = \frac{n\,h}{2L}$$
+
+L'énergie d'une particule libre est purement cinétique, $E = p^2/(2m)$ (voir le rappel ci-dessus) :
+
+$$E_n = \frac{p_n^{\,2}}{2m} = \frac{n^2 h^2}{8 m L^2}$$
+
+</Encart>
+
+<Resultat label="Niveaux d'énergie d'une particule dans une boîte">
+
+$$E_n = \frac{n^2 h^2}{8 m L^2}, \qquad n = 1, 2, 3, \dots$$
+
+<Badge niveau="quantique" slot="badge">Le **principe** est nécessaire : une onde confinée a des niveaux discrets, indexés par l'entier $n$. C'est une conséquence directe des hypothèses 2 et 3.</Badge>
+
+</Resultat>
+
+Lisons ce résultat. L'énergie ne dépend que de l'entier $n$ (le **nombre quantique**) : les niveaux sont discrets, exactement ce que postulait l'hypothèse 2 — sauf qu'ici nous l'avons **obtenu**. L'écart entre niveaux varie en $1/L^2$ : plus la boîte est petite, plus les marches sont hautes. Le confinement à l'échelle atomique ($L \sim 10^{-10}~\text{m}$) creuse des écarts énormes ; à l'échelle d'une bille dans une boîte de la taille d'une pièce, les niveaux sont si serrés qu'ils paraissent continus — et la physique classique redevient une excellente approximation.
+
+<Encart type="plusloin" titre="Ce que la boîte n'est PAS">
+
+Attention à ne pas surinterpréter. La formule $E_n \propto n^2$ décrit un puits *idéalisé* à parois rectangulaires : c'est une idéalisation pédagogique, choisie parce qu'elle se résout à la main. <Badge niveau="qualitatif">Pour un vrai atome, le potentiel est celui, en $-1/r$, du noyau : les niveaux y vont en $-1/n^2$, pas en $+n^2$. Le modèle de la boîte capture le *mécanisme* (confinement → discrétisation), pas les *valeurs* réelles.</Badge>
+
+Autrement dit : le badge **quantique** vaut pour le principe (confinement → niveaux discrets), jamais pour les nombres. Au chapitre suivant, le bon potentiel donnera les vrais niveaux de l'hydrogène — et l'on vérifiera qu'ils reproduisent les raies mesurées.
+
+</Encart>
+
+Les orbitales atomiques sont précisément ces ondes stationnaires en trois dimensions, dans le potentiel du noyau. Visualisons à quoi ressemble une telle fonction d'onde confinée — sa forme, ses lobes, ses nœuds où $|\psi|^2 = 0$ :
+
+<ChimieOrbitalViewer />
+
+Nous tenons notre socle. La matière est ondulatoire et discrète, et le confinement engendre des niveaux. Au chapitre suivant, nous remplaçons la boîte par le vrai potentiel d'un proton, et nous résolvons — au sens d'« admettre le résultat » — l'atome d'hydrogène : ses nombres quantiques, ses orbitales, et la confrontation décisive avec ses raies spectrales.

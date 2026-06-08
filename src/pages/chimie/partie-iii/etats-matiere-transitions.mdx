@@ -1,0 +1,111 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "États de la matière et changements d'état"
+chapter: etats-matiere-transitions
+description: "Les trois états de la matière comme compétition entre énergie thermique et forces de cohésion, les transitions de phase, le diagramme de phases (P, T) et les points remarquables."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## L'état de la matière : une bataille à deux camps
+
+Pourquoi l'eau est-elle liquide dans votre verre, solide dans le bac à glaçons, gazeuse au-dessus de la casserole ? La réponse tient en une seule image, et c'est l'une des plus belles de toute la chimie physique : **un état de la matière est le résultat d'un duel** entre deux énergies qui s'opposent. D'un côté, les forces de cohésion qui veulent rassembler les molécules. De l'autre, l'agitation thermique qui veut tout disperser. Tout ce chapitre découle de ce rapport de forces.
+
+<Hypotheses titre="Hypothèses de départ">
+On admet le résultat de la physique statistique : à la température $T$, chaque degré de liberté d'agitation thermique porte une énergie de l'ordre de $k_B T$, où $k_B$ est la **constante de Boltzmann**, $k_B \approx 1{,}38 \times 10^{-23}\ \mathrm{J\,K^{-1}}$ (constante fondamentale, fixée exactement depuis 2019). On admet aussi qu'à $T$ et $P$ constantes, le système réel adopte l'état le plus stable — résultat qu'on justifiera proprement par l'enthalpie libre dans la Partie IV.
+</Hypotheses>
+
+### Le rapport décisif : $k_B T$ contre la cohésion
+
+Reprenons les forces établies au chapitre précédent.
+
+<Prereq href="/chimie/partie-iii/interactions-intermoleculaires">Les forces entre molécules</Prereq> nous a donné une énergie de cohésion $\varepsilon$ par paire de molécules voisines : quelques $\mathrm{kJ\,mol^{-1}}$ pour la dispersion de London, davantage pour la liaison hydrogène.
+
+Comparons deux énergies par molécule : l'énergie d'agitation $k_B T$ et l'énergie de cohésion $\varepsilon$.
+
+<Encart type="intuition" titre="Le duel, en une phrase">
+Si $k_B T \gg \varepsilon$, l'agitation gagne : les molécules ont trop d'énergie pour rester accrochées, elles volent librement — c'est le **gaz**. Si $k_B T \ll \varepsilon$, la cohésion gagne : les molécules sont piégées dans leurs positions et ne peuvent que vibrer — c'est le **solide**. Et entre les deux, $k_B T \sim \varepsilon$, on a un compromis subtil : les molécules restent au contact mais glissent les unes sur les autres — c'est le **liquide**.
+</Encart>
+
+Faisons parler les chiffres pour rendre l'argument concret.
+
+<Encart type="calcul" titre="Ordre de grandeur : pourquoi l'eau bout vers 100 °C">
+
+On compare l'énergie thermique molaire $RT$ à l'énergie de cohésion. Ici $R = N_A k_B \approx 8{,}314\ \mathrm{J\,mol^{-1}\,K^{-1}}$ (constante des gaz parfaits, produit de deux constantes fondamentales).
+
+À $T = 373\ \mathrm{K}$ (100 °C), l'énergie thermique molaire vaut :
+
+$$RT = 8{,}314 \times 373 \approx 3{,}1\ \mathrm{kJ\,mol^{-1}}$$
+
+L'énergie pour vraiment séparer les molécules d'eau (vaporisation) est mesurée à :
+
+$$\Delta_{\mathrm{vap}} H \approx 41\ \mathrm{kJ\,mol^{-1}}$$
+
+Le rapport $\Delta_{\mathrm{vap}} H / RT \approx 13$. La cohésion par liaison hydrogène domine très largement $RT$ : tant qu'on n'a pas chauffé assez pour que l'agitation cumulée arrache les molécules au réseau de liaisons hydrogène, l'eau reste condensée. C'est bien la **force des liaisons hydrogène** qui place le point d'ébullition aussi haut.
+
+</Encart>
+
+D'où une règle de lecture immédiate.
+
+<Resultat label="Cohésion forte, changement d'état tardif">
+
+$$T_{\text{changement d'état}} \ \nearrow \quad \text{quand} \quad \varepsilon_{\text{cohésion}} \ \nearrow$$
+
+<Badge niveau="qualitatif" slot="badge">Argument robuste $k_B T$ vs cohésion ; mais quantitativement contextuel (entropie, structure)</Badge>
+</Resultat>
+
+C'est ce qui explique la hiérarchie des points d'ébullition : un alcane léger (London faible) bout très bas, l'eau (liaison hydrogène) bien plus haut à masse comparable. Le **classement** est qualitatif ; les **valeurs** précises, elles, sont expérimentales.
+
+### Lire un diagramme de phases
+
+Fixons maintenant non plus seulement $T$, mais aussi la pression $P$. Pour chaque couple $(T, P)$, le corps pur adopte un état stable. En reportant ces états dans le plan $(T, P)$, on obtient le **diagramme de phases** : une carte où chaque région est un état, et chaque frontière une **courbe de coexistence** où deux états cohabitent en équilibre.
+
+<Badge niveau="experimental">Les diagrammes de phases sont entièrement mesurés : positions des courbes, du point triple, du point critique</Badge>
+
+Trois courbes partent d'un même nœud :
+
+- la courbe **solide–liquide** (fusion / solidification),
+- la courbe **liquide–gaz** (vaporisation / liquéfaction),
+- la courbe **solide–gaz** (sublimation / condensation).
+
+Deux points remarquables structurent la carte.
+
+<Encart type="rappel" titre="Point triple et point critique">
+Le **point triple** est l'unique couple $(T, P)$ où solide, liquide et gaz coexistent simultanément. Pour l'eau, il est à $T = 273{,}16\ \mathrm{K}$ et $P = 611\ \mathrm{Pa}$ — valeurs si reproductibles qu'elles ont longtemps servi à *définir* le kelvin.
+
+Le **point critique** termine la courbe liquide–gaz. Au-delà, liquide et gaz deviennent indiscernables : c'est l'état **supercritique**. Pour l'eau, $T_c \approx 647\ \mathrm{K}$, $P_c \approx 22{,}1\ \mathrm{MPa}$.
+</Encart>
+
+Une **isobare horizontale** (pression constante, on chauffe) traverse les régions de gauche à droite : solide → liquide → gaz, coupant successivement les courbes de fusion puis de vaporisation. Si la pression est inférieure à celle du point triple, l'isobare passe **sous** le point triple et ne rencontre jamais le liquide : le solide passe directement en gaz. C'est la **sublimation** — celle du dioxyde de carbone solide (« glace carbonique ») à pression atmosphérique, dont le point triple est à $5{,}2\ \mathrm{bar}$.
+
+### Un changement d'état coûte de l'énergie à température constante
+
+Sur une courbe de coexistence, quelque chose de remarquable se produit : on peut fournir de la chaleur **sans que la température monte**. Toute l'énergie sert à vaincre la cohésion et à réorganiser les molécules, pas à les agiter davantage. Cette énergie échangée à $T$ constante est la **chaleur latente**, ou en langage thermodynamique l'**enthalpie de changement d'état** ($\Delta_{\mathrm{fus}} H$, $\Delta_{\mathrm{vap}} H$, $\Delta_{\mathrm{sub}} H$).
+
+<Badge niveau="experimental">Les enthalpies latentes sont des grandeurs mesurées, tabulées pour chaque corps</Badge>
+
+Retenons le lien — il sera l'un des piliers de la Partie IV : **un changement d'état est un processus enthalpique**. Fondre ou vaporiser absorbe de l'énergie (rupture de cohésion) ; solidifier ou liquéfier en libère. Nous le formaliserons avec le premier principe au chapitre « Énergie et enthalpie des réactions ».
+
+### L'anomalie de l'eau : quand la glace flotte
+
+Sur presque tous les diagrammes de phases, la courbe solide–liquide **monte** vers la droite : augmenter la pression favorise le solide, plus dense. L'eau fait exactement l'inverse : sa courbe de fusion a une **pente négative**. Augmenter la pression *fait fondre* la glace.
+
+<Tournant titre="L'eau désobéit, et la liaison hydrogène explique pourquoi">
+Pour expliquer cette anomalie, nous mobilisons un fait structural, pas une nouvelle loi : dans la glace, chaque molécule d'eau engage **quatre liaisons hydrogène** dirigées, qui imposent un arrangement tétraédrique **ouvert**, ajouré. Ce réseau rigide occupe **plus** de volume que l'eau liquide, où les liaisons se rompent et se reforment en laissant les molécules se tasser. La glace est donc **moins dense** que l'eau liquide : elle flotte.
+</Tournant>
+
+<Resultat label="Anomalie de densité de l'eau">
+
+$$\rho_{\text{glace}} \approx 917\ \mathrm{kg\,m^{-3}} \ \lt \ \rho_{\text{eau liquide}} \approx 1000\ \mathrm{kg\,m^{-3}}$$
+
+<Badge niveau="experimental" slot="badge">Densités mesurées ; l'origine est la géométrie tétraédrique de la liaison hydrogène</Badge>
+</Resultat>
+
+La pente négative en découle directement : comprimer le solide ouvert le déstabilise au profit du liquide plus compact. Que les lacs gèlent par le haut — et que la vie aquatique survive dessous — tient à cette seule particularité des liaisons hydrogène.
+
+Nous avons relié les états de la matière aux forces microscopiques et à la température. Mais nous avons admis qu'à $T$ et $P$ constants le système choisit l'état « le plus stable », et que les changements d'état coûtent une énergie : il est temps de fonder ces idées. Cap sur la **thermochimie**, et d'abord sur l'**énergie et l'enthalpie des réactions**.

@@ -1,0 +1,48 @@
+---
+/**
+ * ChimieSpectreRaies — spectre de raies de l'hydrogène. On choisit une série
+ * (Lyman, Balmer, Paschen, Brackett) ; le composant trace les raies à leur
+ * longueur d'onde réelle (formule de Rydberg) et, en survol/sélection, relie
+ * chaque raie à la transition n → n_f sur un petit diagramme de niveaux.
+ * Illustre la vérification expérimentale de la quantification.
+ */
+---
+
+<div class="iw" data-iw="chimie-spectre">
+  <div class="iw__head"><span class="tag">Interactif</span> Spectre de raies de l’hydrogène</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="sp-serie">Série</label>
+      <select id="sp-serie" data-serie>
+        <option value="1">Lyman (n → 1, UV)</option>
+        <option value="2" selected>Balmer (n → 2, visible)</option>
+        <option value="3">Paschen (n → 3, IR)</option>
+        <option value="4">Brackett (n → 4, IR)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="sp-raie">Raie (n initial)</label>
+      <input id="sp-raie" type="range" min="3" max="8" step="1" value="3" data-raie />
+      <output data-out-raie>n = 3</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">transition</span> <b data-out-trans>3 → 2</b></span>
+    <span class="iw__chip"><span class="k">λ</span> <b data-out-lambda>656 nm</b></span>
+    <span class="iw__chip"><span class="k">ΔE</span> <b data-out-de>1,89 eV</b></span>
+    <span class="iw__chip"><span class="k">domaine</span> <b data-out-dom>visible</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque raie correspond à une <strong>transition</strong> de l’électron d’un niveau n vers un
+    niveau inférieur n<sub>f</sub>. La longueur d’onde suit la formule de Rydberg
+    1/λ = R<sub>H</sub>(1/n<sub>f</sub>² − 1/n²) : positions <em>prédites</em> et raies
+    <em>mesurées</em> coïncident. Le fait que le spectre soit discret (des raies, pas un continuum)
+    est la signature directe de la quantification des niveaux d’énergie. Déplace le curseur : la raie
+    active et la flèche de transition correspondante sont mises en évidence.
+  </p>
+</div>
+
+<script>
+  import './ChimieSpectreRaies.client.ts';
+</script>

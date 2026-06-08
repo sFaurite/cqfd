@@ -1,0 +1,90 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le transformer : un bloc empilable"
+chapter: transformer
+description: "Assemble le bloc transformer complet : attention multi-têtes, réseau feed-forward par position, connexions résiduelles, normalisation de couche, et encodage positionnel. Explique le rôle de chaque pièce et pourquoi l'ensemble s'empile et s'entraîne bien."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaAttentionHeatmap from '../../../components/interactive/IaAttentionHeatmap.astro';
+
+## Une pièce qu'on copie-colle
+
+Nous tenons enfin le moteur du transformer. Le chapitre précédent a établi le <Prereq href="/ia/partie-v/mecanisme-attention">mécanisme d'attention</Prereq> : à partir de requêtes $Q$, de clés $K$ et de valeurs $V$, on calcule des scores $QK^\top/\sqrt{d_k}$, on les passe en softmax, et on mélange les valeurs. C'est une **recherche associative douce**, entièrement parallélisable. Mais l'attention seule ne fait pas un réseau. Le génie du transformer, c'est de l'emballer dans un **bloc standardisé** — toujours le même — qu'on empile autant de fois qu'on veut, comme on empile des étages d'immeuble identiques.
+
+Posons d'abord le décor. Un bloc reçoit une suite de $n$ vecteurs (un par position), chacun de dimension $d$, et renvoie une suite de même forme. C'est cette **conservation de la forme** qui rend l'empilement possible : la sortie d'un bloc est une entrée valide pour le suivant.
+
+<Hypotheses titre="Ce que prend et rend un bloc">
+1. **Entrée** : une matrice $X \in \mathbb{R}^{n \times d}$ — $n$ tokens, chacun un vecteur de dimension $d$ (le *modèle*).
+2. **Sortie** : une matrice de **même forme** $\mathbb{R}^{n \times d}$. Le bloc transforme les représentations sans changer leur géométrie d'interface. <Badge niveau="recette">Figer la dimension $d$ d'un bout à l'autre est un choix d'ingénierie qui autorise l'empilement et les connexions résiduelles ; rien ne l'impose mathématiquement.</Badge>
+</Hypotheses>
+
+## Les quatre pièces, et pourquoi chacune
+
+**1. L'attention multi-têtes.** Plutôt qu'une seule attention sur tout le vecteur, on découpe $d$ en $h$ sous-espaces (les *têtes*), on fait tourner une attention indépendante dans chacun, puis on concatène. L'intuition : différentes têtes peuvent suivre différentes relations (l'accord sujet-verbe ici, la coréférence là). <Badge niveau="recette">Le nombre de têtes $h$ et leur dimension $d/h$ sont réglés empiriquement. On observe a posteriori des têtes « spécialisées », mais on ne sait ni les prescrire à l'avance, ni garantir qu'elles apparaîtront.</Badge>
+
+<IaAttentionHeatmap />
+
+La carte ci-dessus montre les poids d'attention : chaque ligne, un token qui « regarde » ; chaque colonne, un token regardé ; l'intensité, le poids softmax. Notez que rien dans ce calcul ne distingue la position 1 de la position 5 — nous y revenons.
+
+**2. Le réseau feed-forward (FFN), position par position.** Après l'attention, chaque vecteur de token traverse **le même** petit perceptron à une couche cachée :
+
+$$ \mathrm{FFN}(x) = W_2\,\mathrm{ReLU}(W_1 x + b_1) + b_2. $$
+
+Crucial : ce réseau est appliqué **indépendamment** à chaque position (mêmes poids partout). L'attention *mélange* l'information entre tokens ; le FFN la *transforme* en profondeur dans chaque token. Sans lui, le bloc ne serait qu'une suite de moyennes pondérées — incapable de calcul non linéaire par token. <Badge niveau="recette">La dimension cachée vaut typiquement $4d$. Ce ratio « ×4 » est une convention héritée des premiers transformers, ajustée à l'expérience, pas dérivée d'un principe.</Badge>
+
+**3. Les connexions résiduelles.** Autour de chaque sous-couche, on ajoute l'entrée à la sortie : $x \mapsto x + \mathrm{Sublayer}(x)$. La sous-couche n'apprend qu'une **correction** à appliquer. L'effet décisif est sur les gradients.
+
+<Encart type="plusloin" titre="Pourquoi le résidu fait circuler le gradient">
+Soit $y = x + f(x)$. Par la <Prereq href="/ia/partie-ii/graphe-de-calcul">règle de la chaîne</Prereq>, la dérivée d'une perte $L$ par rapport à l'entrée s'écrit
+
+$$ \frac{\partial L}{\partial x} = \frac{\partial L}{\partial y}\Big( I + \frac{\partial f}{\partial x}\Big). $$
+
+Le terme $I$ (identité) garantit qu'un **chemin direct** transporte le gradient même si $\partial f/\partial x$ devient minuscule. En empilant $N$ blocs sans résidu, les jacobiennes se multiplient et le gradient peut s'évanouir exponentiellement (le mal déjà rencontré avec les <Prereq href="/ia/partie-v/sequences-limite-rnn">RNN</Prereq>). Avec résidus, il existe toujours une voie où le gradient transmis vaut au moins $\partial L/\partial y$. <Badge niveau="prouve">La présence du terme identité dans la jacobienne est un fait de calcul, démontrable ligne à ligne.</Badge> Que cela *suffise* à bien entraîner un réseau profond reste, lui, une observation empirique. <Badge niveau="robuste">Les résidus rendent l'entraînement des réseaux très profonds fiable en pratique (constaté dès les ResNet en vision), sans théorème de garantie.</Badge>
+</Encart>
+
+**4. La normalisation de couche (LayerNorm).** On recentre et on réduit chaque vecteur de token : on lui soustrait sa moyenne, on le divise par son écart-type (sur ses $d$ composantes), puis on le rééchelle par des paramètres appris. But : empêcher les amplitudes de dériver d'un bloc à l'autre, ce qui stabilise l'optimisation. <Badge niveau="robuste">LayerNorm stabilise et accélère l'entraînement de façon très reproductible ; le *mécanisme* exact de ce gain reste partiellement débattu.</Badge>
+
+<Encart type="rappel" titre="Pre-norm ou post-norm ?">
+Où placer le LayerNorm ? *Post-norm* (article original) : $\mathrm{LN}(x + \mathrm{Sublayer}(x))$. *Pre-norm* (usage moderne) : $x + \mathrm{Sublayer}(\mathrm{LN}(x))$. Le pre-norm laisse le chemin résiduel totalement « propre » et s'entraîne plus facilement en grande profondeur. <Badge niveau="recette">Le choix pre/post-norm est purement empirique : aucun des deux n'est dérivé d'un principe d'optimalité.</Badge>
+</Encart>
+
+## Le point qui se démontre : l'ordre est invisible
+
+Voici le seul théorème franc du chapitre. L'attention traite ses entrées comme un **ensemble**, pas comme une suite ordonnée.
+
+<Encart type="calcul" titre="L'attention est équivariante par permutation">
+Soit $P$ une matrice de permutation des $n$ lignes. Permutons l'entrée : $X \to PX$. Alors $Q \to PQ$, $K \to PK$, $V \to PV$ (chaque projection est appliquée ligne à ligne). Les scores deviennent
+
+$$ (PQ)(PK)^\top = P\,(QK^\top)\,P^\top. $$
+
+Le softmax agit ligne par ligne et commute avec une permutation des lignes et des colonnes, donc les poids deviennent $A \to P A P^\top$. La sortie :
+
+$$ (P A P^\top)(P V) = P A (P^\top P) V = P A V $$
+
+car $P^\top P = I$. La sortie est donc simplement **permutée de la même façon** : permuter l'entrée permute la sortie, sans rien changer d'autre.
+
+<Resultat label="Équivariance par permutation">
+
+$$ \mathrm{Attn}(PX) = P\,\mathrm{Attn}(X) \quad \text{pour toute permutation } P. $$
+
+<Badge niveau="prouve" slot="badge">Conséquence directe de l'algèbre du softmax et de $P^\top P = I$ : l'attention ne « voit » aucun ordre. Démontré.</Badge>
+</Resultat>
+</Encart>
+
+Conséquence inévitable : sans information ajoutée, « le chat mange la souris » et « la souris mange le chat » seraient indiscernables. Il **faut** injecter l'ordre. C'est l'**encodage positionnel** : on ajoute à chaque token un vecteur dépendant de sa position — sinusoïdal (des sinus/cosinus de fréquences variées) ou directement appris. <Badge niveau="prouve">La *nécessité* d'ajouter une information de position découle de l'équivariance ci-dessus.</Badge> <Badge niveau="recette">La *forme* de cet encodage (sinusoïdal, appris, rotatif…) est, elle, un choix d'ingénierie comparé à l'expérience.</Badge>
+
+## Encodeur, décodeur : qui peut regarder quoi
+
+Le même bloc se décline selon ce qu'on autorise l'attention à regarder. **Encodeur** : chaque token voit tous les autres, gauche et droite — attention *bidirectionnelle*, adaptée à comprendre un texte donné en entier. **Décodeur** : on **masque** les positions futures (on met leur score à $-\infty$ avant le softmax) pour que le token $i$ ne voie que $1,\dots,i$ — attention *causale*, indispensable pour **générer** mot après mot sans tricher en lisant la suite. <Badge niveau="prouve">Le masque causal garantit, par construction, que la prédiction en position $i$ ne dépend d'aucune position $>i$.</Badge>
+
+## Pourquoi ce bloc, et pas un autre
+
+Empilez $N$ de ces blocs, branchez la <Prereq href="/ia/partie-iii/optimiseurs-sgd-adam">descente de gradient stochastique</Prereq>, et vous obtenez l'ossature de tous les grands modèles de langage. La raison de cette domination tient en deux mots : **il s'entraîne et il s'empile**. Les résidus laissent passer le gradient en profondeur, le LayerNorm stabilise, l'attention est parallélisable sur toute la séquence (contrairement aux RNN). Mais soyons honnêtes jusqu'au bout : aucune de ces pièces n'a été *dérivée* d'un principe d'optimalité. <Badge niveau="robuste">Que *ce* bloc précis surpasse les alternatives est une régularité empirique massivement reproduite, non un théorème.</Badge> Le transformer est un **triomphe d'ingénierie empirique** : un assemblage de recettes qui, mises ensemble, passent à l'échelle de façon spectaculaire — sans qu'aucune preuve ne dise qu'il soit le meilleur assemblage possible.
+
+Reste une question pratique avant de nourrir cette machine : comment transformer un texte brut en cette suite de vecteurs $X$ qu'attend le premier bloc ? C'est l'affaire du prochain chapitre — la **tokenisation**.

@@ -1,0 +1,52 @@
+---
+/**
+ * ReseauConstellation — diagramme de constellation I/Q interactif.
+ * On choisit l'ordre de modulation (QPSK, QAM-16, QAM-64, QAM-256) et un niveau
+ * de bruit (donné en E_s/N_0, dB). Les symboles idéaux forment une grille ;
+ * autour de chacun, un nuage de réceptions bruitées (bruit gaussien) se brouille
+ * quand le SNR baisse ou que l'ordre monte. On visualise les régions de décision
+ * et un estimateur du taux d'erreur symbole : plus les nuages débordent sur les
+ * cases voisines, plus il y a d'erreurs — c'est le compromis débit ↔ robustesse.
+ */
+---
+
+<div class="iw" data-iw="reseau-constellation">
+  <div class="iw__head"><span class="tag">Interactif</span> Constellation I/Q : bits par symbole contre bruit</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 11"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="cn-order">Modulation</label>
+      <select id="cn-order" data-order>
+        <option value="4">QPSK (2 bits/symbole)</option>
+        <option value="16" selected>QAM-16 (4 bits/symbole)</option>
+        <option value="64">QAM-64 (6 bits/symbole)</option>
+        <option value="256">QAM-256 (8 bits/symbole)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="cn-snr">Bruit : E<sub>s</sub>/N₀</label>
+      <input id="cn-snr" type="range" min="2" max="40" step="0.5" value="22" data-snr />
+      <output data-out-snr>22,0 dB</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">bits/symbole</span> <b data-out-bits></b></span>
+    <span class="iw__chip"><span class="k">points</span> <b data-out-pts></b></span>
+    <span class="iw__chip"><span class="k">taux d'erreur symbole estimé</span> <b data-out-ser></b></span>
+    <span class="iw__chip"><span class="k">verdict</span> <b data-out-verdict></b></span>
+  </div>
+  <p class="iw__note">
+    Une modulation place l'information dans l'amplitude et la phase de la porteuse : chaque
+    <strong>symbole</strong> est un point du plan I/Q et code plusieurs bits. Plus l'ordre est
+    élevé (QAM-256 = 8 bits/symbole), plus on transmet de débit… mais plus les points sont
+    <em>serrés</em>. Le bruit transforme chaque réception en un nuage gaussien autour du point
+    idéal ; le récepteur décide en prenant le point le plus proche (régions de décision).
+    Quand le nuage déborde sur la case voisine, il y a <em>erreur</em>. C'est le compromis de
+    Shannon vu de près : à bruit donné, monter en ordre augmente le débit jusqu'à ce que le
+    taux d'erreur explose. (Bruit gaussien simulé ; SER estimée par échantillonnage.)
+  </p>
+</div>
+
+<script>
+  import './ReseauConstellation.client.ts';
+</script>

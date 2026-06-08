@@ -1,0 +1,65 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les réseaux convolutifs : du pixel à la catégorie"
+chapter: reseaux-convolutifs
+description: "Assemble une architecture CNN complète : couches de convolution, pooling, têtes de classification. Décrit la hiérarchie de features apprises et introduit l'idée que les premières couches d'un réseau entraîné capturent des motifs réutilisables (transfert)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Les réseaux convolutifs : du pixel à la catégorie
+
+Nous avons une brique : la <Prereq href="/ia/partie-iv/convolution">convolution</Prereq>, un filtre glissant qui partage ses poids sur toute l'image et détecte un motif local où qu'il se trouve. Mais un filtre seul ne *voit* pas un chat. Un détecteur de bord vertical, aussi bon soit-il, ignore tout d'une oreille, d'une moustache, d'un museau. Comment passe-t-on de quelques milliers de pixels à un seul mot — « chat » ?
+
+L'idée des **réseaux convolutifs** (CNN) est d'**empiler** : on enchaîne des couches de convolution, et à chaque étage le réseau combine les motifs de l'étage précédent en motifs plus gros. Des bords on tire des coins, des coins on tire des textures, des textures des parties d'objet, et finalement l'objet. C'est une cathédrale construite à partir d'une seule pierre.
+
+### L'anatomie d'un bloc
+
+L'unité de base est un **bloc** qui se répète. Trois opérations s'y enchaînent presque toujours :
+
+1. **Convolution** : on applique non pas *un* filtre mais $C_{\text{out}}$ filtres en parallèle. Chacun produit une *carte d'activation*. On part donc d'une image à $C_{\text{in}}$ canaux et on en ressort une à $C_{\text{out}}$ canaux — chaque canal de sortie répond à un motif différent. C'est ici, et non au pooling, que le nombre de canaux est choisi et peut augmenter d'un étage au suivant.
+2. **Non-linéarité** : on applique ReLU, $\text{ReLU}(z) = \max(0, z)$, élément par élément. Sans elle, empiler des convolutions ne servirait à rien, car une composition d'opérations affines reste affine.
+3. **Pooling** : on **sous-échantillonne**. Sur chaque petite fenêtre (souvent $2 \times 2$), le *max-pooling* ne garde que la valeur maximale, l'*average-pooling* la moyenne. La carte est ainsi divisée par deux dans chaque dimension : moins de positions spatiales. Combiné à l'augmentation du nombre de canaux décidée à l'étape de convolution, cela donne le mouvement central du CNN — **la résolution spatiale diminue, la profondeur sémantique augmente**.
+
+<Encart type="rappel" titre="Pourquoi la non-linéarité est indispensable">
+La convolution est une opération **linéaire** (chaque sortie est une somme pondérée d'entrées), suivie d'un biais : elle est donc **affine**. Or composer deux fonctions affines redonne une seule fonction affine. Empiler dix couches convolutives sans rien entre elles équivaudrait à *une seule* convolution. C'est exactement le résultat établi pour les <Prereq href="/ia/partie-iii/non-linearites">non-linéarités</Prereq> : il faut intercaler une fonction non affine, ici ReLU, pour que la profondeur apporte quelque chose. <Badge niveau="prouve">La nécessité d'une non-linéarité entre couches affines est démontrée.</Badge>
+</Encart>
+
+<Encart type="intuition" titre="Ce que le pooling achète vraiment">
+Le max-pooling pose une question simple : « ce motif est-il présent *quelque part* dans cette fenêtre ? » Peu importe le pixel exact. Conséquence : si l'objet se décale d'un ou deux pixels, la sortie après pooling change à peine. On gagne une **robustesse aux petites translations** — une invariance *approximative*, à ne pas confondre avec l'équivariance *exacte* de la convolution établie au chapitre précédent. Le pooling abandonne volontairement de l'information de position fine, qu'on juge non pertinente pour dire *quoi* est dans l'image.
+</Encart>
+
+<Badge niveau="recette">Le choix exact — taille des filtres, $2\times2$ ou $3\times3$, max ou moyenne, nombre de canaux par étage, nombre de blocs — est une convention d'ingénierie réglée empiriquement, pas un résultat déduit.</Badge>
+
+### La tête : du volume à la décision
+
+Après plusieurs blocs, il reste un petit volume profond — disons $7 \times 7 \times 512$ : spatialement minuscule, mais riche en canaux abstraits. On l'**aplatit** en un vecteur, qu'on passe dans une ou deux couches denses (un <Prereq href="/ia/partie-iii/perceptron-multicouche">perceptron multicouche</Prereq>), terminées par une sortie de la taille du nombre de classes. La logistique de classification — softmax, entropie croisée — est celle déjà vue. Tout le réseau, convolutions comprises, s'entraîne par <Prereq href="/ia/partie-ii/retropropagation">rétropropagation</Prereq> : la convolution n'est qu'un nœud de plus dans le graphe de calcul, dérivable comme les autres. <Badge niveau="prouve">Le gradient à travers une couche convolutive se calcule exactement par la règle de la chaîne.</Badge>
+
+### La hiérarchie de features : observée, non programmée
+
+Voici le point le plus frappant — et il faut être honnête sur son statut. Quand on inspecte un CNN entraîné, on constate une **hiérarchie** : les premières couches répondent à des **bords** et des couleurs ; les suivantes à des **textures** et des **motifs** ; plus profond, à des **parties** d'objets (un œil, une roue) ; et tout en haut, à des **objets** entiers.
+
+Ce qui est remarquable, c'est qu'on n'a **jamais programmé** ces détecteurs. On n'a écrit aucune règle « cherche un bord ». On a seulement défini une architecture et une perte, puis laissé la descente de gradient ajuster les poids des filtres. Les détecteurs de bords **émergent** d'eux-mêmes, vraisemblablement parce qu'ils sont utiles pour la tâche.
+
+<Badge niveau="robuste">La hiérarchie bords → motifs → parties → objets est une régularité empirique très reproductible, observée sur de nombreux réseaux et jeux de données.</Badge> <Badge niveau="boitenoire">Mais ce n'est pas un théorème : *pourquoi* ces détecteurs émergent aussi proprement, et ce que représente exactement chaque canal profond, relève d'une interprétabilité encore mal comprise.</Badge>
+
+### Réutiliser ce qui a été appris : le transfert
+
+Si les premières couches finissent souvent par apprendre des bords et des textures — des primitives **génériques**, assez indépendantes de la tâche précise — alors pourquoi les réapprendre à chaque fois ? On peut prendre un réseau entraîné sur un immense jeu de données, **garder ses premières couches** comme extracteur de features, et ne réentraîner que la tête sur sa propre tâche. C'est le **transfert d'apprentissage**, qui permet d'obtenir de bons résultats avec très peu de données — un cas où la <Prereq href="/ia/partie-iii/regularisation-overfitting">lutte contre le surapprentissage</Prereq> profite directement de cette réutilisation. <Badge niveau="robuste">L'efficacité du transfert est un constat empirique solide, exploité partout en pratique.</Badge>
+
+### Une brève histoire des architectures
+
+L'empilement précis a beaucoup évolué. **LeNet** (fin des années 1990) reconnaissait des chiffres manuscrits avec quelques couches. **AlexNet** (2012) reprend la recette, mais bien plus grand et entraîné sur GPU, et écrase la concurrence en reconnaissance d'images — l'étincelle de l'essor moderne. Puis on a voulu aller plus **profond**, et un mur est apparu : au-delà d'une certaine profondeur, le réseau s'entraînait *moins* bien, le gradient peinant à remonter de bout en bout.
+
+**ResNet** (2015) lève ce verrou avec les **connexions résiduelles** : au lieu d'apprendre une transformation $H(x)$, un bloc apprend une *correction* $F(x)$ et renvoie $F(x) + x$. Le terme $+x$ — un raccourci qui saute par-dessus le bloc — laisse le gradient circuler presque sans atténuation, rendant entraînables des réseaux de centaines de couches.
+
+<Encart type="plusloin" titre="Le raccourci qui sauve le gradient">
+En notant la sortie d'un bloc $y = F(x) + x$, la dérivée par rapport à l'entrée contient un terme $\partial F / \partial x$ **plus l'identité**. Lors de la rétropropagation, ce $+1$ garantit qu'une part du gradient passe *intacte*, même si $F$ atténue beaucoup. C'est l'intuition centrale contre le gradient évanescent. Ce raccourci additif réapparaîtra à l'identique dans le bloc transformer. <Badge niveau="robuste">Les connexions résiduelles améliorent l'entraînabilité de façon spectaculaire et très reproductible.</Badge> <Badge niveau="boitenoire">L'explication théorique complète de *pourquoi* elles aident autant reste débattue.</Badge>
+</Encart>
+
+Nous savons maintenant lire une image et en extraire des représentations hiérarchiques. Cette idée — qu'une **représentation se construit et s'apprend** plutôt qu'elle ne se programme — est si féconde qu'on va la transposer au langage : au chapitre suivant, nous verrons comment transformer le *sens* des mots en géométrie, avec les **plongements**.

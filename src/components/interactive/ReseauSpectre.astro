@@ -1,0 +1,39 @@
+---
+/**
+ * ReseauSpectre — reconstruction d'un créneau par série de Fourier.
+ * Un curseur fixe le nombre d'harmoniques impaires retenues (N) ; le canvas
+ * superpose le créneau idéal et sa somme partielle de Fourier
+ *   s_N(t) = (4/π) · Σ_{k impair ≤ 2N-1} sin(2π k f0 t) / k,
+ * et affiche en parallèle le spectre (raies aux fréquences k·f0, amplitude 1/k).
+ * Plus N grandit, plus les coins se précisent — illustrant qu'un créneau parfait
+ * exige un spectre s'étendant à l'infini (donc une bande passante infinie).
+ */
+---
+
+<div class="iw" data-iw="reseau-spectre">
+  <div class="iw__head"><span class="tag">Interactif</span> Un créneau, somme de sinusoïdes</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="sp-n">Harmoniques retenues</label>
+      <input id="sp-n" type="range" min="1" max="40" step="1" value="3" data-n />
+      <output data-out-n>3</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">fréquence la plus haute</span> <b data-out-fmax></b></span>
+    <span class="iw__chip"><span class="k">erreur quadratique vs créneau</span> <b data-out-err></b></span>
+  </div>
+  <p class="iw__note">
+    Le créneau idéal (en pointillés) saute brutalement de −1 à +1. La courbe pleine est sa
+    somme partielle de Fourier : seules les harmoniques <em>impaires</em> apparaissent, d'amplitude
+    décroissante en 1/k. Avec une seule sinusoïde on a une vague ; en ajoutant des harmoniques de
+    plus en plus rapides, les coins se précisent. Pour un angle <em>parfait</em>, il faudrait une
+    infinité d'harmoniques — donc des fréquences arbitrairement hautes. C'est pourquoi un canal à
+    bande limitée, qui rabote les hautes fréquences, arrondit toujours les transitions abruptes.
+  </p>
+</div>
+
+<script>
+  import './ReseauSpectre.client.ts';
+</script>

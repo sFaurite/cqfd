@@ -1,0 +1,60 @@
+---
+/**
+ * IaBackpropGraph — petit graphe de calcul (entrées → 2 neurones cachés →
+ * sortie → perte). Passe AVANT : les valeurs se propagent et s'éclairent.
+ * Passe ARRIÈRE : les dérivées δ remontent, les contributions s'additionnent
+ * aux nœuds à chemins multiples. Rend visible que backprop = règle de la
+ * chaîne organisée. Chapitres : graphe de calcul, rétropropagation.
+ */
+---
+
+<div class="iw" data-iw="ia-backprop">
+  <div class="iw__head"><span class="tag">Interactif</span> Rétropropagation pas à pas</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="bp-x1">entrée x₁</label>
+      <input id="bp-x1" type="range" min="-2" max="2" step="0.1" value="1" data-x1 />
+      <output data-out-x1>1,0</output>
+    </div>
+    <div class="iw__row">
+      <label for="bp-x2">entrée x₂</label>
+      <input id="bp-x2" type="range" min="-2" max="2" step="0.1" value="-0.5" data-x2 />
+      <output data-out-x2>-0,5</output>
+    </div>
+    <div class="iw__row">
+      <label for="bp-y">cible y</label>
+      <input id="bp-y" type="range" min="-1" max="2" step="0.1" value="1" data-y />
+      <output data-out-y>1,0</output>
+    </div>
+    <div class="iw__row">
+      <label>animation</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-play>passe avant ▶</button>
+        <button type="button" class="iw__btn" data-back>passe arrière ◀</button>
+        <button type="button" class="iw__btn" data-reset>réinitialiser</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">phase</span> <b data-out-phase>au repos</b></span>
+    <span class="iw__chip"><span class="k">sortie ŷ</span> <b data-out-yh>—</b></span>
+    <span class="iw__chip"><span class="k">perte L</span> <b data-out-loss>—</b></span>
+  </div>
+  <p class="iw__note">
+    <b>Passe avant</b> : chaque nœud combine ses entrées (les arêtes portent les poids) et applique
+    son activation ; les valeurs s'allument de gauche à droite jusqu'à la perte L. <b>Passe arrière</b> :
+    la dérivée ∂L/∂(nœud), notée δ, remonte de droite à gauche. À un nœud traversé par plusieurs
+    chemins, les contributions <i>s'additionnent</i> — c'est exactement la règle de la chaîne, juste
+    appliquée nœud par nœud. Backprop ne « comprend » rien : elle organise des dérivées.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-backprop'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaBackpropGraph.client.ts';
+</script>

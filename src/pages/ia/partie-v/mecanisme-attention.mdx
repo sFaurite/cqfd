@@ -1,0 +1,116 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le mécanisme d'attention : chercher par contenu"
+chapter: mecanisme-attention
+description: "Construit l'attention par produit scalaire (scaled dot-product) à partir d'une idée de recherche associative : requêtes, clés, valeurs, scores, softmax, mélange pondéré. Établit ses propriétés (parallélisable, portée globale) et son coût quadratique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaAttentionHeatmap from '../../../components/interactive/IaAttentionHeatmap.astro';
+
+## Le problème : un mot ne se comprend pas tout seul
+
+Reprenons la phrase « la banque de la rivière était boueuse ». Le mot « banque » n'a de sens qu'à la lumière de « rivière » — qui se trouve cinq mots plus loin. Pour représenter correctement « banque », il faudrait donc aller **chercher** l'information pertinente ailleurs dans la phrase, où qu'elle soit.
+
+Le modèle récurrent que nous avons étudié résout ce problème en faisant transiter toute l'information par un état caché propagé pas à pas. Nous avons vu que cela impose deux fléaux : le <Prereq href="/ia/partie-v/sequences-limite-rnn">gradient qui s'évanouit sur les longues séquences et la séquentialité non parallélisable</Prereq>. L'attention propose une idée radicalement différente : **chaque position regarde directement toutes les autres**, sans relais, en une seule opération matricielle.
+
+<Encart type="intuition" titre="Une recherche dans un dictionnaire, en plus souple">
+Imaginez une table de hachage : vous présentez une **clé**, et vous récupérez la **valeur** associée. Mais ici la recherche est *douce* : au lieu de récupérer une seule valeur, vous récupérez une **moyenne pondérée** de toutes les valeurs, pondérée par la **ressemblance** entre votre requête et chaque clé. Les clés très ressemblantes contribuent beaucoup ; les autres, presque rien. C'est une recherche associative continue et différentiable — donc apprenable par descente de gradient.
+</Encart>
+
+## Trois rôles pour chaque position : requête, clé, valeur
+
+Posons le cadre. On dispose d'une séquence de $n$ vecteurs $x_1, \dots, x_n$ (les représentations de nos tokens), chacun de dimension $d_{\text{model}}$.
+
+<Hypotheses titre="La construction de l'attention">
+1. À chaque position $i$, on calcule trois vecteurs par projection linéaire apprise : une **requête** $q_i = W_Q\, x_i$, une **clé** $k_i = W_K\, x_i$ et une **valeur** $v_i = W_V\, x_i$. Les matrices $W_Q, W_K, W_V$ sont les paramètres à apprendre.
+2. La **pertinence** de la position $j$ pour la position $i$ est mesurée par le produit scalaire $q_i \cdot k_j$. <Badge niveau="recette">Choix de conception : le produit scalaire est une mesure de similarité commode et différentiable. Rien n'impose qu'il soit *le* bon score ; c'est l'option retenue, qui fonctionne.</Badge>
+</Hypotheses>
+
+Le produit scalaire $q_i \cdot k_j$ est grand quand requête et clé pointent dans la même direction : la position $j$ est alors jugée pertinente pour $i$. En empilant les requêtes en lignes dans une matrice $Q$ (de taille $n \times d_k$), de même $K$ et $V$, **tous** les scores se calculent d'un coup :
+
+<Resultat label="Matrice des scores">
+
+$$ S = Q K^{\top}, \qquad S_{ij} = q_i \cdot k_j. $$
+
+<Badge niveau="prouve" slot="badge">Identité exacte : le coefficient $(i,j)$ du produit $QK^\top$ est par définition le produit scalaire de la ligne $i$ de $Q$ par la ligne $j$ de $K$.</Badge>
+</Resultat>
+
+## Le facteur $1/\sqrt{d_k}$ : empêcher le softmax de saturer
+
+On veut transformer chaque ligne de scores en une distribution de poids (positifs, de somme 1). L'outil naturel est le softmax.
+
+<Encart type="rappel" titre="Le softmax, généralisation de la sigmoïde">
+Le softmax transforme un vecteur de scores $z = (z_1, \dots, z_n)$ en une distribution de probabilité :
+
+$$ \operatorname{softmax}(z)_j = \frac{e^{z_j}}{\sum_{\ell} e^{z_\ell}}. $$
+
+Pour $n = 2$, il redonne exactement la <Prereq href="/ia/partie-i/regression-logistique">sigmoïde</Prereq> appliquée à l'**écart** des deux scores : $\operatorname{softmax}(z_1, z_2)_1 = \sigma(z_1 - z_2)$. Point crucial pour la suite : si un score domine très largement les autres, son exponentielle écrase tout, le poids correspondant tend vers $1$ et les autres vers $0$. Le softmax **sature** : il devient quasi déterministe, et sa dérivée s'effondre.
+</Encart>
+
+Or les produits scalaires $q_i \cdot k_j$ peuvent devenir énormes en grande dimension, ce qui pousserait le softmax dans sa zone saturée dès l'initialisation. Quantifions ce risque.
+
+<Encart type="calcul" titre="La variance du score croît avec la dimension">
+Supposons, à l'initialisation, que les composantes de $q$ et $k$ sont indépendantes, centrées ($\mathbb{E}=0$) et de variance $1$. Le score est $q \cdot k = \sum_{m=1}^{d_k} q_m k_m$. Par linéarité de l'espérance, et comme $q_m$ et $k_m$ sont indépendants :
+
+$$ \mathbb{E}[q \cdot k] = \sum_{m=1}^{d_k} \mathbb{E}[q_m]\,\mathbb{E}[k_m] = 0. $$
+
+Pour la variance, les termes $q_m k_m$ sont indépendants entre eux (les couples $(q_m, k_m)$ le sont) et centrés, donc les variances s'additionnent. Pour un terme, comme $q_m \perp k_m$ et $\mathbb{E}[q_m k_m]=0$ :
+
+$$ \operatorname{Var}(q_m k_m) = \mathbb{E}[q_m^2 k_m^2] - 0 = \mathbb{E}[q_m^2]\,\mathbb{E}[k_m^2] = 1\cdot 1 = 1. $$
+
+En sommant les $d_k$ termes :
+
+$$ \operatorname{Var}(q \cdot k) = \sum_{m=1}^{d_k} \operatorname{Var}(q_m k_m) = d_k. $$
+
+L'écart-type du score vaut donc $\sqrt{d_k}$ : il **grandit** avec la dimension. Pour le ramener à un écart-type de $1$, indépendant de $d_k$, on divise par $\sqrt{d_k}$ :
+
+$$ \operatorname{Var}\!\left(\frac{q \cdot k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1. $$
+
+<Badge niveau="robuste" slot="badge">Le calcul de variance est exact *sous les hypothèses d'initialisation posées*. Mais celles-ci (composantes i.i.d., variance unité) sont une idéalisation : en cours d'entraînement les distributions changent. La justification du facteur est donc semi-formelle — un contrôle de variance bien motivé, pas un théorème sur le réseau entraîné.</Badge>
+</Encart>
+
+On obtient la formule complète de l'attention.
+
+<Resultat label="Attention par produit scalaire normalisé">
+
+$$ \operatorname{Attention}(Q,K,V) = \operatorname{softmax}\!\left(\frac{Q K^{\top}}{\sqrt{d_k}}\right) V. $$
+
+<Badge niveau="prouve" slot="badge">Construction entièrement définie : projections linéaires, produit matriciel, softmax ligne par ligne, puis moyenne pondérée des valeurs. Chaque étape est explicite et différentiable.</Badge>
+</Resultat>
+
+La dernière multiplication par $V$ est la moyenne pondérée annoncée : la sortie à la position $i$ est $\sum_j p_{ij}\, v_j$, où $p_{ij}$ est le poids d'attention (la ligne $i$ du softmax). On va chercher, dans toutes les valeurs, celles que la requête juge pertinentes.
+
+## Self-attention et têtes multiples
+
+Quand $Q$, $K$ et $V$ proviennent tous de la **même** séquence ($x_1, \dots, x_n$), on parle de **self-attention** : chaque token interroge ses voisins, lui-même compris. C'est ce mécanisme qui laisse « banque » aller récupérer l'information de « rivière », à n'importe quelle distance, en une seule étape.
+
+Une seule projection ne capture qu'un type de relation. On exécute donc $h$ attentions en parallèle, les **têtes**, chacune avec ses propres $W_Q, W_K, W_V$ dans un sous-espace de dimension $d_k = d_{\text{model}}/h$. On concatène les $h$ sorties, puis on les recombine par une projection $W_O$. Intuitivement, une tête peut suivre l'accord sujet–verbe, une autre les coréférences, une autre la position — mais ceci est une *interprétation a posteriori*, pas une garantie de conception.
+
+<IaAttentionHeatmap />
+
+La carte ci-dessus affiche la matrice des poids $p_{ij}$ : chaque ligne est la distribution d'attention d'un token sur les autres. C'est tentant d'y lire une « explication » du modèle — mais prudence.
+
+<Encart type="plusloin" titre="Ce que les têtes apprennent : largement une boîte noire">
+La **mécanique** de l'attention est limpide et entièrement démontrable. Ce qui l'est beaucoup moins, c'est *pourquoi* elle fonctionne si bien, et ce que chaque tête « apprend » réellement. Lire une carte d'attention comme l'explication d'une décision est **contesté** : des travaux (notamment *Attention is not Explanation*, Jain &amp; Wallace, 2019) montrent qu'on peut souvent fabriquer des cartes d'attention très différentes produisant la *même* sortie — le poids d'attention n'identifie donc pas de façon fiable l'information « responsable ». Le débat reste ouvert (une réplique, *Attention is not not Explanation*, Wiegreffe &amp; Pinter, 2019, nuance ces conclusions). <Badge niveau="boitenoire">L'interprétation des cartes d'attention, et l'efficacité même de l'attention, restent des questions ouvertes. À distinguer rigoureusement de la formule, elle, parfaitement définie.</Badge>
+</Encart>
+
+## Le prix à payer : un coût quadratique
+
+La matrice $S = QK^\top$ a $n \times n$ coefficients : chaque token regarde chaque token.
+
+<Resultat label="Complexité de l'attention">
+
+$$ \text{coût} = O(n^2 \, d). $$
+
+<Badge niveau="prouve" slot="badge">Fait calculatoire : $n^2$ produits scalaires de vecteurs de dimension $d$, plus $n^2$ pondérations. La dépendance quadratique en la longueur $n$ est inévitable dans cette formulation.</Badge>
+</Resultat>
+
+Ce $n^2$ est la rançon de la portée illimitée : doubler la longueur quadruple le calcul, ce qui plafonne en pratique la taille des contextes. En contrepartie, contrairement au RNN, **toutes** les positions se traitent simultanément — l'attention est entièrement parallélisable. C'est précisément ce qui a permis de l'entraîner à très grande échelle.
+
+Nous tenons donc le cœur du réacteur. Mais une couche d'attention seule ne fait pas un modèle : il faut l'emballer avec des connexions résiduelles, une normalisation, un réseau de neurones par position, et un moyen de réinjecter l'**ordre** des mots — que l'attention, telle quelle, ignore totalement. C'est l'objet du chapitre suivant : le bloc transformer.

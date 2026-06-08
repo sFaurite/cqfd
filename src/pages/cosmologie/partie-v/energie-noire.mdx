@@ -1,0 +1,109 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'énergie noire"
+chapter: energie-noire
+description: "L'accélération de l'expansion, les supernovæ Ia, et la constante cosmologique Λ."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import AcceleratingExpansion from '../../../components/interactive/AcceleratingExpansion.astro';
+
+## L'énergie noire
+
+Pendant tout le XXᵉ siècle, une seule question semblait gouverner l'avenir du cosmos : l'expansion va-t-elle l'emporter sur la gravité, ou la gravité va-t-elle finir par tout rappeler ? Dans les deux cas, on s'attendait à une chose : que l'expansion **ralentisse**. La matière attire la matière ; un univers qui grandit en se remplissant de gravité ne peut que freiner. Toute la cosmologie des années 1990 consistait à mesurer *à quelle vitesse* il freinait. La réponse, tombée en 1998, a fait l'effet d'une gifle : il ne freine pas. Il **accélère**.
+
+<Encart type="intuition" titre="L'image qui dérange">
+Lancez une pierre en l'air : elle monte, ralentit, retombe. C'est ce que la gravité fait à toute chose. Imaginez maintenant qu'à mi-hauteur, la pierre se mette à **monter de plus en plus vite**, comme propulsée par un moteur invisible. Vous chercheriez le moteur. L'énergie noire, c'est le nom qu'on donne à ce moteur — sans savoir ce qu'il est.
+</Encart>
+
+### Les chandelles standards qui clochaient
+
+Pour mesurer la décélération, il faut comparer la distance d'objets lointains à leur redshift. Or mesurer une distance cosmique est terriblement difficile — sauf si l'on dispose d'une **chandelle standard** : une source dont on connaît la luminosité intrinsèque, de sorte que sa luminosité *apparente* révèle directement sa distance (plus c'est faible, plus c'est loin).
+
+<Encart type="rappel" titre="Les supernovæ de type Ia">
+Une supernova de type Ia naît d'une **naine blanche** qui accrète de la matière jusqu'à frôler une masse critique universelle, la **masse de Chandrasekhar** ($\approx 1{,}4\,M_\odot$). À ce seuil, l'emballement thermonucléaire est toujours déclenché dans des conditions quasi identiques : toutes ces explosions libèrent donc à peu près la **même énergie**. Après une calibration fine sur la forme de leur courbe de lumière (largeur du pic, couleur — relation de Phillips), leur luminosité absolue est connue à mieux que 10 %. Visibles à des milliards d'années-lumière, ce sont les meilleures chandelles standards du cosmos.
+</Encart>
+
+Deux équipes rivales — le *Supernova Cosmology Project* (Perlmutter) et le *High-z Supernova Search Team* (Riess, Schmidt) — ont mesuré des dizaines de supernovæ Ia lointaines. Le verdict, identique des deux côtés : à redshift donné, ces supernovæ apparaissent **plus faibles**, donc **plus lointaines**, que ne le prédirait un univers en décélération. La lumière a parcouru plus de chemin que prévu : entre l'explosion et nous, l'expansion s'est **emballée**.
+
+<Badge niveau="observe">L'accélération de l'expansion est une mesure directe (supernovæ Ia, Riess–Perlmutter–Schmidt, 1998, Nobel 2011), confirmée depuis indépendamment par le fond diffus cosmologique (CMB) et les oscillations acoustiques des baryons (BAO).</Badge>
+
+<VideoManim src="acceleration-expansion" scene="AccelerationExpansion" titre="L'expansion accélère" legende="Les supernovæ lointaines révèlent une expansion qui accélère : l'énergie noire." />
+
+### Du fait à l'équation : le paramètre de décélération
+
+Traduisons « accélère » en mathématiques. On définit le **paramètre de décélération** $q_0$ par convention de signe historique (positif = freine), à partir du facteur d'échelle $a(t)$ aujourd'hui :
+
+$$ q_0 \equiv -\frac{\ddot a\, a}{\dot a^2}\bigg|_{0}. $$
+
+Un signe **négatif** de $q_0$ signifie $\ddot a > 0$ : l'expansion accélère. Reste à relier $q_0$ au contenu de l'univers.
+
+<Encart type="calcul" titre="q₀ en fonction des densités">
+
+**Étape 1 — Équation d'accélération.** La <Prereq href="/cosmologie/partie-ii/equations-friedmann">seconde équation de Friedmann</Prereq> relie $\ddot a$ à la densité et à la pression de chaque composante :
+
+$$ \frac{\ddot a}{a} = -\frac{4\pi G}{3}\left(\rho + \frac{3p}{c^2}\right). $$
+
+**Étape 2 — Une composante = une équation d'état.** Pour chaque fluide on pose $p = w\,\rho c^2$. La matière a $w=0$ (pression nulle) ; une énergie du vide a $w=-1$. La somme sur les composantes donne :
+
+$$ \frac{\ddot a}{a} = -\frac{4\pi G}{3}\sum_i \rho_i\,(1 + 3 w_i). $$
+
+**Étape 3 — On normalise par $H_0^2$.** Comme $\dot a^2/a^2 = H^2$, on a $-\ddot a\,a/\dot a^2 = -(\ddot a/a)/H^2$. Évalué aujourd'hui :
+
+$$ q_0 = \frac{4\pi G}{3 H_0^2}\sum_i \rho_i\,(1 + 3 w_i). $$
+
+**Étape 4 — On introduit les paramètres de densité.** La densité critique est $\rho_{\text{crit}} = 3 H_0^2 / (8\pi G)$, donc le préfacteur vaut $\dfrac{4\pi G}{3 H_0^2} = \dfrac{1}{2\,\rho_{\text{crit}}}$. Avec les <Prereq href="/cosmologie/partie-ii/parametres-densite">paramètres de densité</Prereq> $\Omega_i = \rho_i / \rho_{\text{crit}}$ :
+
+$$ q_0 = \frac{1}{2}\sum_i \Omega_i\,(1 + 3 w_i). $$
+
+**Étape 5 — Deux composantes seulement.** En ne gardant que la matière ($w=0$) et une constante cosmologique ($w=-1$, donc $1+3w=-2$) :
+
+$$ \boxed{\,q_0 = \frac{\Omega_m}{2} - \Omega_\Lambda\,}. $$
+
+</Encart>
+
+<Resultat label="Paramètre de décélération">
+
+$$ q_0 = \frac{\Omega_m}{2} - \Omega_\Lambda $$
+
+<Badge niveau="concordance" slot="badge">La formule est une conséquence directe des équations de Friedmann (admises). Avec les valeurs de concordance $\Omega_m \approx 0{,}31$ et $\Omega_\Lambda \approx 0{,}69$, on obtient $q_0 \approx -0{,}54 < 0$ : accélération.</Badge>
+</Resultat>
+
+Le message est limpide : pour que $q_0 < 0$, il faut $\Omega_\Lambda > \Omega_m/2$, c'est-à-dire une composante **dominante** dont l'effet gravitationnel est **répulsif**. La condition $1 + 3w < 0$, soit $w < -\tfrac13$, exige une **pression négative**. C'est la signature de l'énergie noire.
+
+### Manipulons l'accélération
+
+Variez le contenu de l'univers et observez la trajectoire de $a(t)$ basculer entre freinage et emballement : le seuil $\Omega_\Lambda = \Omega_m/2$ y est visible à l'œil nu.
+
+<AcceleratingExpansion />
+
+### Λ, l'énergie du vide — et son scandale
+
+L'hypothèse la plus économique est que cette composante est la **constante cosmologique** $\Lambda$ qu'Einstein avait introduite en 1917. Réinterprétée comme une **densité d'énergie du vide** uniforme et constante dans le temps, elle a précisément $w = -1$.
+
+<Tournant titre="Tournant : on nomme sans expliquer">
+Soyons honnêtes sur ce qui se passe ici. L'accélération est un *fait*. Mais en l'attribuant à une « énergie du vide » de densité constante avec $w=-1$, on **ajoute une hypothèse** que rien dans ce qui précède n'imposait : on choisit le modèle le plus simple compatible avec les données, sans déduire sa nature. On ne déduit plus, on **postule** — ancré dans l'expérience (l'accélération est mesurée), mais sans en connaître le mécanisme.
+</Tournant>
+
+<Hypotheses titre="Hypothèse ajoutée à ce stade (modèle ΛCDM)">
+1. L'énergie noire est une **constante cosmologique** $\Lambda$, interprétée comme une **énergie du vide** de densité constante dans le temps et l'espace, d'équation d'état $w = -1$ (donc $1 + 3w = -2$).
+2. Sa densité fixe le paramètre $\Omega_\Lambda \approx 0{,}69$, ajusté pour reproduire simultanément les supernovæ, le CMB et les BAO.
+
+Cette hypothèse n'est **pas déduite** de ce qui précède : c'est le postulat le plus simple compatible avec les données. Tout ce qui suit en dépend.
+</Hypotheses>
+
+<Badge niveau="concordance">Identifier l'énergie noire à $\Lambda$ (énergie du vide, $w=-1$, $\Omega_\Lambda \approx 0{,}69$) est l'interprétation du modèle de concordance ΛCDM : elle rend compte simultanément des supernovæ, du CMB et des BAO. C'est le modèle le mieux ajusté, pas une certitude sur la nature du phénomène.</Badge>
+
+Et c'est là qu'éclate le **problème de la constante cosmologique**. La théorie quantique des champs prédit, elle aussi, une énergie du vide : la somme des énergies de point zéro de tous les champs. Quand on l'estime naïvement jusqu'à l'échelle de Planck, on trouve une densité d'énergie du vide environ **$10^{120}$ fois plus grande** que celle observée. C'est, de loin, le pire désaccord quantitatif de toute la physique.
+
+<Badge niveau="speculatif">Le « désastre des 120 ordres de grandeur » n'a aucune solution établie. Pourquoi l'énergie du vide est-elle si petite — ou est-ce même la bonne explication ? Cela touche à la gravité quantique et reste hors de portée des données.</Badge>
+
+La nature profonde de l'énergie noire — vraie constante $\Lambda$, champ dynamique (« quintessence ») dont $w$ varierait, ou défaut de notre théorie de la gravité aux échelles cosmiques — reste ouverte. <Badge niveau="extrapole">Distinguer une vraie constante ($w=-1$ exact) d'une énergie noire dynamique est l'objectif des grands relevés en cours ; les mesures actuelles donnent $w = -1$ à quelques pour cent près, sans trancher.</Badge>
+
+Une chose est sûre : si $\Lambda$ domine et reste constante, son effet ne fera que croître à mesure que la matière se dilue. C'est ce qui scelle le <Prereq href="/cosmologie/partie-ii/destin-univers">destin de notre univers</Prereq> — une expansion qui s'éternise en s'accélérant, sujet du chapitre suivant.

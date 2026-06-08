@@ -1,0 +1,138 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les non-linéarités : pourquoi et lesquelles"
+chapter: non-linearites
+description: "Justifie la nécessité d'une activation non linéaire, puis compare les fonctions d'activation (sigmoïde, tanh, ReLU) selon leurs gradients. Explique le problème du gradient qui s'évanouit et pourquoi ReLU l'a en grande partie résolu en pratique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Empiler des couches ne suffit pas
+
+Au chapitre précédent, nous avons construit le <Prereq href="/ia/partie-iii/perceptron-multicouche">perceptron multicouche</Prereq> : on enchaîne des couches, chacune calculant $a^{\ell} = \text{activation}(W^{\ell} a^{\ell-1} + b^{\ell})$. L'espoir était que la profondeur apporte de la puissance. Mais il y a un piège que nous devons regarder en face avant d'aller plus loin : **si l'« activation » ne fait rien d'intéressant, empiler des couches ne sert strictement à rien.**
+
+L'intuition est limpide. Une couche sans activation est une fonction affine : elle prend $x$, le multiplie par une matrice, ajoute un vecteur. Composez deux fonctions affines : vous obtenez encore une fonction affine. Vingt couches affines empilées valent exactement une seule couche affine. La profondeur s'effondre. C'est cela que les non-linéarités viennent réparer.
+
+<Hypotheses titre="Ce qu'on pose en entrant">
+1. Une « couche affine » est l'application $x \mapsto Wx + b$ avec $W$ une matrice et $b$ un vecteur (la forme établie au chapitre précédent).
+2. Une activation est une fonction $a : \mathbb{R} \to \mathbb{R}$ appliquée composante par composante.
+3. On dispose des dérivées et de la règle de la chaîne pour raisonner sur les gradients (établis en partie II).
+</Hypotheses>
+
+## Pourquoi la non-linéarité est nécessaire (démontré)
+
+Prouvons rigoureusement l'effondrement. Soient deux couches affines $f_1(x) = W_1 x + b_1$ et $f_2(y) = W_2 y + b_2$. Composons-les.
+
+<Encart type="calcul" titre="La composition de deux applications affines est affine">
+On calcule $f_2 \circ f_1$ ligne à ligne.
+
+$$
+(f_2 \circ f_1)(x) = W_2\,(W_1 x + b_1) + b_2
+$$
+
+On développe par distributivité du produit matriciel :
+
+$$
+= (W_2 W_1)\,x + (W_2 b_1 + b_2)
+$$
+
+Posons $W' = W_2 W_1$ et $b' = W_2 b_1 + b_2$. Alors :
+
+$$
+(f_2 \circ f_1)(x) = W' x + b'
+$$
+
+C'est exactement la forme $x \mapsto W'x + b'$ : une **unique** couche affine. Par récurrence immédiate, toute pile de $n$ couches affines égale une seule couche affine.
+
+<Badge niveau="prouve" slot="badge">Composer des applications affines donne une application affine : démontré par calcul direct, valable pour tout $n$.</Badge>
+</Encart>
+
+Conséquence : sans fonction non-linéaire intercalée, un réseau profond a **exactement** le pouvoir d'expression d'une régression linéaire. Il ne pourra jamais séparer le XOR (vu au chapitre précédent), parce qu'une frontière affine reste un hyperplan.
+
+<Resultat label="Nécessité de la non-linéarité">
+
+$$
+a = \text{identité} \;\Longrightarrow\; \text{réseau profond} \equiv \text{modèle linéaire}
+$$
+
+<Badge niveau="prouve" slot="badge">La non-linéarité n'est pas une option esthétique : c'est la condition mathématique pour que la profondeur ait un sens.</Badge>
+</Resultat>
+
+## Trois candidates : sigmoïde, tanh, ReLU
+
+Il faut donc une fonction $a$ non affine. Trois reviennent sans cesse. Comparons-les sur trois critères : leur forme, leur dérivée, et leurs **zones de saturation** (régions où la dérivée s'écrase vers $0$).
+
+La **sigmoïde** $\sigma(z) = \dfrac{1}{1+e^{-z}}$ — déjà rencontrée en <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq> — écrase $\mathbb{R}$ dans $]0,1[$. Sa dérivée, calculable directement, est $\sigma'(z) = \sigma(z)\,(1-\sigma(z))$. Elle est **maximale en $z=0$**, où elle vaut $\tfrac14$, et tend vers $0$ aux deux extrémités : la sigmoïde sature des deux côtés.
+
+La **tanh** $\tanh(z) = \dfrac{e^z - e^{-z}}{e^z + e^{-z}}$ écrase dans $]-1,1[$, est centrée en $0$ (un avantage pratique), et a pour dérivée $\tanh'(z) = 1 - \tanh^2(z)$, **maximale en $z=0$ où elle vaut $1$**. C'est mieux que la sigmoïde, mais tanh sature elle aussi aux deux bords : loin de $0$, sa dérivée tend vers $0$.
+
+La **ReLU** (*Rectified Linear Unit*) $\text{ReLU}(z) = \max(0, z)$ est radicalement plus simple. Sa dérivée vaut $0$ pour $z &lt; 0$ et $1$ pour $z > 0$ (elle n'est pas dérivable en $0$, on y fixe une valeur par convention). Pas de saturation côté positif : la pente y reste exactement $1$, quelle que soit l'amplitude de $z$.
+
+<Encart type="calcul" titre="La dérivée de la sigmoïde plafonne à 1/4">
+On dérive $\sigma(z) = (1+e^{-z})^{-1}$ par la règle de la chaîne :
+
+$$
+\sigma'(z) = -(1+e^{-z})^{-2}\cdot(-e^{-z}) = \frac{e^{-z}}{(1+e^{-z})^2}
+$$
+
+En factorisant, on reconnaît $\sigma$ et $1-\sigma$ :
+
+$$
+\sigma'(z) = \frac{1}{1+e^{-z}}\cdot\frac{e^{-z}}{1+e^{-z}} = \sigma(z)\,\bigl(1-\sigma(z)\bigr)
+$$
+
+La fonction $u \mapsto u(1-u)$ sur $]0,1[$ est maximale en $u=\tfrac12$, où elle vaut $\tfrac14$. Donc $\sigma'(z) \le \tfrac14$ **partout**.
+
+<Badge niveau="prouve" slot="badge">$\sigma'(z) = \sigma(z)(1-\sigma(z)) \le \tfrac14$ : majoration exacte, démontrée.</Badge>
+</Encart>
+
+## Le gradient évanescent (robuste)
+
+Voici pourquoi ce plafond de $\tfrac14$ est dramatique. La <Prereq href="/ia/partie-ii/retropropagation">rétropropagation</Prereq> calcule le gradient d'une couche profonde en **multipliant** les dérivées des activations traversées (règle de la chaîne le long du graphe). Pour un réseau à activations sigmoïdes, le gradient remontant jusqu'aux premières couches **contient en facteur** un produit de la forme :
+
+$$
+\prod_{\ell=1}^{L} \sigma'(z^{\ell}) \quad\text{avec chaque}\quad \sigma'(z^{\ell}) \le \tfrac14
+$$
+
+(le gradient complet fait aussi intervenir les matrices de poids ; nous isolons ici la contribution des dérivées d'activation, celle que la sigmoïde plafonne.)
+
+<Encart type="calcul" titre="Le produit des dérivées d'activation s'effondre exponentiellement">
+Majorons ce produit en bornant chaque facteur par son maximum $\tfrac14$ :
+
+$$
+\left|\prod_{\ell=1}^{L} \sigma'(z^{\ell})\right| \le \left(\tfrac14\right)^{L}
+$$
+
+Pour $L = 10$ couches : $\left(\tfrac14\right)^{10} \approx 9{,}5\times 10^{-7}$. Pour $L = 20$ : environ $9\times 10^{-13}$.
+
+Cette part du gradient reçue par les premières couches est donc écrasée d'un facteur **un million** dès dix couches. Si les poids ne compensent pas, les couches profondes ne reçoivent quasiment plus de signal : elles cessent d'apprendre.
+
+<Badge niveau="prouve" slot="badge">La majoration $\prod \sigma' \le (1/4)^L$ est exacte. Que ce produit de facteurs $\le 1/4$ s'écrase est arithmétique.</Badge>
+</Encart>
+
+Que ce mécanisme **bloque réellement** l'entraînement des réseaux profonds à sigmoïde est un constat massivement reproductible — c'est ce qu'on appelle le **gradient évanescent**. La majoration des dérivées d'activation est démontrée ; mais que l'apprentissage s'arrête vraiment dépend aussi des poids, des données et de l'initialisation, d'où un statut empirique solide plutôt qu'un théorème.
+
+<Badge niveau="robuste">Le gradient évanescent bloque l'apprentissage des réseaux profonds saturants : régularité expérimentale très reproductible, avec un cœur de calcul démontrable.</Badge>
+
+## Pourquoi ReLU aide — et ses limites (recette)
+
+La ReLU casse ce produit. Sa dérivée vaut **exactement $1$** sur tout le demi-axe positif : tant qu'un neurone est « actif » ($z>0$), il transmet sa part du gradient sans l'atténuer. Un produit de $1$ reste $1$ — ce facteur ne s'évanouit plus. C'est l'argument décisif en sa faveur.
+
+Mais soyons honnêtes : **rien ne prouve que ReLU soit optimale.** Aucun théorème ne dit qu'elle est le « meilleur » choix d'activation ; elle s'est imposée parce qu'elle marche mieux en pratique et qu'elle est triviale à calculer. Et elle a son revers : sa dérivée est $0$ côté négatif, donc un neurone dont l'entrée reste toujours négative reçoit un gradient nul et **ne se réveille jamais** — le *dying ReLU*. C'est le miroir exact de son avantage.
+
+<Badge niveau="recette">Choisir ReLU plutôt que sigmoïde est une recette d'ingénierie : « ça marche mieux en pratique », pas un théorème d'optimalité. Et ReLU a son défaut, le dying ReLU.</Badge>
+
+<Encart type="plusloin" titre="Leaky ReLU, GELU, et le brouillard">
+On a proposé des variantes : la **Leaky ReLU** met une petite pente $\alpha \approx 0{,}01$ côté négatif au lieu de $0$, pour éviter les neurones morts. La **GELU** $z\,\Phi(z)$ (où $\Phi$ est la fonction de répartition de la loi normale centrée réduite) est une version « lisse » de ReLU, devenue standard dans les transformers.
+
+Pourquoi GELU surpasse souvent ReLU dans ces modèles ? On a des récits plausibles (régularisation implicite, lissage du paysage d'optimisation), mais **aucune explication théorique tranchée**. C'est typiquement le genre de réglage qui marche sans qu'on sache vraiment pourquoi.
+
+<Badge niveau="boitenoire" slot="badge">La supériorité empirique de GELU dans les transformers reste mal expliquée théoriquement.</Badge>
+</Encart>
+
+Nous savons maintenant *pourquoi* il faut une non-linéarité et *comment* la choisir pour préserver les gradients. Reste la question vertigineuse : avec des couches non-linéaires, **que peut-on approximer au juste ?** C'est l'objet du théorème d'approximation universelle.

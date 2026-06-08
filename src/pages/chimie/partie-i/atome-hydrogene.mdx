@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'atome d'hydrogène : niveaux et orbitales"
+chapter: atome-hydrogene
+description: "Résolution qualitative de l'atome d'hydrogène : niveaux d'énergie en 1/n², nombres quantiques n, l, m, et forme des orbitales s, p, d."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieOrbitalViewer from '../../../components/interactive/ChimieOrbitalViewer.astro';
+import ChimieSpectreRaies from '../../../components/interactive/ChimieSpectreRaies.astro';
+
+## L'atome d'hydrogène : niveaux et orbitales
+
+Nous avons posé, au chapitre précédent, que la matière est quantique. C'était un socle d'hypothèses — élégant, mais abstrait. Il est temps de le mettre à l'épreuve sur l'objet le plus simple que la nature nous offre : **un proton, un électron, et le vide entre eux**. L'atome d'hydrogène. Sa beauté, c'est qu'on peut le résoudre *exactement* — un luxe rarissime en physique. Et la récompense est immense : en confinant l'électron, on va voir l'énergie se **quantifier** toute seule, et on va voir naître les **orbitales**, ces nuages de probabilité qui sont les vrais personnages de toute la chimie à venir.
+
+<Prereq href="/chimie/partie-i/postulats-quantiques">On réutilise tout le socle quantique : l'électron est décrit par une fonction d'onde $\psi$, $|\psi|^2$ est une densité de probabilité, et un système lié a une énergie quantifiée.</Prereq>
+
+<Hypotheses titre="Hypothèses de départ">
+1. **Le potentiel coulombien.** Le proton (charge $+e$) attire l'électron (charge $-e$). L'énergie potentielle ne dépend que de la distance $r$ : $V(r) = -\dfrac{e^2}{4\pi\varepsilon_0\, r}$. C'est un fait électrostatique mesuré, hérité de la physique classique.
+2. **L'électron est lié.** On s'intéresse aux états où l'électron reste accroché au proton (énergie négative, électron confiné). Le socle quantique impose alors que l'énergie ne peut prendre que des valeurs **discrètes**.
+3. **Le proton est fixe.** Le noyau étant près de 1 800 fois plus lourd que l'électron, on le suppose immobile. Cette approximation rend le problème *exactement* soluble ; elle n'introduit qu'un écart infime sur la valeur de l'énergie.
+</Hypotheses>
+
+### L'intuition : confiner, c'est quantifier
+
+<Encart type="intuition" titre="Pourquoi le confinement crée des niveaux">
+Imaginez une corde de guitare tendue entre deux points fixes. Elle ne peut pas vibrer n'importe comment : seules certaines notes — le fondamental, ses harmoniques — « rentrent » proprement entre les deux extrémités. Une demi-onde, une onde entière, une et demie… mais jamais 1,37. Les autres s'annulent par interférence.
+
+L'électron, en tant qu'**onde** (postulat de dualité), c'est exactement pareil. Coincé dans le « puits » d'attraction du proton, seules certaines ondes stationnaires tiennent. Chaque onde permise correspond à une énergie permise. Le discret ne vient pas d'une règle ajoutée à la main : il **émerge** du fait qu'on enferme une onde dans une boîte. C'est tout le secret de la quantification.
+</Encart>
+
+### Les niveaux d'énergie
+
+Résoudre proprement, c'est trouver les fonctions d'onde $\psi$ qui « tiennent » dans le potentiel coulombien — l'équation qui les régit est l'équation de Schrödinger. Le calcul complet est long ; voici l'idée et le résultat, puis nous le détaillerons.
+
+<Encart type="plusloin" titre="D'où sort le 1/n² (esquisse)">
+On cherche les $\psi(r,\theta,\varphi)$ d'énergie $E$ fixée, solutions stationnaires dans le potentiel $V(r)$. Comme $V$ ne dépend que de $r$, on **sépare les variables** : $\psi = R(r)\,Y(\theta,\varphi)$. La partie angulaire $Y$ impose deux entiers ($l$, $m$) ; la partie radiale $R$, pour rester normalisable (l'électron est *quelque part*, donc $\int|\psi|^2 = 1$ doit converger), n'a de solution que si l'énergie prend des valeurs discrètes indexées par un entier $n$. La structure en $1/n^2$ tombe de la compétition entre attraction coulombienne en $1/r$ et énergie cinétique : c'est le même $1/n^2$ que Bohr avait deviné, mais ici **déduit** sans postuler aucune orbite — l'électron n'est plus une bille sur un rail, c'est une onde stationnaire.
+</Encart>
+
+Le résultat est d'une simplicité stupéfiante :
+
+<Resultat label="Niveaux d'énergie de l'hydrogène">
+$$ E_n = -\frac{13{,}6\ \text{eV}}{n^2}, \qquad n = 1, 2, 3, \dots $$
+<Badge niveau="quantique" slot="badge">La structure en $-1/n^2$ découle de la résolution quantique exacte de l'atome à un électron.</Badge>
+</Resultat>
+
+Deux choses méritent qu'on les sépare soigneusement, car elles n'ont pas le même statut épistémique :
+
+- La **forme** $E_n \propto -1/n^2$ est une **conséquence quantique** pour l'atome à un électron. <Badge niveau="quantique">Imposée par la résolution exacte de l'équation de Schrödinger dans le potentiel coulombien.</Badge>
+- La **valeur** numérique $13{,}6$ eV (l'énergie d'ionisation depuis $n=1$) est un **fait mesuré**, reproductible au laboratoire. <Badge niveau="experimental">Énergie d'ionisation de l'hydrogène, mesurée et tabulée avec une grande précision.</Badge>
+
+<Encart type="calcul" titre="Reconstituer la valeur 13,6 eV">
+
+La constante qui rassemble tout est appelée énergie de Rydberg, $E_R$ :
+
+$$ E_R = \frac{m_e\, e^4}{8\,\varepsilon_0^2\, h^2}. $$
+
+On y reconnaît des constantes **fondamentales** (valeurs mesurées) : masse de l'électron $m_e = 9{,}109 \times 10^{-31}$ kg ; charge élémentaire $e = 1{,}602 \times 10^{-19}$ C ; permittivité du vide $\varepsilon_0 = 8{,}854 \times 10^{-12}$ F/m ; constante de Planck $h = 6{,}626 \times 10^{-34}$ J·s.
+
+**Numériquement :**
+
+$$ E_R = \frac{(9{,}109\times 10^{-31})\,(1{,}602\times 10^{-19})^4}{8\,(8{,}854\times 10^{-12})^2\,(6{,}626\times 10^{-34})^2} \approx 2{,}18 \times 10^{-18}\ \text{J}. $$
+
+**Conversion en eV** (en divisant par $e$) :
+
+$$ E_R \approx \frac{2{,}18\times 10^{-18}}{1{,}602\times 10^{-19}}\ \text{eV} \approx 13{,}6\ \text{eV}. $$
+
+Le pont entre la théorie et le chiffre du laboratoire est ainsi bouclé.
+</Encart>
+
+### Les orbitales : des nuages, pas des orbites
+
+À chaque état permis correspond une fonction d'onde, caractérisée par **trois nombres quantiques** entiers qui sortent naturellement de la résolution :
+
+- $n$ (principal, $n \geq 1$) : fixe l'énergie et la « taille » de l'orbitale.
+- $l$ (azimutal, $0 \leq l \leq n-1$) : fixe la **forme** — on note $s$ ($l=0$), $p$ ($l=1$), $d$ ($l=2$)…
+- $m$ (magnétique, $-l \leq m \leq l$) : fixe l'**orientation** dans l'espace.
+
+<Badge niveau="quantique">Les contraintes $0 \leq l \leq n-1$ et $-l \leq m \leq l$ découlent des conditions de normalisation (partie radiale) et de mono-valuation de $\psi$ (partie angulaire).</Badge>
+
+Insistons sur un point que tout le reste du cours respectera : **une orbitale n'est pas une trajectoire.** L'électron ne décrit aucune orbite. La grandeur physique, c'est $|\psi(x,y,z)|^2$, la **densité de probabilité** de *trouver* l'électron là si on le mesure (postulat du chapitre précédent). On dessine une orbitale comme le nuage qui contient, disons, 90 % de cette probabilité. Parler d'« orbite » serait revenir au modèle de Bohr, faux dans son image même.
+
+<Badge niveau="quantique">Une orbitale est $|\psi|^2$, une distribution de probabilité ; la notion de trajectoire n'a pas de sens en mécanique quantique.</Badge>
+
+Manipulez ces nuages pour le sentir — changez $n$, $l$, $m$ et voyez la forme évoluer :
+
+<ChimieOrbitalViewer />
+
+### Le spectre de raies : la preuve par l'expérience
+
+Voici le moment de vérité. Si les énergies sont *vraiment* quantifiées, alors un électron qui saute d'un niveau $n_i$ vers un niveau $n_f$ plus bas doit libérer **exactement** la différence d'énergie sous forme d'un photon, dont la fréquence est fixée par la relation de Planck $\Delta E = h\nu$ :
+
+$$ h\nu = E_{n_i} - E_{n_f} = 13{,}6\ \text{eV}\left(\frac{1}{n_f^2} - \frac{1}{n_i^2}\right). $$
+
+La prédiction est radicale : comme seules certaines énergies existent, la lumière émise ne peut prendre que certaines fréquences **précises**. On ne devrait pas voir un arc-en-ciel continu, mais des **raies** fines et isolées. C'est exactement ce qu'on observe : les transitions vers $n_f=1$ forment la série de **Lyman** (ultraviolet), celles vers $n_f=2$ la série de **Balmer** (visible — les fameuses raies rouge et bleue de l'hydrogène).
+
+<Badge niveau="experimental">Le spectre de raies de l'hydrogène est mesuré depuis le XIXᵉ siècle et concorde au chiffre près avec la formule.</Badge>
+
+Explorez les séries et lisez directement les transitions :
+
+<ChimieSpectreRaies />
+
+Que les positions mesurées de ces raies tombent *pile* sur les écarts $E_{n_i}-E_{n_f}$ prédits, c'est la confirmation éclatante que la quantification posée en hypothèse n'est pas une commodité mathématique : c'est ainsi que la nature fonctionne. Historiquement, c'est même l'ordre inverse qui s'est imposé — les raies ont été *mesurées d'abord*, et c'est leur régularité énigmatique qui a forcé la quantification.
+
+### Une mise en garde indispensable
+
+Tout cela est **exact** parce qu'il n'y a qu'**un seul** électron : aucune répulsion électron-électron à gérer. Dès l'hélium (deux électrons), le problème devient **insoluble analytiquement**. Toute la chimie des autres atomes reposera donc sur des modèles *approchés* bâtis sur les orbitales de l'hydrogène. <Badge niveau="empirique">Le passage aux atomes polyélectroniques s'appuie sur des approximations (écrantage), pas sur une solution exacte.</Badge>
+
+C'est précisément cette répulsion entre électrons que nous allons apprendre à modéliser au chapitre suivant, en construisant la configuration électronique de *n'importe quel* atome.

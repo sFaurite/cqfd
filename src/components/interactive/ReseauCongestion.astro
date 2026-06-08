@@ -1,0 +1,54 @@
+---
+/**
+ * ReseauCongestion — évolution de la fenêtre de congestion cwnd (AIMD).
+ * Le canvas trace cwnd (en segments / MSS) au fil des RTT : slow start (croissance
+ * exponentielle, doublement par RTT jusqu'au seuil ssthresh), puis congestion
+ * avoidance (croissance linéaire, +1 par RTT). Un bouton « injecter une perte »
+ * applique la chute multiplicative (ssthresh ← cwnd/2, cwnd ← ssthresh) et
+ * illustre l'« additive increase / multiplicative decrease » qui régule le débit.
+ * Animation respectueuse de prefersReducedMotion (état figé + lecture/pause).
+ */
+---
+
+<div class="iw" data-iw="reseau-congestion">
+  <div class="iw__head"><span class="tag">Interactif</span> Contrôle de congestion TCP : slow start, AIMD et pertes</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>Faire avancer le temps</label>
+      <span class="iw__btns">
+        <button type="button" class="iw__btn" data-play>▶ lecture</button>
+        <button type="button" class="iw__btn" data-step>+1 RTT</button>
+        <button type="button" class="iw__btn" data-reset>↺ reset</button>
+      </span>
+    </div>
+    <div class="iw__row">
+      <label>Événement réseau</label>
+      <span class="iw__btns">
+        <button type="button" class="iw__btn" data-loss>⚠ injecter une perte</button>
+      </span>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">RTT n°</span> <b data-out-rtt></b></span>
+    <span class="iw__chip"><span class="k">cwnd</span> <b data-out-cwnd></b></span>
+    <span class="iw__chip"><span class="k">ssthresh</span> <b data-out-ssthresh></b></span>
+    <span class="iw__chip"><span class="k">phase</span> <b data-out-phase></b></span>
+  </div>
+  <p class="iw__note">
+    L'émetteur ne connaît pas la capacité du réseau : il la <em>devine</em> en faisant varier sa
+    fenêtre de congestion cwnd (le nombre de segments en vol). En
+    <span style="color:var(--c-blue)">slow start</span>, cwnd <strong>double</strong> à chaque
+    RTT — une sonde exponentielle — jusqu'au seuil ssthresh. Ensuite, en
+    <span style="color:var(--c-green)">congestion avoidance</span>, elle ne croît que de +1 par
+    RTT (<em>additive increase</em>) : on s'approche prudemment de la limite. Une
+    <span style="color:var(--c-red)">perte</span> est interprétée comme un signe de congestion :
+    ssthresh tombe à cwnd/2 et cwnd est divisée (<em>multiplicative decrease</em>) — c'est l'AIMD.
+    Ce va-et-vient en dents de scie n'est pas une loi physique mais une <strong>heuristique</strong>
+    auto-régulée : sans chef d'orchestre, des millions de flux se partagent ainsi la bande passante.
+  </p>
+</div>
+
+<script>
+  import './ReseauCongestion.client.ts';
+</script>

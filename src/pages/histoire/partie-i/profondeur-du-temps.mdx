@@ -1,0 +1,84 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La profondeur du temps et comment on le mesure"
+chapter: profondeur-du-temps
+description: "Établit le cadre temporel et chronométrique de toute la préhistoire : profondeur du temps humain, et les méthodes physiques (stratigraphie, C-14, potassium-argon, dendrochronologie) qui permettent de dater sans aucun texte."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import HistoireDatationCarbone14 from '../../../components/interactive/HistoireDatationCarbone14.astro';
+import HistoireFriseChrono from '../../../components/interactive/HistoireFriseChrono.astro';
+
+## Entrer dans le temps, sans un seul texte pour nous guider
+
+Tout ce que ce cours racontera dans sa première moitié s'est déroulé **avant l'écriture**. Pas de chronique, pas de date gravée, pas de témoin : rien que des os, des pierres taillées, des cendres, des couches de sédiment. Comment, alors, oser dire qu'un crâne a « deux millions d'années » plutôt que dix mille ? La réponse de ce chapitre est précise : on ne le devine pas, on le **mesure**, par des méthodes physiques indépendantes les unes des autres. Mais avant de mesurer, il faut sentir l'abîme dans lequel on plonge.
+
+<Tournant titre="Tournant : entrer dans le temps sans textes">
+Jusqu'à l'invention de l'écriture (vers 3300 av. J.-C. en Mésopotamie, que nous établirons plus loin), **aucune source écrite n'existe**. Or l'histoire humaine, elle, s'étend sur des **millions d'années**. Tout le récit qui précède l'écriture repose donc sur une révolution méthodologique : remplacer le témoignage par la **mesure physique du temps**. C'est un changement de nature des sources aussi radical que celui que nous retrouverons, en sens inverse, au chapitre sur l'invention de l'écriture. Ici, nos « documents » sont des atomes et des couches de terrain. Apprenons à les lire.
+</Tournant>
+
+<Hypotheses titre="Sources & cadre">
+Ce chapitre **importe** deux acquis extérieurs au cours, qu'il ne démontre pas :
+
+1. **La loi de décroissance radioactive.** Un noyau instable a, à chaque instant, la même probabilité de se désintégrer, quelles que soient sa température, sa pression ou ses liaisons chimiques. Il en résulte une **décroissance exponentielle**, caractérisée par une **demi-période** (ou demi-vie) propre à chaque isotope, mesurée en laboratoire. Ce résultat appartient à la **physique nucléaire** : nous l'admettons tel quel, sans le démontrer ni en écrire l'équation, car sa justification est extérieure à l'histoire.
+2. **Le principe de superposition stratigraphique.** Dans un dépôt non remanié, une couche est **plus ancienne que celle qui la recouvre** : le profond est le vieux. Ce principe relève de la **géologie**.
+
+Ces fondations ne sont pas justifiées ici : elles sont **importées comme acquis attestés**, et tout le reste se construit dessus. Pour la distinction source primaire / niveaux d'attestation, voir <Prereq href="/histoire/methodologie">Méthodologie : sources, traces et niveaux d'attestation</Prereq>.
+</Hypotheses>
+
+### La disproportion : un long, très long couloir
+
+Faisons d'abord parler l'échelle elle-même. Le genre *Homo* apparaît il y a environ **2,5 millions d'années** ; *Homo sapiens*, vers **300 000 ans** ; l'écriture, il y a **environ 5 300 ans**. Mettez le tout sur une journée de 24 heures qui commencerait à l'apparition du genre *Homo* : l'écriture n'apparaît que dans les **trois dernières minutes**. Toute l'« histoire » au sens strict — celle des textes — tient dans ce court instant final.
+
+<HistoireFriseChrono />
+
+<Encart type="intuition" titre="Le rouleau de papier">
+Déroulez un rouleau de papier toilette : 500 feuilles, une par siècle. Les toutes premières feuilles couvrent l'époque moderne — vers la feuille 5, on est déjà en 1500 (Renaissance, imprimerie). Rome républicaine ? Vers la feuille 25. Les premières cités de Sumer ? Vers la feuille 53. Mais *Homo sapiens* ? Il faudrait **3 000 feuilles** — six rouleaux entiers. Et le genre *Homo* ? **Vingt-cinq mille feuilles**. L'écriture n'est qu'un liseré au tout début du premier rouleau. <Badge niveau="atteste">Ces ordres de grandeur reposent sur des datations convergentes établies plus bas dans ce chapitre.</Badge>
+</Encart>
+
+### Mesurer relativement, puis absolument
+
+Deux questions distinctes se posent. La première : **dans quel ORDRE** les choses se sont-elles produites ? La stratigraphie y répond sans aucun chiffre : si un outil gît sous un foyer, l'outil est plus ancien. C'est la **datation relative**. La seconde : **quel ÂGE chiffré** ? Là, il faut une horloge interne à la matière. C'est la **datation absolue**.
+
+<Resultat label="Datation relative">Dans un dépôt intact, l'ordre des couches donne l'ordre du temps : profond = ancien. <Badge slot="badge" niveau="atteste">Principe de superposition, importé de la géologie ; vérifié sur d'innombrables sites stratifiés.</Badge></Resultat>
+
+Une mise en garde s'impose tout de suite, car elle est source d'erreurs célèbres : on date **la couche**, pas directement l'objet. Un fossile peut être plus ancien que la couche s'il a été remanié, ou un foyer postérieur s'il a été creusé depuis le dessus. **Ne jamais confondre l'âge d'un objet et l'âge de son contexte** sans vérifier que le dépôt est intact. <Badge niveau="probable">Règle de prudence systématique en archéologie ; l'écrasante majorité des dates fiables exigent un contexte stratigraphique contrôlé.</Badge>
+
+### L'horloge du carbone 14
+
+Voici l'horloge la plus célèbre pour les temps récents. Son mécanisme tient en quatre temps.
+
+**Un.** Le rayonnement cosmique frappe l'azote de la haute atmosphère et fabrique en continu un isotope radioactif du carbone, le **carbone 14**, en proportion à peu près constante par rapport au carbone ordinaire (carbone 12).
+
+**Deux.** Ce carbone 14 se mêle au gaz carbonique, que les plantes absorbent par photosynthèse, et que les animaux ingèrent en mangeant les plantes. **Tant qu'un être vit, il échange avec l'atmosphère** : son rapport carbone 14 / carbone 12 reste celui de l'air.
+
+**Trois.** À la mort, l'échange cesse. Plus aucun carbone 14 n'entre. Le stock présent au moment de la mort se met alors à **décroître**, chaque noyau se désintégrant en azote selon la loi exponentielle importée plus haut.
+
+**Quatre.** On mesure aujourd'hui le rapport carbone 14 restant. Plus il est faible, plus la mort est ancienne. La **demi-vie du carbone 14 vaut environ 5 730 ans** : tous les 5 730 ans, il reste la moitié du stock. L'horloge interne suit ce rythme.
+
+<HistoireDatationCarbone14 />
+
+<Encart type="calcul" titre="Critique des sources : ce que mesure vraiment le carbone 14">
+Manipulez l'outil ci-dessus : à une demi-vie (≈ 5 730 ans), il reste 50 % ; à deux, 25 % ; à trois, 12,5 %. La décroissance est **exponentielle**, jamais nulle mais vite minuscule. D'où la **limite pratique d'environ 50 000 ans** : 50 000 ans représentent à peu près huit à neuf demi-vies, et au-delà il reste si peu de carbone 14 (moins de 0,4 %) que le bruit de mesure et la moindre contamination par du carbone moderne ruinent le résultat. **Le carbone 14 ne dit donc rien du Paléolithique ancien** : il ne couvre que la fin de l'histoire humaine.
+
+Deuxième subtilité, souvent passée sous silence : la production atmosphérique de carbone 14 **n'a pas été parfaitement constante** au fil des millénaires. Une date « brute » est donc biaisée. On la **CALIBRE** au moyen de courbes de référence (les courbes **IntCal**, révisées régulièrement), dont la partie la plus récente est construite grâce à la **dendrochronologie** — le comptage et la datation des cernes d'arbres, un par an, sur des séquences continues de plus de douze mille ans. Une date publiée « cal. av. J.-C. » est une date corrigée. <Badge niveau="atteste">La nécessité de calibrer est établie par recoupement systématique avec des cernes datés un à un.</Badge>
+</Encart>
+
+<Resultat label="Datation au carbone 14">Pour de la matière organique de moins de ~50 000 ans, le rapport carbone 14 résiduel donne l'âge, après calibration. <Badge slot="badge" niveau="atteste">Méthode validée par des milliers de recoupements avec dendrochronologie, archives historiques et autres horloges.</Badge></Resultat>
+
+### Les autres horloges, et leur convergence
+
+Pour les temps **très anciens**, hors de portée du carbone 14, on emploie le **potassium-argon** (et sa variante argon-argon) : un isotope du potassium se transforme en argon avec une demi-vie d'environ **1,25 milliard d'années**. On l'applique aux roches volcaniques qui encadrent un fossile : une cendre sous le crâne et une coulée au-dessus enserrent son âge. <Badge niveau="atteste">Méthode reine pour les hominines africains de plusieurs millions d'années, calée sur des éruptions datées.</Badge> La **thermoluminescence** date, elle, la dernière chauffe d'un silex ou d'une poterie ; d'autres méthodes (uranium-thorium, résonance de spin électronique) complètent la palette.
+
+L'argument décisif n'est pas une méthode prise isolément, mais leur **convergence**. Quand le carbone 14, la stratigraphie, le potassium-argon et les cernes d'arbres — physiquement indépendants, sensibles à des phénomènes sans rapport — **donnent le même âge**, l'accord ne peut être un hasard. C'est cette concordance qui transforme une mesure en fait historique.
+
+<Encart type="plusloin" titre="Quand les dates restent débattues">
+La convergence n'est pas toujours au rendez-vous. Le **peuplement précoce des Amériques** en est l'exemple vif. Les empreintes humaines de **White Sands** (Nouveau-Mexique), datées de 21 000 à 23 000 ans, repousseraient l'arrivée bien avant le modèle classique : leur fiabilité — matériau daté, risque de contamination, contexte — fait l'objet de **discussions ouvertes**, des recoupements (luminescence, grains de pollen) appuyant les dates initiales sans clore le débat. Le célèbre site de **Monte Verde** (Chili), longtemps tenu pour la première occupation pré-Clovis solidement établie (vers 14 500 ans), est lui-même **re-contesté** : des travaux récents soupçonnent du bois ancien remanié d'avoir gonflé les âges. <Badge niveau="debattu">Aucun consensus tranché : les dates extrêmes du peuplement des Amériques sont contestées entre spécialistes, faute de convergence complète. Que des bornes aussi étudiées restent disputées illustre l'exigence même de la méthode.</Badge>
+</Encart>
+
+Nous tenons désormais l'outil fondamental de toute la Partie I : un temps **mesurable**, profond de millions d'années, lu dans la matière par des horloges physiques indépendantes et calibrées. Reste à le peupler. La prochaine étape nous emmène en Afrique, là où apparaissent les premiers représentants de notre lignée — et où la question n'est plus « quand », mais « qui ».

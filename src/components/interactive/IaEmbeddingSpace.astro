@@ -1,0 +1,53 @@
+---
+/**
+ * IaEmbeddingSpace — projection 2D d'un petit ensemble de plongements de mots,
+ * avec mise en évidence des proximités sémantiques et d'une analogie
+ * vectorielle (roi − homme + femme) tracée comme un parallélogramme. Affiche
+ * honnêtement où l'analogie échoue. Chapitre : plongements.
+ */
+---
+
+<div class="iw" data-iw="ia-embed">
+  <div class="iw__head"><span class="tag">Interactif</span> Plongements de mots et analogie vectorielle</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>analogie</label>
+      <div class="iw__btns" role="group" aria-label="Analogie">
+        <button type="button" class="iw__btn active" data-ana="roi">roi − homme + femme</button>
+        <button type="button" class="iw__btn" data-ana="paris">paris − france + italie</button>
+        <button type="button" class="iw__btn" data-ana="rate">marche → marchait (ratée)</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>affichage</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn active" data-show-vec>parallélogramme</button>
+        <button type="button" class="iw__btn active" data-show-near>voisins</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">cible attendue</span> <b data-out-target>—</b></span>
+    <span class="iw__chip"><span class="k">mot le plus proche du résultat</span> <b data-out-found>—</b></span>
+    <span class="iw__chip"><span class="k">cosinus</span> <b data-out-cos>—</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque mot est un point ; les mots de sens proche se regroupent. La structure remarquable est que
+    certaines <b>directions</b> codent une relation : aller de « homme » à « femme » revient à un même
+    déplacement que de « roi » à « reine ». L'analogie <b>roi − homme + femme</b> place donc un point
+    près de « reine » — le parallélogramme le montre. Mais attention : ces régularités sont
+    <b>approximatives et choisies</b>. Le troisième exemple échoue : le mot le plus proche n'est pas
+    celui attendu. Les plongements encodent des corrélations, pas une logique.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-embed'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaEmbeddingSpace.client.ts';
+</script>

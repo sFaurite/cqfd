@@ -1,0 +1,83 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Signal, frequences et bande passante"
+chapter: signal-bande-passante
+description: "Introduit l'analyse de Fourier au niveau requis : un signal vu comme spectre de frequences, et la bande passante d'un canal comme la plage de frequences qu'il transmet sans trop d'attenuation."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ReseauSpectre from '../../../components/interactive/ReseauSpectre.astro';
+
+## Signal, fréquences et bande passante
+
+Au chapitre précédent, nous avons appris à <Prereq href="/reseaux/partie-i/bit-information">mesurer l'information en bits</Prereq>. Reste une question brutale : combien de bits par seconde peut-on faire passer dans un câble, une fibre, ou l'air ? Avant de répondre, il faut comprendre ce qu'est *physiquement* un signal. Et là, une idée magnifique due à Joseph Fourier va tout éclairer : **n'importe quel signal, aussi tordu soit-il, est une somme de sinusoïdes pures.** Cette idée est la clé qui relie le monde des fils au monde des fréquences.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine que tu veux dessiner un signal carré — un créneau qui saute de 0 à 1 et revient. Tu n'as à ta disposition que des ondes parfaitement rondes, des sinusoïdes. Peux-tu fabriquer un coin bien net avec des courbes molles ? Étonnamment, **oui** : en empilant la bonne sinusoïde lente, plus une trois fois plus rapide (un peu plus faible), plus une cinq fois plus rapide, et ainsi de suite. Plus tu ajoutes de sinusoïdes rapides, plus les coins se précisent. Pour un coin *parfaitement* carré, il en faudrait une infinité — donc des fréquences infiniment hautes. Retiens cette image : **un détail brutal dans le temps coûte des fréquences élevées.** Toute la limitation du débit en découle.
+</Encart>
+
+### Fourier : un signal périodique est une somme de sinus
+
+<Encart type="rappel" titre="La décomposition de Fourier (l'outil neuf)">
+Un signal $s(t)$ **périodique** de période $T$ (donc de fréquence fondamentale $f_0 = 1/T$) peut s'écrire comme une somme de sinusoïdes dont les fréquences sont des **multiples entiers** de $f_0$ :
+
+$$ s(t) = a_0 + \sum_{n=1}^{\infty} \left[\, a_n \cos(2\pi n f_0 t) + b_n \sin(2\pi n f_0 t) \,\right] $$
+
+La fréquence $f_0$ est le **fondamental** ; les $n f_0$ pour $n \geq 2$ sont les **harmoniques**. Les coefficients $a_n, b_n$ disent « combien » de chaque fréquence le signal contient : c'est son **spectre**. Ce n'est pas une approximation commode, c'est un **théorème** : sous des conditions très larges (signal raisonnable, satisfaites par tout signal physique), l'égalité est exacte.
+</Encart>
+
+<Resultat label="Théorème de Fourier (existence de la décomposition)">
+
+$$ s(t) = a_0 + \sum_{n=1}^{\infty}\big[a_n \cos(2\pi n f_0 t) + b_n \sin(2\pi n f_0 t)\big] $$
+
+<Badge niveau="theoreme" slot="badge">Théorème de l'analyse mathématique, démontré rigoureusement (conditions de Dirichlet, 1829), et toujours valable pour un signal physique. C'est une vérité mathématique — pas une loi de la nature — mais c'est elle qui impose la suite physique du raisonnement.</Badge>
+</Resultat>
+
+L'interactif ci-dessous vous laisse manipuler ce spectre : ajoutez les harmoniques une à une et regardez le créneau se reconstruire sous vos yeux.
+
+<ReseauSpectre />
+
+Observez le point crucial : avec seulement le fondamental, vous avez une vague ; avec quelques harmoniques, des coins qui se devinent ; il faudrait l'infini des harmoniques pour un angle parfait. **Un créneau parfait exige un spectre s'étendant jusqu'à l'infini.** <Badge niveau="theoreme">Conséquence directe du théorème de Fourier : une transition abrupte (discontinuité) ne peut être reconstruite qu'avec des composantes de fréquence arbitrairement élevées. C'est mathématiquement inévitable.</Badge>
+
+### La bande passante d'un canal : une grandeur physique
+
+Voici maintenant le canal réel — un câble de cuivre, une fibre, l'air entre deux antennes. Aucun support physique ne laisse passer *toutes* les fréquences également. Chaque support **transmet bien** les fréquences dans une certaine plage et **atténue fortement** celles d'au-delà.
+
+<Hypotheses titre="Ce que nous admettons du support physique">
+Tout canal de transmission réel possède une **plage de fréquences** $[f_{\min}, f_{\max}]$ qu'il transmet avec une atténuation acceptable. En dehors, le signal est tellement affaibli qu'il devient inutilisable. C'est une propriété mesurable du support (cuivre, fibre, fréquences radio allouées).
+</Hypotheses>
+
+<Resultat label="Bande passante d'un canal">
+
+$$ B = f_{\max} - f_{\min} \quad (\text{en hertz}, \text{Hz}) $$
+
+<Badge niveau="theoreme" slot="badge">La bande passante est une grandeur **physique** mesurable, en hertz. Que tout support réel ait une bande *limitée* est imposé par la physique du milieu — c'est ce principe qui relève du théorème, la formule elle-même n'étant que la définition de sa largeur. Elle ne dépend pas du protocole employé.</Badge>
+</Resultat>
+
+Une précision honnête : un vrai canal n'a **pas** de coupure nette. L'atténuation augmente progressivement avec la fréquence ; on définit conventionnellement $f_{\max}$ là où la puissance tombe de moitié (les fameux $-3\,\text{dB}$). Le « mur » vertical est une idéalisation.
+
+<Encart type="plusloin" titre="Pourquoi pas de coupure franche ?">
+Modéliser un canal par un **filtre idéal** — qui laisse passer tout jusqu'à $f_{\max}$ puis bloque tout net — est une commodité. Or un tel filtre est physiquement irréalisable : sa réponse temporelle s'étendrait infiniment dans le passé et le futur (toujours à cause de Fourier !). Les vrais supports ont une transition douce, dont la raideur et les valeurs exactes de $f_{\min}, f_{\max}$ **dépendent du support** : cuivre torsadé, coaxial, fibre, bande radio allouée donnent des chiffres très différents.
+</Encart>
+
+<Badge niveau="deploiement">Les valeurs précises de $f_{\min}$, $f_{\max}$ et la forme de l'atténuation dépendent du support réel : longueur et qualité du câble, type de fibre, fréquence porteuse allouée. Non universel.</Badge>
+
+Et le **filtre idéal à coupure nette** ? <Badge niveau="theoreme">C'est un modèle simplifié, commode pour les calculs (et que Nyquist utilisera), mais physiquement irréalisable : sa réponse temporelle infinie est interdite par Fourier. La réalité est toujours plus douce.</Badge>
+
+### Bande passante n'est PAS débit
+
+Attention à un piège de vocabulaire qui empoisonne tout le domaine. Dans le langage courant, votre opérateur vend de la « bande passante » et l'exprime en **mégabits par seconde**. C'est un abus de langage.
+
+- La **bande passante** $B$ est une largeur de fréquences, en **hertz**. C'est une propriété physique du *support*.
+- Le **débit binaire** est un nombre de **bits par seconde**. C'est une propriété de la *transmission*.
+
+Ce sont deux grandeurs distinctes, dans deux unités différentes. <Badge niveau="theoreme">La distinction hertz / bits par seconde est fondamentale et physique. Confondre les deux empêche de comprendre toute la suite.</Badge> Le lien entre elles n'est pas une évidence : il faut un théorème pour le forger.
+
+Car voici la conséquence physique de tout ce chapitre. Un canal de bande $B$ ne peut transmettre que les composantes de fréquence inférieures à $f_{\max}$. Si l'on envoie un créneau bien carré — qui contient des fréquences arbitrairement hautes — le canal **rabote** les harmoniques hautes : les coins s'arrondissent, les transitions s'étalent. <Badge niveau="theoreme">Effet imposé par la physique du signal : un canal à bande limitée arrondit toute transition abrupte, car il supprime les hautes fréquences nécessaires à sa netteté.</Badge> Si l'on envoie les symboles trop vite, leurs queues arrondies débordent les unes sur les autres et deviennent illisibles. **C'est la racine physique de la limitation du débit.**
+
+Combien de symboles par seconde peut-on alors faire tenir dans une bande $B$ avant que tout se brouille ? C'est précisément la question à laquelle Nyquist a donné une réponse chiffrée. Forgeons ce pont entre les hertz et les symboles au chapitre suivant.

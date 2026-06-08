@@ -1,0 +1,82 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "UDP : le transport minimal"
+chapter: udp
+description: "Presente UDP comme la plus fine couche transport : datagramme, ports, checksum optionnel, absence de connexion et de fiabilite, et ses cas d'usage."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand ne presque rien faire est la bonne idée
+
+Nous savons désormais désigner un processus précis sur une machine précise : le <Prereq href="/reseaux/partie-v/ports-multiplexage">numéro de port</Prereq> identifie l'application, et le quadruplet (IP source, port source, IP destination, port destination) identifie une conversation. Mais IP, à lui seul, ne sait qu'une chose : faire de son mieux pour acheminer un paquet d'une adresse à une autre. *Best effort* — au mieux. Pas de promesse que le paquet arrive, qu'il arrive une seule fois, ni qu'il arrive dans le bon ordre. Il manque donc, au-dessus d'IP, une couche **transport** qui distingue les processus. La plus simple imaginable s'appelle **UDP** (*User Datagram Protocol*). Sa philosophie tient en une phrase : ajouter à IP le strict minimum pour atteindre un processus, et **rien de plus**.
+
+<Hypotheses titre="Ce sur quoi UDP s'appuie">
+- Une couche IP qui transporte des paquets d'une adresse à une autre, **sans garantie** : un paquet peut être perdu, dupliqué, ou arriver après un autre parti plus tard.
+- La notion de **port** comme identifiant d'un processus, et de **multiplexage/démultiplexage** entre applications partageant une même machine (chapitre précédent).
+- Le principe de **détection d'erreur par redondance**, déjà rencontré avec <Prereq href="/reseaux/partie-ii/trame-parite">le bit de parité</Prereq> : on ajoute aux données un champ calculé à partir d'elles, qu'on revérifie à l'arrivée.
+</Hypotheses>
+
+## L'en-tête le plus court possible
+
+UDP ajoute devant les données un en-tête de **8 octets seulement**, fait de quatre champs de 16 bits chacun. C'est tout. Comparez aux 20 octets minimum de TCP que nous verrons ensuite : la frugalité d'UDP est sa raison d'être.
+
+| Champ | Taille | Rôle |
+|---|---|---|
+| **Port source** | 16 bits | le processus émetteur (parfois 0 si on n'attend pas de réponse) |
+| **Port destination** | 16 bits | le processus destinataire — sert au démultiplexage |
+| **Longueur** | 16 bits | taille totale (en-tête + données) en octets |
+| **Checksum** | 16 bits | somme de contrôle pour détecter une altération |
+
+<Badge niveau="norme">Ce format est figé par le RFC 768 (1980), l'un des plus courts de l'histoire d'Internet : trois pages. Les quatre champs, leur ordre et leur taille sont fixés mondialement ; aucune marge d'interprétation.</Badge>
+
+Les deux premiers champs ne sont que l'application directe du multiplexage par ports. Le champ **longueur** est partiellement redondant avec celui d'IP, héritage historique. Le seul champ qui « calcule » quelque chose est le **checksum**.
+
+<Encart type="rappel" titre="Le checksum : la parité, en plus robuste">
+Le checksum UDP reprend exactement l'idée de la <Prereq href="/reseaux/partie-ii/trame-parite">parité</Prereq> : un champ déduit des données, recalculé à l'arrivée, qui doit concorder. La technique diffère : on découpe le datagramme (plus un *pseudo-en-tête* contenant les adresses IP) en mots de 16 bits, on les **additionne en complément à un**, et on stocke le complément du total. À la réception, on refait la somme *incluant* le checksum : le résultat doit être une suite de 1. S'il ne l'est pas, le datagramme est silencieusement **jeté**.
+
+<Badge niveau="norme">L'algorithme du checksum 16 bits en complément à un est spécifié par le RFC 768 (et le RFC 1071). En IPv4, il est facultatif ; en IPv6, il est obligatoire car IP ne protège plus les données.</Badge>
+
+Comme la parité, ce checksum **détecte** sans **corriger**, et certaines erreurs combinées passent au travers. Mais il suffit pour écarter la plupart des datagrammes corrompus avant qu'ils ne remontent à l'application.
+</Encart>
+
+## Ce qu'UDP ne fait pas — la liste, soigneusement
+
+Le cœur du sujet n'est pas ce qu'UDP fait, mais ce qu'il **refuse** de faire. Énumérons-le précisément, car chacune de ces absences sera exactement ce que TCP rajoutera au chapitre suivant.
+
+- **Pas de connexion.** Aucune poignée de main préalable. On envoie un datagramme « à froid » ; il n'y a pas d'état partagé entre les deux extrémités.
+- **Pas d'accusé de réception.** L'émetteur n'apprend jamais si son datagramme est arrivé.
+- **Pas de retransmission ni de fiabilité.** Un datagramme perdu est perdu, définitivement. UDP ne le renvoie pas et ne signale pas la perte.
+- **Pas d'ordre garanti.** Deux datagrammes peuvent arriver dans l'ordre inverse de leur envoi ; UDP les livre tels quels.
+- **Pas de contrôle de flux ni de congestion.** UDP émet au rythme que l'application décide, sans ralentir si le réseau sature.
+
+<Badge niveau="norme">Ces absences ne sont pas un défaut d'implémentation : ce sont des choix de conception inscrits dans le RFC 768. UDP n'ajoute volontairement aucune machinerie pour masquer le caractère non fiable d'IP — il l'expose tel quel. Rien dans la physique ni dans aucun théorème n'interdit ces garanties : TCP les fournira au-dessus du même IP, preuve qu'il s'agit d'un parti pris, pas d'une impossibilité.</Badge>
+
+La conséquence est nette : **si une application veut de la fiabilité par-dessus UDP, c'est à elle de la construire** — numéroter ses messages, détecter les pertes, redemander ce qui manque. UDP ne l'en empêche pas ; il ne l'aide pas non plus.
+
+## Pourquoi cette pauvreté est parfois une richesse
+
+On serait tenté de conclure qu'UDP est « TCP en moins bien ». Ce serait une erreur d'analyse. Le minimalisme d'UDP est *exactement ce qu'il faut* dans plusieurs situations courantes.
+
+<Encart type="intuition" titre="Trois cas où retransmettre serait absurde">
+**Le DNS.** Résoudre un nom, c'est typiquement **une** petite requête et **une** petite réponse. Établir une connexion en trois messages, juste pour échanger deux paquets, serait du gaspillage : si la réponse n'arrive pas, on renvoie simplement la requête. Le coût d'une connexion dépasserait le coût de la perte.
+
+**La voix et la vidéo en temps réel.** Dans un appel, un paquet d'audio en retard ne sert plus à rien : le moment qu'il décrit est déjà passé. Le retransmettre **aggraverait** la situation — il arriverait encore plus tard. Mieux vaut un petit blanc qu'un décalage croissant. La perte se masque côté application, pas en renvoyant le passé.
+
+**Les jeux en ligne.** La position d'un joueur d'il y a 200 ms n'intéresse personne : on veut la position **actuelle**. Un état périmé est inutile ; on attend le suivant. Là encore, la livraison « au mieux » et rapide bat la livraison « garantie » et lente.
+</Encart>
+
+Le point commun de ces cas : **la fraîcheur prime sur l'exhaustivité**. Quand une donnée en retard est une donnée morte, les mécanismes de fiabilité de TCP deviennent un handicap, pas un atout.
+
+<Badge niveau="heuristique">Le choix UDP contre TCP est une décision d'ingénierie, à arbitrer cas par cas : volume d'échange, tolérance à la perte, sensibilité au délai. Il n'existe pas de « bon » protocole dans l'absolu — seulement un protocole adapté à un usage.</Badge>
+
+<Encart type="plusloin" titre="QUIC : la fiabilité reconstruite sur UDP">
+On peut vouloir *à la fois* le contrôle fin offert par UDP *et* la fiabilité de TCP. C'est le pari de **QUIC** (base de HTTP/3) : il roule au-dessus d'UDP, mais réimplémente lui-même connexions, retransmission, ordre et chiffrement, dans l'espace applicatif. Pourquoi ne pas avoir étendu TCP directement ? Parce que TCP est figé dans les noyaux et les équipements réseau : bâtir sur UDP laisse toute la logique évolutive **dans le programme**, donc bien plus facile à faire évoluer. <Badge niveau="deploiement">QUIC est largement déployé par les grands acteurs du web, mais sa présence dépend du client, du serveur et des pare-feu traversés. Certains réseaux bloquent encore UDP sur le web et forcent un repli vers TCP.</Badge>
+</Encart>
+
+Nous tenons donc le transport dans sa forme la plus dépouillée : des ports, une longueur, un checksum, et l'honnêteté d'avouer qu'il ne garantit rien. Reste à relever le défi inverse — bâtir un canal **fiable et ordonné** au-dessus du même IP non fiable. C'est tout l'objet de TCP, que nous abordons maintenant en commençant par sa première promesse : établir une connexion.

@@ -1,0 +1,136 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La rétropropagation : dériver tout le réseau efficacement"
+chapter: retropropagation
+description: "Démontre la rétropropagation comme application organisée de la règle de la chaîne sur le graphe de calcul, parcouru de la sortie vers l'entrée. Établit son coût (du même ordre que la passe avant) et la calcule explicitement sur un petit réseau."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaBackpropGraph from '../../../components/interactive/IaBackpropGraph.astro';
+
+## La rétropropagation : dériver tout le réseau efficacement
+
+<Prereq href="/ia/partie-ii/graphe-de-calcul">On représente le réseau comme un graphe de calcul et l'on applique la règle de la chaîne le long de ses chemins.</Prereq> <Prereq href="/ia/partie-ii/derivees-gradient">On veut ce gradient pour appliquer la règle $\theta \leftarrow \theta - \eta\,\nabla L$.</Prereq>
+
+<Encart type="intuition" titre="L'idée en une image">
+Un réseau profond, c'est une longue composition de fonctions. Pour savoir comment bouger un poids tout au début afin de réduire la perte tout à la fin, on pourrait le perturber un peu et regarder ce que devient $L$. Mais avec des millions de poids, cela ferait des millions de passes complètes : ruineux. L'astuce de la rétropropagation est de remarquer que tous ces gradients partagent du travail. On calcule **une seule fois** la sensibilité de la perte à chaque couche, en partant de la sortie et en remontant. Chaque couche reçoit de sa voisine de droite « voilà à quel point je suis sensible », la transforme localement, et la transmet à sa voisine de gauche. Un seul aller-retour suffit pour **tous** les gradients.
+</Encart>
+
+### Le décor : un réseau en couches
+
+On reprend l'architecture empilée. Pour une couche $\ell$, on note $z^\ell = W^\ell a^{\ell-1} + b^\ell$ la **pré-activation** (un vecteur), puis $a^\ell = \sigma(z^\ell)$ l'**activation**, où $\sigma$ s'applique composante par composante. L'entrée est $a^0 = x$, la sortie $a^L$, et la perte est $L(a^L)$ pour un exemple donné. Tout cela est posé en hypothèse : c'est notre modèle.
+
+<Encart type="rappel" titre="Deux outils de notation neufs">
+Le **produit de Hadamard** $u \odot v$ multiplie deux vecteurs **terme à terme** : $(u \odot v)_i = u_i v_i$ ; le résultat est un vecteur de même taille. À ne pas confondre avec le produit matriciel. La **transposée** $W^\top$ échange lignes et colonnes : si $W$ est de taille $m \times n$, alors $W^\top$ est $n \times m$, avec $(W^\top)_{ij} = W_{ji}$. Elle apparaît naturellement quand on remonte un gradient à travers une multiplication matricielle, comme on va le voir.
+</Encart>
+
+### L'erreur d'un nœud : la quantité centrale
+
+On définit pour chaque couche le vecteur d'**erreur** $\delta^\ell$ comme la dérivée de la perte par rapport à la pré-activation :
+
+$$
+\delta^\ell \equiv \frac{\partial L}{\partial z^\ell}, \qquad \text{soit composante par composante} \quad \delta^\ell_j = \frac{\partial L}{\partial z^\ell_j}.
+$$
+
+C'est la « sensibilité » de la perte au signal qui entre dans la couche $\ell$. Tout l'algorithme consiste à calculer ces $\delta^\ell$ efficacement, car les gradients des poids s'en déduiront immédiatement.
+
+### La récurrence : remonter d'une couche
+
+<Encart type="calcul" titre="Démonstration : delta-ell = ((W^(ell+1))^T delta^(ell+1)) ⊙ sigma'(z^ell)">
+
+**Étape 1 — La règle de la chaîne.** La pré-activation $z^\ell$ n'influence $L$ qu'à travers la couche suivante $z^{\ell+1}$. Donc, pour chaque composante $j$ :
+
+$$
+\delta^\ell_j = \frac{\partial L}{\partial z^\ell_j} = \sum_k \frac{\partial L}{\partial z^{\ell+1}_k}\,\frac{\partial z^{\ell+1}_k}{\partial z^\ell_j} = \sum_k \delta^{\ell+1}_k \,\frac{\partial z^{\ell+1}_k}{\partial z^\ell_j}.
+$$
+
+**Étape 2 — Le lien entre couches.** Par définition $z^{\ell+1}_k = \sum_i W^{\ell+1}_{ki}\,a^\ell_i + b^{\ell+1}_k$ et $a^\ell_i = \sigma(z^\ell_i)$. La dérivée se factorise :
+
+$$
+\frac{\partial z^{\ell+1}_k}{\partial z^\ell_j} = W^{\ell+1}_{kj}\,\frac{\partial a^\ell_j}{\partial z^\ell_j} = W^{\ell+1}_{kj}\,\sigma'(z^\ell_j).
+$$
+
+(Seul le terme $i = j$ survit dans la somme sur $i$, car $a^\ell_i$ ne dépend que de $z^\ell_i$.)
+
+**Étape 3 — On rassemble.** En réinjectant :
+
+$$
+\delta^\ell_j = \sigma'(z^\ell_j)\sum_k \delta^{\ell+1}_k\, W^{\ell+1}_{kj} = \sigma'(z^\ell_j)\,\big((W^{\ell+1})^\top \delta^{\ell+1}\big)_j.
+$$
+
+On a reconnu la somme : $\sum_k (W^{\ell+1})^\top_{jk}\,\delta^{\ell+1}_k$, puisque $(W^{\ell+1})^\top_{jk} = W^{\ell+1}_{kj}$.
+
+**Étape 4 — Forme vectorielle.** En empilant les composantes (le facteur $\sigma'(z^\ell_j)$, propre à chaque $j$, devient un produit de Hadamard) :
+
+$$
+\boxed{\;\delta^\ell = \big((W^{\ell+1})^\top \delta^{\ell+1}\big) \odot \sigma'(z^\ell)\;} \qquad \blacksquare
+$$
+
+La transposée apparaît parce que la propagation avant multiplie par $W^{\ell+1}$ (lignes = sorties) ; la remontée du gradient renverse ce flux et multiplie par $(W^{\ell+1})^\top$. Le $\odot\,\sigma'(z^\ell)$ traduit le passage à travers la non-linéarité locale, dérivée terme à terme.
+</Encart>
+
+Il manque l'amorce de la récurrence : à la sortie, $\delta^L = \dfrac{\partial L}{\partial a^L} \odot \sigma'(z^L)$, qui se calcule directement à partir de la perte. On part de là et on descend $\ell = L, L-1, \dots, 1$.
+
+### Des erreurs aux gradients des poids
+
+<Encart type="calcul" titre="Démonstration : dL/dW^ell = delta^ell (a^(ell-1))^T">
+
+On dérive par rapport à un poids $W^\ell_{ji}$. Il n'intervient que dans $z^\ell_j$ :
+
+$$
+\frac{\partial L}{\partial W^\ell_{ji}} = \frac{\partial L}{\partial z^\ell_j}\,\frac{\partial z^\ell_j}{\partial W^\ell_{ji}} = \delta^\ell_j \cdot a^{\ell-1}_i,
+$$
+
+car $z^\ell_j = \sum_i W^\ell_{ji} a^{\ell-1}_i + b^\ell_j$. La matrice dont l'entrée $(j,i)$ vaut $\delta^\ell_j\,a^{\ell-1}_i$ est exactement le **produit extérieur** $\delta^\ell (a^{\ell-1})^\top$. De même, $\partial L/\partial b^\ell_j = \delta^\ell_j \cdot \partial z^\ell_j/\partial b^\ell_j = \delta^\ell_j$. D'où, sous forme matricielle :
+
+$$
+\boxed{\;\frac{\partial L}{\partial W^\ell} = \delta^\ell\,(a^{\ell-1})^\top, \qquad \frac{\partial L}{\partial b^\ell} = \delta^\ell\;} \qquad \blacksquare
+$$
+</Encart>
+
+<Resultat label="Les quatre équations de la rétropropagation">
+
+$$
+\delta^L = \nabla_{a^L} L \odot \sigma'(z^L), \quad \delta^\ell = \big((W^{\ell+1})^\top \delta^{\ell+1}\big)\odot \sigma'(z^\ell), \quad \frac{\partial L}{\partial W^\ell}=\delta^\ell (a^{\ell-1})^\top, \quad \frac{\partial L}{\partial b^\ell}=\delta^\ell
+$$
+
+<Badge niveau="prouve" slot="badge">Démontrées ci-dessus par la seule règle de la chaîne sur le graphe de calcul. La backprop calcule le gradient EXACT — ce n'est ni une approximation ni une heuristique, mais l'organisation efficace d'un calcul mathématique.</Badge>
+</Resultat>
+
+### Pourquoi c'est efficace : le coût
+
+<Encart type="plusloin" titre="O(passe avant) contre O(#paramètres × passe avant)">
+La méthode **naïve** (différences finies) perturbe chaque paramètre l'un après l'autre et refait une passe avant complète pour estimer $\partial L/\partial \theta_k$. Avec $P$ paramètres, cela coûte de l'ordre de $P$ passes avant : prohibitif quand $P$ atteint le milliard. La rétropropagation, elle, fait **une** passe avant (pour obtenir et stocker les $z^\ell, a^\ell$) puis **une** passe arrière qui réutilise les mêmes matrices $W^\ell$ dans l'autre sens. Chaque équation ci-dessus coûte, par couche, le même ordre d'opérations qu'une multiplication matricielle de la passe avant. Le coût total est donc $O(\text{passe avant})$ — à un facteur constant près —, indépendamment du nombre de paramètres pris un à un. C'est l'idée de **mémoïsation** : on calcule chaque $\delta^\ell$ une seule fois et on le réutilise pour tous les poids de la couche. C'est la base algorithmique de l'autodifférentiation (autograd) des frameworks modernes.
+</Encart>
+
+### Un exemple numérique complet (réseau à 2 couches)
+
+Prenons une entrée scalaire $a^0 = 1$, des poids $W^1 = 0{,}5$, $b^1 = 0$, $W^2 = 2$, $b^2 = 0$, une activation $\sigma = \text{ReLU}$ (donc $\sigma'(z) = 1$ si $z>0$, sinon $0$), une cible $y = 0$ et la perte $L = \tfrac12(a^2 - y)^2$.
+
+<Encart type="calcul" titre="Passe avant puis passe arrière, ligne à ligne">
+
+**Avant.** $z^1 = 0{,}5\cdot 1 + 0 = 0{,}5$, donc $a^1 = \text{ReLU}(0{,}5) = 0{,}5$. Puis $z^2 = 2\cdot 0{,}5 + 0 = 1$, donc $a^2 = \text{ReLU}(1) = 1$. Perte : $L = \tfrac12(1-0)^2 = 0{,}5$. (Avec la cible naturelle $y=1$ on aurait $L=0$ et tous les gradients nuls ; on prend $y=0$ pour observer une mise à jour non triviale.)
+
+**Arrière — sortie.** $\dfrac{\partial L}{\partial a^2} = a^2 - y = 1$, et $\sigma'(z^2)=1$ (car $z^2 = 1 > 0$), donc $\delta^2 = 1 \cdot 1 = 1$.
+
+**Gradients couche 2.** $\dfrac{\partial L}{\partial W^2} = \delta^2 a^1 = 1\cdot 0{,}5 = 0{,}5$ ; $\dfrac{\partial L}{\partial b^2} = \delta^2 = 1$.
+
+**Arrière — couche cachée.** $\delta^1 = \big((W^2)^\top \delta^2\big) \odot \sigma'(z^1) = (2\cdot 1)\cdot 1 = 2$ (car $z^1 = 0{,}5 > 0$, donc $\sigma'(z^1)=1$).
+
+**Gradients couche 1.** $\dfrac{\partial L}{\partial W^1} = \delta^1 a^0 = 2\cdot 1 = 2$ ; $\dfrac{\partial L}{\partial b^1} = \delta^1 = 2$. $\blacksquare$
+</Encart>
+
+Manipule le graphe ci-dessous : déclenche la passe avant, puis la passe arrière, et regarde chaque $\delta$ se propager de la sortie vers l'entrée.
+
+<IaBackpropGraph />
+
+<Encart type="plusloin" titre="Honnêteté : ce que backprop ne dit PAS">
+La rétropropagation donne le gradient **exact**. Mais elle ne garantit rien sur l'**optimisation** qui s'ensuit : suivre $-\nabla L$ peut stagner, osciller ou tomber dans un minimum médiocre. <Prereq href="/ia/partie-ii/derivees-gradient">Les garanties de convergence relèvent de la descente de gradient, pas du calcul du gradient.</Prereq> <Badge niveau="recette">Le pas $\eta$ et le choix de l'optimiseur restent des recettes d'ingénierie.</Badge> Distinguons donc nettement **backprop** (calcul du gradient, démontré) de **descente de gradient** (l'optimisation, aux garanties limitées). Les frameworks calculent tout cela automatiquement (autograd), mais comprendre l'algorithme reste essentiel pour déboguer : le facteur $(W^{\ell+1})^\top$ appliqué à chaque couche, couplé aux $\sigma'(z^\ell)$, explique déjà pourquoi les gradients peuvent **exploser** ou **s'évanouir** dans les réseaux profonds — un problème qu'on attaquera de front bientôt.
+</Encart>
+
+Nous savons désormais calculer efficacement le gradient de n'importe quel réseau en couches. Il est temps d'empiler vraiment ces couches : au chapitre suivant, le perceptron multicouche, et la raison pour laquelle un seul neurone ne peut pas séparer le simple XOR.

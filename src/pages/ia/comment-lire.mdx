@@ -1,0 +1,139 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce cours
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’échelle de fiabilité « apprentissage profond », et la promesse exacte. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce cours reconstruit **d’un seul tenant** l’intelligence artificielle moderne : on part du
+**neurone formel** — une somme pondérée et un seuil — et on remonte, étage par étage, jusqu’aux
+**grands modèles de langage**. La règle, non négociable : *on ne vous demande jamais de croire sur
+parole.* Chaque maillon est soit **posé explicitement**, soit **construit** à partir du précédent.
+
+Une précision d’honnêteté, dès maintenant. Le deep learning n’est pas une science déductive comme
+la géométrie : c’est un domaine **largement empirique**. Beaucoup de techniques *marchent* avant
+d’être comprises. Dire « tout se démontre » serait donc **trompeur**. Ce qu’on s’engage à faire :
+
+- distinguer, à chaque ligne, ce qui est **mathématiquement prouvé** (le calcul du gradient, la
+  rétropropagation, le théorème d’approximation universelle) de ce qui n’est qu’une **régularité
+  observée** ou une **recette qui marche** ;
+- signaler sans détour les endroits où l’on quitte la déduction pour un **choix d’ingénierie** —
+  un taux d’apprentissage, une architecture, une normalisation : un bandeau « Tournant » le dit ;
+- nommer honnêtement les **questions ouvertes** (pourquoi un réseau généralise, l’interprétabilité)
+  plutôt que de les habiller en certitudes.
+
+La promesse exacte est donc : *rien n’est présenté comme acquis sans qu’on dise à quel point il
+l’est.* C’est tout l’intérêt de l’échelle de fiabilité de ce cours — elle distingue, à chaque
+affirmation, **ce qui est démontré** de **ce qui marche sans qu’on sache encore tout à fait pourquoi**.
+
+## À qui s’adresse ce cours ?
+
+Le niveau de départ visé est la **fin du lycée / début de licence** : vous êtes à l’aise avec la
+notion de fonction, de dérivée, et un peu de calcul vectoriel (un vecteur, un produit scalaire).
+**Aucun prérequis en IA n’est supposé.** Dès qu’un outil nouveau apparaît, un encart « Rappel » le
+ramène à des bases simples.
+
+<Encart type="rappel" titre="Exemple de rappel — dérivée et produit scalaire">
+La **dérivée** d’une fonction en un point, c’est la **pente** de sa courbe à cet endroit : positive,
+la fonction monte ; négative, elle descend. Tout l’apprentissage consiste à descendre la pente d’une
+fonction d’erreur.
+
+Le **produit scalaire** de deux vecteurs $\mathbf{w}\cdot\mathbf{x} = \sum_i w_i x_i$ combine des
+entrées pondérées en un seul nombre : c’est exactement ce que calcule un neurone.
+</Encart>
+
+## Les encadrés « Hypothèses » et les « Tournants »
+
+Au début d’une partie qui **pose** quelque chose (un cadre, une convention de notation, un objectif
+d’apprentissage), un encadré liste **noir sur blanc** ce qui est admis.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente ainsi, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **cesse de déduire pour adopter un choix d’ingénierie** — fixer un taux d’apprentissage,
+choisir une architecture, ajouter une normalisation —, un **bandeau « Tournant »** le signale :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, la théorie ne dicte plus la suite. On **décide** d’une recette, parce qu’elle marche en
+pratique — et on le dit, plutôt que de la faire passer pour une nécessité. La construction reprend
+ensuite à partir de ce choix.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — calculs, rappels,
+approfondissements — sont rangés dans des encarts que vous **dépliez d’un clic** (ou avec la
+touche <kbd>Entrée</kbd>). Quatre familles, reconnaissables à leur couleur et leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ouverts par défaut, car ils aident
+à comprendre *avant* de formaliser. Exemple : « apprendre, c’est descendre une colline dans le
+brouillard en tâtant la pente sous ses pieds ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent une dérivation **ligne à ligne**, sans étape sautée. Par exemple, on y
+montrerait que la dérivée de la sigmoïde vaut
+
+$$ \sigma'(z) = \sigma(z)\,\bigl(1 - \sigma(z)\bigr), $$
+
+en repartant de sa définition. Chaque ligne est justifiée par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil à des bases simples : ce qu’est un gradient, une matrice, une
+probabilité. Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors fil principal** : une variante d’optimiseur,
+le détail d’une tête d’attention. Facultatifs : on peut les sauter.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent sur
+tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce cours. **Chaque affirmation notable** porte une pastille
+colorée qui dit *quel est son statut* — démontré, empiriquement robuste, simple recette, ou encore
+ouvert. Survolez un badge (ou donnez-lui le focus au clavier) pour lire **pourquoi**.
+
+- La rétropropagation calcule exactement le gradient du réseau <Badge niveau="prouve">C’est la règle de la chaîne du calcul différentiel, organisée pour réutiliser les calculs. Démontrable.</Badge>
+- La descente de gradient stochastique entraîne efficacement de très grands réseaux <Badge niveau="robuste">Régularité empirique extrêmement reproductible, mais sans preuve générale de convergence vers un bon minimum.</Badge>
+- On fixe le taux d’apprentissage à une petite valeur, ajustée à la main <Badge niveau="recette">Choix d’ingénierie : il n’existe pas de valeur optimale universelle ; on règle par essais et validation.</Badge>
+- Pourquoi un grand réseau surparamétré généralise-t-il quand même bien ? <Badge niveau="boitenoire">Question encore ouverte : pas d’explication théorique complète et consensuelle à ce jour.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et la
+page <a href="/ia/methodologie">Méthodologie</a> détaille les quatre niveaux.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ \text{un réseau à une couche cachée peut approcher toute fonction continue.} $$
+<Badge niveau="prouve" slot="badge">Théorème d’approximation universelle : démontré. Attention — il garantit l’existence d’un réseau, pas qu’on sache l’apprendre.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat établi ailleurs, un lien **prérequis** vous y renvoie :
+par exemple, on invoquera plus tard la <Prereq href="/ia/partie-ii/descente-de-gradient">descente de gradient</Prereq> en pointant vers la page qui la construit.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? La construction commence par la brique élémentaire : un neurone, ses poids et son seuil.

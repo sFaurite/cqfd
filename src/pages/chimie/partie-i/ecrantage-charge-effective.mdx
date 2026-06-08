@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Écrantage et charge effective"
+chapter: ecrantage-charge-effective
+description: "Notion de charge nucléaire effective Z*, modèle d'écrantage de Slater, et son rôle pour expliquer énergies, tailles et toute la périodicité à venir."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi un électron de valence ne « voit » pas tout le noyau
+
+Reprenons l'image que nous a léguée le chapitre précédent. Dans un atome polyélectronique, les électrons s'empilent dans les sous-couches selon <Prereq href="/chimie/partie-i/structure-electronique">Pauli, l'ordre de remplissage et la règle de Hund</Prereq>. Mais une question reste en suspens : **avec quelle force le noyau retient-il un électron donné ?**
+
+La réponse naïve serait : « avec une force proportionnelle à $Z$, le nombre de protons ». C'est faux — et joliment faux. Imaginez un électron de valence, loin du noyau, perdu en périphérie. Entre lui et les $Z$ protons s'interposent les électrons de cœur. Ces électrons internes le **repoussent**, et cette répulsion s'oppose à l'attraction du noyau. Résultat : l'électron de valence ressent une charge nette *plus faible* que $Z$. On dit que les électrons internes **écrantent** le noyau.
+
+<Encart type="intuition" titre="L'analogie du soleil derrière la foule">
+
+Vous voulez vous réchauffer à un radiateur (le noyau, chaud et attirant). Mais une foule de gens (les électrons de cœur) s'est massée devant. Chacun absorbe un peu de chaleur. Vous, tout au fond, ne recevez qu'une fraction de ce que le radiateur émet réellement. La chaleur perçue, c'est $Z^*$ ; la puissance vraie du radiateur, c'est $Z$.
+
+</Encart>
+
+## La charge nucléaire effective $Z^*$
+
+Formalisons. On définit la **charge nucléaire effective** $Z^*$ comme la charge positive *réellement ressentie* par un électron donné, après soustraction de l'effet d'écran des autres électrons. On l'écrit comme une simple différence.
+
+<Resultat label="charge-effective">
+
+$$Z^* = Z - \sigma$$
+
+<Badge niveau="quantique" slot="badge">L'existence d'un écrantage découle directement de la répulsion électron-électron imposée par l'électromagnétisme, dans le cadre de l'équation de Schrödinger à plusieurs électrons.</Badge>
+
+</Resultat>
+
+Ici $Z$ est le numéro atomique (entier, le nombre de protons — une donnée structurelle) et $\sigma$ (sigma) est la **constante d'écran**, qui mesure tout ce que les autres électrons « volent » de l'attraction nucléaire. Le principe est solide : c'est une conséquence nécessaire du fait que les électrons se repoussent. <Badge niveau="experimental">Que $Z^*$ soit inférieur à $Z$ et croisse le long d'une période est confirmé par les énergies d'ionisation mesurées.</Badge>
+
+Attention à un point crucial de rigueur. La valeur *exacte* de $Z^*$ se calcule numériquement, en résolvant l'atome à plusieurs électrons (méthodes de type Hartree-Fock) : c'est une grandeur bien définie. Mais ce calcul est lourd. Pour estimer $Z^*$ à la main, on utilise un modèle approché : les **règles de Slater**.
+
+## Les règles de Slater : une recette, pas une loi
+
+John Slater a proposé en 1930 une recette empirique pour estimer $\sigma$ sans calcul quantique. Il faut d'abord répartir les sous-couches en groupes ordonnés :
+
+$$(1s)\;(2s,2p)\;(3s,3p)\;(3d)\;(4s,4p)\;(4d)\;(4f)\;\ldots$$
+
+Pour l'électron étudié, on additionne des contributions selon des coefficients **ajustés à la main** par Slater :
+
+<Encart type="rappel" titre="Les coefficients d'écran de Slater">
+
+Pour un électron d'un groupe $(ns, np)$ :
+
+- chaque **autre** électron du *même* groupe contribue **0,35** (sauf le groupe $1s$ : **0,30**) ;
+- chaque électron de la couche $n-1$ contribue **0,85** ;
+- chaque électron d'une couche encore plus interne ($\le n-2$) contribue **1,00**.
+
+Pour un électron $d$ ou $f$ : tout électron **plus interne** que lui contribue **1,00**, et chaque **autre** électron du même groupe contribue **0,35**.
+
+</Encart>
+
+Insistons : ces nombres — $0{,}35$, $0{,}85$, $1{,}00$ — ne sont pas des constantes de la nature. Ce sont des paramètres choisis pour reproduire au mieux les données. <Badge niveau="empirique">Les règles de Slater sont un modèle grossier à coefficients ajustés ; elles donnent un ordre de grandeur, pas une valeur exacte.</Badge> Ne confondez jamais le $Z^*$ de Slater (estimation de poche) avec le $Z^*$ exact (calculé numériquement).
+
+<Encart type="calcul" titre="Z* d'un électron de valence du sodium (Na, Z = 11)">
+
+Configuration : $1s^2\,2s^2\,2p^6\,3s^1$. On étudie l'électron $3s$, donc $n = 3$, groupe $(3s, 3p)$.
+
+Ligne 1 — même groupe : il n'y a aucun *autre* électron dans $(3s,3p)$ (le $3s^1$ est seul) →
+
+$$0 \times 0{,}35 = 0$$
+
+Ligne 2 — couche $n-1 = 2$, soit $2s^2 2p^6$, c'est-à-dire 8 électrons →
+
+$$8 \times 0{,}85 = 6{,}80$$
+
+Ligne 3 — couches plus internes, soit $1s^2$, c'est-à-dire 2 électrons →
+
+$$2 \times 1{,}00 = 2{,}00$$
+
+Somme des écrans :
+
+$$\sigma = 0 + 6{,}80 + 2{,}00 = 8{,}80$$
+
+Charge effective :
+
+$$Z^* = 11 - 8{,}80 = 2{,}20$$
+
+</Encart>
+
+Voilà le message du sodium : sur les onze protons, l'électron de valence n'en « ressent » qu'environ deux. L'unique électron $3s$ est tenu par une charge effective d'à peine $2{,}2$, ce qui éclaire pourquoi le sodium cède si facilement cet électron.
+
+## La pénétration : pourquoi $s$ descend plus bas que $p$ et $d$
+
+Il reste un fait que l'écrantage seul n'explique pas, et qui éclaire l'ordre énergétique du chapitre précédent. Pourquoi, à $n$ fixé, l'énergie suit-elle $E_{ns} < E_{np} < E_{nd}$ ?
+
+La réponse tient dans la forme des orbitales, donnée par $|\psi|^2$ (la densité de probabilité de présence). Une orbitale $s$ possède une densité **non nulle au voisinage immédiat du noyau** : l'électron $s$ a une probabilité réelle de se trouver *à l'intérieur* du nuage de cœur, là où l'écran ne joue presque plus et où il ressent une charge proche de $Z$. On dit qu'elle **pénètre** mieux. Une orbitale $p$ pénètre moins, une orbitale $d$ encore moins.
+
+<Encart type="plusloin" titre="Pénétration et nœuds radiaux">
+
+L'orbitale $2s$ possède un nœud radial et un petit pic de densité très près du noyau, absent de la $2p$. C'est ce lobe interne qui « plonge » sous l'écran des électrons de cœur. L'électron $2s$ passe une fraction de son temps dans cette zone peu écrantée : il y ressent un $Z^*$ local élevé, ce qui abaisse son énergie moyenne. Les règles de Slater capturent mal cet effet, car elles attribuent le même coefficient à $s$ et $p$ d'une même couche — c'est précisément l'une de leurs faiblesses : elles n'isolent pas la pénétration.
+
+</Encart>
+
+Plus une orbitale pénètre, moins elle est écrantée, plus le $Z^*$ ressenti est grand, donc plus son électron est lié et plus son énergie est basse. <Badge niveau="quantique">L'ordre $E_{ns} &lt; E_{np} &lt; E_{nd}$ découle de la forme des $|\psi|^2$ imposée par l'équation de Schrödinger.</Badge> La pénétration différenciée est donc le mécanisme physique *derrière* l'ordre de remplissage que nous avions admis comme une règle.
+
+Nous tenons maintenant l'outil unificateur de la suite : $Z^*$ croît nettement le long d'une période (les électrons ajoutés s'écrantent mal entre eux) et croît beaucoup plus lentement quand on descend un groupe. Dans le prochain chapitre, cette seule grandeur va nous permettre d'expliquer d'un coup les rayons atomiques, les énergies d'ionisation et l'électronégativité — c'est-à-dire la périodicité elle-même.

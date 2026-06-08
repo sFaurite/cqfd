@@ -1,0 +1,94 @@
+---
+/**
+ * IaTokenizer — tokeniseur interactif. L'utilisateur saisit un texte ; le
+ * composant le découpe en tokens (sous-mots) colorés et affiche le nombre de
+ * tokens. Met en évidence les cas révélateurs (mots rares fragmentés, nombres
+ * découpés, espaces). Chapitres : tokenisation, génération.
+ *
+ * Le rendu des tokens se fait en HTML (pas en canvas) car c'est du texte
+ * sélectionnable — plus accessible. On reste dans le namespace .iw.
+ */
+---
+
+<div class="iw" data-iw="ia-token">
+  <div class="iw__head"><span class="tag">Interactif</span> Découper un texte en tokens</div>
+  <div class="iw__controls">
+    <div class="iw__row" style="grid-template-columns: 1fr;">
+      <label for="tk-input" style="white-space: normal;">Saisis un texte (essaie un mot rare, un grand nombre, une faute) :</label>
+    </div>
+    <div class="iw__row" style="grid-template-columns: 1fr;">
+      <textarea id="tk-input" data-input rows="3" spellcheck="false"
+        aria-label="Texte à tokeniser">L'anticonstitutionnellement coûte 1234567 € en 2024 ! 🙂</textarea>
+    </div>
+    <div class="iw__row" style="grid-template-columns: auto auto 1fr;">
+      <label>exemples</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-ex="0">mot rare</button>
+        <button type="button" class="iw__btn" data-ex="1">nombre</button>
+        <button type="button" class="iw__btn" data-ex="2">code</button>
+        <button type="button" class="iw__btn" data-ex="3">emoji</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__tokens" data-tokens aria-live="polite"></div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">caractères</span> <b data-out-chars>0</b></span>
+    <span class="iw__chip"><span class="k">tokens</span> <b data-out-tokens>0</b></span>
+    <span class="iw__chip"><span class="k">ratio car/token</span> <b data-out-ratio>—</b></span>
+  </div>
+  <p class="iw__note">
+    Un modèle de langue ne voit pas des lettres ni des mots, mais des <b>tokens</b> : des fragments
+    fréquents (souvent des sous-mots). Les mots courants tiennent en un token ; les mots rares, les
+    grands nombres et les emojis se <b>fragmentent</b>. L'espace fait souvent partie du token suivant.
+    Ce découpage (ici une simulation type BPE, pas le vrai vocabulaire d'un modèle) explique pourquoi
+    compter des lettres ou faire de l'arithmétique exacte est difficile pour un LLM, et pourquoi la
+    facturation se fait au token.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-token'] textarea {
+    width: 100%;
+    resize: vertical;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    background: var(--c-surface);
+    color: var(--c-text);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+    padding: 0.6em 0.7em;
+    line-height: 1.5;
+  }
+  .iw[data-iw='ia-token'] textarea:focus {
+    outline: 2px solid var(--c-blue);
+    outline-offset: 1px;
+  }
+  .iw[data-iw='ia-token'] .iw__tokens {
+    padding: 0.9em 1em;
+    border-top: 1px solid var(--c-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 3px;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    line-height: 1.9;
+    min-height: 2.4em;
+  }
+  .iw[data-iw='ia-token'] .tk {
+    padding: 0.05em 0.35em;
+    border-radius: 5px;
+    border: 1px solid color-mix(in srgb, var(--tk) 45%, transparent);
+    background: color-mix(in srgb, var(--tk) 16%, transparent);
+    color: var(--c-text);
+    white-space: pre;
+  }
+  .iw[data-iw='ia-token'] .tk-space {
+    color: var(--c-muted);
+    opacity: 0.7;
+  }
+</style>
+
+<script>
+  import './IaTokenizer.client.ts';
+</script>

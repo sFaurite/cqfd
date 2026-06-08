@@ -1,0 +1,106 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Groupes fonctionnels et familles de molécules"
+chapter: groupes-fonctionnels
+description: "Les principaux groupes fonctionnels (alcool, aldéhyde, cétone, acide carboxylique, amine, ester) et l'idée que la réactivité est portée par la fonction plus que par le squelette."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Quand toute une molécule se résume à quelques atomes
+
+Voici une molécule d'éthanol : $\text{CH}_3\text{-CH}_2\text{-OH}$. Et voici l'acide acétique : $\text{CH}_3\text{-COOH}$. Le vinaigre pique, l'alcool non. Pourtant, dans les deux cas, l'essentiel du squelette est le même : une petite chaîne carbonée inerte. Toute la différence de comportement tient à **quelques atomes au bout**. C'est l'idée la plus économe de toute la chimie organique : la réactivité n'est pas répartie sur la molécule entière, elle est **concentrée** sur de petits motifs récurrents, les **groupes fonctionnels**.
+
+Pourquoi cette concentration ? Parce que le squelette carboné est, lui, remarquablement stable. Nous l'avons vu au chapitre précédent.
+
+<Prereq href="/chimie/partie-vi/carbone-squelette">Le carbone : tétravalence, hybridation et caténation</Prereq>
+
+Les liaisons $\text{C-C}$ et $\text{C-H}$ sont peu polaires et énergétiquement solides : rien n'y invite une attaque. Dès qu'on introduit un atome plus électronégatif (O, N, halogène) ou une liaison multiple, on crée une **zone de fragilité électronique** — un endroit où les électrons sont mal partagés ou facilement mobilisables. C'est exactement ce qu'il faut pour réagir.
+
+<Prereq href="/chimie/partie-iii/polarite-moments-dipolaires">Polarité de liaison et moments dipolaires</Prereq>
+
+## Le concept de groupe fonctionnel
+
+<Hypotheses titre="Ce qu'on admet ici">
+On admet le **postulat de transférabilité** : un même motif d'atomes, porté par des squelettes différents, confère un comportement chimique **similaire**. L'éthanol et le propan-1-ol partagent la fonction alcool et réagissent « comme des alcools ». Ce n'est pas un théorème quantique : c'est une généralisation tirée de l'expérience.
+</Hypotheses>
+
+<Tournant titre="Une généralisation empirique, pas une déduction">
+On ne *déduit* pas le concept de groupe fonctionnel des postulats quantiques : on le **constate**. Des milliers de réactions montrent que la fonction gouverne la réactivité bien plus que le reste de la molécule. C'est une carte extraordinairement prédictive, mais approchée — le squelette module (effets électroniques, stériques) sans abolir le comportement de la fonction.
+<Badge niveau="empirique">Le groupe fonctionnel est une règle prédictive puissante et largement validée par l'expérience, non une nécessité imposée par la mécanique quantique. Le contexte moléculaire peut l'infléchir.</Badge>
+</Tournant>
+
+Trois ingrédients électroniques expliquent *pourquoi* un motif est réactif, et tous trois nous sont déjà familiers :
+
+1. **La polarité de liaison** : un atome électronégatif tire la densité électronique, créant un site $\delta^+$ (pauvre, attaqué par ce qui est riche) et un site $\delta^-$ (riche, attaqué par ce qui est pauvre).
+2. **Les doublets non liants** : hérités du modèle de Lewis, ce sont des réserves d'électrons disponibles — sur O, N, halogènes — qui peuvent capter un proton ou amorcer une attaque.
+3. **Les liaisons multiples** : une double ou triple liaison concentre des électrons accessibles, cible privilégiée des réactifs avides d'électrons.
+
+<Badge niveau="qualitatif">Relier réactivité, polarité, doublets et liaisons multiples est une lecture qualitative cohérente avec la structure électronique, mais l'ampleur des effets dépend du contexte.</Badge>
+
+## Le panorama des grandes familles
+
+Voici les principaux groupes, avec le motif et l'origine de leur réactivité. $\text{R}$ désigne un reste carboné quelconque.
+
+| Famille | Groupe | Motif | Cœur réactif |
+|---|---|---|---|
+| Alcool | hydroxyle | $\text{R-OH}$ | O polaire + doublets |
+| Amine | amino | $\text{R-NH}_2$ | doublet sur N (basique) |
+| Aldéhyde / cétone | carbonyle | $\text{R-CO-}$ | $\text{C}{=}\text{O}$ polarisé |
+| Acide carboxylique | carboxyle | $\text{R-COOH}$ | carbonyle + hydroxyle |
+| Ester | ester | $\text{R-COO-R'}$ | carbonyle + O pontant |
+| Éther | éther | $\text{R-O-R'}$ | doublets, peu réactif |
+
+Le **carbonyle** $\text{C}{=}\text{O}$ mérite une mention spéciale : l'oxygène, très électronégatif, polarise fortement la double liaison. Le carbone devient nettement $\delta^+$ — c'est *le* site d'attaque de toute la chimie des aldéhydes, cétones, acides et esters. Une seule polarité explique une immense famille de réactions.
+
+<Badge niveau="qualitatif">Faire du carbone du carbonyle « le » site d'attaque est une lecture qualitative issue de la polarité de liaison ; elle oriente la prévision sans fixer l'ampleur réelle, qui dépend des substituants et du milieu.</Badge>
+
+## Du groupe au comportement : deux cas tests
+
+Le pouvoir du concept se mesure à sa capacité à *prédire*. Vérifions sur deux fonctions opposées, en nous appuyant sur la chimie acide-base déjà établie.
+
+<Prereq href="/chimie/partie-v/acide-base">Brønsted-Lowry, $K_a$ et l'échelle des $\text{p}K_a$</Prereq>
+
+**Un acide carboxylique est acide.** Le groupe $\text{-COOH}$ libère son proton bien plus facilement qu'un alcool. Les mesures sont sans appel : l'acide acétique a un $\text{p}K_a \approx 4{,}8$, alors que l'éthanol affiche $\text{p}K_a \approx 16$. Un écart de plus de onze unités, soit un facteur $10^{11}$ sur $K_a$.
+
+<Badge niveau="experimental">Les valeurs $\text{p}K_a(\text{CH}_3\text{COOH}) \approx 4{,}8$ et $\text{p}K_a(\text{C}_2\text{H}_5\text{OH}) \approx 16$ sont mesurées de façon reproductible.</Badge>
+
+<Encart type="calcul" titre="Lire l'écart de pKa">
+La constante d'acidité et le $\text{p}K_a$ sont liés par :
+
+$$
+\text{p}K_a = -\log_{10} K_a .
+$$
+
+Pour l'acide acétique, $K_a = 10^{-4{,}8} \approx 1{,}6 \times 10^{-5}$. Pour l'éthanol, $K_a = 10^{-16}$. Le rapport vaut :
+
+$$
+\frac{K_a(\text{acide})}{K_a(\text{alcool})} = \frac{10^{-4{,}8}}{10^{-16}} = 10^{\,11{,}2} \approx 1{,}6 \times 10^{11} .
+$$
+
+L'acide carboxylique cède donc son proton environ **cent milliards de fois** plus volontiers. La fonction, pas le squelette, dicte ce résultat.
+</Encart>
+
+*Pourquoi* cet écart ? Parce que ce qui compte, c'est la stabilité de la **base conjuguée**. En perdant son proton, l'acide carboxylique forme l'ion carboxylate $\text{R-COO}^-$ : la charge négative ne reste pas sur un seul oxygène, elle est **délocalisée** sur les deux oxygènes équivalents (résonance). Une charge étalée est une charge stabilisée, donc plus facile à former. L'alcoolate $\text{R-O}^-$, lui, garde sa charge concentrée sur un unique oxygène, sans secours : il est défavorisé.
+
+<Badge niveau="qualitatif">La stabilisation de la base conjuguée par résonance explique *qualitativement* l'acidité supérieure ; elle rationalise la mesure sans la remplacer.</Badge>
+
+**Une amine est basique.** Symétriquement, l'azote de $\text{R-NH}_2$ porte un **doublet non liant** disponible. Ce doublet capte un proton pour former $\text{R-NH}_3^+$ : l'amine se comporte en base de Brønsted. Le comportement découle directement d'un trait de structure électronique — un doublet libre — exactement comme l'octet de Lewis le suggérait.
+
+<Badge niveau="qualitatif">Qu'un doublet libre rende l'amine basique est une lecture qualitative cohérente avec le modèle de Lewis ; la force basique réelle (mesurée par $\text{p}K_a$) dépend du substituant et du solvant.</Badge>
+
+<Resultat label="Logique du chapitre">
+
+$$
+\text{groupe fonctionnel} \;\longrightarrow\; \text{structure électronique locale} \;\longrightarrow\; \text{réactivité}
+$$
+
+<Badge niveau="empirique" slot="badge">Fil directeur empirique : la fonction, via sa structure électronique, gouverne le comportement chimique de la molécule.</Badge>
+</Resultat>
+
+Nous savons désormais *où* une molécule réagit et *pourquoi* ce site est sensible. Reste la question du *comment* : par quel chemin les électrons se déplacent-ils réellement pendant une réaction ? C'est l'objet du dernier chapitre — la danse des flèches courbes, où tout le fil conducteur se referme.

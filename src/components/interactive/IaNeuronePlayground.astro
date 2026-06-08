@@ -1,0 +1,59 @@
+---
+/**
+ * IaNeuronePlayground — manipulation d'un neurone unique en 2D.
+ * Deux curseurs pour les poids (w1, w2) et un pour le biais b. On voit
+ * en temps réel la droite séparatrice w·x + b = 0 sur un nuage de points
+ * à deux classes, et la sortie de l'activation (seuil ou sigmoïde,
+ * commutable). Rend tangible « un neurone = un hyperplan ».
+ * Chapitres : neurone formel, régression logistique.
+ */
+---
+
+<div class="iw" data-iw="ia-neurone">
+  <div class="iw__head"><span class="tag">Interactif</span> Un neurone = une droite séparatrice</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="nr-w1">poids w₁</label>
+      <input id="nr-w1" type="range" min="-3" max="3" step="0.05" value="1" data-w1 />
+      <output data-out-w1>1,00</output>
+    </div>
+    <div class="iw__row">
+      <label for="nr-w2">poids w₂</label>
+      <input id="nr-w2" type="range" min="-3" max="3" step="0.05" value="0.7" data-w2 />
+      <output data-out-w2>0,70</output>
+    </div>
+    <div class="iw__row">
+      <label for="nr-b">biais b</label>
+      <input id="nr-b" type="range" min="-3" max="3" step="0.05" value="-0.2" data-b />
+      <output data-out-b>-0,20</output>
+    </div>
+    <div class="iw__row">
+      <label>activation</label>
+      <div class="iw__btns" role="group" aria-label="Fonction d'activation">
+        <button type="button" class="iw__btn active" data-act="seuil">seuil</button>
+        <button type="button" class="iw__btn" data-act="sigmoide">sigmoïde</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">bien classés</span> <b data-out-acc>—</b></span>
+    <span class="iw__chip"><span class="k">σ(w·x+b) au curseur</span> <b data-out-sig>—</b></span>
+  </div>
+  <p class="iw__note">
+    Le neurone calcule z = w₁x₁ + w₂x₂ + b. La droite <b>w·x + b = 0</b> (en jaune) sépare
+    le plan en deux : au-delà la sortie tend vers 1, en deçà vers 0. Les poids orientent la
+    droite, le biais la décale. Avec le <b>seuil</b> la décision est franche ; avec la
+    <b>sigmoïde</b> elle devient une transition douce (probabilité), ce qui rend l'apprentissage
+    par gradient possible. Survole le nuage : la barre montre σ(z) au point pointé.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-neurone'] .iw__controls.cols2 .iw__row:last-child .iw__btns { justify-self: start; }
+</style>
+
+<script>
+  import './IaNeuronePlayground.client.ts';
+</script>

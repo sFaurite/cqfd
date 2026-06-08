@@ -1,0 +1,35 @@
+---
+/**
+ * ExpansionScaleFactor — une grille de galaxies « comobiles » dont l'espacement
+ * physique suit le facteur d'échelle a(t). En réglant a, on voit l'univers se
+ * dilater (ce n'est pas un mouvement DANS l'espace : c'est l'espace qui grandit)
+ * et on lit le redshift z = 1/a − 1 d'un photon émis à ce facteur d'échelle.
+ */
+---
+
+<div class="iw" data-iw="expansion-scale-factor">
+  <div class="iw__head"><span class="tag">Interactif</span> L'expansion : facteur d'échelle et redshift</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="esf-a">facteur d'échelle a</label>
+      <input id="esf-a" type="range" min="0.2" max="1" step="0.01" value="0.5" data-a />
+      <output data-out-a>0,50</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">redshift</span> <b data-out-z>z = 1,00</b></span>
+    <span class="iw__chip"><span class="k">longueur d'onde</span> <b data-out-l>×2,00</b></span>
+    <span class="iw__chip"><span class="k">époque</span> <b data-out-ep>passé</b></span>
+  </div>
+  <p class="iw__note">
+    Les galaxies gardent leurs coordonnées <em>comobiles</em> ; seule la distance physique entre
+    elles change, proportionnellement à <code>a</code>. Une lumière émise quand l'univers était
+    <code>a</code> fois plus petit nous arrive étirée d'un facteur <code>1/a</code> — c'est le
+    redshift <code>z = 1/a − 1</code>.
+  </p>
+</div>
+
+<script>
+  import './ExpansionScaleFactor.client.ts';
+</script>

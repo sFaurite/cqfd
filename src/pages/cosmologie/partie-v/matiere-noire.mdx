@@ -1,0 +1,120 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La matière noire"
+chapter: matiere-noire
+description: "Courbes de rotation, lentilles, CMB : un faisceau de preuves convergentes."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import RotationCurve from '../../../components/interactive/RotationCurve.astro';
+
+## La matière noire
+
+Tout ce que nous avons posé jusqu'ici — l'expansion, la formation des galaxies par <Prereq href="/cosmologie/partie-v/instabilite-jeans">instabilité de Jeans</Prereq>, le fond diffus — repose sur un comptage de la masse. Or, dès qu'on **pèse** l'univers par sa gravité plutôt que par sa lumière, les deux nombres refusent de coïncider. Il manque, partout et systématiquement, de la masse. C'est l'énigme de la **matière noire** : non pas une hypothèse gratuite, mais l'écart, mesuré, entre ce qui brille et ce qui attire.
+
+<Encart type="intuition" titre="Peser sans voir">
+Imaginez une chorégraphie de patineurs se tenant par la main et tournant ensemble. À leur vitesse, vous pouvez déduire la force qui les retient — donc, in fine, leur masse. Si la chorégraphie est bien trop rapide pour ne tenir qu'à ce que vous voyez, c'est qu'une main invisible serre les rangs. La matière noire, c'est cette main : on ne la voit pas, mais on lit sa poigne dans le mouvement.
+</Encart>
+
+### Premier indice : les courbes de rotation des galaxies
+
+Considérons une étoile en orbite circulaire à la distance $r$ du centre d'une galaxie, autour d'une masse $M(r)$ contenue à l'intérieur de son orbite. La gravité fournit la force centripète. Le calcul est élémentaire et décisif.
+
+<Encart type="calcul" titre="Vitesse orbitale et masse enclose">
+
+**Étape 1 — Équilibre des forces.** La force gravitationnelle égale la force centripète :
+
+$$ \frac{G M(r)\, m}{r^2} = \frac{m\, v^2}{r}. $$
+
+**Étape 2 — On isole la vitesse.** On simplifie par $m$, puis on multiplie les deux membres par $r$ :
+
+$$ \frac{G M(r)}{r^2} = \frac{v^2}{r} \quad\Longrightarrow\quad v^2 = \frac{G M(r)}{r}. $$
+
+On prend la racine :
+
+$$ v(r) = \sqrt{\frac{G M(r)}{r}}. $$
+
+**Étape 3 — On lit la prédiction.** Au-delà du disque lumineux, toute la masse visible est déjà à l'intérieur de l'orbite : $M(r)$ devient constant, $M(r)\approx M$. Alors le numérateur ne varie plus et
+
+$$ \boxed{\,v(r) \propto \frac{1}{\sqrt{r}}\,}. $$
+
+La vitesse devrait **décroître** quand on s'éloigne — exactement comme Neptune tourne plus lentement que la Terre (loi képlérienne).
+
+</Encart>
+
+Voilà la prédiction. L'observation la contredit frontalement : passé le disque, la vitesse ne décline pas, elle reste **plate**.
+
+<VideoManim src="courbe-rotation" scene="CourbeRotation" titre="Les courbes de rotation des galaxies" legende="La vitesse reste plate au lieu de décliner : il manque une masse invisible." />
+
+Pour que $v$ reste constant, il faut, d'après $v^2 = G M(r)/r$, que $M(r)\propto r$ : la masse doit continuer de croître **linéairement** bien au-delà des étoiles, dans une région où l'on ne voit plus rien. Manipulez vous-même les deux composantes — disque visible et halo invisible — et constatez que seule l'addition d'un halo reproduit la courbe mesurée.
+
+<RotationCurve />
+
+<Badge niveau="observe">Les courbes de rotation plates sont mesurées sur des centaines de galaxies (Rubin, Ford, années 1970), par décalage Doppler de l'hydrogène à 21 cm. Le fait est empirique et robuste.</Badge>
+
+### Le faisceau converge : amas, lentilles, CMB
+
+Une anomalie isolée s'explique parfois par un détail. Mais la même masse manquante réapparaît à toutes les échelles, par des méthodes indépendantes — et c'est cette **convergence** qui force la conclusion.
+
+**Les amas de galaxies (Zwicky, 1933).** En appliquant le théorème du viriel à la **dispersion des vitesses** des galaxies de l'amas de Coma, Zwicky trouva une masse dynamique très supérieure à la masse lumineuse. Il parla, le premier, de *dunkle Materie*.
+
+<Encart type="rappel" titre="Le théorème du viriel">
+Pour un système gravitationnel lié et à l'équilibre statistique (un amas de galaxies, par exemple), l'énergie cinétique moyenne $\langle T\rangle$ et l'énergie potentielle moyenne $\langle U\rangle$ sont reliées par
+
+$$ 2\,\langle T\rangle + \langle U\rangle = 0. $$
+
+Comme $\langle T\rangle \sim \tfrac{1}{2} M \langle v^2\rangle$ dépend de la **dispersion des vitesses** mesurée (par décalage Doppler) et $\langle U\rangle \sim -G M^2/R$ de la taille $R$ de l'amas, on en tire la masse totale $M$ — sans rien supposer sur ce qui rayonne. C'est une pesée purement dynamique.
+</Encart>
+
+**Les lentilles gravitationnelles.** La masse courbe les rayons lumineux ; en mesurant la déformation des images de galaxies d'arrière-plan, on cartographie la masse **totale** d'un amas, lumineuse ou non. C'est une pesée purement gravitationnelle, sans hypothèse sur l'état du gaz.
+
+**L'amas du Boulet (Bullet Cluster).** C'est l'argument le plus net contre une simple modification de la gravité. Deux amas se sont traversés. Le gaz chaud — l'essentiel de la matière *baryonique*, visible en rayons X — a été freiné par friction et reste au centre. Mais les lentilles localisent la masse **ailleurs**, en avant, là où sont passées les galaxies (quasi sans collision) et, avec elles, la masse manquante. **La masse s'est dissociée de la matière visible.** Une simple loi de gravité, quelle qu'elle soit, fait suivre la masse à la matière qui la porte ; ici elles sont séparées dans l'espace.
+
+<Badge niveau="observe">Dispersion de vitesses, effet de lentille et séparation masse/gaz du Boulet sont des observations directes. Elles établissent un excès gravitationnel, indépendamment de toute interprétation.</Badge>
+
+**Le fond diffus cosmologique.** Argument cosmologique le plus fort, et indépendant. La hauteur relative des pics acoustiques des <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">anisotropies du CMB</Prereq> mesure deux densités distinctes : celle de **toute** la matière, $\Omega_m$, et celle des seuls **baryons**, $\Omega_b$. Or les baryons subissent la pression du rayonnement (ils oscillent), tandis que la matière noire, neutre, ne ressent que la gravité (elle s'effondre librement). Le verdict est sans appel : $\Omega_m \approx 0{,}31$ contre $\Omega_b \approx 0{,}049$, soit
+
+$$ \Omega_m \approx 6\,\Omega_b. $$
+
+<Badge niveau="observe">Le rapport $\Omega_m / \Omega_b \approx 6$ est lu directement dans le spectre du CMB (Planck). C'est une mesure, pas un ajustement.</Badge>
+
+Plusieurs sondes, plusieurs échelles, un même excès : courbes de rotation, viriel des amas, lentilles, amas du Boulet, fond diffus. Cette robustesse est ce qui distingue la matière noire d'une erreur.
+
+<Tournant titre="Tournant : de l'excès observé à l'interprétation du modèle">
+Jusqu'ici, tout est **mesuré** : il existe, à toutes les échelles, un excès gravitationnel par rapport à la lumière. Ce fait est solide. Mais dire que cet excès est une **particule** froide, non baryonique et neutre — c'est *interpréter* les données dans le cadre du modèle ΛCDM. On cesse de déduire l'observé pour adopter une hypothèse de contenu, qu'aucune détection en laboratoire n'a encore confirmée. Le signalement qui suit n'est donc pas une particule identifiée, mais la **lecture** que le modèle standard fait du faisceau.
+</Tournant>
+
+### Ses propriétés : ce que les données imposent au modèle
+
+De ce faisceau, le modèle ΛCDM déduit un signalement précis.
+
+- **Non baryonique.** Si l'excès était de la matière ordinaire, on aurait $\Omega_m \approx \Omega_b$. Le CMB et la nucléosynthèse primordiale l'interdisent : il y a environ six fois trop de matière pour la quantité de baryons autorisée.
+- **Sans interaction électromagnétique.** Elle n'émet, n'absorbe ni ne réfléchit la lumière : « noire » au sens propre. Au Boulet, elle a traversé sans friction, contrairement au gaz.
+- **Froide** (*cold*). Pour que l'<Prereq href="/cosmologie/partie-v/instabilite-jeans">instabilité de Jeans</Prereq> forme d'abord les petites structures (galaxies) puis les grandes, la matière noire doit être **non relativiste** tôt : lente, donc « froide ». Une matière chaude (relativiste) lisserait les petites échelles, en contradiction avec la structure observée.
+
+<Resultat label="Signalement de la matière noire (CDM)">
+
+$$ \text{froide (non relativiste)} \;+\; \text{non baryonique} \;+\; \text{neutre électriquement} $$
+
+<Badge niveau="concordance" slot="badge">Ces propriétés constituent l'interprétation CDM (Cold Dark Matter) du modèle ΛCDM. Elles reproduisent simultanément courbes de rotation, amas, lentilles, CMB et formation des structures — mais restent une **lecture** des données, pas une particule identifiée.</Badge>
+</Resultat>
+
+### La nature reste inconnue — et MOND ne suffit pas
+
+Que la matière noire **existe** gravitationnellement est solide. **Ce qu'elle est** ne l'est pas.
+
+Les candidats privilégiés sont des particules au-delà du Modèle standard : les **WIMPs** (particules massives interagissant faiblement) et les **axions** (très légers, issus du problème de violation CP forte de la chromodynamique). Des décennies d'expériences de détection directe et de production en accélérateur n'ont, à ce jour, rien trouvé.
+
+<Badge niveau="extrapole">WIMPs et axions sont des extrapolations théoriques sérieuses au-delà du Modèle standard. Aucune détection directe, en laboratoire ou en accélérateur, n'a été confirmée.</Badge>
+
+Reste l'alternative : et si ce n'était pas de la matière, mais la **gravité** qui dérivait à basse accélération ? C'est l'idée de **MOND** (dynamique newtonienne modifiée), qui modifie la loi de Newton pour reproduire, *par construction*, les courbes de rotation plates — qu'elle décrit d'ailleurs remarquablement à l'échelle galactique. Mais MOND bute sur le reste du faisceau : elle peine à rendre compte des amas, des pics du CMB, et surtout du **Boulet**, où masse et matière visible sont **physiquement séparées**. Modifier la gravité laisse la masse là où est la matière ; or les données montrent le contraire.
+
+<Badge niveau="extrapole">MOND est une alternative honnête mais en difficulté : performante sur les galaxies, elle échoue à reproduire amas, CMB et la séparation masse/matière de l'amas du Boulet, sans réintroduire de masse invisible.</Badge>
+
+La matière noire structure donc l'univers — mais elle n'explique ni son expansion accélérée, ni ce qui domine aujourd'hui son bilan énergétique. Pour cela, il faut affronter la composante la plus déroutante de toutes : l'énergie noire.

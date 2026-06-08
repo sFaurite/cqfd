@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Recombinaison et fond diffus cosmologique"
+chapter: recombinaison-cmb
+description: "Le découplage matière-rayonnement libère le CMB : la plus vieille lumière observable."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import BlackbodyCMB from '../../../components/interactive/BlackbodyCMB.astro';
+
+## Recombinaison et fond diffus cosmologique
+
+Remontons le film de l'expansion. Plus on remonte, plus l'univers est dense et chaud — nous l'avons établi avec <Prereq href="/cosmologie/partie-iii/univers-chaud">l'univers chaud</Prereq>. Aux premières centaines de milliers d'années, la matière n'est pas faite d'atomes : c'est un **plasma**, une soupe de protons, de noyaux d'hélium et d'électrons libres, baignée d'un océan de photons. Or un électron libre est, pour la lumière, un mur. Les photons s'y heurtent sans cesse (diffusion Thomson) et ne parcourent qu'une distance dérisoire avant d'être déviés. L'univers est **opaque** : un brouillard lumineux et incandescent, où l'on ne voit rien à un mètre.
+
+Puis, vers **380 000 ans**, quelque chose bascule. La température tombe assez bas pour que les électrons se laissent capturer par les protons et forment des atomes d'hydrogène neutres. D'un coup, les électrons libres disparaissent, le brouillard se lève, et les photons — qui ne rencontrent plus d'obstacle — s'élancent en ligne droite. Ils voyagent depuis lors quasi librement. Ce flash de lumière libéré il y a 13,8 milliards d'années, c'est le **fond diffus cosmologique** (CMB), la plus vieille image accessible de l'univers.
+
+<Encart type="intuition" titre="Le moment où le brouillard se lève">
+Pensez à un matin de brouillard épais : la lumière du soleil existe, mais elle est diffusée de gouttelette en gouttelette, et vous ne voyez qu'une lueur blanche uniforme. Quand le brouillard se dissipe, le paysage apparaît net. La recombinaison, c'est exactement cet instant à l'échelle de l'univers entier. La « dernière gouttelette » que chaque photon a touchée avant de filer vers nous dessine une sphère autour de nous : la **surface de dernière diffusion**. Le CMB est l'image de cette surface — non pas un lieu, mais une **époque** que nous voyons dans toutes les directions.
+</Encart>
+
+### Pourquoi « recombinaison » à 3000 K et non à 158 000 K ?
+
+Voici le piège classique, et il vaut la peine de le démonter. Lier un électron à un proton libère de l'énergie : l'énergie d'ionisation de l'hydrogène vaut $E_I = 13{,}6\ \mathrm{eV}$. <Badge niveau="observe">Cette énergie d'ionisation est mesurée en laboratoire avec une très grande précision.</Badge> Naïvement, on s'attend à ce que les atomes se forment dès que l'énergie thermique typique $k_B T$ tombe sous $13{,}6\ \mathrm{eV}$, soit à une température $T \sim E_I/k_B \approx 158\,000\ \mathrm{K}$. Or la recombinaison a lieu **une cinquantaine de fois plus tard et plus froid**, vers $3000\ \mathrm{K}$. Pourquoi ?
+
+La réponse tient en un nombre : le rapport entre photons et baryons. Il y a environ **un milliard de photons pour chaque proton**. <Badge niveau="observe">Ce rapport photons/baryons est mesuré : il découle de la densité de photons du CMB et de la densité de baryons (lue dans les abondances primordiales et les pics du CMB).</Badge> Et même à une température où le photon *moyen* est bien trop mou pour casser un atome, la lumière est un corps noir : sa queue à haute énergie contient encore une multitude de photons capables d'ioniser. Tant que les photons « durs » (au-delà de $13{,}6\ \mathrm{eV}$) sont plus nombreux que les baryons, chaque atome formé est aussitôt re-cassé. Il faut donc descendre **bien plus bas** que $158\,000\ \mathrm{K}$ pour que la fraction de photons ionisants devienne assez rare devant l'immense réservoir de baryons.
+
+<Encart type="calcul" titre="Estimation par le rapport photons/baryons">
+
+**Étape 1 — La fraction de photons ionisants.** Dans un corps noir à température $T$, la proportion de photons d'énergie supérieure à $E_I$ décroît exponentiellement, en $\sim e^{-E_I/k_B T}$. Le nombre de photons capables d'ioniser, *par baryon*, est de l'ordre de
+
+$$ \mathcal{N} \sim \eta^{-1}\, e^{-E_I/k_B T}, $$
+
+où $\eta = n_b/n_\gamma \approx 6\times 10^{-10}$ est le **rapport baryon/photon**.
+
+**Étape 2 — Condition de recombinaison.** Les atomes commencent à survivre quand les photons durs deviennent moins nombreux que les baryons, soit $\mathcal{N}\sim 1$ :
+
+$$ e^{-E_I/k_B T} \sim \eta \approx 6\times 10^{-10}. $$
+
+**Étape 3 — On isole la température.** En prenant le logarithme :
+
+$$ \frac{E_I}{k_B T} \sim -\ln(\eta) = \ln\!\left(\frac{1}{6\times 10^{-10}}\right) \approx 21. $$
+
+**Étape 4 — Résultat de l'estimation grossière.** La recombinaison se produit donc non pas à $E_I/k_B$, mais à une température environ **21 fois plus basse** :
+
+$$ T_{\mathrm{rec}} \sim \frac{E_I}{21\, k_B} \approx \frac{158\,000\ \mathrm{K}}{21} \approx 7500\ \mathrm{K}. $$
+
+Ce simple argument fait déjà l'essentiel du travail : il divise par plus de vingt la température naïve, et désigne la *cause* — l'énorme réservoir de photons. Mais il surestime encore $T_{\mathrm{rec}}$.
+
+**Étape 5 — L'affinement de Saha.** Un traitement complet par l'**équation de Saha** ajoute un facteur de **volume de phase** $\propto (m_e k_B T / 2\pi\hbar^2)^{3/2}$ qui amplifie encore le déséquilibre en faveur de l'ionisation. Le logarithme effectif passe alors de $\approx 21$ à $\approx 40$, ce qui repousse la recombinaison vers
+
+$$ T_{\mathrm{rec}} \approx \frac{158\,000\ \mathrm{K}}{40} \approx 3700\ \mathrm{K}, $$
+
+et l'on retient conventionnellement le point où la moitié des électrons sont recombinés, vers $\sim 3000\ \mathrm{K}$. $\qquad\blacksquare$
+
+L'ordre de grandeur — et surtout sa *cause* — tient entièrement dans le grand logarithme $\ln(1/\eta)$, encore renforcé par le facteur de volume de phase de Saha.
+
+</Encart>
+
+C'est l'énorme rapport photons/baryons qui repousse la recombinaison vers $3000\ \mathrm{K}$, et non l'énergie d'ionisation nue. <Badge niveau="concordance">Le calcul de Saha appliqué à la composition de l'univers primordial place la recombinaison à $z\approx 1100$, soit $T\approx 3000\ \mathrm{K}$ et un âge de l'ordre de $380\,000$ ans. C'est une prédiction du modèle, en accord fin avec la position des pics du CMB.</Badge>
+
+<VideoManim src="recombinaison-cmb" scene="RecombinaisonCMB" titre="Recombinaison et libération du fond diffus" legende="Quand les atomes se forment, l'univers devient transparent et libère le CMB." />
+
+### Du flash à 3000 K au corps noir à 2,7 K
+
+Au moment du découplage, ce rayonnement est un **corps noir** à $\sim 3000\ \mathrm{K}$ : à l'œil, l'univers entier baignait alors dans une lueur orangée. Mais depuis, l'espace s'est étiré d'un facteur $1+z \approx 1100$. L'expansion étire la longueur d'onde de chaque photon dans la même proportion — c'est le redshift cosmologique — et une propriété remarquable se conserve : un corps noir reste un corps noir, sa température chutant simplement comme l'inverse du facteur d'échelle.
+
+<Encart type="rappel" titre="Pourquoi un corps noir reste un corps noir en se diluant">
+La distribution de Planck dépend des photons uniquement par la combinaison $h\nu/k_B T$. Sous l'expansion, chaque fréquence est divisée par $(1+z)$ ; il suffit donc de diviser $T$ par le même facteur pour que la distribution garde *exactement* sa forme de Planck. Aucun processus n'est requis : la dilution géométrique préserve le spectre. D'où la loi du refroidissement :
+
+$$ T(z) = T_0\,(1+z). $$
+</Encart>
+
+<Resultat label="Température du CMB au redshift z">
+
+$$ T(z) = T_0\,(1+z), \qquad T_0 = 2{,}7255\ \mathrm{K} $$
+
+<Badge niveau="observe" slot="badge">La température actuelle $T_0 = 2{,}7255\ \mathrm{K}$ est mesurée directement (FIRAS/COBE) ; la loi $T\propto 1+z$ est confirmée par la température du CMB lue à grand redshift dans des nuages intergalactiques.</Badge>
+</Resultat>
+
+En reportant $z\approx 1100$ et $T_0 = 2{,}7255\ \mathrm{K}$, on retrouve bien $T_{\mathrm{rec}} = 2{,}7255 \times 1101 \approx 3000\ \mathrm{K}$ : la cohérence boucle. Le flash orangé de la recombinaison nous parvient aujourd'hui, refroidi mille fois, sous forme de micro-ondes — un rayonnement à un peu moins de 3 degrés au-dessus du zéro absolu, identique dans toutes les directions.
+
+### Le corps noir le plus parfait de l'univers
+
+C'est ici qu'intervient la mesure reine. En 1990, l'instrument **FIRAS** du satellite **COBE** a relevé le spectre du CMB sur tout le domaine des micro-ondes. Le résultat est saisissant : les points de mesure tombent si exactement sur la courbe de Planck que les barres d'erreur sont plus petites que l'épaisseur du trait. Aucun corps noir fabriqué en laboratoire n'approche cette perfection.
+
+<BlackbodyCMB />
+
+<Badge niveau="observe">Le spectre du CMB est le **corps noir le plus parfait jamais mesuré** : FIRAS contraint tout écart à la loi de Planck à moins de $10^{-4}$ de l'intensité au pic. C'est une preuve empirique directe que l'univers a bien traversé une phase dense, chaude et en équilibre thermique — exactement ce qu'exige un univers issu d'un état primordial brûlant.</Badge>
+
+Cette perfection n'est pas un détail esthétique : un corps noir aussi pur ne peut naître que d'un milieu ayant été **en équilibre thermique**, donc opaque et thermalisé. Le CMB est ainsi le témoin scellé du plasma primordial, et sa simple existence ferme la porte aux modèles d'univers froid. Restent ses minuscules irrégularités — une part sur cent mille — qui portent l'empreinte des germes de toutes les galaxies : c'est l'objet du chapitre suivant.

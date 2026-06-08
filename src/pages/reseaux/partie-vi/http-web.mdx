@@ -1,0 +1,84 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "HTTP et le web"
+chapter: http-web
+description: "Presente HTTP : modele requete/reponse, methodes et codes de statut, son caractere sans etat, et l'evolution des versions (1.1, 2, 3/QUIC)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Toute la pile, pour une simple page
+
+Vous tapez `https://exemple.fr` et appuyez sur Entrée. Une seconde plus tard, une page s'affiche. Ce geste anodin met en mouvement *tout* ce que nous avons construit depuis le premier bit : un signal sur un fil, une trame Ethernet, un paquet IP routé saut par saut, une connexion TCP fiable, une résolution de nom. HTTP est la couche qui, tout en haut, donne un sens à cette machinerie. Ce chapitre a deux missions : décrire HTTP lui-même, puis — c'est le moment du cours où la pile se montre entière — suivre une requête de bout en bout.
+
+<Encart type="intuition" titre="Une conversation par cartes postales">
+Imaginez deux interlocuteurs qui ne se parlent jamais de vive voix : ils s'échangent des messages écrits, complets, autonomes. Vous écrivez « Donne-moi la page d'accueil », vous glissez la carte dans la boîte (TCP), et plus tard une carte revient : « Voici, code 200, en voici le contenu ». Chaque carte se suffit à elle-même. HTTP, c'est exactement cela : un protocole **requête/réponse** en texte clair, où le client demande et le serveur répond. Pas de négociation continue, pas de mémoire entre deux cartes — juste des messages bien formés.
+</Encart>
+
+## L'anatomie d'un message HTTP
+
+Un message HTTP est du **texte lisible**. Une requête commence par une *ligne de requête* : une **méthode** (l'action voulue : `GET` pour lire, `POST` pour envoyer), une **cible** (le chemin de la ressource, par exemple `/index.html`) et une **version**. Suivent des *en-têtes* (`clé: valeur`), une ligne vide, puis un *corps* optionnel.
+
+```http
+GET /index.html HTTP/1.1
+Host: exemple.fr
+Accept: text/html
+```
+
+La réponse suit la même structure, mais sa première ligne porte un **code de statut** à trois chiffres. La famille du premier chiffre dit l'essentiel : **2xx** succès (`200 OK`), **3xx** redirection (`301`), **4xx** erreur du client (`404 Not Found`), **5xx** erreur du serveur (`500`).
+
+<Resultat label="HTTP : protocole requête/réponse au-dessus de TCP">
+
+$$ \text{Client} \xrightarrow{\text{requête : méthode + cible + en-têtes}} \text{Serveur} \xrightarrow{\text{réponse : statut + en-têtes + corps}} \text{Client} $$
+
+<Badge niveau="norme" slot="badge">Le format des messages, les méthodes et les codes de statut sont fixés par les RFC HTTP (RFC 9110 et suivantes), adoptées mondialement. C'est une norme, pas une nécessité physique.</Badge>
+</Resultat>
+
+Une mise en garde indispensable : **HTTP n'est pas HTML, et HTTP n'est pas le web**. HTTP est le *protocole de transfert* ; HTML est l'un des *formats* qu'il transporte (parmi d'autres : images, JSON, vidéo). Le web, lui, est l'écosystème global de ressources liées par des URL. HTTP n'en est que le facteur. <Badge niveau="norme">HTML est défini par sa propre spécification (WHATWG/W3C), distincte des RFC HTTP. Confondre le facteur et le courrier qu'il porte est une erreur fréquente.</Badge>
+
+## Le voyage complet : de l'URL à la page
+
+Reprenons `https://exemple.fr`. Voici, dans l'ordre, ce que la pile entière accomplit.
+
+<Encart type="calcul" titre="Bout en bout : chaque couche entre en scène">
+1. **Résoudre le nom.** Le navigateur ne sait pas où est `exemple.fr` ; il interroge le DNS, qui lui renvoie une adresse IP. *(Voir <Prereq href="/reseaux/partie-vi/dns">Le DNS : des noms aux adresses</Prereq>.)*
+
+2. **Établir TCP.** Le client ouvre une connexion fiable vers l'IP obtenue, port 443, par le *three-way handshake*. *(Voir <Prereq href="/reseaux/partie-v/tcp-connexion">TCP : établir une connexion fiable</Prereq>.)*
+
+3. **Émettre la requête HTTP.** Sur ce flux fiable, le client écrit `GET / HTTP/1.1` avec ses en-têtes.
+
+4. **Descendre la pile.** Ces octets sont découpés en segments TCP, encapsulés dans des **paquets IP**, routés saut par saut par *longest prefix match*, mis dans des **trames Ethernet** adressées par MAC, et finalement émis comme un **signal** modulé sur le support physique.
+
+5. **Remonter côté serveur.** Le serveur reconstruit le flux, lit la requête, produit la réponse `200 OK` avec le HTML, et le chemin inverse se déroule.
+
+6. **Afficher.** Le navigateur interprète le HTML reçu et peint la page.
+</Encart>
+
+C'est ici que tout le cours converge. <Badge niveau="theoreme">Le débit utile de cet échange reste borné par la capacité de Shannon du maillon le plus lent ($C = B\log_2(1 + S/N)$) : aucune couche supérieure ne peut transmettre plus vite que ne le permet la physique du canal.</Badge> <Badge niveau="norme">Chaque encapsulation (HTTP → TCP → IP → Ethernet) suit des normes empilées : c'est la structure en couches qui rend cette traversée possible et interopérable.</Badge>
+
+## Sans état : un choix, pas une fatalité
+
+Point crucial : HTTP est **sans état** (*stateless*). Chaque requête est traitée indépendamment ; le serveur n'a, par construction, aucun souvenir de la précédente. Cela simplifie énormément les serveurs (aucune mémoire par client à gérer, montée en charge facile), mais pose un problème : comment rester connecté à un site, garder un panier d'achat ?
+
+<Tournant titre="L'absence d'état est une décision de conception">
+Rien dans la physique ou dans TCP n'impose que HTTP soit sans état — TCP, lui, *est* à état (il suit numéros de séquence et fenêtres). L'apatridie de HTTP est un **choix** délibéré des concepteurs, motivé par la simplicité et la robustesse. Pour réintroduire de la continuité quand on en a besoin, on l'ajoute *par-dessus* : un **cookie** est un petit jeton que le serveur dépose chez le client (en-tête `Set-Cookie`) et que le client renvoie à chaque requête suivante. Le serveur associe ce jeton à une **session** stockée de son côté. L'état n'est donc pas dans le protocole : il est reconstruit explicitement par convention applicative.
+</Tournant>
+
+<Badge niveau="norme">Le mécanisme des cookies est standardisé (RFC 6265), mais le fait de bâtir des sessions par-dessus un protocole apatride est une convention d'ingénierie, révisable.</Badge>
+
+## L'évolution : corriger la performance, pas la correction
+
+HTTP fonctionne depuis ses débuts ; ses versions successives ne le *corrigent* pas, elles l'*accélèrent*.
+
+- **HTTP/1.1** introduit les **connexions persistantes** : on réutilise une même connexion TCP pour plusieurs requêtes, au lieu de payer un handshake par fichier. <Badge niveau="norme">Persistance définie avec HTTP/1.1 (RFC 7230, aujourd'hui révisée par la RFC 9112) ; gain d'ingénierie, sémantique inchangée.</Badge>
+- **HTTP/2** passe à un encodage **binaire** et **multiplexe** plusieurs échanges sur une seule connexion. Motif : en HTTP/1.1, les requêtes d'une connexion sont sérialisées, et une lente bloque les suivantes (*head-of-line blocking* applicatif). <Badge niveau="heuristique">Le multiplexage est une optimisation d'ingénierie ciblant la latence perçue ; raisonnable, non imposée.</Badge>
+- **HTTP/3** déplace le tout sur **QUIC**, bâti sur **UDP**. Pourquoi quitter TCP ? Parce que le multiplexage de HTTP/2 souffre encore d'un *head-of-line blocking* au niveau TCP : une perte sur un flux fait attendre tous les autres, car TCP livre un flux unique strictement ordonné. QUIC sépare les flux pour qu'une perte n'affecte que le sien. <Badge niveau="heuristique">Bâtir un transport fiable et multiplexé sur UDP est un compromis d'ingénierie face à une limite de TCP ; ce n'est pas une nécessité, c'est une amélioration mesurée de la latence.</Badge>
+
+Chaque version est une réponse à une limite *de performance*, jamais à un défaut de correction. La sémantique — méthodes, statuts, requête/réponse — reste celle des origines.
+
+Nous avons monté la pile entière : du signal au sens. Il manque pourtant une garantie que ce `https` promettait sans qu'on l'explique : **personne ne peut lire ni falsifier** cet échange. C'est l'objet du <Prereq href="/reseaux/partie-vi/tls-securite">chapitre suivant</Prereq>, où nous verrons comment chiffrer et authentifier une connexion.

@@ -1,0 +1,64 @@
+---
+/**
+ * IaUniversalApprox — approximation d'une fonction cible 1D par une somme de
+ * neurones ReLU (bosses/marches). L'utilisateur ajoute des neurones et voit la
+ * courbe approchée épouser la cible. Illustre le théorème d'approximation
+ * universelle, mais aussi son coût (beaucoup de neurones) et la limite
+ * existence ≠ apprenabilité. Réutilisé pour l'overfitting (approcher le bruit).
+ * Chapitres : approximation universelle, régularisation.
+ */
+---
+
+<div class="iw" data-iw="ia-approx">
+  <div class="iw__head"><span class="tag">Interactif</span> Empiler des neurones pour approcher une courbe</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="ua-n">neurones cachés</label>
+      <input id="ua-n" type="range" min="1" max="40" step="1" value="6" data-n />
+      <output data-out-n>6</output>
+    </div>
+    <div class="iw__row">
+      <label>fonction cible</label>
+      <div class="iw__btns" role="group" aria-label="Cible">
+        <button type="button" class="iw__btn active" data-target="sin">sinus</button>
+        <button type="button" class="iw__btn" data-target="marche">marche</button>
+        <button type="button" class="iw__btn" data-target="bosse">bosse</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label for="ua-noise">bruit des données</label>
+      <input id="ua-noise" type="range" min="0" max="0.4" step="0.02" value="0" data-noise />
+      <output data-out-noise>0,00</output>
+    </div>
+    <div class="iw__row">
+      <label>affichage</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn active" data-show="briques">voir les briques</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">neurones</span> <b data-out-n2>6</b></span>
+    <span class="iw__chip"><span class="k">erreur (cible)</span> <b data-out-err>—</b></span>
+    <span class="iw__chip"><span class="k">erreur (données)</span> <b data-out-errd>—</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque neurone ReLU est une <b>rampe coudée</b> ; en additionnant beaucoup de rampes décalées, on
+    fabrique une ligne brisée qui épouse n'importe quelle courbe continue : c'est l'idée du théorème
+    d'approximation universelle. Augmente le nombre de neurones et l'écart à la cible chute. Mais
+    monte le <b>bruit</b> : avec trop de neurones, la courbe se met à <i>épouser le bruit</i>
+    (surapprentissage) — l'existence d'un bon réseau ne garantit pas qu'on l'apprenne à partir de
+    données bruitées.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-approx'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaUniversalApprox.client.ts';
+</script>

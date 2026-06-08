@@ -1,0 +1,52 @@
+---
+/**
+ * ReseauTcpHandshake — animation pas à pas du three-way handshake TCP.
+ * Deux hôtes (client / serveur) reliés par un diagramme de séquence vertical.
+ * On avance étape par étape : SYN (seq=x), SYN-ACK (seq=y, ack=x+1), ACK
+ * (seq=x+1, ack=y+1), puis connexion établie. Les segments glissent d'un hôte
+ * à l'autre et les numéros de séquence/acquittement s'affichent. Option « perte »
+ * : un segment se perd, le timer expire (timeout) et le segment est retransmis.
+ * prefersReducedMotion → état figé + le bouton « étape suivante » fait foi.
+ */
+---
+
+<div class="iw" data-iw="reseau-tcp-handshake">
+  <div class="iw__head"><span class="tag">Interactif</span> TCP : l'ouverture en trois temps (SYN / SYN-ACK / ACK)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 11"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="tcp-loss">Simuler une perte de segment</label>
+      <input id="tcp-loss" type="checkbox" data-loss />
+      <output data-out-loss>non</output>
+    </div>
+    <div class="iw__row">
+      <label>Dérouler la séquence</label>
+      <span class="iw__btns">
+        <button type="button" class="iw__btn" data-prev>◀ précédente</button>
+        <button type="button" class="iw__btn" data-next>étape suivante ▶</button>
+        <button type="button" class="iw__btn" data-reset>↺ reset</button>
+      </span>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">étape</span> <b data-out-step></b></span>
+    <span class="iw__chip"><span class="k">client</span> <b data-out-cstate></b></span>
+    <span class="iw__chip"><span class="k">serveur</span> <b data-out-sstate></b></span>
+  </div>
+  <p class="iw__note">
+    Avant d'échanger des données, TCP établit une connexion <strong>fiable</strong> en trois
+    segments. Le client envoie <span style="color:var(--c-blue)">SYN</span> avec un numéro de
+    séquence initial x (choisi aléatoirement). Le serveur répond
+    <span style="color:var(--c-green)">SYN-ACK</span> : il accuse réception (ack = x+1) et propose
+    son propre y. Le client renvoie <span style="color:var(--c-teal)">ACK</span> (ack = y+1) : la
+    connexion est <em>établie</em> des deux côtés. Les numéros de séquence permettent à chacun de
+    savoir quels octets ont été reçus. Coche « perte » : un segment disparaît, mais TCP arme un
+    <strong>timer</strong> à chaque envoi ; à son expiration (<em>timeout</em>), le segment est
+    <em>retransmis</em>. C'est ainsi qu'une fiabilité de bout en bout est construite par-dessus un
+    réseau qui, lui, ne garantit rien.
+  </p>
+</div>
+
+<script>
+  import './ReseauTcpHandshake.client.ts';
+</script>

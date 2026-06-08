@@ -1,0 +1,122 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le destin de l'univers"
+chapter: destin-univers
+description: "Selon son contenu : recontraction, expansion éternelle, ou accélération."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le destin de l'univers
+
+Nous tenons maintenant les deux leviers qui commandent l'avenir : l'équation de Friedmann, qui relie le taux d'expansion au contenu, et son <Prereq href="/cosmologie/partie-ii/equations-friedmann">corollaire d'accélération</Prereq>. La question « comment finira l'univers ? » n'est plus une rêverie : c'est un problème de comptabilité. Connaissez les <Prereq href="/cosmologie/partie-ii/parametres-densite">paramètres de densité</Prereq> et le <Prereq href="/cosmologie/partie-ii/contenu-univers">contenu</Prereq>, et le destin se déduit — **à condition** que les lois et les composantes restent ce qu'elles sont. Classons les scénarios.
+
+<Encart type="intuition" titre="Une pierre lancée vers le haut">
+Reprenons l'image de la bille lancée vers le ciel. Si on la lance moins vite que la vitesse de libération, elle retombe : c'est le **Big Crunch**. Pile à la vitesse de libération, elle monte éternellement mais en ralentissant sans cesse, sa vitesse tendant vers zéro : c'est l'**expansion éternelle décélérée**. Mais imaginez maintenant qu'un moteur antigravitationnel s'allume en cours de route et **repousse** la bille de plus en plus fort : tant que ce moteur tourne, elle s'éloigne en accélérant. Ce moteur, c'est la constante cosmologique $\Lambda$, et c'est le scénario qui décrit notre univers — l'accélération étant aujourd'hui **observée** (nous y revenons).
+</Encart>
+
+### Trois questions, posées à l'équation
+
+Tout tient dans la première équation de Friedmann, qui gouverne le carré du taux d'expansion $H = \dot a / a$ :
+
+$$ H^2 = \left(\frac{\dot a}{a}\right)^2 = \frac{8\pi G}{3}\,\rho - \frac{k c^2}{a^2}. $$
+
+Le destin se lit en demandant : **$H$ peut-il s'annuler ?** Si oui, l'expansion s'arrête, puis (l'accélération restant négative pour de la matière) s'inverse. Si non, l'univers grandit pour toujours. La réponse dépend de la compétition entre le terme de densité, toujours positif, et le terme de courbure $-kc^2/a^2$, qui porte le signe de $k$.
+
+#### Cas 1 — Univers fermé dominé par la matière : le Big Crunch
+
+<Encart type="calcul" titre="Pourquoi un univers fermé (k>0) sans Λ recontracte">
+
+**Hypothèse.** Univers ne contenant que de la matière non relativiste ($p \approx 0$, pas de $\Lambda$), avec courbure positive $k > 0$.
+
+**Étape 1 — Dilution de la matière.** La matière conserve sa masse tandis que le volume croît comme $a^3$, donc
+
+$$ \rho_m(a) = \rho_{m,0}\,\frac{a_0^3}{a^3} \propto a^{-3}. $$
+
+**Étape 2 — Le terme de densité chute plus vite que le terme de courbure.** Reportons dans Friedmann :
+
+$$ H^2 = \frac{8\pi G}{3}\,\rho_{m,0}\,\frac{a_0^3}{a^3} - \frac{kc^2}{a^2}. $$
+
+Le premier terme décroît en $a^{-3}$, le second seulement en $a^{-2}$.
+
+**Étape 3 — Un croisement inévitable.** Quand $a$ grandit, $a^{-3}$ devient négligeable devant $a^{-2}$. Il existe donc une valeur $a_{\max}$ pour laquelle les deux termes s'égalent et $H^2 = 0$ :
+
+$$ \frac{8\pi G}{3}\,\rho_{m,0}\,\frac{a_0^3}{a_{\max}^3} = \frac{kc^2}{a_{\max}^2} \;\Longrightarrow\; a_{\max} = \frac{8\pi G\,\rho_{m,0}\,a_0^3}{3kc^2}. $$
+
+**Étape 4 — Inversion.** En $a_{\max}$, l'expansion s'arrête. L'équation d'accélération $\ddot a/a = -\tfrac{4\pi G}{3}\rho_m < 0$ reste négative : $a$ se met à décroître. L'univers recontracte jusqu'à $a \to 0$. $\boxed{\text{Big Crunch}}$
+
+</Encart>
+
+<Badge niveau="concordance">Ce verdict — fermé + matière seule $\Rightarrow$ recontraction — est une déduction directe de l'équation de Friedmann (cadre admis). Il classe correctement le destin **en fonction du contenu**, sans préjuger duquel est le nôtre.</Badge>
+
+#### Cas 2 — Univers plat ou ouvert sans Λ : expansion éternelle, décélérée
+
+Si $k \le 0$ et qu'il n'y a pas de $\Lambda$, les **deux** termes du membre de droite sont positifs (ou le second nul) : $H^2$ ne s'annule jamais. L'univers grandit pour toujours. Mais comme la seule gravité présente est attractive, il **décélère** : l'équation d'accélération donne $\ddot a < 0$. Pour le cas critique $k = 0$ (univers plat de matière), on intègre exactement.
+
+<Encart type="calcul" titre="L'univers d'Einstein–de Sitter (plat, matière) ralentit sans s'arrêter">
+
+Avec $k = 0$ et $\rho_m \propto a^{-3}$, Friedmann s'écrit $\dot a^2 = C\,a^{-1}$ avec $C = \tfrac{8\pi G}{3}\rho_{m,0}a_0^3$. On sépare les variables :
+
+$$ \sqrt{a}\,\mathrm{d}a = \sqrt{C}\,\mathrm{d}t \;\Longrightarrow\; \tfrac{2}{3}a^{3/2} = \sqrt{C}\,t \;\Longrightarrow\; a(t) \propto t^{2/3}. $$
+
+La vitesse $\dot a \propto t^{-1/3}$ **tend vers zéro** quand $t \to \infty$, sans jamais l'atteindre : expansion infinie mais asymptotiquement gelée.
+
+</Encart>
+
+<Badge niveau="concordance">Plat/ouvert sans $\Lambda$ $\Rightarrow$ expansion éternelle décélérée : déduction de Friedmann pour ce contenu hypothétique. Ce n'est pas notre univers, car l'observation montre une accélération (voir ci-dessous).</Badge>
+
+#### Cas 3 — Univers avec Λ : accélération vers de Sitter
+
+C'est ici que la **pression** entre en jeu, via l'équation d'accélération. La constante cosmologique a une équation d'état $p_\Lambda = -\rho_\Lambda c^2$ : une **pression négative**. Voyons pourquoi cela accélère.
+
+<Encart type="calcul" titre="Λ a une pression négative, donc ä > 0">
+
+**Étape 1 — L'équation d'accélération.** Elle fait peser la pression *en plus* de la densité :
+
+$$ \frac{\ddot a}{a} = -\frac{4\pi G}{3}\left(\rho + \frac{3p}{c^2}\right). $$
+
+**Étape 2 — On y injecte $\Lambda$.** Pour l'énergie noire $p_\Lambda = -\rho_\Lambda c^2$, donc $\rho_\Lambda + 3p_\Lambda/c^2 = \rho_\Lambda - 3\rho_\Lambda = -2\rho_\Lambda$ :
+
+$$ \frac{\ddot a}{a} = -\frac{4\pi G}{3}(-2\rho_\Lambda) = +\frac{8\pi G}{3}\,\rho_\Lambda > 0. $$
+
+Le signe s'est **inversé** : $\Lambda$ repousse. La condition générale d'accélération est $p < -\tfrac{1}{3}\rho c^2$, exactement satisfaite ici.
+
+**Étape 3 — Λ ne se dilue pas.** $\rho_\Lambda$ est constante : tandis que matière et rayonnement se diluent ($\propto a^{-3}$, $a^{-4}$), $\Lambda$ finit toujours par dominer. Friedmann devient $H^2 \to \tfrac{8\pi G}{3}\rho_\Lambda \equiv H_\Lambda^2$, constant.
+
+**Étape 4 — Régime de de Sitter.** Avec $H = \dot a/a$ constant, on intègre $\dot a / a = H_\Lambda$ :
+
+$$ a(t) \propto e^{H_\Lambda\, t}. \qquad \boxed{\text{expansion exponentielle}} $$
+
+</Encart>
+
+<Badge niveau="concordance">Λ $\Rightarrow$ accélération tendant vers un régime de de Sitter exponentiel : déduit des deux équations de Friedmann **en supposant** une pression négative constante ($p_\Lambda = -\rho_\Lambda c^2$ pour toujours). C'est l'hypothèse la plus simple ; sa validité à très long terme n'est pas testée (voir plus bas).</Badge>
+
+### Notre univers, et son futur lointain
+
+Que les trois destins existent est de la théorie ; lequel est le nôtre relève de la mesure. Le diagramme $(\Omega_m, \Omega_\Lambda)$ et l'intégration numérique de $a(t)$, présentés au chapitre précédent (composant **FriedmannFate**), montraient déjà comment basculer d'un régime à l'autre. Les valeurs mesurées, $\Omega_m \approx 0{,}3$ et $\Omega_\Lambda \approx 0{,}7$, nous placent dans le **cas 3**.
+
+Le fait que l'expansion **accélère aujourd'hui** n'est pas une supposition : <Badge niveau="observe">l'accélération est mesurée, notamment par la luminosité des supernovae de type Ia (Riess et Perlmutter, 1998), recoupée par le fond diffus et les grandes structures. C'est une inférence à partir de données réelles, robuste et faisant consensus.</Badge>
+
+<Tournant titre="Tournant : du présent observé au futur extrapolé">
+Jusqu'ici, tout se déduisait des équations et du contenu **mesuré aujourd'hui**. Passer au futur lointain demande une **hypothèse nouvelle**, qui n'est pas une déduction : que la constante cosmologique $\Lambda$ reste *exactement* constante pour l'éternité (équation d'état $w = -1$ figée). Les observations contraignent $w$ près de $-1$ **dans le passé proche et le présent** ; elles ne disent rien de son comportement dans des dizaines de milliards d'années. Nous adoptons donc cette constance comme hypothèse de travail, et nous le signalons.
+</Tournant>
+
+<Hypotheses titre="Hypothèse supplémentaire pour le futur lointain">
+1. L'énergie noire est une **vraie constante cosmologique** : $\rho_\Lambda = \text{cte}$, $p_\Lambda = -\rho_\Lambda c^2$, sans aucune évolution dans le temps.
+2. Les lois de la physique (gravité, contenu) restent valides et inchangées arbitrairement loin dans le futur.
+</Hypotheses>
+
+Sous ces hypothèses, le futur lointain en découle. Matière et rayonnement continuant de se diluer, $\Lambda$ domine de plus en plus : l'univers entre dans une phase de de Sitter quasi pure. Les amas liés gravitationnellement (le nôtre compris) résistent, mais tout ce qui n'est pas lié est emporté hors de l'horizon, à un rythme exponentiel. Le ciel se vide, le rayonnement de fond se dilue et refroidit vers le zéro absolu, les étoiles s'éteignent faute de gaz : ce serait la **mort thermique**, un état d'entropie maximale, froid et presque vide.
+
+<Encart type="plusloin" titre="Pourquoi « presque » et non « certainement »">
+Tout ce futur lointain repose sur l'hypothèse forte ci-dessus : que $\Lambda$ soit **vraiment constante** pour l'éternité. C'est l'option la plus simple et compatible avec les données actuelles, mais ce sont des données du présent et du passé proche. Si l'énergie noire évoluait (équation d'état $w(t) \neq -1$), d'autres fins deviennent possibles : un *Big Rip* si la pression devenait plus négative encore, ou même une recontraction tardive si $\rho_\Lambda$ décroissait et changeait de signe. La physique sous-jacente de l'énergie noire reste ouverte.
+</Encart>
+
+<Badge niveau="extrapole">L'accélération **éternelle** et l'approche d'un état de de Sitter sont une extrapolation au-delà du directement testé : valides tant que $\Lambda$ reste constante, hypothèse sérieuse mais non tranchée. Affirmer un infini futur avec certitude serait abusif.</Badge>
+
+Nous avons ainsi bouclé la dynamique : un contenu, deux équations, trois destins, et le nôtre qui **accélère** (fait observé), s'acheminant — *si* $\Lambda$ tient parole — vers de Sitter. Mais d'où vient ce contenu ? Pour remonter le film, il faut revenir au tout début, quand l'univers était dense et brûlant — et c'est l'histoire du Big Bang chaud que nous ouvrons maintenant.

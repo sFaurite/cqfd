@@ -1,0 +1,86 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La trame et la detection d'erreurs : la parite"
+chapter: trame-parite
+description: "Introduit la trame (delimitation, structure), pose le probleme de la detection d'erreurs, et analyse le bit de parite : ce qu'il detecte, ce qu'il rate."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi découper le flux en trames ?
+
+Jusqu'ici, nous savons faire voyager des bits sur un fil : nous savons les <Prereq href="/reseaux/partie-ii/codage-ligne">coder pour les transmettre et récupérer l'horloge</Prereq>, et nous savons combien d'information chaque bit transporte au mieux, par <Prereq href="/reseaux/partie-i/bit-information">l'entropie de la source</Prereq>. Mais un récepteur qui voit défiler un torrent ininterrompu de $0$ et de $1$ se heurte à deux questions cruelles : *où commence un message ? où finit-il ?* Et surtout : *suis-je sûr d'avoir reçu exactement ce qui a été émis ?*
+
+La réponse à la première question est la **trame** (*frame*) : on regroupe les bits en blocs finis, délimités, qu'on transmet et qu'on vérifie comme des unités. Pour marquer les frontières, un procédé classique est le **fanion** (*flag*) — un motif binaire réservé, par exemple `01111110` dans le protocole HDLC, placé au début et à la fin de chaque trame.
+
+<Encart type="intuition" titre="Le fanion et le piège du motif interdit">
+Le fanion `01111110` (un `0`, six `1`, un `0`) signifie « frontière ». Que se passe-t-il alors quand les **données** contiennent par hasard six `1` consécutifs ? Le récepteur croirait voir une fin de trame fantôme. On résout cela par le **bit stuffing** (bourrage de bits) : l'émetteur insère un `0` après chaque suite de cinq `1` dans les données ; le récepteur le retire. Ainsi les données ne peuvent plus jamais contenir six `1` d'affilée, et le fanion reste le *seul* endroit où six `1` consécutifs apparaissent. Ethernet, lui, n'utilise pas de fanion mais un préambule fixe et un champ de longueur — un autre choix, même problème résolu autrement.
+</Encart>
+
+La structure exacte d'une trame — taille des champs, valeur du fanion, ordre des octets — n'a rien de nécessaire : c'est une décision d'ingénierie figée dans un standard. <Badge niveau="norme">Fanions HDLC, préambule et champs Ethernet : fixés par une norme adoptée mondialement. Cohérents et universels, mais ils auraient pu être autres.</Badge> Nous détaillerons la trame Ethernet au chapitre 9 ; ici, ce qui nous occupe est la **seconde** question.
+
+## Le problème : il reste des erreurs
+
+Le théorème de <Prereq href="/reseaux/partie-i/bruit-shannon">Shannon</Prereq> nous a appris une nouvelle réjouissante et une mauvaise. La bonne : sous la capacité $C = B\log_2(1 + S/N)$, il *existe* un codage rendant la probabilité d'erreur aussi petite qu'on veut. La mauvaise : ce codage idéal est inaccessible en pratique, et tout système réel — câble, fibre, radio — laisse passer des **erreurs résiduelles**, des bits qui basculent. Un récepteur honnête doit donc, au minimum, *savoir* qu'une trame est corrompue, pour la jeter et la redemander.
+
+<Tournant titre="On ajoute volontairement de la redondance">
+Jusqu'à présent, notre boussole était l'**efficacité** : comprimer la source au plus près de son entropie, ne transmettre aucun bit superflu. Nous opérons ici un renversement. Pour détecter les erreurs, nous allons *ajouter* des bits qui ne portent **aucune** information nouvelle sur le message — de la pure **redondance**. C'est exactement le **codage de canal** dont Shannon prouve l'existence : on s'éloigne délibérément du codage optimal de la source, et cette redondance est le **prix de la fiabilité**. Poser ce choix, c'est admettre que sur un canal bruité, l'efficacité pure n'est pas la bonne cible.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de ce chapitre">
+1. Le canal peut **inverser** certains bits ($0 \leftrightarrow 1$) ; ces inversions sont notre seul modèle d'erreur.
+2. On accepte d'ajouter à chaque bloc des bits de **contrôle** calculés à partir des bits de données.
+3. On travaille dans $\mathbb{F}_2$ : les bits sont des éléments de $\{0,1\}$ munis de l'addition modulo $2$.
+</Hypotheses>
+
+Que la redondance *permette* la détection n'est pas une astuce locale : c'est un fait fondé sur la théorie. <Badge niveau="theoreme">Le codage de canal de Shannon garantit qu'avec assez de redondance bien choisie, on peut détecter (et même corriger) les erreurs sous la capacité. Le *principe* est imposé par le théorème.</Badge>
+
+## Le bit de parité : la redondance minimale
+
+L'idée la plus économique : **un seul** bit de contrôle pour tout un bloc. Soient $m$ bits de données $b_1, b_2, \dots, b_m$. On définit le **bit de parité** $p$ par
+
+$$ p = b_1 \oplus b_2 \oplus \cdots \oplus b_m .$$
+
+Le symbole $\oplus$ est l'addition dans $\mathbb{F}_2$ : le **XOR**, c'est-à-dire l'addition modulo $2$. On transmet alors les $m+1$ bits $b_1,\dots,b_m,p$. Ce choix réalise la **parité paire** : par construction, la somme de *tous* les bits émis (données + parité) est nulle modulo $2$, donc le nombre total de $1$ est **pair**.
+
+<Encart type="rappel" titre="L'addition modulo 2 (XOR)">
+Dans $\mathbb{F}_2$, on calcule comme avec les entiers, mais $2 \equiv 0$. La table d'addition :
+
+$$ 0\oplus 0 = 0,\quad 0\oplus 1 = 1,\quad 1\oplus 0 = 1,\quad 1\oplus 1 = 0 .$$
+
+Deux propriétés cruciales : $x \oplus x = 0$ (chaque bit est son propre opposé) et l'opération est **commutative et associative**, donc une somme $\bigoplus_i b_i$ ne dépend ni de l'ordre, ni du regroupement. Géométriquement, $b_1 \oplus \cdots \oplus b_m$ répond à une seule question : *le nombre de $1$ est-il pair ($=0$) ou impair ($=1$) ?*
+</Encart>
+
+À la réception, on recalcule la somme XOR de tous les bits reçus, parité comprise. Cette somme — le **syndrome** $s$ — devrait valoir $0$. Si $s = 1$, le bloc est corrompu. Démontrons exactement *ce que* ce test détecte.
+
+<Encart type="calcul" titre="Le syndrome détecte un nombre IMPAIR d'erreurs — et seulement lui">
+Modélisons une erreur sur le bit $i$ par l'ajout d'un bit $e_i \in \{0,1\}$ : reçu $=$ émis $\oplus\, e_i$, avec $e_i = 1$ si et seulement si le bit $i$ a basculé. Notons $c_1,\dots,c_{m+1}$ les bits émis (avec $c_{m+1}=p$). Par construction de la parité paire :
+
+$$ c_1 \oplus c_2 \oplus \cdots \oplus c_{m+1} = 0 .$$
+
+Le récepteur calcule le syndrome sur les bits **reçus** $c_j \oplus e_j$ :
+
+$$ s = \bigoplus_{j=1}^{m+1} \big(c_j \oplus e_j\big) = \Big(\bigoplus_j c_j\Big) \oplus \Big(\bigoplus_j e_j\Big) = 0 \oplus \bigoplus_j e_j = \bigoplus_{j=1}^{m+1} e_j .$$
+
+(On a réordonné librement la somme : XOR est commutatif et associatif.) Donc $s = \bigoplus_j e_j$, qui vaut $1$ si le nombre de $e_j$ égaux à $1$ est impair, et $0$ s'il est pair. Le syndrome **ne voit que la parité du nombre d'erreurs** :
+
+$$ s = 1 \iff \text{le nombre de bits inversés est impair.} $$
+
+En particulier, $1$ erreur ($s=1$) est détectée ; mais $2$ erreurs donnent $s = 1 \oplus 1 = 0$ : **invisibles**. Et $0$ erreur donne aussi $s=0$ — le test ne *distingue pas* « pas d'erreur » de « deux erreurs ».
+
+<Resultat label="Portée et limite du bit de parité">
+
+$$ s = \bigoplus_{j} e_j \;\Longrightarrow\; \text{détecte tout nombre impair d'erreurs, rate tout nombre pair.} $$
+
+<Badge niveau="theoreme" slot="badge">Conséquence stricte de l'algèbre de $\mathbb{F}_2$. Ce ne peut pas être autrement : un seul bit de contrôle ne mesure qu'une parité.</Badge>
+</Resultat>
+</Encart>
+
+Il faut donc être **précis** : le bit de parité ne « détecte pas les erreurs » au sens large. Il détecte un *nombre impair* d'erreurs et **laisse passer silencieusement** toute paire — or sur un canal réel, les erreurs surviennent souvent en **rafales** (un parasite affecte plusieurs bits voisins d'un coup), donc fréquemment en nombre pair. <Badge niveau="theoreme">La cécité de la parité aux erreurs paires est démontrée ci-dessus, pas constatée : c'est une limite mathématique du code, pas un défaut d'implémentation.</Badge> Annoncer plus serait malhonnête.
+
+Cette insuffisance n'est pas une fatalité de la redondance, seulement de *cette* redondance-là, trop maigre. En investissant quelques bits de plus et une opération plus riche qu'une simple parité — une **division polynomiale** dans $\mathbb{F}_2$ — on attrape *toutes* les erreurs simples et doubles, ainsi que toute rafale courte. C'est précisément ce que construit le chapitre suivant, où le bit de parité se révélera comme le cas le plus pauvre d'une famille bien plus puissante : le **CRC**.

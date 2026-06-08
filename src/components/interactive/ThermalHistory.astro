@@ -1,0 +1,32 @@
+---
+/**
+ * ThermalHistory — la frise thermique de l'univers : remonter le temps revient à
+ * chauffer. Un curseur balaie l'histoire (échelle log du temps) et fait défiler les
+ * grands événements, de l'ère de Planck à aujourd'hui, avec leur température.
+ */
+---
+
+<div class="iw" data-iw="thermal-history">
+  <div class="iw__head"><span class="tag">Interactif</span> La frise thermique de l'univers</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="th-t">curseur (temps, log)</label>
+      <input id="th-t" type="range" min="-43" max="17.6" step="0.1" value="13.08" data-logt />
+      <output data-out-t>380 000 ans</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">température</span> <b data-out-temp>~3000 K</b></span>
+    <span class="iw__chip"><span class="k">événement</span> <b data-out-ev>Recombinaison</b></span>
+  </div>
+  <p class="iw__note">
+    L'univers se refroidit en se dilatant : la température chute comme <code>1/a</code>. En la
+    remontant, on traverse à rebours la recombinaison (3000 K), la nucléosynthèse (10⁹ K), puis des
+    énergies de plus en plus extrêmes — jusqu'à l'ère de Planck, où la physique connue s'arrête.
+  </p>
+</div>
+
+<script>
+  import './ThermalHistory.client.ts';
+</script>

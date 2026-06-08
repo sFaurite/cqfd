@@ -1,0 +1,34 @@
+---
+/**
+ * HubbleDiagram — le diagramme vitesse-distance. Des galaxies « observées »
+ * (dispersées autour de la vraie pente) sont fixes ; on règle H₀ pour ajuster
+ * la droite v = H₀·d. L'âge naïf de l'univers 1/H₀ se lit en direct.
+ */
+---
+
+<div class="iw" data-iw="hubble-diagram">
+  <div class="iw__head"><span class="tag">Interactif</span> Le diagramme de Hubble : v = H₀·d</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="hd-h0">H₀ (km/s/Mpc)</label>
+      <input id="hd-h0" type="range" min="40" max="100" step="1" value="70" data-h0 />
+      <output data-out-h0>70</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">pente</span> <b data-out-pente>70 km/s/Mpc</b></span>
+    <span class="iw__chip"><span class="k">âge naïf 1/H₀</span> <b data-out-age>14,0 Ga</b></span>
+    <span class="iw__chip"><span class="k">ajustement</span> <b data-out-fit>bon</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque point est une galaxie : plus elle est lointaine, plus elle s'éloigne vite, et la
+    proportionnalité <code>v = H₀·d</code> est la signature de l'expansion. La pente est la
+    constante de Hubble. Son inverse <code>1/H₀</code> donne une première estimation de l'âge de
+    l'univers (≈ <code>978/H₀</code> milliards d'années).
+  </p>
+</div>
+
+<script>
+  import './HubbleDiagram.client.ts';
+</script>

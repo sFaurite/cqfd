@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Entropie et second principe"
+chapter: entropie-second-principe
+description: "Le second principe et l'entropie : interprétation statistique (Boltzmann, nombre de micro-états), entropie de réaction, et pourquoi des réactions endothermiques peuvent être spontanées."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieEntropieMicroetats from '../../../components/interactive/ChimieEntropieMicroetats.astro';
+
+## Le bilan d'énergie ne suffit pas
+
+Au chapitre précédent, nous avons appris à calculer le bilan énergétique d'une réaction grâce à <Prereq href="/chimie/partie-iv/energie-enthalpie">l'enthalpie de réaction $\Delta_r H$</Prereq>. Une idée séduisante émerge naturellement : une réaction devrait être spontanée si elle libère de l'énergie, c'est-à-dire si $\Delta_r H &lt; 0$. C'est souvent vrai... mais c'est faux en général.
+
+Prenez un glaçon dans un verre à température ambiante : il fond spontanément, alors que la fusion **absorbe** de la chaleur ($\Delta H > 0$). Dissolvez du nitrate d'ammonium dans l'eau : le bécher devient glacial, la dissolution est endothermique, et pourtant elle se produit toute seule. Il manque manifestement un ingrédient au critère de spontanéité. Cet ingrédient, c'est l'**entropie**.
+
+### L'intuition : compter les arrangements
+
+Imaginez quatre molécules de gaz, **numérotées** (donc discernables), dans une boîte divisée en deux moitiés. Combien y a-t-il de façons de les répartir ? Une seule configuration les met toutes à gauche. Mais il y a six façons d'en mettre deux à gauche et deux à droite (les choix de la paire qui va à gauche : $\binom{4}{2} = 6$). Si chaque arrangement microscopique est également probable, l'état « équilibré » est tout simplement **plus probable**, parce qu'il correspond à plus de manières de le réaliser.
+
+L'entropie mesure exactement cela : le nombre d'arrangements microscopiques (les *micro-états*) compatibles avec ce qu'on observe à l'échelle macroscopique. Un gaz se répand dans tout le volume disponible non pas parce qu'une force le pousse, mais parce que les configurations « étalées » sont écrasantement majoritaires.
+
+<ChimieEntropieMicroetats />
+
+<Encart type="intuition" titre="« Désordre », un mot dangereux">
+
+On résume souvent l'entropie par « le désordre ». C'est un raccourci trompeur. L'entropie ne mesure pas un désordre esthétique, mais le **nombre de micro-états** compatibles avec l'état macroscopique. Un cristal qui fond n'est pas « plus en désordre » au sens du rangement d'une chambre : il offre simplement bien plus de façons de placer ses atomes et de répartir leur énergie. Gardez l'image du *comptage* (combien de micro-états ?), pas celle du fouillis.
+
+</Encart>
+
+### La formule de Boltzmann
+
+Ludwig Boltzmann a donné à cette intuition une forme quantitative d'une beauté redoutable. Si $\Omega$ (oméga) désigne le nombre de micro-états accessibles correspondant à un état macroscopique donné, alors l'entropie $S$ de cet état vaut :
+
+<Resultat label="Entropie statistique (Boltzmann)">
+
+$$ S = k_B \ln \Omega $$
+
+<Badge niveau="quantique" slot="badge">Le comptage des micro-états $\Omega$ repose sur les états quantiques discrets d'un système lié ; la relation au macroscopique est statistique et fondamentale.</Badge>
+
+</Resultat>
+
+La constante $k_B \approx 1{,}381 \times 10^{-23}\ \mathrm{J\,K^{-1}}$ est la **constante de Boltzmann**, une constante fondamentale, dont la valeur est aujourd'hui **fixée par définition** (elle sert depuis 2019 à définir le kelvin). Le choix du logarithme n'est pas arbitraire.
+
+<Encart type="calcul" titre="Pourquoi un logarithme ?">
+
+On veut que l'entropie soit **additive** : pour deux systèmes indépendants $A$ et $B$ réunis, on attend $S_{A+B} = S_A + S_B$.
+
+Or les nombres de micro-états, eux, se **multiplient** : chaque configuration de $A$ peut se combiner à chaque configuration de $B$, donc
+
+$$ \Omega_{A+B} = \Omega_A \times \Omega_B $$
+
+Cherchons une fonction $f$ telle que $S = f(\Omega)$ soit additive. Il faut
+
+$$ f(\Omega_A \, \Omega_B) = f(\Omega_A) + f(\Omega_B) $$
+
+C'est l'équation fonctionnelle du logarithme : la seule fonction continue qui transforme un produit en somme est $f(x) = k\ln x$. Le facteur $k_B$ fixe l'unité (le joule par kelvin) pour raccorder cette entropie statistique à l'entropie thermodynamique mesurée historiquement.
+
+</Encart>
+
+### Le second principe
+
+Voici l'hypothèse fondamentale, dégagée par l'expérience accumulée de la thermodynamique et jamais prise en défaut.
+
+<Hypotheses titre="Second principe de la thermodynamique">
+
+Il existe une fonction d'état **entropie** $S$ telle que, pour toute transformation d'un système **isolé** (l'univers, par exemple) :
+
+$$ \Delta S_{\text{univers}} \geq 0 $$
+
+L'égalité ne vaut que pour une transformation réversible (idéale). Toute transformation **spontanée** réelle fait **strictement croître** l'entropie de l'univers.
+
+<Badge niveau="experimental" slot="badge">Principe fondamental imposé par l'expérience : aucune violation n'a jamais été observée. Il ne se déduit pas, il se pose.</Badge>
+
+</Hypotheses>
+
+<Tournant titre="Une nouvelle hypothèse, pas une déduction">
+
+Soyons honnêtes : le second principe n'est **pas démontré** à partir du quantique. C'est une hypothèse supplémentaire que nous **ajoutons** à notre socle. L'interprétation de Boltzmann l'éclaire — un état très probable a beaucoup de micro-états donc une grande entropie, et le système évolue vers le plus probable — mais l'affirmation « l'entropie de l'univers croît » reste un principe expérimental indépendant.
+
+</Tournant>
+
+Point crucial : c'est l'entropie de **l'univers** (système + extérieur) qui doit croître, pas forcément celle du système seul. Le glaçon qui fond voit son entropie **augmenter** ; le nitrate d'ammonium qui se dissout aussi. Une réaction endothermique abaisse l'entropie de l'extérieur (elle lui prend de la chaleur), mais si l'entropie du système augmente suffisamment, le bilan total reste positif. **C'est pourquoi une réaction endothermique peut être spontanée.** Nous ferons la synthèse complète de cette compétition au chapitre suivant.
+
+### Prévoir le signe de $\Delta_r S$ d'une réaction
+
+Sans calcul, on devine souvent le signe de la variation d'entropie d'un système en se demandant : l'état final offre-t-il plus de micro-états que l'état initial ?
+
+- **Nombre de moles de gaz.** Un gaz dispose de bien plus de micro-états qu'un liquide ou un solide (volume accessible immense). Si une réaction **augmente** le nombre de moles gazeuses, $\Delta_r S > 0$. Exemple : $\ \mathrm{CaCO_3(s) \to CaO(s) + CO_2(g)}\ $ crée du gaz, donc $\Delta_r S > 0$.
+- **Changement d'état.** Fusion et vaporisation augmentent l'entropie ($S_{\text{gaz}} > S_{\text{liq}} > S_{\text{sol}}$).
+- **Dissolution.** Disperser un soluté dans un solvant augmente en général le nombre de configurations, donc $\Delta_r S > 0$ (avec des nuances : la solvatation d'ions très chargés peut au contraire ordonner localement le solvant).
+
+<Badge niveau="qualitatif">Ces prévisions de signe sont des tendances qualitatives fiables, mais elles dépendent du contexte : pour un bilan précis, il faut les valeurs mesurées.</Badge>
+
+### Mesurer l'entropie : le troisième principe
+
+Contrairement à l'enthalpie, dont seules les **variations** ont un sens, l'entropie possède un **zéro absolu**. C'est l'objet du troisième principe.
+
+<Encart type="rappel" titre="Troisième principe et entropies standard">
+
+Un cristal parfait à $0\ \mathrm{K}$ n'a qu'**une seule** façon de s'organiser : $\Omega = 1$, donc par la formule de Boltzmann $S = k_B \ln 1 = 0$. On pose ainsi $S(0\ \mathrm{K}) = 0$ pour un solide cristallin parfait.
+
+À partir de cette origine, on peut **mesurer** l'entropie molaire standard $S^\circ$ de chaque corps (en $\mathrm{J\,K^{-1}\,mol^{-1}}$), tabulée comme les enthalpies de formation. L'entropie standard de réaction se calcule alors par bilan, exactement comme la loi de Hess :
+
+$$ \Delta_r S^\circ = \sum_{\text{produits}} \nu_i\, S^\circ_i - \sum_{\text{réactifs}} \nu_j\, S^\circ_j $$
+
+où les $\nu$ sont les coefficients stœchiométriques.
+
+<Badge niveau="experimental">Les valeurs $S^\circ$ sont mesurées ; le troisième principe fixe l'origine $S=0$ à $0\ \mathrm{K}$ pour un cristal parfait.</Badge>
+
+</Encart>
+
+Nous tenons désormais les deux moteurs d'une transformation : l'**énergie** (enthalpie) et la **dispersion statistique** (entropie). Reste à les faire dialoguer dans un seul critère, réglé par la température — c'est tout l'objet de l'enthalpie libre de Gibbs, que nous construisons au chapitre suivant.

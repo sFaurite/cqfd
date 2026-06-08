@@ -1,0 +1,85 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La géométrie des molécules : VSEPR"
+chapter: vsepr-geometrie
+description: "La méthode VSEPR : les doublets liants et non liants minimisent leur répulsion, déterminant la géométrie (linéaire, trigonale, tétraédrique, etc.) et les écarts angulaires."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import ChimieVSEPR from '../../../components/interactive/ChimieVSEPR.astro';
+
+## La géométrie des molécules : VSEPR
+
+Une structure de Lewis nous dit *qui est lié à qui*, mais elle est plate : sur le papier, elle n'a pas de forme dans l'espace. Or l'eau n'est pas droite, le méthane n'est pas carré, l'ammoniac n'est pas plan. La géométrie d'une molécule conditionne sa polarité, sa réactivité, jusqu'à la façon dont une enzyme reconnaît son substrat. Il nous faut donc une règle pour passer du schéma de Lewis à une forme en trois dimensions. Cette règle existe, elle est étonnamment simple, et elle s'appelle **VSEPR** (*Valence Shell Electron Pair Repulsion* : répulsion des paires d'électrons de la couche de valence).
+
+L'idée tient en une phrase. Autour d'un atome central, les **doublets d'électrons** — qu'ils soient engagés dans une liaison ou non — se repoussent, car ce sont des nuages de charge négative. Ils vont donc se disposer **le plus loin possible les uns des autres** sur une sphère imaginaire centrée sur l'atome. Compter les doublets, c'est déjà connaître l'arrangement.
+
+<Tournant titre="Une règle qui marche, sans dérivation quantique">
+VSEPR n'est pas tirée de l'équation de Schrödinger. C'est un modèle empirique (Sidgwick et Powell 1940, repris par Gillespie et Nyholm en 1957) : on remplace le calcul des orbitales par une image électrostatique simpliste — des doublets-charges qui se fuient sur une sphère. Cette image est physiquement grossière, et pourtant elle prédit remarquablement bien la forme de la plupart des molécules de la chimie courante. On la pose donc pour ce qu'elle est : une recette prédictive efficace, pas une loi fondamentale.
+</Tournant>
+
+<Encart type="intuition" titre="Des ballons attachés par leurs nœuds">
+Gonflez quelques ballons identiques et nouez-les ensemble par leur extrémité. Vous n'avez rien à calculer : deux ballons se mettent dos à dos (linéaire), trois forment un Y plat, quatre s'écartent spontanément en pyramide à base triangulaire — le tétraèdre. Les ballons « cherchent » la configuration qui minimise leur encombrement mutuel, exactement comme les doublets cherchent à minimiser leur répulsion électrostatique. La géométrie d'une molécule est, à ce niveau, un problème de rangement de ballons.
+</Encart>
+
+### La méthode : compter, arranger, lire la forme
+
+On part de la structure de Lewis, établie au chapitre précédent — voir <Prereq href="/chimie/partie-ii/liaison-covalente-lewis">la liaison covalente et le modèle de Lewis</Prereq>. Sur l'atome central A, on dénombre :
+
+- le nombre $X$ de **liaisons** (un doublet liant par liaison ; une liaison double ou triple compte pour **une seule** direction de répulsion, car ses doublets pointent dans le même sens) ;
+- le nombre $E$ de **doublets non liants** (les paires libres portées par A).
+
+La somme $n = X + E$ est le **nombre de directions de répulsion**. C'est lui, et lui seul, qui fixe l'arrangement de base :
+
+<Resultat label="Figures de répulsion AXₙEₘ">
+
+$$
+n = 2:\ \text{linéaire} \quad n = 3:\ \text{trigonal plan} \quad n = 4:\ \text{tétraédrique} \quad n = 5:\ \text{bipyramide trigonale} \quad n = 6:\ \text{octaédrique}
+$$
+
+<Badge niveau="empirique" slot="badge">VSEPR est une règle empirique : elle prédit remarquablement bien les géométries, mais ne dérive pas rigoureusement de l'équation de Schrödinger.</Badge>
+</Resultat>
+
+La **forme effective** de la molécule, elle, ne décrit que la position des *atomes* : les doublets non liants occupent de l'espace mais restent invisibles. Ainsi, avec $n=4$ : zéro doublet libre donne un tétraèdre (AX₄, comme CH₄), un doublet libre donne une **pyramide** (AX₃E, comme NH₃), deux doublets libres donnent une molécule **coudée** (AX₂E₂, comme H₂O). Même arrangement de départ, trois silhouettes différentes selon le nombre de paires libres.
+
+Manipulez la construction ci-dessous : changez le nombre de liaisons et de doublets libres, et observez comment l'arrangement et la forme effective se réorganisent.
+
+<ChimieVSEPR />
+
+<Encart type="rappel" titre="Lire la notation AXₙEₘ">
+A est l'atome central, X un atome lié, E un doublet non liant. Les indices comptent les directions de répulsion. Exemples : CO₂ est AX₂ (deux doubles liaisons, deux directions) → linéaire ; BF₃ est AX₃ → trigonal plan ; CH₄ est AX₄ → tétraédrique ; NH₃ est AX₃E ; H₂O est AX₂E₂. La somme $n=X+E$ donne l'arrangement, le seul X donne la forme visible.
+</Encart>
+
+### Pourquoi l'eau fait 104,5° et non 109,5°
+
+Si tous les doublets se repoussaient *également*, le tétraèdre parfait imposerait des angles de $109{,}5°$ partout. <Badge niveau="quantique">Cet angle n'est pas une grandeur chimique mais une vérité géométrique exacte : c'est l'angle entre deux sommets d'un tétraèdre régulier vu de son centre, $\arccos(-1/3) \approx 109{,}47°$. Nécessaire et indépendant de tout modèle.</Badge> Or on mesure $107°$ dans NH₃ et $104{,}5°$ dans H₂O. <Badge niveau="experimental">Ces angles sont mesurés expérimentalement (spectroscopie micro-onde, diffraction) de façon reproductible.</Badge> L'angle se referme à mesure qu'on ajoute des doublets libres. VSEPR explique cette tendance par une **hiérarchie de répulsion** :
+
+$$
+\text{non liant–non liant} \;>\; \text{non liant–liant} \;>\; \text{liant–liant}
+$$
+
+<Encart type="calcul" titre="L'angle qui se referme, doublet après doublet">
+
+**Étape 1 — Le point de départ.** Les quatre doublets de C, N et O dans CH₄, NH₃, H₂O occupent le même arrangement tétraédrique ($n=4$). Référence sans paire libre : CH₄, angle H–C–H $= 109{,}5°$.
+
+**Étape 2 — L'argument physique.** L'argument invoqué par VSEPR : un doublet **non liant** n'est retenu que par un seul noyau (l'atome central). Son nuage serait donc plus diffus et plus proche de A qu'un doublet **liant**, partagé entre deux noyaux et tiré vers l'extérieur. Plus proche et plus gros, il pousserait plus fort sur ses voisins. C'est une justification *qualitative*, pas une démonstration.
+
+**Étape 3 — Une paire libre (NH₃).** L'unique doublet libre de l'azote comprimerait les trois liaisons N–H : l'angle tombe de $109{,}5°$ à la valeur **mesurée** $107°$.
+
+**Étape 4 — Deux paires libres (H₂O).** Les deux doublets libres de l'oxygène compriment encore davantage : l'angle H–O–H **mesuré** descend à $104{,}5°$.
+
+**Bilan.** La séquence $109{,}5° \rightarrow 107° \rightarrow 104{,}5°$ suit le nombre de paires libres. La règle prédit le *sens* de la fermeture ; les valeurs sont expérimentales. $\qquad\blacksquare$
+</Encart>
+
+Attention : cette hiérarchie est une **règle ad hoc**. <Badge niveau="empirique">Le classement « non liant > liant » est posé parce qu'il reproduit les angles observés, pas déduit d'un principe fondamental.</Badge> Elle prédit le *sens* de la distorsion, pas sa valeur : que NH₃ se referme, oui ; qu'il tombe précisément à $107°$, seule la mesure le dit. <Badge niveau="qualitatif">L'ampleur d'une distorsion angulaire est une tendance qualitative, non chiffrable par la seule règle.</Badge>
+
+<Encart type="plusloin" titre="Là où VSEPR se trompe">
+VSEPR n'est pas une loi. Le difluorure de calcium **CaF₂**, qu'on prédirait linéaire (AX₂), est franchement **coudé** en phase gazeuse (angle d'environ $145°$) — un effet attribué à la participation d'orbitales d et à la polarisabilité du cœur du calcium, hors du modèle. Les complexes de **métaux de transition** échappent largement à VSEPR : leurs électrons d brisent l'image d'un simple décompte de doublets. Et même pour des molécules « sages », VSEPR reste muet sur les énergies de liaison ou le magnétisme — là où le modèle des **orbitales moléculaires** prend le relais (chapitre ultérieur). VSEPR est un outil de prédiction géométrique de premier ordre, formidablement efficace dans son domaine, et conscient de ses limites. <Badge niveau="experimental">Le caractère coudé de CaF₂ gazeux est établi expérimentalement (spectroscopie en phase vapeur).</Badge>
+</Encart>
+
+Nous savons désormais lire la forme d'une molécule dans son décompte de doublets. Mais une forme n'est pas qu'esthétique : couplée à la polarité de chaque liaison, elle décide si la molécule entière porte un déséquilibre de charge — c'est le **moment dipolaire**, objet du prochain chapitre.

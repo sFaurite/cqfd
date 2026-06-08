@@ -1,0 +1,67 @@
+---
+/**
+ * IaLossLandscape — surface de perte L(w, b) en carte de niveaux, avec une
+ * bille qui descend par gradient. L'utilisateur règle le taux d'apprentissage
+ * et lance la descente : convergence (pas adapté), oscillation (pas trop grand)
+ * ou divergence. Comparaison SGD / momentum / Adam sur un paysage non convexe
+ * avec point-selle. Fil rouge des Parties II et III.
+ */
+---
+
+<div class="iw" data-iw="ia-loss">
+  <div class="iw__head"><span class="tag">Interactif</span> Descendre la surface de perte</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="ll-lr">taux η</label>
+      <input id="ll-lr" type="range" min="0.005" max="0.6" step="0.005" value="0.12" data-lr />
+      <output data-out-lr>0,120</output>
+    </div>
+    <div class="iw__row">
+      <label>paysage</label>
+      <div class="iw__btns" role="group" aria-label="Paysage">
+        <button type="button" class="iw__btn active" data-surf="convexe">bol convexe</button>
+        <button type="button" class="iw__btn" data-surf="selle">point-selle</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>optimiseur</label>
+      <div class="iw__btns" role="group" aria-label="Optimiseur">
+        <button type="button" class="iw__btn active" data-opt="sgd">SGD</button>
+        <button type="button" class="iw__btn" data-opt="momentum">momentum</button>
+        <button type="button" class="iw__btn" data-opt="adam">Adam</button>
+      </div>
+      <output></output>
+    </div>
+    <div class="iw__row">
+      <label>contrôle</label>
+      <div class="iw__btns">
+        <button type="button" class="iw__btn" data-run>lancer</button>
+        <button type="button" class="iw__btn" data-reset>réinitialiser</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">itération</span> <b data-out-step>0</b></span>
+    <span class="iw__chip"><span class="k">perte L</span> <b data-out-loss>—</b></span>
+    <span class="iw__chip"><span class="k">‖∇L‖</span> <b data-out-grad>—</b></span>
+    <span class="iw__chip"><span class="k">état</span> <b data-out-state>au repos</b></span>
+  </div>
+  <p class="iw__note">
+    La carte montre les lignes de niveau de L : foncé = bas, clair = haut. La bille suit
+    l'opposé du gradient. <b>Clique sur la carte</b> pour replacer le point de départ, puis
+    « lancer ». Avec un η trop grand la trajectoire <i>oscille</i> puis <i>diverge</i> ; bien réglé,
+    elle <i>converge</i> vers le creux. Sur le point-selle, SGD peut stagner là où momentum et Adam
+    s'échappent. Tout cela suppose un gradient calculable : c'est ce que fournit la rétropropagation.
+  </p>
+</div>
+
+<style>
+  .iw[data-iw='ia-loss'] .iw__btns { justify-self: start; flex-wrap: wrap; }
+</style>
+
+<script>
+  import './IaLossLandscape.client.ts';
+</script>

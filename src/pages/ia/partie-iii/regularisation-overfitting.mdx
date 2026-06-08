@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Surapprentissage et régularisation"
+chapter: regularisation-overfitting
+description: "Définit le surapprentissage (overfitting) via l'écart entraînement/validation, puis présente les remèdes : pénalités L1/L2, dropout, early stopping, augmentation. Souligne que la plupart sont des recettes efficaces sans théorie complète, et que la généralisation du deep learning reste une question ouverte."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import IaUniversalApprox from '../../../components/interactive/IaUniversalApprox.astro';
+
+## Surapprentissage et régularisation
+
+Nous savons construire un modèle, mesurer son erreur avec une <Prereq href="/ia/partie-ii/fonction-de-perte">fonction de perte</Prereq>, et empiler des couches dans un <Prereq href="/ia/partie-iii/perceptron-multicouche">perceptron multicouche</Prereq>. Mais une question reste suspendue : un modèle qui réussit *sur les données d'entraînement* a-t-il vraiment *appris* quelque chose, ou a-t-il juste *retenu par cœur* ? C'est tout le drame de ce chapitre.
+
+<Encart type="intuition" titre="Réviser un examen versus mémoriser les annales">
+Un élève qui apprend les corrigés des annales par cœur aura 20/20 sur ces annales exactes. Mais le jour de l'examen, sur un sujet *nouveau*, il s'effondre : il n'a pas saisi la *règle*, il a stocké des *réponses*. Un réseau de neurones peut faire pareil. On veut qu'il généralise — qu'il fasse bien sur des données qu'il n'a *jamais vues*. Retenir l'entraînement est facile ; généraliser est le vrai but.
+</Encart>
+
+### Diagnostiquer le surapprentissage
+
+On sépare nos données en deux : un **ensemble d'entraînement** (sur lequel on ajuste les paramètres) et un **ensemble de validation** (jamais vu pendant l'entraînement). On suit alors deux courbes au fil des époques.
+
+Le **surapprentissage** (overfitting) se lit dans un écart : l'erreur d'entraînement continue de baisser, pendant que l'erreur de validation, elle, *remonte*.
+
+<Resultat label="Signature du surapprentissage">
+
+$$ L_{\text{entraînement}} \ \text{faible (et décroît)}, \qquad L_{\text{validation}} \ \text{élevée (et croît)} $$
+
+<Badge niveau="robuste" slot="badge">Diagnostic empirique universel, reproductible sur quasiment tous les modèles. C'est une observation systématique, pas un théorème.</Badge>
+</Resultat>
+
+Inversement, si *les deux* erreurs restent élevées, le modèle **sous-apprend** (underfitting) : il est trop pauvre pour capturer la structure des données.
+
+### Le compromis biais-variance (version classique)
+
+La lecture classique de ce phénomène est le **compromis biais-variance**. Décomposons l'erreur attendue d'un modèle en trois morceaux.
+
+<Encart type="plusloin" titre="La décomposition biais-variance">
+Pour une cible $y = f(x) + \varepsilon$ avec un bruit $\varepsilon$ de variance $\sigma^2$, l'erreur quadratique moyenne en un point $x$, prise en moyenne sur les jeux d'entraînement possibles, se décompose exactement :
+
+$$ \mathbb{E}\big[(y - \hat{f}(x))^2\big] \ = \ \underbrace{\big(\mathbb{E}[\hat{f}(x)] - f(x)\big)^2}_{\text{biais}^2} \ + \ \underbrace{\mathbb{E}\big[(\hat{f}(x) - \mathbb{E}[\hat{f}(x)])^2\big]}_{\text{variance}} \ + \ \underbrace{\sigma^2}_{\text{bruit}} $$
+
+Le **biais** mesure l'erreur de modélisation (un modèle trop simple rate la vraie fonction). La **variance** mesure la sensibilité aux fluctuations du jeu d'entraînement (un modèle trop riche colle au bruit). Le bruit $\sigma^2$ est irréductible. <Badge niveau="prouve" compact>Cette égalité est un calcul algébrique exact.</Badge>
+</Encart>
+
+L'intuition classique : un modèle plus complexe **baisse le biais** mais **augmente la variance**. Il existerait donc une complexité « idéale » au creux de l'erreur totale — une courbe en U. <Badge niveau="robuste">Ce compromis décrit fidèlement le comportement des modèles de capacité modérée (régressions polynomiales, petits réseaux). Mais sa version naïve « plus complexe = forcément plus de variance » est **démentie** par le deep learning moderne — on y revient à la fin.</Badge>
+
+### La régularisation L2 : préférer de petits poids
+
+La première parade : **pénaliser la complexité** directement dans la perte. On ajoute un terme qui punit les grands poids.
+
+<Tournant titre="On modifie l'objectif d'apprentissage">
+Jusqu'ici on minimisait la seule perte sur les données. On **décide** maintenant d'optimiser une perte *augmentée* d'une pénalité $\lambda \lVert w \rVert^2$. C'est un choix de modélisation : on injecte un *a priori* (« les bonnes solutions ont de petits poids »), pas une vérité déduite.
+</Tournant>
+
+$$ L_{\text{rég}}(w) \ = \ L(w) \ + \ \frac{\lambda}{2}\,\lVert w \rVert^2, \qquad \lambda \geq 0 $$
+
+Le coefficient $\lambda$ règle la force de la pénalité : c'est un **hyperparamètre**. Voyons son effet sur la mise à jour.
+
+<Encart type="calcul" titre="Pourquoi on appelle ça « weight decay »">
+
+**Gradient du terme de pénalité.** On dérive $\frac{\lambda}{2}\lVert w \rVert^2 = \frac{\lambda}{2}\sum_i w_i^2$ par rapport à $w$ :
+
+$$ \nabla_w \left( \frac{\lambda}{2}\,\lVert w \rVert^2 \right) \ = \ \lambda\, w. $$
+
+**Gradient total.** Par linéarité de la dérivée :
+
+$$ \nabla_w L_{\text{rég}} \ = \ \nabla_w L \ + \ \lambda\, w. $$
+
+**Mise à jour par descente de gradient** (pas $\eta$) :
+
+$$ w \ \leftarrow \ w - \eta\big(\nabla_w L + \lambda w\big) \ = \ \underbrace{(1 - \eta\lambda)}_{&lt;\,1}\, w \ - \ \eta\,\nabla_w L. $$
+
+**Lecture.** Avant même de regarder les données, le facteur $(1 - \eta\lambda) &lt; 1$ *rétrécit* le poids à chaque pas. Le poids « décroît » — d'où le nom **weight decay**. ∎
+</Encart>
+
+<Resultat label="Effet de la régularisation L2">
+
+$$ w \ \leftarrow \ (1 - \eta\lambda)\, w \ - \ \eta\,\nabla_w L $$
+
+<Badge niveau="robuste" slot="badge">Effet **démontrable** : sur une régression linéaire, la L2 (ridge) a une solution fermée qui réduit prouvablement la variance. Sur un réseau profond, le mécanisme « petits poids = modèle plus lisse » est solidement empirique, sans garantie générale.</Badge>
+</Resultat>
+
+Une variante, la **régularisation L1** (lasso), pénalise $\lambda \lVert w \rVert_1 = \lambda \sum_i |w_i|$ au lieu du carré de la norme. Là où la L2 *rétrécit* tous les poids, la L1 tend à en annuler franchement certains : elle produit des solutions **parcimonieuses** (beaucoup de poids exactement nuls), ce qui sélectionne de fait les variables utiles. <Badge niveau="robuste">Sur le problème linéaire, cet effet de parcimonie de la L1 est prouvable (géométrie de la boule $\ell_1$, à coins). Sur un réseau profond, il reste un comportement empirique.</Badge>
+
+### Dropout, early stopping, augmentation
+
+D'autres techniques agissent sans modifier explicitement la fonction objectif.
+
+Le **dropout** : à chaque passe d'entraînement, on désactive aléatoirement une fraction des neurones. Le réseau ne peut plus s'appuyer sur un neurone précis ; il doit répartir l'information. <Badge niveau="recette">Recette très efficace. Justification *partielle* : un réseau avec dropout approxime une **moyenne (ensembling) de sous-réseaux**. Mais il n'existe pas de théorie complète prédisant *quand* et *de combien* il aide.</Badge>
+
+L'**early stopping** : on arrête l'entraînement quand l'erreur de validation cesse de baisser, avant qu'elle ne remonte. <Badge niveau="recette">Simple et redoutablement efficace ; on montre qu'elle s'apparente à une régularisation implicite. Reste un réglage, pas un théorème.</Badge>
+
+L'**augmentation de données** : on crée artificiellement des variantes des exemples (rotations, recadrages, bruit) pour agrandir l'entraînement et y inscrire les invariances voulues. <Badge niveau="recette">Pilier pratique, surtout en vision ; le choix des transformations est un art d'ingénierie.</Badge>
+
+### L'aveu d'honnêteté : pourquoi ça généralise reste un mystère
+
+Voici le composant interactif pour ressentir la tension entre coller aux points et rester lisse :
+
+<IaUniversalApprox />
+
+La théorie classique prédit qu'un modèle avec *bien plus* de paramètres que de données devrait *exploser* en variance et généraliser horriblement. Or les réseaux modernes, massivement **sur-paramétrés** (des milliards de paramètres pour bien moins d'exemples), interpolent parfaitement l'entraînement *et généralisent quand même très bien*. Pire : passé le point d'interpolation, l'erreur de test peut *redescendre* — c'est la **double descente**, une seconde vallée que la courbe en U classique ignore totalement.
+
+<Resultat label="Double descente">
+
+$$ \text{erreur de test} : \ \searrow \ \nearrow \ (\text{pic à l'interpolation}) \ \searrow \ \text{encore !} $$
+
+<Badge niveau="boitenoire" slot="badge">Phénomène observé et reproductible, mais **non expliqué** par la théorie classique. Pourquoi des réseaux sur-paramétrés généralisent est une **question ouverte** majeure du domaine.</Badge>
+</Resultat>
+
+Soyons donc rigoureusement honnêtes : la régularisation **aide** empiriquement, mais elle n'**explique pas** la généralisation. Affirmer « le réseau généralise *parce qu*'on régularise » serait un abus — on régularise *un peu* et ça généralise *beaucoup*, y compris parfois sans régularisation explicite. <Badge niveau="boitenoire">La généralisation des grands réseaux est le grand point d'interrogation de cette Partie III : nos outils marchent, notre théorie traîne derrière.</Badge>
+
+Nous avons maintenant un modèle qui apprend, qui s'optimise et qu'on tente de garder honnête. Au chapitre suivant, nous quittons les couches « tout-connectées » pour exploiter enfin la *structure* des données : la **convolution** et la vision par ordinateur.

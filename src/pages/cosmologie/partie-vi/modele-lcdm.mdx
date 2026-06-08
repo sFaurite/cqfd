@@ -1,0 +1,118 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le modèle de concordance ΛCDM"
+chapter: modele-lcdm
+description: "Six paramètres qui ajustent l'ensemble des observations : la synthèse du modèle standard."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le modèle de concordance ΛCDM
+
+Nous arrivons au sommet de l'édifice. Pendant cinq parties, nous avons posé une à une les pièces : un univers homogène et isotrope décrit par un <Prereq href="/cosmologie/partie-ii/equations-friedmann">facteur d'échelle $a(t)$</Prereq>, des <Prereq href="/cosmologie/partie-ii/parametres-densite">paramètres de densité</Prereq>, le rayonnement fossile et ses <Prereq href="/cosmologie/partie-iii/anisotropies-cmb">anisotropies</Prereq>, puis deux composantes invisibles — la <Prereq href="/cosmologie/partie-v/matiere-noire">matière noire</Prereq> et l'<Prereq href="/cosmologie/partie-ii/destin-univers">énergie noire</Prereq>. La question de ce chapitre est : peut-on rassembler tout cela en **un seul modèle**, avec **un seul jeu de nombres**, qui rende compte simultanément de données aussi différentes que le fond diffus, les supernovæ et la répartition des galaxies ?
+
+La réponse — et c'est le résultat central de la cosmologie moderne — est oui. Ce modèle s'appelle **ΛCDM** : Λ pour la constante cosmologique (l'énergie noire), CDM pour *Cold Dark Matter*, la matière noire froide. Son pouvoir n'est pas qu'il explique beaucoup avec beaucoup ; c'est qu'il explique **énormément avec très peu**.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez une seule clé qui ouvre simultanément des dizaines de serrures totalement différentes : la porte du grenier, le cadenas du vélo, le coffre de la voiture, la boîte aux lettres. Si une telle clé existait, vous ne penseriez pas à un hasard — vous conclueriez qu'il y a une serrurerie commune cachée derrière. ΛCDM est cette clé : six nombres réglés une fois pour toutes, et l'éventail entier des observations cosmologiques s'emboîte. C'est ce qu'on appelle la **concordance**.
+</Encart>
+
+### Le squelette du modèle
+
+ΛCDM repose sur quelques choix de cadre que nous avons déjà établis ou admis, et qu'il faut nommer clairement avant d'aller plus loin.
+
+<Tournant titre="Tournant : on pose deux ingrédients dont la nature est inconnue">
+Jusqu'ici, le fil était presque entièrement déductif : la métrique FLRW découle du principe cosmologique, les lois de dilution découlent de l'équation de continuité, etc. Ici nous franchissons un pas qui n'est **pas** déduit de ce qui précède. ΛCDM **postule** que le contenu de l'univers comprend deux composantes — une **matière noire froide** (CDM) et une **constante cosmologique** $\Lambda$ — dont la *présence gravitationnelle* est imposée par les données, mais dont la *nature physique* reste à ce jour inconnue. Tout ce qui suit est correct **sous ce postulat** ; le postulat lui-même n'est pas démontré, il est adopté parce qu'il marche.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ de ΛCDM">
+1. La relativité générale est valable à l'échelle cosmologique, appliquée à une métrique FLRW homogène et isotrope (parties I–II).
+2. L'univers est **spatialement plat** ($k = 0$, soit $\Omega_{\text{tot}} = 1$) — non posé arbitrairement, mais imposé par la position du premier pic acoustique du CMB.
+3. Le contenu se réduit à : rayonnement (négligeable aujourd'hui), baryons, matière noire **froide** (sans pression, non relativiste), et une constante cosmologique $\Lambda$.
+4. Les fluctuations primordiales de densité sont **gaussiennes**, **adiabatiques** et de spectre quasi invariant d'échelle.
+</Hypotheses>
+
+Sous ces hypothèses, l'équation de Friedmann se met sous une forme compacte qui résume tout le contenu :
+
+$$ H^2(a) = H_0^2 \left( \Omega_r\, a^{-4} + \Omega_b\, a^{-3} + \Omega_c\, a^{-3} + \Omega_\Lambda \right). $$
+
+Chaque terme se dilue à sa façon : le rayonnement en $a^{-4}$, la matière (baryons $\Omega_b$ + matière noire froide $\Omega_c$) en $a^{-3}$, et $\Lambda$ reste constante. La platitude (hypothèse 2) supprime le terme de courbure $\Omega_k\, a^{-2}$ et impose la contrainte de fermeture, qui n'est donc pas un paramètre libre mais une conséquence :
+
+$$ \Omega_r + \Omega_b + \Omega_c + \Omega_\Lambda = 1. $$
+
+<Badge niveau="concordance">La disparition du terme de courbure et la fermeture à $1$ découlent de l'hypothèse de platitude $\Omega_{\text{tot}} = 1$, elle-même ajustée sur la position du premier pic du CMB. C'est exact **au sein du modèle** ; une courbure non nulle, quoique observationnellement défavorisée, n'est pas rigoureusement exclue.</Badge>
+
+### Six nombres, et c'est tout
+
+Le cœur du miracle tient dans le décompte. Pour ajuster toutes les observations, ΛCDM n'a besoin que de **six paramètres libres**. Tout le reste — l'âge de l'univers, $\Omega_\Lambda$, l'amplitude des pics du CMB, l'échelle des oscillations baryoniques — en **découle** par calcul.
+
+| Paramètre | Symbole usuel | Ce qu'il fixe |
+|---|---|---|
+| Densité de baryons | $\Omega_b h^2$ | Quantité de matière ordinaire |
+| Densité de matière noire | $\Omega_c h^2$ | Quantité de CDM |
+| Échelle acoustique (ou $H_0$) | $\theta_*$ | Géométrie / taux d'expansion |
+| Profondeur optique de réionisation | $\tau$ | Diffusion du CMB par le gaz réionisé |
+| Amplitude des fluctuations | $A_s$ | « Hauteur » du spectre primordial |
+| Indice spectral | $n_s$ | « Pente » du spectre primordial |
+
+<Encart type="rappel" titre="Pourquoi l'angle acoustique $\theta_*$ plutôt que $H_0$ ?">
+Le premier pic du CMB mesure un **angle** : celui sous lequel on voit l'horizon sonore $r_s$ au moment du découplage, situé à la distance comobile $D_*$. Cet angle vaut $\theta_* = r_s / D_*$. Il est mesuré avec une précision extrême (mieux que $0{,}1\%$), bien meilleure que $H_0$ lui-même, car il ne dépend que d'un rapport de longueurs sur la sphère céleste. On le prend donc comme paramètre primaire ; $H_0$ s'en déduit une fois les densités fixées. C'est une commodité d'ajustement, pas une hypothèse supplémentaire.
+</Encart>
+
+<Badge niveau="concordance">Que **six** paramètres suffisent à ajuster simultanément le CMB (des milliers de multipôles), les BAO, les supernovæ, le lentillage gravitationnel et les abondances primordiales — des sondes physiquement indépendantes, à des époques cosmiques différentes — est le triomphe quantitatif de ΛCDM. C'est ce que désigne le mot « concordance ».</Badge>
+
+### Comment une seule clé ouvre toutes les serrures
+
+Le point profond est l'**indépendance** des sondes. Chacune contraint des combinaisons différentes des mêmes paramètres ; leurs courbes de confiance se croisent en un point unique du plan $(\Omega_m, \Omega_\Lambda)$.
+
+<Encart type="calcul" titre="Trois sondes, une même intersection">
+
+**CMB (fond diffus).** La position et la hauteur relative des pics fixent $\Omega_b h^2$, $\Omega_c h^2$ et $\theta_*$. La courbure quasi nulle impose une bande étroite le long de $\Omega_m + \Omega_\Lambda \approx 1$.
+
+**Supernovæ de type Ia.** Chandelles standard, elles mesurent la relation distance–redshift, donc directement l'**accélération** : elles contraignent surtout la **différence** $\Omega_\Lambda - \Omega_m$, soit une bande **transverse** à celle du CMB.
+
+**BAO (oscillations baryoniques).** La même échelle acoustique $r_s$ qui marque le CMB s'imprime dans la distribution des galaxies à bas redshift : une « règle standard » qui contraint $\Omega_m$ et $H_0$ encore selon une autre direction.
+
+Trois bandes d'orientations différentes dans le plan $(\Omega_m, \Omega_\Lambda)$ se **coupent en un seul point** :
+
+$$ \boxed{\;\Omega_m \approx 0{,}31, \qquad \Omega_\Lambda \approx 0{,}69, \qquad \Omega_m + \Omega_\Lambda \approx 1\;} $$
+
+Qu'aucune des trois ne soit *forcée* d'être compatible avec les autres — et qu'elles le soient — voilà la preuve. $\blacksquare$
+
+</Encart>
+
+<Badge niveau="concordance">Les valeurs $\Omega_m \approx 0{,}31$ et $\Omega_\Lambda \approx 0{,}69$ sont issues de l'ajustement combiné (Planck, BAO, SNe Ia) au modèle ΛCDM. Le croisement des trois bandes indépendantes au même point est concordant, mais la lecture en $(\Omega_m, \Omega_\Lambda)$ suppose le cadre du modèle.</Badge>
+
+### Le bilan énergétique de l'univers
+
+Une fois les six nombres ajustés, on lit le contenu de l'univers aujourd'hui. Le résultat est aussi célèbre qu'humblant :
+
+<Resultat label="Bilan énergétique de l'univers (aujourd'hui)">
+
+$$ \underbrace{\Omega_b \approx 5\,\%}_{\text{matière ordinaire}} \quad + \quad \underbrace{\Omega_c \approx 27\,\%}_{\text{matière noire}} \quad + \quad \underbrace{\Omega_\Lambda \approx 68\,\%}_{\text{énergie noire}} \; \approx \; 100\,\% $$
+
+<Badge niveau="concordance" slot="badge">Proportions issues de l'ajustement global ΛCDM aux données combinées (Planck + BAO + SNe). Solides au sein du modèle ; les densités de baryons et de matière sont par ailleurs recoupées indépendamment par la nucléosynthèse primordiale et le lentillage.</Badge>
+</Resultat>
+
+De ce même ajustement découle l'âge de l'univers, obtenu en intégrant $\mathrm{d}t = \mathrm{d}a / (a H(a))$ depuis le Big Bang jusqu'à aujourd'hui :
+
+$$ t_0 = \int_0^1 \frac{\mathrm{d}a}{a\, H(a)} \approx 13{,}8 \ \text{milliards d'années}. $$
+
+<Badge niveau="concordance">L'âge $13{,}8$ Ga est une **prédiction** du modèle, pas un paramètre. Sa concordance avec l'âge des plus vieilles étoiles et amas globulaires (mesurés indépendamment, $\sim 13$ Ga) est un test croisé que ΛCDM passe haut la main.</Badge>
+
+### Décrire n'est pas expliquer
+
+Il faut maintenant être d'une honnêteté scrupuleuse, car c'est là que ΛCDM montre sa double nature. Le modèle **décrit** superbement. Mais sur les deux ingrédients qui font $95\,\%$ du bilan, il n'**explique** rien.
+
+<Badge niveau="extrapole">La matière noire froide est requise par la dynamique des galaxies, le lentillage et la structure du CMB — son existence gravitationnelle est solide. Mais sa **nature** (particule au-delà du Modèle Standard ?) n'est pas établie et n'a jamais été détectée en laboratoire.</Badge>
+
+<Badge niveau="speculatif">L'énergie noire est, dans ΛCDM, une simple constante $\Lambda$. Mais *pourquoi* le vide possède une densité d'énergie non nulle, et pourquoi précisément cette valeur — minuscule devant toute attente de la physique quantique — reste l'un des plus grands problèmes ouverts. Sa **physique** est inconnue.</Badge>
+
+Voilà donc le paradoxe que ce cours assume : ΛCDM est le modèle le plus précis et le mieux testé de l'histoire de la cosmologie, et pourtant les deux tiers et plus de son contenu sont nommés sans être compris. C'est un succès phénoménal de la **description**, et une invitation béante à l'**explication**.
+
+C'est précisément sur ces fissures — la nature de l'énergie noire, les tensions naissantes comme celle sur $H_0$, et les frontières au-delà desquelles ΛCDM cesse de répondre — que s'ouvre la dernière partie de notre voyage.
