@@ -1,0 +1,100 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce site
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’indicateur de fiabilité, et la promesse exacte du site. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce site construit son sujet **d’un seul tenant** : on pose des hypothèses de départ, puis on
+**déduit** le reste, étape par étape. La règle, non négociable : *on ne vous demande jamais de
+croire sur parole.* Chaque résultat est soit **posé explicitement comme hypothèse**, soit
+**démontré** à partir de ce qui précède.
+
+Une précision d’honnêteté : quand le cadre ne suffit plus, on **ajoute** de nouvelles hypothèses —
+toujours **annoncées clairement** (un bandeau « Tournant ») et **ancrées dans des faits**. La
+promesse exacte est donc : *rien n’est utilisé sans être, soit une hypothèse posée au grand jour,
+soit une déduction.*
+
+## Les encadrés « Hypothèses de départ »
+
+Au début de chaque grande partie, un encadré liste **noir sur blanc** ce qui est admis sans
+démonstration. C’est le contrat : tout le reste de la partie devra en découler.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente comme ceci, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **change de cadre** — qu’on adopte de nouvelles hypothèses imposées par l’expérience —,
+un **bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, le cadre précédent ne suffit plus. On **ajoute** de nouvelles hypothèses, **imposées par
+l’expérience** et non déduites — et on le dit, plutôt que de les faire passer en contrebande.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil principal reste **conceptuel et fluide**. Les détails se dévoilent d’un clic (ou avec
+<kbd>Entrée</kbd> au clavier). Quatre familles, reconnaissables à leur couleur et leur icône :
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 donnent une analogie ou une image mentale. **Ouverts par défaut** : ils aident à
+comprendre *avant* de calculer.
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent une démonstration **ligne à ligne**, sans étape sautée. Par exemple :
+
+$$ a^2 + b^2 = c^2. $$
+
+Chaque ligne est justifiée par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil au niveau requis (un théorème, une notation…), pour ne laisser
+personne au bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement hors-programme. Facultatifs : on peut les sauter
+sans perdre le fil.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent sur
+tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté du site : **chaque affirmation notable** porte une pastille colorée
+disant *à quel point on en est sûr*. Survolez-la (ou donnez-lui le focus) pour lire **pourquoi**.
+
+- Un **théorème démontré** <Badge niveau="demontre">Prouvé rigoureusement à partir des axiomes adoptés.</Badge>
+- Un **axiome ou une définition** (posé) <Badge niveau="admis">Adopté par choix, non démontré : il fait partie du point de départ.</Badge>
+- Une **conjecture** non démontrée <Badge niveau="conjecture">Crue vraie, mais non prouvée à ce jour.</Badge>
+- Un énoncé **indécidable** <Badge niveau="indecidable">Démontré ni prouvable ni réfutable dans le cadre adopté.</Badge>
+
+La page <a href="/maths/methodologie">Méthodologie</a> détaille ces niveaux. Les résultats importants sont
+encadrés, souvent avec leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ a^2 + b^2 = c^2 $$
+<Badge niveau="demontre" slot="badge">Théorème démontré ; valable pour tout triangle rectangle.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat établi ailleurs, un lien **prérequis** y renvoie : par
+exemple <Prereq href="/maths/partie-ii/entiers-naturels">le chapitre sur les entiers naturels</Prereq>.
+
+## Comment naviguer
+
+- La **barre latérale** liste les parties et chapitres dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site construit.
+- Le **glossaire** et l’**index des symboles** sont accessibles partout.

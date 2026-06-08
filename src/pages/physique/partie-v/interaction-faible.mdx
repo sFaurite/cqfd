@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'interaction faible"
+chapter: interaction-faible
+description: "Changement de saveur, désintégration β, et des messagers massifs W/Z."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import BetaDecay from '../../../components/interactive/BetaDecay.astro';
+
+## L'interaction faible
+
+De toutes les forces de la nature, l'interaction faible est la plus discrète et la plus étrange. Les trois autres (gravitation, électromagnétisme, interaction forte) attirent, repoussent ou lient des particules sans changer leur identité. L'interaction faible, elle, fait autre chose de radicalement différent : **elle transforme une particule en une autre**. Un quark *down* devient un quark *up* ; un proton devient un neutron. C'est la seule force qui change la **saveur** des <Prereq href="/physique/partie-iv/fermions">fermions</Prereq>.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine que chaque particule porte une étiquette : « je suis un quark down », « je suis un électron ». L'interaction forte et l'électromagnétisme respectent ces étiquettes : ils ne font que pousser, tirer ou coller. L'interaction faible, elle, est le seul « alchimiste » du lot : elle arrache l'étiquette et en colle une autre. C'est exactement ce qui se passe dans la radioactivité β, où un neutron se métamorphose en proton.
+</Encart>
+
+### Des messagers très lourds, une portée minuscule
+
+Comme toute interaction du Modèle Standard, la force faible est transmise par des particules messagères : les **bosons de jauge**. Il y en a trois : les bosons $W^+$ et $W^-$, électriquement chargés, et le boson $Z^0$, neutre. Leur particularité décisive : ils sont **massifs**.
+
+$$ m_{W} \approx 80{,}4~\text{GeV}/c^2 \qquad m_{Z} \approx 91{,}2~\text{GeV}/c^2 $$
+
+À titre de comparaison, c'est environ 85 à 100 fois la masse d'un proton, concentrée dans une seule particule. Or nous avons vu que, pour un boson, **plus la masse est grande, plus la portée est courte** (<Prereq href="/physique/partie-iv/bosons-jauge">portée ↔ masse</Prereq>). Le photon, sans masse, donne une portée infinie à l'électromagnétisme. Les bosons $W$ et $Z$, eux, ne peuvent exister que pendant un temps infinitésimal, ce qui confine l'interaction faible à une distance de l'ordre de $10^{-18}~\text{m}$, soit mille fois plus petite qu'un noyau.
+
+<Resultat label="Portée de l'interaction faible">
+
+$$ R \sim \frac{\hbar}{m_W\,c} \approx 2\times 10^{-18}~\text{m} $$
+
+<Badge niveau="etabli" slot="badge">Masses des $W$/$Z$ mesurées au CERN (collisionneurs SPS puis LEP, 1983-2000) à mieux que 0,1 %.</Badge>
+</Resultat>
+
+C'est pourquoi cette force, pourtant fondamentale, semble si « faible » à notre échelle : non pas parce qu'elle est intrinsèquement peu intense, mais parce qu'elle n'agit qu'à très courte distance. <Badge niveau="etabli">Le lien masse → courte portée est solidement établi : il découle directement de la relation de portée vue au chapitre précédent et est confirmé par la mesure des masses.</Badge>
+
+### L'application phare : la désintégration β⁻
+
+Le grand classique de l'interaction faible, c'est la radioactivité β moins. Vue de loin, c'est la transformation d'un neutron en proton :
+
+$$ n \longrightarrow p + e^- + \bar{\nu}_e $$
+
+Mais qu'est-ce qui se passe *vraiment*, au niveau des briques élémentaires ? Un neutron est composé de trois quarks $(u,d,d)$, un proton de $(u,u,d)$. La transformation se ramène donc à **un seul quark qui change de saveur** : un quark $d$ devient un quark $u$. Et c'est là qu'intervient le boson $W$ :
+
+$$ d \longrightarrow u + W^- $$
+
+Le $W^-$ ainsi émis est bien trop lourd pour être réel ici (l'énergie disponible est dérisoire devant $80~\text{GeV}$) : c'est une particule **virtuelle**, qui se désintègre aussitôt en un électron et un antineutrino électronique :
+
+$$ W^- \longrightarrow e^- + \bar{\nu}_e $$
+
+En recollant les deux étapes, on retrouve exactement le bilan $n \to p + e^- + \bar{\nu}_e$. C'est l'interaction faible, et elle seule, qui autorise ce changement de saveur $d \to u$. <Badge niveau="etabli">Mécanisme $d \to u + W^-$ confirmé expérimentalement (structure du courant chargé, mesures de durées de vie, détection directe du $W$).</Badge>
+
+<BetaDecay />
+
+<Encart type="calcul" titre="Bilan des nombres conservés (charges et compteurs)">
+Vérifions que toutes les règles de conservation sont respectées à chaque étape. On note $Q$ la charge électrique (en unités de $e$), $B$ le nombre baryonique et $L_e$ le nombre leptonique électronique.
+
+**Étape 1 — au vertex du quark : $d \to u + W^-$.**
+Charge du quark $d$ : $Q_d = -\tfrac{1}{3}$. Charge du quark $u$ : $Q_u = +\tfrac{2}{3}$.
+
+$$ Q_d = Q_u + Q_{W^-} \;\Longrightarrow\; -\tfrac{1}{3} = +\tfrac{2}{3} + Q_{W^-} $$
+
+$$ Q_{W^-} = -\tfrac{1}{3} - \tfrac{2}{3} = -1 . $$
+
+On retrouve bien la charge $-1$ du $W^-$. La charge est conservée. ✓
+
+**Étape 2 — désintégration du $W^-$ : $W^- \to e^- + \bar{\nu}_e$.**
+
+$$ Q : \quad -1 = (-1) + 0 \quad \checkmark $$
+
+Le nombre leptonique : l'électron $e^-$ porte $L_e = +1$, l'antineutrino $\bar{\nu}_e$ porte $L_e = -1$.
+
+$$ L_e : \quad 0 = (+1) + (-1) = 0 \quad \checkmark $$
+
+**Bilan global — $n \to p + e^- + \bar{\nu}_e$.**
+
+| Grandeur | $n$ | $\to$ | $p$ | $e^-$ | $\bar{\nu}_e$ | total à droite |
+|---|---|---|---|---|---|---|
+| Charge $Q$ | $0$ | | $+1$ | $-1$ | $0$ | $0$ ✓ |
+| Baryonique $B$ | $+1$ | | $+1$ | $0$ | $0$ | $+1$ ✓ |
+| Leptonique $L_e$ | $0$ | | $0$ | $+1$ | $-1$ | $0$ ✓ |
+
+Tout est conservé. En revanche, la **saveur** des quarks, elle, n'est PAS conservée : un $d$ a disparu, un $u$ est apparu. C'est la signature de l'interaction faible. $\;\blacksquare$
+</Encart>
+
+<Resultat label="Désintégration β⁻ (niveau des quarks)">
+
+$$ \underbrace{d \to u + W^-}_{\text{vertex faible}},\qquad W^- \to e^- + \bar{\nu}_e \quad\Longrightarrow\quad n \to p + e^- + \bar{\nu}_e $$
+
+<Badge niveau="etabli" slot="badge">Conservation charge / énergie / nombres : vérifiée dans toutes les désintégrations β observées depuis un siècle.</Badge>
+</Resultat>
+
+### Une force qui distingue la gauche de la droite
+
+Le trait le plus déroutant de l'interaction faible fut découvert en 1956-57 : **elle ne traite pas de la même façon une particule et son image dans un miroir**. Plus précisément, elle n'agit que sur les fermions de <Prereq href="/physique/partie-iv/chiralite">chiralité gauche</Prereq> (et les antifermions de chiralité droite). On dit qu'elle **viole la parité**.
+
+<Encart type="intuition" titre="Un univers qui n'est pas ambidextre">
+Place une expérience de désintégration β devant un miroir. Pour la gravité ou l'électromagnétisme, le reflet est une expérience parfaitement possible : la Nature ne sait pas distinguer la « vraie » scène de son reflet. Pour l'interaction faible, c'est faux : le reflet décrit un processus que la Nature **n'autorise pas** au même taux. L'expérience de Wu (1957), mesurant l'émission des électrons par du cobalt-60 polarisé, l'a montré : les électrons sortent préférentiellement dans une direction privilégiée. L'Univers, vis-à-vis de la force faible, est gaucher.
+</Encart>
+
+<Badge niveau="etabli">Violation maximale de la parité par l'interaction faible : établie par l'expérience de Wu sur le $^{60}$Co et confirmée d'innombrables fois depuis.</Badge>
+
+### Les grandes conséquences
+
+L'interaction faible, malgré sa portée minuscule, gouverne des phénomènes immenses :
+
+- **La radioactivité β** des noyaux instables, à la base de la datation et de la médecine nucléaire. <Badge niveau="etabli">Observée et quantifiée depuis Becquerel.</Badge>
+- **La fusion dans le Soleil.** La toute première réaction de la chaîne proton-proton, $p + p \to {}^2\text{H} + e^+ + \nu_e$, exige qu'un proton se change en neutron — donc un $u \to d + W^+$. Sans interaction faible, le Soleil ne pourrait pas brûler. <Badge niveau="etabli">Confirmée par la détection des neutrinos solaires (expériences Homestake, SNO, Borexino).</Badge>
+- **La non-conservation de la saveur**, propriété unique qui permet aux quarks et leptons lourds de se désintégrer vers les plus légers. <Badge niveau="etabli">Pilier du Modèle Standard.</Badge>
+
+Une dernière surprise nous attend. Cette force « faible » à courte portée et le « puissant » électromagnétisme à portée infinie semblent tout opposer. Pourtant, à très haute énergie, ils ne font plus qu'un : c'est l'**unification électrofaible**, le sujet du prochain chapitre.

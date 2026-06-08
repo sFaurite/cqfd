@@ -1,0 +1,85 @@
+---
+/**
+ * ProtonMass — d'où vient la masse du proton. ~99 % est de l'énergie (champ de
+ * gluons + énergie cinétique des quarks confinés, via E=mc²), et seulement ~1 %
+ * vient de la masse des quarks (donnée par le Higgs). Un bouton « coupe » le Higgs
+ * pour montrer que le proton ne perdrait presque rien.
+ */
+---
+
+<div class="iw" data-iw="protonmass">
+  <div class="iw__head"><span class="tag">Interactif</span> La masse du proton : 99 % d’énergie, 1 % de Higgs</div>
+
+  <div class="pm__total">
+    Masse du proton : <b data-pm-total>938 MeV/c²</b>
+  </div>
+
+  <div class="pm__bar" role="img" aria-label="Répartition de la masse du proton">
+    <div class="pm__seg energie" data-seg="energie" style="flex-grow: 929">
+      <span>Énergie (gluons + mouvement des quarks) ≈ 99 %</span>
+    </div>
+    <div class="pm__seg higgs" data-seg="higgs" style="flex-grow: 9">
+      <span>Masses des quarks (Higgs) ≈ 1 %</span>
+    </div>
+  </div>
+
+  <div class="iw__controls">
+    <div class="iw__btns">
+      <button class="iw__btn" data-toggle-higgs>Couper le champ de Higgs</button>
+    </div>
+  </div>
+  <p class="iw__note" data-pm-note>
+    Le champ de Higgs ne donne sa masse qu’aux quarks <em>eux-mêmes</em> (≈ 9 MeV au total pour
+    u+u+d). Les ~929 MeV restants sont de l’énergie : le champ de gluons et l’agitation des quarks
+    confinés, convertis en masse par E = mc². <strong>Conclusion :</strong> l’essentiel de votre
+    masse ne vient PAS du Higgs, mais de l’interaction forte.
+  </p>
+</div>
+
+<script>
+  import './ProtonMass.client.ts';
+</script>
+
+<style>
+  .pm__total {
+    padding: 0.8em 1em 0.2em;
+    font-size: 1rem;
+  }
+  .pm__total b {
+    color: var(--c-yellow);
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+  }
+  .pm__bar {
+    display: flex;
+    height: 64px;
+    margin: 0.6em 1em;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--c-border);
+  }
+  .pm__seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.6em;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    transition: flex-grow 0.6s ease;
+    overflow: hidden;
+    color: #04121a;
+  }
+  .pm__seg.energie {
+    background: linear-gradient(135deg, var(--c-blue), var(--c-teal));
+  }
+  .pm__seg.higgs {
+    background: var(--c-yellow);
+    min-width: 0;
+  }
+  .pm__seg span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

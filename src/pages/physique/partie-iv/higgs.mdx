@@ -1,0 +1,82 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le boson et le champ de Higgs"
+chapter: higgs
+description: "Comment le champ de Higgs donne leur masse aux particules élémentaires — et à elles seules."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import HiggsBraking from '../../../components/interactive/HiggsBraking.astro';
+
+## Le boson et le champ de Higgs
+
+Nous avons vu qu'un fermion ne peut être massif que si ses deux **chiralités** existent et peuvent se « parler » (<Prereq href="/physique/partie-iv/chiralite">cf. chiralité</Prereq>). Mais dans le Modèle standard, gauche et droite ne se ressemblent pas du tout : l'interaction faible n'agit que sur la composante gauche. Écrire bêtement un terme de masse reliant les deux est alors *interdit* par les symétries de la théorie. D'où le paradoxe : la nature exige des particules sans masse… alors qu'elles en ont une. Le **champ de Higgs** est la solution élégante à cette contradiction.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez une grande pièce remplie d'une foule uniforme et immobile : c'est le **champ de Higgs**, présent *partout*, même dans le vide le plus parfait. Une personne anonyme la traverse sans gêne (particule sans masse, à la vitesse de la lumière). Une célébrité, elle, est entourée, ralentie, « freinée » : elle se déplace comme si elle était lourde. Cette **inertie acquise**, c'est la masse. Attention : c'est une *image*, pas une preuve — la vraie mélasse dissiperait de l'énergie, le champ de Higgs non. Gardez l'intuition « plus on interagit avec le champ, plus on est lourd », et oubliez les frottements.
+</Encart>
+
+### Un champ qui ne s'éteint jamais
+
+La plupart des champs valent zéro dans le vide : sans source, pas de champ électrique, pas de photon (<Prereq href="/physique/partie-iii/champs-quantiques">cf. champs quantiques</Prereq>). Le champ de Higgs est l'exception : sa valeur la plus stable, celle qui *minimise l'énergie du vide*, est **non nulle**. On la note souvent $v \approx 246~\text{GeV}$. Autrement dit, l'univers entier baigne en permanence dans une « valeur de fond » de ce champ.
+
+<Badge niveau="etabli">La valeur de fond $v \approx 246~\text{GeV}$ n'est pas un choix arbitraire : elle se déduit des mesures de précision de l'interaction faible (constante de Fermi, masses des bosons $W$ et $Z$), connues à mieux que $10^{-4}$ près. La *valeur* est donc établie ; c'est l'*interprétation* (un champ non nul partout) qui relève du modèle.</Badge>
+
+<Encart type="intuition" titre="Pourquoi le minimum n'est pas à zéro">
+Pensez au fond d'une bouteille de vin, bombé au centre. Si vous lâchez une bille pile au sommet (champ nul), elle est en équilibre instable : au moindre souffle, elle roule et se fige dans la gouttière circulaire, à une valeur *non nulle*. Le système a « choisi » spontanément un état de plus basse énergie qui n'est plus symétrique. C'est exactement la **brisure spontanée de symétrie** : les lois restent symétriques, mais le vide, lui, a fait un choix.
+</Encart>
+
+Cette valeur de fond brise la symétrie dite **électrofaible** (le mécanisme détaillé sera vu en Partie V). C'est précisément ce qui débloque l'écriture d'un terme de masse autorisé : le champ de Higgs sert d'intermédiaire entre la chiralité gauche et la chiralité droite. Plus un fermion se couple fortement à lui, plus il est massif. <Badge niveau="modelise">Le mécanisme de brisure spontanée de symétrie électrofaible est le cœur théorique du Modèle standard : un cadre mathématique cohérent, prédictif et testé, mais qui reste un *modèle* — d'où le niveau 🔵.</Badge>
+
+<VideoManim src="higgs-field" scene="HiggsField" titre="Le champ de Higgs" legende="Plus une particule se couple au champ de Higgs, plus elle est « freinée » : plus elle est massive." />
+
+### Couplage et masse
+
+<Encart type="calcul" titre="De l'interaction à la masse (esquisse)">
+**Étape 1.** Le champ de Higgs $\phi$ relie les deux chiralités d'un fermion via un couplage d'intensité $y$ (appelé *couplage de Yukawa*, propre à chaque particule). L'interaction a la forme schématique :
+
+$$ \mathcal{L}_{\text{int}} = -\,y\,\bar{\psi}_{\text{gauche}}\,\phi\,\psi_{\text{droite}} \;+\; (\text{symétrique}). $$
+
+**Étape 2.** Dans le vide, $\phi$ ne vaut pas zéro mais sa valeur de fond constante $v/\sqrt{2}$. On remplace :
+
+$$ \mathcal{L}_{\text{int}} \;\longrightarrow\; -\,\frac{y\,v}{\sqrt{2}}\,\bar{\psi}_{\text{gauche}}\,\psi_{\text{droite}} \;+\; (\text{symétrique}). $$
+
+**Étape 3.** Or un terme reliant gauche et droite avec un coefficient constant *est* exactement, dans cette théorie, ce qu'on appelle un **terme de masse**. On identifie ce coefficient constant à $mc^2$ :
+
+$$ m\,c^{2} \;=\; \frac{y\,v}{\sqrt{2}} \quad\Longrightarrow\quad \boxed{\,m \;=\; \frac{y\,v}{\sqrt{2}\,c^{2}}\,} $$
+
+**Conclusion.** La masse est *proportionnelle au couplage* $y$. Le couplage de l'électron est minuscule (électron léger), celui du quark top est proche de 1 (top très lourd, $\sim 173~\text{GeV}/c^2$). Aucune masse n'est « expliquée » au sens où on la prédirait : les $y$ restent des paramètres *mesurés*. Le mécanisme dit seulement *comment* la masse apparaît. ∎
+</Encart>
+
+<Resultat label="Masse par couplage au Higgs">$$ m = \frac{y\,v}{\sqrt{2}\,c^{2}} $$ <Badge niveau="modelise" slot="badge">Relation masse ↔ couplage solidement modélisée : les couplages mesurés au LHC (Higgs → paires de τ, b, et W/Z) suivent bien une croissance avec la masse. Confirmation en cours d'affinement.</Badge></Resultat>
+
+<HiggsBraking />
+
+### Ce que le Higgs ne fait PAS
+
+Point capital, souvent mal compris : le mécanisme de Higgs ne donne de masse qu'aux **particules élémentaires** — quarks, leptons chargés (électron, muon, tau) et bosons $W$, $Z$. <Badge niveau="modelise">Le mécanisme de Higgs comme origine de la masse des particules élémentaires est solidement modélisé et compatible avec toutes les mesures, mais reste une théorie (Modèle standard).</Badge>
+
+En revanche, **l'essentiel de la masse de la matière ordinaire ne vient PAS du Higgs**. Un proton pèse $\approx 938~\text{MeV}/c^2$, alors que ses trois quarks de valence, eux, ne « pèsent » via le Higgs qu'environ $9~\text{MeV}/c^2$ : moins de 1 %. Les 99 % restants sont l'**énergie de la force forte** qui confine les quarks et les gluons, convertie en masse par $E = mc^2$ (<Prereq href="/physique/partie-ii/masse-energie-confinee">cf. masse comme énergie confinée</Prereq>). <Badge niveau="etabli">Établi : que l'essentiel de la masse du proton ne vienne pas du Higgs mais de la force forte est solidement acquis (calculs de chromodynamique sur réseau et spectroscopie hadronique concordants). Votre masse vient à plus de 99 % de la force forte, pas du Higgs.</Badge>
+
+### Le boson : l'excitation du champ
+
+Si le champ de Higgs existe vraiment, alors comme tout champ quantique il doit pouvoir **vibrer** : une petite oscillation autour de sa valeur de fond $v$ est une particule, le **boson de Higgs**. Le détecter, c'est prouver l'existence du champ.
+
+En 2012, les expériences ATLAS et CMS au **LHC** (CERN) ont observé une nouvelle particule de masse :
+
+$$ m_H \approx 125~\text{GeV}/c^2. $$
+
+<Resultat label="Boson de Higgs">$$ m_H \approx 125~\text{GeV}/c^2 \quad (\text{découvert en 2012, LHC}) $$ <Badge niveau="etabli" slot="badge">Établi : découverte conjointe ATLAS + CMS au-delà de 5σ, prix Nobel 2013 (Englert et Higgs). Spin, parité et désintégrations mesurés depuis et conformes au Modèle standard.</Badge></Resultat>
+
+<Encart type="plusloin" titre="Pourquoi 125 GeV était difficile à trouver">
+Le boson de Higgs est instable : il se désintègre en $\sim 10^{-22}$ s, bien avant d'atteindre un détecteur. On ne le « voit » que par ses produits de désintégration (paires de photons, de bosons $Z$, etc.), reconstruits statistiquement par-dessus un bruit de fond colossal. Il a fallu des milliards de collisions proton-proton (à une énergie dans le centre de masse $\sqrt{s} = 7$ puis $8~\text{TeV}$) pour faire émerger un petit pic autour de 125 GeV. Sa masse, elle, n'est pas prédite par la théorie : c'est un paramètre *mesuré*.
+</Encart>
+
+En résumé : un champ partout présent, non nul même dans le vide ; les particules élémentaires qui s'y couplent acquièrent une masse proportionnelle à leur couplage ; et son excitation, le boson de Higgs, a été capturée en 2012. La dernière pièce du puzzle des masses élémentaires était trouvée.
+
+Reste une question : pourquoi ce champ a-t-il « choisi » une valeur non nulle, et comment cette brisure structure-t-elle l'interaction électrofaible ? C'est tout l'enjeu de la **Partie V**, où nous unifierons électromagnétisme et force faible.

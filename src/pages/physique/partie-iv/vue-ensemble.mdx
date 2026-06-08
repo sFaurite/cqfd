@@ -1,0 +1,108 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Vue d'ensemble : le tableau du Modèle Standard"
+chapter: vue-ensemble
+description: "La carte de toutes les particules connues, expliquée case par case."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import StandardModelTable from '../../../components/interactive/StandardModelTable.astro';
+
+## Vue d'ensemble : le tableau du Modèle Standard
+
+Nous avons appris qu'à l'échelle fondamentale, la matière n'est pas faite de petites billes mais d'**excitations de champs quantiques** : à chaque type de particule correspond un champ qui remplit tout l'espace, et une « particule » n'est qu'un grain d'énergie de ce champ. <Prereq href="/physique/partie-iii/champs-quantiques">Voir : la notion de champ quantique.</Prereq>
+
+<Badge niveau="modelise">La description « une particule = une excitation d'un champ » est le cadre de la *théorie quantique des champs*. C'est un modèle d'une précision extraordinaire, mais qui reste un cadre théorique : d'où le niveau 🔵.</Badge>
+
+La question naturelle est alors : **combien de champs différents existe-t-il, et comment interagissent-ils ?** La réponse, patiemment construite entre 1960 et 1980, puis vérifiée pendant un demi-siècle, tient sur une seule affiche. C'est le **Modèle Standard de la physique des particules**.
+
+<Tournant titre="Tournant : ce tableau est dicté par l'expérience">
+Le contenu du Modèle Standard — *quelles* particules existent, *quelles* sont leurs masses et leurs charges — ne se **déduit** d'aucun principe plus profond. C'est une structure **mesurée**, déterminée par des décennies d'expériences (accélérateurs, détecteurs). On la prend ici comme une **donnée** : un ensemble d'hypothèses supplémentaires, posées par la nature. Le « pourquoi ces particules-là, avec ces masses-là ? » est, lui, une **question ouverte** — c'est tout l'objet de la <Prereq href="/physique/partie-vi/saveurs">Partie VI</Prereq>.
+</Tournant>
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine la table périodique de Mendeleïev : tout ce qu'un chimiste manipule (l'or, l'oxygène, le carbone…) tient dans une grille d'une centaine de cases. Le Modèle Standard est la table de Mendeleïev *du niveau du dessous* : il classe non pas les atomes, mais les briques **véritablement** élémentaires — celles qu'on ne peut plus casser. Et il est bien plus petit : **17 types de particules** suffisent à décrire (presque) tout l'Univers.
+</Encart>
+
+<Badge niveau="modelise">Le Modèle Standard est une théorie (quantique des champs) : un cadre mathématique cohérent, prédictif et testé à très haute précision. Mais c'est un *modèle* — il a des limites connues (voir plus bas), d'où le niveau 🔵 pour la théorie elle-même.</Badge>
+
+### Deux grandes familles : qui forme la matière, qui transmet les forces ?
+
+Tout part d'une propriété quantique appelée le **spin** (un moment cinétique intrinsèque, propre à la particule). Le spin sépare le monde en deux camps aux comportements radicalement différents.
+
+| Famille | Spin | Rôle | Comportement collectif |
+|---|---|---|---|
+| **Fermions** | demi-entier ($\tfrac12$) | constituent la **matière** | s'excluent mutuellement (un seul par état) |
+| **Bosons** | entier ($0, 1$) | **transmettent les forces** | peuvent s'empiler sans limite |
+
+<Badge niveau="etabli">Cette dichotomie est expérimentalement solide : l'exclusion des fermions explique la structure des atomes et la stabilité de la matière ; l'empilement des bosons explique le laser et le champ électromagnétique classique.</Badge>
+
+<Encart type="rappel" titre="Spin demi-entier vs entier">
+Le spin se mesure en multiples de $\hbar$ (la constante de Planck réduite). Les **fermions** ont un spin demi-entier ($\tfrac12, \tfrac32, \dots$) et obéissent au principe d'exclusion : deux fermions identiques ne peuvent pas occuper le même état quantique. Les **bosons** ont un spin entier ($0, 1, 2, \dots$) et n'ont pas cette contrainte. Dans le Modèle Standard, seuls les spins $0$ (le Higgs) et $1$ (les bosons de jauge) sont réalisés ; le spin $2$ correspondrait à un *graviton* hypothétique, qui n'y figure pas. Tu n'as pas besoin de savoir calculer le spin ici — retiens seulement qu'il agit comme une « étiquette » qui range chaque particule dans l'un des deux camps.
+</Encart>
+
+### Le tableau, case par case
+
+Voici la carte. Explore-la, puis nous la commenterons colonne par colonne.
+
+<StandardModelTable />
+
+#### Les fermions : la matière (les trois colonnes de gauche)
+
+Les fermions se divisent eux-mêmes en deux sous-familles, selon qu'ils ressentent ou non la **force forte**.
+
+- **Les quarks** (6 « saveurs ») : *up, down, charm, strange, top, bottom*. Ils sont les seuls à être sensibles à la force forte ; c'est pourquoi ils s'assemblent par trois pour former les **protons** ($uud$) et les **neutrons** ($udd$) du noyau. On ne les observe jamais isolés.
+- **Les leptons** (6) : l'**électron**, le **muon**, le **tau**, et leurs trois **neutrinos** associés. Insensibles à la force forte, les leptons chargés (électron, muon, tau) ressentent la force électromagnétique ; les neutrinos, neutres, ne ressentent quasiment que la force faible — ce qui les rend presque invisibles. <Prereq href="/physique/partie-iv/fermions">Détail des quarks et des leptons.</Prereq>
+
+<Badge niveau="etabli">Les 12 fermions sont tous détectés et leurs propriétés (charge, masse) mesurées. Le dernier neutrino confirmé (celui du tau) l'a été en 2000 ; le quark top, le plus lourd, en 1995.</Badge>
+
+#### Les trois générations : trois copies de masses croissantes
+
+Regarde les colonnes du tableau : la structure se **répète trois fois**. Chaque ligne de fermions existe en trois versions, les **générations**, identiques en tout *sauf la masse*, qui croît fortement d'une génération à l'autre.
+
+| Génération | Quarks | Lepton chargé |
+|---|---|---|
+| 1ʳᵉ (la matière ordinaire) | up, down | électron |
+| 2ᵉ | charm, strange | muon |
+| 3ᵉ | top, bottom | tau |
+
+Toute la matière stable qui t'entoure — ton corps, les étoiles, cette page — est faite **uniquement de la 1ʳᵉ génération** : protons, neutrons (donc quarks $u$ et $d$) et électrons. Les générations 2 et 3 sont plus lourdes, donc instables : créées dans les collisions de haute énergie ou les rayons cosmiques, elles se désintègrent en une fraction de seconde vers la 1ʳᵉ génération.
+
+<Badge niveau="etabli">Le nombre de générations « légères » est mesuré : l'étude de la désintégration du boson Z au LEP (CERN) impose exactement **3** familles de neutrinos légers. Pourquoi trois, et pas une ou dix ? Personne ne le sait — c'est l'une des grandes énigmes ouvertes.</Badge>
+
+#### Les bosons : les messagers des forces (la colonne de droite)
+
+Les **bosons de jauge** (spin 1) sont les « porteurs » des interactions : transmettre une force, c'est échanger l'un de ces bosons.
+
+| Boson | Spin | Force transmise | Portée |
+|---|---|---|---|
+| **Photon** ($\gamma$) | 1 | électromagnétique | infinie |
+| **8 gluons** ($g$) | 1 | forte | très courte (noyau) |
+| **$W^+, W^-, Z^0$** | 1 | faible | très courte |
+
+<Prereq href="/physique/partie-iv/bosons-jauge">Comment un échange de boson crée une force.</Prereq>
+
+<Badge niveau="etabli">Photon, gluons et bosons $W/Z$ sont tous détectés. Les bosons $W$ et $Z$, prédits puis découverts au CERN en 1983, valurent le prix Nobel ; les gluons ont été mis en évidence dès 1979.</Badge>
+
+Reste une case à part, seule de son espèce : le **boson de Higgs** (spin **0**, donc ni fermion de matière, ni boson de jauge messager). Son champ donne leur masse aux autres particules élémentaires (les quarks, les leptons chargés, les bosons $W$ et $Z$). Prédit en 1964, il n'a été observé qu'en **2012** au LHC, complétant le tableau. <Prereq href="/physique/partie-iv/higgs">Le mécanisme de Higgs et l'origine de la masse.</Prereq>
+
+<Badge niveau="etabli">L'existence du boson de Higgs (prix Nobel 2013) confirme la dernière pièce manquante du Modèle Standard.</Badge>
+
+### Et l'antimatière ?
+
+Le tableau cache une symétrie : **chaque fermion possède une antiparticule**, de même masse mais de charges opposées. L'électron ($e^-$) a pour antiparticule le **positron** ($e^+$) ; au quark $u$ correspond l'antiquark $\bar u$, etc. Particule et antiparticule peuvent s'**annihiler** en pure énergie ($e^- + e^+ \to 2\gamma$), conformément à $E = mc^2$.
+
+<Badge niveau="etabli">L'antimatière n'est pas une spéculation : le positron est prédit par Dirac (1928) puis observé en 1932 ; aujourd'hui l'antimatière se fabrique et se piège au CERN, et les positrons servent en médecine (imagerie TEP).</Badge>
+
+### Une absence qui crie : la gravité
+
+Un détail capital : **la gravité ne figure nulle part** dans ce tableau. Aucun « graviton » n'y a sa case, car nous ne savons pas encore décrire la gravité comme une théorie quantique des champs cohérente. C'est précisément la grande affaire inachevée de la physique.
+
+<Badge niveau="ouvert">Unifier le Modèle Standard avec la gravité (relativité générale) est un problème non résolu. C'est l'objet de la <Prereq href="/physique/partie-vi/gravite-quantique">Partie VI</Prereq>.</Badge>
+
+Nous tenons donc la carte : 12 fermions de matière en 3 générations, 12 bosons de jauge messagers, 1 boson de Higgs, et le miroir de l'antimatière. Dans le chapitre suivant, descendons dans la première colonne et examinons de près ces fermions — les briques mêmes dont vous êtes fait.

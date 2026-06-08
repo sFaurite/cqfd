@@ -1,0 +1,145 @@
+---
+/**
+ * OpenProblemsMap — carte de synthèse : ce qu'on sait vs ce qu'on ignore, chaque
+ * domaine coloré par son niveau de fiabilité et cliquable vers sa page.
+ */
+import { FIABILITE, type NiveauFiabilite } from '../../lib/palette';
+
+interface Domaine {
+  titre: string;
+  niveau: NiveauFiabilite;
+  desc: string;
+  voir?: string;
+}
+
+const domaines: Domaine[] = [
+  { titre: 'Relativité restreinte', niveau: 'etabli', desc: 'Temps, longueurs, E=mc² : vérifiés partout.', voir: '/physique/partie-i/postulats' },
+  { titre: 'Existence du Higgs', niveau: 'etabli', desc: 'Boson observé en 2012 (LHC).', voir: '/physique/partie-iv/higgs' },
+  { titre: 'Particules du Modèle Standard', niveau: 'etabli', desc: 'Toutes détectées et mesurées.', voir: '/physique/partie-iv/vue-ensemble' },
+  { titre: 'Mécanisme de Higgs (masses)', niveau: 'modelise', desc: 'Donne la masse aux particules élémentaires. Cadre très confirmé.', voir: '/physique/partie-iv/higgs' },
+  { titre: 'Confinement des quarks', niveau: 'modelise', desc: 'On n’isole jamais un quark. Bien modélisé, calcul difficile.', voir: '/physique/partie-v/interaction-forte' },
+  { titre: 'Unification électrofaible', niveau: 'modelise', desc: 'EM + faible = une seule force à haute énergie.', voir: '/physique/partie-v/electrofaible' },
+  { titre: 'Masse des neutrinos (seesaw ?)', niveau: 'plausible', desc: 'Masse non nulle prouvée ; son origine (Dirac/seesaw) débattue.', voir: '/physique/partie-vi/masse-neutrinos' },
+  { titre: 'Neutrino = sa propre antiparticule ?', niveau: 'plausible', desc: 'Hypothèse de Majorana, encore non tranchée.', voir: '/physique/partie-vi/masse-neutrinos' },
+  { titre: 'Hiérarchie des masses / saveurs', niveau: 'ouvert', desc: 'Pourquoi ces valeurs de masses et de couplages ?', voir: '/physique/partie-vi/saveurs' },
+  { titre: 'Matière noire', niveau: 'ouvert', desc: '~27 % de l’Univers, nature inconnue.', voir: '/physique/partie-vi/matiere-noire' },
+  { titre: 'Énergie noire', niveau: 'ouvert', desc: '~68 % de l’Univers, expansion accélérée inexpliquée.', voir: '/physique/partie-vi/matiere-noire' },
+  { titre: 'Gravité quantique', niveau: 'ouvert', desc: 'Pas de théorie unifiant relativité générale et quantique.', voir: '/physique/partie-vi/gravite-quantique' },
+  { titre: 'Asymétrie matière/antimatière', niveau: 'ouvert', desc: 'Pourquoi reste-t-il de la matière ?', voir: '/physique/partie-vi/asymetrie' },
+  { titre: 'Problème de hiérarchie (Higgs/gravité)', niveau: 'ouvert', desc: 'Pourquoi la gravité est-elle si faible ?', voir: '/physique/partie-vi/hierarchie' },
+];
+
+const niveauxOrdre: NiveauFiabilite[] = ['etabli', 'modelise', 'plausible', 'ouvert'];
+const parNiveau = (n: NiveauFiabilite) => domaines.filter((d) => d.niveau === n);
+---
+
+<div class="iw opm" data-iw="openmap">
+  <div class="iw__head"><span class="tag">Interactif</span> Carte : ce qu’on sait, ce qu’on ignore</div>
+
+  <div class="opm__legend">
+    {
+      niveauxOrdre.map((n) => (
+        <span class="opm__leg">
+          <i style={`background:${FIABILITE[n].color}`} />
+          {FIABILITE[n].emoji} {FIABILITE[n].label}
+        </span>
+      ))
+    }
+  </div>
+
+  <div class="opm__cols">
+    {
+      niveauxOrdre.map((n) => (
+        <div class="opm__col" style={`--cc:${FIABILITE[n].color}`}>
+          <div class="opm__colhead">{FIABILITE[n].label}</div>
+          {parNiveau(n).map((d) => (
+            <a class="opm__card" href={d.voir ?? '#'}>
+              <strong>{d.titre}</strong>
+              <span>{d.desc}</span>
+            </a>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+  <p class="iw__note">
+    Plus on descend (vert → rouge), moins on est sûr. La physique fondamentale n’est pas un bloc de
+    certitudes : c’est un noyau extrêmement solide entouré de questions grandes ouvertes.
+  </p>
+</div>
+
+<style>
+  .opm__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8em;
+    padding: 0.8em 1em 0;
+    font-size: 0.8rem;
+  }
+  .opm__leg {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--c-muted);
+  }
+  .opm__leg i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .opm__cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+    padding: 1rem;
+  }
+  @media (max-width: 760px) {
+    .opm__cols {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 420px) {
+    .opm__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+  .opm__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .opm__colhead {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 800;
+    color: var(--cc);
+    padding-bottom: 0.3em;
+    border-bottom: 2px solid var(--cc);
+  }
+  .opm__card {
+    display: block;
+    padding: 0.6em 0.7em;
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--cc);
+    border-radius: 8px;
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+  .opm__card:hover {
+    text-decoration: none;
+    background: var(--c-surface-2);
+    transform: translateY(-2px);
+    transition: transform 0.12s;
+  }
+  .opm__card strong {
+    display: block;
+    font-size: 0.85rem;
+    margin-bottom: 0.2em;
+  }
+  .opm__card span {
+    font-size: 0.74rem;
+    color: var(--c-muted);
+    line-height: 1.4;
+  }
+</style>

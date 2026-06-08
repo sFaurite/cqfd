@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GLOSSAIRE } from '../../data/maths/glossary';
+
+const termes = [...GLOSSAIRE].sort((a, b) =>
+  a.terme.localeCompare(b.terme, 'fr', { sensitivity: 'base' }),
+);
+---
+
+<BaseLayout title="Glossaire" courseId="maths" currentPath={Astro.url.pathname} description="Tous les termes techniques du site, définis et reliés à la page où ils sont introduits.">
+  <div class="lesson-wrap">
+    <article id="contenu" class="prose" data-pagefind-body>
+      <h1>Glossaire</h1>
+      <p class="lead">
+        Chaque terme technique du site, défini simplement, avec un lien vers la page
+        où il est introduit ou démontré.
+      </p>
+
+      <div class="filtre">
+        <input
+          type="search"
+          id="gl-filtre"
+          placeholder="Filtrer les termes…"
+          aria-label="Filtrer les termes du glossaire"
+        />
+        <span id="gl-count" class="count">{termes.length} termes</span>
+      </div>
+
+      <dl class="glossaire">
+        {
+          termes.map((t) => (
+            <div class="entree" data-terme={`${t.terme} ${(t.alias ?? []).join(' ')}`.toLowerCase()}>
+              <dt id={`gl-${t.terme.replace(/[^a-zA-Zà-ÿ0-9]+/g, '-').toLowerCase()}`}>
+                {t.terme}
+              </dt>
+              <dd>
+                <span set:html={t.def} />
+                {t.voir && (
+                  <a class="voir" href={t.voir}>
+                    voir la page →
+                  </a>
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </article>
+  </div>
+
+  <script>
+    const input = document.getElementById('gl-filtre') as HTMLInputElement | null;
+    const count = document.getElementById('gl-count');
+    const entrees = Array.from(document.querySelectorAll<HTMLElement>('.entree'));
+    input?.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let n = 0;
+      for (const e of entrees) {
+        const ok = !q || (e.dataset.terme ?? '').includes(q);
+        e.style.display = ok ? '' : 'none';
+        if (ok) n++;
+      }
+      if (count) count.textContent = `${n} terme${n > 1 ? 's' : ''}`;
+    });
+  </script>
+
+  <style>
+    .lesson-wrap {
+      padding: 1.4rem clamp(1rem, 3vw, 2.4rem) 3rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+    .filtre {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    #gl-filtre {
+      flex: 1;
+      padding: 0.6em 0.9em;
+      background: var(--c-bg-elev);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-sm);
+      color: var(--c-text);
+      font-size: 1rem;
+    }
+    #gl-filtre:focus {
+      border-color: var(--c-blue);
+      outline: none;
+    }
+    .count {
+      color: var(--c-muted);
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .glossaire {
+      margin: 0;
+    }
+    .entree {
+      padding: 0.9em 0;
+      border-bottom: 1px solid var(--c-border);
+    }
+    dt {
+      font-weight: 700;
+      color: var(--c-blue);
+      font-size: 1.05rem;
+      scroll-margin-top: calc(var(--header-h) + 12px);
+    }
+    dd {
+      margin: 0.3em 0 0;
+      color: var(--c-text);
+    }
+    .voir {
+      display: inline-block;
+      margin-left: 0.4em;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+  </style>
+</BaseLayout>

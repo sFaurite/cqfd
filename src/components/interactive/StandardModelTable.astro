@@ -1,0 +1,224 @@
+---
+/**
+ * StandardModelTable — le tableau du Modèle Standard, interactif. Chaque case est
+ * cliquable et affiche masse, charge, spin, catégorie et un mot d'explication.
+ */
+interface P {
+  id: string;
+  sym: string;
+  nom: string;
+  masse: string;
+  charge: string;
+  spin: string;
+  cat: 'quark' | 'lepton' | 'boson' | 'higgs';
+  info: string;
+}
+
+const quarksUp: P[] = [
+  { id: 'u', sym: 'u', nom: 'quark up', masse: '≈ 2,2 MeV/c²', charge: '+2/3', spin: '1/2', cat: 'quark', info: 'Constituant du proton (uud) et du neutron (udd). 1ʳᵉ génération.' },
+  { id: 'c', sym: 'c', nom: 'quark charm', masse: '≈ 1,27 GeV/c²', charge: '+2/3', spin: '1/2', cat: 'quark', info: 'Version plus lourde du up. 2ᵉ génération.' },
+  { id: 't', sym: 't', nom: 'quark top', masse: '≈ 173 GeV/c²', charge: '+2/3', spin: '1/2', cat: 'quark', info: 'La particule élémentaire la plus lourde connue. 3ᵉ génération.' },
+];
+const quarksDown: P[] = [
+  { id: 'd', sym: 'd', nom: 'quark down', masse: '≈ 4,7 MeV/c²', charge: '−1/3', spin: '1/2', cat: 'quark', info: 'Constituant du proton et du neutron. 1ʳᵉ génération.' },
+  { id: 's', sym: 's', nom: 'quark strange', masse: '≈ 96 MeV/c²', charge: '−1/3', spin: '1/2', cat: 'quark', info: 'Quark étrange. 2ᵉ génération.' },
+  { id: 'b', sym: 'b', nom: 'quark bottom', masse: '≈ 4,18 GeV/c²', charge: '−1/3', spin: '1/2', cat: 'quark', info: 'Quark beauté. 3ᵉ génération.' },
+];
+const leptonsCharges: P[] = [
+  { id: 'e', sym: 'e', nom: 'électron', masse: '0,511 MeV/c²', charge: '−1', spin: '1/2', cat: 'lepton', info: 'Forme les atomes ; responsable de la chimie. 1ʳᵉ génération.' },
+  { id: 'mu', sym: 'μ', nom: 'muon', masse: '105,7 MeV/c²', charge: '−1', spin: '1/2', cat: 'lepton', info: 'Électron lourd et instable. 2ᵉ génération.' },
+  { id: 'tau', sym: 'τ', nom: 'tau', masse: '1,777 GeV/c²', charge: '−1', spin: '1/2', cat: 'lepton', info: 'Lepton chargé le plus lourd. 3ᵉ génération.' },
+];
+const neutrinos: P[] = [
+  { id: 'nue', sym: 'νₑ', nom: 'neutrino électronique', masse: '< 0,8 eV/c²', charge: '0', spin: '1/2', cat: 'lepton', info: 'Quasi sans masse, n’interagit que faiblement. Sa masse non nulle (oscillations) dépasse le Modèle Standard originel.' },
+  { id: 'numu', sym: 'νμ', nom: 'neutrino muonique', masse: 'minuscule', charge: '0', spin: '1/2', cat: 'lepton', info: '2ᵉ génération de neutrino.' },
+  { id: 'nutau', sym: 'ντ', nom: 'neutrino tauique', masse: 'minuscule', charge: '0', spin: '1/2', cat: 'lepton', info: '3ᵉ génération de neutrino.' },
+];
+const bosons: P[] = [
+  { id: 'g', sym: 'g', nom: 'gluon', masse: '0', charge: '0', spin: '1', cat: 'boson', info: 'Messager de l’interaction forte entre quarks. Sans masse, mais confiné.' },
+  { id: 'photon', sym: 'γ', nom: 'photon', masse: '0', charge: '0', spin: '1', cat: 'boson', info: 'Messager de l’électromagnétisme. Masse nulle protégée par une symétrie de jauge.' },
+  { id: 'Z', sym: 'Z', nom: 'boson Z', masse: '91,2 GeV/c²', charge: '0', spin: '1', cat: 'boson', info: 'Messager neutre de l’interaction faible. Massif → courte portée.' },
+  { id: 'W', sym: 'W', nom: 'boson W', masse: '80,4 GeV/c²', charge: '±1', spin: '1', cat: 'boson', info: 'Messager chargé de l’interaction faible ; change la saveur (désintégration β).' },
+];
+const higgs: P[] = [
+  { id: 'H', sym: 'H', nom: 'boson de Higgs', masse: '≈ 125 GeV/c²', charge: '0', spin: '0', cat: 'higgs', info: 'Excitation du champ de Higgs, qui donne leur masse aux particules élémentaires. Découvert en 2012.' },
+];
+
+const tous = [...quarksUp, ...quarksDown, ...leptonsCharges, ...neutrinos, ...bosons, ...higgs];
+const cell = (p: P) => p;
+---
+
+<div class="iw smt" data-iw="smtable">
+  <div class="iw__head"><span class="tag">Interactif</span> Le tableau du Modèle Standard — cliquez une case</div>
+
+  <div class="smt__grid">
+    <div class="smt__col">
+      <div class="smt__lbl">Quarks</div>
+      {[quarksUp, quarksDown].map((row) => (
+        <div class="smt__row">
+          {row.map((p) => (
+            <button class="smt__cell" data-cat={p.cat} data-id={p.id}>
+              <span class="sym">{p.sym}</span>
+              <span class="m">{p.masse}</span>
+            </button>
+          ))}
+        </div>
+      ))}
+      <div class="smt__lbl">Leptons</div>
+      {[leptonsCharges, neutrinos].map((row) => (
+        <div class="smt__row">
+          {row.map((p) => (
+            <button class="smt__cell" data-cat={p.cat} data-id={p.id}>
+              <span class="sym">{p.sym}</span>
+              <span class="m">{p.masse}</span>
+            </button>
+          ))}
+        </div>
+      ))}
+      <div class="smt__gen">← 1ʳᵉ · 2ᵉ · 3ᵉ génération →</div>
+    </div>
+
+    <div class="smt__col narrow">
+      <div class="smt__lbl">Bosons de jauge</div>
+      <div class="smt__row wrap">
+        {bosons.map((p) => (
+          <button class="smt__cell" data-cat={p.cat} data-id={p.id}>
+            <span class="sym">{p.sym}</span>
+            <span class="m">{p.masse === '0' ? 'sans masse' : p.masse}</span>
+          </button>
+        ))}
+      </div>
+      <div class="smt__lbl">Higgs</div>
+      <div class="smt__row">
+        {higgs.map((p) => (
+          <button class="smt__cell" data-cat={p.cat} data-id={p.id}>
+            <span class="sym">{p.sym}</span>
+            <span class="m">{p.masse}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="smt__panel" data-panel>
+    <p class="smt__hint">Sélectionnez une particule pour voir ses propriétés.</p>
+  </div>
+
+  <script is:inline type="application/json" data-smt-data set:html={JSON.stringify(tous)}></script>
+</div>
+
+<script>
+  import './StandardModelTable.client.ts';
+</script>
+
+<style>
+  .smt__grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  @media (max-width: 620px) {
+    .smt__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .smt__lbl {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-muted);
+    font-weight: 700;
+    margin: 0.5em 0 0.3em;
+  }
+  .smt__row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .smt__row.wrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .smt__cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1em;
+    padding: 0.5em 0.6em;
+    border-radius: 8px;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.1s;
+  }
+  .smt__cell:hover {
+    transform: translateY(-2px);
+    border-color: currentColor;
+  }
+  .smt__cell .sym {
+    font-size: 1.3rem;
+    font-weight: 800;
+    font-style: italic;
+  }
+  .smt__cell .m {
+    font-size: 0.66rem;
+    color: var(--c-muted);
+  }
+  .smt__cell[data-cat='quark'] {
+    box-shadow: inset 3px 0 0 var(--c-purple);
+  }
+  .smt__cell[data-cat='lepton'] {
+    box-shadow: inset 3px 0 0 var(--c-teal);
+  }
+  .smt__cell[data-cat='boson'] {
+    box-shadow: inset 3px 0 0 var(--c-red);
+  }
+  .smt__cell[data-cat='higgs'] {
+    box-shadow: inset 3px 0 0 var(--c-yellow);
+  }
+  .smt__cell.sel {
+    background: var(--c-surface-2);
+    border-color: var(--c-blue);
+  }
+  .smt__gen {
+    font-size: 0.7rem;
+    color: var(--c-muted);
+    text-align: center;
+    margin-top: 0.3em;
+  }
+  .smt__panel {
+    margin: 0 1rem 1rem;
+    padding: 0.9em 1.1em;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+    background: var(--c-bg);
+    min-height: 90px;
+  }
+  .smt__hint {
+    color: var(--c-muted);
+    margin: 0;
+  }
+  .smt__panel h4 {
+    margin: 0 0 0.2em;
+    color: var(--c-text);
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1.1rem;
+  }
+  .smt__props {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin: 0.5em 0;
+  }
+  .smt__props span {
+    font-size: 0.8rem;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
+  }
+</style>

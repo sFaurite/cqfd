@@ -1,0 +1,145 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La méthode axiomatique"
+chapter: methode-axiomatique
+description: "Axiomes, définitions, théorèmes, démonstrations — ce qu'on admet et ce qu'on déduit. Et les limites de Gödel."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi commencer par poser des règles du jeu
+
+<Tournant titre="Tournant : on ne prouve pas tout à partir de rien">
+
+C'est le tout premier chapitre, et il faut être honnête dès la première ligne : **un cours de mathématiques ne démontre pas tout**. On pourrait croire qu'un édifice « rigoureux » consiste à ne rien admettre — à tout justifier, indéfiniment. C'est impossible. Toute justification s'appuie sur quelque chose d'antérieur ; si l'on remontait sans fin, aucune démonstration ne s'arrêterait jamais. Il faut donc des **points de départ** que l'on accepte sans preuve : les **axiomes**.
+
+Mais alors, comment choisir ces points de départ ? On ne les choisit pas parce qu'ils seraient « évidents » ou « vrais en soi » — cette idée a explosé en vol au XX$^\text{e}$ siècle. On les choisit parce qu'ils forment un système **cohérent** (sans contradiction) et **fécond** (il en sort beaucoup de mathématiques utiles). Pire — et c'est le grand vertige de ce chapitre — un théorème de Gödel (1931) montre qu'un système assez riche **ne peut même pas démontrer sa propre cohérence**.
+
+Voici donc la promesse de ce site, et c'est une promesse modeste mais solide : **rien ne sera jamais utilisé sans être, soit un axiome posé au grand jour, soit une déduction explicite de ce qui précède.** On ne cache aucun ingrédient sous le tapis. Quand on ajoute une hypothèse, on le dit.
+
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+
+1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les règles d'inférence usuelles — dont le **modus ponens** : de $A$ et de $A \Rightarrow B$, on déduit $B$. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
+2. **Principe méthodologique.** Les axiomes sont des **points de départ posés**, pas des vérités démontrées. Les juger, c'est juger leur cohérence et leur fécondité, pas leur « évidence ».
+
+</Hypotheses>
+
+## Le vocabulaire de l'édifice
+
+Avant de construire, fixons les briques. Quatre mots structurent toute mathématique déductive.
+
+- **Axiome** — un énoncé **admis sans démonstration**. C'est un choix, posé au départ. Exemple à venir : « il existe un ensemble vide ».
+- **Définition** — une **convention de nommage**. Elle n'affirme rien sur le monde ; elle abrège. Dire « un nombre est *pair* s'il s'écrit $2k$ » ne se démontre pas : c'est un raccourci de langage. Une définition ne peut pas être « fausse », seulement utile ou maladroite.
+- **Théorème** — un énoncé **démontré** à partir des axiomes et des résultats déjà établis. C'est le seul type d'énoncé qui « se gagne ».
+- **Lemme** et **corollaire** — des théorèmes, mais étiquetés par leur rôle : un *lemme* est un résultat technique, marche d'escalier vers un théorème plus important ; un *corollaire* est une conséquence quasi immédiate d'un théorème qu'on vient d'établir.
+
+<Encart type="intuition" titre="L'analogie du jeu d'échecs">
+
+Pensez aux axiomes comme aux **règles initiales** des échecs : le placement des pièces, leurs déplacements. Personne ne « démontre » que le fou va en diagonale — c'est posé. Les **définitions** sont le vocabulaire (« roque », « échec et mat »). Les **théorèmes** sont les positions que l'on peut *atteindre* en jouant selon les règles. Et la **logique** ? C'est ce qui garantit qu'un coup légal mène bien à une position légale. Changez les règles de départ, vous obtenez un autre jeu — une autre mathématique.
+
+</Encart>
+
+## Qu'est-ce qu'une démonstration ?
+
+Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par une règle d'inférence. Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
+
+Plusieurs *formes* de démonstration reviennent sans cesse :
+
+- **Preuve directe** : on part des hypothèses et on enchaîne les implications jusqu'à la conclusion.
+- **Preuve par contraposée** : pour montrer $A \Rightarrow B$, on montre $\lnot B \Rightarrow \lnot A$, qui lui est **logiquement équivalent**. <Badge niveau="demontre">L'équivalence entre $A \Rightarrow B$ et $\lnot B \Rightarrow \lnot A$ est une tautologie de la logique classique.</Badge>
+- **Preuve par l'absurde** : on suppose la négation de ce qu'on veut prouver, et on en déduit une contradiction (un énoncé et sa négation). La contradiction étant interdite, l'hypothèse de départ était fausse. <Badge niveau="demontre">Valide en logique classique ; en logique intuitionniste, l'absurde ne prouve que les négations, pas les énoncés positifs.</Badge>
+
+Une quatrième arme, la **démonstration par récurrence**, mérite un chapitre à elle seule : on l'introduira rigoureusement plus tard, car elle repose sur une propriété spécifique des entiers naturels.
+
+<Encart type="calcul" titre="Une preuve par l'absurde : √2 est irrationnel (esquisse)">
+
+**Objectif.** Montrer qu'il n'existe pas d'entiers $p, q$ avec $q \neq 0$ tels que $\sqrt{2} = \tfrac{p}{q}$.
+
+**Étape 1 — supposer le contraire.** Supposons qu'il existe de tels entiers. Quitte à simplifier, on peut prendre la fraction *réduite* (aucun facteur commun à $p$ et $q$).
+
+**Étape 2 — élever au carré.** Alors $2 = \tfrac{p^2}{q^2}$, donc
+
+$$p^2 = 2\,q^2.$$
+
+**Étape 3 — $p$ est pair.** $p^2$ vaut deux fois un entier, donc $p^2$ est pair, donc $p$ est pair. Écrivons $p = 2k$.
+
+**Étape 4 — $q$ est pair aussi.** En reportant : $(2k)^2 = 2q^2$, soit $4k^2 = 2q^2$, donc $q^2 = 2k^2$. Par le même raisonnement, $q$ est pair.
+
+**Étape 5 — contradiction.** $p$ et $q$ sont tous deux pairs : ils ont le facteur commun $2$. Cela **contredit** le caractère réduit de la fraction (étape 1).
+
+L'hypothèse « $\sqrt 2$ est rationnel » mène à une contradiction : elle est donc fausse. $\boxed{\sqrt 2 \notin \mathbb{Q}}$
+
+<Badge niveau="demontre">Théorème démontré (déjà connu des Grecs). Ici c'est une *esquisse* illustrative : elle mobilise les entiers et la divisibilité, qu'on ne construira rigoureusement qu'après avoir posé ZF.</Badge>
+
+</Encart>
+
+## Ce qui fait un *bon* système d'axiomes
+
+On ne pose pas des axiomes au hasard. Trois qualités les départagent.
+
+1. **Cohérence (non-contradiction).** Le système ne doit jamais permettre de démontrer à la fois un énoncé et sa négation. **C'est de loin la plus importante** : un système incohérent démontre *tout* (du faux on déduit n'importe quoi), il ne dit donc plus rien. <Badge niveau="demontre">Qu'un système incohérent démontre tout est un théorème élémentaire de logique (principe d'explosion).</Badge>
+2. **Indépendance.** Aucun axiome ne devrait être démontrable à partir des autres — sinon, ce n'est pas un axiome mais un théorème déguisé. C'est une qualité d'élégance, pas une nécessité. <Badge niveau="demontre">Notion standard ; l'indépendance d'un axiome se prouve par un modèle où il est faux et les autres vrais.</Badge>
+3. **Complétude (idéal).** On aimerait que *tout* énoncé exprimable soit, soit démontrable, soit réfutable. C'est le rêve : aucune question laissée en suspens.
+
+## Le grand tournant : Gödel (1931)
+
+Ce rêve est mort. Kurt Gödel a démontré deux théorèmes qui redéfinissent ce que « rigueur » veut dire. Une précision est indispensable pour qu'ils soient **exacts** : ils portent sur les systèmes **récursivement axiomatisables** — ceux dont la liste des axiomes peut être énumérée par un algorithme. C'est le cas de tous les systèmes d'axiomes que l'on utilise réellement.
+
+<Resultat label="Premier théorème d'incomplétude de Gödel">
+
+$$\text{Tout système cohérent, récursivement axiomatisable et assez riche pour l'arithmétique contient un énoncé } G \text{ ni démontrable ni réfutable.}$$
+
+<Badge niveau="demontre" slot="badge">Théorème démontré en 1931, jamais remis en cause.</Badge>
+
+</Resultat>
+
+Un tel énoncé $G$ est dit **indécidable** dans le système : ni prouvable, ni réfutable en son sein. De plus, dans l'interprétation **standard** (celle des entiers usuels $\mathbb{N}$), $G$ se trouve être **vrai** — bien qu'indémontrable. <Badge niveau="demontre">« Vrai dans $\mathbb{N}$ » est une affirmation *sémantique* (sur le modèle standard), distincte de « démontrable ».</Badge>
+
+Autrement dit, dès qu'un système est assez puissant pour parler des entiers et de l'addition, il échappe à toute axiomatisation complète. Ajouter $G$ comme nouvel axiome ne sauve rien — le système agrandi, toujours récursivement axiomatisable, en fabrique aussitôt un autre. <Badge niveau="demontre">L'incomplétude est *irréductible* : aucune extension récursive cohérente ne la supprime.</Badge>
+
+<Resultat label="Second théorème d'incomplétude de Gödel">
+
+$$\text{Un tel système, s'il est cohérent, ne peut pas démontrer sa propre cohérence.}$$
+
+<Badge niveau="demontre" slot="badge">Théorème démontré (1931), obtenu en formalisant la preuve du premier à l'intérieur du système.</Badge>
+
+</Resultat>
+
+<Encart type="intuition" titre="Vrai n'est pas démontrable">
+
+Le cœur du vertige est cette distinction, qu'on confond souvent. **« Vrai »** se rapporte à une signification, à un *modèle* (l'énoncé décrit correctement les entiers $\mathbb{N}$). **« Démontrable »** se rapporte à un système d'axiomes (il existe une chaîne finie de pas qui y mène). Gödel montre que ces deux notions **ne coïncident pas** : dans un système donné, il y a du vrai (au sens du modèle standard) hors de portée de toute preuve. La vérité déborde la démonstration.
+
+</Encart>
+
+## La promesse honnête de ce cours
+
+Quelle conséquence pour nous ? Le système d'axiomes standard des mathématiques s'appelle **ZF** (Zermelo–Fraenkel, parfois augmenté de l'axiome du choix : ZFC). On le construira au chapitre suivant. ZF est récursivement axiomatisable et contient l'arithmétique : les deux théorèmes de Gödel s'y appliquent. Par le second :
+
+<Resultat label="Cohérence de ZF, vue de l'intérieur">
+
+$$\text{Si ZF est cohérent, alors ZF ne peut pas démontrer sa propre cohérence.}$$
+
+<Badge niveau="demontre" slot="badge">Application directe du second théorème de Gödel.</Badge>
+
+</Resultat>
+
+Et la cohérence de ZF elle-même ?
+
+<Resultat label="ZF est-il cohérent ?">
+
+$$\text{ZF est très probablement cohérent — mais cela ne peut pas être prouvé depuis l'intérieur de ZF.}$$
+
+<Badge niveau="conjecture" slot="badge">Un siècle d'usage sans contradiction nous y fait croire, mais c'est une confiance, pas un théorème.</Badge>
+
+</Resultat>
+
+Voilà l'aveu fondateur. On ne *prouvera* jamais, depuis l'intérieur, que les mathématiques sont sans contradiction. On **travaille à l'intérieur** d'un système qu'on **adopte par confiance et par fécondité** : un siècle d'exploration intensive n'y a révélé aucune faille, et il engendre une richesse stupéfiante. Ce choix est **méthodologique**, ni une vérité absolue, ni un mystère insondable — une décision raisonnée, assumée.
+
+Dans le chapitre suivant, on descend tout en bas de l'édifice et l'on pose, une à une, les briques de ZF — à commencer par l'objet le plus humble et le plus puissant des mathématiques : l'**ensemble**.

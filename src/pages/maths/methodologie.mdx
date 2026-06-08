@@ -1,0 +1,46 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que signifient les quatre niveaux du cours de mathématiques — démontré, admis, conjecturé, indécidable.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+
+En mathématiques, la « fiabilité » d’un énoncé n’est pas une affaire de mesure mais de **statut
+logique** : est-il *démontré* à partir des axiomes, *posé* comme axiome, *conjecturé*, ou
+*indécidable* ? Ce n’est donc pas un thermomètre de certitude mais une **classification de
+statuts**. Chaque affirmation notable du cours porte l’un des quatre niveaux ci-dessous ; survolez
+un badge (ou donnez-lui le focus) pour lire *pourquoi*.
+
+## Les quatre niveaux
+
+### 🟢 Démontré <Badge niveau="demontre">Théorème prouvé à partir des axiomes adoptés ; consensus.</Badge>
+Un **théorème** : prouvé rigoureusement à partir des axiomes et de résultats déjà établis. C’est le
+plus haut statut — mais toujours *relatif aux axiomes* choisis.
+
+### 🔵 Admis <Badge niveau="admis">Axiome, définition, ou cadre — posé par choix.</Badge>
+Un **axiome**, une **définition**, ou un **cadre** (ZF, la logique classique) : posé *par choix*, non
+démontré. Ce n’est ni « vrai » ni « faux » en soi — c’est le point de départ qu’on adopte. Le 🔵
+n’est donc pas « moins sûr » que le 🟢 : c’est une *autre nature* d’énoncé.
+
+### 🟡 Conjecturé <Badge niveau="conjecture">Cru vrai, mais non démontré.</Badge>
+Une **conjecture** : crue vraie, fortement étayée, mais **non démontrée** à ce jour (hypothèse de
+Riemann, P vs NP, cohérence de ZF…).
+
+### 🔴 Indécidable <Badge niveau="indecidable">Démontré ni prouvable ni réfutable dans le cadre.</Badge>
+Un énoncé dont on a **démontré** qu’il n’est *ni prouvable ni réfutable* à partir des axiomes adoptés
+(l’hypothèse du continu dans ZFC). Ajouter l’énoncé *ou* sa négation laisse une théorie cohérente.
+
+<Encart type="plusloin" titre="Pourquoi 🔴 « indécidable » est un statut paradoxal">
+L’indécidabilité d’un énoncé est elle-même un **théorème** (donc 🟢 au méta-niveau !). Le 🔴 ne dit
+pas « on ne sait pas encore » : il dit « on a **prouvé** qu’aucune réponse n’existe *dans ce cadre* ».
+C’est plus fort — et plus définitif — qu’une simple conjecture ouverte.
+</Encart>
+
+## Une remarque honnête
+
+Tout, dans ce cours, est **relatif aux axiomes de ZF** (que l’on adopte, sans pouvoir prouver leur
+cohérence — cf. <a href="/maths/partie-i/methode-axiomatique">Gödel</a>). « Démontré » signifie donc
+toujours : *démontré à partir de ZF*. C’est la portée exacte — et la limite honnête — de l’édifice.

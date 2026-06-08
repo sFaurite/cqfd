@@ -1,0 +1,81 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La chiralité (gaucher / droitier)"
+chapter: chiralite
+description: "Une propriété subtile, mais centrale pour la masse et la force faible."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## La chiralité (gaucher / droitier)
+
+Imagine tes deux mains. Elles sont presque identiques : mêmes doigts, mêmes proportions. Et pourtant tu ne peux pas superposer ta main gauche sur ta main droite — l'une est l'image de l'autre dans un miroir. On dit qu'elles sont **chirales** (du grec *kheir*, la main). Eh bien, certaines particules ont exactement cette propriété : il existe une version « gauchère » et une version « droitière », et — c'est l'un des faits les plus stupéfiants de toute la physique — **la Nature ne les traite pas de la même façon**.
+
+<Encart type="intuition" titre="L'idée en une image">
+Représente-toi une particule comme une minuscule toupie qui file en ligne droite. Sa rotation propre, c'est le <Prereq href="/physique/partie-iv/fermions">spin</Prereq>. Maintenant compare l'axe de rotation au sens du déplacement, en utilisant la règle de la main : si tu pointes le pouce dans le sens du mouvement et que les autres doigts s'enroulent dans le sens du spin, alors une main marche et pas l'autre. La toupie est « gauchère » ou « droitière ». C'est cette idée intuitive — le sens du spin par rapport au mouvement — que nous allons d'abord raffiner.
+</Encart>
+
+### Hélicité : le spin contre le mouvement
+
+L'**hélicité** est la projection du spin sur la direction du mouvement. Si le spin pointe « vers l'avant », l'hélicité est positive (droitière) ; s'il pointe « vers l'arrière », elle est négative (gauchère). C'est concret, mesurable… mais cela cache un piège relativiste.
+
+<Encart type="intuition" titre="Pourquoi l'hélicité n'est pas absolue">
+Imagine une particule massive, donc plus lente que la lumière, dont le spin pointe vers l'avant : elle est droitière. Maintenant **dépasse-la** dans ta fusée. Vue de ta fenêtre, la particule recule désormais — mais son spin, lui, n'a pas tourné. Donc dans ton référentiel, le spin pointe « vers l'arrière » : elle est devenue **gauchère** ! L'hélicité a changé rien qu'en changeant d'observateur.
+</Encart>
+
+C'est là le cœur du problème : pour une particule **massive**, on peut toujours la doubler (sa vitesse est inférieure à $c$, <Prereq href="/physique/partie-ii/particules-sans-masse">comme établi pour la matière massive</Prereq>), donc son hélicité **dépend du référentiel**. L'hélicité n'est donc pas la « bonne » étiquette fondamentale.
+
+<Resultat label="Hélicité d'une particule massive">L'hélicité d'une particule de masse $m \neq 0$ dépend du référentiel : sa vitesse étant inférieure à $c$, il existe toujours un observateur qui la « double » et voit le sens apparent du mouvement s'inverser. <Badge niveau="etabli" slot="badge">Pure cinématique relativiste (existence d'un référentiel qui dépasse toute particule massive) ; vérifiée sans exception.</Badge></Resultat>
+
+La grandeur réellement fondamentale, invariante (la même pour tous les observateurs), c'est la **chiralité**. Pour un objet sans masse filant exactement à $c$, personne ne peut le doubler, et chiralité et hélicité coïncident. Pour une particule massive, la distinction devient essentielle — voir l'encart ci-dessous.
+
+<Encart type="plusloin" titre="Chiralité ≠ hélicité, proprement">
+L'hélicité est définie par la mécanique : c'est le signe de $\vec{S}\cdot\vec{p}$ (spin projeté sur l'impulsion). La chiralité, elle, est une propriété **intrinsèque** de la façon dont la particule se comporte sous les transformations de Lorentz — techniquement, c'est la « représentation » (gauche ou droite) sous laquelle se transforme le champ qui décrit la particule. On la mesure par un opérateur noté $\gamma^5$, dont les valeurs propres $+1$ (droite) et $-1$ (gauche) sont les mêmes dans **tous** les référentiels. Pour un objet de masse nulle, les deux notions fusionnent ; pour une masse non nulle, un état de chiralité définie est une **superposition** d'hélicités. On reste ici sans spineurs, mais retiens : la chiralité est l'invariant, l'hélicité est ce qu'on observe. <Badge niveau="modelise" slot="badge">Cadre de la théorie quantique des champs (chiralité = représentation de Lorentz du champ) ; ses prédictions sont confirmées avec une précision extrême, mais cela reste un cadre théorique, d'où le 🔵.</Badge>
+</Encart>
+
+### Fait n°1 : la force faible est gauchère
+
+Voici le coup de tonnerre. L'<Prereq href="/physique/partie-iv/fermions">interaction faible</Prereq> — celle qui régit la radioactivité bêta — **n'agit que sur les particules de chiralité gauche** (et sur les antiparticules de chiralité droite). Elle ignore totalement les droitiers. La Nature distingue donc la gauche de la droite : on dit qu'elle **viole la parité** (la symétrie miroir).
+
+Longtemps on a cru, par élégance, que les lois de la physique étaient indifférentes au miroir. En **1956**, Tsung-Dao Lee et Chen Ning Yang remarquent que ce n'a jamais été testé pour la force faible. **Chien-Shiung Wu** relève le défi : elle refroidit du cobalt-60 à un cheveu du zéro absolu et aligne les spins des noyaux avec un champ magnétique. Si le miroir était respecté, les électrons de la désintégration bêta devraient partir autant « vers le haut » que « vers le bas ». Résultat : ils filent **préférentiellement dans une direction**. Le miroir est brisé.
+
+<Resultat label="Violation de parité (force faible)">L'interaction faible ne couple qu'aux fermions de chiralité **gauche** (et aux antifermions de chiralité droite). La symétrie miroir n'est pas une loi de la Nature. <Badge niveau="etabli" slot="badge">Expérience de Wu (1956-1957), confirmée des milliers de fois ; Lee &amp; Yang, prix Nobel 1957.</Badge></Resultat>
+
+<Encart type="intuition" titre="Pourquoi c'est si choquant">
+Filme un match de tennis, puis regarde le film dans un miroir : tout reste physiquement plausible (la balle rebondit, les joueurs courent normalement). Mais filme une désintégration bêta : dans le miroir, tu verrais un processus que la Nature **n'autorise pas**. La force faible est le seul phénomène connu qui te permettrait de dire, sans repère extérieur, « ceci est l'image dans un miroir » — de définir la gauche et la droite dans l'absolu.
+</Encart>
+
+### Fait n°2 : la masse mélange gauche et droite
+
+Maintenant, un second fait, tout aussi profond. Une particule **massive** ne peut pas être purement gauchère ou purement droitière de façon permanente. **La masse couple en permanence les deux composantes** : une particule massive « oscille » sans cesse entre sa version gauche et sa version droite.
+
+<Encart type="intuition" titre="L'oscillation gauche ↔ droite">
+Repense à la particule massive qu'on peut doubler : pour un observateur elle est droitière, pour un autre gauchère. Pour que ces deux descriptions décrivent le **même** objet, il faut que les composantes gauche et droite soient continuellement converties l'une en l'autre. C'est précisément ce que fait une masse : elle est le « pont » qui fait clignoter la particule entre gaucher et droitier, des milliards de milliards de fois par seconde.
+</Encart>
+
+On peut le résumer par une image d'équation : le terme de masse dans les équations relie toujours un morceau gauche $\psi_L$ à un morceau droit $\psi_R$.
+
+$$\text{(terme de masse)} \;\propto\; m\,\big(\overline{\psi_L}\,\psi_R + \overline{\psi_R}\,\psi_L\big)$$
+
+Lis cette ligne comme une phrase : « la masse transforme du gauche en droite, et de la droite en gauche ». Conséquence immédiate et vertigineuse : **donner une masse à une particule exige que ses deux chiralités existent**. S'il n'existait que des gauchers, il n'y aurait personne avec qui les coupler — et la particule serait obligatoirement de masse nulle, filant à $c$ pour l'éternité.
+
+<Resultat label="Masse ⇔ couplage gauche–droite">Une masse $m \neq 0$ relie nécessairement les composantes gauche et droite d'une particule. Sans les deux chiralités, pas de masse. <Badge niveau="modelise" slot="badge">Cadre théorique du Modèle standard ; ses conséquences (spectre des particules, comportement de la force faible) sont confirmées expérimentalement.</Badge></Resultat>
+
+### La tension qui appelle le Higgs
+
+Place maintenant les deux faits côte à côte, et savoure le paradoxe :
+
+| Fait | Ce qu'il impose |
+|---|---|
+| La force faible n'agit que sur les **gauchers** | Gauche et droite sont **différents**, traités différemment |
+| La masse **mélange** gauche et droite | Pour avoir une masse, il faut que les deux **coexistent et se parlent** |
+
+Le problème : un terme de masse « écrit à la main » mélangerait directement un gaucher (qui ressent la force faible) avec un droitier (qui ne la ressent pas). Ce serait incohérent — comme additionner des pommes et des poires. La Nature semble donc coincée : elle veut des masses, mais elle interdit naïvement de les écrire.
+
+La sortie est élégantissime : et si le « pont » entre gauche et droite n'était pas un terme rigide, mais un **champ** qui remplit tout l'espace, et dont les particules ralentissent en le traversant ? Ce champ, c'est le **champ de Higgs** : il fournit le couplage gauche↔droite manquant et fabrique ainsi la masse, sans casser la cohérence de la force faible. <Badge niveau="modelise" slot="badge">Mécanisme du Modèle standard ; le boson associé a été observé au LHC en 2012.</Badge>
+
+C'est exactement le mécanisme que nous allons démonter dans le <Prereq href="/physique/partie-iv/higgs">chapitre suivant</Prereq> : comment un champ omniprésent peut transformer des particules qui voudraient filer à $c$ en objets dotés d'une masse.

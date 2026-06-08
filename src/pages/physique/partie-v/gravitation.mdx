@@ -1,0 +1,121 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La gravitation"
+chapter: gravitation
+description: "Ce que le Modèle Standard dit — et surtout ne dit pas. Le graviton hypothétique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## La gravitation
+
+Nous arrivons au bout de notre voyage avec l'interaction la plus familière — celle qui nous colle au sol, fait tomber les pommes et tient la Lune en orbite — et pourtant la plus mystérieuse pour la physique fondamentale. Car voici le paradoxe : la gravité est l'interaction que nous ressentons depuis toujours, mais c'est la seule qui **n'entre pas** dans le Modèle Standard des particules.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine un drap tendu, bien horizontal. Pose une boule de bowling au milieu : le drap se creuse. Lance maintenant une bille près de la boule — elle ne va pas tout droit, elle s'enroule, comme « attirée ». Pourtant aucune corde, aucune ficelle ne relie la bille à la boule. Ce qui guide la bille, c'est la **forme du drap**. C'est exactement l'idée d'Einstein : la matière déforme l'espace-temps, et cette déformation dit aux autres objets comment se déplacer. La gravité n'est pas une force qui « tire » : c'est la géométrie de l'espace-temps qui devient courbe.
+</Encart>
+
+### Deux visions de la gravité
+
+Pendant plus de deux siècles, on a décrit la gravité avec la loi de Newton (1687) : deux masses $m_1$ et $m_2$ séparées d'une distance $r$ s'attirent avec une force
+
+$$ F = G\,\frac{m_1 m_2}{r^2}. $$
+
+Ici $G = 6{,}674 \times 10^{-11}\ \mathrm{N\cdot m^2 \cdot kg^{-2}}$ est la constante de gravitation, une grandeur **mesurée** (pas définie par convention) — et c'est d'ailleurs l'une des constantes fondamentales les moins bien connues, à environ $2 \times 10^{-5}$ près.
+
+<Badge niveau="etabli">La loi de Newton décrit avec une précision remarquable les chutes, les marées, les trajectoires des sondes spatiales. C'est une excellente approximation à faible vitesse et faible gravité.</Badge>
+
+Mais Newton avait un problème de fond : sa force agit **instantanément**, à distance, à travers le vide. Or nous avons appris qu'aucune information ne peut voyager plus vite que la lumière. La gravité newtonienne est donc incompatible avec la relativité.
+
+### La relativité générale : la gravité, c'est de la géométrie
+
+En 1915, Einstein règle la contradiction par une idée renversante. Reprenons notre <Prereq href="/physique/partie-i/minkowski">espace-temps</Prereq> : ce n'est pas une scène fixe sur laquelle se déroule la physique. C'est un acteur. La masse et l'énergie le **courbent**, et les objets en chute libre suivent simplement les « lignes les plus droites possibles » de cet espace-temps courbé (on les appelle des géodésiques).
+
+<Encart type="intuition" titre="Pourquoi 'masse ET énergie' ?">
+Souviens-toi de $E = mc^2$ : masse et énergie sont la même chose. Une boîte remplie de lumière chaude pèse, très légèrement, plus lourd qu'une boîte froide. Donc ce qui courbe l'espace-temps, ce n'est pas seulement la masse au repos, mais **toute** forme d'énergie — y compris la pression et le mouvement. C'est pour cela que la lumière elle-même, sans masse, est déviée par le Soleil.
+</Encart>
+
+L'équation d'Einstein résume tout cela en une phrase mathématique : « la courbure de l'espace-temps = la quantité de matière-énergie présente ». On l'écrit symboliquement
+
+$$ G_{\mu\nu} = \frac{8\pi G}{c^4}\,T_{\mu\nu}, $$
+
+où le membre de gauche décrit la géométrie (la courbure) et celui de droite le contenu en énergie. Tu n'as pas à savoir résoudre cette équation — mais retiens le slogan du physicien John Wheeler : *« la matière dit à l'espace-temps comment se courber ; l'espace-temps dit à la matière comment se mouvoir. »*
+
+<Encart type="plusloin" titre="Le principe d'équivalence, point de départ d'Einstein">
+Einstein part d'une observation que Galilée avait déjà faite : **tous les corps tombent de la même façon**, quelle que soit leur masse. Une plume et un marteau lâchés sur la Lune touchent le sol ensemble (expérience faite par Apollo 15). Einstein en tire une intuition radicale, le **principe d'équivalence** : être dans un ascenseur en chute libre est localement indiscernable d'être en apesanteur dans l'espace ; et être immobile sur Terre est indiscernable d'accélérer à $9{,}8\ \mathrm{m\cdot s^{-2}}$ dans une fusée. Si gravité et accélération sont localement la même chose, alors la gravité n'est pas une « vraie » force : c'est un effet de géométrie. Tout découle de là.
+</Encart>
+
+### Pourquoi on y croit : les preuves
+
+La relativité générale est l'une des théories les mieux vérifiées de toute la physique.
+
+| Prédiction | Vérification | Année |
+|---|---|---|
+| Précession de l'orbite de Mercure | Expliquée exactement (43"/siècle) | 1915 |
+| Déviation de la lumière par le Soleil | Éclipse d'Eddington | 1919 |
+| Lentilles gravitationnelles | Galaxies déformant la lumière d'arrière-plan | dès 1979 |
+| Ralentissement du temps en gravité | Corrections du GPS (indispensables !) | en service |
+| Ondes gravitationnelles | Détection directe par LIGO | 2015 |
+| Image d'un trou noir | Telescope Event Horizon (M87, Sgr A*) | 2019, 2022 |
+
+<Resultat label="La relativité générale">$$ \text{Gravité} = \text{courbure de l'espace-temps par l'énergie-masse} $$ <Badge niveau="etabli" slot="badge">Mercure, lentilles gravitationnelles, GPS, image de trous noirs, et la détection directe des ondes gravitationnelles par LIGO en 2015 (fusion de deux trous noirs). Aucun désaccord observé à ce jour.</Badge></Resultat>
+
+Mais attention : la relativité générale est une théorie **classique**. Comme la gravitation de Newton, elle ne contient aucune trace de quanta, de probabilités ou du flou quantique. C'est précisément là que se loge le grand problème non résolu.
+
+### Le graviton : un boson qu'on n'a jamais vu
+
+Dans le Modèle Standard, chaque interaction est portée par des particules messagères — les <Prereq href="/physique/partie-iv/bosons-jauge">bosons de jauge</Prereq> : le photon pour l'électromagnétisme, les gluons pour la force forte, les bosons $W$ et $Z$ pour la force faible. Par analogie, si la gravité était une théorie quantique, elle devrait être portée par un boson : le **graviton**.
+
+On peut même prédire ses propriétés théoriques. Comme la gravité a une portée infinie (elle décroît en $1/r^2$ sans jamais s'annuler), le graviton devrait être **sans masse**, comme le photon. Et parce que la source de la gravité n'est pas une simple charge mais l'énergie-impulsion (un objet à deux indices), le graviton devrait avoir un **spin 2** — c'est unique, tous les autres bosons de jauge ont un spin 1.
+
+<Badge niveau="ouvert">Le graviton est purement **hypothétique**. Il n'a JAMAIS été observé, et il est probablement hors de portée de toute expérience imaginable aujourd'hui : la gravité est si faible qu'un détecteur de gravitons individuels devrait être absurdement massif. Son existence reste une conjecture théorique.</Badge>
+
+### La plus faible de toutes — et de très loin
+
+Voici un fait qui surprend toujours : la gravité est, **et de très loin**, la plus faible des quatre interactions.
+
+<Encart type="intuition" titre="Une démonstration que tu fais sans le savoir">
+Prends un petit aimant de réfrigérateur. Approche-le d'un trombone : l'aimant le soulève. Réfléchis à ce qui vient de se passer. La Terre **entière** — $6 \times 10^{24}\ \mathrm{kg}$ — tire le trombone vers le bas par gravité. Et un misérable aimant de quelques grammes gagne ! L'électromagnétisme d'un objet minuscule écrase la gravité de la planète tout entière.
+</Encart>
+
+Quantifions. Entre deux protons, le rapport de la force électromagnétique à la force gravitationnelle vaut environ
+
+$$ \frac{F_{\text{em}}}{F_{\text{grav}}} \approx 10^{36}. $$
+
+<Encart type="calcul" titre="D'où sort ce 10³⁶ ? (entre deux protons)">
+Plaçons deux protons (charge $+e$, masse $m_p$) à une distance $r$. Les deux forces ont **exactement** la même dépendance en $1/r^2$, l'une donnée par la loi de Coulomb, l'autre par la loi de Newton :
+
+$$ F_{\text{em}} = \frac{1}{4\pi\varepsilon_0}\,\frac{e^2}{r^2}, \qquad F_{\text{grav}} = G\,\frac{m_p^2}{r^2}. $$
+
+En faisant le rapport, la distance $r$ **disparaît** — le résultat ne dépend donc pas de l'écartement choisi :
+
+$$ \frac{F_{\text{em}}}{F_{\text{grav}}} = \frac{e^2}{4\pi\varepsilon_0\,G\,m_p^2}. $$
+
+Remplaçons par les valeurs numériques. Avec $e = 1{,}60\times 10^{-19}\ \mathrm{C}$, $\varepsilon_0 = 8{,}85\times 10^{-12}\ \mathrm{F\cdot m^{-1}}$, $G = 6{,}67\times 10^{-11}\ \mathrm{N\cdot m^2\cdot kg^{-2}}$ et $m_p = 1{,}67\times 10^{-27}\ \mathrm{kg}$ :
+
+$$ \frac{1}{4\pi\varepsilon_0}\,e^2 = 2{,}31\times 10^{-28}\ \mathrm{N\cdot m^2}, \qquad G\,m_p^2 = 1{,}87\times 10^{-64}\ \mathrm{N\cdot m^2}. $$
+
+$$ \frac{F_{\text{em}}}{F_{\text{grav}}} = \frac{2{,}31\times 10^{-28}}{1{,}87\times 10^{-64}} \approx 1{,}2\times 10^{36}. $$
+
+Soit environ $10^{36}$. Le rapport est un **nombre pur** (les unités se compensent), ce qui confirme qu'il a un sens universel, indépendant du système d'unités. $\;\blacksquare$
+</Encart>
+
+<Badge niveau="etabli">Soit un 1 suivi de **36 zéros**. La gravité est environ un milliard de milliards de milliards de milliards de fois plus faible que l'électromagnétisme à l'échelle des particules. C'est un fait expérimental solidement établi.</Badge>
+
+Pourquoi un tel gouffre ? Personne ne le sait vraiment. C'est l'une des facettes du **problème de hiérarchie**, que nous explorerons en <Prereq href="/physique/partie-vi/gravite-quantique">gravité quantique</Prereq>.
+
+### Le verrou : marier la gravité et le quantique
+
+Récapitulons honnêtement où nous en sommes. Trois des quatre interactions — électromagnétique, faible, forte — sont décrites par le Modèle Standard, une théorie **quantique**. La gravité, elle, est décrite par la relativité générale, une théorie **classique** et géométrique. Les deux marchent superbement, chacune dans son domaine.
+
+<Badge niveau="etabli">La gravité est absente du Modèle Standard. C'est un fait, pas une opinion : le Modèle Standard ne contient ni graviton, ni courbure de l'espace-temps.</Badge>
+
+Le problème surgit là où les deux mondes se rencontrent : au cœur d'un trou noir, ou au premier instant du Big Bang, là où une énorme énergie est concentrée dans un espace minuscule. Il faut alors une théorie qui soit à la fois quantique **et** gravitationnelle. Or, quand on essaie naïvement de quantifier la relativité générale — d'en faire une théorie de gravitons —, les calculs explosent en infinis qu'on ne sait pas dompter, contrairement aux autres interactions. Construire une **gravité quantique** cohérente est le plus grand chantier ouvert de la physique fondamentale.
+
+<Badge niveau="ouvert">Aucune théorie de gravité quantique n'est aujourd'hui vérifiée expérimentalement. Les pistes (cordes, gravité quantique à boucles) restent spéculatives.</Badge>
+
+C'est précisément ce front de recherche — pourquoi l'unification est si difficile, et quelles idées on tente pour la réaliser — que va aborder maintenant la dernière partie de notre voyage, en <Prereq href="/physique/partie-vi/gravite-quantique">gravité quantique</Prereq>.

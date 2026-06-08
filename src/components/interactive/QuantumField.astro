@@ -1,0 +1,28 @@
+---
+/**
+ * QuantumField — un champ quantique visualisé comme une « membrane » qui remplit
+ * l'espace. Cliquez pour créer une excitation localisée : c'est ça, une particule.
+ * Plusieurs clics = plusieurs particules du même champ.
+ */
+---
+
+<div class="iw" data-iw="qfield">
+  <div class="iw__head"><span class="tag">Interactif</span> Une particule = une excitation d’un champ</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 7; cursor: crosshair; touch-action: none;"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__btns">
+      <button class="iw__btn" data-clear>Effacer le champ</button>
+    </div>
+  </div>
+  <p class="iw__note">
+    La ligne ondulante est le <strong>champ</strong> : il existe partout, même « au repos » (il vibre
+    un peu — l’énergie du vide). <strong>Cliquez</strong> n’importe où pour y déposer un « grain »
+    d’énergie : une bosse qui oscille, c’est une <em>particule</em>. Toutes les particules d’un même
+    type (tous les électrons, par ex.) sont des excitations du même champ — voilà pourquoi elles sont
+    rigoureusement identiques.
+  </p>
+</div>
+
+<script>
+  import './QuantumField.client.ts';
+</script>

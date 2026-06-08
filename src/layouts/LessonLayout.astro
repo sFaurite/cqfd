@@ -1,0 +1,248 @@
+---
+/**
+ * Layout des pages de cours. Utilisable de deux façons :
+ *   1. via le frontmatter MDX (`layout: ../../layouts/LessonLayout.astro`) :
+ *      reçoit `frontmatter` (dont title, chapter, description, minutesLecture
+ *      injecté par le plugin remark) et `headings` (auto-extraits).
+ *   2. importé dans une page .astro : props passées directement (title, chapter…).
+ *
+ * Fournit : fil d'Ariane, titre + méta (partie, temps de lecture), boutons
+ * « tout déplier / replier », sommaire de page (rail droit, scrollspy),
+ * barre de progression, et navigation précédent/suivant.
+ */
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import PrevNext from '../components/PrevNext.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import { chapByPath, courseIdFromPath } from '../lib/nav';
+import { courseById } from '../lib/courses';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+// Normalise les deux modes d'utilisation.
+const fm: any = (Astro.props as any).frontmatter ?? Astro.props;
+const headings: Heading[] = (Astro.props as any).headings ?? fm.headings ?? [];
+
+// Le HUB résout le chapitre par la ROUTE (les slugs peuvent se répéter d'un cours à l'autre).
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const courseId = courseIdFromPath(currentPath);
+const cours = courseById(courseId);
+const entree = chapByPath(currentPath);
+const partie = entree?.partie;
+const chap = entree?.chap;
+const titre: string = fm.title ?? chap?.titre ?? 'Cours';
+const description: string | undefined = fm.description ?? chap?.accroche;
+const minutes: number | undefined = fm.minutesLecture;
+
+const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={titre} description={description} courseId={courseId} currentPath={currentPath}>
+  <div class="lesson-wrap">
+    <div class="lesson" data-encart-scope>
+      <article id="contenu" class="prose article" data-pagefind-body>
+        {partie && chap && <Breadcrumb partie={partie} chap={chap} course={cours} />}
+
+        <header class="page-head">
+          {
+            partie && (
+              <div class="eyebrow">
+                {partie.roman !== '0' && partie.roman !== '★' && (
+                  <span class="pill">Partie {partie.roman}</span>
+                )}
+                {chap && chap.num > 0 && <span class="pill ghost">Chapitre {chap.num}</span>}
+              </div>
+            )
+          }
+          <h1>{titre}</h1>
+          {description && <p class="lead">{description}</p>}
+          <div class="meta">
+            {minutes && <span>⏱ {minutes} min de lecture</span>}
+            <span class="controls" data-encart-scope>
+              <button type="button" data-encart-all="open" class="ctl">⊕ Tout déplier</button>
+              <button type="button" data-encart-all="close" class="ctl">⊖ Tout replier</button>
+            </span>
+          </div>
+        </header>
+
+        <slot />
+
+        {chap && <PrevNext currentPath={currentPath} />}
+      </article>
+
+      {
+        tocItems.length > 0 && (
+          <aside class="toc-rail" aria-label="Sommaire de la page">
+            <p class="toc-title">Sur cette page</p>
+            <nav>
+              <ul>
+                {tocItems.map((h) => (
+                  <li class:list={[`d${h.depth}`]}>
+                    <a href={`#${h.slug}`} data-toc={h.slug}>
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        )
+      }
+    </div>
+  </div>
+
+  <ReadingProgress />
+
+  {
+    tocItems.length > 0 && (
+      <script>
+        // Scrollspy : surligne l'entrée du sommaire correspondant à la section visible.
+        const liens = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc]'));
+        const parSlug = new Map(liens.map((a) => [a.dataset.toc, a]));
+        const obs = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                liens.forEach((a) => a.classList.remove('active'));
+                parSlug.get(e.target.id)?.classList.add('active');
+              }
+            }
+          },
+          { rootMargin: '-10% 0px -75% 0px', threshold: 0 },
+        );
+        document
+          .querySelectorAll('#contenu h2[id], #contenu h3[id]')
+          .forEach((h) => obs.observe(h));
+      </script>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .lesson-wrap {
+    padding: 1.4rem clamp(1rem, 3vw, 2.4rem) 3rem;
+  }
+  .lesson {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--toc-w);
+    gap: 2.4rem;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  .article {
+    min-width: 0;
+    margin: 0 auto;
+  }
+  .page-head {
+    margin-bottom: 1.6rem;
+  }
+  .eyebrow {
+    display: flex;
+    gap: 0.5em;
+    margin: 0.6em 0 0.4em;
+  }
+  .pill {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--c-blue);
+    background: color-mix(in srgb, var(--c-blue) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--c-blue) 35%, transparent);
+    padding: 0.15em 0.6em;
+    border-radius: 999px;
+  }
+  .pill.ghost {
+    color: var(--c-muted);
+    background: transparent;
+    border-color: var(--c-border);
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8em;
+    margin-top: 1em;
+    padding: 0.5em 0;
+    border-top: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-border);
+    color: var(--c-muted);
+    font-size: 0.85rem;
+  }
+  .controls {
+    display: flex;
+    gap: 0.5em;
+  }
+  .ctl {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    color: var(--c-muted);
+    border-radius: 8px;
+    padding: 0.25em 0.6em;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .ctl:hover {
+    color: var(--c-text);
+    border-color: var(--c-blue);
+  }
+
+  /* Rail droit : sommaire de page */
+  .toc-rail {
+    position: sticky;
+    top: calc(var(--header-h) + 1.4rem);
+    align-self: start;
+    height: max-content;
+    max-height: calc(100vh - var(--header-h) - 2.8rem);
+    overflow-y: auto;
+    font-size: 0.85rem;
+  }
+  .toc-title {
+    margin: 0 0 0.6em;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--c-muted);
+    font-weight: 700;
+  }
+  .toc-rail ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid var(--c-border);
+  }
+  .toc-rail li.d3 {
+    padding-left: 0.9em;
+  }
+  .toc-rail a {
+    display: block;
+    padding: 0.28em 0.7em;
+    color: var(--c-muted);
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+    line-height: 1.35;
+  }
+  .toc-rail a:hover {
+    color: var(--c-text);
+    text-decoration: none;
+  }
+  .toc-rail a.active {
+    color: var(--c-blue);
+    border-left-color: var(--c-blue);
+    font-weight: 600;
+  }
+
+  @media (max-width: 1100px) {
+    .lesson {
+      grid-template-columns: 1fr;
+    }
+    .toc-rail {
+      display: none;
+    }
+  }
+</style>

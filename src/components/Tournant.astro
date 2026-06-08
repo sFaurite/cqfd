@@ -1,0 +1,70 @@
+---
+/**
+ * Tournant — bandeau signalant un CHANGEMENT DE CADRE : l'endroit où l'on cesse de
+ * déduire de ce qui précède pour AJOUTER de nouvelles hypothèses (imposées par
+ * l'expérience). Rend explicite, pour le lecteur, que le fil « tout est déduit »
+ * comporte des points où l'on pose, honnêtement, du neuf.
+ *
+ * Usage :
+ *   <Tournant titre="Tournant : on change de cadre">
+ *     Texte expliquant quelles hypothèses nouvelles on adopte et pourquoi.
+ *   </Tournant>
+ */
+interface Props {
+  titre?: string;
+}
+const { titre = 'Tournant : on change de cadre' } = Astro.props;
+---
+
+<aside class="tournant" aria-label={titre}>
+  <div class="head">
+    <span class="icon" aria-hidden="true">🧭</span>
+    <h2 class="t">{titre}</h2>
+  </div>
+  <div class="body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .tournant {
+    margin: 1.8em 0;
+    border: 1px solid color-mix(in srgb, var(--c-orange) 55%, var(--c-border));
+    border-left: 5px solid var(--c-orange);
+    border-radius: var(--radius);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-orange) 13%, var(--c-bg-elev)),
+      var(--c-bg-elev)
+    );
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.7em 1.1em;
+    background: color-mix(in srgb, var(--c-orange) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-orange) 32%, var(--c-border));
+  }
+  .icon {
+    font-size: 1.3em;
+  }
+  .t {
+    margin: 0;
+    border: none;
+    padding: 0;
+    font-size: 1.1rem;
+    color: var(--c-text);
+  }
+  .body {
+    padding: 0.4em 1.2em 1em;
+  }
+  .body :global(p:first-child) {
+    margin-top: 0.8em;
+  }
+  .body :global(p:last-child) {
+    margin-bottom: 0.2em;
+  }
+</style>

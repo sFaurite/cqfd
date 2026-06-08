@@ -1,0 +1,147 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les fermions : quarks et leptons"
+chapter: fermions
+description: "6 quarks, 6 leptons, 3 générations : la matière dont tout est fait."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import StandardModelTable from '../../../components/interactive/StandardModelTable.astro';
+
+## Les fermions : quarks et leptons
+
+Toute la matière qui vous entoure — cette page, votre main, l'air que vous respirez — est faite d'un petit nombre de particules qui se ressemblent toutes par une propriété cruciale : ce sont des **fermions**. Et c'est précisément cette propriété qui fait que la matière *tient debout* au lieu de s'effondrer en un point.
+
+<Encart type="intuition" titre="Les briques et la règle anti-empilement">
+Imaginez une salle de cinéma où chaque siège ne peut accueillir qu'un seul spectateur. Si la salle se remplit, les nouveaux arrivants sont *obligés* de s'asseoir plus loin, plus haut, dans des rangées d'énergie supérieure. Les fermions obéissent à la même règle : impossible d'en entasser deux dans le même état. C'est cette règle, et elle seule, qui donne à la matière son **volume** et sa **rigidité**.
+</Encart>
+
+### Spin ½ et principe d'exclusion
+
+Les fermions sont les particules de **spin ½** : une sorte de moment cinétique intrinsèque, quantifié, qui ne prend ici que les valeurs $+\tfrac{1}{2}$ ou $-\tfrac{1}{2}$ (en unités de $\hbar$).
+
+<Encart type="rappel" titre="Le spin et la constante ℏ">
+Le **spin** est un moment cinétique propre à la particule, sans équivalent classique : ce n'est *pas* une rotation sur elle-même, mais une grandeur quantique intrinsèque, au même titre que la masse ou la charge. Comme tout moment cinétique en physique quantique, il se mesure en unités de la **constante de Planck réduite** $\hbar = \dfrac{h}{2\pi} \approx 1{,}05 \times 10^{-34}\ \mathrm{J\cdot s}$. Dire qu'une particule est « de spin ½ » signifie que la projection de ce moment cinétique sur un axe ne peut valoir que $+\tfrac{1}{2}\hbar$ ou $-\tfrac{1}{2}\hbar$ : deux états, et deux seulement.
+</Encart>
+
+<Badge niveau="etabli">Le spin demi-entier des constituants de la matière est mesuré dès les années 1920 (expérience de Stern et Gerlach, structure fine des spectres) et n'a jamais été démenti.</Badge>
+
+Leur signature, c'est le **principe d'exclusion de Pauli** :
+
+<Resultat label="Principe d'exclusion de Pauli">
+
+$$ \text{Deux fermions identiques ne peuvent jamais occuper le même état quantique.} $$
+
+<Badge niveau="etabli" slot="badge">Vérifié dans tous les atomes, métaux, naines blanches, étoiles à neutrons.</Badge>
+</Resultat>
+
+Ce principe découle directement de la nature quantique de ces particules : nous avons vu comment le couplage entre spin et indiscernabilité l'impose (voir <Prereq href="/physique/partie-iii/heisenberg">le principe d'exclusion via Heisenberg et le spin</Prereq>). Sa conséquence est immense : dans un atome, les électrons ne peuvent pas tous tomber dans l'état d'énergie le plus bas ; ils remplissent des « couches » successives. C'est l'origine de la **table périodique des éléments** et donc de toute la chimie.
+
+<Badge niveau="etabli">La structure en couches électroniques, conséquence directe de Pauli, est confirmée par toute la spectroscopie atomique.</Badge>
+
+Les fermions fondamentaux se rangent en deux familles : les **quarks** et les **leptons**.
+
+### Les quarks : six saveurs et une charge cachée
+
+Il existe **six saveurs** de quarks, regroupées par paires :
+
+| Saveur | Symbole | Charge électrique |
+|---|---|---|
+| up | $u$ | $+\tfrac{2}{3}$ |
+| down | $d$ | $-\tfrac{1}{3}$ |
+| charm | $c$ | $+\tfrac{2}{3}$ |
+| strange | $s$ | $-\tfrac{1}{3}$ |
+| top | $t$ | $+\tfrac{2}{3}$ |
+| bottom | $b$ | $-\tfrac{1}{3}$ |
+
+Première surprise : leurs charges électriques sont **fractionnaires**, multiples de $\tfrac{1}{3}$ de la charge élémentaire $e$. C'est inhabituel — on a longtemps cru que toute charge était un multiple entier de $e$.
+
+<Badge niveau="etabli">Les charges fractionnaires des quarks sont mesurées indirectement (diffusion profondément inélastique, désintégrations) et reproduisent exactement les charges entières des particules composées.</Badge>
+
+Vérifions sur le proton et le neutron, faits de trois quarks :
+
+<Encart type="calcul" titre="Les charges du proton et du neutron">
+**Étape 1.** Le proton est composé de deux quarks $u$ et un quark $d$, noté $uud$. Sa charge totale est la somme des charges :
+
+$$ Q_p = \left(+\tfrac{2}{3}\right) + \left(+\tfrac{2}{3}\right) + \left(-\tfrac{1}{3}\right). $$
+
+**Étape 2.** On additionne les fractions au même dénominateur :
+
+$$ Q_p = \frac{2 + 2 - 1}{3}\,e = \frac{3}{3}\,e = +1\,e. $$
+
+**Étape 3.** Le neutron est composé $udd$ :
+
+$$ Q_n = \left(+\tfrac{2}{3}\right) + \left(-\tfrac{1}{3}\right) + \left(-\tfrac{1}{3}\right) = \frac{2 - 1 - 1}{3}\,e = 0. $$
+
+Les charges fractionnaires s'assemblent donc parfaitement en charges entières : $\boxed{Q_p = +e,\quad Q_n = 0.}$ ∎
+</Encart>
+
+Deuxième surprise, plus profonde : les quarks portent une **charge de couleur** (appelée rouge, vert ou bleu — ce ne sont que des noms, sans rapport avec la vision). Cette charge est à la **force forte** ce que la charge électrique est à la force électromagnétique. Elle a une conséquence spectaculaire : on ne peut **jamais isoler un quark seul**. Ils restent toujours liés en combinaisons « blanches » (neutres en couleur), comme les trios de quarks des protons. C'est le **confinement**.
+
+<Badge niveau="modelise">Le confinement est solidement modélisé par la chromodynamique quantique et confirmé par toutes les expériences (aucun quark libre jamais observé), mais sa démonstration mathématique complète reste un problème ouvert. Détaillé en Partie V.</Badge>
+
+### Les leptons : électron, muon, tau et neutrinos
+
+L'autre famille, ce sont les **leptons**. Eux ne portent pas de couleur, ne ressentent pas la force forte, et existent bel et bien à l'état isolé. Six leptons, eux aussi par paires :
+
+| Lepton chargé | Charge | Neutrino associé | Charge |
+|---|---|---|---|
+| électron $e^-$ | $-1$ | neutrino électronique $\nu_e$ | $0$ |
+| muon $\mu^-$ | $-1$ | neutrino muonique $\nu_\mu$ | $0$ |
+| tau $\tau^-$ | $-1$ | neutrino tauique $\nu_\tau$ | $0$ |
+
+Les trois leptons chargés ont la même charge $-e$ mais des masses très différentes. Les **neutrinos** sont neutres, n'interagissent quasiment qu'avec la force faible, et ont une masse minuscule (longtemps crue nulle).
+
+<Badge niveau="etabli">L'existence des trois leptons chargés et de leurs neutrinos est établie expérimentalement ; la masse non nulle des neutrinos est prouvée par les oscillations de neutrinos (Nobel 2015).</Badge>
+
+### Trois générations et antiparticules
+
+En regardant les deux tableaux, un motif saute aux yeux : les particules se répètent en **trois générations**, copies les unes des autres mais de **masses croissantes**.
+
+| Génération | Quarks | Lepton chargé | Neutrino |
+|---|---|---|---|
+| 1 | $u,\ d$ | $e$ | $\nu_e$ |
+| 2 | $c,\ s$ | $\mu$ | $\nu_\mu$ |
+| 3 | $t,\ b$ | $\tau$ | $\nu_\tau$ |
+
+<Badge niveau="etabli">Le nombre de générations de fermions légers est mesuré égal à trois : la durée de vie du boson $Z$ (collisionneur LEP, CERN) n'est compatible qu'avec exactement trois espèces de neutrinos légers.</Badge>
+
+Quelques masses mesurées (au repos, exprimées en $\mathrm{MeV}/c^2$ via <Prereq href="/physique/partie-ii/e-mc2">la relation $E=mc^2$</Prereq>) :
+
+| Particule | Masse approximative |
+|---|---|
+| électron $e$ | $0{,}511\ \mathrm{MeV}/c^2$ |
+| muon $\mu$ | $106\ \mathrm{MeV}/c^2$ |
+| tau $\tau$ | $1777\ \mathrm{MeV}/c^2$ |
+| quark $u$ | $\approx 2{,}2\ \mathrm{MeV}/c^2$ |
+| quark $t$ | $\approx 173\,000\ \mathrm{MeV}/c^2$ |
+
+<Badge niveau="etabli">Toutes ces masses sont des grandeurs mesurées expérimentalement (collisionneurs, spectrométrie). Les masses des quarks légers dépendent de conventions de définition, d'où leur statut approximatif.</Badge>
+
+Seules les particules de la **première génération** — les quarks $u$ et $d$, l'électron $e$ (et le neutrino $\nu_e$) — sont stables et constituent la matière ordinaire. Les générations 2 et 3, plus lourdes, se désintègrent en une fraction de seconde et n'apparaissent que dans les rayons cosmiques ou les accélérateurs.
+
+<Badge niveau="etabli">La stabilité des seuls fermions de première génération et la désintégration rapide des générations supérieures sont mesurées en accélérateur (durées de vie connues à grande précision).</Badge>
+
+À chaque fermion correspond une **antiparticule** : même masse, même spin, mais charges opposées. L'antiélectron (positron $e^+$) a une charge $+e$, l'antiquark $\bar{u}$ une charge $-\tfrac{2}{3}$, et ainsi de suite. Matière et antimatière s'annihilent au contact en libérant de l'énergie selon $E=mc^2$.
+
+<Badge niveau="etabli">L'existence des antiparticules est confirmée depuis la découverte du positron (1932) et utilisée quotidiennement (imagerie médicale TEP).</Badge>
+
+<StandardModelTable />
+
+Pour replacer ces fermions dans l'architecture complète des particules et de leurs interactions, revoyez <Prereq href="/physique/partie-iv/vue-ensemble">le tableau d'ensemble du Modèle standard</Prereq>.
+
+<Encart type="plusloin" titre="Pourquoi Pauli empêche la matière de s'effondrer">
+Sans le principe d'exclusion, tous les électrons d'un atome tomberaient dans l'orbitale de plus basse énergie, et tous les atomes pourraient s'interpénétrer librement : la matière n'aurait ni volume ni dureté. Pauli l'interdit. Confiner $N$ fermions identiques dans un petit volume force chacun dans un état d'énergie distinct, de plus en plus élevé. Il en résulte une **pression de dégénérescence** purement quantique, qui ne dépend pas de la température. C'est elle qui :
+
+- donne aux solides leur incompressibilité ;
+- soutient les **naines blanches** contre la gravité (pression de dégénérescence des électrons) ;
+- soutient les **étoiles à neutrons** (pression de dégénérescence des neutrons).
+
+Au-delà d'une masse limite (≈ 1,4 masse solaire pour les naines blanches, *limite de Chandrasekhar*), même cette pression cède : l'astre s'effondre. La stabilité de toute la matière repose donc, littéralement, sur un principe de spin ½. <Badge niveau="etabli">Confirmé par l'observation des naines blanches et des étoiles à neutrons.</Badge>
+</Encart>
+
+Les fermions sont donc les briques de la matière. Mais qu'est-ce qui les fait *tenir ensemble* et *interagir* ? C'est le rôle de l'autre grande famille de particules — les **bosons**, porteurs des forces — que nous découvrons au chapitre suivant.

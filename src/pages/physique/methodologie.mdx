@@ -1,0 +1,78 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « établi », « solidement modélisé », « plausible » et « ouvert » — et comment on classe chaque affirmation.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+La physique n’est pas un bloc monolithique de certitudes. Certaines affirmations sont
+vérifiées à des précisions vertigineuses ; d’autres sont des **cadres théoriques** très
+solides mais non « palpables » ; d’autres encore sont des **hypothèses de travail** ; et
+certaines, enfin, sont de **vraies questions ouvertes**. Mélanger ces statuts est la source de
+beaucoup de malentendus sur « ce que dit la science ».
+
+Pour éviter cela, **chaque affirmation notable** de ce site porte l’un de ces quatre niveaux.
+
+## Les quatre niveaux
+
+### 🟢 Établi <Badge niveau="etabli">Exemple : la masse nulle du photon, ou $E=mc^2$.</Badge>
+
+Vérifié expérimentalement, souvent à très haute précision, avec un **consensus total** de la
+communauté. Ce n’est pas « probablement vrai » : c’est mesuré, reproduit, et utilisé tous les
+jours dans des technologies qui fonctionnent.
+
+> Exemples : la dilatation du temps (mesurée sur des horloges atomiques et les muons),
+> $E=mc^2$, l’existence du boson de Higgs, la valeur de la vitesse limite $c$.
+
+### 🔵 Solidement modélisé <Badge niveau="modelise">Exemple : le mécanisme de Higgs, le confinement des quarks.</Badge>
+
+Théorie **très bien confirmée**, qui prédit correctement les expériences, mais qui repose sur
+un **cadre** (un modèle, des objets qu’on ne « voit » pas directement). On a d’excellentes
+raisons d’y croire, tout en sachant que c’est une description.
+
+> Exemples : le mécanisme par lequel le champ de Higgs donne la masse, le confinement des
+> quarks, la description des forces par des champs quantiques.
+
+### 🟡 Plausible / en débat <Badge niveau="plausible">Exemple : le mécanisme du seesaw pour la masse des neutrinos.</Badge>
+
+Hypothèse **sérieuse**, défendue par une partie de la communauté, mais **non tranchée** par
+l’expérience. Plusieurs scénarios concurrents restent possibles.
+
+> Exemples : le mécanisme du seesaw, la nature de Majorana du neutrino, certaines pistes
+> d’unification.
+
+### 🔴 Ouvert / inconnu <Badge niveau="ouvert">Exemple : la nature de la matière noire, la gravité quantique.</Badge>
+
+**Aucune réponse établie.** On constate un phénomène ou une incohérence, mais on ne sait pas
+l’expliquer. Ce sont les frontières actuelles de la physique.
+
+> Exemples : la nature de la matière noire et de l’énergie noire, une théorie quantique de la
+> gravitation, l’origine de l’asymétrie matière-antimatière.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau a été attribué — quelle preuve expérimentale, quel statut théorique.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « établi » et « modélisé » ?">
+Parce que la nature de la preuve diffère. « La dilatation du temps existe » est un **fait
+mesuré** : on chronomètre des particules. « La masse vient du champ de Higgs » est l’**explication
+théorique** la mieux confirmée que nous ayons — vérifiée indirectement par la découverte du
+boson —, mais c’est une explication, pas une observation directe du champ. Les deux sont très
+fiables ; elles ne le sont pas *de la même façon*. Le badge rend cette nuance visible.
+</Encart>
+
+## Sur les constantes et les grands nombres
+
+Quand une valeur numérique est citée, on précise son **statut** :
+
+- **Défini par convention** : la valeur est fixée *par décision*, sans incertitude. Depuis 2019,
+  c’est le cas de la vitesse limite $c = 299\,792\,458$ m/s, de la constante de Planck $h$, de la
+  charge élémentaire $e$ et du nombre d’Avogadro $N_A$. <Badge niveau="etabli">Ces nombres définissent désormais les unités SI ; ils n’ont, par construction, aucune incertitude.</Badge>
+- **Mesuré** : la valeur provient de l’expérience, avec une incertitude. C’est le cas des masses
+  des particules, comme celle du boson de Higgs ($\approx 125$ GeV/c²). <Badge niveau="etabli">Mesurée au LHC par ATLAS et CMS, avec une précision de l’ordre du pour mille.</Badge>
+
+L’<a href="/physique/symboles">index des symboles</a> récapitule ces valeurs et leur statut.

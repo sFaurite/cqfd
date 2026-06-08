@@ -1,0 +1,209 @@
+---
+/**
+ * Barre latérale de navigation, persistante. Dérivée de src/lib/nav.ts.
+ * Met en évidence le chapitre courant et affiche la progression de lecture.
+ */
+import type { Partie } from '../lib/nav';
+import type { Course } from '../lib/courses';
+
+interface Props {
+  parties: Partie[];
+  currentPath?: string;
+  course?: Course;
+}
+const { parties, currentPath, course } = Astro.props;
+const clean = (p: string) => (p ?? '').replace(/\/$/, '');
+const cur = clean(currentPath ?? '');
+
+const flat = parties.flatMap((p) => p.chapitres);
+const idx = flat.findIndex((c) => clean(c.path) === cur);
+const total = flat.length;
+const progress = idx >= 0 ? Math.round(((idx + 1) / total) * 100) : 0;
+---
+
+<nav class="sidebar" id="sidebar" aria-label="Sommaire du cours">
+  <a href="/" class="all-courses">← Tous les cours</a>
+  <a href={course?.home ?? '/'} class="brand">
+    <span class="logo" aria-hidden="true">{course?.logo ?? '⊙'}</span>
+    <span class="brand-txt">
+      <strong>{course?.title ?? 'Cours'}</strong>
+    </span>
+  </a>
+
+  {
+    idx >= 0 && (
+      <div class="progress" aria-hidden="true">
+        <div class="progress-bar" style={`width:${progress}%`} />
+        <span class="progress-lbl">
+          Étape {idx + 1} / {total}
+        </span>
+      </div>
+    )
+  }
+
+  <ol class="parts">
+    {
+      parties.map((partie) => (
+        <li class="part">
+          <div class="part-head">
+            <span class="roman">{partie.roman}</span>
+            <span class="part-title">{partie.titre}</span>
+          </div>
+          <ul class="chaps">
+            {partie.chapitres.map((chap) => {
+              const active = clean(chap.path) === cur;
+              return (
+                <li>
+                  <a
+                    href={chap.path}
+                    class:list={['chap', { active }]}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {chap.num > 0 && <span class="num">{chap.num}</span>}
+                    <span class="chap-txt">{chap.court ?? chap.titre}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .sidebar {
+    width: var(--sidebar-w);
+    height: 100%;
+    overflow-y: auto;
+    padding: 1rem 0.7rem 4rem;
+    border-right: 1px solid var(--c-border);
+    background: var(--c-bg-elev);
+    scrollbar-width: thin;
+  }
+  .all-courses {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--c-muted);
+    padding: 0.2em 0.6em 0.4em;
+  }
+  .all-courses:hover {
+    color: var(--c-blue);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.2em 0.6em 0.9em;
+    color: var(--c-text);
+  }
+  .brand:hover {
+    text-decoration: none;
+  }
+  .logo {
+    font-size: 1.7rem;
+    color: var(--c-blue);
+    line-height: 1;
+  }
+  .brand-txt strong {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+  .brand-txt small {
+    color: var(--c-muted);
+    font-size: 0.76rem;
+  }
+
+  .progress {
+    position: relative;
+    height: 22px;
+    margin: 0 0.5em 1em;
+    background: var(--c-surface);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--c-border);
+  }
+  .progress-bar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: linear-gradient(90deg, var(--c-blue-d), var(--c-blue));
+    transition: width 0.4s ease;
+  }
+  .progress-lbl {
+    position: relative;
+    display: block;
+    text-align: center;
+    font-size: 0.7rem;
+    line-height: 22px;
+    font-weight: 700;
+    color: var(--c-text);
+    mix-blend-mode: difference;
+  }
+
+  .parts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: none;
+  }
+  .part {
+    margin-bottom: 1.1em;
+  }
+  .part-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    padding: 0.25em 0.6em;
+  }
+  .roman {
+    font-weight: 800;
+    color: var(--c-blue);
+    font-size: 0.78rem;
+    min-width: 1.4em;
+  }
+  .part-title {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-muted);
+    font-weight: 700;
+  }
+  .chaps {
+    list-style: none;
+    margin: 0.2em 0 0;
+    padding: 0 0 0 0.3em;
+    border-left: 1px solid var(--c-border);
+    margin-left: 0.9em;
+  }
+  .chap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5em;
+    padding: 0.34em 0.6em;
+    border-radius: 7px;
+    color: var(--c-muted);
+    font-size: 0.88rem;
+    line-height: 1.3;
+  }
+  .chap:hover {
+    background: var(--c-surface);
+    color: var(--c-text);
+    text-decoration: none;
+  }
+  .chap.active {
+    background: color-mix(in srgb, var(--c-blue) 18%, transparent);
+    color: var(--c-text);
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--c-blue);
+  }
+  .num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--c-blue);
+    min-width: 1.3em;
+    text-align: right;
+    flex: none;
+  }
+</style>

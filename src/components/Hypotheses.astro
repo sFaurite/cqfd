@@ -1,0 +1,84 @@
+---
+/**
+ * Encadré « Hypothèses de départ ».
+ * Liste explicitement les postulats/axiomes admis au début d'une partie/section.
+ * Tout le reste de la page doit être déduit de ces hypothèses (ou de résultats
+ * déjà démontrés ailleurs, liés via <Prereq>).
+ *
+ * Usage :
+ *   <Hypotheses titre="Hypothèses de cette partie">
+ *     1. Premier postulat…
+ *     2. Second postulat…
+ *   </Hypotheses>
+ */
+interface Props {
+  titre?: string;
+}
+const { titre = 'Hypothèses de départ' } = Astro.props;
+---
+
+<aside class="hypotheses" aria-label={titre}>
+  <div class="head">
+    <span class="icon" aria-hidden="true">⚖️</span>
+    <h2 class="t">{titre}</h2>
+  </div>
+  <div class="body">
+    <p class="intro">Tout ce qui suit est <strong>déduit</strong> de ces seules hypothèses (ou de résultats déjà démontrés). Rien d’autre n’est admis.</p>
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .hypotheses {
+    margin: 1.6em 0;
+    border: 1px solid color-mix(in srgb, var(--c-blue) 45%, var(--c-border));
+    border-radius: var(--radius);
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--c-blue) 12%, var(--c-bg-elev)),
+      var(--c-bg-elev)
+    );
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.7em 1.1em;
+    background: color-mix(in srgb, var(--c-blue) 18%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--c-blue) 35%, var(--c-border));
+  }
+  .icon {
+    font-size: 1.3em;
+  }
+  .t {
+    margin: 0;
+    font-size: 1.1rem;
+    border: none;
+    padding: 0;
+    color: var(--c-text);
+    letter-spacing: 0.01em;
+  }
+  .body {
+    padding: 0.4em 1.2em 1em;
+  }
+  .intro {
+    color: var(--c-muted);
+    font-size: 0.92rem;
+    font-style: italic;
+    margin: 0.8em 0 0.6em;
+  }
+  .body :global(ol),
+  .body :global(ul) {
+    margin: 0.4em 0 0.2em;
+    padding-left: 1.3em;
+  }
+  .body :global(li) {
+    margin: 0.55em 0;
+  }
+  .body :global(li::marker) {
+    color: var(--c-blue);
+    font-weight: 700;
+  }
+</style>

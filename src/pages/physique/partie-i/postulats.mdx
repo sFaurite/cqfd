@@ -1,0 +1,111 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les deux postulats d'Einstein"
+chapter: postulats
+description: "Énoncés, motivés par Michelson-Morley, discutés. Le point de départ de tout."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import SimultaneityTrain from '../../../components/interactive/SimultaneityTrain.astro';
+
+## Les deux postulats d'Einstein
+
+Toute la relativité — la dilatation du temps, $E=mc^2$, les trous noirs — tient sur **deux phrases**. Deux hypothèses si simples qu'un lycéen peut les comprendre, et si puissantes qu'elles ont fait s'effondrer l'idée la plus évidente du monde : que le temps s'écoule pareil pour tous. Voici ces deux phrases, et l'histoire qui a forcé Einstein à les écrire.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine que tu cours à 10 km/h et que tu lances une balle à 20 km/h vers l'avant. Pour quelqu'un au sol, la balle file à 30 km/h : les vitesses s'additionnent. C'est le bon sens, et c'est vrai pour les balles. Maintenant remplace la balle par un faisceau de lumière. Le bon sens dit : la lumière devrait aller à $c$ + ta vitesse. **La nature dit non.** Quoi que tu fasses, la lumière te dépasse toujours à la même vitesse. C'est absurde... et c'est mesuré. Toute la relativité naît de la décision d'Einstein de croire la nature plutôt que le bon sens.
+</Encart>
+
+### Le mystère de l'éther
+
+Au XIXᵉ siècle, on sait que la lumière est une **onde**. Or une onde, pensait-on, a besoin d'un milieu pour se propager : le son a besoin de l'air, les vagues ont besoin de l'eau. On postula donc un milieu invisible remplissant tout l'espace, **l'éther**, dans lequel la lumière vibrerait. La vitesse $c$ aurait alors été la vitesse de la lumière *par rapport à l'éther*.
+
+Conséquence directe : la Terre, qui fonce autour du Soleil à environ $30\ \text{km/s}$, devrait sentir un « vent d'éther ». Mesurer la vitesse de la lumière dans le sens du mouvement et perpendiculairement devait donner des valeurs différentes — comme un nageur remonte un fleuve plus lentement qu'il ne le traverse.
+
+### L'expérience qui n'a rien trouvé
+
+En 1887, Michelson et Morley construisent un interféromètre d'une précision extraordinaire pour détecter ce vent d'éther. Ils envoient deux faisceaux lumineux dans des directions perpendiculaires et comparent leurs temps de trajet.
+
+Résultat : **rien**. Aucune différence. La lumière se propage à la même vitesse dans toutes les directions, quelle que soit la saison, quel que soit le mouvement de la Terre.
+
+<Resultat label="Expérience de Michelson-Morley (1887)">
+
+$$ c_{\parallel} = c_{\perp} = c \quad \text{(aucun vent d'éther)} $$
+
+<Badge niveau="etabli" slot="badge">Reproduite des milliers de fois depuis 1887, avec une précision croissante ; aujourd'hui l'isotropie de $c$ est vérifiée à mieux que $10^{-17}$ près.</Badge>
+</Resultat>
+
+C'est le coup de tonnerre. Soit la Terre est miraculeusement immobile (réfuté), soit l'éther n'existe pas et il faut repenser l'espace et le temps. Einstein, en 1905, choisit la seconde voie et la pousse jusqu'au bout.
+
+### Les deux postulats
+
+<Hypotheses titre="Les postulats de la relativité restreinte (Einstein, 1905)">
+1. **Principe de relativité.** Les lois de la physique sont identiques dans tous les **référentiels galiléens** (référentiels en translation rectiligne uniforme les uns par rapport aux autres). Aucune expérience ne permet de distinguer le repos du mouvement uniforme : il n'existe **aucun référentiel privilégié**, et donc pas d'éther.
+2. **Invariance de la vitesse limite $c$.** Il existe une vitesse limite $c$ qui a la **même valeur dans tous les référentiels galiléens**, indépendamment du mouvement de la source ou de l'observateur.
+</Hypotheses>
+
+<Encart type="rappel" titre="Qu'est-ce qu'un référentiel galiléen ?">
+Un **référentiel** est un objet de référence muni d'horloges et de règles, par rapport auquel on repère positions et instants. Il est **galiléen** s'il n'est ni accéléré ni en rotation : un train à vitesse constante sur une voie droite, par exemple. Le principe de Galilée (déjà connu en mécanique classique) disait que les lois de la *mécanique* y sont les mêmes ; Einstein étend cela à **toute** la physique, lumière comprise.
+</Encart>
+
+Ces deux postulats sont des **hypothèses admises**, pas des théorèmes : on ne les démontre pas, on les pose. Leur valeur vient de tout ce qu'on en déduit et qui se vérifie ensuite.
+
+<Badge niveau="etabli">Un siècle d'expériences (accélérateurs de particules, GPS, horloges atomiques, désintégration des muons) confirme chaque conséquence des postulats sans une seule exception. Leur validité expérimentale est aujourd'hui hors de doute.</Badge>
+
+### Une précision capitale : $c$ n'est pas « la vitesse de la lumière »
+
+On dit toujours « $c$ = vitesse de la lumière », mais c'est trompeur. Le second postulat ne parle pas de lumière : il parle d'une **vitesse limite invariante de l'espace-temps**, une propriété de la géométrie de l'Univers. La lumière atteint cette vitesse uniquement parce que le photon n'a **pas de masse**. Toute particule sans masse (le gluon, par exemple) se propage exactement à $c$.
+
+<Resultat label="Statut de c">
+
+$c$ est la **vitesse limite invariante** de l'espace-temps — une propriété de la géométrie de l'Univers, non une propriété « par essence » de la lumière. La lumière la suit parce qu'elle est sans masse.
+
+<Badge niveau="etabli" slot="badge">$c$ est la vitesse limite invariante de l'espace-temps ; la lumière la suit car le photon est sans masse — fait solidement établi.</Badge>
+</Resultat>
+
+Sa valeur :
+
+$$ c = 299\,792\,458\ \text{m}\cdot\text{s}^{-1} $$
+
+<Badge niveau="etabli">Depuis 1983, cette valeur est **exacte par convention** : on l'a *choisie* pour définir le mètre comme la distance parcourue par la lumière en $1/299\,792\,458$ de seconde. Ce n'est plus un nombre mesuré, mais une définition.</Badge>
+
+### Le conflit : quelque chose doit céder
+
+Les deux postulats, ensemble, contredisent frontalement le bon sens. Reprenons l'addition des vitesses de Galilée.
+
+<Encart type="calcul" titre="Pourquoi les deux postulats forcent à abandonner le temps absolu">
+
+**Étape 1 — La loi galiléenne.** Un objet a une vitesse $v'$ dans un train, le train roule à $V$ par rapport au sol. La mécanique classique affirme que la vitesse au sol est :
+
+$$ v = v' + V. $$
+
+**Étape 2 — On l'applique à la lumière.** On allume une lampe dans le train, donc $v' = c$. La loi galiléenne prédit alors, pour l'observateur au sol :
+
+$$ v = c + V. $$
+
+**Étape 3 — Le second postulat.** Mais le postulat 2 impose que la lumière aille à $c$ pour l'observateur au sol *aussi* :
+
+$$ v = c. $$
+
+**Étape 4 — La contradiction.** Les étapes 2 et 3 donnent $c + V = c$, soit $V = 0$. C'est faux dès que le train bouge. **La loi d'addition galiléenne est donc incompatible avec les postulats.**
+
+**Étape 5 — Le coupable.** D'où vient $v = v'+V$ ? D'une hypothèse cachée jamais écrite : que le temps et les distances sont **les mêmes pour tous**. Si les postulats sont vrais (et l'expérience dit qu'ils le sont), c'est cette hypothèse qui est fausse. **Le temps n'est pas absolu.** ∎
+</Encart>
+
+Voilà le séisme : pour sauver l'invariance de $c$, il faut accepter que le temps lui-même s'écoule différemment selon les observateurs.
+
+### Premier choc : la simultanéité est relative
+
+Conséquence immédiate et la plus déroutante : **deux événements simultanés pour l'un ne le sont pas forcément pour l'autre.** Imagine un wagon au centre duquel une lampe s'allume. Pour un passager, la lumière atteint l'avant et l'arrière *en même temps* (mêmes distances, même vitesse $c$). Mais pour un observateur sur le quai, l'arrière du wagon « avance vers » la lumière tandis que l'avant « la fuit » — or la lumière garde la même vitesse $c$ pour lui aussi. Il voit donc l'arrière touché **avant** l'avant.
+
+Les deux ont raison. La simultanéité n'a de sens que *relativement à un référentiel*. Manipule toi-même la scène :
+
+<SimultaneityTrain />
+
+<Badge niveau="etabli">La relativité de la simultanéité est une conséquence directe et vérifiée des postulats ; elle est au cœur du fonctionnement du GPS, qui en tiendrait compte sous peine d'erreurs de plusieurs kilomètres par jour.</Badge>
+
+Nous tenons nos deux postulats et leur première fissure dans l'édifice classique. Dans le chapitre suivant, nous transformons cette fissure en équation : en suivant un simple rayon lumineux rebondissant entre deux miroirs, nous allons **démontrer** que le temps se dilate.

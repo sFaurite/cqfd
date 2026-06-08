@@ -1,0 +1,36 @@
+---
+/**
+ * LorentzSlider — courbe γ(β) interactive + valeurs dérivées en temps réel
+ * (vitesse, dilatation du temps, contraction des longueurs).
+ * Utilisé sur la page « facteur de Lorentz » et la page modèle.
+ */
+---
+
+<div class="iw" data-iw="lorentz">
+  <div class="iw__head"><span class="tag">Interactif</span> Le facteur de Lorentz γ en fonction de la vitesse</div>
+  <div class="iw__canvas-wrap">
+    <canvas style="aspect-ratio: 16 / 10"></canvas>
+  </div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="lz-beta">β = v/c</label>
+      <input id="lz-beta" type="range" min="0" max="0.999" step="0.001" value="0.6" data-beta />
+      <output data-out-beta>0,600</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">vitesse</span> <b data-out-v></b></span>
+    <span class="iw__chip"><span class="k">γ</span> <b data-out-gamma></b></span>
+    <span class="iw__chip"><span class="k">1 s propre devient</span> <b data-out-dt></b></span>
+    <span class="iw__chip"><span class="k">1 m propre devient</span> <b data-out-l></b></span>
+  </div>
+  <p class="iw__note">
+    À faible vitesse, γ ≈ 1 : les effets relativistes sont imperceptibles. Mais quand v
+    s’approche de c, γ explose vers l’infini — ce qui rend la vitesse limite c
+    inatteignable pour tout objet doté d’une masse.
+  </p>
+</div>
+
+<script>
+  import './LorentzSlider.client.ts';
+</script>

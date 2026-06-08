@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La masse comme énergie confinée"
+chapter: masse-energie-confinee
+description: "Pourquoi ~99 % de la masse du proton est de l'énergie, pas du Higgs."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import ProtonMass from '../../../components/interactive/ProtonMass.astro';
+
+## La masse comme énergie confinée
+
+Nous avons établi la relation la plus célèbre de la physique : <Prereq href="/physique/partie-ii/energie">$E = mc^2$</Prereq>. On la lit souvent dans un seul sens — « la masse peut se transformer en énergie ». Mais elle se lit aussi dans l'autre : **toute énergie enfermée dans un système possède une masse**. C'est cette lecture, presque retournée, qui va nous révéler d'où vient vraiment la masse de la matière qui nous entoure.
+
+<Encart type="intuition" titre="Une boîte de lumière a une masse">
+Imaginez une boîte aux parois parfaitement réfléchissantes, dans laquelle on enferme de la lumière qui rebondit. La lumière n'a pas de masse. La boîte vide non plus (disons). Pourtant, une fois remplie d'énergie lumineuse $E$, la boîte est **plus difficile à pousser** : son inertie a augmenté de $E/c^2$. L'énergie confinée se comporte comme de la masse. La masse n'est pas une « substance » : c'est une mesure de l'énergie interne d'un système au repos.
+</Encart>
+
+### La masse d'un système, c'est son énergie interne totale
+
+Pour un objet **composite** (formé de plusieurs morceaux), la masse n'est pas la simple somme des masses des morceaux. C'est l'énergie totale contenue à l'intérieur, mesurée quand le système entier est au repos, divisée par $c^2$ :
+
+<Resultat label="Masse d'un système composite">
+$$ M_{\text{système}} = \frac{E_{\text{interne totale}}}{c^2} $$
+<Badge niveau="etabli" slot="badge">Conséquence directe de $E=mc^2$, confirmée par toute la physique nucléaire.</Badge>
+</Resultat>
+
+Cette énergie interne contient **tout** : les masses des constituants, mais aussi leur énergie cinétique d'agitation à l'intérieur, et l'énergie de leurs interactions mutuelles.
+
+<Badge niveau="etabli">Que l'énergie de liaison contribue à la masse via $E=mc^2$ est vérifié au quotidien dans les réacteurs et les bombes : c'est le socle de l'énergie nucléaire.</Badge>
+
+### Défaut de masse et énergie de liaison
+
+Voici le fait surprenant. Quand des constituants s'**assemblent en un système lié** (un noyau, un atome, une molécule), ils libèrent de l'énergie : c'est l'**énergie de liaison** $E_L$. Cette énergie quitte le système. Donc, d'après $M = E_{\text{interne}}/c^2$, le système lié est **plus léger** que la somme de ses morceaux séparés.
+
+<Encart type="calcul" titre="Le défaut de masse, ligne à ligne">
+
+**Étape 1.** On part de constituants libres, immobiles et éloignés. Leur énergie interne totale est la somme de leurs énergies de masse :
+
+$$ E_{\text{libres}} = \left(\sum_i m_i\right) c^2. $$
+
+**Étape 2.** On les laisse s'assembler en un système lié. La liaison étant attractive, le système émet de l'énergie $E_L > 0$ (rayonnement, chaleur). Par conservation de l'énergie, l'énergie restée à l'intérieur vaut :
+
+$$ E_{\text{lié}} = E_{\text{libres}} - E_L. $$
+
+**Étape 3.** La masse du système lié est cette énergie interne divisée par $c^2$ :
+
+$$ M_{\text{lié}} = \frac{E_{\text{lié}}}{c^2} = \frac{E_{\text{libres}} - E_L}{c^2} = \sum_i m_i - \frac{E_L}{c^2}. $$
+
+**Étape 4.** On définit le **défaut de masse** $\Delta m$ comme l'écart entre la somme des morceaux et le tout :
+
+$$ \boxed{\;\Delta m = \sum_i m_i - M_{\text{lié}} = \frac{E_L}{c^2}\;} $$
+
+Le défaut de masse n'est pas une masse « disparue » : c'est l'énergie de liaison partie ailleurs, qui ne pèse plus dans la balance. ∎
+</Encart>
+
+Exemple : le noyau d'hélium-4 est environ $0{,}7\%$ plus léger que ses deux protons et deux neutrons séparés. Ce petit pourcentage, c'est l'énergie de liaison nucléaire — et c'est lui qui fait briller le Soleil. <Badge niveau="etabli">Mesuré sur tous les noyaux par spectrométrie de masse ; courbe d'Aston.</Badge> Pour le détail du calcul énergétique, voir <Prereq href="/physique/partie-ii/e-mc2">l'énergie de liaison via $E=mc^2$</Prereq>.
+
+### Le cas spectaculaire du proton
+
+Jusqu'ici, le défaut de masse reste petit (quelques %). Mais descendons d'un cran, à l'intérieur même du proton. Là, l'effet n'est plus une correction : il **est** presque tout.
+
+Un proton est fait de trois **quarks de valence** : deux quarks *up* et un quark *down* (uud). Ces quarks ont une masse — donnée par le mécanisme de Higgs — mais elle est minuscule :
+
+$$ m_u \approx 2{,}2~\text{MeV}/c^2, \qquad m_d \approx 4{,}7~\text{MeV}/c^2. $$
+
+<Encart type="rappel" titre="L'unité MeV/c²">
+En physique des particules, on mesure les masses en énergie : $1~\text{MeV} = 10^6$ électronvolts d'énergie, et l'on divise par $c^2$ pour obtenir une masse via $E=mc^2$. C'est exactement la lecture « énergie $\to$ masse » de ce chapitre. Repère : l'électron pèse $0{,}511~\text{MeV}/c^2$, le proton $938~\text{MeV}/c^2$.
+</Encart>
+
+Additionnons les trois quarks de valence : $2 m_u + m_d \approx 2{,}2 + 2{,}2 + 4{,}7 \approx 9~\text{MeV}/c^2$. Or le proton pèse **938 MeV/c²**. Les masses des quarks ne représentent donc qu'environ **1 %** de la masse du proton !
+
+$$ \frac{9~\text{MeV}/c^2}{938~\text{MeV}/c^2} \approx 0{,}01 = 1\,\%. $$
+
+D'où viennent les **99 % restants** ? De l'**énergie** enfermée dans le proton, exactement comme la boîte de lumière :
+
+- l'énergie du **champ de gluons** — les particules qui transmettent l'interaction forte et collent les quarks ensemble. Les gluons sont **sans masse**, mais le champ qu'ils forment est bourré d'énergie ;
+- l'énergie cinétique d'**agitation** des quarks, confinés dans un volume minuscule, qui filent à des vitesses proches de $c$.
+
+Cette énergie interne, divisée par $c^2$, *est* l'essentiel de la masse du proton. Que des gluons sans masse et de l'énergie de mouvement puissent peser, c'est précisément le cas des <Prereq href="/physique/partie-ii/particules-sans-masse">particules sans masse</Prereq> : de l'énergie sans masse, qui contribue pourtant à l'inertie du tout.
+
+<ProtonMass />
+
+<Resultat label="Origine de la masse du proton">
+$$ \underbrace{m_{\text{quarks}}}_{\approx\,1\%\ (\text{Higgs})} + \underbrace{\frac{E_{\text{gluons}} + E_{\text{cinétique}}}{c^2}}_{\approx\,99\%\ (\text{interaction forte})} = m_p \approx 938~\text{MeV}/c^2 $$
+<Badge niveau="modelise" slot="badge">Répartition ~1 % / ~99 % issue des calculs de chromodynamique quantique (QCD) sur réseau, en accord avec l'expérience.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="Pourquoi le défaut de masse est ici « négatif »">
+Pour les noyaux, l'assemblage *libère* de l'énergie et le système est *plus léger* ($\Delta m > 0$). Pour le proton, c'est l'inverse : confiner les quarks par l'interaction forte *coûte* énormément d'énergie, qui reste piégée à l'intérieur. Le proton est donc beaucoup *plus lourd* que ses quarks ; avec la même convention $\Delta m = \sum_i m_i - M$, on aurait ici $\Delta m < 0$. La raison profonde est le **confinement** : on ne peut pas séparer les quarks, donc l'énergie du champ de gluons ne s'échappe jamais — elle reste comptée comme masse. La QCD prédit cette valeur à quelques pour-cent près, mais le calcul exige des superordinateurs (lattice QCD), d'où le statut 🔵 plutôt que 🟢.
+</Encart>
+
+### Ce que cela change pour notre vision du monde
+
+Tirez-en la conséquence. Vous, cette page, l'air autour de vous : votre masse est faite de protons et de neutrons. Et **~99 % de cette masse n'est pas de la « matière » au sens naïf** : c'est de l'énergie pure, celle de l'interaction forte, gelée sous forme de masse par $E=mc^2$. <Badge niveau="modelise">~99 % de la masse des nucléons provient de l'énergie de l'interaction forte (QCD sur réseau) ; seul le ~1 % restant vient des masses de quarks données par le Higgs.</Badge>
+
+<Badge niveau="etabli">Le boson de Higgs ne fournit *pas* l'essentiel de notre masse : il ne donne leur masse qu'aux particules élémentaires (quarks, électrons), soit le ~1 % évoqué.</Badge> Le Higgs explique pourquoi un électron ou un quark a *une* masse plutôt que zéro — un sujet bien réel mais distinct, que nous aborderons en **Partie IV**. L'essentiel de votre poids, lui, vient de l'énergie de liaison à l'intérieur de vos protons.
+
+La masse n'est donc pas une chose : c'est une forme que prend l'énergie quand on l'enferme. Reste une question que nous avons contournée : pourquoi l'énergie confinée résiste-t-elle à être poussée — autrement dit, d'où vient l'inertie ? C'est ce que nous explorerons au chapitre suivant.

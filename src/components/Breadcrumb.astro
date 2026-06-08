@@ -1,0 +1,61 @@
+---
+/**
+ * Fil d'Ariane : Accueil › Partie X › Chapitre courant.
+ */
+import type { Partie, Chapitre } from '../lib/nav';
+import type { Course } from '../lib/courses';
+interface Props {
+  partie: Partie;
+  chap: Chapitre;
+  course?: Course;
+}
+const { partie, chap, course } = Astro.props;
+const premierDeLaPartie = partie.chapitres[0]?.path ?? '/';
+---
+
+<nav class="breadcrumb" aria-label="Fil d'Ariane">
+  <ol>
+    <li><a href="/">Accueil</a></li>
+    <li aria-hidden="true" class="sep">›</li>
+    {course && (
+      <>
+        <li><a href={course.home}>{course.logo} {course.id === 'maths' ? 'Maths' : 'Physique'}</a></li>
+        <li aria-hidden="true" class="sep">›</li>
+      </>
+    )}
+    <li>
+      <a href={premierDeLaPartie}>
+        {partie.roman !== '0' && partie.roman !== '★' && `Partie ${partie.roman} — `}{partie.titre}
+      </a>
+    </li>
+    <li aria-hidden="true" class="sep">›</li>
+    <li aria-current="page">{chap.court ?? chap.titre}</li>
+  </ol>
+</nav>
+
+<style>
+  .breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.82rem;
+    color: var(--c-muted);
+  }
+  .breadcrumb a {
+    color: var(--c-muted);
+  }
+  .breadcrumb a:hover {
+    color: var(--c-blue);
+  }
+  .sep {
+    color: var(--c-border);
+  }
+  li[aria-current='page'] {
+    color: var(--c-text);
+    font-weight: 600;
+  }
+</style>

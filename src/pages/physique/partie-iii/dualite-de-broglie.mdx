@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Dualité onde-corpuscule et relation de de Broglie"
+chapter: dualite-de-broglie
+description: "Toute particule est aussi une onde : p = h/λ."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import DeBroglie from '../../../components/interactive/DeBroglie.astro';
+
+## Une particule, est-ce une onde ?
+
+Jusqu'ici, deux mondes semblaient séparés. D'un côté les **ondes** : la lumière, le son, les vagues — des objets étalés dans l'espace, qui se superposent, interfèrent, diffractent. De l'autre les **corpuscules** : des grains de matière bien localisés, comme un électron ou une bille. En 1924, un jeune physicien français, Louis de Broglie, ose une idée d'une audace folle : et si cette frontière n'existait pas ? Si **toute** particule était aussi une onde ?
+
+<Encart type="intuition" titre="L'idée en une image">
+Pensez à une corde de guitare. Quand vous la pincez, elle ne vibre pas n'importe comment : seules certaines notes « rentrent » dans la longueur de la corde. L'onde impose des règles. De Broglie a eu l'intuition qu'un électron tournant autour d'un noyau était lui aussi une onde qui doit « boucler » sur elle-même — ce qui explique pourquoi seules certaines orbites (certaines énergies) sont permises. La matière, au fond, vibrerait comme une corde.
+</Encart>
+
+### Le point de départ : le photon
+
+Pour comprendre d'où sort l'idée, partons de l'objet qui est *déjà* à la fois onde et particule : le **photon**. On dispose de deux résultats solides obtenus plus tôt.
+
+D'une part, l'énergie d'un photon vaut $E = h\nu$, où $\nu$ est la fréquence de l'onde lumineuse et $h$ la constante de Planck. <Badge niveau="etabli">Relation de Planck–Einstein, $E = h\nu$ : c'est la pierre angulaire de l'effet photoélectrique (Einstein, prix Nobel 1921), où la lumière n'arrache des électrons qu'au-dessus d'une fréquence seuil — preuve que son énergie est quantifiée par paquets $h\nu$. C'est un postulat de la physique quantique, hors du champ de la seule relativité.</Badge>
+
+D'autre part, <Prereq href="/physique/partie-ii/particules-sans-masse">une particule sans masse vérifie $E = pc$</Prereq>, reliant son énergie $E$ à sa quantité de mouvement $p$.
+
+Le photon étant sans masse, ces deux relations doivent coïncider. Mettons-les face à face.
+
+<Encart type="calcul" titre="Du photon à la relation p = h/λ">
+**Étape 1 — Les deux expressions de l'énergie.** Pour le photon, on a simultanément
+
+$$ E = h\nu \qquad \text{et} \qquad E = pc. $$
+
+**Étape 2 — On les égale.** Puisque c'est la même énergie :
+
+$$ pc = h\nu. $$
+
+**Étape 3 — On isole la quantité de mouvement** en divisant les deux membres par $c$ :
+
+$$ p = \frac{h\nu}{c}. $$
+
+**Étape 4 — On introduit la longueur d'onde.** Pour toute onde, fréquence et longueur d'onde sont liées par la vitesse de propagation. Pour la lumière dans le vide : $\lambda \nu = c$, donc $\dfrac{\nu}{c} = \dfrac{1}{\lambda}$.
+
+**Étape 5 — Substitution.** En remplaçant $\dfrac{\nu}{c}$ par $\dfrac{1}{\lambda}$ :
+
+$$ p = \frac{h}{\lambda}. $$
+
+La quantité de mouvement du photon est directement reliée à la longueur d'onde de sa lumière. ∎
+</Encart>
+
+<Encart type="rappel" titre="La relation λν = c">
+Une onde qui se répète sur une distance $\lambda$ (sa longueur d'onde) en effectuant $\nu$ oscillations par seconde (sa fréquence) avance de $\lambda \times \nu$ mètres par seconde. Cette vitesse, pour la lumière dans le vide, est $c$. D'où $\lambda\nu = c$. C'est vrai pour toute onde (en remplaçant $c$ par la vitesse de l'onde concernée).
+</Encart>
+
+### Le saut de génie de de Broglie
+
+Le résultat $p = h/\lambda$ a été établi *pour le photon*, en exploitant qu'il est sans masse. De Broglie renverse la logique. Il **postule** que cette relation n'est pas une particularité de la lumière, mais une loi **universelle** : à toute particule de quantité de mouvement $p$ — y compris un électron, un atome, vous-même — est associée une onde de longueur d'onde
+
+$$ \lambda = \frac{h}{p}. $$
+
+<Resultat label="Longueur d'onde de de Broglie">$$ \lambda = \frac{h}{p} = \frac{h}{mv} $$ <Badge niveau="etabli" slot="badge">Confirmée dès 1927 par Davisson et Germer : un faisceau d'électrons envoyé sur un cristal de nickel produit des figures de diffraction, exactement comme une onde. Aujourd'hui routine en microscopie électronique.</Badge></Resultat>
+
+Ici $h = 6{,}626 \times 10^{-34}\ \text{J·s}$ est la **constante de Planck**, dont la valeur est aujourd'hui *fixée par convention* (elle sert à définir le kilogramme depuis 2019). Pour une particule de masse $m$ allant à vitesse $v \ll c$, on a $p = mv$, d'où la deuxième écriture $\lambda = h/(mv)$. <Badge niveau="etabli">L'approximation $p = mv$ est l'expression classique de la quantité de mouvement, valable tant que $v \ll c$ ; aux vitesses relativistes il faudrait écrire $p = \gamma m v$.</Badge>
+
+<VideoManim src="de-broglie" scene="DeBroglie" titre="L'onde de de Broglie" legende="À toute particule de quantité de mouvement p est associée une onde de longueur λ = h/p." />
+
+<DeBroglie />
+
+### Pourquoi ne voit-on jamais une balle « onduler » ?
+
+La relation $\lambda = h/p$ contient une réponse spectaculaire. La constante $h$ est *minuscule*. Pour qu'un objet manifeste un comportement ondulatoire (diffraction, interférences), il faut que sa longueur d'onde soit comparable à la taille des obstacles qu'il rencontre. Comparons un électron et une balle de tennis.
+
+<Encart type="calcul" titre="λ d'un électron contre λ d'une balle">
+**Cas 1 — Un électron accéléré.** Masse $m_e = 9{,}1 \times 10^{-31}\ \text{kg}$, vitesse typique $v \approx 7{,}3 \times 10^{6}\ \text{m/s}$ (un électron accéléré sous une centaine de volts).
+
+$$ p = m_e v = 9{,}1 \times 10^{-31} \times 7{,}3 \times 10^{6} \approx 6{,}6 \times 10^{-24}\ \text{kg·m/s}. $$
+
+$$ \lambda = \frac{h}{p} = \frac{6{,}626 \times 10^{-34}}{6{,}6 \times 10^{-24}} \approx 1{,}0 \times 10^{-10}\ \text{m} = 0{,}1\ \text{nm}. $$
+
+**Cas 2 — Une balle de tennis.** Masse $m = 0{,}057\ \text{kg}$, vitesse $v = 30\ \text{m/s}$.
+
+$$ p = mv = 0{,}057 \times 30 = 1{,}71\ \text{kg·m/s}. $$
+
+$$ \lambda = \frac{h}{p} = \frac{6{,}626 \times 10^{-34}}{1{,}71} \approx 3{,}9 \times 10^{-34}\ \text{m}. $$
+</Encart>
+
+Le verdict est sans appel. L'électron a une longueur d'onde de l'ordre de $0{,}1\ \text{nm}$ — exactement l'échelle des distances entre atomes dans un cristal. <Badge niveau="etabli">C'est pourquoi un cristal diffracte les électrons : il joue le rôle d'un réseau adapté à leur onde.</Badge> La balle, elle, a une longueur d'onde de $\sim 10^{-34}\ \text{m}$, soit **près de vingt ordres de grandeur plus petite qu'un noyau atomique**. Aucun obstacle réel ne peut révéler une onde aussi fine : la balle reste, pour nous, un pur corpuscule. La physique classique n'est pas fausse — elle est juste la limite où $\lambda$ est négligeable.
+
+### La dualité onde-corpuscule
+
+L'expérience qui cristallise tout ce mystère est celle des **fentes de Young**, réalisée avec des électrons. On envoie les électrons **un par un** vers deux fentes voisines. Chacun arrive sur l'écran comme un grain bien localisé — un point : c'est le côté **corpuscule**. Mais quand des milliers de points s'accumulent, ils dessinent des **franges d'interférence** — alternance de zones claires et sombres : c'est le côté **onde**. Chaque électron passe « par les deux fentes à la fois », son onde interfère avec elle-même, et c'est cette onde qui dicte *où* le grain a le plus de chances d'atterrir.
+
+<Badge niveau="etabli">La dualité onde-corpuscule est l'un des faits les mieux vérifiés de la physique : observée avec des photons, des électrons, des neutrons, et même des grosses molécules de centaines d'atomes.</Badge>
+
+Un objet quantique n'est donc ni « vraiment » une onde, ni « vraiment » une particule : c'est une entité nouvelle, qui se montre tantôt sous une face, tantôt sous l'autre, selon la question qu'on lui pose.
+
+Mais cette double nature a un prix redoutable. Si une particule *est* une onde étalée, où se trouve-t-elle exactement ? Et à quelle vitesse va-t-elle ? Nous verrons que ces deux questions ne peuvent plus recevoir, simultanément, de réponse parfaitement précise — c'est le **principe d'incertitude de Heisenberg**, qu'aborde le chapitre suivant.

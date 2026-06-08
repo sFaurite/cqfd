@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La masse des neutrinos"
+chapter: masse-neutrinos
+description: "Dirac ou seesaw ? Le neutrino est-il sa propre antiparticule ?"
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## La masse des neutrinos
+
+Pendant des décennies, le neutrino fut le fantôme du Modèle Standard : une particule sans charge électrique, presque sans interaction... et, croyait-on, sans masse. Or une découverte expérimentale a forcé les physiciens à corriger leurs équations. Cette page raconte comment une simple observation — un neutrino qui *change de nature* en vol — a fissuré la théorie la mieux vérifiée de l'histoire.
+
+<Prereq href="/physique/partie-iv/fermions">Les neutrinos</Prereq> existent en trois **saveurs** : électronique ($\nu_e$), muonique ($\nu_\mu$) et tauique ($\nu_\tau$), associées à leurs cousins chargés (électron, muon, tau).
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez un diapason qui semble jouer un La pur, mais qui, en réalité, superpose plusieurs notes très proches. Comme ces notes n'ont pas exactement la même fréquence, leur somme « bat » : tantôt elles s'additionnent, tantôt elles s'annulent, et le timbre perçu change lentement. Un neutrino, c'est pareil : il voyage comme une superposition d'« ondes de masse » légèrement décalées. Au fil du trajet, le mélange se transforme — et un neutrino parti « électronique » peut arriver « muonique ». Ce battement n'existe que si les notes ont des fréquences différentes, donc si les masses sont différentes... donc non nulles.
+</Encart>
+
+### Le mystère des neutrinos solaires
+
+Le Soleil est une fournaise nucléaire qui produit un déluge de neutrinos électroniques $\nu_e$. Dès les années 1960, les expériences en comptaient... mais deux à trois fois trop peu. Où passaient les autres ?
+
+La réponse vint en deux temps. **Super-Kamiokande** (Japon, neutrinos atmosphériques) puis **SNO** (Canada, neutrinos solaires) montrèrent que les neutrinos manquants n'avaient pas disparu : ils avaient **changé de saveur** en route. SNO fut décisif car il pouvait détecter *toutes* les saveurs : le flux total correspondait exactement à la prédiction solaire, seule la répartition avait changé. Ce phénomène s'appelle l'**oscillation des neutrinos**, et il valut le prix Nobel 2015 à Takaaki Kajita et Arthur McDonald.
+
+<Badge niveau="etabli">Oscillations confirmées par Super-Kamiokande, SNO, KamLAND, puis les réacteurs (Daya Bay) et accélérateurs. Reproduites de façon indépendante : statut expérimental solide.</Badge>
+
+### Pourquoi osciller impose une masse
+
+Voici le cœur du raisonnement. Les états de **saveur** ($\nu_e, \nu_\mu, \nu_\tau$) ne sont pas les états de **masse définie** ($\nu_1, \nu_2, \nu_3$) : ce sont deux « bases » différentes pour décrire le même objet, reliées par un mélange. Quand un neutrino se propage, ce sont les états de masse qui évoluent dans le temps, chacun avec sa propre « horloge quantique » dont le rythme dépend de sa masse.
+
+<Encart type="rappel" titre="Phase d'une onde quantique">
+En physique quantique, un état d'énergie $E$ acquiert au cours du temps une **phase** qui tourne comme $e^{-iEt/\hbar}$. Deux ondes de phases différentes peuvent interférer : se renforcer ou s'annuler. C'est exactement l'analogue des « battements » sonores entre deux notes proches.
+</Encart>
+
+<Encart type="calcul" titre="Démonstration : oscillation à deux saveurs">
+
+On simplifie à deux saveurs ($\nu_e, \nu_\mu$) et deux états de masse ($\nu_1, \nu_2$), reliés par un angle de mélange $\theta$.
+
+**Étape 1 — Mélange.** L'état produit est une combinaison :
+
+$$ |\nu_e\rangle = \cos\theta\,|\nu_1\rangle + \sin\theta\,|\nu_2\rangle. $$
+
+**Étape 2 — Propagation.** Chaque état de masse évolue avec sa phase. Pour une particule ultra-relativiste d'impulsion $p$, l'énergie vaut :
+
+$$ E_i = \sqrt{p^2c^2 + m_i^2c^4} \approx pc + \frac{m_i^2 c^3}{2p} \qquad (\text{développement limité car } m_i c^2 \ll pc). $$
+
+**Étape 3 — Différence de phase.** Le terme commun $pc$ ne change rien au mélange ; seule compte la **différence** des phases :
+
+$$ \Delta\phi = \frac{(E_2 - E_1)\,t}{\hbar} \approx \frac{\Delta m^2\, c^3}{2p\hbar}\,t, \qquad \Delta m^2 \equiv m_2^2 - m_1^2. $$
+
+**Étape 4 — Probabilité.** En reprojetant sur la saveur $\nu_\mu$ après une distance $L \approx ct$ (et $E \approx pc$), la probabilité $\sin^2(2\theta)\,\sin^2(\Delta\phi/2)$ devient :
+
+$$ P(\nu_e \to \nu_\mu) = \sin^2(2\theta)\,\sin^2\!\left(\frac{\Delta m^2\,c^3\,L}{4\hbar E}\right). $$
+
+**Étape 5 — Conclusion.** Si $\Delta m^2 = 0$, l'argument du second sinus est nul, donc $P = 0$ : **aucune oscillation**. Observer $P \neq 0$ exige donc $\Delta m^2 \neq 0$, c'est-à-dire qu'au moins deux états de masse ont des masses différentes — donc non toutes nulles. ∎
+
+</Encart>
+
+<Resultat label="Les neutrinos sont massifs">$$ P(\nu_e \to \nu_\mu) \neq 0 \;\Longrightarrow\; \Delta m^2 \neq 0 \;\Longrightarrow\; m_\nu \neq 0 $$ <Badge niveau="etabli" slot="badge">Conséquence directe et non contournable des oscillations mesurées (Nobel 2015).</Badge></Resultat>
+
+Attention : les oscillations ne mesurent que des **différences** de masses au carré, pas les masses elles-mêmes. On sait néanmoins qu'elles sont **minuscules** : moins de $\sim 0{,}8\ \text{eV}/c^2$ par limite directe (expérience KATRIN), et la cosmologie resserre la somme des trois masses sous $\sim 0{,}1\ \text{eV}/c^2$. À comparer à l'électron : $511\,000\ \text{eV}/c^2$. Le neutrino est au moins un million de fois plus léger.
+
+<Badge niveau="etabli">Masse non nulle mais infime : croisement de la limite directe (KATRIN, mesurée) et des contraintes cosmologiques (modélisées).</Badge>
+
+### Pourquoi cela brise le Modèle Standard originel
+
+Dans la version d'origine du Modèle Standard, le neutrino n'existait que sous une seule forme, dite « gaucher » (de <Prereq href="/physique/partie-iv/chiralite">chiralité</Prereq> gauche). Or le <Prereq href="/physique/partie-iv/higgs">mécanisme de Higgs</Prereq> qui donne une masse aux autres fermions a besoin de **deux** versions, gauche **et** droite, pour les coupler. Faute de neutrino droitier, le Modèle Standard prédisait $m_\nu = 0$, exactement. L'expérience dit le contraire : la théorie d'origine est donc **incomplète**.
+
+<Badge niveau="etabli">Incompatibilité factuelle : le Modèle Standard minimal prédit $m_\nu=0$, l'expérience prouve $m_\nu\neq 0$.</Badge>
+
+### Deux pistes pour expliquer cette masse
+
+**Piste 1 — masse de Dirac.** On postule l'existence d'un neutrino droitier, jamais observé, et le neutrino reçoit sa masse par le Higgs comme l'électron. Problème : pourquoi serait-elle un million de fois plus petite, sans raison ? Ce neutrino droitier reste hypothétique.
+
+<Badge niveau="plausible">Mécanisme cohérent mais ad hoc ; le neutrino droitier n'est pas détecté.</Badge>
+
+**Piste 2 — le mécanisme du seesaw (« balançoire »).** L'idée la plus élégante pour expliquer la petitesse de la masse.
+
+<Encart type="plusloin" titre="Le seesaw, en intuition">
+
+Supposons un partenaire droitier **très lourd**, de masse $M$ proche d'une échelle d'énergie gigantesque (unification, $\sim 10^{15}\ \text{GeV}$). Le couplage de Dirac $m_D$ reste « ordinaire ». Diagonaliser la matrice de masse donne, pour le neutrino léger observé :
+
+$$ m_\nu \approx \frac{m_D^{\,2}}{M}. $$
+
+C'est la « balançoire » : plus le partenaire $M$ est lourd, plus le neutrino visible est léger. Un $M$ énorme produit naturellement un $m_\nu$ minuscule, sans réglage artificiel. C'est séduisant, mais $M$ est hors de portée de tout accélérateur : aucune preuve directe.
+
+</Encart>
+
+<Badge niveau="plausible">Le seesaw explique élégamment la petitesse de $m_\nu$, mais reste non confirmé expérimentalement.</Badge>
+
+### Le neutrino est-il sa propre antiparticule ?
+
+Le seesaw fonctionne mieux si le neutrino est une particule de **Majorana** : un objet identique à son antiparticule (possible justement parce qu'il est neutre). Pour le tester, on traque la **double désintégration β sans neutrino** ($0\nu\beta\beta$) : un noyau émettrait deux électrons sans aucun neutrino, ce qui n'est possible que si neutrino et antineutrino sont une seule et même chose. Ce processus n'a **jamais** été observé à ce jour (expériences GERDA, KamLAND-Zen, LEGEND...).
+
+<Badge niveau="plausible">Nature de Majorana en débat : la double β sans neutrino n'a pas été détectée ; recherche très active.</Badge>
+
+Ainsi, la masse des neutrinos est la première fissure expérimentale, solide et reconnue, dans le Modèle Standard — une porte entrouverte sur une physique encore inconnue. Reste à comprendre *d'où* viennent toutes ces masses : c'est l'objet du chapitre suivant.

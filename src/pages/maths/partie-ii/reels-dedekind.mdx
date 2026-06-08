@@ -1,0 +1,200 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les nombres réels (coupures de Dedekind)"
+chapter: reels-dedekind
+description: "Combler les trous de ℚ : une coupure définit un réel. √2 enfin construit, et la complétude de ℝ."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import DedekindCut from '../../../components/interactive/DedekindCut.astro';
+
+## Le dernier pas : combler les trous de ℚ
+
+Nous voici au bout d'un long voyage. Parti du vide, nous avons construit $\mathbb{N}$, puis $\mathbb{Z}$ (les paires d'entiers, modulo « même différence »), puis $\mathbb{Q}$ (les fractions, modulo « même rapport »). À chaque étape, une seule règle du jeu : **ne rien admettre**. Tout fut déduit des axiomes <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>, à partir des <Prereq href="/maths/partie-ii/entiers-naturels">entiers naturels</Prereq>.
+
+Et pourtant $\mathbb{Q}$, si dense, si confortable, cache un défaut béant. Ce chapitre le révèle, puis le répare — **toujours sans nouvel axiome**.
+
+<Encart type="intuition" titre="L'image à garder en tête">
+Imaginez la droite des rationnels comme une règle graduée infiniment fine. Entre deux rationnels, il y en a toujours un autre : on ne voit aucun « blanc ». Et pourtant la règle est **criblée de trous invisibles**. À l'endroit précis où devrait se trouver $\sqrt{2}$, il n'y a... rien. La matière rationnelle s'arrête juste avant, et reprend juste après, sans jamais toucher le point. Notre mission : fabriquer ce point manquant à partir de ce qui l'entoure.
+</Encart>
+
+### 1. $\mathbb{Q}$ est troué : $\sqrt{2}$ n'existe pas dans $\mathbb{Q}$
+
+L'équation $x^2 = 2$ a une solution géométrique évidente — la diagonale du carré de côté $1$. Mais cette solution n'est aucun rationnel.
+
+<Encart type="calcul" titre="Démonstration : √2 est irrationnel">
+
+Raisonnons **par l'absurde**. Supposons qu'il existe $x \in \mathbb{Q}$ tel que $x^2 = 2$, avec $x > 0$.
+
+**Étape 1.** Tout rationnel positif s'écrit sous forme irréductible $x = \dfrac{p}{q}$ avec $p, q \in \mathbb{N}^*$ et $\gcd(p,q) = 1$. (Existence et unicité de la forme irréductible : conséquence de la division euclidienne dans $\mathbb{Z}$.)
+
+**Étape 2.** De $x^2 = 2$ on tire :
+
+$$
+\frac{p^2}{q^2} = 2 \quad\Longrightarrow\quad p^2 = 2\,q^2.
+$$
+
+**Étape 3.** Donc $p^2$ est pair. Or le carré d'un impair est impair : si $p = 2k+1$, alors $p^2 = 4k^2 + 4k + 1$ est impair. Par contraposée, $p^2$ pair force $p$ **pair**. Écrivons $p = 2m$.
+
+**Étape 4.** Reportons : $(2m)^2 = 2q^2$, soit $4m^2 = 2q^2$, donc
+
+$$
+q^2 = 2\,m^2.
+$$
+
+**Étape 5.** Par le même argument qu'à l'étape 3, $q$ est **pair**.
+
+**Étape 6.** Ainsi $p$ et $q$ sont tous deux pairs, donc $2 \mid \gcd(p,q)$. Cela contredit $\gcd(p,q) = 1$.
+
+L'hypothèse était absurde.
+
+<Resultat label="Irrationalité de √2">
+
+$$
+\nexists\, x \in \mathbb{Q},\quad x^2 = 2.
+$$
+
+<Badge niveau="demontre" slot="badge">Démontrée par l'absurde, argument de parité — vérité mathématique certaine.</Badge>
+</Resultat>
+
+</Encart>
+
+Le trou est donc réel. Il nous faut une procédure générale pour le combler — et tous les autres trous du même genre.
+
+### 2. La coupure de Dedekind
+
+L'idée géniale de Dedekind (1872) : **pour désigner un point de la droite, il suffit de dire tout ce qui est strictement à sa gauche.** Un nombre n'a pas besoin d'« exister » au préalable ; il *est* l'ombre qu'il projette sur les rationnels.
+
+<Encart type="rappel" titre="Définition (c'est une définition dans ZF — rien n'est admis)">
+
+Une **coupure de Dedekind** est un sous-ensemble $A \subseteq \mathbb{Q}$ vérifiant :
+
+1. $A \neq \varnothing$ et $A \neq \mathbb{Q}$ (non triviale) ;
+2. **close vers le bas** : si $q \in A$ et $q' < q$, alors $q' \in A$ ;
+3. **sans plus grand élément** : pour tout $q \in A$, il existe $q'' \in A$ avec $q'' > q$.
+
+Insistons : ceci est une **définition**, pas une hypothèse. On ne *postule* rien — on nomme un certain type de sous-ensemble de $\mathbb{Q}$, objet dont l'existence est déjà garantie par ZF.
+
+</Encart>
+
+La condition 2 dit que $A$ est un « demi-axe gauche ». La condition 3 interdit à $A$ de s'arrêter *sur* un rationnel — sinon ce rationnel serait son maximum. Une coupure désigne donc soit un rationnel « par en dessous », soit un point que $\mathbb{Q}$ n'atteint pas.
+
+<Badge niveau="demontre">Objet purement ensembliste : une coupure est un élément de $\mathcal{P}(\mathbb{Q})$, dont l'existence est garantie par l'axiome des parties de ZF. Aucune hypothèse nouvelle.</Badge>
+
+### 3. Définition de $\mathbb{R}$ et le point manquant
+
+On **pose** :
+
+$$
+\mathbb{R} := \{\, A \subseteq \mathbb{Q} \ :\ A \text{ est une coupure de Dedekind} \,\}.
+$$
+
+C'est tout. $\mathbb{R}$ n'est rien d'autre que l'ensemble des coupures — un sous-ensemble de $\mathcal{P}(\mathbb{Q})$, donc un objet légitime de ZF.
+
+Voyons maintenant comment ce dispositif **comble** le trou de $\sqrt 2$. Considérons :
+
+$$
+A_{\sqrt 2} := \{\, q \in \mathbb{Q} \ :\ q < 0 \ \text{ou} \ q^2 < 2 \,\}.
+$$
+
+<Encart type="plusloin" titre="Vérification : A_√2 est bien une coupure SANS maximum">
+
+**Non triviale.** $-1 \in A_{\sqrt2}$ (car $-1 < 0$), donc $A \neq \varnothing$. Et $2 \notin A_{\sqrt2}$ (car $2 \geq 0$ et $2^2 = 4 \geq 2$), donc $A \neq \mathbb{Q}$.
+
+**Close vers le bas.** Soit $q \in A_{\sqrt2}$ et $q' < q$. Si $q' < 0$, c'est gagné. Sinon $0 \le q' < q$, donc $q'^2 < q^2$. Comme $q \in A$ et $q \ge 0$, on a $q^2 < 2$, d'où $q'^2 < 2$ : $q' \in A$.
+
+**Sans plus grand élément.** Soit $q \in A_{\sqrt2}$ avec $q > 0$ (le cas $q \le 0$ est immédiat : on peut toujours monter jusqu'à un petit rationnel strictement positif, lui-même dans $A$). On cherche un rationnel $\varepsilon > 0$ tel que $(q+\varepsilon)^2 < 2$. Développons :
+
+$$
+(q+\varepsilon)^2 = q^2 + \varepsilon\,(2q + \varepsilon).
+$$
+
+Imposons d'abord $\varepsilon \le 1$ ; alors $2q + \varepsilon \le 2q + 1$, donc
+
+$$
+(q+\varepsilon)^2 \le q^2 + \varepsilon\,(2q+1).
+$$
+
+Posons maintenant le rationnel
+
+$$
+\varepsilon = \min\!\left(1,\ \frac{2 - q^2}{2q+2}\right) > 0 \quad (\text{car } q^2 < 2).
+$$
+
+Comme $\dfrac{2q+1}{2q+2} < 1$ et $\varepsilon \le \dfrac{2 - q^2}{2q+2}$, on obtient l'inégalité **stricte**
+
+$$
+\varepsilon\,(2q+1) \ \le\ \frac{2 - q^2}{2q+2}\,(2q+1) \ <\ 2 - q^2.
+$$
+
+D'où $(q+\varepsilon)^2 \le q^2 + \varepsilon(2q+1) < q^2 + (2 - q^2) = 2$. Donc $q + \varepsilon \in A$ et $q + \varepsilon > q$ : aucun $q$ n'est maximal.
+
+$A_{\sqrt2}$ a donc tous les rationnels « en dessous de $\sqrt2$ » mais aucun maximum : elle bouche exactement le trou. $\quad\blacksquare$
+
+</Encart>
+
+Manipulez vous-même la coupure pour voir le point naître du vide :
+
+<DedekindCut />
+
+<Badge niveau="demontre">$A_{\sqrt2} \in \mathbb{R}$ et $(A_{\sqrt2})^2 = 2$ pour la multiplication des coupures : le nombre absent de $\mathbb{Q}$ est présent dans $\mathbb{R}$.</Badge>
+
+### 4. L'ordre et la propriété qui justifie tout
+
+On ordonne les coupures par **inclusion** :
+
+$$
+A \le B \quad\Longleftrightarrow\quad A \subseteq B.
+$$
+
+C'est naturel : être « plus à gauche » sur la droite, c'est avoir une ombre plus petite. Cet ordre est **total** : de deux coupures distinctes, l'une contient strictement l'autre.
+
+<Badge niveau="demontre">Ordre total déduit de la définition : si $A \not\subseteq B$, un $q \in A \setminus B$ minore $B$ tout entier (clôture vers le bas de $A$), donc $B \subseteq A$.</Badge>
+
+Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}$.
+
+<Encart type="calcul" titre="Théorème : ℝ est complet (borne sup)">
+
+**Énoncé.** Toute partie $\mathcal{S} \subseteq \mathbb{R}$ non vide et **majorée** admet une borne supérieure dans $\mathbb{R}$.
+
+**Construction.** Posons $U := \bigcup_{A \in \mathcal S} A \subseteq \mathbb{Q}$ (la réunion des coupures).
+
+**Étape 1 — non triviale.** $\mathcal S \neq \varnothing$ donne un $A_0 \in \mathcal S$ non vide, donc $U \supseteq A_0 \neq \varnothing$. Comme $\mathcal S$ est majorée par une coupure $M$, chaque $A \subseteq M$, donc $U \subseteq M \neq \mathbb{Q}$.
+
+**Étape 2 — close vers le bas.** Si $q \in U$ et $q' < q$ : $q$ appartient à un certain $A$, qui est clos vers le bas, donc $q' \in A \subseteq U$.
+
+**Étape 3 — sans maximum.** Si $q \in U$, alors $q \in A$ pour un $A$ sans maximum : il existe $q'' \in A \subseteq U$ avec $q'' > q$.
+
+Donc $U$ est **une coupure**. C'est le plus petit majorant (tout majorant contient chaque $A$, donc contient $U$).
+
+<Resultat label="Complétude de ℝ">
+
+$$
+\sup \mathcal{S} \ =\ \bigcup_{A \in \mathcal S} A \ \in\ \mathbb{R}.
+$$
+
+<Badge niveau="demontre" slot="badge">Théorème démontré. C'est la propriété de la borne supérieure — l'essence de $\mathbb{R}$.</Badge>
+</Resultat>
+
+</Encart>
+
+Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{q : q^2 < 2\}$ est non vide et majoré, mais **n'a pas de borne supérieure rationnelle** : sa « limite » serait $\sqrt2$, qui n'existe pas. Le trou, c'était exactement *l'absence de borne sup*. En passant aux coupures, chaque borne sup manquante devient l'objet $U$ — et $\mathbb{R}$ devient le continuum sans faille.
+
+### Le parcours est bouclé
+
+Récapitulons le chemin, entièrement déductif :
+
+$$
+\varnothing \ \rightsquigarrow\ \mathbb{N} \ \rightsquigarrow\ \mathbb{Z} \ \rightsquigarrow\ \mathbb{Q} \ \rightsquigarrow\ \mathbb{R}.
+$$
+
+À aucun moment nous n'avons posé d'axiome supplémentaire : ni les entiers, ni les fractions, ni les coupures n'exigent autre chose que <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>. Contrairement aux chapitres de physique de la Partie I, où l'expérience nous *imposait* de nouvelles hypothèses, ici tout est **pure déduction** — d'où l'absence de tout « tournant ». Le continuum des réels — base de toute l'analyse — est un théorème, pas un postulat.
+
+<Badge niveau="demontre">La construction de $\mathbb{R}$ par coupures est standard depuis Dedekind (1872) et entièrement formalisée dans ZF.</Badge>
+
+Munis de ce sol ferme, nous pouvons enfin faire de l'analyse : limites, continuité, dérivées — c'est le sujet du prochain chapitre.

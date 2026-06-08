@@ -1,0 +1,66 @@
+---
+/**
+ * Encadré « Résultat » — met en valeur un résultat important (formule encadrée).
+ *
+ * Usage :
+ *   <Resultat label="Dilatation du temps">
+ *     $$ \Delta t = \gamma\, \Delta t_0 $$
+ *   </Resultat>
+ *
+ * Un badge de fiabilité peut être passé en attribut `badge` (slot nommé) ou placé
+ * juste après dans le texte.
+ */
+interface Props {
+  label?: string;
+}
+const { label = 'Résultat' } = Astro.props;
+const hasBadge = await Astro.slots.has('badge');
+---
+
+<div class="resultat" role="figure" aria-label={label}>
+  <div class="ribbon">
+    <span aria-hidden="true">★</span> {label}
+    {hasBadge && <span class="badge-slot"><slot name="badge" /></span>}
+  </div>
+  <div class="content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .resultat {
+    margin: 1.6em 0;
+    border: 1.5px solid color-mix(in srgb, var(--c-yellow) 55%, var(--c-border));
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--c-yellow) 7%, var(--c-bg-elev));
+    overflow: hidden;
+  }
+  .ribbon {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    padding: 0.45em 1em;
+    background: color-mix(in srgb, var(--c-yellow) 16%, transparent);
+    color: var(--c-yellow);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid color-mix(in srgb, var(--c-yellow) 30%, var(--c-border));
+  }
+  .badge-slot {
+    margin-left: auto;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+  .content {
+    padding: 0.3em 1.1em;
+  }
+  .content :global(.katex-display) {
+    margin: 0.8em 0;
+  }
+  .content :global(.katex) {
+    font-size: 1.18em;
+  }
+</style>

@@ -1,0 +1,120 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Matière noire et énergie noire"
+chapter: matiere-noire
+description: "95 % de l'Univers nous échappe : deux énigmes distinctes."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import OpenProblemsMap from '../../../components/interactive/OpenProblemsMap.astro';
+
+## Deux énigmes dans le noir
+
+Imagine que tu pèses une voiture en la regardant rouler : tu mesures son accélération, tu connais les forces, tu en déduis sa masse. Maintenant fais-le avec une galaxie entière. Quand les astronomes ont fait ce calcul, ils ont eu un choc : les galaxies se comportent comme si elles contenaient **bien plus de masse** que toute la matière visible. Et quand ils ont mesuré comment l'Univers grandit, ils ont eu un second choc, totalement indépendant. Deux mystères, deux noms — **matière noire** et **énergie noire** — qu'il ne faut surtout pas confondre.
+
+<Encart type="intuition" titre="Ne pas mélanger les deux">
+La **matière noire** est de la *masse* en trop : elle attire, elle freine, elle structure. L'**énergie noire** fait l'inverse : elle *pousse*, elle accélère l'expansion. L'une est un problème de gravité manquante à l'échelle des galaxies (et des amas) ; l'autre, un problème de répulsion à l'échelle de l'Univers entier. Rien ne dit qu'elles ont la même cause.
+</Encart>
+
+Pour comprendre, on s'appuie sur deux résultats déjà posés ailleurs : la liste des particules connues via <Prereq href="/physique/partie-iv/vue-ensemble">le Modèle Standard</Prereq>, et la loi qui régit l'attraction des masses via <Prereq href="/physique/partie-v/gravitation">la gravitation</Prereq>.
+
+## Énigme n°1 : la matière noire
+
+### Les galaxies tournent « trop vite »
+
+Dans le Système solaire, plus une planète est loin du Soleil, plus elle est lente : Neptune se traîne par rapport à Mercure. C'est ce que prédit la gravitation quand presque toute la masse est concentrée au centre.
+
+<Encart type="rappel" titre="Force centripète d'un mouvement circulaire">
+Un corps de masse $m$ qui décrit un cercle de rayon $r$ à la vitesse $v$ ne va pas en ligne droite : sa vitesse change de *direction* en permanence. Il subit donc une accélération dirigée vers le centre, l'**accélération centripète** $a = \dfrac{v^2}{r}$. D'après la deuxième loi de Newton, cela exige une force, elle aussi dirigée vers le centre, de norme $F = m\,a = \dfrac{m\,v^2}{r}$. C'est exactement le rôle que joue ici la gravitation.
+</Encart>
+
+<Encart type="calcul" titre="Pourquoi la vitesse devrait diminuer avec la distance">
+**Étape 1.** On suppose la masse à symétrie sphérique. Une étoile de masse $m$ en orbite circulaire à la distance $r$ du centre ne ressent alors que la masse $M(r)$ située à l'intérieur de son orbite (théorème du *shell* : une coquille externe n'exerce aucune force nette). La force gravitationnelle vaut :
+
+$$ F = \frac{G\,M(r)\,m}{r^2}. $$
+
+**Étape 2.** Cette force joue le rôle de force centripète, donc $F = \dfrac{m\,v^2}{r}$. On égalise :
+
+$$ \frac{G\,M(r)\,m}{r^2} = \frac{m\,v^2}{r}. $$
+
+**Étape 3.** On simplifie par $m$ (présent des deux côtés), puis par un facteur $r$, ce qui donne $v^2 = \dfrac{G\,M(r)}{r}$. On isole la vitesse :
+
+$$ v(r) = \sqrt{\frac{G\,M(r)}{r}}. $$
+
+**Étape 4.** Loin du cœur lumineux d'une galaxie, presque plus aucune étoile : la masse $M(r)$ devrait être quasi constante (notons-la $M$). Alors $v(r) \propto 1/\sqrt{r}$ : la vitesse devrait **décroître**.
+
+$$ \boxed{v(r) \approx \sqrt{\tfrac{G\,M}{r}} \;\longrightarrow\; \text{décroît quand } r \text{ augmente.}} $$
+
+</Encart>
+
+Or l'observation dit le contraire. En mesurant le décalage Doppler du gaz et des étoiles, on trace la **courbe de rotation** : la vitesse reste à peu près *plate*, voire augmente, bien au-delà des étoiles visibles. <Badge niveau="etabli">Mesuré pour des centaines de galaxies depuis les travaux de Vera Rubin et Kent Ford (années 1970) ; l'observation Doppler elle-même est robuste.</Badge>
+
+Pour que $v(r)$ reste constante, il faut, d'après l'étape 3, que $M(r)$ continue de croître proportionnellement à $r$ là où il n'y a plus de lumière. L'interprétation retenue : une masse **invisible** entoure les galaxies dans un vaste halo. <Badge niveau="modelise">L'observation est solide, mais conclure à une *masse manquante* est déjà une interprétation dans le cadre de la gravitation newtonienne/relativiste ; quelques modèles alternatifs (gravité modifiée) la contestent encore.</Badge>
+
+### Quatre indices indépendants pointent dans le même sens
+
+| Observation | Ce qu'on voit |
+|---|---|
+| Courbes de rotation | Galaxies tournant trop vite en périphérie |
+| Lentilles gravitationnelles | La lumière des galaxies lointaines est déviée par une masse qu'on ne voit pas |
+| Amas de galaxies | Les galaxies y filent trop vite pour rester liées sans masse cachée |
+| Fond diffus cosmologique | Les fluctuations du rayonnement fossile exigent une matière qui n'interagit pas avec la lumière |
+
+<Badge niveau="modelise">Quatre sondes indépendantes (gravité, optique, dynamique, cosmologie) convergent ; l'*interprétation* en termes de masse manquante est un modèle, pas une vision directe.</Badge>
+
+La lentille gravitationnelle est particulièrement parlante : la <Prereq href="/physique/partie-v/gravitation">gravitation</Prereq> courbe les trajectoires de la lumière, et on mesure une déviation trop forte pour la matière visible seule. <Badge niveau="etabli">La déviation de la lumière par une masse est elle-même un effet vérifié de longue date (éclipse de 1919) ; ici, c'est son *ampleur* qui trahit une masse invisible.</Badge>
+
+### Mais de quoi est-elle faite ?
+
+Et là, l'honnêteté s'impose. Cette matière **n'émet, n'absorbe ni ne réfléchit la lumière** — d'où « noire ». Aucune particule du <Prereq href="/physique/partie-iv/vue-ensemble">Modèle Standard</Prereq> ne convient : ce ne sont ni des étoiles éteintes, ni du gaz, ni des neutrinos en quantité suffisante. On a proposé des candidats — les **WIMPs** (particules massives interagissant faiblement), les **axions** — mais aucun détecteur ne les a jamais attrapés. <Badge niveau="ouvert">Ces candidats sortent tous du Modèle Standard : ce sont des hypothèses théoriques, à ce jour sans confirmation expérimentale.</Badge>
+
+<Resultat label="Matière noire">
+
+$$ \text{Effet gravitationnel : réel} \quad\Longrightarrow\quad \text{Nature : inconnue} $$
+
+<Badge niveau="ouvert" slot="badge">Aucune particule détectée à ce jour ; tous les candidats restent hypothétiques.</Badge>
+</Resultat>
+
+## Énigme n°2 : l'énergie noire
+
+### L'expansion s'accélère
+
+On savait depuis Hubble que l'Univers est en expansion. On s'attendait à ce que la gravité **freine** cette expansion : toute cette masse devrait se ralentir mutuellement. En 1998, deux équipes mesurent la distance de **supernovae de type Ia** très lointaines — des « chandelles standard » dont on connaît la luminosité réelle. <Badge niveau="etabli">L'expansion de l'Univers (loi de Hubble-Lemaître) est un fait observé depuis 1929.</Badge>
+
+<Encart type="rappel" titre="Chandelle standard">
+Une supernova de type Ia explose toujours avec à peu près la même énergie. Si on connaît la luminosité réelle d'un objet et qu'on mesure sa luminosité apparente, on en déduit sa distance — comme estimer l'éloignement d'un phare dont on connaît la puissance. Plus un objet est loin, plus il paraît faible.
+</Encart>
+
+Surprise : ces supernovae sont **plus loin, donc plus faibles**, que ce qu'on attendait pour leur décalage vers le rouge. L'expansion ne ralentit pas — elle **accélère**. <Badge niveau="etabli">Prix Nobel de physique 2011 (Perlmutter, Schmidt, Riess) ; confirmé depuis par le fond diffus et la distribution des galaxies.</Badge>
+
+### La cause ? Un grand point d'interrogation
+
+Pour accélérer l'expansion, il faut une forme d'énergie au comportement **répulsif**, présente partout, même dans le vide. L'hypothèse la plus simple est la **constante cosmologique** $\Lambda$ — une énergie du vide constante. Mais quand on essaie de la calculer à partir de la physique quantique, on tombe à côté par un facteur gigantesque (des dizaines d'ordres de grandeur). On observe donc parfaitement *l'effet*, et on ignore *la cause*.
+
+<Resultat label="Énergie noire">
+
+$$ \text{Accélération de l'expansion : observée} \quad\Longrightarrow\quad \text{Nature : inconnue} $$
+
+<Badge niveau="etabli" slot="badge">L'accélération est solidement observée (Nobel 2011).</Badge>
+<Badge niveau="ouvert" slot="badge">Sa nature — constante $\Lambda$ ou autre chose ? — reste totalement ouverte.</Badge>
+</Resultat>
+
+## Le bilan : nous sommes minoritaires
+
+En combinant toutes ces mesures, la cosmologie établit la composition de l'Univers :
+
+$$ \underbrace{\approx 5\,\%}_{\text{matière ordinaire}} \;+\; \underbrace{\approx 27\,\%}_{\text{matière noire}} \;+\; \underbrace{\approx 68\,\%}_{\text{énergie noire}} \;=\; 100\,\%. $$
+
+<Badge niveau="modelise">Pourcentages *mesurés* (fond diffus Planck, supernovae, grandes structures), mais dans le cadre du modèle cosmologique standard ; valeurs cohérentes entre sondes indépendantes.</Badge>
+
+Tout ce que décrit le <Prereq href="/physique/partie-iv/vue-ensemble">Modèle Standard des particules</Prereq> — les étoiles, les planètes, toi, ce texte — ne représente que **5 %** du contenu de l'Univers. Les 95 % restants se manifestent uniquement par leur **gravité** ou leur **effet sur l'expansion** : on connaît leurs effets avec précision, mais leur nature nous échappe encore.
+
+Ces deux énigmes ne sont d'ailleurs que deux cases d'une carte plus large : voici, par niveau de fiabilité, ce que la physique tient pour acquis et ce qui lui résiste encore.
+
+<OpenProblemsMap />
+
+Deux énigmes distinctes, donc, et la même leçon d'humilité : la relativité et la gravitation nous disent *qu'il manque quelque chose* et *combien*, mais pas *quoi*. C'est précisément ce que viennent traquer les expériences et télescopes de la décennie — et l'objet du prochain chapitre, où nous regarderons comment on espère, enfin, percer le noir.

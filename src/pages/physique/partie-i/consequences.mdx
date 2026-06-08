@@ -1,0 +1,292 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Conséquences directes : simultanéité, dilatation du temps, contraction des longueurs"
+chapter: consequences
+description: Trois bouleversements démontrés à partir des seuls postulats — dont la dilatation du temps, prouvée par l'horloge à lumière.
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import LightClock from '../../../components/interactive/LightClock.astro';
+import LorentzSlider from '../../../components/interactive/LorentzSlider.astro';
+
+Nous n’admettons sur cette page que **deux choses** : les deux postulats d’Einstein. Tout le
+reste — le fait que le temps se dilate, que les longueurs se contractent, que la simultanéité
+n’est pas absolue — va en **découler**, par des raisonnements et des calculs que nous
+détaillerons entièrement. C’est le moment où la physique cesse d’être « du bon sens » et devient
+surprenante… tout en restant parfaitement logique.
+
+<Hypotheses titre="Hypothèses de départ (les deux postulats)">
+1. **Principe de relativité.** Les lois de la physique sont les mêmes dans tous les référentiels galiléens (en translation rectiligne uniforme les uns par rapport aux autres). Aucun n’est « le vrai référentiel immobile ».
+2. **Invariance de la vitesse limite.** Il existe une vitesse $c$ identique dans tous ces référentiels. La lumière dans le vide se propage à cette vitesse, quelle que soit la vitesse de la source ou de l’observateur.
+
+Ces deux énoncés sont posés et discutés au chapitre précédent : <Prereq href="/physique/partie-i/postulats">les deux postulats d’Einstein</Prereq>. Ici, on s’en sert — et de rien d’autre.
+</Hypotheses>
+
+Le second postulat est le grain de sable. Dans la vie courante, les vitesses s’additionnent :
+si vous marchez à 5 km/h dans un train à 100 km/h, le sol vous voit à 105 km/h. Le postulat 2
+dit que **la lumière refuse ce jeu** : elle file à $c$ pour tout le monde. Quelque chose doit
+donc céder. Ce « quelque chose », nous allons le voir, c’est notre idée d’un **temps universel**.
+
+## La relativité de la simultanéité
+
+Premier choc : **deux événements simultanés pour un observateur ne le sont pas forcément pour
+un autre.**
+
+<Encart type="intuition" titre="L'expérience du wagon d'Einstein">
+Imaginez un wagon filant à grande vitesse. En son **milieu exact**, une lampe s’allume et envoie
+de la lumière vers l’avant et vers l’arrière du wagon.
+
+- **Pour une voyageuse assise dans le wagon**, la lampe est à égale distance des deux extrémités.
+  La lumière, allant à $c$ dans les deux sens, atteint l’avant et l’arrière **en même temps**.
+- **Pour un observateur sur le quai**, pendant que la lumière voyage, l’arrière du wagon
+  « avance vers » le rayon qui va vers l’arrière, tandis que l’avant « fuit » le rayon qui va vers
+  l’avant. Comme la lumière va à $c$ pour lui aussi (postulat 2 !), elle atteint **l’arrière
+  avant l’avant**.
+
+Mêmes rayons, mêmes faits — mais l’ordre « simultané / pas simultané » change selon
+l’observateur. La simultanéité est **relative**.
+</Encart>
+
+Ce résultat n’est pas un détail : c’est lui qui rend les deux suivants possibles sans
+contradiction. Sa mise en équation complète utilise les <Prereq href="/physique/partie-i/transformations-lorentz">transformations de Lorentz</Prereq>, que nous démontrerons plus loin. <Badge niveau="etabli">La relativité de la simultanéité est une conséquence directe et vérifiée des postulats ; elle est confirmée par toute la cohérence expérimentale de la relativité restreinte.</Badge>
+
+## La dilatation du temps
+
+Voici le résultat-phare, et nous allons le **démontrer entièrement** avec une seule
+expérience de pensée : l’**horloge à lumière**.
+
+<Encart type="intuition" titre="L'idée en une image">
+Construisons l’horloge la plus simple possible : deux miroirs face à face, et un photon qui
+rebondit entre eux. Un aller-retour = un « tic-tac ». Comme le photon va toujours à $c$, le
+tic-tac dure un temps fixe… **tant que l’horloge ne bouge pas**.
+
+Mettez maintenant l’horloge en mouvement. Vue du quai, le photon ne monte plus tout droit : il
+suit une **diagonale**, donc un chemin **plus long**. À la même vitesse $c$, parcourir plus long
+prend plus de temps. Donc, vue du quai, **l’horloge en mouvement bat plus lentement.** Et comme
+les lois sont les mêmes pour toutes les horloges (postulat 1), c’est *le temps lui-même* qui
+ralentit pour l’objet en mouvement.
+</Encart>
+
+### On la regarde
+
+La vidéo ci-dessous « raconte » l’horloge à lumière, puis le composant interactif vous laisse
+manipuler la vitesse vous-même : montez $\beta = v/c$ et regardez le trajet du photon s’allonger
+et le tic-tac mobile prendre du retard.
+
+<VideoManim
+  src="light-clock"
+  scene="LightClock"
+  titre="L'horloge à lumière"
+  legende="Le photon d'une horloge en mouvement suit une diagonale plus longue : son tic-tac dure donc plus longtemps, vu du laboratoire."
+/>
+
+<LightClock />
+
+### On la démontre
+
+Notons les grandeurs proprement, puis calculons. Tout repose sur **un triangle rectangle** et le
+**théorème de Pythagore** — plus **une seule hypothèse géométrique** : que la hauteur $L$ entre les
+miroirs (perpendiculaire au mouvement) soit **identique dans les deux référentiels**. C'est le seul
+point que la démonstration *admet* sans le prouver directement ; justifions-le d'abord, par un
+argument de symétrie.
+
+<Encart type="plusloin" titre="Pourquoi la hauteur L ne se contracte pas (les longueurs transverses sont invariantes)">
+
+L'idée : les longueurs **perpendiculaires** au mouvement ne peuvent ni se contracter ni s'allonger,
+sous peine de contradiction logique avec le principe de relativité (postulat 1).
+
+**L'expérience de pensée.** Prenons deux anneaux **identiques au repos** (même diamètre), montés
+perpendiculairement à la direction du mouvement, et faisons-les foncer l'un vers l'autre le long de
+leur axe commun, à grande vitesse.
+
+**Le raisonnement par l'absurde.** Supposons que la longueur transverse *se contracte* avec la vitesse.
+
+- Dans le référentiel de l'anneau A, c'est B qui bouge : A le verrait donc **plus petit**, et B
+  passerait *à l'intérieur* de A.
+- Mais le postulat 1 interdit tout référentiel privilégié : la situation est **parfaitement
+  symétrique**. Dans le référentiel de B, c'est donc A qui paraît plus petit, et A passerait *à
+  l'intérieur* de B.
+
+Les deux conclusions sont **incompatibles** : au croisement, soit l'anneau B raye la face interne de
+A, soit l'inverse — pas les deux. Or « qui raye qui » est un **fait physique** sur lequel tous les
+observateurs doivent s'accorder. La seule issue cohérente est que les anneaux passent **exactement
+l'un dans l'autre** : la longueur transverse **ne change pas**. (Le même argument exclut un
+allongement.)
+
+**Conclusion.** Perpendiculairement au mouvement, les longueurs sont **invariantes**. C'est ce qui
+autorise à garder le même $L$ dans les deux référentiels. <Badge niveau="etabli">Conséquence directe du principe de relativité ; c'est aussi pourquoi seule la dimension *parallèle* à la vitesse se contracte.</Badge>
+</Encart>
+
+<Encart type="rappel" titre="Théorème de Pythagore">
+Dans un triangle rectangle, le carré de l’hypoténuse (le plus grand côté, opposé à l’angle droit)
+est égal à la somme des carrés des deux autres côtés :
+
+$$ \text{hypoténuse}^2 = \text{côté}_1^2 + \text{côté}_2^2. $$
+</Encart>
+
+<Encart type="calcul" titre="Démonstration de la dilatation du temps, ligne à ligne">
+
+**Mise en place.** Soit $L$ la distance entre les deux miroirs. On note :
+- $\Delta t_0$ : durée d’un aller-retour mesurée **dans le référentiel de l’horloge** (où elle est immobile) — le *temps propre* ;
+- $\Delta t$ : durée du même aller-retour mesurée **depuis le laboratoire**, où l’horloge se déplace à la vitesse $v$.
+
+**Étape 1 — l’horloge au repos.** Le photon parcourt $2L$ (montée + descente) à la vitesse $c$ :
+
+$$ \Delta t_0 = \frac{2L}{c}. \qquad (1) $$
+
+**Étape 2 — l’horloge en mouvement, vue du labo.** Pendant la durée $\Delta t$, l’horloge avance
+horizontalement de $v\,\Delta t$. Par symétrie, sur une **demi-période** $\dfrac{\Delta t}{2}$,
+elle avance de $v\dfrac{\Delta t}{2}$, tandis que le photon monte de la hauteur $L$. Le photon
+suit donc l’hypoténuse d’un triangle rectangle de côtés $L$ (vertical) et $v\dfrac{\Delta t}{2}$
+(horizontal).
+
+**Étape 3 — Pythagore.** La longueur de cette hypoténuse est
+
+$$ \sqrt{L^2 + \left(v\frac{\Delta t}{2}\right)^2}. $$
+
+Mais le photon va à la vitesse $c$ : en une demi-période $\dfrac{\Delta t}{2}$, il parcourt
+$c\dfrac{\Delta t}{2}$. Ces deux expressions décrivent **la même longueur** :
+
+$$ c\,\frac{\Delta t}{2} = \sqrt{L^2 + \left(v\frac{\Delta t}{2}\right)^2}. \qquad (2) $$
+
+**Étape 4 — on élève au carré** (pour supprimer la racine) :
+
+$$ c^2\,\frac{\Delta t^2}{4} = L^2 + v^2\,\frac{\Delta t^2}{4}. $$
+
+**Étape 5 — on regroupe les termes en $\Delta t^2$** à gauche :
+
+$$ c^2\,\frac{\Delta t^2}{4} - v^2\,\frac{\Delta t^2}{4} = L^2 \;\Longrightarrow\; (c^2 - v^2)\,\frac{\Delta t^2}{4} = L^2. $$
+
+**Étape 6 — on isole $\Delta t^2$**, puis $\Delta t$ :
+
+$$ \Delta t^2 = \frac{4L^2}{c^2 - v^2} \;\Longrightarrow\; \Delta t = \frac{2L}{\sqrt{c^2 - v^2}}. $$
+
+**Étape 7 — on fait apparaître $\dfrac{2L}{c}$**, c’est-à-dire $\Delta t_0$ d’après $(1)$. On
+factorise $c^2$ sous la racine :
+
+$$ \sqrt{c^2 - v^2} = \sqrt{c^2\left(1 - \frac{v^2}{c^2}\right)} = c\,\sqrt{1 - \frac{v^2}{c^2}}. $$
+
+Donc
+
+$$ \Delta t = \frac{2L}{c\,\sqrt{1 - \dfrac{v^2}{c^2}}} = \underbrace{\frac{2L}{c}}_{=\,\Delta t_0}\cdot \frac{1}{\sqrt{1 - \dfrac{v^2}{c^2}}}. $$
+
+**Conclusion.** En posant le **facteur de Lorentz** $\displaystyle \gamma = \frac{1}{\sqrt{1 - v^2/c^2}}$ :
+
+$$ \boxed{\;\Delta t = \gamma\,\Delta t_0\;} \qquad \text{avec } \gamma \ge 1. $$
+
+Comme $\gamma \ge 1$, on a toujours $\Delta t \ge \Delta t_0$ : la durée mesurée pour l’horloge en
+mouvement est **plus longue**. L’horloge mobile bat plus lentement. ∎
+</Encart>
+
+<Resultat label="Dilatation du temps">
+$$ \Delta t = \gamma\,\Delta t_0, \qquad \gamma = \frac{1}{\sqrt{1 - v^2/c^2}} \ge 1. $$
+Une horloge en mouvement bat plus lentement, d’un facteur $\gamma$, que la même horloge au repos.
+<Badge niveau="etabli" slot="badge">Mesuré directement : muons atmosphériques, horloges atomiques en avion, GPS.</Badge>
+</Resultat>
+
+Le nombre $\gamma$ apparaît partout en relativité ; nous lui consacrons la <Prereq href="/physique/partie-i/lorentz-gamma">page suivante</Prereq>. Pour l’instant, manipulez-le : voyez comme il reste ≈ 1 aux vitesses ordinaires, et explose près de $c$.
+
+<LorentzSlider />
+
+### Ce n'est pas une illusion : trois preuves expérimentales
+
+<Encart type="plusloin" titre="Muons, horloges atomiques, GPS">
+
+- **Les muons cosmiques.** Les muons, créés à ~15 km d’altitude par les rayons cosmiques, ont une
+  durée de vie moyenne au repos de ~2,2 µs. Même à une vitesse proche de $c$, sans relativité ils
+  ne devraient parcourir que ~660 m avant de se désintégrer — donc ne jamais atteindre le sol. Or
+  on les détecte en abondance au niveau de la mer : leur « horloge interne » bat au ralenti
+  ($\gamma \approx 9$ pour les muons typiques), ce qui multiplie leur portée. <Badge niveau="etabli">Mesuré dès 1941 (Rossi–Hall) ; aujourd'hui en TP étudiants.</Badge>
+
+- **Les horloges atomiques voyageuses.** En 1971, l’expérience de Hafele–Keating a embarqué des
+  horloges atomiques dans des avions de ligne : à l’atterrissage, elles affichaient un écart de
+  quelques centaines de nanosecondes par rapport aux horloges restées au sol, conforme au calcul
+  (relativité restreinte **et** générale combinées). <Badge niveau="etabli">Écart prédit et mesuré à mieux que 10 %.</Badge>
+
+- **Le GPS.** Les satellites GPS embarquent des horloges qui se décalent de ~38 µs/jour par rapport
+  au sol (effet combiné vitesse + gravité). Sans correction relativiste, le positionnement
+  dériverait de ~10 km par jour. Votre téléphone applique ces corrections en permanence. <Badge niveau="etabli">La relativité est, littéralement, dans votre poche.</Badge>
+</Encart>
+
+## La contraction des longueurs
+
+Si le temps n’est pas absolu, l’espace ne peut pas l’être non plus. Reprenons les muons : *eux*
+ne « voient » pas leur durée de vie s’allonger (dans leur propre référentiel, ils vivent leurs
+2,2 µs habituelles). Comment atteignent-ils le sol, alors ?
+
+<Encart type="intuition" titre="Le point de vue du muon">
+Pour le muon, c’est **l’atmosphère qui défile** à grande vitesse — et cette épaisseur de 15 km
+lui paraît **contractée**, réduite à moins de 2 km. Une distance assez courte pour qu’il la
+traverse pendant sa courte vie. Les deux points de vue (notre temps dilaté / sa distance
+contractée) décrivent le **même fait** et donnent le même résultat. C’est cette cohérence qui
+fait la force de la théorie.
+</Encart>
+
+<Encart type="calcul" titre="Démonstration de la contraction des longueurs, ligne à ligne">
+
+On veut comparer la longueur d’un trajet mesurée dans deux référentiels. Soit deux points fixes
+dans le référentiel du laboratoire (par ex. « haut de l’atmosphère » et « sol »), séparés par la
+**longueur propre** $L_0$ (propre car mesurée dans le référentiel où ces points sont immobiles).
+Un objet (le muon) les relie à la vitesse $v$.
+
+**Étape 1 — durée du trajet, vue du labo.** L’objet parcourt $L_0$ à la vitesse $v$ :
+
+$$ \Delta t = \frac{L_0}{v}. \qquad (1) $$
+
+**Étape 2 — durée du trajet, vue de l’objet.** Pour l’objet, les deux événements « départ » et
+« arrivée » se produisent **au même endroit** (sur lui) : il mesure donc le *temps propre*
+$\Delta t_0$. D’après la dilatation du temps démontrée plus haut, l’horloge de l’objet (mobile,
+vue du labo) bat au ralenti : le labo voit s’écouler $\Delta t = \gamma\,\Delta t_0$, donc
+
+$$ \Delta t_0 = \frac{\Delta t}{\gamma}. \qquad (2) $$
+
+**Étape 3 — longueur mesurée par l’objet.** Dans le référentiel de l’objet, les deux points
+défilent à la vitesse $v$ et mettent la durée $\Delta t_0$ à passer. La longueur qu’il leur
+attribue est donc
+
+$$ L = v\,\Delta t_0. $$
+
+**Étape 4 — on substitue $(2)$ puis $(1)$ :**
+
+$$ L = v\,\frac{\Delta t}{\gamma} = \frac{v}{\gamma}\cdot \frac{L_0}{v} = \frac{L_0}{\gamma}. $$
+
+**Conclusion.**
+
+$$ \boxed{\;L = \frac{L_0}{\gamma}\;} \qquad (\gamma \ge 1 \Rightarrow L \le L_0). $$
+
+La longueur dans le sens du mouvement est **contractée** d’un facteur $\gamma$. ∎
+</Encart>
+
+<Resultat label="Contraction des longueurs">
+$$ L = \frac{L_0}{\gamma} \le L_0. $$
+Un objet (ou une distance) est mesuré plus court dans le sens du déplacement, du facteur $\gamma$.
+<Badge niveau="etabli" slot="badge">Vérifiée indirectement (les muons atteignent le sol) et par toute la cohérence de la relativité ; mesure directe d'une longueur contractée impossible à notre échelle.</Badge>
+</Resultat>
+
+<Encart type="rappel" titre="Attention : seulement dans le sens du mouvement">
+La contraction ne touche **que** la dimension parallèle à la vitesse. Les dimensions
+perpendiculaires ne changent pas — nous l’avons **démontré plus haut** par l’argument de symétrie
+des deux anneaux. C’est précisément ce qui nous a autorisés à garder la hauteur $L$ identique dans
+les deux référentiels lors de la démonstration de la dilatation du temps : cette étape n’était donc
+pas un point admis en douce, mais un résultat justifié.
+</Encart>
+
+## Ce que nous avons démontré
+
+À partir des **deux seuls postulats**, et avec pour seul outil le théorème de Pythagore, nous
+avons obtenu trois résultats qui ne s’admettent pas — ils se prouvent :
+
+| Effet | Résultat | D’où il vient |
+| --- | --- | --- |
+| Simultanéité | relative à l’observateur | postulat 2 (intuition du wagon) |
+| Dilatation du temps | $\Delta t = \gamma\,\Delta t_0$ | horloge à lumière + Pythagore |
+| Contraction des longueurs | $L = L_0/\gamma$ | dilatation du temps + définition de la vitesse |
+
+Tous trois sont gouvernés par le même nombre, $\gamma$. La page suivante lui est entièrement
+consacrée : d’où vient sa forme exacte, comment il se comporte, et pourquoi il interdit de
+dépasser $c$.

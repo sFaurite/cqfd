@@ -1,0 +1,114 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les particules sans masse"
+chapter: particules-sans-masse
+description: "Masse nulle ⇒ v = c forcément et p = E/c : de l'énergie sans masse."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import MasslessParticle from '../../../components/interactive/MasslessParticle.astro';
+
+## Les particules sans masse
+
+Jusqu'ici, nous avons traité la masse $m$ comme une grandeur bien présente : elle apparaît dans l'énergie de repos $mc^2$, dans l'impulsion $p = \gamma m v$, partout. Mais que se passe-t-il si on pose, brutalement, $m = 0$ ? Une particule sans masse, est-ce seulement possible ? Et si oui, à quelle vitesse va-t-elle ? La réponse est l'une des plus spectaculaires de toute la relativité.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez la masse comme une « inertie », une réticence à bouger. Plus un objet est massif, plus il faut d'énergie pour l'accélérer, et la relativité nous a appris qu'atteindre $c$ demanderait une énergie infinie. Mais retournez le raisonnement : si une particule n'a **aucune** masse, plus rien ne la « retient ». Elle n'a pas le choix — elle file à la vitesse maximale, $c$, et elle ne peut jamais s'arrêter. Une particule sans masse, c'est de l'énergie pure en mouvement perpétuel.
+</Encart>
+
+### Partons de la relation énergie-impulsion
+
+<Prereq href="/physique/partie-ii/e-mc2">La relation fondamentale $E^2 = (mc^2)^2 + (pc)^2$</Prereq> relie l'énergie totale $E$, l'impulsion $p$ et la masse $m$ d'une particule. Posons $m = 0$ :
+
+$$E^2 = (0)^2 + (pc)^2 = (pc)^2.$$
+
+En prenant la racine carrée (l'énergie et l'impulsion étant positives), on obtient une relation d'une simplicité saisissante.
+
+<Resultat label="Énergie d'une particule sans masse">
+
+$$ E = pc \qquad \Longleftrightarrow \qquad p = \frac{E}{c} $$
+
+<Badge niveau="etabli" slot="badge">Vérifiée pour le photon : c'est la base de l'effet photoélectrique et de l'effet Compton, mesurés avec une précision extrême.</Badge>
+</Resultat>
+
+Remarquez déjà quelque chose de crucial : rien n'oblige $E$ à être nulle. On peut parfaitement avoir $E = pc > 0$. **Masse nulle ne veut pas dire énergie nulle.** Nous y reviendrons.
+
+### Démontrons que $v = c$, obligatoirement
+
+Pour connaître la vitesse, il nous faut une expression de $v$ en fonction de $E$ et $p$. Elle découle directement des définitions relativistes <Prereq href="/physique/partie-ii/energie">de l'impulsion $p = \gamma m v$ et de l'énergie $E = \gamma m c^2$</Prereq>.
+
+<Encart type="calcul" titre="Démonstration ligne à ligne : la formule $v = pc^2/E$, puis $v=c$">
+
+**Étape 1.** On part des deux expressions relativistes pour une particule de masse $m$ :
+
+$$ p = \gamma m v \qquad \text{et} \qquad E = \gamma m c^2. $$
+
+**Étape 2.** Formons le rapport $\dfrac{p}{E}$. Le facteur $\gamma$ et la masse $m$, communs aux deux, se simplifient :
+
+$$ \frac{p}{E} = \frac{\gamma m v}{\gamma m c^2} = \frac{v}{c^2}. $$
+
+**Étape 3.** On isole $v$ en multipliant les deux membres par $c^2$. C'est la formule générale de la vitesse, valable pour **toute** particule :
+
+$$ v = \frac{p\,c^2}{E}. $$
+
+**Étape 4.** Réécrivons-la sous forme de fraction de $c$, ce qui sera plus parlant :
+
+$$ \frac{v}{c} = \frac{p\,c^2}{E\,c} = \frac{p\,c}{E}. $$
+
+**Étape 5.** Appliquons maintenant le cas sans masse. Nous avons établi plus haut que pour $m = 0$, on a $E = pc$. Substituons :
+
+$$ \frac{v}{c} = \frac{p\,c}{E} = \frac{p\,c}{p\,c} = 1. $$
+
+**Étape 6.** Donc $\dfrac{v}{c} = 1$, c'est-à-dire :
+
+$$ \boxed{\,v = c\,} $$
+
+et ce, quelle que soit la valeur de $E$ ou de $p$. La vitesse est verrouillée à $c$. ∎
+</Encart>
+
+<Resultat label="Une particule sans masse va toujours à $c$">
+
+$$ m = 0 \;\Longrightarrow\; v = c \quad \text{(toujours, dans tout référentiel)} $$
+
+<Badge niveau="etabli" slot="badge">La lumière se propage à $c$ dans tout référentiel inertiel : c'est le second postulat d'Einstein, confirmé par Michelson-Morley et d'innombrables expériences.</Badge>
+</Resultat>
+
+### Conséquence : aucun repos possible
+
+Cette conclusion a une portée vertigineuse. Une particule sans masse va à $c$ dans **tous** les référentiels inertiels, sans exception. Elle ne peut donc **jamais** être au repos : il n'existe aucun observateur, aucun référentiel, dans lequel un photon serait immobile.
+
+<Badge niveau="etabli">Une particule sans masse ne possède pas de référentiel propre (« référentiel au repos ») : conséquence directe du second postulat, jamais prise en défaut.</Badge>
+
+C'est une rupture totale avec une particule massive. Une particule de masse $m \neq 0$ possède toujours un référentiel où elle est au repos — son référentiel propre — dans lequel $v = 0$, $p = 0$ et $E = mc^2$ (sa pure énergie de repos). Pour une particule sans masse, ce référentiel n'existe pas. Il n'y a pas de « point de vue du photon ».
+
+<Encart type="plusloin" titre="Pourquoi on ne peut pas se mettre dans le référentiel du photon">
+On pourrait être tenté de calculer le temps propre $\Delta\tau$ écoulé pour un photon. Or le long de la trajectoire de la lumière, on a $c\,\Delta t = \Delta x$, donc l'intervalle d'espace-temps $c^2\Delta t^2 - \Delta x^2 = 0$. Le temps propre, défini par $c^2\Delta\tau^2 = c^2\Delta t^2 - \Delta x^2$, vaut alors $\Delta\tau = 0$ : la trajectoire est dite « de genre lumière ». Aucune horloge ne peut suivre cette ligne. Mathématiquement, vouloir « monter » dans le référentiel du photon revient à prendre $v \to c$, ce qui fait diverger $\gamma \to \infty$ : la transformation de Lorentz devient singulière. Le référentiel propre n'est donc pas seulement introuvable expérimentalement, il est interdit par la structure même de la théorie.
+</Encart>
+
+### Le paradoxe « sans masse mais avec énergie » résolu
+
+Revenons à l'apparente contradiction. Comment quelque chose « sans masse » peut-il transporter de l'énergie et de l'impulsion, frapper un capteur, faire dévier un électron ? La réponse tient dans la formule $E = pc$ : l'énergie d'une particule sans masse ne vient **pas** d'une masse de repos (il n'y en a pas), mais **entièrement de son mouvement**, encodé dans son impulsion $p$. Tant que $p > 0$, alors $E > 0$.
+
+<Badge niveau="etabli">Masse nulle $\neq$ énergie nulle : un photon de fréquence $\nu$ porte $E = h\nu > 0$, ce qui pousse les voiles solaires et arrache les électrons des métaux (effet photoélectrique, Nobel 1921).</Badge>
+
+Les deux exemples physiques connus de particules sans masse sont le **photon** (le quantum du champ électromagnétique, la « particule de lumière ») et le **gluon** (qui assure la cohésion des quarks à l'intérieur des hadrons, comme le proton et le neutron).
+
+<Badge niveau="modelise">Le gluon est sans masse dans le Modèle Standard ; confiné, il n'est jamais observé libre, mais ses effets sont solidement établis. La masse du photon est mesurée comme nulle à mieux que $10^{-18}\ \text{eV}/c^2$ près.</Badge>
+
+<MasslessParticle />
+
+Récapitulons l'opposition fondamentale entre les deux mondes :
+
+| Grandeur | Particule massive ($m \neq 0$) | Particule sans masse ($m = 0$) |
+| --- | --- | --- |
+| Vitesse $v$ | $0 \le v < c$ (jamais $c$) | $v = c$ toujours |
+| Référentiel propre | Existe ($v = 0$) | N'existe pas |
+| Énergie au repos | $E = mc^2 > 0$ | sans objet (jamais au repos) |
+| Relation $E$–$p$ | $E^2 = (mc^2)^2 + (pc)^2$ | $E = pc$ |
+| Énergie minimale | $mc^2$ | tend vers $0$ quand $p \to 0$ |
+
+Ainsi, le cas $m = 0$ n'est pas une curiosité marginale : c'est la lumière elle-même, le messager qui a fondé toute la relativité. Nous avons bouclé la boucle. Reste une dernière question, peut-être la plus profonde : d'où vient la masse des particules qui, elles, en ont une ? C'est ce que nous explorerons au chapitre suivant.

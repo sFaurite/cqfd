@@ -1,0 +1,142 @@
+---
+/**
+ * Badge de fiabilité — pastille colorée + libellé + infobulle « pourquoi ce niveau ».
+ *
+ * Usage :
+ *   <Badge niveau="etabli">Mesuré à 10⁻¹⁸ près ; consensus total.</Badge>
+ *
+ * Le contenu du slot explique POURQUOI ce niveau (preuve expérimentale, statut
+ * théorique…). Il s'affiche au survol et au focus clavier (a11y), et reste lu
+ * par les lecteurs d'écran via aria-describedby.
+ */
+import { FIABILITE, type NiveauFiabilite } from '../lib/palette';
+
+interface Props {
+  niveau: NiveauFiabilite;
+  /** n'affiche que la pastille (sans libellé), utile inline dans un titre */
+  compact?: boolean;
+}
+
+const { niveau, compact = false } = Astro.props;
+const info = FIABILITE[niveau];
+const id = `fbtip-${niveau}-${Math.random().toString(36).slice(2, 8)}`;
+const hasTip = await Astro.slots.has('default');
+---
+
+<span
+  class:list={['fbadge', { compact }]}
+  data-niveau={niveau}
+  style={`--badge-color:${info.color}`}
+  tabindex="0"
+  role="note"
+  aria-label={`Niveau de fiabilité : ${info.label}`}
+  aria-describedby={hasTip ? id : undefined}
+>
+  <span class="dot" aria-hidden="true"></span>
+  {!compact && <span class="lbl">{info.label}</span>}
+  {
+    hasTip && (
+      <span class="tip" id={id} role="tooltip">
+        <strong>{info.emoji} {info.label}</strong>
+        <span class="tip-body"><slot /></span>
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .fbadge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    vertical-align: baseline;
+    padding: 0.08em 0.55em 0.08em 0.45em;
+    border: 1px solid color-mix(in srgb, var(--badge-color) 55%, transparent);
+    background: color-mix(in srgb, var(--badge-color) 14%, transparent);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--c-text);
+    cursor: help;
+    white-space: nowrap;
+  }
+  .fbadge.compact {
+    padding: 0.18em;
+  }
+  .dot {
+    width: 0.62em;
+    height: 0.62em;
+    border-radius: 50%;
+    background: var(--badge-color);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--badge-color) 22%, transparent);
+    flex: none;
+  }
+  .lbl {
+    letter-spacing: 0.01em;
+  }
+
+  /* Infobulle */
+  .tip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    width: max-content;
+    max-width: 280px;
+    background: var(--c-bg-elev);
+    color: var(--c-text);
+    border: 1px solid var(--badge-color);
+    border-radius: var(--radius-sm);
+    padding: 0.6em 0.75em;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: normal;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.16s ease, transform 0.16s ease;
+    z-index: 60;
+    text-align: left;
+  }
+  .tip strong {
+    display: block;
+    margin-bottom: 0.25em;
+    color: var(--badge-color);
+  }
+  .tip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--badge-color);
+  }
+  .fbadge:hover .tip,
+  .fbadge:focus-visible .tip,
+  .fbadge:focus-within .tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* sur petits écrans, l'infobulle s'aligne à gauche pour ne pas déborder */
+  @media (max-width: 640px) {
+    .tip {
+      left: 0;
+      transform: translateX(0) translateY(4px);
+      max-width: min(280px, 80vw);
+    }
+    .tip::after {
+      left: 1.5em;
+    }
+    .fbadge:hover .tip,
+    .fbadge:focus-visible .tip,
+    .fbadge:focus-within .tip {
+      transform: translateX(0) translateY(0);
+    }
+  }
+</style>

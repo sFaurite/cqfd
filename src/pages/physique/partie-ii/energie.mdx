@@ -1,0 +1,144 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'énergie relativiste E = γmc² et l'énergie de repos"
+chapter: energie
+description: "D'où vient E = mc², l'énergie qu'une masse possède même immobile."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import LorentzSlider from '../../../components/interactive/LorentzSlider.astro';
+
+## L'énergie relativiste $E = \gamma mc^2$ et l'énergie de repos
+
+<Prereq href="/physique/partie-ii/quantite-mouvement">On utilise ici la quantité de mouvement relativiste $p = \gamma m v$.</Prereq> <Prereq href="/physique/partie-i/lorentz-gamma">Et le facteur de Lorentz $\gamma = 1/\sqrt{1 - v^2/c^2}$.</Prereq>
+
+<Encart type="intuition" titre="L'idée en une image">
+En mécanique classique, pousser un objet lui transfère de l'énergie cinétique : plus on le pousse, plus il va vite, sans limite. Mais nous savons déjà que la vitesse de la lumière $c$ est un mur infranchissable. Que devient alors l'énergie qu'on continue d'injecter quand l'objet frôle déjà $c$ et ne peut presque plus accélérer ? Elle ne disparaît pas : elle se loge dans le facteur $\gamma$, qui grossit sans limite. L'énergie d'un corps n'est donc pas $\tfrac12 m v^2$ ; c'est $\gamma m c^2$. Et surprise : même à l'arrêt ($v=0$, donc $\gamma = 1$), il reste $mc^2$. La masse *est* une réserve d'énergie.
+</Encart>
+
+### On la démontre : le travail de la force
+
+L'énergie cinétique, c'est le travail qu'il faut fournir pour amener un objet du repos jusqu'à la vitesse $v$. On garde cette définition — elle reste valable en relativité — mais on l'applique à la **bonne** quantité de mouvement, la quantité relativiste $p = \gamma m v$.
+
+<Encart type="rappel" titre="Travail d'une force et théorème de l'énergie cinétique">
+La force est la variation de la quantité de mouvement : $\vec{F} = \dfrac{d\vec{p}}{dt}$ (deuxième loi de Newton, valable telle quelle en relativité si l'on utilise $p$ relativiste). Le travail élémentaire sur un déplacement $dx$ vaut $dW = F\,dx$. Le théorème de l'énergie cinétique dit que l'énergie cinétique gagnée est la somme (l'intégrale) de tous ces travaux élémentaires : $E_{\text{cin}} = \int_0^x F\,dx$.
+</Encart>
+
+<Encart type="calcul" titre="Démonstration ligne à ligne : $E_{\text{cin}} = (\gamma - 1)mc^2$">
+
+**Étape 1 — Le travail à fournir.** On part du repos et on intègre le travail de la force le long du trajet :
+
+$$ E_{\text{cin}} = \int_0^{x} F\,dx = \int \frac{dp}{dt}\,dx. $$
+
+**Étape 2 — On change de variable.** Comme $\dfrac{dx}{dt} = v$, on a $\dfrac{dp}{dt}\,dx = \dfrac{dx}{dt}\,dp = v\,dp$. Le travail devient une intégrale sur la quantité de mouvement :
+
+$$ E_{\text{cin}} = \int_0^{p} v\,dp. $$
+
+**Étape 3 — On exprime $p$.** Avec $p = \gamma m v = \dfrac{m v}{\sqrt{1 - v^2/c^2}}$, on intègre par parties ($\int v\,dp = [v\,p] - \int p\,dv$) entre $v=0$ et $v$ :
+
+$$ E_{\text{cin}} = \big[v\,\gamma m v\big]_0^{v} - \int_0^{v} \gamma m v\,dv = \gamma m v^2 - m\int_0^{v} \frac{v\,dv}{\sqrt{1 - v^2/c^2}}. $$
+
+**Étape 4 — On calcule l'intégrale restante.** On pose $u = 1 - v^2/c^2$, donc $du = -\dfrac{2v}{c^2}dv$, soit $v\,dv = -\dfrac{c^2}{2}du$. Alors :
+
+$$ \int \frac{v\,dv}{\sqrt{1 - v^2/c^2}} = -\frac{c^2}{2}\int u^{-1/2}\,du = -\frac{c^2}{2}\cdot 2\sqrt{u} = -c^2\sqrt{u} = -c^2\sqrt{1 - v^2/c^2} = -\frac{c^2}{\gamma}. $$
+
+**Étape 5 — On rassemble.** Entre $0$ et $v$, ce terme vaut $-\dfrac{c^2}{\gamma} - \big(-c^2\big) = c^2\Big(1 - \dfrac{1}{\gamma}\Big)$ (à $v=0$, $\sqrt{1-v^2/c^2}=1$). En réinjectant :
+
+$$ E_{\text{cin}} = \gamma m v^2 - m c^2\Big(1 - \frac{1}{\gamma}\Big) = \gamma m v^2 - m c^2 + \frac{m c^2}{\gamma}. $$
+
+**Étape 6 — On simplifie avec $\gamma$.** De $\gamma = (1-v^2/c^2)^{-1/2}$ on tire $\gamma^2(1 - v^2/c^2) = 1$, donc $\dfrac{1}{\gamma} = \gamma\big(1 - v^2/c^2\big)$, soit $\dfrac{m c^2}{\gamma} = \gamma m c^2\big(1 - v^2/c^2\big) = \gamma m c^2 - \gamma m v^2$. En remplaçant :
+
+$$ E_{\text{cin}} = \gamma m v^2 - m c^2 + \gamma m c^2 - \gamma m v^2 = \gamma m c^2 - m c^2. $$
+
+**Conclusion.** $\boxed{E_{\text{cin}} = (\gamma - 1)\,m c^2}$ ∎
+</Encart>
+
+<Resultat label="Énergie cinétique relativiste">
+
+$$ E_{\text{cin}} = (\gamma - 1)\,m c^2 $$
+
+<Badge niveau="etabli" slot="badge">Démontrée ci-dessus à partir du seul théorème de l'énergie cinétique appliqué à la quantité de mouvement relativiste ; l'énergie $(\gamma-1)mc^2$ à fournir est confirmée chaque jour dans les accélérateurs de particules.</Badge>
+</Resultat>
+
+### De l'énergie cinétique à l'énergie totale
+
+Le calcul nous livre $E_{\text{cin}} = (\gamma - 1)mc^2 = \gamma m c^2 - m c^2$. Lisons-le autrement : l'énergie cinétique est la **différence** entre une grandeur $\gamma m c^2$ (qui dépend de la vitesse) et une grandeur $mc^2$ (qui n'en dépend pas). Il est naturel d'appeler **énergie totale** $E$ le premier terme, et **énergie de repos** $E_0$ le second :
+
+$$ E = E_{\text{cin}} + m c^2 = \gamma m c^2. $$
+
+<Resultat label="Énergie totale relativiste">
+
+$$ E = \gamma m c^2 $$
+
+<Badge niveau="etabli" slot="badge">Vérifiée chaque jour dans les accélérateurs : pour atteindre des $\gamma$ de plusieurs milliers, il faut fournir exactement l'énergie $(\gamma-1)mc^2$ prédite.</Badge>
+</Resultat>
+
+### Vérification : retour au classique à basse vitesse
+
+Une théorie nouvelle doit redonner l'ancienne dans son domaine de validité. Vérifions qu'à faible vitesse, $E_{\text{cin}} = (\gamma-1)mc^2$ redonne bien le $\tfrac12 m v^2$ de la classe de Première.
+
+<Encart type="rappel" titre="Développement limité de $\gamma$ à basse vitesse">
+Pour $x$ petit, $(1 + x)^{\alpha} \approx 1 + \alpha x$. Avec $\gamma = (1 - v^2/c^2)^{-1/2}$, on a $\alpha = -\tfrac12$ et $x = -v^2/c^2$ petit (car $v \ll c$), donc $\gamma \approx 1 + \big(-\tfrac12\big)\big(-\tfrac{v^2}{c^2}\big) = 1 + \tfrac12\,\dfrac{v^2}{c^2}$.
+</Encart>
+
+<Encart type="calcul" titre="Le développement limité, ligne à ligne">
+
+**Étape 1.** À basse vitesse, $\gamma \approx 1 + \dfrac{1}{2}\dfrac{v^2}{c^2}$.
+
+**Étape 2.** Donc $\gamma - 1 \approx \dfrac{1}{2}\dfrac{v^2}{c^2}$.
+
+**Étape 3.** D'où l'énergie cinétique :
+
+$$ E_{\text{cin}} = (\gamma - 1)m c^2 \approx \frac{1}{2}\frac{v^2}{c^2}\,m c^2 = \frac{1}{2}m v^2. $$
+
+Les $c^2$ se simplifient et l'on retombe exactement sur l'expression classique. ∎
+</Encart>
+
+<Resultat label="Limite classique">
+
+$$ E_{\text{cin}} \xrightarrow[v \ll c]{} \tfrac{1}{2}m v^2 $$
+
+<Badge niveau="etabli" slot="badge">Cohérence parfaite avec la mécanique de Newton aux vitesses usuelles ; aucune mesure de la vie courante ne peut les distinguer.</Badge>
+</Resultat>
+
+### L'énergie de repos : $E_0 = mc^2$
+
+Posons maintenant $v = 0$, donc $\gamma = 1$. L'énergie cinétique s'annule, mais l'énergie totale ne tombe pas à zéro :
+
+$$ E_0 = E(v=0) = 1 \cdot m c^2 = m c^2. $$
+
+<Resultat label="Énergie de repos">
+
+$$ E_0 = m c^2 $$
+
+<Badge niveau="etabli" slot="badge">Confirmée par les défauts de masse nucléaires, l'annihilation matière-antimatière et l'ensemble de la physique des particules.</Badge>
+</Resultat>
+
+C'est le résultat le plus célèbre de la physique : **un corps immobile possède déjà de l'énergie, en proportion de sa masse.** La masse n'est pas une chose distincte de l'énergie — c'est de l'énergie « congelée ».
+
+<Encart type="plusloin" titre="Attention : $E = mc^2$ n'est qu'un cas particulier">
+La formule de bistrot « $E = mc^2$ » est en réalité le cas $v = 0$ de la relation générale $E = \gamma m c^2$. Pour un objet en mouvement, $E$ est **plus grande** que $mc^2$. Et la relation la plus complète, valable même pour la lumière (qui n'a pas de masse mais transporte de l'énergie et une quantité de mouvement), s'écrit $E^2 = (mc^2)^2 + (pc)^2$. On la démontrera au chapitre suivant. <Prereq href="/physique/partie-ii/e-mc2">Vers la relation énergie-impulsion $E^2 = (mc^2)^2 + (pc)^2$.</Prereq>
+</Encart>
+
+### Ordre de grandeur : pourquoi $mc^2$ est colossal
+
+Le facteur $c^2 \approx 9 \times 10^{16}\ \text{m}^2/\text{s}^2$ est gigantesque. La valeur $c = 299\,792\,458\ \text{m/s}$ est aujourd'hui **fixée par convention** (elle définit le mètre), elle n'est plus une mesure. <Badge niveau="etabli">Valeur exacte par définition du SI depuis 1983.</Badge>
+
+<Encart type="calcul" titre="Énergie de repos de 1 gramme">
+
+Avec $m = 1\ \text{g} = 10^{-3}\ \text{kg}$ :
+
+$$ E_0 = m c^2 = 10^{-3} \times (3{,}0 \times 10^{8})^2 = 10^{-3} \times 9{,}0 \times 10^{16} = 9{,}0 \times 10^{13}\ \text{J}. $$
+
+Soit $\boxed{E_0 \approx 9 \times 10^{13}\ \text{J}}$ pour un seul gramme — environ $20$ kilotonnes de TNT, c'est-à-dire de l'ordre de l'énergie libérée par la bombe de Hiroshima. ∎
+</Encart>
+
+Manipule le curseur ci-dessous : fais varier $v$ et observe comment $\gamma$, l'énergie totale $\gamma mc^2$ et l'énergie cinétique $(\gamma-1)mc^2$ explosent à l'approche de $c$, alors qu'à basse vitesse l'énergie cinétique colle à la parabole $\tfrac12 mv^2$.
+
+<LorentzSlider />
+
+Nous avons donc une énergie totale $E = \gamma m c^2$ et une quantité de mouvement $p = \gamma m v$. Ces deux grandeurs ne sont pas indépendantes : au chapitre suivant, nous les combinerons en une seule relation, $E^2 = (mc^2)^2 + (pc)^2$, qui révélera la véritable nature de $E = mc^2$ et s'appliquera même aux particules sans masse comme le photon.

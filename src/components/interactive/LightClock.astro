@@ -1,0 +1,43 @@
+---
+/**
+ * LightClock — l'horloge à lumière, animée. Compare une horloge au repos
+ * (photon vertical) à la MÊME horloge en mouvement (photon en zigzag, trajet plus
+ * long → tic-tac plus lent). Fait apparaître le triangle rectangle c·t / v·t / c·t₀
+ * d'où vient le facteur de Lorentz. Composant phare de la page « dilatation du temps ».
+ */
+---
+
+<div class="iw" data-iw="lightclock">
+  <div class="iw__head"><span class="tag">Interactif</span> L’horloge à lumière : pourquoi le temps se dilate</div>
+  <div class="iw__canvas-wrap">
+    <canvas style="aspect-ratio: 16 / 9"></canvas>
+  </div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="hc-beta">β = v/c</label>
+      <input id="hc-beta" type="range" min="0" max="0.95" step="0.01" value="0.7" data-beta />
+      <output data-out-beta>0,70</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-play>⏸ Pause</button>
+      <button class="iw__btn" data-reset>↺ Réinitialiser</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">γ</span> <b data-out-gamma></b></span>
+    <span class="iw__chip"><span class="k">période mobile / repos</span> <b data-out-ratio></b></span>
+    <span class="iw__chip"><span class="k">tics — repos</span> <b data-out-tr></b></span>
+    <span class="iw__chip"><span class="k">tics — mobile</span> <b data-out-tm></b></span>
+  </div>
+  <p class="iw__note">
+    Le photon va toujours à la même vitesse c. Dans l’horloge en mouvement (en bas), il doit
+    parcourir un trajet <em>plus long</em> (la diagonale jaune) pour faire un aller-retour :
+    son tic-tac prend donc plus de temps. Le triangle rectangle relie le trajet du photon
+    (c·t, hypoténuse), le déplacement de l’horloge (v·t) et la hauteur (c·t₀) — c’est de là
+    que sort le facteur γ.
+  </p>
+</div>
+
+<script>
+  import './LightClock.client.ts';
+</script>

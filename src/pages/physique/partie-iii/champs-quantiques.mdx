@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La notion de champ quantique"
+chapter: champs-quantiques
+description: "Une particule est une « excitation » d'un champ qui remplit tout l'espace."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import QuantumField from '../../../components/interactive/QuantumField.astro';
+
+## La notion de champ quantique
+
+Nous avons rencontré quelque chose de troublant : un électron, un photon, ne sont ni tout à fait des billes, ni tout à fait des vagues. Selon l'expérience, ils se comportent comme l'un ou l'autre. Cette **dualité onde-corpuscule** (<Prereq href="/physique/partie-iii/dualite-de-broglie">voir le chapitre sur de Broglie</Prereq>) est-elle une bizarrerie à accepter en serrant les dents, ou cache-t-elle une réalité plus profonde ?
+
+La physique du XXe siècle a tranché : il existe un cadre où l'onde et le corpuscule ne sont plus deux visages contradictoires, mais deux aspects d'une seule et même chose. Ce cadre, c'est la **théorie quantique des champs** (TQC). Et son idée centrale est d'une simplicité renversante.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez un drap tendu, infini, qui remplit tout l'espace. Au repos, il est parfaitement plat : c'est le « vide ». Donnez-lui une pichenette : une bosse apparaît, se déplace, transporte de l'énergie. **Cette bosse, c'est la particule.** Le drap, lui, ne va nulle part — il est partout à la fois. Ce qui voyage, c'est l'excitation.
+
+Maintenant la clé : il n'y a pas un drap par électron de l'Univers. Il y a **UN seul drap pour tous les électrons**. Chaque électron est juste une bosse de ce drap unique. Voilà pourquoi tous les électrons sont rigoureusement identiques : ce sont des plis du même tissu.
+</Encart>
+
+### Le champ d'abord, la particule ensuite
+
+Renversons l'ordre habituel. En TQC, l'objet fondamental n'est pas la particule : c'est le **champ**. Un champ, vous connaissez déjà l'idée — le champ électrique attribue un vecteur à chaque point de l'espace, le champ de température attribue un nombre. Un champ quantique attribue à chaque point de l'espace une grandeur capable de **vibrer** et d'emmagasiner de l'énergie.
+
+La règle quantique impose alors que ce champ ne peut pas vibrer n'importe comment : son énergie ne monte que par **paquets indivisibles**, des « quanta ». Un quantum d'excitation = une particule. Deux quanta = deux particules. Et c'est tout. La nature « grumeleuse » de la matière (on compte les électrons un par un) tombe directement de là.
+
+<Resultat label="Le principe fondateur de la TQC">
+
+$$ \text{champ (partout)} \;\xrightarrow{\;\text{excitation par quanta}\;}\; \text{particules (localisées)} $$
+
+<Badge niveau="modelise" slot="badge">Cadre théorique extraordinairement bien confirmé (l'électrodynamique quantique prédit le moment magnétique de l'électron à mieux que 12 chiffres significatifs), mais c'est un MODÈLE, pas une « photo » du réel.</Badge>
+</Resultat>
+
+<QuantumField />
+
+Jouez avec le champ ci-dessus : au repos il est plat (le vide) ; en l'excitant vous faites apparaître des quanta localisés. Remarquez qu'on ne peut pas créer « un demi-quantum ».
+
+### Conséquence (a) : toutes les particules sont jumelles
+
+Pourquoi deux électrons ont-ils EXACTEMENT la même masse, la même charge, le même spin — au point qu'aucune expérience, jamais, n'a pu les distinguer ? En physique classique, c'est un mystère : deux billes fabriquées séparément ont toujours un infime défaut.
+
+En TQC, ce n'est plus un mystère, c'est une **évidence** : il n'existe qu'un seul champ électronique. Tout électron est une excitation de ce champ-là. Demander pourquoi ils sont identiques, c'est demander pourquoi deux vagues du même océan sont « faites de la même eau ».
+
+<Badge niveau="etabli">L'indiscernabilité des particules identiques est un fait expérimental massif : sans elle, ni la stabilité de la matière, ni le tableau périodique, ni la statistique des gaz ne s'expliqueraient.</Badge>
+
+### Conséquence (b) : on peut créer et détruire des particules
+
+Une bosse sur un drap peut naître et disparaître. De même, une particule n'est pas éternelle ni incréée : si l'on fournit assez d'énergie au champ, on l'excite et **une particule apparaît** ; si l'excitation se désexcite, **elle disparaît**. C'est la création et l'annihilation.
+
+Combinons cela avec deux résultats déjà établis. D'abord l'équivalence masse-énergie (<Prereq href="/physique/partie-ii/e-mc2">voir le chapitre sur $E = mc^2$</Prereq>) : pour fabriquer une particule de masse $m$, il faut au minimum l'énergie $E = mc^2$. Ensuite, l'énergie peut être apportée par d'autres particules (par exemple deux photons très énergétiques).
+
+<Encart type="calcul" titre="Le seuil de la création de paire électron-positron">
+On veut créer une paire : un électron ($m_e$) et son antiparticule, le positron (même masse $m_e$). La conservation de la charge impose de les créer ensemble (charges $-e$ et $+e$, somme nulle).
+
+**Étape 1 — Énergie de masse à fournir.** Il faut matérialiser deux masses $m_e$ :
+
+$$ E_{\min} = m_e c^2 + m_e c^2 = 2\,m_e c^2. $$
+
+**Étape 2 — Valeur numérique.** La masse de l'électron est $m_e = 9{,}109 \times 10^{-31}\ \text{kg}$ (mesurée) et $c = 299\,792\,458\ \text{m·s}^{-1}$ (fixée par convention). On a l'habitude d'exprimer l'énergie de masse de l'électron : $m_e c^2 = 0{,}511\ \text{MeV}$.
+
+**Étape 3 — Seuil.** Il faut donc au moins :
+
+$$ \boxed{E_{\min} = 2 \times 0{,}511\ \text{MeV} = 1{,}022\ \text{MeV}.} $$
+
+En dessous de cette énergie, aucune paire ne peut apparaître : le champ ne peut pas s'exciter « à moitié ». Au-dessus, l'excédent part en énergie cinétique des deux particules. ∎
+</Encart>
+
+Ce processus n'est pas une spéculation : on le voit tous les jours dans les accélérateurs et même en imagerie médicale (la tomographie par émission de positrons, le « PET-scan », repose sur l'annihilation inverse $e^+ + e^- \to$ deux photons).
+
+<Badge niveau="etabli">Création et annihilation de paires : observées en routine depuis la découverte du positron par Anderson (1932), exploitées en médecine et dans tous les collisionneurs.</Badge>
+
+### Conséquence (c) : le vide n'est pas vide
+
+Si la particule est l'excitation d'un champ, alors le « vide » est l'état du champ **sans aucune excitation** — le drap parfaitement plat. Mais la mécanique quantique interdit à toute grandeur d'être à la fois parfaitement nulle et parfaitement immobile (c'est l'esprit du principe d'indétermination de Heisenberg, <Prereq href="/physique/partie-iii/heisenberg">voir le chapitre correspondant</Prereq>). Le champ ne peut donc jamais être totalement immobile : il **frémit** en permanence. On parle de **fluctuations du vide**.
+
+<Encart type="plusloin" titre="Pourquoi le vide frémit (version plus exigeante)">
+Le principe d'indétermination énergie-temps, $\Delta E\,\Delta t \gtrsim \dfrac{\hbar}{2}$, autorise le champ à « emprunter » brièvement une énergie $\Delta E$ pendant une durée $\Delta t$ d'autant plus courte que $\Delta E$ est grande. Le vide grouille ainsi de paires particule-antiparticule qui apparaissent et se réannihilent presque aussitôt : les **particules virtuelles**. Elles ne sont pas directement détectables, mais leurs effets le sont — par exemple l'effet Casimir (une force attractive entre deux plaques dans le vide) ou la minuscule correction du spectre de l'hydrogène (le « décalage de Lamb »).
+</Encart>
+
+<Badge niveau="modelise">Les fluctuations du vide sont un effet du cadre théorique, indirectement confirmé (effet Casimir mesuré, décalage de Lamb mesuré). L'interprétation des particules « virtuelles » reste un outil de calcul, pas un objet observable.</Badge>
+
+### Et le photon dans tout ça ?
+
+Le cas le plus familier boucle la boucle. La lumière est une onde du champ électromagnétique — Maxwell l'avait établi. La TQC ajoute : ce champ, lui aussi, ne s'excite que par quanta. **Un quantum du champ électromagnétique, c'est un photon.** L'onde lumineuse classique n'est rien d'autre qu'un nombre colossal de ces quanta agissant de concert.
+
+La dualité onde-corpuscule n'est donc plus paradoxale : le champ est l'onde, le quantum est le corpuscule, et les deux coexistent sans contradiction. Ce qui ressemblait à une schizophrénie de la matière était simplement le signe qu'on regardait un champ quantique.
+
+<Badge niveau="etabli">Le photon comme quantum du champ électromagnétique est confirmé par l'effet photoélectrique, l'effet Compton et les expériences de comptage de photons un par un.</Badge>
+
+Nous tenons enfin le bon vocabulaire. La matière et la lumière sont des excitations de champs ; toutes les particules d'un type donné sont identiques parce qu'elles partagent un champ ; elles peuvent naître et mourir parce que l'énergie excite ou désexcite ce champ. Reste une question vertigineuse : **combien de champs existe-t-il, et lesquels ?** C'est l'objet de la Partie IV — le Modèle Standard, l'inventaire de tous les champs fondamentaux de l'Univers.

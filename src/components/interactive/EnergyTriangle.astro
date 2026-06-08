@@ -1,0 +1,37 @@
+---
+/**
+ * EnergyTriangle — E² = (mc²)² + (pc)² visualisé comme un triangle rectangle
+ * dont on fait varier les côtés mc² et pc. Montre que E = mc² (repos) et
+ * E = pc (sans masse) sont les deux cas limites.
+ */
+---
+
+<div class="iw" data-iw="etriangle">
+  <div class="iw__head"><span class="tag">Interactif</span> E² = (mc²)² + (pc)² — le triangle de l’énergie</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="et-m">mc² (énergie de masse)</label>
+      <input id="et-m" type="range" min="0" max="3" step="0.05" value="1.5" data-m />
+      <output data-out-m>1,50</output>
+    </div>
+    <div class="iw__row">
+      <label for="et-p">pc (énergie de mouvement)</label>
+      <input id="et-p" type="range" min="0" max="3" step="0.05" value="1" data-p />
+      <output data-out-p>1,00</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">E</span> <b data-out-e></b></span>
+    <span class="iw__chip"><span class="k">cas</span> <b data-out-cas></b></span>
+  </div>
+  <p class="iw__note">
+    Glissez mc² vers 0 : le triangle s’aplatit et E → pc (particule <em>sans masse</em>, comme le
+    photon). Glissez pc vers 0 : il se redresse et E → mc² (particule <em>au repos</em>).
+    Les valeurs sont en GeV.
+  </p>
+</div>
+
+<script>
+  import './EnergyTriangle.client.ts';
+</script>

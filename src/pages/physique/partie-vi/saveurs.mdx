@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le problème des saveurs et la hiérarchie des masses"
+chapter: saveurs
+description: "Pourquoi ces valeurs de masses et de couplages ? Personne ne sait."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## Le problème des saveurs et la hiérarchie des masses
+
+Nous avons construit, pièce par pièce, un édifice magnifique : le Modèle Standard. Il décrit toutes les particules connues et trois des quatre interactions. Il a prédit le boson de Higgs, les courants neutres, le quark top — et chaque fois, l'expérience a confirmé. C'est l'une des théories les plus précises de l'histoire des sciences.
+
+Et pourtant, à l'intérieur de ce moteur parfaitement huilé, il y a une vingtaine de petites vis dont **personne ne sait expliquer le réglage**. On les mesure. On ne les déduit pas. Ce chapitre raconte cette gêne — le *problème des saveurs* — et pourquoi les physiciens y voient le signe qu'une théorie plus profonde nous attend.
+
+<Encart type="intuition" titre="Une recette qui marche... sans qu'on sache pourquoi">
+Imagine une recette de cuisine extraordinaire. Tu suis les étapes, et le plat est toujours parfait : c'est reproductible, fiable, génial. Mais la recette dit « ajoute 0,511 g de sel, 105,7 g de poivre, 1777 g de cumin »… sans jamais dire **pourquoi** ces nombres-là. Tu peux cuisiner le plat à la perfection, mais tu n'as aucune idée d'où viennent les quantités. Le Modèle Standard, c'est exactement ça : la recette fonctionne, mais les ingrédients sont posés à la main.
+</Encart>
+
+### Les paramètres libres : ce que la théorie ne prédit pas
+
+Une théorie idéale partirait de quelques principes et **déduirait** tout le reste. Le Modèle Standard n'y arrive pas. Il contient un jeu de nombres qu'on doit **fournir de l'extérieur**, en les lisant sur les expériences. On les appelle les *paramètres libres*. Il y en a environ **19 à 26** selon qu'on inclut ou non les masses des neutrinos (que le Modèle Standard originel ne prévoyait même pas).
+
+<Prereq href="/physique/partie-iv/fermions">Rappel : les fermions de matière se répartissent en trois générations identiques sauf par leur masse.</Prereq> <Prereq href="/physique/partie-iv/higgs">Rappel : chaque fermion acquiert sa masse par couplage au champ de Higgs ; plus le couplage est fort, plus la particule est lourde.</Prereq>
+
+Parmi ces paramètres :
+
+- **9 masses** de fermions chargés (3 leptons, 6 quarks) — auxquelles s'ajoutent les masses des neutrinos ;
+- **4 paramètres de mélange des quarks** (la matrice CKM, dont 3 angles et 1 phase) ;
+- **3 constantes de couplage** des interactions (jauge $U(1)$, $SU(2)$, $SU(3)$) ;
+- les **2 paramètres du secteur de Higgs** (qui fixent sa masse et la valeur du champ dans le vide), etc.
+
+<Badge niveau="etabli">Le décompte d'environ 19 paramètres libres dans le Modèle Standard minimal (sans masses de neutrinos) est un fait structurel de la théorie, fixé par le formalisme du lagrangien.</Badge>
+
+Le point crucial : ces nombres ne sont **pas des erreurs**, et le Modèle Standard n'est **pas faux**. Simplement, la théorie ne dit rien sur leur **origine**. Elle est comme une équation à laquelle il manque les conditions initiales.
+
+<Badge niveau="ouvert">Pourquoi ces paramètres valent ce qu'ils valent — et pourquoi ils sont si nombreux — est une question entièrement ouverte. Aucune théorie acceptée ne les prédit.</Badge>
+
+### La hiérarchie des masses : six ordres de grandeur
+
+Concentrons-nous sur les masses des fermions, le cœur du mystère. Voici les valeurs **mesurées** (exprimées en énergie, via $E = mc^2$, comme c'est l'usage en physique des particules) :
+
+| Génération | Lepton chargé | Quark « haut » | Quark « bas » |
+|---|---|---|---|
+| 1 | électron — 0,511 MeV | up — ≈ 2,2 MeV | down — ≈ 4,7 MeV |
+| 2 | muon — 105,7 MeV | charm — ≈ 1,27 GeV | strange — ≈ 95 MeV |
+| 3 | tau — 1777 MeV | **top — ≈ 173 GeV** | bottom — ≈ 4,18 GeV |
+
+<Badge niveau="etabli">Ces masses sont mesurées expérimentalement (désintégrations, collisionneurs, spectroscopie) avec une grande précision pour les particules stables ou abondamment produites.</Badge>
+
+Regardons l'amplitude. L'électron pèse $0{,}511\ \text{MeV}$. Le quark top pèse $\approx 173\ 000\ \text{MeV}$. Le rapport est colossal.
+
+<Encart type="calcul" titre="Combien d'ordres de grandeur entre l'électron et le top ?">
+**Étape 1.** On exprime les deux masses dans la même unité (le MeV) afin de pouvoir les diviser proprement :
+
+$$ m_{\text{top}} = 173\ \text{GeV} = 173 \times 10^{3}\ \text{MeV}, \qquad m_{e} = 0{,}511\ \text{MeV}. $$
+
+**Étape 2.** On forme le rapport des masses (donc des couplages au Higgs, qui leur sont proportionnels) :
+
+$$ R = \frac{m_{\text{top}}}{m_{e}} = \frac{173 \times 10^{3}\ \text{MeV}}{0{,}511\ \text{MeV}} = \frac{1{,}73 \times 10^{5}}{0{,}511} \approx 3{,}4 \times 10^{5}. $$
+
+**Étape 3.** Le « nombre d'ordres de grandeur » est le logarithme décimal de ce rapport :
+
+$$ \log_{10}(R) = \log_{10}(3{,}4 \times 10^{5}) = \log_{10}(3{,}4) + 5 \approx 0{,}53 + 5 = 5{,}53. $$
+
+**Conclusion.** Les masses s'étalent sur plus de **5 ordres de grandeur** rien qu'entre l'électron et le top. En incluant les neutrinos (masse $\lesssim 10^{-6}\ \text{MeV}$), on dépasse **onze** ordres de grandeur. ∎
+</Encart>
+
+<Encart type="rappel" titre="Ordre de grandeur et logarithme">
+Un « ordre de grandeur » est un facteur 10. Passer de $10$ à $10\,000$, c'est gravir 3 ordres de grandeur ($10^3$). L'outil naturel pour compter ces sauts est le **logarithme décimal** $\log_{10}$ : si $A = 10^{n}$, alors $\log_{10}(A) = n$. Et $\log_{10}(a\times 10^{n}) = \log_{10}(a) + n$. C'est ce qui transforme un rapport gigantesque en un petit nombre lisible.
+</Encart>
+
+<Resultat label="Hiérarchie des masses des fermions">$$ \frac{m_{\text{top}}}{m_{e}} \approx 3{,}4 \times 10^{5} \quad\Longrightarrow\quad \gtrsim 5 \text{ à } 6 \text{ ordres de grandeur (chargés)},\ \gg 11 \text{ avec les neutrinos.} $$ <Badge niveau="etabli" slot="badge">Fait expérimental : les masses mesurées s'étalent sur cette plage.</Badge></Resultat>
+
+Or, dans le Modèle Standard, masse = couplage au Higgs. Dire que le top est $3{,}4\times 10^{5}$ fois plus lourd que l'électron, c'est dire que le top « accroche » le champ de Higgs $3{,}4\times 10^{5}$ fois plus fort. **Pourquoi ?** La théorie est muette.
+
+<Badge niveau="ouvert">L'origine de cette hiérarchie — pourquoi les couplages au Higgs sont si dispersés, et selon ce motif précis — est inconnue. C'est le « problème de la hiérarchie des saveurs ».</Badge>
+
+### Pourquoi trois générations ? Et pourquoi se mélangent-elles ?
+
+Deuxième énigme : il existe exactement **trois** copies de chaque fermion, identiques en tout sauf leur masse. L'électron, le muon, le tau ne diffèrent que par leur poids. Le physicien Isidor Rabi, à propos du muon, aurait lâché : *« Qui a commandé ça ? »* La question reste sans réponse.
+
+<Badge niveau="etabli">Le nombre de trois générations légères est solidement établi (mesure de la largeur du boson Z au LEP : $N = 2{,}984 \pm 0{,}008$).</Badge> <Badge niveau="ouvert">Pourquoi trois, plutôt que une ou cinquante, est une question ouverte.</Badge>
+
+Troisième énigme : les saveurs de quarks ne sont pas tout à fait « étanches ». Un quark d'une génération peut se transformer en quark d'une autre lors d'une désintégration faible, avec des probabilités encodées dans la **matrice CKM** (Cabibbo–Kobayashi–Maskawa). Ses angles de mélange sont, eux aussi, **mesurés mais non prédits** — et l'une de ses composantes (une phase) est responsable de la violation de symétrie matière/antimatière.
+
+<Badge niveau="modelise">La matrice CKM décrit fidèlement les mélanges observés : le formalisme « marche » remarquablement.</Badge> <Badge niveau="ouvert">Mais la valeur de ses angles n'est expliquée par aucun principe.</Badge>
+
+### Honnêteté intellectuelle : « ça marche » n'est pas « on comprend »
+
+Il faut tenir les deux bouts. D'un côté, le Modèle Standard **fonctionne** avec une précision spectaculaire : on lui donne ces ~20 nombres, et il prédit ensuite des milliers d'observations sans jamais se tromper. <Badge niveau="modelise">La structure prédictive du Modèle Standard, une fois ses paramètres fixés, est l'une des mieux vérifiées de la physique.</Badge>
+
+De l'autre, le fait même qu'il faille **fournir** tous ces nombres « à la main » — sans logique interne, sur une plage de masses absurdement large — est précisément ce qui dit aux physiciens : *ce n'est pas le mot de la fin*. Une théorie complète expliquerait ces motifs au lieu de les enregistrer.
+
+<Encart type="plusloin" titre="Des pistes, pas (encore) des réponses">
+Plusieurs idées tentent de domestiquer les saveurs : la **symétrie de saveur** (des symétries cachées qui contraindraient les couplages), le **mécanisme de Froggatt–Nielsen** (une charge supplémentaire générant naturellement une hiérarchie de puissances d'un petit paramètre), ou les théories de **grande unification** où quarks et leptons d'une même génération seraient les facettes d'un même objet. Aucune n'est confirmée. <Badge niveau="ouvert">Toutes ces approches restent spéculatives à ce jour.</Badge>
+</Encart>
+
+Le problème des saveurs est ainsi un trou béant et reconnu au cœur d'une théorie par ailleurs triomphale. Il nous rappelle que « décrire » et « expliquer » sont deux choses différentes — et que la physique fondamentale a encore de la route. Dans le chapitre suivant, nous tournerons notre regard vers une autre faille du Modèle Standard, dont les indices viennent du cosmos : les neutrinos et leur masse insoupçonnée.

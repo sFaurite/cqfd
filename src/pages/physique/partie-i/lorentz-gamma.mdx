@@ -1,0 +1,123 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le facteur de Lorentz γ"
+chapter: lorentz-gamma
+description: "Dérivation complète du facteur qui mesure tous les effets relativistes."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import LorentzSlider from '../../../components/interactive/LorentzSlider.astro';
+
+## Le facteur de Lorentz $\gamma$
+
+Dans le chapitre précédent, un drôle de nombre est apparu : il étirait les durées, comme si le temps lui-même se dilatait. Ce nombre, on l'appelle le **facteur de Lorentz**, noté $\gamma$ (la lettre grecque « gamma »). Ce n'est pas un coefficient arbitraire bricolé pour faire marcher les équations : c'est la conséquence mathématique inévitable des postulats de la relativité. Et c'est, à lui seul, le **thermomètre de la relativité** : il mesure « à quel point » les effets relativistes se font sentir.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez un cadran avec une seule aiguille. Quand vous êtes immobile (ou presque), l'aiguille pointe sur $1$ : tout se passe comme en physique classique, rien d'étrange. Plus vous accélérez vers la vitesse de la lumière, plus l'aiguille grimpe : $1$, puis $2$, puis $7$, puis $\infty$. La position de cette aiguille, c'est $\gamma$. Tant qu'elle est collée à $1$, Newton suffit. Dès qu'elle décolle, l'espace et le temps se déforment.
+</Encart>
+
+### La définition
+
+On introduit d'abord la **vitesse réduite** $\beta$ (« bêta »), qui exprime la vitesse $v$ d'un objet en fraction de la vitesse de la lumière $c$ :
+
+$$ \beta = \frac{v}{c}, \qquad 0 \le \beta < 1. $$
+
+Comme $c$ est la vitesse limite, $v$ ne dépasse jamais $c$ ; pour un objet de masse $m > 0$ on a même $v < c$ strictement, donc $\beta$ reste dans l'intervalle $[0\,;\,1[$. Le facteur de Lorentz se définit alors ainsi :
+
+<Resultat label="Facteur de Lorentz">
+
+$$ \gamma = \frac{1}{\sqrt{1 - \dfrac{v^2}{c^2}}} = \frac{1}{\sqrt{1 - \beta^2}} $$
+
+<Badge niveau="etabli" slot="badge">Définition mathématique tirée directement des postulats ; vérifiée par toutes les expériences relativistes (muons, accélérateurs, GPS).</Badge>
+</Resultat>
+
+La valeur $c \approx 2{,}998 \times 10^8\ \text{m·s}^{-1}$ (exactement $299\,792\,458\ \text{m·s}^{-1}$) est aujourd'hui une **constante définie par convention** : elle fixe la définition du mètre depuis 1983, et n'est donc plus une grandeur mesurée. <Badge niveau="etabli">Vitesse de la lumière dans le vide : valeur fixée par le Système international d'unités.</Badge>
+
+<Prereq href="/physique/partie-i/consequences">La dilatation du temps</Prereq> nous a déjà donné $\Delta t = \gamma\,\Delta t_0$ : le même $\gamma$ y règle l'allongement des durées. Nous verrons qu'il gouvernera aussi la contraction des longueurs, la quantité de mouvement et l'énergie. Un seul nombre pour tout.
+
+### Comment $\gamma$ se comporte
+
+Examinons l'expression $\gamma = 1/\sqrt{1-\beta^2}$ étape par étape, sans calcul, juste en regardant.
+
+- Si $v = 0$, alors $\beta = 0$ et $\sqrt{1-0} = 1$, donc $\gamma = 1$. C'est la **limite classique** : à l'arrêt (ou à vitesse ordinaire), il ne se passe rien d'étrange.
+- Quand $v$ augmente, $\beta^2$ augmente, donc $1-\beta^2$ **diminue**, donc sa racine carrée diminue, donc $\gamma$ — qui est l'inverse de cette racine — **augmente**. $\gamma$ est toujours $\ge 1$ : la relativité ne raccourcit jamais les durées propres, elle ne fait que les allonger.
+- Quand $v \to c$, alors $\beta \to 1$, donc $1 - \beta^2 \to 0$. On divise $1$ par un nombre qui tend vers zéro par valeurs positives : $\gamma \to +\infty$. **La courbe explose.**
+
+<Resultat label="Divergence à la vitesse de la lumière">
+
+$$ \lim_{v \to c} \gamma = +\infty $$
+
+<Badge niveau="etabli" slot="badge">Conséquence directe de la définition ; confirmée par l'impossibilité expérimentale d'accélérer une particule massive jusqu'à $c$ (accélérateurs de particules).</Badge>
+</Resultat>
+
+Manipulez le curseur ci-dessous pour sentir cette explosion : tant que $v$ reste « raisonnable », $\gamma$ bouge à peine ; mais dans les tout derniers pourcents avant $c$, il s'envole.
+
+<LorentzSlider />
+
+### Quelques valeurs à retenir
+
+Voici $\gamma$ pour différentes vitesses. Notez que jusqu'à $10\,\%$ de $c$ — soit déjà $30\,000\ \text{km·s}^{-1}$ ! — l'écart à $1$ est minuscule.
+
+| Vitesse $v$ | $\beta$ | Facteur $\gamma$ | Effet |
+|---|---|---|---|
+| $0$ | $0$ | $1$ | aucun |
+| $0{,}1\,c$ | $0{,}1$ | $\approx 1{,}005$ | $+0{,}5\,\%$ |
+| $0{,}9\,c$ | $0{,}9$ | $\approx 2{,}29$ | durées plus que doublées |
+| $0{,}99\,c$ | $0{,}99$ | $\approx 7{,}09$ | énorme |
+| $0{,}999\,c$ | $0{,}999$ | $\approx 22{,}4$ | extrême |
+
+On comprend pourquoi la relativité est restée invisible si longtemps : aux vitesses de la vie courante (une voiture, un avion, même une fusée), $\beta$ est si petit que $\gamma$ vaut $1$ à une précision démentielle.
+
+### Pourquoi $\gamma \approx 1$ aux faibles vitesses : le calcul
+
+L'affirmation « $\gamma \approx 1$ quand $v$ est petit » mérite d'être prouvée. On va même obtenir le premier terme correctif, qui est l'origine de l'énergie cinétique classique $\tfrac{1}{2}mv^2$.
+
+<Encart type="rappel" titre="Approximation $(1+x)^n \approx 1 + nx$">
+Quand $x$ est **petit devant $1$** (on écrit $|x| \ll 1$), une puissance se linéarise :
+
+$$ (1+x)^n \approx 1 + n\,x. $$
+
+Exemples : $\sqrt{1+x} = (1+x)^{1/2} \approx 1 + \tfrac{1}{2}x$, et $(1+x)^{-1/2} \approx 1 - \tfrac{1}{2}x$. C'est exact à la limite $x \to 0$ ; l'erreur est de l'ordre de $x^2$, donc négligeable quand $x$ est minuscule. Géométriquement : on remplace la courbe par sa tangente en $x=0$.
+</Encart>
+
+<Encart type="calcul" titre="Développement de $\gamma$ au premier ordre">
+
+**Étape 1.** On part de la définition, réécrite comme une puissance :
+
+$$ \gamma = \frac{1}{\sqrt{1-\beta^2}} = \left(1 - \beta^2\right)^{-1/2}. $$
+
+**Étape 2.** On pose $x = -\beta^2$ et $n = -\tfrac{1}{2}$. Quand $v$ est petit devant $c$, $\beta = v/c$ est petit, donc $\beta^2$ est **très** petit : la condition $|x| \ll 1$ est largement remplie.
+
+**Étape 3.** On applique l'approximation du rappel :
+
+$$ \gamma = (1 + x)^{n} \approx 1 + n\,x = 1 + \left(-\tfrac{1}{2}\right)\left(-\beta^2\right). $$
+
+**Étape 4.** On simplifie le produit des deux signes moins :
+
+$$ \boxed{\;\gamma \approx 1 + \tfrac{1}{2}\beta^2 = 1 + \dfrac{1}{2}\dfrac{v^2}{c^2}\;} $$
+
+**Vérification.** Pour $v = 0{,}1\,c$ : $\gamma \approx 1 + \tfrac{1}{2}(0{,}1)^2 = 1 + 0{,}005 = 1{,}005$. C'est bien la valeur du tableau. ∎
+</Encart>
+
+Ce petit terme $\tfrac{1}{2}\beta^2$ n'est pas anodin : multiplié par $mc^2$, il redonne exactement $\tfrac{1}{2}mv^2$, l'énergie cinétique de Newton. La physique classique est donc **contenue** dans la relativité, comme premier étage d'un développement. <Badge niveau="etabli">L'approximation classique est le terme dominant de $\gamma$ aux basses vitesses ; recoupement parfait avec la mécanique newtonienne.</Badge>
+
+### Pourquoi $c$ est une frontière infranchissable
+
+La divergence $\gamma \to \infty$ n'est pas une curiosité mathématique : c'est un **verrou physique**. Nous établirons dans les chapitres suivants que la quantité de mouvement d'un objet de masse $m$ s'écrit $p = \gamma m v$, et son énergie $E = \gamma m c^2$. Or si $\gamma \to \infty$ quand $v \to c$, alors $p$ et $E$ tendent eux aussi vers l'infini. <Badge niveau="etabli">Expressions relativistes de la quantité de mouvement et de l'énergie, démontrées dans les chapitres suivants ; vérifiées quotidiennement dans les accélérateurs.</Badge>
+
+<Encart type="intuition" titre="Une masse ne peut pas atteindre $c$">
+Pousser un objet, c'est lui donner de l'énergie. Mais plus il va vite, plus $\gamma$ grimpe, et plus chaque petit gain de vitesse coûte cher en énergie. Près de $c$, il faudrait une énergie **infinie** pour gagner les derniers mètres par seconde. Aucune source ne peut fournir l'infini : $c$ reste donc à jamais hors d'atteinte pour tout ce qui possède une masse. Seules les particules de masse nulle, comme la lumière, voyagent à $c$ — et elles n'ont pas le choix, elles vont *toujours* à $c$.
+</Encart>
+
+<Resultat label="$c$, vitesse limite pour la matière">
+
+$$ v < c \quad\text{pour tout objet de masse } m > 0 $$
+
+<Badge niveau="etabli" slot="badge">Conséquence de la divergence de $\gamma$ ; confirmée chaque jour dans les accélérateurs, où l'on approche $c$ sans jamais l'atteindre malgré une énergie colossale.</Badge>
+</Resultat>
+
+Nous tenons donc l'outil central de toute la suite : $\gamma$. Vu de loin, il vaut $1$ et Newton règne ; vu de près, il s'envole et redessine l'espace et le temps. Armés de ce nombre, attaquons maintenant son premier grand effet géométrique : la **contraction des longueurs**.

@@ -1,0 +1,136 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'espace-temps de Minkowski"
+chapter: minkowski
+description: "Intervalle invariant, cônes de lumière : la géométrie de l'espace-temps."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import SpacetimeDiagram from '../../../components/interactive/SpacetimeDiagram.astro';
+
+## L'espace-temps de Minkowski
+
+Jusqu'ici, le temps et l'espace nous semblaient deux choses séparées : une horloge d'un côté, une règle de l'autre. La relativité nous force à les coudre ensemble. Si la durée entre deux événements dépend du référentiel, et la distance aussi, peut-être existe-t-il une grandeur mélangeant temps **et** espace qui, elle, ne dépend de personne. C'est l'idée géniale de Hermann Minkowski en 1908 : il n'y a plus l'espace et le temps, mais un seul tissu à quatre dimensions, **l'espace-temps**.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez une règle posée sur une table. Sa longueur ne change pas si vous tournez la tête : c'est une propriété de la règle, pas de votre point de vue. En revanche, sa projection sur l'axe « gauche-droite » et sa projection sur l'axe « avant-arrière » changent quand vous tournez. Minkowski affirme : changer de référentiel (passer dans un train), c'est comme **tourner les axes** dans l'espace-temps. La durée et la distance sont des « projections » qui changent ; mais une certaine « longueur » dans l'espace-temps, elle, reste fixe. Cette longueur invariante, c'est l'**intervalle**.
+</Encart>
+
+<Prereq href="/physique/partie-i/transformations-lorentz">On utilise ici les transformations de Lorentz</Prereq> établies au chapitre précédent. On ne les redémontre pas, on en tire une conséquence spectaculaire.
+
+### Un point devient un événement
+
+Dans l'espace-temps, on ne repère plus un objet par 3 nombres $(x, y, z)$ mais un **événement** — « quelque chose qui se produit à un endroit et à un instant » — par **4 nombres** :
+
+$$ (ct,\ x,\ y,\ z). $$
+
+Pourquoi $ct$ et pas $t$ ? Parce que $t$ est une durée (en secondes) et $x$ une longueur (en mètres) : on ne peut pas les comparer. En multipliant le temps par la vitesse de la lumière $c$, $ct$ devient une **longueur**. Les quatre coordonnées sont alors homogènes, exprimées en mètres, et on peut les mêler dans une même formule.
+
+<Badge niveau="etabli">$c = 299\,792\,458$ m/s est une valeur **définie par convention** depuis 1983 (elle fixe le mètre), pas une mesure : c'est un nombre exact.</Badge>
+
+### L'intervalle d'espace-temps
+
+Pour deux événements séparés par une durée $\Delta t$ et des distances $\Delta x, \Delta y, \Delta z$, Minkowski définit l'**intervalle** :
+
+$$ s^2 = (c\,\Delta t)^2 - \Delta x^2 - \Delta y^2 - \Delta z^2. $$
+
+Le signe « moins » est la clé : ce n'est PAS le théorème de Pythagore ordinaire. Le temps et l'espace n'entrent pas avec le même signe. Cette « géométrie tordue » est exactement ce qui rend $s^2$ invariant.
+
+<Badge niveau="etabli">La définition même de l'intervalle relève d'un choix de signature ; ici on adopte la convention $(+,-,-,-)$, standard en relativité restreinte.</Badge>
+
+### On démontre l'invariance
+
+Plaçons-nous dans le cas d'un mouvement selon $x$ (alors $\Delta y$ et $\Delta z$ ne changent pas) et montrons que $s^2$ calculé dans le train ($R'$) vaut $s^2$ calculé sur le quai ($R$).
+
+<Encart type="rappel" titre="L'identité $(a-b)(a+b)=a^2-b^2$ et le facteur de Lorentz">
+On notera $\beta = v/c$ et $\gamma = \dfrac{1}{\sqrt{1-\beta^2}}$. La seule propriété dont on a besoin est :
+
+$$ \gamma^2\,(1-\beta^2) = 1, \quad \text{donc} \quad \gamma^2 - \gamma^2\beta^2 = 1. $$
+
+C'est immédiat en élevant $\gamma$ au carré.
+</Encart>
+
+<Encart type="calcul" titre="Démonstration ligne à ligne de l'invariance">
+**Étape 1.** Les transformations de Lorentz donnent, pour les **écarts** entre deux événements (avec $\beta c = v$) :
+
+$$ \Delta x = \gamma\,(\Delta x' + \beta\,c\,\Delta t'), \qquad c\,\Delta t = \gamma\,(c\,\Delta t' + \beta\,\Delta x'). $$
+
+**Étape 2.** On calcule $(c\Delta t)^2$ en développant le carré :
+
+$$ (c\,\Delta t)^2 = \gamma^2\,\big[(c\Delta t')^2 + 2\beta\,(c\Delta t')(\Delta x') + \beta^2(\Delta x')^2\big]. $$
+
+**Étape 3.** De même pour $(\Delta x)^2$ :
+
+$$ (\Delta x)^2 = \gamma^2\,\big[(\Delta x')^2 + 2\beta\,(\Delta x')(c\Delta t') + \beta^2(c\Delta t')^2\big]. $$
+
+**Étape 4.** On soustrait. Les deux **doubles produits** $2\beta\,(c\Delta t')(\Delta x')$ sont identiques et s'**annulent** :
+
+$$ (c\Delta t)^2 - (\Delta x)^2 = \gamma^2\,\big[(c\Delta t')^2 + \beta^2(\Delta x')^2 - (\Delta x')^2 - \beta^2(c\Delta t')^2\big]. $$
+
+**Étape 5.** On regroupe les termes en $(c\Delta t')^2$ et en $(\Delta x')^2$ :
+
+$$ (c\Delta t)^2 - (\Delta x)^2 = \gamma^2\,\big[(1-\beta^2)(c\Delta t')^2 - (1-\beta^2)(\Delta x')^2\big]. $$
+
+**Étape 6.** On factorise $(1-\beta^2)$ et on utilise $\gamma^2(1-\beta^2)=1$ (rappel ci-dessus) :
+
+$$ (c\Delta t)^2 - (\Delta x)^2 = \gamma^2(1-\beta^2)\,\big[(c\Delta t')^2 - (\Delta x')^2\big] = (c\Delta t')^2 - (\Delta x')^2. $$
+
+**Étape 7.** Comme $\Delta y = \Delta y'$ et $\Delta z = \Delta z'$, on retranche les mêmes termes des deux côtés :
+
+$$ \boxed{\,s^2 = (c\Delta t)^2-\Delta x^2-\Delta y^2-\Delta z^2 = s'^2\,} \qquad \blacksquare $$
+</Encart>
+
+<Resultat label="Invariance de l'intervalle">
+
+$$ s^2 = (c\,\Delta t)^2 - \Delta x^2 - \Delta y^2 - \Delta z^2 = \text{invariant} $$
+
+<Badge niveau="etabli" slot="badge">Conséquence directe et exacte des transformations de Lorentz, elles-mêmes confirmées (muons, GPS, accélérateurs). Tous les observateurs trouvent la même valeur de $s^2$.</Badge>
+</Resultat>
+
+### Trois familles d'événements
+
+Le signe de $s^2$ — qui ne dépend d'aucun référentiel — classe la relation entre deux événements en trois catégories absolues :
+
+| Signe de $s^2$ | Nom | Interprétation |
+|---|---|---|
+| $s^2 > 0$ | genre **temps** | Le temps « gagne » sur l'espace. Un signal plus lent que la lumière peut relier les deux événements : ils peuvent avoir un **lien de cause à effet**. Leur **ordre temporel est absolu** (tout le monde s'accorde sur lequel précède l'autre). |
+| $s^2 = 0$ | genre **lumière** | Seul un rayon lumineux relie les deux événements : $c\lvert\Delta t\rvert = \lvert\Delta x\rvert$. |
+| $s^2 \lt 0$ | genre **espace** | L'espace « gagne ». Aucun signal de vitesse $\le c$ ne peut les relier : ils sont **ailleurs** l'un pour l'autre, **sans lien causal possible**. Leur ordre temporel dépend du référentiel. |
+
+<Badge niveau="etabli">Cette structure causale est solide : elle découle de l'invariance de $s^2$ et du fait que $c$ borne la vitesse de toute information. Aucune expérience ne l'a jamais prise en défaut.</Badge>
+
+L'idée à retenir : **$c$ est la borne de la causalité**. Pour relier causalement deux événements, il faut une « pente » dans l'espace-temps moins raide que celle de la lumière.
+
+### Le cône de lumière
+
+Traçons un diagramme avec $ct$ en vertical et $x$ en horizontal (en posant $\Delta y=\Delta z=0$). Un rayon lumineux vérifie $ct = \pm x$ : ce sont deux droites à **45°**. En trois dimensions d'espace, elles forment un **cône** : le cône de lumière.
+
+<VideoManim src="light-cone" scene="LightCone" titre="Le cône de lumière" legende="Passé, futur et 'ailleurs' : ce que la causalité autorise depuis un événement." />
+
+Depuis un événement « ici-maintenant » placé à l'origine :
+- l'**intérieur du cône vers le haut** = le **futur** atteignable (genre temps, $s^2>0$) ;
+- l'**intérieur du cône vers le bas** = le **passé** qui a pu nous influencer ;
+- l'**extérieur du cône** = l'**ailleurs** (genre espace, $s^2\lt 0$), définitivement hors d'atteinte causale.
+
+### Les axes qui pivotent
+
+Voici la plus belle conséquence géométrique. Dans le diagramme, le référentiel mobile $R'$ n'a pas des axes perpendiculaires : ses axes $ct'$ et $x'$ **pivotent en ciseaux vers la droite de lumière**. L'axe $ct'$ (lieu des événements à $x'=0$, donc la trajectoire de l'origine de $R'$) s'incline d'un angle $\theta$ tel que $\tan\theta = \beta$ ; l'axe $x'$ (lieu des événements simultanés dans $R'$) s'incline de l'autre côté, du même angle. Les deux se referment symétriquement vers la ligne à 45°, qu'ils ne franchissent jamais.
+
+<Badge niveau="etabli">L'angle d'inclinaison $\tan\theta=\beta$ et l'inclinaison symétrique des deux axes se déduisent directement des transformations de Lorentz.</Badge>
+
+<SpacetimeDiagram />
+
+Tout devient alors géométrique. La **dilatation du temps** et la **contraction des longueurs** ne sont plus des formules mystérieuses : ce sont des effets de **projection** d'une grandeur invariante sur des axes inclinés différents — exactement comme l'ombre d'une règle change de longueur quand on tourne la règle, alors que la règle, elle, ne change pas. La **relativité de la simultanéité** s'y lit d'un coup d'œil : « en même temps » dépend de l'inclinaison de l'axe $x'$, donc du référentiel.
+
+<Encart type="plusloin" titre="Pourquoi un pivotement et pas une vraie rotation ?">
+Dans une rotation ordinaire, les deux axes tournent dans le **même sens**. Ici, $ct'$ et $x'$ tournent en sens **opposés** (en ciseaux) : c'est une **rotation hyperbolique**. La raison profonde est le signe « moins » de l'intervalle : la quantité conservée n'est pas $x^2+y^2$ (cercles) mais $(ct)^2-x^2$ (hyperboles). Un point qui « tourne » à intervalle constant suit donc une hyperbole, pas un cercle, et c'est précisément ce qui empêche les axes de franchir la ligne de lumière. On parle de géométrie « pseudo-euclidienne » ou de Minkowski.
+
+<Badge niveau="etabli">L'angle $\theta$ avec $\tan\theta=\beta$ et le caractère hyperbolique se déduisent directement des transformations de Lorentz.</Badge>
+</Encart>
+
+Nous avons maintenant un cadre unifié et une géométrie. Dans le chapitre suivant, nous mettrons cette machine au travail : en exigeant que la quantité de mouvement se conserve dans cet espace-temps, nous verrons surgir la plus célèbre équation de la physique, $E=mc^2$.

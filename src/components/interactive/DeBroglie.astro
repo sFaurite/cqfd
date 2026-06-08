@@ -1,0 +1,34 @@
+---
+/**
+ * DeBroglie — longueur d'onde λ = h/p d'un électron, comparée à la taille d'un
+ * atome, en faisant varier sa vitesse. Plus l'électron va vite, plus sa longueur
+ * d'onde est courte.
+ */
+---
+
+<div class="iw" data-iw="debroglie">
+  <div class="iw__head"><span class="tag">Interactif</span> La longueur d’onde de de Broglie λ = h/p</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 8"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="db-v">vitesse de l’électron</label>
+      <input id="db-v" type="range" min="0" max="1" step="0.001" value="0.4" data-v />
+      <output data-out-v></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">p</span> <b data-out-p></b></span>
+    <span class="iw__chip"><span class="k">λ</span> <b data-out-l></b></span>
+    <span class="iw__chip"><span class="k">vs atome (~0,1 nm)</span> <b data-out-cmp></b></span>
+  </div>
+  <p class="iw__note">
+    L’onde dessinée est à l’échelle d’un atome (barre repère de 0,1 nm). Aux faibles vitesses, λ
+    dépasse la taille de l’atome : l’aspect ondulatoire domine. À grande vitesse, λ devient minuscule
+    et l’électron se comporte presque comme une bille. Un objet macroscopique a un λ si petit qu’aucune
+    onde n’est jamais visible.
+  </p>
+</div>
+
+<script>
+  import './DeBroglie.client.ts';
+</script>

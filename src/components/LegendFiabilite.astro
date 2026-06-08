@@ -1,0 +1,148 @@
+---
+/**
+ * Légende de l'indicateur de fiabilité — accessible depuis le header de chaque page.
+ * Menu déroulant listant les 4 niveaux + lien vers la page Méthodologie.
+ */
+import { niveauxFor } from '../lib/fiability';
+import type { CourseId } from '../lib/nav';
+interface Props {
+  courseId: CourseId;
+}
+const { courseId } = Astro.props;
+const NIVEAUX = niveauxFor(courseId);
+const methodoHref = `/${courseId}/methodologie`;
+---
+
+<details class="legende">
+  <summary aria-label="Légende des niveaux de fiabilité">
+    <span class="dots" aria-hidden="true">
+      {NIVEAUX.map((v) => <i style={`background:${v.color}`}></i>)}
+    </span>
+    <span class="txt">Fiabilité</span>
+    <svg class="chev" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"
+      ><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      ></path></svg
+    >
+  </summary>
+  <div class="panel">
+    <p class="hdr">Chaque affirmation porte un de ces 4 niveaux :</p>
+    <ul>
+      {
+        NIVEAUX.map((v) => (
+          <li>
+            <span class="dot" style={`background:${v.color}`} aria-hidden="true" />
+            <span>
+              <strong>{v.emoji} {v.label}</strong>
+              <em>{v.sens}</em>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+    <a href={methodoHref} class="more">En savoir plus → Méthodologie</a>
+  </div>
+</details>
+
+<style>
+  .legende {
+    position: relative;
+  }
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    padding: 0.4em 0.7em;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    list-style: none;
+    color: var(--c-text);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    background: var(--c-surface-2);
+  }
+  .dots {
+    display: inline-flex;
+    gap: 2px;
+  }
+  .dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .chev {
+    color: var(--c-muted);
+    transition: transform 0.2s;
+  }
+  .legende[open] .chev {
+    transform: rotate(180deg);
+  }
+  .txt {
+    display: none;
+  }
+  @media (min-width: 720px) {
+    .txt {
+      display: inline;
+    }
+  }
+  .panel {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 320px;
+    max-width: 86vw;
+    background: var(--c-bg-elev);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 0.9em 1em;
+    z-index: 80;
+  }
+  .hdr {
+    margin: 0 0 0.6em;
+    font-size: 0.82rem;
+    color: var(--c-muted);
+  }
+  .panel ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6em;
+  }
+  .panel li {
+    display: flex;
+    gap: 0.55em;
+    align-items: flex-start;
+  }
+  .panel .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: 0.28em;
+    flex: none;
+  }
+  .panel strong {
+    display: block;
+    font-size: 0.88rem;
+  }
+  .panel em {
+    color: var(--c-muted);
+    font-style: normal;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  .more {
+    display: inline-block;
+    margin-top: 0.8em;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+</style>

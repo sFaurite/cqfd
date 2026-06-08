@@ -1,0 +1,115 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le problème de la hiérarchie"
+chapter: hierarchie
+description: "Pourquoi la gravité est-elle si faible, et la masse du Higgs si « légère » ?"
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## Le problème de la hiérarchie
+
+Imagine un petit aimant de réfrigérateur. Il soulève un trombone sans effort — alors que la Terre entière, ses $6\times10^{24}$ kilogrammes, tire ce même trombone vers le bas. L'aimant gagne. À lui seul, il bat la gravité de la planète tout entière.
+
+Ce duel anodin cache l'un des plus grands mystères de la physique fondamentale. Pourquoi les forces de la nature ont-elles des intensités si désespérément différentes ? Et pourquoi certaines grandeurs « devraient » être énormes alors qu'on les mesure minuscules ? C'est ce qu'on appelle **le problème de la hiérarchie**.
+
+<Encart type="intuition" titre="Deux escaliers vertigineux">
+Imagine deux escaliers. Le premier sépare la gravité des autres forces : un écart de **36 marches** (en facteur 10 à chaque marche). Le second sépare la masse du boson de Higgs de l'échelle de Planck : **17 marches**. À chaque fois, on se demande : qu'est-ce qui maintient un tel gouffre ouvert, sans qu'il se referme ?
+</Encart>
+
+### Fait 1 : la gravité est ridiculement faible
+
+Comparons, pour deux protons, la force électrique (répulsion entre charges) et la force gravitationnelle (attraction entre masses). Les deux décroissent en $1/r^2$, donc leur rapport ne dépend pas de la distance : c'est un nombre pur.
+
+<Encart type="rappel" titre="Deux lois en $1/r^2$">
+Deux lois de la physique de Terminale ont exactement la même forme géométrique. La **loi de Coulomb** donne la force entre deux charges $q_1$ et $q_2$ séparées de $r$ : $F_{\text{e}} = \dfrac{1}{4\pi\varepsilon_0}\dfrac{q_1 q_2}{r^2}$, où $\varepsilon_0$ est la permittivité du vide. La **loi de la gravitation** de Newton donne la force entre deux masses : $F_{\text{g}} = G\,\dfrac{m_1 m_2}{r^2}$. Comme les deux varient en $1/r^2$, leur rapport est **indépendant de la distance** : la dépendance en $r$ se simplifie. C'est ce qui rend la comparaison universelle.
+</Encart>
+
+<Encart type="calcul" titre="Le rapport des forces entre deux protons">
+**Étape 1 — Force électrique.** Loi de Coulomb pour deux charges $e$ séparées de $r$ :
+
+$$ F_{\text{e}} = \frac{1}{4\pi\varepsilon_0}\,\frac{e^2}{r^2}. $$
+
+**Étape 2 — Force gravitationnelle.** Loi de Newton pour deux masses $m_p$ séparées de $r$ :
+
+$$ F_{\text{g}} = G\,\frac{m_p^2}{r^2}. $$
+
+**Étape 3 — Le rapport.** On divise. Les $r^2$ se simplifient (c'est tout l'intérêt) :
+
+$$ \frac{F_{\text{e}}}{F_{\text{g}}} = \frac{e^2/(4\pi\varepsilon_0\,r^2)}{G\,m_p^2/r^2} = \frac{e^2}{4\pi\varepsilon_0\,G\,m_p^2}. $$
+
+**Étape 4 — Valeurs numériques.** Avec $e = 1{,}602\times10^{-19}\,\text{C}$, $\varepsilon_0 = 8{,}854\times10^{-12}\,\text{F·m}^{-1}$, $G = 6{,}674\times10^{-11}\,\text{m}^3\text{kg}^{-1}\text{s}^{-2}$ et $m_p = 1{,}673\times10^{-27}\,\text{kg}$ :
+
+$$ \frac{F_{\text{e}}}{F_{\text{g}}} = \frac{(1{,}602\times10^{-19})^2}{4\pi\,(8{,}854\times10^{-12})\,(6{,}674\times10^{-11})\,(1{,}673\times10^{-27})^2} \approx 1{,}2\times10^{36}. $$
+
+**Étape 5 — Conclusion.** Le résultat est un nombre pur, sans unité (les unités se compensent), et colossal :
+
+$$ \boxed{\;\dfrac{F_{\text{e}}}{F_{\text{g}}} \approx 10^{36}\;} $$
+∎
+</Encart>
+
+<Resultat label="La gravité, force ultra-faible">
+
+$$ \frac{F_{\text{électrique}}}{F_{\text{gravitationnelle}}} \approx 10^{36} $$
+
+<Badge niveau="etabli" slot="badge">Calcul direct à partir de constantes mesurées en laboratoire (charge, masse du proton, $G$). C'est un fait, pas une hypothèse.</Badge>
+</Resultat>
+
+Un milliard de milliards de milliards de milliards. Voilà pourquoi le petit aimant gagne. La gravité ne nous semble dominante que parce qu'elle s'accumule sans jamais s'annuler : la Terre n'a pas de « charge gravitationnelle négative ». À l'échelle de deux particules, elle est négligeable. Cette faiblesse extrême est un fait <Badge niveau="etabli">vérifié sur d'innombrables systèmes, de l'atome aux planètes</Badge> — mais *pourquoi* la nature a-t-elle choisi ce nombre, $G$, si petit ? Personne ne le sait. La gravitation faible est posée ici : <Prereq href="/physique/partie-v/gravitation">la force de gravitation</Prereq>.
+
+### Fait 2 : le Higgs, une plume qui devrait peser une tonne
+
+Le second escalier est plus subtil, et plus inquiétant. Le boson de <Prereq href="/physique/partie-iv/higgs">Higgs</Prereq> a une masse mesurée d'environ $125\ \text{GeV}/c^2$. Comparons-la à l'**échelle de Planck**, l'énergie où la gravité quantique devient incontournable, posée en <Prereq href="/physique/partie-vi/gravite-quantique">gravité quantique</Prereq> :
+
+$$ E_{\text{Planck}} \approx 1{,}2\times10^{19}\ \text{GeV}. $$
+
+L'écart est de **17 ordres de grandeur**. En soi, un grand écart de masses ne choque pas : l'électron est déjà bien plus léger que le proton. Le problème est plus profond et tient à la nature *quantique* du Higgs.
+
+<Encart type="intuition" titre="Le champ qui ne reste jamais tranquille">
+En physique quantique, le vide n'est pas vide : il bouillonne de particules « virtuelles » qui apparaissent et disparaissent. Le Higgs interagit avec toutes les particules massives — c'est même son rôle. Du coup, ces fluctuations du vide viennent sans cesse « corriger » sa masse, comme un brouhaha permanent ajouté à une note de musique. Le souci : ce brouhaha devrait être assourdissant.
+</Encart>
+
+Quand on calcule ces corrections quantiques, on trouve qu'elles tendent à pousser le carré de la masse du Higgs non pas vers $125\ \text{GeV}$, mais vers l'énergie la plus haute où la théorie reste valable — typiquement l'échelle de Planck. Schématiquement :
+
+$$ m_H^2 \;=\; (m_H^2)_{\text{nu}} \;+\; \delta m^2, \qquad \delta m^2 \sim E_{\text{Planck}}^2. $$
+
+<Badge niveau="modelise">L'apparition de corrections quantiques au carré de la masse, croissant comme le carré de l'énergie de coupure, est un résultat solide de la théorie quantique des champs (renormalisation). L'écriture ci-dessus est volontairement schématique.</Badge>
+
+Autrement dit, la masse « brute » $(m_H^2)_{\text{nu}}$ et la correction $\delta m^2$ sont chacune gigantesques, de l'ordre de $(10^{19}\ \text{GeV})^2$, mais elles doivent se soustraire pour laisser un résidu minuscule de $(125\ \text{GeV})^2$. Il faut que ces deux nombres énormes coïncident sur **34 chiffres**.
+
+<Encart type="plusloin" titre="Le « fine-tuning » : combien c'est improbable ?">
+Imagine que tu additionnes deux nombres d'environ $10^{38}$ chacun (en unités de $\text{GeV}^2$, car $(10^{19})^2 = 10^{38}$), et que tu exiges que leur différence vaille exactement $\sim 10^{4}$ (puisque $(125)^2 \approx 1{,}6\times10^{4}$). Il faut alors que les deux nombres soient identiques jusqu'à la $34^{\text{e}}$ décimale relative — c'est l'écart $38 - 4 = 34$ entre les ordres de grandeur.
+
+C'est comme régler deux montagnes de sable, chacune haute comme l'Everest, pour que leur différence de hauteur soit celle d'un seul grain — et que ça reste vrai après chaque correction de la théorie. Rien dans le Modèle Standard n'interdit cet ajustement : il est *autorisé*. Mais il paraît absurdement précis, « non naturel ». C'est le cœur du **problème de naturalité** formulé par 't Hooft : une petite valeur n'est « naturelle » que si la mettre exactement à zéro fait apparaître une symétrie supplémentaire qui la protège. Pour la masse du Higgs, on ne connaît aucune telle symétrie dans le Modèle Standard.
+
+<Badge niveau="ouvert">Le degré d'ajustement requis est calculable et réel ; mais l'idée qu'un tel ajustement soit « interdit » ou « anormal » est un critère esthétique, pas une loi physique démontrée.</Badge>
+</Encart>
+
+<Resultat label="Le problème de la hiérarchie (naturalité)">
+
+$$ \frac{m_H}{E_{\text{Planck}}} \sim \frac{125\ \text{GeV}}{10^{19}\ \text{GeV}} \sim 10^{-17}\quad\text{(sans explication connue)} $$
+
+<Badge niveau="ouvert" slot="badge">Question non résolue. Ce n'est PAS une contradiction de la théorie : c'est un problème de naturalité, un inconfort esthétique sur l'absence d'explication.</Badge>
+</Resultat>
+
+### Soyons honnêtes : un malaise, pas une faute
+
+Insistons, car c'est essentiel : **rien n'est faux ici**. Le Modèle Standard, avec une masse de Higgs ajustée à la main, décrit parfaitement toutes les expériences. Le problème de la hiérarchie n'est pas une incohérence mathématique ni une prédiction démentie. C'est l'intuition, profondément ancrée chez les physiciens, qu'une théorie « belle » ne devrait pas exiger de coïncidences extravagantes. Cette intuition est-elle un bon guide ? On l'ignore. <Badge niveau="ouvert">Le statut même de l'argument de naturalité comme principe de découverte fait débat dans la communauté.</Badge>
+
+### Les pistes proposées (et leurs ennuis)
+
+Pour expliquer naturellement la petitesse du Higgs, plusieurs idées ont été avancées :
+
+| Piste | Idée centrale | Statut |
+|---|---|---|
+| **Supersymétrie** | Chaque particule a un « partenaire » dont les corrections quantiques annulent presque exactement les siennes, stabilisant $m_H$. | Aucun partenaire détecté au LHC <Badge niveau="ouvert">non observée ; les versions les plus naturelles sont désormais fortement contraintes.</Badge> |
+| **Dimensions supplémentaires** | Si l'espace a des dimensions cachées et compactes, la gravité s'y « dilue », ce qui rapprocherait l'échelle de Planck de l'échelle du Higgs. | Aucune signature expérimentale <Badge niveau="ouvert">spéculatif ; non confirmé.</Badge> |
+| **Anthropie / multivers** | Notre univers serait un parmi d'innombrables ; nous observons un Higgs léger parce que seuls ces univers permettent atomes et chimie. | Difficilement testable <Badge niveau="ouvert">débattu, à la frontière de la falsifiabilité.</Badge> |
+
+La supersymétrie était l'espoir le plus élégant : elle réglait d'un coup le fine-tuning. Mais après des années de collisions au LHC, **aucun** superpartenaire n'a été vu dans le domaine d'énergie où on l'attendait. Ce n'est pas une réfutation totale — la supersymétrie pourrait vivre à plus haute énergie — mais c'est un revers qui ravive tout le mystère. <Badge niveau="ouvert">La supersymétrie reste une hypothèse théorique non observée à ce jour.</Badge>
+
+Le problème de la hiérarchie nous laisse donc face à une vérité humble : nos théories *marchent*, mais nous ne comprenons pas *pourquoi* leurs nombres sont ceux-là. Ce gouffre entre « ça fonctionne » et « ça s'explique » nous conduit naturellement à la question ultime — celle des frontières mêmes de ce que la physique peut aujourd'hui prétendre savoir.

@@ -1,0 +1,78 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'électromagnétisme"
+chapter: electromagnetisme
+description: "Portée infinie, photon, et la symétrie de jauge qui protège sa masse nulle."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## L'électromagnétisme
+
+Si tu lis ces lignes, c'est grâce à l'électromagnétisme : la lumière qui frappe ton écran, les liaisons chimiques qui tiennent tes neurones ensemble, le simple fait que ta main ne traverse pas la table. De toutes les forces fondamentales, c'est la première que les physiciens ont vraiment **comprise** — pas seulement décrite, mais expliquée à partir d'un principe profond. C'est notre force « modèle », celle sur laquelle toutes les autres sont calquées.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine deux personnes sur des barques qui se lancent un ballon. À chaque lancer, celui qui jette recule, celui qui reçoit est poussé : elles se repoussent **sans se toucher**, juste en échangeant un objet. En physique des particules, la force électromagnétique fonctionne pareil : deux charges interagissent en s'échangeant des **photons**. Le photon est le « ballon » de l'électromagnétisme — son **messager**. Et toute la subtilité de cette force tient à une propriété du messager : il n'a pas de masse.
+</Encart>
+
+### Un messager sans masse, donc une portée infinie
+
+Le photon est le **boson de jauge** de l'interaction électromagnétique : la particule échangée qui transmet la force.
+
+<Prereq href="/physique/partie-iv/bosons-jauge">Le photon comme boson de jauge</Prereq>
+
+Or nous avons établi un lien fondamental : **plus le messager est lourd, plus la force a une portée courte**.
+
+<Prereq href="/physique/partie-iv/bosons-jauge">Portée d'une force ↔ masse de son médiateur</Prereq>
+
+Le photon ayant une masse strictement nulle, l'électromagnétisme a une **portée infinie**. Concrètement, deux charges se « sentent » quelle que soit leur distance — l'intensité décroît, mais ne s'annule jamais. C'est l'origine de la fameuse loi en $1/r^2$ : l'aimant agit à distance, l'étoile lointaine nous envoie sa lumière, l'atome d'hydrogène le plus reculé de l'Univers obéit aux mêmes règles que le nôtre.
+
+<Resultat label="Portée de l'électromagnétisme">$$ m_{\text{photon}} = 0 \quad\Longrightarrow\quad \text{portée infinie},\qquad F \propto \frac{1}{r^2} $$ <Badge niveau="etabli" slot="badge">La masse du photon est compatible avec zéro expérimentalement : $m_\gamma < 10^{-18}\ \text{eV}/c^2$, soit plus de $10^{23}$ fois plus léger que l'électron.</Badge></Resultat>
+
+Une autre règle d'or accompagne cette force : la **charge électrique se conserve**. Dans n'importe quelle réaction, la somme des charges avant est exactement égale à la somme des charges après. On peut créer une paire électron–positron ($-e$ et $+e$, total nul) à partir d'un photon (charge nulle), mais jamais faire apparaître une charge isolée à partir de rien.
+
+<Badge niveau="etabli">Conservation de la charge : vérifiée dans tous les processus connus, des réactions chimiques aux collisions du LHC, sans aucune exception observée.</Badge>
+
+### Pourquoi le photon est-il *forcé* d'être sans masse ?
+
+Voici le cœur de ce chapitre, et l'une des plus belles idées de la physique. On pourrait croire que la masse nulle du photon est une coïncidence, ou un nombre « réglé à la main » à zéro. **Ce n'est pas le cas.** Elle est *protégée* par une **symétrie**.
+
+<Encart type="intuition" titre="Qu'est-ce qu'une symétrie de jauge ?">
+Tu connais déjà une idée proche. L'**énergie potentielle** électrique n'a pas de zéro absolu : seules les **différences** de potentiel comptent. Brancher une pile sur un circuit ne change rien si tu ajoutes 1000 V partout — c'est l'écart qui pilote tout. On dit que la physique est *invariante* quand on redéfinit le « zéro » du potentiel. Cette liberté de redéfinir une référence, **localement et différemment en chaque point**, c'est une **invariance de jauge**. Le mot « jauge » signifie « étalon de mesure ». La symétrie de l'électromagnétisme s'appelle $U(1)$.
+</Encart>
+
+L'exigence est la suivante : les lois doivent rester identiques même si l'on change cette référence librement **en chaque point de l'espace et du temps**. Pour que cela tienne, il faut introduire un champ qui « compense » ces changements locaux — et ce champ, c'est exactement le **champ électromagnétique**, dont la particule est le photon. Autrement dit : **la symétrie de jauge n'autorise pas seulement le photon, elle le rend nécessaire.**
+
+Et voici la conséquence décisive : un **terme de masse** pour le photon dans les équations *briserait* cette invariance de jauge. La symétrie l'**interdit**. Le photon est donc sans masse non par chance, mais par principe.
+
+<Resultat label="Masse nulle protégée">$$ \text{Symétrie de jauge } U(1) \quad\Longrightarrow\quad m_{\text{photon}} = 0 \ \text{(exactement)} $$ <Badge niveau="modelise" slot="badge">Conséquence robuste du Modèle Standard, pilier théorique solide ; cohérente avec toutes les mesures (masse compatible avec zéro).</Badge></Resultat>
+
+C'est exactement ce qui distingue l'électromagnétisme de l'**interaction faible**, dont les messagers (bosons $W$ et $Z$) sont très lourds et la portée minuscule. Là-bas, la symétrie de jauge est « cachée », et les bosons acquièrent une masse. Ici, elle reste intacte, et le photon reste sans masse : portée infinie.
+
+<Encart type="plusloin" titre="Un peu plus de détail honnête">
+En toute rigueur, l'invariance de jauge n'est pas qu'un argument verbal : elle est le principe à partir duquel on **dérive** toute l'électrodynamique. Le potentiel électromagnétique $A_\mu$ peut être redéfini par $A_\mu \to A_\mu + \partial_\mu \chi$ pour n'importe quelle fonction $\chi(x,t)$, sans modifier les champs électrique et magnétique mesurables. Or un terme de masse aurait la forme $\propto m^2\,A_\mu A^\mu$, qui n'est *pas* invariant sous cette transformation : il dépendrait du choix de $\chi$, donc d'une convention sans réalité physique. C'est impossible. La masse du photon est donc fixée à zéro par cohérence interne. Subtilité signalée honnêtement : ce raisonnement vaut au niveau du Modèle Standard ; les expériences, elles, ne peuvent que poser des bornes de plus en plus serrées sur $m_\gamma$, jamais prouver un zéro exact.
+</Encart>
+
+### Mesurer la force : la constante de structure fine α
+
+Reste une question : **à quel point** l'électromagnétisme est-il intense ? On résume cela par un seul nombre, sans aucune unité, la **constante de structure fine** $\alpha$. Elle mesure la « force du couplage » entre une charge et un photon — la probabilité, en quelque sorte, qu'une charge émette ou absorbe un photon.
+
+<Resultat label="Constante de structure fine">$$ \alpha = \frac{e^2}{4\pi\varepsilon_0\,\hbar c} \approx \frac{1}{137{,}036} \approx 7{,}297\times 10^{-3} $$ <Badge niveau="etabli" slot="badge">Nombre pur (sans dimension), mesuré expérimentalement avec une précision relative de l'ordre de $10^{-10}$.</Badge></Resultat>
+
+<Encart type="rappel" titre="Pourquoi α n'a-t-elle pas d'unité ?">
+$\alpha$ combine la charge élémentaire $e$, la constante électrique $\varepsilon_0$, la constante de Planck réduite $\hbar$ et la vitesse de la lumière $c$. Toutes leurs unités se compensent exactement : il reste un **nombre pur**. C'est précieux, car un nombre sans unité a la même valeur pour tout le monde, partout dans l'Univers, indépendamment du choix des mètres ou des secondes. Sa valeur, $\approx 1/137$, est **mesurée** : aucune théorie connue ne sait la prédire à ce jour.
+</Encart>
+
+Que $\alpha$ soit petite ($\approx 0{,}007 \ll 1$) est une bénédiction : cela signifie que l'électromagnétisme est une force « douce », et que ses effets se calculent par approximations successives de plus en plus fines (chaque photon supplémentaire échangé contribue d'un facteur $\alpha$, donc de moins en moins).
+
+### QED : la théorie la mieux vérifiée de toute la science
+
+La théorie quantique complète de l'électromagnétisme s'appelle l'**électrodynamique quantique** (QED). Elle décrit charges et photons en un seul cadre cohérent, et sa précision est tout simplement stupéfiante. Son test emblématique est le **moment magnétique anomal de l'électron**, le fameux $g-2$ : la QED le prédit, et l'expérience le confirme, sur **douze chiffres significatifs**.
+
+<Badge niveau="etabli">$g-2$ de l'électron : accord théorie/expérience à mieux qu'une partie sur $10^{12}$. C'est la prédiction la plus précise jamais confrontée à la mesure dans toute l'histoire des sciences.</Badge>
+
+Nous tenons donc notre prototype : une force née d'une **symétrie** ($U(1)$), portée par un messager sans masse (le photon), d'intensité fixée par un nombre pur ($\alpha$), et décrite avec une précision inégalée (QED). Toute la suite consistera à demander : et si l'on rendait cette symétrie plus riche ? C'est exactement ce qui se passe avec l'**interaction forte**, que nous abordons au chapitre suivant.

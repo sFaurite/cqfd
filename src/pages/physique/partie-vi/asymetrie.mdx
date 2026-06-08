@@ -1,0 +1,83 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'asymétrie matière / antimatière"
+chapter: asymetrie
+description: "Pourquoi reste-t-il de la matière, et pas seulement du rayonnement ?"
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## L'asymétrie matière / antimatière
+
+Nous voici face à l'une des plus belles énigmes de la physique : **nous existons**. Cela peut sembler trivial, mais la relativité combinée à la mécanique quantique en fait presque un miracle statistique. Reprenons le fil.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez une comptabilité parfaitement équilibrée. À chaque fois que l'énergie du Big Bang crée une particule de matière, elle crée aussi son antiparticule, exactement comme une banque qui inscrit un crédit en face de chaque débit. Quand les deux se rencontrent, elles s'annulent : matière + antimatière → lumière. Si la comptabilité était *parfaite*, l'Univers se serait soldé en un océan de photons, sans la moindre particule survivante. Pas d'étoiles, pas de planètes, pas de vous. Or vous êtes là. C'est donc qu'**il restait un tout petit surplus de matière** quand la musique s'est arrêtée. D'où venait ce surplus ?
+</Encart>
+
+### Le problème : une création par paires
+
+La relativité restreinte impose $E = mc^2$ : l'énergie peut se transformer en masse, et inversement. Mais une règle de conservation accompagne cette création. Quand deux photons assez énergétiques fabriquent de la matière, ils ne fabriquent jamais une particule seule : ils produisent une **paire** particule–antiparticule, par exemple un électron et un positron.
+
+<Prereq href="/physique/partie-iv/fermions">Nous avons vu que chaque fermion possède une antiparticule, de même masse mais de charges opposées.</Prereq>
+
+Dans l'Univers primordial, ultra-chaud et ultra-dense, ces réactions tournaient dans les deux sens en permanence :
+
+$$ \gamma + \gamma \;\rightleftharpoons\; \text{particule} + \text{antiparticule}. $$
+
+Tant que la température était suffisante, équilibre parfait : autant de matière créée que détruite, autant de matière que d'antimatière. Puis l'Univers s'est dilaté et refroidi. Les photons sont devenus trop « mous » pour recréer des paires ; il ne restait plus qu'à s'annihiler. Si tout était symétrique, le bilan final serait **zéro matière**.
+
+<Resultat label="Le surplus observé">$$ \eta \;=\; \frac{n_{\text{baryons}} - n_{\text{antibaryons}}}{n_{\text{photons}}} \;\approx\; 6 \times 10^{-10} $$ <Badge niveau="etabli" slot="badge">Mesuré par le rayonnement de fond cosmologique (satellite Planck) et la nucléosynthèse primordiale, deux méthodes indépendantes qui concordent.</Badge></Resultat>
+
+Traduisons ce nombre. Pour environ **un milliard** de paires qui se sont mutuellement détruites en libérant deux photons chacune, il y avait **un baryon de matière en trop**, sans partenaire pour s'annihiler. Ce sont ces rescapés — environ une part sur un milliard — qui forment aujourd'hui toutes les galaxies. Et le milliard de paires annihilées ? Ce sont précisément les photons du fond diffus cosmologique que l'on détecte encore. La preuve que l'annihilation a bien eu lieu est littéralement écrite dans le ciel. <Badge niveau="etabli">L'asymétrie matière/antimatière est un fait observationnel solide ; aucune région de l'Univers faite d'antimatière n'a été détectée.</Badge>
+
+### Trois conditions pour un déséquilibre : Sakharov
+
+En 1967, le physicien Andreï Sakharov a posé la question proprement : *quelles conditions logiques* une théorie doit-elle remplir pour qu'un Univers démarrant symétrique finisse avec un excédent de matière ? Sa réponse tient en trois conditions, toutes nécessaires.
+
+| Condition | Ce qu'elle signifie | Pourquoi elle est indispensable |
+|---|---|---|
+| **1. Violation du nombre baryonique** | Des réactions doivent pouvoir changer le nombre total de quarks (baryons). | Sans cela, partant de zéro baryon net, on reste à zéro pour toujours. |
+| **2. Violation de C et de CP** | Les lois ne doivent pas traiter matière et antimatière de façon strictement identique. | Si elles étaient symétriques, tout excès produit côté matière serait exactement compensé côté antimatière. |
+| **3. Hors équilibre thermique** | Le déséquilibre doit se produire pendant que l'Univers change vite (expansion, refroidissement). | À l'équilibre parfait, les réactions inverses effacent tout surplus aussi vite qu'il apparaît. |
+
+<Badge niveau="etabli">Le théorème de Sakharov est un résultat logique solidement admis : ces trois conditions sont nécessaires (mais elles ne disent rien, à elles seules, de l'ampleur du surplus produit).</Badge>
+
+<Encart type="rappel" titre="Que sont C, P et CP ?">
+Trois opérations de symétrie imaginaires que l'on applique à une expérience :
+- **C** (conjugaison de charge) : remplacer chaque particule par son antiparticule.
+- **P** (parité) : prendre l'image miroir de l'espace (inverser gauche/droite, haut/bas).
+- **CP** : faire les deux à la fois — miroir *et* échange matière/antimatière.
+
+Dire qu'une loi « respecte CP » signifie qu'une expérience et sa version CP-transformée donnent exactement les mêmes probabilités. Une **violation de CP** signifie que matière et antimatière, vues dans un miroir, ne se comportent pas tout à fait pareil.
+</Encart>
+
+La condition 2 est la plus subtile, et la plus belle, car contrairement à ce qu'on pourrait croire, **elle est violée dans la nature**.
+
+<Encart type="plusloin" titre="La violation de CP, observée expérimentalement">
+On a longtemps cru les lois de la physique parfaitement symétriques par CP. En **1964**, Cronin et Fitch (prix Nobel 1980) étudient le **kaon neutre** $K^0$ et son antiparticule. Ces deux états se mélangent quantiquement et donnent des particules à durée de vie différente. La théorie symétrique CP prédisait qu'un certain état (le kaon à longue durée de vie) ne pouvait *jamais* se désintégrer en deux pions. Or il le faisait — dans environ **2 désintégrations sur 1000**. Petit, mais non nul : CP est violée. <Badge niveau="etabli">Résultat reproduit des milliers de fois.</Badge>
+
+Depuis, la violation de CP a été confirmée bien plus nettement dans les **mésons B** (usines à B comme BaBar, Belle, et l'expérience LHCb au CERN), puis dans les **mésons D** et les **mésons B étranges**. <Badge niveau="etabli">Mesures multiples, indépendantes, au pour-cent près.</Badge>
+
+D'où vient cette violation dans le Modèle Standard ? <Prereq href="/physique/partie-v/interaction-faible">De l'interaction faible</Prereq> : les quarks ne changent pas de saveur « tout droit ». La matrice de mélange (dite CKM) qui décrit ces transitions contient un nombre complexe, une **phase**, qui ne peut être annulée par aucun changement de convention. C'est cette phase irréductible qui rend les processus de matière et d'antimatière légèrement différents. Élégant : la violation de CP n'est pas ajoutée à la main, elle est une *conséquence* de la structure de l'interaction faible. <Badge niveau="modelise">Le mécanisme CKM décrit fidèlement toutes les violations de CP mesurées à ce jour ; c'est l'unique source de violation de CP confirmée.</Badge>
+</Encart>
+
+### Le verdict : le compte n'y est pas
+
+Voici le point crucial, et il faut le dire sans détour. Les trois conditions de Sakharov **sont toutes présentes** dans la physique connue : l'interaction faible viole bien C et CP, le Modèle Standard autorise (très rarement) des processus changeant le nombre baryonique, et l'expansion de l'Univers fournit le hors-équilibre. Tout y est, qualitativement. <Badge niveau="modelise">La violation du nombre baryonique dans le Modèle Standard repose sur des processus prédits par la théorie (les « sphalérons » de l'interaction électrofaible) ; ils sont solidement modélisés mais n'ont jamais été observés directement.</Badge>
+
+Mais quand on **calcule** combien de surplus de matière la violation de CP du Modèle Standard peut produire, on tombe sur un nombre du genre $\eta \sim 10^{-18}$, soit **environ un milliard de fois trop petit** par rapport aux $6 \times 10^{-10}$ observés. <Badge niveau="etabli">Ce déficit est un constat de calcul robuste, largement admis : le Modèle Standard, à lui seul, n'explique PAS l'asymétrie observée.</Badge>
+
+Autrement dit : nous tenons le bon *cadre* (Sakharov), nous voyons l'un de ses ingrédients à l'œuvre (CP violée), mais **il manque une pièce** au mécanisme. C'est l'un des plus grands trous béants de la physique.
+
+Quelles pistes ? On regroupe les hypothèses sous le nom de **baryogénèse** (créer directement un excès de quarks) — qui suppose souvent une nouvelle source de violation de CP au-delà du Modèle Standard. <Badge niveau="plausible">Plusieurs scénarios cohérents, aucun confirmé expérimentalement.</Badge> Une variante très étudiée est la **leptogénèse** : un excès se formerait d'abord chez les *leptons* (via de très lourds neutrinos hypothétiques), puis serait converti en excès de baryons. <Badge niveau="ouvert">Séduisante car liée à la masse des neutrinos, mais les particules invoquées sont hors de portée des accélérateurs actuels ; statut purement théorique.</Badge>
+
+<Encart type="intuition" titre="Pourquoi c'est passionnant plutôt que décevant">
+Quand un modèle aussi puissant que le Modèle Standard prédit le bon ordre de grandeur sur des dizaines de phénomènes mais rate l'asymétrie cosmique d'un facteur un milliard, ce n'est pas un échec : c'est une **flèche**. Elle pointe vers une physique nouvelle — neutrinos lourds, nouvelle violation de CP, transitions de phase de l'Univers jeune. Notre existence même est un indice expérimental que le Modèle Standard est incomplet.
+</Encart>
+
+Ce déséquilibre primordial a décidé de *quoi* l'Univers serait fait. Reste à comprendre comment cette matière, une fois sauvée de l'annihilation, s'est assemblée — des premiers noyaux aux atomes — pour bâtir la matière que nous touchons.

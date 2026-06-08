@@ -1,0 +1,35 @@
+---
+/**
+ * SpacetimeDiagram — diagramme de Minkowski interactif. Axes ct et x, cône de
+ * lumière, axes ct' / x' d'un référentiel en mouvement (β réglable), et un
+ * événement déplaçable dont on lit les coordonnées dans les deux référentiels
+ * ainsi que l'intervalle invariant s² = (ct)² − x².
+ */
+---
+
+<div class="iw" data-iw="minkowski">
+  <div class="iw__head"><span class="tag">Interactif</span> Diagramme d’espace-temps de Minkowski</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 1 / 1; touch-action: none; max-width: 460px; margin: 0 auto;"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="mk-beta">β du référentiel mobile</label>
+      <input id="mk-beta" type="range" min="-0.9" max="0.9" step="0.01" value="0.5" data-beta />
+      <output data-out-beta>0,50</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">événement (S)</span> <b data-out-s></b></span>
+    <span class="iw__chip"><span class="k">événement (S′)</span> <b data-out-sp></b></span>
+    <span class="iw__chip"><span class="k">intervalle s²</span> <b data-out-int></b></span>
+    <span class="iw__chip"><b data-out-type></b></span>
+  </div>
+  <p class="iw__note">
+    <strong>Glissez le point jaune.</strong> Les axes bleus (ct′, x′) sont ceux d’un observateur en
+    mouvement : ils « pivotent » vers la ligne de lumière à 45°. L’intervalle s² = (ct)² − x² garde
+    <em>la même valeur</em> dans les deux référentiels — c’est l’invariant de l’espace-temps.
+  </p>
+</div>
+
+<script>
+  import './SpacetimeDiagram.client.ts';
+</script>

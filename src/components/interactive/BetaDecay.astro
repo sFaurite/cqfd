@@ -1,0 +1,23 @@
+---
+/**
+ * BetaDecay — la désintégration β⁻ étape par étape, jusqu'au niveau des quarks :
+ * un quark d du neutron se change en quark u en émettant un boson W⁻, qui se
+ * désintègre en électron + antineutrino. Le neutron (udd) devient un proton (uud).
+ */
+---
+
+<div class="iw" data-iw="betadecay">
+  <div class="iw__head"><span class="tag">Interactif</span> La désintégration β⁻ : n → p + e⁻ + ν̄ₑ</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__btns">
+      <button class="iw__btn" data-prev>← Étape précédente</button>
+      <button class="iw__btn" data-next>Étape suivante →</button>
+    </div>
+  </div>
+  <p class="iw__note" data-caption></p>
+</div>
+
+<script>
+  import './BetaDecay.client.ts';
+</script>

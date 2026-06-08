@@ -1,0 +1,123 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La relation fondamentale E² = (mc²)² + (pc)²"
+chapter: e-mc2
+description: "Dérivation complète : comment γ et m s'éliminent pour donner la relation reine."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import EnergyTriangle from '../../../components/interactive/EnergyTriangle.astro';
+
+## La relation fondamentale $E^2 = (mc^2)^2 + (pc)^2$
+
+Tu connais déjà la formule la plus célèbre de toute la physique : $E = mc^2$. Mais cette formule a un défaut bien caché : elle ne parle que d'un objet **au repos**. Dès qu'une particule bouge, dès qu'elle a une quantité de mouvement, il manque quelque chose. Et surtout, $E = mc^2$ devient absurde pour la lumière, dont les grains — les photons — n'ont aucune masse ($m = 0$). Faut-il dire que la lumière n'a pas d'énergie ? Évidemment non.
+
+Il existe une relation plus profonde, dont $E = mc^2$ n'est qu'un cas particulier. Elle relie trois grandeurs — l'énergie $E$, la masse $m$ et la quantité de mouvement $p$ — et elle vaut pour **tout** : l'électron, la balle de fusil, et le photon sans masse.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine que l'énergie totale d'une particule se «&nbsp;range&nbsp;» selon deux directions perpendiculaires. La première représente ce qu'elle possède **juste parce qu'elle existe** (sa masse, via $mc^2$). La seconde représente ce qu'elle possède **parce qu'elle bouge** (son élan, via $pc$). Ces deux contributions ne s'additionnent pas bêtement : elles se combinent **comme les deux côtés d'un triangle rectangle**, et l'énergie totale $E$ en est l'hypoténuse. Pythagore débarque au cœur de la relativité.
+</Encart>
+
+### Les deux briques de départ
+
+Nous avons déjà établi, dans les chapitres précédents, les deux expressions dont nous avons besoin. Nous ne les redémontrons pas : nous les **utilisons**.
+
+<Prereq href="/physique/partie-ii/energie">L'énergie totale d'une particule de masse $m$ et de vitesse $v$ : $E = \gamma m c^2$.</Prereq>
+
+<Prereq href="/physique/partie-ii/quantite-mouvement">La quantité de mouvement relativiste : $p = \gamma m v$.</Prereq>
+
+Le symbole $\gamma$ (gamma) est le facteur de Lorentz, $\gamma = \dfrac{1}{\sqrt{1 - v^2/c^2}}$, qui dépend de la vitesse. On pose aussi, pour alléger, $\beta = v/c$.
+
+L'idée de la démonstration est presque magique : $\gamma$ et $v$ apparaissent dans $E$ **et** dans $p$. Si on combine $E$ et $p$ de la bonne façon, ces deux gêneurs vont **purement et simplement disparaître**, et il ne restera que $m$ et $c$, deux quantités qui ne dépendent pas du référentiel. C'est tout l'enjeu du chapitre.
+
+<Encart type="rappel" titre="Une identité algébrique sur le facteur de Lorentz">
+Partons de la définition $\gamma = \dfrac{1}{\sqrt{1-\beta^2}}$ avec $\beta = v/c$. En élevant au carré :
+
+$$ \gamma^2 = \frac{1}{1-\beta^2}. $$
+
+En multipliant les deux membres par $(1-\beta^2)$, on obtient l'identité-clé que nous réutiliserons :
+
+$$ \gamma^2\,(1 - \beta^2) = 1. $$
+
+Autrement dit&nbsp;: $\gamma^2 - \gamma^2\beta^2 = 1$. C'est la seule propriété de $\gamma$ dont nous aurons besoin.
+</Encart>
+
+### On la démontre, ligne à ligne
+
+<Encart type="calcul" titre="Démonstration de $E^2 = (mc^2)^2 + (pc)^2$">
+
+**Étape 1 — On écrit les carrés.** À partir de $E = \gamma m c^2$ et de $p = \gamma m v$, on calcule séparément $E^2$ et $(pc)^2$ :
+
+$$ E^2 = \gamma^2 m^2 c^4 \qquad\text{et}\qquad (pc)^2 = \gamma^2 m^2 v^2 c^2. $$
+
+**Étape 2 — On soustrait.** L'astuce est de calculer la **différence** $E^2 - (pc)^2$, car on va voir un facteur commun apparaître :
+
+$$ E^2 - (pc)^2 = \gamma^2 m^2 c^4 - \gamma^2 m^2 v^2 c^2. $$
+
+**Étape 3 — On factorise par $\gamma^2 m^2 c^4$.** Dans le second terme, écrivons $v^2 c^2 = c^4 \cdot \dfrac{v^2}{c^2} = c^4\,\beta^2$. La différence devient :
+
+$$ E^2 - (pc)^2 = \gamma^2 m^2 c^4 - \gamma^2 m^2 c^4\,\beta^2 = \gamma^2 m^2 c^4\,\bigl(1 - \beta^2\bigr). $$
+
+**Étape 4 — $\gamma$ disparaît.** On reconnaît l'identité du rappel, $\gamma^2(1-\beta^2) = 1$. Le facteur $\gamma^2$ et le facteur $(1-\beta^2)$ s'annulent mutuellement :
+
+$$ E^2 - (pc)^2 = m^2 c^4 \cdot \underbrace{\gamma^2\,(1-\beta^2)}_{=\,1} = m^2 c^4. $$
+
+C'est le cœur du chapitre&nbsp;: **$\gamma$ et $v$ ont totalement disparu.** Il ne reste que la masse $m$ et la vitesse de la lumière $c$, deux quantités identiques dans tous les référentiels.
+
+**Étape 5 — On range.** On fait passer $(pc)^2$ de l'autre côté :
+
+$$ E^2 = m^2 c^4 + (pc)^2 = (mc^2)^2 + (pc)^2. \qquad\blacksquare $$
+
+</Encart>
+
+<Resultat label="Relation énergie–impulsion">
+
+$$ E^2 = (mc^2)^2 + (pc)^2 $$
+
+<Badge niveau="etabli" slot="badge">Pilier de toute la physique des particules : vérifiée chaque jour dans les accélérateurs (LHC, etc.), où l'on mesure $E$ et $p$ et où l'on en déduit la masse $m$ des particules produites.</Badge>
+</Resultat>
+
+Remarque profonde&nbsp;: la quantité $E^2 - (pc)^2$ vaut $m^2c^4$, qui ne dépend **pas** de l'observateur. Deux physiciens qui se croisent à grande vitesse mesureront des $E$ et des $p$ différents, mais la combinaison $E^2 - (pc)^2$ leur donnera **la même masse**. C'est un **invariant relativiste**.
+
+<Badge niveau="etabli">L'invariance de $m^2c^4 = E^2 - (pc)^2$ par changement de référentiel est une conséquence directe des transformations de Lorentz, vérifiée expérimentalement avec une précision extrême.</Badge>
+
+### La lecture géométrique : le triangle de l'énergie
+
+Regarde à nouveau le résultat : $E^2 = (mc^2)^2 + (pc)^2$. C'est **exactement** le théorème de Pythagore. Dessine un triangle rectangle dont les deux côtés de l'angle droit mesurent $mc^2$ et $pc$ : alors l'hypoténuse mesure précisément $E$.
+
+<EnergyTriangle />
+
+<VideoManim src="energy-triangle" scene="EnergyTriangle" titre="Le triangle de l'énergie" legende="E, mc² et pc forment un triangle rectangle : E² = (mc²)² + (pc)²." />
+
+Ce triangle raconte toute l'histoire. Plus une particule va vite, plus son $pc$ grandit, plus l'hypoténuse $E$ s'allonge — mais le côté $mc^2$, lui, ne change jamais : la masse est l'ossature fixe de la particule.
+
+### Deux cas limites qui éclairent tout
+
+**Cas 1 — La particule au repos ($p = 0$).** Si la particule ne bouge pas, sa quantité de mouvement est nulle. Le côté $pc$ s'écrase, le triangle s'aplatit, et l'hypoténuse se confond avec le côté $mc^2$ :
+
+$$ E^2 = (mc^2)^2 + 0 \;\Longrightarrow\; E = mc^2. $$
+
+On retrouve la formule de l'énergie de repos. **$E = mc^2$ n'est donc qu'un cas particulier** de la relation fondamentale.
+
+<Badge niveau="etabli">$E = mc^2$ comme cas $p=0$ : confirmé par les bilans de masse en physique nucléaire (fission, fusion) et l'annihilation matière-antimatière.</Badge>
+
+**Cas 2 — La particule sans masse ($m = 0$).** C'est ici que la nouvelle relation devient indispensable. Pour un photon, $m = 0$, donc le côté $mc^2$ s'écrase à son tour :
+
+$$ E^2 = 0 + (pc)^2 \;\Longrightarrow\; E = pc. $$
+
+Une particule sans masse possède donc bien une énergie et une quantité de mouvement, reliées par $E = pc$. **Là où $E = mc^2$ donnerait $E = 0$ (absurde), la relation complète donne la bonne réponse.**
+
+<Badge niveau="etabli">$E = pc$ pour les photons : vérifié par l'effet Compton et la pression de radiation de la lumière, mesurée expérimentalement.</Badge>
+
+<Encart type="plusloin" titre="Pourquoi $E = pc$ est la signature de la vitesse $c$">
+Pour une particule massive, le rapport vitesse/énergie s'écrit $\dfrac{pc}{E} = \dfrac{\gamma m v c}{\gamma m c^2} = \dfrac{v}{c} = \beta$. Ce rapport vaut $1$ exactement quand $v = c$. Or $E = pc$ équivaut justement à $\dfrac{pc}{E} = 1$, donc à $v = c$. Une particule qui vérifie $E = pc$ va nécessairement à la vitesse de la lumière — et réciproquement, seules les particules de masse nulle peuvent atteindre $c$. C'est cohérent : $\gamma \to \infty$ quand $v \to c$, et le produit $\gamma m$ ne peut rester fini que si $m = 0$.
+</Encart>
+
+Voilà pourquoi les physiciens considèrent $E^2 = (mc^2)^2 + (pc)^2$ comme **plus fondamentale** que $E = mc^2$ : elle contient cette dernière, elle décrit le mouvement, et surtout elle est la seule à parler correctement de la lumière, faite de particules sans masse mais pleines d'énergie.
+
+Dans le prochain chapitre, nous mettrons cette relation à l'épreuve sur la lumière elle-même : nous en déduirons l'énergie et l'impulsion du photon, et nous verrons comment une particule sans masse peut malgré tout pousser un objet.

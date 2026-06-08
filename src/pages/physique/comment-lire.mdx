@@ -1,0 +1,138 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce site
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’indicateur de fiabilité, et le niveau requis. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce site raconte la physique fondamentale moderne **d’un seul tenant**, des **deux postulats de
+la relativité restreinte** jusqu’au Modèle Standard des particules. La règle, non négociable :
+*on ne vous demande jamais de croire sur parole.* Chaque résultat est soit **posé explicitement
+comme hypothèse**, soit **démontré** à partir de ce qui précède.
+
+Une précision d’honnêteté, dès maintenant : **on ne prétend pas tout déduire des deux seuls
+postulats.** La relativité (Parties I-II) en découle, oui. Mais le monde quantique et le Modèle
+Standard (Partie III et suivantes) **ne se déduisent pas** de la relativité — ce sont de
+**nouvelles hypothèses**, imposées par l’expérience. Chaque fois qu’on en ajoute une, on le **dit
+clairement** (un bandeau « Tournant » le signale) et on l’**ancre dans un fait mesuré**. La
+promesse exacte est donc : *rien n’est utilisé sans être, soit une hypothèse posée au grand jour,
+soit une déduction.*
+
+Cette page vous explique les **outils** qui reviennent partout : les encadrés d’hypothèses (et
+les bandeaux « Tournant »), les encarts dépliables, et les badges de fiabilité.
+
+## À qui s’adresse ce site ?
+
+Le niveau de départ visé est la **Terminale S** (ou son équivalent) : vous êtes à l’aise avec
+les dérivées, les vecteurs, la trigonométrie de base et la notation scientifique. **Aucun
+prérequis universitaire n’est supposé.** Dès qu’un outil nouveau apparaît, un encart
+« Rappel » le ramène aux acquis du lycée.
+
+<Encart type="rappel" titre="Exemple de rappel — la notation scientifique">
+On écrit les très grands ou très petits nombres sous la forme $a \times 10^{n}$, avec
+$1 \le a < 10$. Par exemple, la vitesse limite vaut
+
+$$ c \approx 3{,}00 \times 10^{8}\ \text{m/s} = 300\,000\,000\ \text{m/s}. $$
+
+Et la constante de Planck vaut $h \approx 6{,}63 \times 10^{-34}\ \text{J·s}$ — un nombre
+minuscule qui fixe l’échelle du monde quantique.
+</Encart>
+
+## Les encadrés « Hypothèses de départ »
+
+Au début de chaque grande partie, un encadré liste **noir sur blanc** ce qui est admis sans
+démonstration. C’est le contrat : tout le reste de la partie devra en découler.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente comme ceci, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **change de cadre** — quand on cesse de déduire pour adopter de nouvelles hypothèses
+(par exemple au début du monde quantique) —, un **bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, la théorie précédente ne suffit plus. On **ajoute** de nouvelles hypothèses, **imposées par
+l’expérience** et non déduites — et on le dit clairement, plutôt que de les faire passer en
+contrebande. La déduction reprend ensuite à partir d’elles.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — démonstrations
+ligne à ligne, rappels, approfondissements — sont rangés dans des encarts que vous **dépliez
+d’un clic** (ou avec la touche <kbd>Entrée</kbd> au clavier). Il en existe quatre familles,
+reconnaissables à leur couleur et à leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ils sont **ouverts par défaut**
+parce qu’ils aident à comprendre *avant* de calculer. Exemple : « le facteur de Lorentz, c’est
+le “taux de change” entre le temps d’une horloge en mouvement et le vôtre ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent une démonstration **ligne à ligne**, sans étape sautée. Par exemple,
+on y montrerait que
+
+$$ \gamma = \frac{1}{\sqrt{1 - \dfrac{v^2}{c^2}}} $$
+
+en partant de l’expérience de pensée de l’horloge à lumière. Chaque ligne est justifiée par
+la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel Terminale S (fermé par défaut)">
+Les encarts 📐 ramènent un outil au programme du lycée : théorème de Pythagore, dérivée d’une
+fonction, produit scalaire… Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors-programme** : une démonstration plus
+exigeante, un lien avec une théorie plus avancée. Facultatifs : on peut les sauter sans perdre
+le fil.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent
+sur tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce site. **Chaque affirmation scientifique notable** porte une
+pastille colorée qui dit *à quel point on en est sûr*. Survolez un badge (ou donnez-lui le focus
+au clavier) pour lire **pourquoi** il porte ce niveau.
+
+- La masse du photon est nulle <Badge niveau="etabli">Vérifié expérimentalement : la borne actuelle est inférieure à $10^{-18}$ eV/c². Protégé par une symétrie de jauge.</Badge>
+- Le champ de Higgs donne leur masse aux particules élémentaires <Badge niveau="modelise">Le boson est observé (2012) ; le mécanisme est très bien confirmé, mais reste un cadre théorique.</Badge>
+- Les neutrinos pourraient être leur propre antiparticule <Badge niveau="plausible">Hypothèse sérieuse (Majorana), testée par la recherche de la double désintégration β sans neutrino — non tranchée.</Badge>
+- La nature de la matière noire <Badge niveau="ouvert">Aucune particule candidate détectée à ce jour : question entièrement ouverte.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et
+la page <a href="/physique/methodologie">Méthodologie</a> détaille ce que chaque niveau signifie.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur dans un encadré, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ E = mc^2 $$
+<Badge niveau="etabli" slot="badge">Cas particulier (au repos) de $E^2=(mc^2)^2+(pc)^2$, vérifié dans d’innombrables expériences.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat démontré ailleurs, un lien **prérequis** vous y
+renvoie d’un clic : par exemple, on invoquera plus tard le <Prereq href="/physique/partie-i/lorentz-gamma">facteur de Lorentz</Prereq> en pointant vers sa démonstration.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (disponible sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? La construction commence par les deux postulats d’Einstein.

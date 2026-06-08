@@ -1,0 +1,92 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'interaction forte et la force nucléaire résiduelle"
+chapter: interaction-forte
+description: "Gluons et confinement entre quarks ; pions entre nucléons (force résiduelle)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## L'interaction forte et la force nucléaire résiduelle
+
+Il y a deux « forces fortes » dans la nature, et on les confond presque toujours. La première colle les **quarks** entre eux à l'intérieur d'un proton. La seconde colle les **protons et les neutrons** entre eux dans un noyau. Ce ne sont pas la même chose : la seconde n'est qu'un *résidu* de la première, comme une miette qui dépasse. Ce chapitre raconte comment l'une découle de l'autre.
+
+<Encart type="intuition" titre="L'idée en une image : un élastique, pas un ressort">
+Imagine deux quarks reliés par un élastique. Pour les écarter, tu tires : l'élastique se tend, et — contrairement à la gravité ou à l'électricité — la force **ne faiblit pas** quand tu écartes. Au contraire, tu accumules de l'énergie. À un moment, l'élastique « casse »… mais au lieu de libérer deux bouts, l'énergie investie se matérialise en une **nouvelle paire quark–antiquark** aux extrémités cassées ($E=mc^2$). Tu voulais un quark seul, tu obtiens deux nouveaux élastiques. C'est le **confinement** : on n'isole jamais un quark.
+</Encart>
+
+### 1. L'interaction forte fondamentale : la charge de couleur
+
+<Prereq href="/physique/partie-iv/fermions">Les quarks</Prereq> ne portent pas seulement une charge électrique ; ils portent une charge d'un type nouveau, baptisée **couleur**, qui peut prendre trois valeurs notées par convention rouge, vert, bleu (rien à voir avec la vraie couleur : c'est juste un nom). Cette charge est la source de l'interaction forte fondamentale, décrite par la théorie de la **chromodynamique quantique** (QCD).
+
+Les médiateurs de cette force sont les <Prereq href="/physique/partie-iv/bosons-jauge">gluons</Prereq>, des bosons de masse nulle. Mais voici la différence cruciale avec le photon de l'électromagnétisme :
+
+| | Photon (force EM) | Gluon (force forte) |
+|---|---|---|
+| Charge transportée | aucune | porte lui-même de la couleur |
+| Interagit avec ses semblables ? | non | **oui** |
+| Portée libre | infinie | confinée |
+
+Le photon est électriquement neutre : il transmet la force sans la subir. Le gluon, lui, **porte de la couleur** : il agit à la fois comme messager *et* comme charge. Conséquence : les gluons s'attirent entre eux, et le champ de force, au lieu de s'étaler dans l'espace, se condense en un **tube** étroit reliant les quarks — notre élastique.
+
+<Badge niveau="modelise">La QCD (charge de couleur, gluons auto-interagissants) est solidement vérifiée par les collisions à haute énergie au LHC et dans les anciens accélérateurs (jets de hadrons, taux de production). C'est un pilier du Modèle standard, mais le confinement n'a pas de preuve analytique complète (problème mathématique encore ouvert).</Badge>
+
+### 2. Le confinement : pourquoi on ne voit jamais de quark seul
+
+Pour le photon, l'énergie d'interaction décroît en $1/r$ : éloigne deux charges, la force tend vers zéro, et on peut les séparer. Pour deux quarks, le tube de couleur stocke une énergie qui **croît linéairement** avec la distance :
+
+$$ E(r) \approx \kappa\, r \quad\text{avec}\quad \kappa \approx 1{,}4\times 10^{5}\ \text{N} $$
+
+Cette « tension de corde » $\kappa$ vaut environ $1{,}4\times 10^{5}\ \text{N}$, soit l'équivalent d'une quinzaine de tonnes-force : séparer complètement des quarks coûterait infiniment d'énergie. Bien avant d'y arriver, l'énergie accumulée suffit à créer une paire quark–antiquark.
+
+<Encart type="plusloin" titre="Le confinement, en détail">
+Le potentiel quark–antiquark est bien décrit par une forme « Coulomb + corde » :
+
+$$ V(r) = -\frac{4}{3}\frac{\alpha_s}{r} + \kappa\, r $$
+
+Le terme $-\alpha_s/r$ domine à courte distance (comportement quasi-coulombien) ; le terme $\kappa r$ domine à longue distance et **interdit la séparation**. Quand $\kappa r$ atteint l'énergie de masse d'une paire (soit quelques centaines de MeV, l'échelle de masse effective d'un quark dans un hadron), la corde se rompt par création d'une paire : c'est l'**hadronisation**. En pratique, un quark éjecté lors d'une collision produit une gerbe de hadrons collimatée, un **jet** — la signature observable du confinement. La preuve analytique que la QCD impose le confinement reste, à ce jour, un problème ouvert (l'un des « prix du millénaire »).
+
+<Badge niveau="modelise">Forme du potentiel et tension de corde mesurées sur réseau (lattice QCD) et confirmées par la spectroscopie du charmonium ; mécanisme accepté mais sans démonstration mathématique rigoureuse.</Badge>
+</Encart>
+
+Le confinement impose une règle simple : seules existent librement les combinaisons de couleur **neutre** (« blanche »). Deux façons d'y parvenir :
+
+<Resultat label="Les hadrons sont neutres en couleur">
+
+$$ \text{baryon} = q\,q\,q \;(\text{rouge}+\text{vert}+\text{bleu}) \qquad \text{méson} = q\,\bar{q}\;(\text{couleur}+\text{anti-couleur}) $$
+
+<Badge niveau="modelise" slot="badge">Toutes les particules détectées (proton, neutron, pions…) sont des hadrons neutres ; aucun quark ni gluon libre n'a jamais été observé, conformément à la QCD.</Badge>
+</Resultat>
+
+Le proton ($uud$) et le neutron ($udd$) sont des baryons. Notons d'ailleurs que la masse du proton ne vient presque pas de celle de ses quarks, mais de l'énergie du champ fort confiné en son sein — voir <Prereq href="/physique/partie-ii/masse-energie-confinee">la masse du proton</Prereq>.
+
+<Encart type="rappel" titre="Liberté asymptotique">
+On vient de voir qu'à *grande* distance la force forte est colossale. Surprise : à *très courte* distance (haute énergie), elle devient au contraire **très faible**, et les quarks se comportent presque comme libres. C'est la **liberté asymptotique** : la constante de couplage $\alpha_s$ *décroît* quand l'énergie augmente — l'inverse de l'électromagnétisme.
+
+<Badge niveau="etabli">Gross, Politzer et Wilczek, prix Nobel 2004 ; vérifiée précisément par la décroissance mesurée de $\alpha_s$ avec l'énergie au LEP et au LHC.</Badge>
+</Encart>
+
+### 3. La force nucléaire : un simple résidu
+
+Alors, qu'est-ce qui retient ensemble protons et neutrons dans un noyau ? Chaque nucléon est, vu de l'extérieur, **neutre en couleur**. La force forte fondamentale agit sur la couleur ; entre deux objets globalement blancs, elle devrait donc s'annuler. Et c'est presque le cas… mais pas tout à fait.
+
+<Encart type="intuition" titre="L'analogie de van der Waals">
+Une molécule d'eau est électriquement neutre. Pourtant deux molécules d'eau s'attirent (c'est pourquoi l'eau est liquide) : les charges internes ne sont pas parfaitement centrées, et il en « fuit » un petit champ résiduel — les forces de van der Waals. La **force nucléaire** est l'exact analogue pour la couleur : entre deux nucléons blancs, il subsiste une attraction *résiduelle*, fuite du champ de couleur interne.
+</Encart>
+
+Cette force résiduelle n'est **pas** transmise directement par des gluons (ils sont confinés à l'intérieur de chaque nucléon), mais par l'échange de hadrons légers, principalement les **pions** ($\pi$, des mésons $q\bar q$). C'est la masse de ces pions qui fixe la portée de la force nucléaire à environ $1{,}5\ \text{fm}$ — d'où la taille des noyaux. Cette idée d'un médiateur massif, proposée par Yukawa, sera précisée au chapitre suivant.
+
+<Resultat label="Deux forces fortes à distinguer">
+
+$$ \underbrace{q\;\xleftrightarrow{\ \text{gluons}\ }\;q}_{\text{force forte FONDAMENTALE}} \qquad\Longrightarrow\qquad \underbrace{p,n\;\xleftrightarrow{\ \text{pions}\ }\;p,n}_{\text{force nucléaire RÉSIDUELLE}} $$
+
+<Badge niveau="modelise" slot="badge">Distinction fondamentale/résiduelle bien établie en physique nucléaire (modèle de Yukawa, potentiels nucléon-nucléon ajustés sur la diffusion p-n), analogue à EM → van der Waals.</Badge>
+</Resultat>
+
+À retenir, et c'est le piège à éviter : la force forte *entre quarks* (gluons, couleur, confinement) et la force nucléaire *entre nucléons* (pions, résiduelle) sont **deux niveaux distincts** d'un même phénomène. L'une est la cause profonde, l'autre sa lointaine retombée.
+
+Au chapitre suivant, nous donnerons corps à cet « échange de pions » : comment une particule *massive* peut servir de messager, et pourquoi cela impose une portée finie — l'idée de Yukawa.

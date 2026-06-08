@@ -1,0 +1,38 @@
+---
+/**
+ * MasslessParticle — vitesse v/c en fonction de la quantité de mouvement, pour
+ * différentes masses. Pour m = 0, v = c quelle que soit p (la particule ne peut
+ * pas être au repos) ; pour m > 0, v → c sans jamais l'atteindre.
+ */
+---
+
+<div class="iw" data-iw="massless">
+  <div class="iw__head"><span class="tag">Interactif</span> Sans masse ⇒ v = c. Avec masse ⇒ v &lt; c.</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="ml-m">masse mc²</label>
+      <input id="ml-m" type="range" min="0" max="3" step="0.05" value="1" data-m />
+      <output data-out-m></output>
+    </div>
+    <div class="iw__row">
+      <label for="ml-p">pc</label>
+      <input id="ml-p" type="range" min="0" max="6" step="0.05" value="2" data-p />
+      <output data-out-p></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">E</span> <b data-out-e></b></span>
+    <span class="iw__chip"><span class="k">v/c</span> <b data-out-v></b></span>
+    <span class="iw__chip"><b data-out-msg></b></span>
+  </div>
+  <p class="iw__note">
+    On a v/c = pc/E avec E = √((mc²)² + (pc)²). Mettez la masse à 0 : la courbe devient une droite
+    plate à v = c — une particule sans masse va <em>toujours</em> à c, on ne peut ni l’accélérer ni
+    l’arrêter. Avec une masse, augmenter p rapproche v de c sans jamais l’atteindre.
+  </p>
+</div>
+
+<script>
+  import './MasslessParticle.client.ts';
+</script>

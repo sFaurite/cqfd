@@ -1,0 +1,108 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le principe d'incertitude de Heisenberg"
+chapter: heisenberg
+description: "Confiner dans un petit espace coûte de l'énergie : la clé des masses."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import HeisenbergBox from '../../../components/interactive/HeisenbergBox.astro';
+
+## Le principe d'incertitude de Heisenberg
+
+On a déjà vu une idée déroutante : à toute particule est associée une onde, de longueur d'onde $\lambda = h/p$ (voir <Prereq href="/physique/partie-iii/dualite-de-broglie">la longueur d'onde de de Broglie</Prereq>). Cette page en tire une conséquence qui a fait trembler la physique du XXᵉ siècle : on ne peut pas connaître à la fois, et aussi précisément qu'on veut, **où** est une particule et **avec quelle impulsion** elle voyage. Ce n'est pas de la maladresse expérimentale : c'est inscrit dans la nature ondulatoire de la matière.
+
+<Encart type="intuition" titre="L'idée en une image">
+Pensez au son. Une note **parfaitement pure** (une seule fréquence) doit durer infiniment longtemps : un « bip » très court n'a pas de hauteur bien définie, il « gratte » sur plein de fréquences à la fois. Inversement, pour bien définir la hauteur, il faut un son long. **Localisation dans le temps** et **pureté en fréquence** s'opposent.
+
+Une particule quantique, c'est pareil avec l'espace. La bien localiser (un « pic » étroit, $\Delta x$ petit) oblige à superposer beaucoup de longueurs d'onde différentes — donc beaucoup d'impulsions différentes (car $p = h/\lambda$). Sa position devient nette, mais son impulsion devient floue. Les deux flous sont liés par une balance qu'on ne peut pas tromper.
+</Encart>
+
+### L'énoncé
+
+En notant $\Delta x$ l'incertitude (l'étalement) sur la position et $\Delta p$ celle sur l'impulsion :
+
+<Resultat label="Principe d'incertitude position-impulsion">
+
+$$ \Delta x \cdot \Delta p \ \geq\ \frac{\hbar}{2} $$
+
+<Badge niveau="etabli" slot="badge">Inégalité vérifiée sur d'innombrables systèmes (diffraction d'électrons, spectroscopie, pièges à ions). Conséquence mathématique exacte de la description ondulatoire.</Badge>
+</Resultat>
+
+Ici $\hbar$ (« h barre ») est la **constante de Planck réduite** :
+
+$$ \hbar = \frac{h}{2\pi} \approx 1{,}055 \times 10^{-34}\ \text{J·s}. $$
+
+La constante de Planck $h \approx 6{,}626\times 10^{-34}\ \text{J·s}$ est aujourd'hui une valeur **fixée par convention** (elle définit le kilogramme depuis 2019) ; $\hbar$ en découle exactement. <Badge niveau="etabli">Depuis 2019, le SI fixe $h = 6{,}62607015\times 10^{-34}\ \text{J·s}$ par définition (valeur exacte, sans incertitude).</Badge>
+
+<Badge niveau="etabli">Le caractère **fondamental** (et non instrumental) de l'incertitude est solidement établi : il ne provient pas du fait qu'on perturbe la particule en la mesurant, mais de ce qu'une position et une impulsion *simultanément* définies n'existent tout simplement pas pour un objet quantique.</Badge>
+
+<Encart type="plusloin" titre="Ne pas confondre avec « l'effet de l'observateur »">
+On résume souvent l'incertitude par : « mesurer la position perturbe l'impulsion » (le fameux « microscope de Heisenberg »). C'est une image historique, mais **trompeuse** : elle laisse croire que la particule *a* en réalité une position et une impulsion bien définies, qu'on viendrait seulement brouiller en regardant. Faux. L'inégalité $\Delta x\,\Delta p \geq \hbar/2$ porte sur l'**état** de la particule lui-même, *avant* toute mesure : un état où $\Delta x$ est petit n'a tout simplement pas d'impulsion bien définie. La perturbation par la mesure (l'« effet de l'observateur ») est un phénomène réel mais **distinct** ; ce n'est pas l'origine du principe d'incertitude.
+</Encart>
+
+<HeisenbergBox />
+
+### Pourquoi cette balance ? L'argument du paquet d'ondes
+
+Une particule localisée n'est pas une onde infinie : c'est un **paquet d'ondes**, un petit train d'oscillations confiné dans une région de largeur $\Delta x$. Pour fabriquer un tel paquet, on additionne plusieurs ondes pures de longueurs d'onde voisines. Les crêtes se renforcent au centre du paquet et s'annulent ailleurs : c'est cette annulation qui « fabrique » la localisation.
+
+Le point clé : **plus on veut un paquet étroit, plus il faut mélanger d'ondes de longueurs d'onde différentes.** Or chaque longueur d'onde correspond à une impulsion ($p = h/\lambda$). Beaucoup de longueurs d'onde, c'est donc un grand étalement $\Delta p$ d'impulsions. On ne peut pas avoir un paquet à la fois ultra-étroit ($\Delta x$ petit) et fait d'une seule onde ($\Delta p$ nul) : c'est contradictoire. <Badge niveau="etabli">La largeur d'un paquet d'ondes et l'étalement de ses impulsions sont liés par cette contrainte : c'est un théorème sur les transformées de Fourier, indépendant de toute mesure.</Badge>
+
+<Encart type="rappel" titre="Qu'est-ce qu'un paquet d'ondes ?">
+Une onde **pure** $\sin(2\pi x/\lambda)$ s'étend de $-\infty$ à $+\infty$ : elle a une longueur d'onde parfaitement définie, donc (par $p = h/\lambda$) une impulsion parfaitement définie, mais **aucune** position privilégiée. Pour localiser quelque chose, on **superpose** plusieurs telles ondes de longueurs d'onde voisines : leurs crêtes coïncident dans une petite zone (le paquet) et se décalent ailleurs jusqu'à s'annuler. Plus on veut une zone étroite, plus il faut d'ondes voisines à additionner. C'est l'idée d'addition d'ondes (interférences) vue en Terminale, poussée jusqu'au bout.
+</Encart>
+
+<Encart type="plusloin" titre="Le lien exact : la transformée de Fourier">
+Mathématiquement, un paquet d'ondes $\psi(x)$ et sa « composition en impulsions » $\tilde\psi(p)$ sont reliés par une **transformée de Fourier** — le même outil qui décompose un son en fréquences. Un théorème central dit alors : le produit des largeurs d'une fonction et de sa transformée de Fourier ne peut pas descendre en dessous d'un seuil.
+
+Pour un **paquet gaussien** (une « cloche »), c'est ce cas qui réalise exactement l'égalité $\Delta x\,\Delta p = \hbar/2$ ; toute autre forme donne un produit plus grand, d'où l'inégalité $\geq$. L'identité $\Delta x\,\Delta p \geq \hbar/2$ n'est donc pas une loi physique ajoutée à la main : c'est un fait de mathématiques sur les ondes, transporté dans le monde quantique par la relation $p = h/\lambda$.
+</Encart>
+
+### La conséquence décisive : confiner coûte de l'énergie
+
+Voici le résultat le plus lourd de conséquences. Enfermons une particule de masse $m$ dans une boîte de taille $\Delta x$. Sa position est donc connue à $\Delta x$ près — l'inégalité impose alors une impulsion qui ne peut pas être nulle.
+
+<Encart type="calcul" titre="Énergie cinétique minimale d'une particule confinée">
+
+**Étape 1 — borne sur l'impulsion.** La particule étant confinée dans une région de taille $\Delta x$, le principe donne :
+
+$$ \Delta p \ \geq\ \frac{\hbar}{2\,\Delta x}. $$
+
+**Étape 2 — l'impulsion ne peut pas être nulle.** Son impulsion moyenne peut être nulle (elle ne part en moyenne nulle part), mais elle **fluctue** d'au moins $\Delta p$. L'ordre de grandeur de l'impulsion typique est donc $p \sim \Delta p \sim \hbar/\Delta x$ (on garde l'ordre de grandeur, en lâchant le facteur 2) :
+
+$$ p \ \sim\ \Delta p \ \sim\ \frac{\hbar}{\Delta x}. $$
+
+**Étape 3 — énergie cinétique associée.** Pour une particule non relativiste, $E_c = \dfrac{p^2}{2m}$. En reportant $p \sim \hbar/\Delta x$ :
+
+$$ E_{c,\text{min}} \ \sim\ \frac{p^2}{2m} \ \sim\ \frac{1}{2m}\left(\frac{\hbar}{\Delta x}\right)^2 \ =\ \frac{\hbar^2}{2\,m\,(\Delta x)^2}. $$
+
+**Conclusion.** Plus la boîte est petite, plus cette énergie explose (en $1/\Delta x^2$) :
+
+$$ \boxed{\,E_{c,\text{min}} \ \sim\ \frac{\hbar^2}{2\,m\,(\Delta x)^2}\,} $$
+
+On ne peut pas immobiliser une particule dans un petit volume : la confiner lui impose une **énergie de point zéro** incompressible. ∎
+</Encart>
+
+<Resultat label="Le confinement a un coût énergétique">
+
+$$ E_{c,\text{min}} \ \sim\ \frac{\hbar^2}{2\,m\,(\Delta x)^2} $$
+
+<Badge niveau="modelise" slot="badge">Estimation d'ordre de grandeur, mais qualitativement exacte et confirmée : elle explique la stabilité de l'atome (l'électron ne tombe pas sur le noyau) et l'énergie des états liés.</Badge>
+</Resultat>
+
+<Encart type="intuition" titre="Pourquoi l'atome ne s'effondre pas">
+En physique classique, l'électron devrait spiraler vers le noyau et s'y écraser. Mais le confiner près du noyau ($\Delta x$ minuscule) ferait exploser son énergie cinétique. L'atome trouve un compromis : un rayon où l'énergie totale est la plus basse possible. La stabilité de la matière est une **victoire de l'incertitude** sur l'attraction. <Badge niveau="modelise" compact>L'estimation par l'incertitude redonne le bon ordre de grandeur du rayon de Bohr et de l'énergie de l'hydrogène.</Badge>
+</Encart>
+
+### Le clou : d'où vient la masse du proton
+
+Souvenez-vous de <Prereq href="/physique/partie-ii/masse-energie-confinee">l'énergie confinée du proton</Prereq>. Les quarks qui le composent sont enfermés dans une région de l'ordre de $\Delta x \sim 1\ \text{fm} = 10^{-15}\ \text{m}$. Un confinement aussi serré force, via notre formule, une énergie colossale. Et par $E = mc^2$, cette énergie *est* l'essentiel de la masse du proton : les quarks « nus » ne pèsent presque rien, c'est leur énergie de confinement qui fait la masse.
+
+<Badge niveau="modelise">Le mécanisme « confinement → énergie → masse hadronique » est solidement établi qualitativement et confirmé quantitativement par les calculs de chromodynamique quantique (QCD) sur réseau. La formule simple ci-dessus n'en donne que l'ordre de grandeur, mais elle pointe la bonne physique.</Badge>
+
+Nous comprenons maintenant que l'incertitude n'est pas une limite de nos appareils, mais un principe créateur : elle stabilise la matière et lui donne sa masse. Cette même idée — une grandeur trop bien localisée force l'apparition d'énergie — ne s'arrête pas à la position. Au chapitre suivant, nous changerons de point de vue : une particule n'est plus un petit grain, mais une **excitation d'un champ** qui remplit tout l'espace. C'est ce changement de regard qui réconciliera l'onde, l'incertitude et la création de particules.

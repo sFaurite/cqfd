@@ -1,0 +1,53 @@
+---
+/**
+ * Lien « prérequis » — pointe vers la page où un résultat utilisé ici a été
+ * posé en hypothèse ou démontré. Matérialise la traçabilité « rien n'est admis
+ * sans justification ».
+ *
+ * Usage inline :
+ *   …d'après le <Prereq href="/partie-i/un-chapitre">résultat établi au chapitre…</Prereq>…
+ */
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+
+<a class="prereq" href={href} title="Voir la page où ce résultat est établi">
+  <svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true">
+    <path
+      d="M6.5 9.5l3-3M7 4.5h3.5V8M9.5 11H4.5V6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.4"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  </svg>
+  <span><slot /></span>
+</a>
+
+<style>
+  .prereq {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    padding: 0.02em 0.35em;
+    border-bottom: 1px dashed color-mix(in srgb, var(--c-link) 60%, transparent);
+    color: var(--c-link);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .prereq:hover {
+    text-decoration: none;
+    background: color-mix(in srgb, var(--c-link) 14%, transparent);
+    border-radius: 4px;
+    color: var(--c-link-hover);
+  }
+  .prereq svg {
+    flex: none;
+    opacity: 0.8;
+  }
+  .prereq span {
+    white-space: normal;
+  }
+</style>

@@ -1,0 +1,8 @@
+# Dépendances Python pour les animations Manim.
+# Installation (déjà faite par manim/install.sh) :
+#   python3 -m venv manim/.venv
+#   manim/.venv/bin/pip install -r manim/requirements.txt
+#
+# Nécessite aussi, côté système : ffmpeg + une distribution LaTeX (texlive…) + dvisvgm
+# (voir manim/install.sh).
+manim>=0.18,<0.20

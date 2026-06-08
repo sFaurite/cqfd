@@ -1,0 +1,155 @@
+---
+/**
+ * Lecteur de vidéo Manim, avec dégradation gracieuse.
+ *
+ * Cherche dans public/videos/ les fichiers <src>.mp4, <src>.png (poster) et
+ * <src>.fr.vtt (sous-titres). Selon ce qui existe :
+ *   - mp4 présent  → <video controls> + poster + piste de sous-titres si dispo ;
+ *   - mp4 absent mais png présent → affiche le poster + invite à rendre la vidéo ;
+ *   - rien         → encart d'invite au rendu Manim (le composant interactif de
+ *                    la page porte alors la démonstration vivante).
+ *
+ * Usage :
+ *   <VideoManim src="light-clock" titre="L'horloge à lumière" scene="LightClock"
+ *               legende="Le tic-tac d'une horloge en mouvement dure plus longtemps." />
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+interface Props {
+  src: string;
+  titre: string;
+  scene?: string;
+  legende?: string;
+}
+
+const { src, titre, scene, legende } = Astro.props;
+
+const dir = path.join(process.cwd(), 'public', 'videos');
+const has = (ext: string) => {
+  try {
+    return fs.existsSync(path.join(dir, `${src}.${ext}`));
+  } catch {
+    return false;
+  }
+};
+const hasMp4 = has('mp4');
+const hasPoster = has('png');
+const hasVtt = has('fr.vtt');
+
+const mp4Url = `/videos/${src}.mp4`;
+const posterUrl = hasPoster ? `/videos/${src}.png` : undefined;
+const vttUrl = `/videos/${src}.fr.vtt`;
+const renderCmd = scene ? `manim -qh manim/${src.replace(/-/g, '_')}.py ${scene}` : `bash manim/render.sh`;
+---
+
+<figure class="vmanim">
+  {
+    hasMp4 ? (
+      <video controls preload="metadata" poster={posterUrl} playsinline>
+        <source src={mp4Url} type="video/mp4" />
+        {hasVtt && <track kind="subtitles" src={vttUrl} srclang="fr" label="Français" default />}
+        Votre navigateur ne lit pas la balise vidéo.
+      </video>
+    ) : (
+      <div class="placeholder">
+        {posterUrl ? (
+          <img src={posterUrl} alt={`Aperçu de la vidéo : ${titre}`} />
+        ) : (
+          <div class="noposter" aria-hidden="true">▶</div>
+        )}
+        <div class="overlay">
+          <p class="ph-title">🎬 Vidéo Manim — « {titre} »</p>
+          <p class="ph-sub">
+            Vidéo non encore rendue. Le composant interactif ci-dessous porte la
+            même démonstration. Pour générer la vidéo&nbsp;:
+          </p>
+          <code>{renderCmd}</code>
+        </div>
+      </div>
+    )
+  }
+  <figcaption>
+    <span class="cap-icon" aria-hidden="true">🎬</span>
+    <span><strong>{titre}.</strong> {legende}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .vmanim {
+    margin: 1.6em 0;
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+    box-shadow: var(--shadow);
+  }
+  video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #04060a;
+  }
+  .placeholder {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: radial-gradient(circle at 50% 40%, #11202b, #060a0f);
+    display: grid;
+    place-items: center;
+  }
+  .placeholder img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+  }
+  .noposter {
+    font-size: 3rem;
+    color: var(--c-blue);
+    opacity: 0.5;
+  }
+  .overlay {
+    position: relative;
+    text-align: center;
+    padding: 1.2em;
+    max-width: 540px;
+  }
+  .ph-title {
+    margin: 0 0 0.4em;
+    font-weight: 700;
+    color: var(--c-blue);
+  }
+  .ph-sub {
+    margin: 0 0 0.7em;
+    color: var(--c-muted);
+    font-size: 0.9rem;
+  }
+  .overlay code {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--c-border);
+    color: var(--c-yellow);
+    padding: 0.4em 0.7em;
+    border-radius: var(--radius-sm);
+  }
+  figcaption {
+    display: flex;
+    gap: 0.55em;
+    align-items: flex-start;
+    padding: 0.7em 1em;
+    background: var(--c-bg-elev);
+    color: var(--c-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  figcaption strong {
+    color: var(--c-text);
+  }
+  .cap-icon {
+    flex: none;
+  }
+</style>

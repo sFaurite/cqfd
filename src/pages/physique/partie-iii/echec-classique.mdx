@@ -1,0 +1,129 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Pourquoi la physique classique échoue"
+chapter: echec-classique
+description: "Corps noir et effet photoélectrique : là où la physique de 1900 craque."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Pourquoi la physique classique échoue
+
+Vers 1900, la physique semble triomphante : la mécanique de Newton décrit les planètes, l'électromagnétisme de Maxwell unifie lumière, électricité et magnétisme. Pourtant, deux expériences de laboratoire, en apparence anodines, vont faire vaciller tout l'édifice. Le point commun de ces deux énigmes : la physique classique prédit l'**infini** ou le **rien** là où la nature se contente d'autre chose. La solution, dans les deux cas, sera la même idée révolutionnaire — l'énergie ne s'écoule pas en un flot continu, mais par **grains**.
+
+<Tournant titre="Tournant méthodologique : à partir d'ici, on AJOUTE des hypothèses">
+Jusqu'à présent, tout découlait des **deux postulats de la relativité**. Ce n'est plus possible : la mécanique quantique **ne se déduit pas** de la relativité. C'est une théorie *nouvelle*, qu'aucun raisonnement ne fait sortir de ce qui précède — elle est **imposée par l'expérience**.
+
+Nous allons donc faire ce que ce site fait toujours lorsqu'il le faut : poser de **nouvelles hypothèses, noir sur blanc**, et les ancrer dans des faits de laboratoire plutôt que dans une démonstration. À partir d'elles, la déduction reprend. La promesse du site n'est pas « tout vient de 2 postulats » ; c'est : *rien n'est utilisé sans être soit une hypothèse posée explicitement, soit une conséquence démontrée.*
+</Tournant>
+
+<Hypotheses titre="Les nouvelles hypothèses du monde quantique">
+Au fil de cette partie, **motivées par l'expérience** (corps noir, effet photoélectrique…), nous adopterons :
+
+1. **Quantification de l'énergie** : la lumière échange son énergie par grains $E = h\nu$ — *ce chapitre*.
+2. **Dualité onde-corpuscule** : à toute particule est associée une onde, $p = h/\lambda$ — <Prereq href="/physique/partie-iii/dualite-de-broglie">chapitre suivant</Prereq>.
+3. **Principe d'incertitude** : $\Delta x\,\Delta p \ge \hbar/2$ — <Prereq href="/physique/partie-iii/heisenberg">plus loin</Prereq>.
+4. **Champs quantiques** : une particule est une excitation d'un champ — <Prereq href="/physique/partie-iii/champs-quantiques">fin de partie</Prereq>.
+
+Ces énoncés ne se démontrent pas à partir de la relativité : ils sont **admis parce que vérifiés**, et tout le reste en sera déduit.
+</Hypotheses>
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez un escalier et une rampe lisse. La physique classique pense que l'énergie est une rampe : on peut s'arrêter à n'importe quelle hauteur, échanger n'importe quelle quantité d'énergie, aussi petite soit-elle. La révolution quantique dit : non, c'est un **escalier**. On ne peut échanger l'énergie que par marches entières, jamais une demi-marche. La hauteur d'une marche est minuscule — d'où l'illusion d'une rampe dans la vie courante — mais elle change tout pour la lumière et les atomes.
+</Encart>
+
+### Premier échec : le corps noir et la catastrophe ultraviolette
+
+Chauffez un morceau de fer : il rougeoie, puis devient orange, blanc. Tout corps chaud émet de la lumière, répartie sur toutes les longueurs d'onde. La question est : **combien** d'énergie à chaque longueur d'onde ?
+
+<Encart type="rappel" titre="Fréquence et longueur d'onde">
+Une onde lumineuse est caractérisée par sa **fréquence** $\nu$ (en hertz, $\mathrm{Hz} = \mathrm{s}^{-1}$ : le nombre d'oscillations par seconde) ou par sa **longueur d'onde** $\lambda$ (en mètres : la distance entre deux crêtes). Comme la lumière voyage à la vitesse $c$, les deux sont liées par
+
+$$ c = \lambda\,\nu \qquad\Longleftrightarrow\qquad \nu = \frac{c}{\lambda}. $$
+
+Petite longueur d'onde $\leftrightarrow$ grande fréquence (le violet, l'ultraviolet) ; grande longueur d'onde $\leftrightarrow$ petite fréquence (le rouge, l'infrarouge).
+</Encart>
+
+La physique classique répond avec le **théorème d'équipartition de l'énergie** : à température $T$, chaque « mode » de vibration du champ électromagnétique reçoit en moyenne la même énergie, proportionnelle à $k_B T$. Le problème, c'est qu'il existe une infinité de modes aux courtes longueurs d'onde — toujours plus de manières de faire vibrer le champ quand $\lambda$ diminue. En sommant l'énergie de tous ces modes, on obtient une énergie totale émise **infinie**, et une intensité qui explose vers les courtes longueurs d'onde (l'ultraviolet).
+
+<Resultat label="La catastrophe ultraviolette">
+
+Selon la physique classique, l'intensité émise par un corps chaud croît sans limite quand $\lambda \to 0$ : tout objet tiède devrait rayonner une énergie infinie dans l'ultraviolet.
+
+<Badge niveau="etabli" slot="badge">Fait historique : c'est bien la prédiction de la loi de Rayleigh-Jeans, en contradiction flagrante avec les mesures. La nature, elle, fait l'inverse : un corps tiède ne nous irradie pas de rayons X.</Badge>
+</Resultat>
+
+C'est absurde : votre corps, à 37 °C, ne vous bombarde pas de rayons mortels. Les mesures montrent une courbe qui **monte puis redescend**, avec un pic, et tend vers zéro aux courtes longueurs d'onde. La théorie classique est en désaccord total avec l'expérience.
+
+### Planck (1900) : l'énergie par paquets
+
+Max Planck trouve la formule qui colle parfaitement aux mesures — mais au prix d'une hypothèse qu'il qualifie lui-même de « geste désespéré ». Il suppose que les parois du corps noir n'échangent pas l'énergie de façon continue, mais par **paquets indivisibles**, des *quanta*, dont l'énergie est proportionnelle à la fréquence :
+
+<Resultat label="Quantum de Planck">
+
+$$ E = h\,\nu $$
+
+<Badge niveau="etabli" slot="badge">Pierre angulaire de la physique quantique, vérifiée par d'innombrables expériences (spectres atomiques, lasers, semi-conducteurs).</Badge>
+</Resultat>
+
+Pourquoi cela règle la catastrophe ? Pour exciter un mode de **haute fréquence**, il faut au minimum un quantum d'énergie $h\nu$, qui devient énorme. Or l'agitation thermique ne dispose en moyenne que de $\sim k_B T$. Si $h\nu \gg k_B T$, il n'y a tout simplement **pas assez d'énergie disponible** pour payer ne serait-ce qu'un seul quantum : ces modes restent « gelés ». L'infinité de modes ultraviolets cesse de contribuer, et la courbe redescend. La rampe est devenue un escalier, et les marches du haut sont trop hautes pour être gravies.
+
+La constante $h$ est la **constante de Planck**. Sa valeur :
+
+$$ h = 6{,}626\,070\,15 \times 10^{-34}\ \mathrm{J\cdot s}. $$
+
+<Badge niveau="etabli">Depuis la révision du Système international en 2019, $h$ n'est plus mesurée : sa valeur est **fixée exactement par convention** et sert à *définir* le kilogramme. C'est désormais une constante de définition, comme $c$.</Badge>
+
+### Second échec : l'effet photoélectrique
+
+Éclairez une plaque métallique : sous certaines conditions, elle éjecte des électrons. Si la lumière est une onde continue (vision de Maxwell), on attend ceci : une lumière plus **intense** apporte plus d'énergie, donc devrait toujours finir par arracher des électrons, quitte à attendre. La couleur ne devrait pas être décisive.
+
+L'expérience dit l'inverse, et c'est troublant :
+- En dessous d'une **fréquence seuil** $\nu_0$, aucun électron n'est éjecté, **même avec une lumière éblouissante**.
+- Au-dessus de $\nu_0$, l'éjection est **immédiate**, même pour une lumière très faible.
+- Augmenter l'intensité augmente le *nombre* d'électrons, mais **pas leur énergie** ; seule la *fréquence* contrôle leur énergie.
+
+<Badge niveau="etabli">L'existence d'un seuil **en fréquence** (et non en intensité) est un fait expérimental solide, inexplicable par la théorie ondulatoire continue de la lumière.</Badge>
+
+### Einstein (1905) : la lumière est faite de grains
+
+Einstein franchit le pas que Planck n'osait pas : si la lumière elle-même est constituée de quanta — les **photons** — chacun d'énergie $E = h\nu$, alors tout s'éclaire. Un électron ne peut absorber qu'**un photon à la fois**. Pour s'échapper du métal, il doit payer un « droit de sortie », le **travail d'extraction** $W$ (propre à chaque métal). Tout est question d'arithmétique d'un seul photon, pas de l'intensité totale.
+
+<Encart type="calcul" titre="Bilan d'énergie d'un photon (démonstration ligne à ligne)">
+**Étape 1.** Un électron absorbe **un seul** photon, qui lui apporte l'énergie
+
+$$ E_{\text{photon}} = h\,\nu. $$
+
+**Étape 2.** Conservation de l'énergie : cette énergie sert d'abord à payer le travail d'extraction $W$ (l'énergie minimale pour quitter le métal) ; le reste devient l'énergie cinétique $E_c$ de l'électron éjecté.
+
+$$ h\,\nu = W + E_c. $$
+
+**Étape 3.** Comme $E_c \ge 0$, une éjection n'est possible que si $h\nu \ge W$, c'est-à-dire au-dessus de la fréquence seuil $\nu_0$ définie par $h\,\nu_0 = W$ :
+
+$$ \nu_0 = \frac{W}{h}. $$
+
+**Étape 4.** L'énergie cinétique maximale des électrons éjectés vaut donc
+
+$$ \boxed{E_c = h\,\nu - W = h(\nu - \nu_0).} $$
+
+Elle ne dépend **que** de la fréquence, pas de l'intensité. Augmenter l'intensité, c'est envoyer plus de photons : plus d'électrons éjectés, mais chacun avec la même énergie. ∎
+</Encart>
+
+Le seuil en fréquence est expliqué : un photon de trop basse fréquence n'a pas assez d'énergie ($h\nu < W$) pour libérer un électron, et en envoyer un milliard n'y change rien — un milliard de pièces qui valent chacune moins que le prix d'entrée ne paient toujours pas l'entrée. La relation $E_c = h(\nu - \nu_0)$, une droite de pente $h$, est confirmée avec une précision remarquable.
+
+<Badge niveau="etabli">L'explication d'Einstein vaut le prix Nobel 1921 ; la mesure de la pente redonne exactement $h$. La nature corpusculaire de la lumière est aujourd'hui hors de doute.</Badge>
+
+Que la lumière soit faite de grains d'énergie $E = h\nu$ s'accorde parfaitement avec ce que nous avons déjà établi : pour ces grains sans masse, l'énergie et la quantité de mouvement sont liées par <Prereq href="/physique/partie-ii/particules-sans-masse">$E = pc$</Prereq>. Combinées, ces deux relations donneront bientôt l'impulsion du photon.
+
+### Le bilan
+
+Deux énigmes, une seule clé. Le corps noir comme l'effet photoélectrique exigent que **l'énergie soit quantifiée** et que la lumière possède un **aspect corpusculaire**. La physique classique, qui supposait l'énergie continue, ne pouvait que prédire l'infini ou le silence.
+
+<Badge niveau="etabli">La quantification de l'énergie ($E = h\nu$) et l'existence du photon sont des piliers expérimentaux de la physique moderne.</Badge>
+
+Mais alors, la lumière est-elle onde (Maxwell, les interférences) ou grain (Einstein, le photon) ? La réponse — déroutante — est : **les deux à la fois**. C'est la dualité onde-corpuscule, que nous explorons au chapitre suivant.

@@ -1,0 +1,110 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les bosons de jauge (messagers des forces)"
+chapter: bosons-jauge
+description: "Photon, gluons, W et Z : qui transmet quelle force."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## Les bosons de jauge : les messagers des forces
+
+Jusqu'ici, nous avons décrit la matière comme des excitations de <Prereq href="/physique/partie-iii/champs-quantiques">champs quantiques</Prereq>, et nous avons dressé le <Prereq href="/physique/partie-iv/vue-ensemble">tableau d'ensemble</Prereq> des particules. Reste une question : comment ces particules se *parlent*-elles ? Comment un électron « sait-il » qu'un autre électron est proche, et qu'il doit le repousser ?
+
+La réponse de la physique moderne est étonnamment concrète : **les forces ne sont pas des actions à distance mystérieuses, mais des échanges de particules.** Interagir, c'est s'envoyer des messagers.
+
+<Encart type="intuition" titre="Deux patineurs et un ballon">
+Imagine deux patineurs sur la glace, face à face. L'un lance un ballon lourd à l'autre. En le lançant, il recule (conservation de la quantité de mouvement). En le réceptionnant, l'autre recule aussi. Vus de loin, sans voir le ballon, on dirait que les deux patineurs **se repoussent** par une force invisible. C'est exactement l'image : la force est l'échange d'un objet, et cet objet est un *boson de jauge*. (L'analogie a ses limites — elle peine à expliquer l'attraction — mais l'idée centrale, « échanger = interagir », est juste.)
+</Encart>
+
+### Échanger un boson, c'est interagir
+
+Chaque interaction fondamentale possède son ou ses messagers. Ce sont tous des **bosons de spin 1** (on les appelle *bosons vecteurs*), par opposition aux fermions de matière (spin 1/2). Les physiciens dessinent ces échanges avec des **diagrammes de Feynman** : le temps va vers la droite, deux électrons s'approchent, échangent un photon (la ligne ondulée), puis repartent déviés.
+
+```
+ e⁻ \           / e⁻
+      \____γ____/        ← le photon γ est échangé : c'est ça, la répulsion électrique
+      /          \
+ e⁻ /            \ e⁻
+```
+
+Ce dessin n'est pas qu'une jolie image : c'est un véritable outil de calcul qui donne, chiffre pour chiffre, les probabilités mesurées dans les accélérateurs.
+
+<Badge niveau="etabli">Les diagrammes de Feynman de l'électrodynamique quantique prédisent le moment magnétique de l'électron à une douzaine de chiffres significatifs — l'accord théorie/expérience le plus précis de toute la science.</Badge>
+
+### Les trois familles de messagers
+
+| Interaction | Messager(s) | Masse | Portée |
+|---|---|---|---|
+| Électromagnétique | photon $\gamma$ | nulle | infinie |
+| Forte | 8 gluons $g$ | nulle | $\sim 10^{-15}$ m (confinée) |
+| Faible | $W^+$, $W^-$, $Z^0$ | $\sim 80\text{–}91$ GeV/$c^2$ | $\sim 10^{-18}$ m |
+
+Le **photon** transmet l'électromagnétisme. Il est sans masse, donc voyage à $c$ et porte la force à l'infini : c'est pourquoi on voit les étoiles lointaines. <Prereq href="/physique/partie-ii/particules-sans-masse">Pourquoi une particule de masse nulle va exactement à $c$.</Prereq>
+
+Les **gluons** (au nombre de 8) transmettent l'interaction forte entre quarks. Eux aussi sont sans masse — mais, fait étrange, ils ne sortent jamais : ils sont *confinés*. La force forte ne faiblit pas avec la distance, elle reste constante, si bien qu'on ne peut jamais isoler un quark ou un gluon seul. C'est ce confinement, et non une masse, qui limite sa portée effective à la taille du noyau.
+
+Les bosons $W^+$, $W^-$ et $Z^0$ transmettent l'interaction faible, responsable de certaines radioactivités. Eux sont **très lourds** : environ 80 GeV/$c^2$ pour les $W$, 91 GeV/$c^2$ pour le $Z$ — soit presque la masse d'un atome entier d'une centaine de nucléons (de l'ordre du strontium ou du molybdène), concentrée dans une seule particule élémentaire !
+
+<Badge niveau="etabli">Photon et gluons de masse nulle, $W$ et $Z$ massifs : mesurés au CERN. Le $Z$ a été produit des millions de fois au LEP ; sa masse vaut $91{,}19$ GeV/$c^2$, et celle des $W$ environ $80{,}4$ GeV/$c^2$.</Badge>
+
+### Pourquoi les forces lourdes sont à courte portée
+
+Voici l'idée la plus profonde de ce chapitre : **plus le messager est lourd, plus la portée de la force est courte.** Le photon, sans masse, agit à l'infini ; les $W$/$Z$, énormes, agissent sur une distance ridiculement petite.
+
+<Encart type="intuition" titre="Un messager emprunté au vide">
+Pour exister, un messager massif doit « emprunter » une énergie $E \approx mc^2$ au vide. Le principe d'incertitude de Heisenberg autorise cet emprunt, mais seulement pour un temps très bref $\Delta t \approx \hbar/E$. Pendant ce temps, même en voyageant au mieux à $c$, le messager ne parcourt qu'une distance $R \approx c\,\Delta t$. Plus il est lourd, plus l'emprunt est gros, plus il doit être remboursé vite, et moins il va loin. Une particule lourde est un messager *pressé*.
+</Encart>
+
+<Encart type="rappel" titre="Le principe d'incertitude de Heisenberg">
+En physique quantique, on ne peut pas connaître simultanément avec une précision parfaite l'énergie d'un système et la durée pendant laquelle il la possède. Les deux incertitudes sont liées par
+
+$$ \Delta E \cdot \Delta t \gtrsim \hbar, $$
+
+où $\hbar = h/2\pi \approx 1{,}05 \times 10^{-34}$ J·s est la constante de Planck réduite (valeur fixée par convention depuis la redéfinition du SI de 2019, qui fixe exactement $h$). Cela autorise des « fluctuations » d'énergie sur des temps très courts. <Prereq href="/physique/partie-iii/heisenberg">Le principe d'incertitude, posé et justifié.</Prereq>
+</Encart>
+
+<Encart type="calcul" titre="Estimer la portée à partir de la masse">
+**Étape 1.** L'énergie minimale à emprunter pour faire apparaître un messager de masse $m$ est son énergie de masse :
+
+$$ \Delta E \approx m c^2. $$
+
+**Étape 2.** Heisenberg limite la durée de vie de cet emprunt :
+
+$$ \Delta t \approx \frac{\hbar}{\Delta E} = \frac{\hbar}{m c^2}. $$
+
+**Étape 3.** En voyageant au plus à la vitesse $c$, le messager couvre la distance
+
+$$ R \approx c \, \Delta t = c \cdot \frac{\hbar}{m c^2} = \frac{\hbar}{m c}. $$
+
+**Étape 4.** On reconnaît la *longueur d'onde de Compton réduite* de la particule. Application au $W$ ($m \approx 80$ GeV/$c^2$). On convertit en unités SI : $m c^2 = 80 \times 10^9 \times 1{,}6 \times 10^{-19} \approx 1{,}3 \times 10^{-8}$ J. Donc
+
+$$ R \approx \frac{\hbar}{m c^2} \cdot c = \frac{1{,}05 \times 10^{-34}}{1{,}3 \times 10^{-8}} \times 3 \times 10^{8} \approx 2 \times 10^{-18}\ \text{m}. $$
+
+**Étape 5.** Pour le photon, $m = 0$, donc $R \to \infty$ : portée infinie. On retient :
+
+$$ \boxed{R \approx \dfrac{\hbar}{m c}} $$
+</Encart>
+
+<Resultat label="Portée d'une interaction ↔ masse du médiateur">
+
+$$ R \approx \frac{\hbar}{m c} $$
+
+<Badge niveau="modelise" slot="badge">Argument d'ordre de grandeur (potentiel de Yukawa, 1935). Il prédit correctement $\sim 10^{-18}$ m pour l'interaction faible et la portée infinie de l'électromagnétisme.</Badge>
+</Resultat>
+
+C'est ainsi qu'en 1935 Yukawa, raisonnant à l'envers, prédit l'existence d'une particule de portée $\sim 10^{-15}$ m pour la force nucléaire : le pion fut découvert douze ans plus tard.
+
+### Qui *impose* ces messagers ? La symétrie de jauge
+
+Reste une dernière question, presque vertigineuse : pourquoi *faut-il* un photon ? Pourquoi la Nature s'embarrasse-t-elle de ces messagers ?
+
+La réponse tient en deux mots : **symétrie de jauge**. L'idée intuitive : on exige que les lois de la physique restent inchangées même si l'on a la liberté de redéfinir, indépendamment en chaque point de l'espace, une « référence interne » des champs de matière (par exemple la phase de leur fonction d'onde). Cette liberté locale ne peut être maintenue que si un champ supplémentaire vient « compenser » les variations d'un point à l'autre. Et ce champ compensateur, c'est exactement le boson de jauge. Le photon n'est pas un accident : il est *forcé* par l'exigence de symétrie.
+
+<Badge niveau="modelise">Le principe de jauge (symétrie locale ⟹ existence du boson médiateur) est le squelette du Modèle Standard. Il est solidement vérifié, mais reste un principe organisateur plutôt qu'une vérité démontrée à partir de plus fondamental.</Badge>
+
+Ce principe a une conséquence redoutable, et c'est l'énigme du prochain chapitre : la symétrie de jauge, prise telle quelle, **interdit** aux bosons de jauge d'avoir une masse. Le photon obéit sagement (masse nulle). Mais alors, comment les $W$ et $Z$ peuvent-ils être si lourds ? Pour résoudre ce paradoxe, il faudra que la symétrie se *brise* d'elle-même — et faire entrer en scène un nouveau personnage : le champ de Higgs.

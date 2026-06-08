@@ -1,0 +1,14 @@
+# dépendances & build
+node_modules/
+dist/
+.astro/
+
+# Manim : environnement Python + sorties intermédiaires
+manim/.venv/
+manim/media/
+manim/*.log
+
+# divers
+.playwright-mcp/
+*.log
+.DS_Store

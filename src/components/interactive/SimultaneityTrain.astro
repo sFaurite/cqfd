@@ -1,0 +1,26 @@
+---
+/**
+ * SimultaneityTrain — l'expérience du wagon d'Einstein. Une lampe au centre émet
+ * deux éclairs. Dans le référentiel du train, ils atteignent les deux parois en
+ * même temps ; vu du quai (train en mouvement), l'arrière est touché AVANT l'avant.
+ */
+---
+
+<div class="iw" data-iw="simultaneity">
+  <div class="iw__head"><span class="tag">Interactif</span> Relativité de la simultanéité — le wagon d’Einstein</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 7"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__btns">
+      <button class="iw__btn active" data-frame="train">Dans le train</button>
+      <button class="iw__btn" data-frame="quai">Depuis le quai</button>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-replay>↺ Relancer l’éclair</button>
+    </div>
+  </div>
+  <p class="iw__note" data-caption></p>
+</div>
+
+<script>
+  import './SimultaneityTrain.client.ts';
+</script>

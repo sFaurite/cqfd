@@ -1,0 +1,82 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L'unification électrofaible"
+chapter: electrofaible
+description: "Comment électromagnétisme et force faible ne font qu'un à haute énergie."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## L'unification électrofaible
+
+Au chapitre précédent, deux forces semblaient n'avoir aucun rapport : l'<Prereq href="/physique/partie-v/electromagnetisme">électromagnétisme</Prereq>, infinie en portée et véhiculée par le photon ; et l'<Prereq href="/physique/partie-v/interaction-faible">interaction faible</Prereq>, minuscule en portée, responsable de la radioactivité bêta. L'une agit à des kilomètres, l'autre s'éteint avant même de traverser un proton. Comment imaginer qu'il s'agisse de **la même force** ?
+
+C'est pourtant l'une des plus belles découvertes du XXe siècle : au-dessus d'une certaine énergie, ces deux interactions fusionnent en une seule, l'**interaction électrofaible**.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imagine de la vapeur d'eau à très haute température : un gaz parfaitement uniforme, sans direction privilégiée — c'est l'univers à haute énergie, où la symétrie électrofaible est intacte. Refroidis : la vapeur se condense en glace, et des cristaux apparaissent avec des axes, des directions. La symétrie parfaite du gaz s'est **brisée** en gelant. Notre univers froid d'aujourd'hui est cette glace : la force unique s'est figée en deux visages distincts, l'électromagnétisme et la force faible. Rien dans les lois n'a changé — c'est l'**état** du vide qui a gelé.
+</Encart>
+
+### Une seule force au-dessus de ~100 GeV
+
+L'énergie est ici la clé. Aux énergies que nous croisons tous les jours, électromagnétisme et force faible paraissent étrangers. Mais au-delà d'une énergie de l'ordre de $100\ \text{GeV}$ — l'énergie qu'on atteint dans les grands accélérateurs, ou qui régnait dans l'univers une fraction de seconde après le Big Bang — la distinction s'efface. Les quatre particules messagères de l'électrofaible (les bosons $W^+$, $W^-$, $Z^0$ et le photon $\gamma$) jouent alors des rôles totalement interchangeables.
+
+<Resultat label="Unification électrofaible">$$ \text{Électromagnétisme} \;+\; \text{Force faible} \;\xrightarrow{E \,\gtrsim\, 100\ \text{GeV}}\; \text{Interaction électrofaible} $$ <Badge niveau="etabli" slot="badge">Théorie de Glashow–Weinberg–Salam (Nobel 1979), confirmée par la découverte des $W$ et $Z$ au CERN en 1983 (Rubbia & van der Meer, Nobel 1984).</Badge></Resultat>
+
+Cette structure unifiée porte un nom de code que tu peux croiser : le groupe de symétrie $SU(2)\times U(1)$. Pas besoin d'en décortiquer les mathématiques ici — retiens simplement que ce sont deux symétries imbriquées qui, ensemble, organisent les quatre bosons.
+
+### Pourquoi deux visages ? La brisure par le Higgs
+
+Si la force est unique, pourquoi le photon vole-t-il à l'infini alors que la force faible s'arrête net ? Toute la réponse tient dans la **masse des messagers**.
+
+Une force a une portée d'autant plus courte que son messager est lourd — c'est le lien <Prereq href="/physique/partie-iv/bosons-jauge">portée ↔ masse du médiateur</Prereq> établi au chapitre des bosons de jauge. Le photon a une masse **rigoureusement nulle**, d'où une portée infinie. À l'inverse, les bosons $W$ et $Z$ sont des poids lourds : environ $80\ \text{GeV}/c^2$ pour le $W$ et $91\ \text{GeV}/c^2$ pour le $Z$, soit près de **100 fois la masse du proton**. C'est cette masse colossale qui confine la force faible à des distances inférieures à la taille d'un noyau.
+
+<Encart type="rappel" titre="Masse du messager et portée d'une force">
+Pour un messager de masse $m$, la portée maximale de l'interaction est fixée par le <Prereq href="/physique/partie-iii/heisenberg">principe d'incertitude de Heisenberg</Prereq> : l'énergie nécessaire pour « emprunter » brièvement un messager de masse $m$ ne peut exister que pendant un temps très court, donc sur une distance limitée. En partant de $\Delta E\,\Delta t \gtrsim \hbar$ avec $\Delta E \approx m c^2$ et une distance parcourue au plus $R \approx c\,\Delta t$, on obtient l'ordre de grandeur
+
+$$ R \approx c\,\Delta t \approx \frac{c\,\hbar}{\Delta E} \approx \frac{c\,\hbar}{m c^2} = \frac{\hbar}{m\,c}. $$
+
+Si $m=0$ (photon), $R\to\infty$ : portée infinie. Si $m$ est grand ($W$, $Z$), $R$ est minuscule. Ici $\hbar$ est la constante de Planck réduite et $c$ la vitesse de la lumière.
+</Encart>
+
+D'où vient cette masse ? Du **champ de Higgs**. Tu sais déjà qu'il donne leur masse aux <Prereq href="/physique/partie-iv/higgs">fermions</Prereq> (électron, quarks...). Mais son rôle premier est ailleurs : c'est lui qui **brise la symétrie électrofaible**. En refroidissant sous $\sim 100\ \text{GeV}$, le vide s'est rempli d'une valeur non nulle du champ de Higgs — comme la vapeur qui gèle. Trois des quatre bosons ($W^+$, $W^-$, $Z^0$) « accrochent » ce champ et deviennent massifs ; le quatrième, le photon, n'y accroche pas et reste sans masse.
+
+<Resultat label="Origine des masses des bosons">$$ W^\pm,\ Z^0 \;\text{deviennent massifs} \qquad\qquad \gamma \;\text{reste de masse nulle} $$ <Badge niveau="modelise" slot="badge">Mécanisme de Brout–Englert–Higgs : solidement modélisé, et conforté par la découverte du boson de Higgs en 2012 (Nobel 2013). C'est le mécanisme retenu, même si l'on continue de tester ses détails.</Badge></Resultat>
+
+Le photon, lui, ne dépend d'aucun mécanisme de masse :
+
+<Resultat label="Photon de masse nulle">$$ m_\gamma = 0 \;\Longrightarrow\; \text{portée infinie de l'électromagnétisme} $$ <Badge niveau="etabli" slot="badge">Mesures expérimentales : $m_\gamma < 10^{-18}\ \text{eV}/c^2$, compatible avec zéro. C'est le pilier de la loi de Coulomb en $1/r^2$.</Badge></Resultat>
+
+Le Higgs n'est donc pas seulement « la particule qui donne la masse aux électrons » : c'est la pièce qui **explique pourquoi nous percevons deux forces là où il n'y en a qu'une**.
+
+<Encart type="plusloin" titre="Brisure spontanée et angle de Weinberg (hors programme)">
+On parle de brisure *spontanée* : les équations de la théorie restent parfaitement symétriques, c'est seulement l'état de plus basse énergie (le vide) qui choisit une configuration particulière, brisant la symétrie. Analogie : un crayon en équilibre sur sa pointe respecte une symétrie de rotation parfaite, mais en tombant il choisit *une* direction — la loi est symétrique, la solution ne l'est pas.
+
+Mathématiquement, les deux symétries $SU(2)$ et $U(1)$ produisent quatre champs de jauge. Le Higgs en mélange deux pour fabriquer, d'une part le $Z^0$ (massif), d'autre part le photon (sans masse). Le « dosage » de ce mélange est gouverné par un seul nombre mesuré, l'**angle de Weinberg** $\theta_W$, avec
+
+$$ \cos\theta_W = \frac{m_W}{m_Z}, \qquad \sin^2\theta_W \approx 0{,}231. $$
+
+Honnêtement : cette valeur n'est pas prédite par la théorie, elle est *mesurée*. Mais une fois mesurée, elle relie une foule de quantités indépendantes (masses, couplages, sections efficaces) qui s'accordent toutes — c'est cette cohérence qui rend l'unification si convaincante.
+</Encart>
+
+### Une prédiction, puis une découverte
+
+Ce qui distingue la science d'un simple récit, c'est la **prédiction vérifiable**. La théorie électrofaible, formulée vers 1967, exigeait l'existence de bosons $W$ et $Z$ lourds — et donnait même leurs masses approximatives *avant* qu'on ne les voie. En 1983, au CERN, les expériences UA1 et UA2 les détectèrent, aux masses prédites. La force unique n'était plus une hypothèse : on l'avait débusquée.
+
+<Badge niveau="etabli">Prédiction quantitative des masses des $W/Z$ dans les années 1970, confirmation directe en 1983 : l'un des tests les plus probants de toute la physique des particules.</Badge>
+
+### Et la gravité ?
+
+L'électromagnétisme et l'interaction faible sont, on l'a vu, véritablement *unifiés*. La troisième force, l'interaction forte, n'est pas fondue dans cette unification : elle est seulement décrite **dans le même cadre** — celui des théories de jauge du Modèle Standard, de symétrie $SU(3)\times SU(2)\times U(1)$. Les fusionner toutes les trois en une seule force (la « grande unification ») reste une hypothèse non confirmée.
+
+<Badge niveau="ouvert">La « grande unification » (fusion électrofaible + force forte) n'est, à ce jour, ni observée ni établie : aucune de ses prédictions caractéristiques (désintégration du proton, par exemple) n'a été détectée.</Badge>
+
+Mais une grande absente demeure surtout : la **gravité**. Aucune théorie confirmée ne l'unifie aux autres interactions. Décrite par la relativité générale d'un côté, par la mécanique quantique de l'autre, elle résiste à toute fusion.
+
+<Badge niveau="ouvert">L'unification de la gravité avec les forces quantiques (gravité quantique) reste un problème non résolu : cordes, gravité quantique à boucles… aucune n'est confirmée expérimentalement.</Badge>
+
+C'est précisément ce dernier fossé — entre le monde du très petit et celui de la gravitation — que nous explorerons dans le prochain chapitre.

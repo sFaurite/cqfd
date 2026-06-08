@@ -1,0 +1,122 @@
+---
+/**
+ * Encart dépliable — composant réutilisable, 4 types visuellement distincts.
+ *
+ *   🧮 calcul    — démonstration ligne à ligne (fermé par défaut)
+ *   📐 rappel    — prérequis Terminale S (fermé par défaut)
+ *   🔬 plusloin  — approfondissement hors-programme (fermé par défaut)
+ *   💡 intuition — analogie / image mentale (OUVERT par défaut)
+ *
+ * Usage :
+ *   <Encart type="calcul" titre="Dérivation de γ">
+ *     ...lignes de calcul KaTeX...
+ *   </Encart>
+ *
+ * Repose sur <details>/<summary> (accessible, fonctionne sans JS) ; l'animation
+ * d'ouverture est ajoutée par src/scripts/accordion.ts.
+ */
+import { ENCART, type TypeEncart } from '../lib/palette';
+
+interface Props {
+  type: TypeEncart;
+  titre?: string;
+  /** force l'état initial (sinon : valeur par défaut du type) */
+  open?: boolean;
+}
+
+const { type, titre, open } = Astro.props;
+const meta = ENCART[type];
+const estOuvert = open ?? meta.open;
+const libelle = titre ?? meta.label;
+---
+
+<details class="encart" data-type={type} open={estOuvert} style={`--accent:${meta.color}`}>
+  <summary>
+    <span class="emoji" aria-hidden="true">{meta.emoji}</span>
+    <span class="kind">{meta.label}</span>
+    {titre && <span class="sep" aria-hidden="true">·</span>}
+    {titre && <span class="titre">{titre}</span>}
+    <svg class="chev" viewBox="0 0 16 16" aria-hidden="true" width="16" height="16">
+      <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </summary>
+  <div class="encart__body">
+    <div class="encart__inner">
+      <slot />
+    </div>
+  </div>
+</details>
+
+<style>
+  .encart {
+    --accent: var(--c-blue);
+    margin: 1.4em 0;
+    border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--c-border));
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--accent) 6%, var(--c-bg-elev));
+    overflow: visible;
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.7em 0.9em;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    list-style: none;
+    user-select: none;
+    color: var(--c-text);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .emoji {
+    font-size: 1.05em;
+  }
+  .kind {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .sep {
+    color: var(--c-muted);
+  }
+  .titre {
+    font-weight: 600;
+    color: var(--c-text);
+  }
+  .chev {
+    margin-left: auto;
+    color: var(--c-muted);
+    transition: transform 0.25s ease;
+    flex: none;
+  }
+  .encart[open] .chev {
+    transform: rotate(180deg);
+  }
+  .encart__body {
+    /* l'inner reçoit le padding ; le body est la cible d'animation de hauteur */
+  }
+  .encart__inner {
+    padding: 0.2em 1.1em 0.9em;
+    border-top: 1px solid color-mix(in srgb, var(--accent) 22%, var(--c-border));
+  }
+  .encart__inner > :first-child {
+    margin-top: 0.8em;
+  }
+  .encart__inner > :last-child {
+    margin-bottom: 0;
+  }
+  /* les lignes de calcul respirent un peu plus */
+  .encart[data-type='calcul'] .encart__inner :global(.katex-display) {
+    margin: 0.7em 0;
+  }
+</style>

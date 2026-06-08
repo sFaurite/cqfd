@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La gravité quantique"
+chapter: gravite-quantique
+description: "L'absence de théorie unifiant relativité générale et mécanique quantique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+
+## La gravité quantique
+
+Nous voici à la frontière. Tout au long de ce site, nous avons bâti la physique comme un édifice presque sans fissure : des postulats de la relativité jusqu'aux champs quantiques. Mais ce chapitre est différent. Ici, il n'y a pas de résultat triomphal à encadrer. Il y a une question que personne, en 2026, ne sait résoudre. Et c'est précisément ce qui la rend fascinante.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez deux cartes géographiques d'un même territoire, dessinées par deux explorateurs géniaux. La première — la **relativité générale** — décrit parfaitement les continents : planètes, étoiles, galaxies, la courbure de l'espace-temps. La seconde — la **physique quantique** — décrit parfaitement le microscopique : atomes, électrons, particules. Chacune est d'une précision stupéfiante dans son domaine. Le problème ? Là où les deux cartes se chevauchent — au cœur d'un trou noir, à l'instant du Big Bang — elles ne s'accordent pas. Pire : superposées, elles donnent des absurdités. Personne n'a encore réussi à dessiner la carte complète.
+</Encart>
+
+### Deux théories, deux mondes, deux succès
+
+D'un côté, la **relativité générale** d'Einstein. La gravité n'y est pas une force au sens de Newton : c'est la **courbure de l'espace-temps** produite par la matière et l'énergie. Cette théorie est *classique* (non quantique) et *déterministe* : l'espace-temps y est une trame lisse et continue.
+
+<Prereq href="/physique/partie-v/gravitation">La gravité comme géométrie de l'espace-temps</Prereq> est confirmée par la déviation de la lumière, les ondes gravitationnelles, le GPS.
+
+<Badge niveau="etabli">Lentilles gravitationnelles, avance du périhélie de Mercure, ondes gravitationnelles (LIGO, 2015), image du trou noir M87* (2019).</Badge>
+
+De l'autre, la **théorie quantique des champs**, qui décrit l'électromagnétisme et les forces nucléaires. Là, tout est *probabiliste*, *discret* (quantifié), et soumis au principe d'incertitude. Les <Prereq href="/physique/partie-iii/champs-quantiques">champs quantiques</Prereq> fluctuent en permanence, même dans le vide.
+
+<Badge niveau="etabli">Le moment magnétique de l'électron est prédit et mesuré à plus de 10 chiffres significatifs : la physique la plus précise jamais réalisée.</Badge>
+
+Chacune, prise seule, est l'une des plus belles réussites de l'esprit humain. Le drame se joue quand on veut les faire cohabiter.
+
+### Pourquoi ça coince
+
+La gravité est la seule des quatre forces fondamentales qu'on n'a jamais réussi à formuler proprement comme une théorie quantique. L'idée naïve semble pourtant simple : si l'électromagnétisme est porté par un quantum (le photon), la gravité devrait l'être par le sien — un quantum qu'on appelle le **graviton**. Il suffirait de quantifier le champ gravitationnel comme on a quantifié les autres.
+
+Sauf que ça ne marche pas. Quand on tente le calcul, les prédictions explosent : on obtient des **infinis**. Or, en physique quantique des champs, des infinis apparaissent aussi pour l'électromagnétisme — mais on sait les « ranger » par une procédure mathématique appelée **renormalisation**. Pour la gravité, cette procédure **échoue** : on dit que la gravité quantifiée est *non renormalisable*. Les infinis se multiplient sans qu'aucune astuce finie ne puisse les absorber. La théorie perd tout pouvoir prédictif.
+
+<Badge niveau="etabli">L'incalculabilité (non-renormalisabilité) de la gravité quantifiée naïvement est un fait mathématique démontré, pas une opinion.</Badge>
+
+<Encart type="plusloin" titre="Pourquoi la gravité n'est pas renormalisable (idée)">
+En théorie quantique des champs, calculer un processus revient à sommer une infinité de diagrammes de plus en plus « tordus » (les fameuses boucles). Beaucoup donnent des intégrales infinies. La **renormalisation** consiste à absorber ces infinis dans un nombre **fini** de constantes mesurées (masse, charge…) : on les mesure une fois, et tout le reste est prédit.
+
+Cela ne fonctionne proprement que si la constante de couplage n'a pas une dimension « négative » : c'est le cas, par exemple, de la constante de structure fine $\alpha \approx 1/137$, qui est **sans dimension**. Or la constante de couplage de la gravité, c'est essentiellement $G$ (la constante de Newton), et $G$ **a une dimension** : en unités naturelles ($\hbar = c = 1$), elle porte des unités de (longueur)$^2$.
+
+Conséquence : à chaque ordre de calcul apparaît un nouveau type d'infini, exigeant une **nouvelle** constante à ajuster. Il en faudrait une infinité — donc une infinité de mesures avant de pouvoir prédire quoi que ce soit. La théorie devient vide de contenu prédictif. C'est la racine technique du problème.
+</Encart>
+
+### L'échelle de Planck : là où l'on ne peut plus tricher
+
+Tant que la gravité est faible et les distances grandes, on peut ignorer ses effets quantiques. Mais il existe une échelle où gravité et quantique deviennent **simultanément** indispensables. On la construit en combinant les trois constantes fondamentales : $G$ (gravité), $\hbar$ (quantique) et $c$ (relativité).
+
+<Encart type="rappel" titre="L'analyse dimensionnelle">
+Avant tout calcul, une idée simple : **les unités d'une formule doivent être cohérentes**. On ne peut pas additionner des mètres et des secondes, et une longueur doit s'exprimer en mètres.
+
+L'**analyse dimensionnelle** exploite cette contrainte : si l'on pense qu'une grandeur (ici, une longueur) ne dépend que de quelques constantes, on cherche la combinaison de ces constantes qui a la **bonne unité**. Souvent, cette seule exigence suffit à reconstituer la formule, à un facteur sans dimension près (un nombre comme $2$ ou $\pi$, que l'analyse dimensionnelle ne peut pas deviner).
+
+Concrètement : on écrit la grandeur comme un produit de puissances inconnues des constantes, on impose que les unités correspondent, et l'on résout pour ces puissances. C'est exactement ce qu'on fait ci-dessous pour fabriquer une longueur à partir de $G$, $\hbar$ et $c$.
+</Encart>
+
+<Encart type="calcul" titre="Construire la longueur de Planck par analyse dimensionnelle">
+**Étape 1.** On cherche une longueur $\ell_P$ formée uniquement de $G$, $\hbar$, $c$ : $\ell_P = G^{a}\,\hbar^{b}\,c^{d}$.
+
+**Étape 2.** Dimensions (en mètre M, kilogramme K, seconde S) : $[G]=\mathrm{M^3 K^{-1} S^{-2}}$, $[\hbar]=\mathrm{M^2 K\,S^{-1}}$, $[c]=\mathrm{M\,S^{-1}}$. On veut une longueur, soit $\mathrm{M^1 K^0 S^0}$.
+
+**Étape 3.** On écrit l'égalité des exposants pour chaque unité :
+
+$$\text{M} : 3a + 2b + d = 1, \qquad \text{K} : -a + b = 0, \qquad \text{S} : -2a - b - d = 0.$$
+
+L'équation sur K donne $a = b$. En reportant dans les équations sur M et S, on obtient $5a + d = 1$ et $-3a - d = 0$, d'où $d = -3a$ puis $2a = 1$. On en tire $a = b = \tfrac12$ et $d = -\tfrac32$.
+
+**Étape 4.** D'où :
+
+$$\ell_P = \sqrt{\dfrac{G\,\hbar}{c^{3}}}.$$
+
+**Étape 5.** Application numérique avec $G=6{,}674\times10^{-11}$, $\hbar=1{,}055\times10^{-34}$, $c=2{,}998\times10^{8}$ (unités SI) :
+
+$$\boxed{\ell_P \approx 1{,}6\times10^{-35}\ \text{m}.} \qquad \blacksquare$$
+</Encart>
+
+Cette longueur est inimaginablement petite : environ $10^{20}$ fois plus petite qu'un proton. L'énergie correspondante, l'**énergie de Planck**, vaut $E_P = \sqrt{\hbar c^5/G} \approx 1{,}2\times10^{19}\ \text{GeV}$ — soit environ un million de milliards de fois l'énergie des collisions du LHC.
+
+<Resultat label="Échelle de Planck">$$ \ell_P \approx 1{,}6\times10^{-35}\ \text{m}, \qquad E_P \approx 1{,}2\times10^{19}\ \text{GeV} $$ <Badge niveau="modelise" slot="badge">Estimation purement théorique : c'est l'ordre de grandeur où l'on s'attend à ce que la gravité quantique domine. Aucune mesure directe n'a sondé cette échelle.</Badge></Resultat>
+
+À cette échelle, les fluctuations quantiques de la géométrie elle-même deviennent si violentes que la notion lisse d'espace-temps perd vraisemblablement son sens. Là, ignorer le caractère quantique de la gravité n'est plus possible : trous noirs, premiers instants du Big Bang. C'est le verrou.
+
+### Les pistes — et notre honnêteté
+
+Plusieurs programmes de recherche tentent de forcer ce verrou. Il faut être clair : **aucun n'a été testé expérimentalement**, aucun ne fait consensus.
+
+| Piste | Idée centrale | Statut |
+|---|---|---|
+| Théorie des cordes | Les particules sont de minuscules cordes vibrantes ; la gravité y émerge naturellement | Cohérente mathématiquement, mais non testée |
+| Gravité quantique à boucles | L'espace-temps lui-même est quantifié en « grains » discrets | Cohérente, mais non testée |
+
+<Badge niveau="ouvert">Théorie des cordes et gravité quantique à boucles : aucune prédiction n'a pu être confrontée à l'expérience à ce jour. Pas de consensus scientifique. Ce site ne privilégie aucune des deux.</Badge>
+
+Et l'incompatibilité de fond reste, elle aussi, un problème **ouvert** :
+
+<Badge niveau="ouvert">Réconcilier relativité générale et physique quantique à l'échelle de Planck est l'un des plus grands problèmes non résolus de la physique. Personne ne connaît la bonne théorie.</Badge>
+
+C'est important de le dire sans détour : ici, la honnêteté scientifique consiste à reconnaître qu'**on ne sait pas**. Les chapitres précédents s'achevaient sur des résultats vérifiés à de nombreuses décimales. Celui-ci s'achève sur une question ouverte — la plus belle invitation à devenir, un jour peut-être, celui ou celle qui dessinera la carte manquante.
+
+C'est sur cette frontière que se clôt notre parcours : du temps qui se dilate jusqu'aux limites mêmes de ce que la physique sait aujourd'hui formuler.

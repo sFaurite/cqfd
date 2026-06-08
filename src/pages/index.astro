@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../lib/site.config';
+import { COURSES } from '../lib/courses';
+---
+
+<BaseLayout title={SITE.brand} showSidebar={false}>
+  <main class="home" data-pagefind-body>
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="kicker">Portail · cours déductifs · en français</p>
+        <h1>{SITE.logo} {SITE.brand}</h1>
+        <p class="tagline">
+          Deux cours où l’on <strong>pose explicitement chaque hypothèse</strong>, puis où l’on
+          <strong>déduit</strong> — rien n’est « à croire sur parole ». Choisissez votre entrée.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Les cours</h2>
+      <div class="courses">
+        {
+          COURSES.map((c) => (
+            <a class="course-card" href={c.home} style={`--accent:${c.accent}`}>
+              <div class="cc-logo" aria-hidden="true">{c.logo}</div>
+              <h2>{c.title}</h2>
+              <p>{c.blurb}</p>
+              <span class="cc-go">Entrer →</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <footer class="home-foot">
+      <p>
+        Chaque cours a sa <strong>propre échelle de fiabilité</strong> — empirique pour la physique,
+        déductive (démontré / admis / conjecturé / indécidable) pour les mathématiques.
+      </p>
+    </footer>
+  </main>
+</BaseLayout>

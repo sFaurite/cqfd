@@ -1,0 +1,35 @@
+---
+/**
+ * HiggsBraking — le champ de Higgs comme « mélasse ». Plus une particule s'y
+ * couple fortement, plus elle est freinée : c'est l'origine de sa masse. Le
+ * photon (couplage nul) traverse sans ralentir → masse nulle.
+ */
+---
+
+<div class="iw" data-iw="higgs">
+  <div class="iw__head"><span class="tag">Interactif</span> Le champ de Higgs : se coupler, c’est devenir massif</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="hg-g">couplage de la particule réglable</label>
+      <input id="hg-g" type="range" min="0" max="1" step="0.01" value="0.5" data-g />
+      <output data-out-g></output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-play>⏸ Pause</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">masse effective</span> <b data-out-m></b></span>
+  </div>
+  <p class="iw__note">
+    Analogie (schématique, pas une preuve) : le champ de Higgs remplit tout l’espace. Une particule
+    qui s’y couple fortement (comme le quark top) avance difficilement → grande masse. Le photon ne
+    s’y couple pas du tout → il file à c, masse nulle. <strong>Attention :</strong> ce mécanisme ne
+    donne la masse qu’aux particules <em>élémentaires</em>, pas à la matière composite.
+  </p>
+</div>
+
+<script>
+  import './HiggsBraking.client.ts';
+</script>

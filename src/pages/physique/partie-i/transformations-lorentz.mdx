@@ -1,0 +1,162 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les transformations de Lorentz et la composition des vitesses"
+chapter: transformations-lorentz
+description: "Le dictionnaire entre référentiels, puis pourquoi on ne dépasse jamais c."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import VelocityComposition from '../../../components/interactive/VelocityComposition.astro';
+
+## Les transformations de Lorentz
+
+Nous savons déjà *comment* le temps se dilate et *comment* les longueurs se contractent. Mais ces deux phénomènes ne sont que les ombres d'une même réalité plus profonde : une **règle de traduction** universelle qui relie les coordonnées d'un même événement entre deux observateurs. Cette règle, c'est la **transformation de Lorentz**. C'est elle qui remplace la vieille intuition de Galilée, et c'est elle qui va, à la fin de ce chapitre, nous interdire pour de bon de dépasser la lumière.
+
+<Prereq href="/physique/partie-i/lorentz-gamma">On réutilise le facteur de Lorentz $\gamma = 1/\sqrt{1 - v^2/c^2}$.</Prereq>
+<Prereq href="/physique/partie-i/consequences">Et les résultats de dilatation du temps et de contraction des longueurs.</Prereq>
+
+Comme dans tout ce chapitre, on se place dans le cas simple où Bob se déplace par rapport à Alice à la vitesse constante $v$ le long de l'axe des $x$, et où les axes des deux repères sont parallèles. Les coordonnées $y$ et $z$, perpendiculaires au mouvement, ne sont pas affectées ($y' = y$, $z' = z$) ; nous ne suivons donc que $t$ et $x$.
+
+<Encart type="intuition" titre="L'idée en une image">
+Imaginez deux observateurs, Alice (immobile, repère $R$) et Bob (qui file à la vitesse $v$, repère $R'$). Un même flash lumineux se produit quelque part. Alice lui attribue des coordonnées $(t, x)$ ; Bob, $(t', x')$. Ce sont deux **descriptions** du *même* événement. La transformation de Lorentz est le « dictionnaire » qui passe de l'une à l'autre. Galilée croyait que ce dictionnaire était trivial : $x' = x - vt$ et $t' = t$ (le temps est le même pour tous). Einstein nous dit : non, le temps de Bob et celui d'Alice se mélangent à l'espace.
+</Encart>
+
+### Que doit respecter ce dictionnaire ?
+
+Deux contraintes, et deux seulement, suffisent à tout déterminer.
+
+<Hypotheses titre="Hypothèses de départ">
+1. **Principe de relativité et homogénéité de l'espace et du temps** : aucun référentiel galiléen n'est privilégié, et aucun point, aucun instant n'est privilégié. Conséquence mathématique : la transformation reliant $(t,x)$ à $(t',x')$ est **linéaire** (pas de carrés, pas de termes constants). Sinon, une règle de 1 m mesurerait des longueurs différentes selon l'endroit où on la pose, ou un même mouvement uniforme paraîtrait accéléré.
+2. **Invariance de la vitesse de la lumière** : un front lumineux qui part de l'origine vérifie $x = ct$ pour Alice. Il doit vérifier $x' = ct'$ pour Bob. La lumière va à $c$ pour tout le monde — c'est le postulat fondateur.
+
+Ces deux énoncés sont posés au chapitre des <Prereq href="/physique/partie-i/consequences">deux postulats d'Einstein</Prereq>. Ici, on s'en sert — et de rien d'autre.
+</Hypotheses>
+
+<VideoManim src="lorentz-transform" scene="LorentzTransform" titre="Les transformations de Lorentz" legende="Comment les coordonnées (t, x) d'un même événement se traduisent d'un référentiel à l'autre." />
+
+### On les démontre
+
+<Encart type="calcul" titre="Démonstration ligne à ligne">
+
+**Étape 1 — La forme linéaire.** L'homogénéité (hypothèse 1) impose une relation linéaire. On choisit les origines de sorte que les deux repères coïncident à $t = t' = 0$ et $x = x' = 0$. La forme la plus générale est :
+
+$$ x' = A\,x + B\,t, \qquad t' = D\,x + E\,t. $$
+
+**Étape 2 — L'origine de Bob.** Dans son propre repère, Bob est immobile en $x' = 0$. Or, vu par Alice, Bob avance à la vitesse $v$, donc il est sur la droite $x = vt$. En injectant $x' = 0$ et $x = vt$ : $0 = A(vt) + Bt = (Av + B)t$, donc $B = -Av$. D'où :
+
+$$ x' = A\,(x - vt). $$
+
+**Étape 3 — La symétrie (relativité du mouvement).** Le principe de relativité dit qu'aucun repère n'est privilégié : la transformation inverse a la même forme, avec $-v$ à la place de $v$ (dans le repère de Bob, Alice s'éloigne à $-v$). Le coefficient multiplicatif doit être le même dans les deux sens — sinon un repère serait privilégié — on le note $A = \gamma$ (à déterminer) :
+
+$$ x = \gamma\,(x' + vt'). $$
+
+**Étape 4 — On utilise la lumière.** Un front lumineux parti de l'origine : pour Alice $x = ct$, pour Bob $x' = ct'$ (hypothèse 2). On reporte dans les deux équations des étapes 2 et 3 :
+
+$$ ct' = \gamma\,(ct - vt) = \gamma\,t\,(c - v), \qquad ct = \gamma\,(ct' + vt') = \gamma\,t'\,(c + v). $$
+
+**Étape 5 — On multiplie membre à membre.** Le produit des membres de gauche égale le produit de ceux de droite :
+
+$$ c^2\,t\,t' = \gamma^2\,t\,t'\,(c - v)(c + v) = \gamma^2\,t\,t'\,(c^2 - v^2). $$
+
+**Étape 6 — On isole $\gamma$.** On simplifie par $t\,t' \neq 0$, puis par $c^2$ :
+
+$$ 1 = \gamma^2\left(1 - \frac{v^2}{c^2}\right) \quad\Longrightarrow\quad \gamma = \frac{1}{\sqrt{1 - v^2/c^2}}. $$
+
+On retrouve **exactement** le facteur de Lorentz du chapitre précédent : ce n'est pas un hasard, c'est la même physique.
+
+**Étape 7 — La transformation du temps.** On part de $x = \gamma(x' + vt')$ et de $x' = \gamma(x - vt)$. On substitue la seconde dans la première :
+
+$$ x = \gamma\big(\gamma(x-vt) + vt'\big) = \gamma^2(x - vt) + \gamma v t'. $$
+
+On isole $vt'$, puis on divise par $\gamma$ :
+
+$$ \gamma v t' = x - \gamma^2(x - vt) = x\,(1 - \gamma^2) + \gamma^2 v t \quad\Longrightarrow\quad v t' = \frac{x}{\gamma} - \gamma x + \gamma v t. $$
+
+Avec $\dfrac{1}{\gamma} - \gamma = \dfrac{1-\gamma^2}{\gamma}$ et $1-\gamma^2 = -\gamma^2 v^2/c^2$ (d'après l'étape 6), le terme en $x$ devient $-\gamma\,\dfrac{v^2}{c^2}\,x$. On factorise par $\gamma v$ :
+
+$$ v t' = \gamma v\left(t - \frac{v\,x}{c^2}\right) \quad\Longrightarrow\quad t' = \gamma\left(t - \frac{v\,x}{c^2}\right). \qquad \blacksquare $$
+
+</Encart>
+
+<Resultat label="Transformations de Lorentz">
+$$ x' = \gamma\,(x - vt), \qquad t' = \gamma\left(t - \frac{v\,x}{c^2}\right) $$
+<Badge niveau="etabli" slot="badge">Cadre de toute la physique des particules ; vérifiées chaque jour dans les accélérateurs (LHC) et par les horloges atomiques.</Badge>
+</Resultat>
+
+Le terme $-\,vx/c^2$ dans $t'$ est le cœur de la révolution : **le temps de Bob dépend de la position $x$**. Deux événements simultanés pour Alice (même $t$) ne le sont plus pour Bob s'ils sont à des $x$ différents. C'est la *relativité de la simultanéité*. <Badge niveau="etabli">Conséquence directe et vérifiée des transformations de Lorentz.</Badge>
+
+<Encart type="plusloin" titre="Et le retour à Galilée ?">
+À basse vitesse, $v \ll c$, deux choses se passent : $\gamma \to 1$ (car $v^2/c^2 \to 0$) et le terme $vx/c^2 \to 0$ (car on divise par $c^2 \approx 9\times10^{16}\ \text{m}^2/\text{s}^2$). Les formules deviennent alors $x' = x - vt$ et $t' = t$ : ce sont **exactement les transformations de Galilée**. La mécanique de Newton n'est pas fausse, elle est la limite « lente » de la relativité. <Badge niveau="etabli">Vérifié : à 100 km/h, $\gamma - 1 \approx 4\times10^{-15}$, totalement indétectable.</Badge>
+</Encart>
+
+### La composition des vitesses
+
+Maintenant la récompense. Galilée additionnait simplement les vitesses : un caillou lancé à $u$ depuis un train roulant à $v$ va, pour le sol, à $u + v$. Que donne Lorentz ?
+
+<Encart type="rappel" titre="Vitesse = dérivée de la position">
+La vitesse d'un objet est le taux de variation de sa position au cours du temps : sur un intervalle infiniment court, on écrit la position qui varie de $dx$ pendant la durée $dt$, et la vitesse vaut le rapport $\dfrac{dx}{dt}$.
+
+Quand deux grandeurs sont reliées par une relation **linéaire** comme $x = \gamma(x' + v t')$, une variation $dx'$ de $x'$ et une variation $dt'$ de $t'$ produisent une variation de $x$ donnée par la même combinaison :
+
+$$ dx = \gamma\,(dx' + v\,dt'). $$
+
+C'est tout ce dont nous avons besoin : on applique ce procédé aux deux transformations, puis on fait le rapport pour obtenir une vitesse.
+</Encart>
+
+<Encart type="calcul" titre="Démonstration ligne à ligne">
+
+**Étape 1.** Un objet se déplace à la vitesse $u = \dfrac{dx'}{dt'}$ dans le repère $R'$ de Bob. Cherchons sa vitesse $w = \dfrac{dx}{dt}$ pour Alice ($R$).
+
+**Étape 2.** On applique le procédé du rappel aux transformations **inverses** ($x = \gamma(x' + vt')$, $t = \gamma(t' + vx'/c^2)$) :
+
+$$ dx = \gamma\,(dx' + v\,dt'), \qquad dt = \gamma\left(dt' + \frac{v\,dx'}{c^2}\right). $$
+
+**Étape 3.** On fait le rapport. Le facteur $\gamma$ se simplifie :
+
+$$ w = \frac{dx}{dt} = \frac{dx' + v\,dt'}{dt' + \dfrac{v\,dx'}{c^2}}. $$
+
+**Étape 4.** On divise haut et bas par $dt'$, et on reconnaît $u = dx'/dt'$ :
+
+$$ w = \frac{\dfrac{dx'}{dt'} + v}{1 + \dfrac{v}{c^2}\dfrac{dx'}{dt'}} = \frac{u + v}{1 + \dfrac{uv}{c^2}}. \qquad \blacksquare $$
+
+</Encart>
+
+<Resultat label="Composition relativiste des vitesses">
+$$ w = \frac{u + v}{1 + \dfrac{uv}{c^2}} $$
+<Badge niveau="etabli" slot="badge">Confirmée par l'expérience de Fizeau (1851) sur la lumière dans l'eau en mouvement, dont elle donne le coefficient d'entraînement, avant même Einstein.</Badge>
+</Resultat>
+
+Le dénominateur $1 + uv/c^2$ est le « frein cosmique ». Vérifions ce qu'il impose.
+
+- **À basse vitesse** ($u, v \ll c$) : $uv/c^2 \approx 0$, donc $w \approx u + v$. On retrouve Galilée. <Badge niveau="etabli">Limite classique exacte.</Badge>
+- **Avec de la lumière** ($u = c$) : $w = \dfrac{c + v}{1 + cv/c^2} = \dfrac{c+v}{1 + v/c} = \dfrac{c(c+v)}{c+v} = c$. La lumière reste à $c$, quel que soit $v$ ! Le postulat de départ est **automatiquement** respecté. <Badge niveau="etabli">C'est tout l'édifice qui boucle sur lui-même.</Badge>
+- **Le plafond infranchissable** : si $u < c$ et $v < c$, alors on démontre que $w < c$ (voir encart). On peut additionner des vitesses sous-luminiques à l'infini : on s'approche de $c$ sans jamais l'atteindre.
+
+<Encart type="plusloin" titre="Pourquoi w reste strictement &lt; c">
+
+Calculons $c - w$ pour montrer qu'il est positif. On met tout au même dénominateur :
+
+$$ c - w = c - \frac{u+v}{1 + uv/c^2} = \frac{c(1 + uv/c^2) - (u+v)}{1 + uv/c^2} = \frac{c + uv/c - u - v}{1 + uv/c^2}. $$
+
+Le numérateur se factorise :
+
+$$ c + \frac{uv}{c} - u - v = \frac{c^2 + uv - uc - vc}{c} = \frac{(c-u)(c-v)}{c}. $$
+
+Donc :
+
+$$ c - w = \frac{(c-u)(c-v)}{c\,(1 + uv/c^2)}. $$
+
+Si $0 \le u < c$ et $0 \le v < c$, alors $(c-u) > 0$ et $(c-v) > 0$ : le numérateur est positif, le dénominateur aussi, donc $c - w > 0$, c'est-à-dire $w < c$. <Badge niveau="etabli">$c$ est une vitesse limite, jamais une vitesse atteignable pour la matière.</Badge>
+
+</Encart>
+
+Manipulez vous-même cette loi : poussez $u$ et $v$ vers $c$ et regardez $w$ buter contre le mur.
+
+<VelocityComposition />
+
+Nous tenons désormais le dictionnaire complet de l'espace-temps. Dans le prochain chapitre, nous verrons que ces transformations laissent invariante une quantité magique — l'**intervalle d'espace-temps** — qui unifie enfin le temps et l'espace en une seule géométrie.

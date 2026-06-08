@@ -1,0 +1,36 @@
+---
+/**
+ * DedekindCut — une coupure de ℚ. On partage les rationnels en deux : A (en dessous)
+ * et son complémentaire (au-dessus). LA COUPURE elle-même EST le nombre réel. Quand
+ * la position est irrationnelle (√2), A n'a pas de plus grand élément : la coupure
+ * comble un « trou » de ℚ — c'est ainsi qu'on fabrique les réels.
+ */
+---
+
+<div class="iw" data-iw="dedekind">
+  <div class="iw__head"><span class="tag">Interactif</span> Les réels par coupures de Dedekind</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 6"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="dk-x">position de la coupure</label>
+      <input id="dk-x" type="range" min="0" max="3" step="0.001" value="1.5" data-x />
+      <output data-out-x>1,500</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-sqrt2>Coupure de √2</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">A =</span> <b>{'{'} q ∈ ℚ : q &lt; x {'}'}</b></span>
+    <span class="iw__chip"><b data-out-type></b></span>
+  </div>
+  <p class="iw__note">
+    À gauche, l’ensemble <b>A</b> des rationnels sous la coupure ; à droite, les autres. <b>Le réel
+    x est défini comme la coupure elle-même.</b> Cliquez « √2 » : la coupure tombe là où <em>aucun</em>
+    rationnel ne se trouve — A n’a pas de plus grand élément. ℚ avait un trou ; ℝ le comble.
+  </p>
+</div>
+
+<script>
+  import './DedekindCut.client.ts';
+</script>

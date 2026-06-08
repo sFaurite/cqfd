@@ -1,0 +1,32 @@
+---
+/**
+ * VonNeumannOrdinals — la construction des entiers naturels « à la von Neumann » :
+ * 0 = ∅, et S(n) = n ∪ {n}. Chaque entier n est l'ensemble de tous les entiers qui
+ * le précèdent — donc n possède exactement n éléments.
+ */
+---
+
+<div class="iw" data-iw="vonneumann">
+  <div class="iw__head"><span class="tag">Interactif</span> Construire ℕ à partir de l’ensemble vide</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 7"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="vn-n">entier n</label>
+      <input id="vn-n" type="range" min="0" max="6" step="1" value="3" data-n />
+      <output data-out-n>3</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">n possède</span> <b data-out-card></b></span>
+    <span class="iw__chip"><span class="k">successeur</span> <b data-out-succ></b></span>
+  </div>
+  <p class="iw__note">
+    Règle : <b>0 = ∅</b> (l’ensemble vide, zéro élément) et <b>S(n) = n ∪ {'{'}n{'}'}</b> (on ajoute, à n,
+    l’élément « n » lui-même). Chaque entier n est donc l’ensemble {'{'}0, 1, …, n−1{'}'} — il a exactement
+    <b>n</b> éléments. Tout part de ∅ : rien d’autre n’est admis.
+  </p>
+</div>
+
+<script>
+  import './VonNeumannOrdinals.client.ts';
+</script>

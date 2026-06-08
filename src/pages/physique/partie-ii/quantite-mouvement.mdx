@@ -1,0 +1,109 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La quantité de mouvement relativiste p = γmv"
+chapter: quantite-mouvement
+description: "Pourquoi p = mv ne suffit plus, et comment le corriger."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import LorentzSlider from '../../../components/interactive/LorentzSlider.astro';
+
+## La quantité de mouvement relativiste $p = \gamma m v$
+
+En mécanique classique, la quantité de mouvement d'un objet vaut $p = mv$. C'est une grandeur précieuse : dans un système isolé, **elle se conserve** — la somme des $mv$ avant un choc égale la somme après. Cette loi est si robuste qu'on aimerait la garder. Mais la relativité nous force à un constat dérangeant : avec la composition relativiste des vitesses, $p = mv$ **n'est plus conservée**. Il va falloir réparer la définition.
+
+<Encart type="intuition" titre="Le problème en une image">
+Imaginez deux billes identiques qui se cognent de plein fouet et rebondissent. Dans un référentiel bien choisi, par symétrie, le total des quantités de mouvement est nul avant et après : tout va bien. Mais changez de référentiel (regardez la scène depuis un train qui passe). Les vitesses ne s'ajoutent plus simplement — elles se composent selon la formule relativiste, qui « tasse » les grandes vitesses. Du coup, en recalculant naïvement $\sum mv$, le bilan **ne tombe plus juste**. Soit on abandonne la conservation, soit on change la formule de $p$. La physique choisit toujours la deuxième option : on garde la loi de conservation, on corrige l'outil.
+</Encart>
+
+<Prereq href="/physique/partie-i/transformations-lorentz">La composition relativiste des vitesses</Prereq> et <Prereq href="/physique/partie-i/lorentz-gamma">le facteur de Lorentz $\gamma$</Prereq> sont les deux ingrédients dont nous aurons besoin.
+
+### Pourquoi $p = mv$ casse
+
+Le principe de relativité exige qu'une loi de conservation vraie dans un référentiel le soit dans **tous** les référentiels inertiels. Vérifions que $p = mv$ échoue à ce test.
+
+<Encart type="calcul" titre="Une collision qui trahit p = mv">
+On considère deux objets identiques de masse $m$. Dans le référentiel $R'$ du centre de masse, ils arrivent l'un vers l'autre à la même vitesse $\pm u$ et, après un choc symétrique, repartent à $\mp u$.
+
+**Étape 1 — Bilan dans $R'$.** Avant : $p'_{\text{av}} = m u + m(-u) = 0$. Après : $p'_{\text{ap}} = m(-u) + m(u) = 0$. La quantité de mouvement classique est conservée. ✔
+
+**Étape 2 — On change de référentiel.** $R'$ se déplace à la vitesse $V$ par rapport au laboratoire $R$. Pour trouver les vitesses dans $R$, on **n'ajoute pas** simplement $V$ : on utilise la composition relativiste
+
+$$ w = \frac{u + V}{1 + \dfrac{uV}{c^2}}. $$
+
+**Étape 3 — Vitesse de chaque objet dans $R$.** L'objet à $+u$ a dans $R$ la vitesse $w_1 = \dfrac{u+V}{1+uV/c^2}$ ; celui à $-u$ a la vitesse $w_2 = \dfrac{-u+V}{1-uV/c^2}$.
+
+**Étape 4 — Bilan classique dans $R$ (avant).** On forme $p_{\text{av}} = m w_1 + m w_2$. À cause des **dénominateurs différents** ($1+uV/c^2$ et $1-uV/c^2$), la somme ne se simplifie pas en $2mV$ comme on l'attendrait classiquement.
+
+**Étape 5 — Le verdict.** Un calcul de la même quantité après le choc donne une valeur **différente** : $p_{\text{av}} \neq p_{\text{ap}}$ dans $R$. Or rien de physique n'a changé en changeant de point de vue. Donc $\sum m v$ **n'est pas un invariant de conservation** en relativité. ∎
+</Encart>
+
+La cause profonde est simple : la composition des vitesses est **non linéaire** (elle déforme les additions), alors que $p = mv$ est linéaire en $v$. Les deux sont incompatibles. <Badge niveau="etabli">La non-conservation de $\sum mv$ entre référentiels est une conséquence directe de la composition relativiste des vitesses, elle-même démontrée à partir des postulats.</Badge>
+
+### La réparation : $p = \gamma m v$
+
+L'idée géniale consiste à se demander : par rapport à *quel temps* mesure-t-on la vitesse ? Classiquement, on dérive la position par le temps $t$ du laboratoire. Mais ce temps dépend du référentiel. En revanche, le **temps propre** $\tau$ — le temps lu par une horloge embarquée sur l'objet — est, lui, un invariant : tout le monde s'accorde dessus. Mesurons donc le « débit de position » avec cette horloge-là.
+
+<Encart type="rappel" titre="Temps propre et dilatation">
+Pour un objet qui avance à la vitesse $v$, l'intervalle de temps $\mathrm{d}t$ vu du laboratoire et l'intervalle $\mathrm{d}\tau$ de sa propre horloge sont liés par la dilatation du temps : $\mathrm{d}t = \gamma\,\mathrm{d}\tau$, où $\gamma = \dfrac{1}{\sqrt{1 - v^2/c^2}}$. Le temps propre $\tau$ a la même valeur dans tous les référentiels : c'est un **invariant**.
+</Encart>
+
+<Encart type="calcul" titre="Construire la bonne quantité de mouvement">
+**Étape 1.** On garde l'idée « $p$ = masse × vitesse », mais on définit la vitesse comme la dérivée de la position $x$ par le **temps propre** $\tau$ :
+
+$$ p = m\,\frac{\mathrm{d}x}{\mathrm{d}\tau}. $$
+
+**Étape 2.** On relie $\tau$ au temps $t$ du laboratoire avec $\mathrm{d}t = \gamma\,\mathrm{d}\tau$, donc $\dfrac{1}{\mathrm{d}\tau} = \gamma\,\dfrac{1}{\mathrm{d}t}$ :
+
+$$ p = m\,\frac{\mathrm{d}x}{\mathrm{d}\tau} = m\,\gamma\,\frac{\mathrm{d}x}{\mathrm{d}t}. $$
+
+**Étape 3.** Or $\dfrac{\mathrm{d}x}{\mathrm{d}t} = v$ est la vitesse ordinaire. D'où
+
+$$ \boxed{\,p = \gamma\,m\,v\,}. $$
+
+**Étape 4 — Cohérence.** Aux faibles vitesses, $v \ll c$ donne $\gamma \to 1$, et l'on retrouve $p \approx mv$ : la relativité **contient** la mécanique de Newton comme cas limite. ∎
+</Encart>
+
+<Resultat label="Quantité de mouvement relativiste">
+
+$$ p = \gamma\,m\,v = \frac{m\,v}{\sqrt{1 - v^2/c^2}} $$
+
+<Badge niveau="etabli" slot="badge">Vérifiée chaque jour dans les accélérateurs (LHC, synchrotrons) : sans le facteur $\gamma$, on ne pourrait ni guider ni faire entrer en collision les particules.</Badge>
+</Resultat>
+
+Pourquoi *cette* forme et pas une autre ? Parce que c'est la **seule** définition « masse × vitesse » qui se conserve simultanément dans tous les référentiels inertiels. C'est exactement l'argument de symétrie qui manquait à $p=mv$.
+
+<Encart type="plusloin" titre="L'argument complet : pourquoi γmv et rien d'autre">
+On exige que la quantité de mouvement totale soit conservée dans **tout** référentiel. En reprenant la collision symétrique de tout à l'heure, et en imposant la conservation à la fois dans $R'$ et dans $R$, on est conduit à chercher une fonction $p = f(v)\,v$ telle que le bilan reste nul après transformation de Lorentz des vitesses. La condition se résout en $f(v) = \gamma(v)$, à une constante multiplicative près fixée par la limite newtonienne $f(0)=1$. La raison structurelle profonde : $(\,E/c,\ p\,)$ forment un **quadrivecteur énergie-impulsion** $\left(\gamma m c, \gamma m v\right)$ qui se transforme exactement comme $(c\,t, x)$ sous Lorentz. Conserver un quadrivecteur dans un référentiel le conserve donc automatiquement dans tous les autres — c'est la garantie d'invariance qu'on cherchait.
+</Encart>
+
+### La masse $m$ est invariante (oubliez la « masse relativiste »)
+
+Dans $p = \gamma m v$, le $m$ est la **masse invariante** (ou masse au repos) : une propriété de l'objet, identique dans tous les référentiels. Ce n'est pas $m$ qui « augmente » avec la vitesse, c'est le facteur $\gamma$ qui agit sur le mouvement.
+
+<Badge niveau="etabli">La masse $m$ est un invariant relativiste, scalaire identique dans tous les référentiels — c'est le standard de la physique moderne.</Badge>
+
+On lit parfois la formule sous l'habillage « $p = m_{\text{rel}}\,v$ avec $m_{\text{rel}} = \gamma m$ », en parlant de **masse relativiste** qui grandirait avec la vitesse. Cette notion est aujourd'hui considérée comme **obsolète et trompeuse** : elle suggère à tort qu'un objet rapide deviendrait « plus lourd » de façon intrinsèque, alors que sa masse — celle qui figure dans $E=mc^2$ et qui caractérise la particule — ne change pas. Les physiciens préfèrent garder le facteur $\gamma$ visible et réserver le mot « masse » à l'invariant.
+
+<LorentzSlider />
+
+### La barrière de la vitesse $c$
+
+Regardez le comportement de $\gamma$ quand $v$ s'approche de $c$ : il **explose vers l'infini**. Comme $p = \gamma m v$, la quantité de mouvement diverge elle aussi.
+
+$$ \lim_{v \to c^-} \gamma = \lim_{v \to c^-} \frac{1}{\sqrt{1 - v^2/c^2}} = +\infty \quad\Longrightarrow\quad p \to +\infty. $$
+
+<Resultat label="Une barrière infranchissable">
+
+$$ v \to c \ \Longrightarrow\ p = \gamma m v \to +\infty $$
+
+<Badge niveau="etabli" slot="badge">Confirmé : les électrons des accélérateurs frôlent $c$ mais ne l'atteignent jamais ; il faudrait une énergie/impulsion infinie pour une masse non nulle.</Badge>
+</Resultat>
+
+Concrètement : pour faire varier $p$, il faut appliquer une force pendant un certain temps (une impulsion). Pousser une particule **massive** jusqu'à $c$ exigerait de lui communiquer une quantité de mouvement infinie, donc une énergie infinie. C'est impossible. Voilà pourquoi $c$ n'est pas seulement la vitesse de la lumière : c'est une **limite de vitesse universelle** pour toute la matière. Seules les particules de masse nulle (comme les photons) peuvent voyager exactement à $c$.
+
+Nous avons réparé la quantité de mouvement. Mais l'énergie réclame le même traitement — et c'est en la corrigeant que surgira la plus célèbre équation de la physique. Direction $E = \gamma m c^2$.

@@ -1,0 +1,76 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Synthèse : ce qu'on sait vs ce qu'on ignore"
+chapter: synthese
+description: "La carte complète, colorée par l'indicateur de fiabilité."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import OpenProblemsMap from '../../../components/interactive/OpenProblemsMap.astro';
+
+## Synthèse : ce qu'on sait vs ce qu'on ignore
+
+Nous voici au bout du voyage. Nous étions partis de **deux phrases**, et nous avons reconstruit, pierre par pierre, une grande partie de la physique du XXe siècle. Avant de refermer le livre, prenons de la hauteur : qu'avons-nous vraiment *démontré*, et où s'arrête honnêtement notre savoir ?
+
+<Encart type="intuition" titre="Une seule image pour tout le site">
+Imagine un noyau de roche extrêmement dur — la physique testée des milliers de fois, qui ne bouge plus. Autour de ce noyau, un halo de questions encore floues. L'erreur du débutant, c'est de croire que le flou contamine le noyau. C'est faux : le noyau est solide *justement parce qu'*on a su circonscrire ce qu'on ignore. La science n'est pas un château de cartes — c'est un continent solide bordé de côtes inexplorées.
+</Encart>
+
+### Le chemin parcouru
+
+Reprenons le fil, en une respiration.
+
+Tout commence par les <Prereq href="/physique/partie-i/postulats">deux postulats d'Einstein</Prereq> : les lois de la physique sont les mêmes dans tous les référentiels inertiels, et la vitesse de la lumière $c$ y vaut toujours la même valeur. <Badge niveau="etabli">Vérifiés depuis 1905 par tous les accélérateurs, le GPS, les horloges atomiques. Aucune exception connue.</Badge>
+
+De ces deux phrases découle **toute la relativité restreinte** : dilatation du temps, contraction des longueurs, perte de la simultanéité, puis la relation énergie-impulsion qui couronne l'édifice.
+
+$$ E^2 = (mc^2)^2 + (pc)^2 $$
+
+<Badge niveau="etabli">Confirmée à chaque collision du LHC ; pour une particule au repos elle redonne $E = mc^2$.</Badge>
+
+Ensuite, marier la relativité avec la **mécanique quantique** force l'existence des champs et de l'antimatière. La théorie quantique des champs décrit alors les particules comme des excitations de champs, et débouche sur le <Prereq href="/physique/partie-iv/vue-ensemble">Modèle Standard</Prereq> : douze particules de matière (six quarks et six leptons), les bosons médiateurs de **trois** forces (électromagnétique, faible, forte), et le boson de Higgs qui donne leur masse aux particules élémentaires. <Badge niveau="etabli">Higgs observé en 2012 au LHC ; le Modèle Standard est la théorie la plus précisément testée de l'histoire.</Badge>
+
+Et la **gravité** ? Elle reste à part, décrite par la relativité générale, magnifiquement vérifiée à grande échelle <Badge niveau="etabli">ondes gravitationnelles détectées en 2015, déviation de la lumière, précession de Mercure.</Badge> mais toujours pas réconciliée avec le quantique.
+
+### Le bilan honnête, niveau par niveau
+
+Voici la carte des problèmes ouverts — chaque continent y a sa couleur de fiabilité.
+
+<OpenProblemsMap />
+
+Détaillons ce que dit cette carte, sans rien survendre.
+
+**🟢 Établi — le noyau de roche.** La relativité restreinte, la relation $E^2=(mc^2)^2+(pc)^2$, l'existence des quarks, des leptons, des bosons, et du Higgs. <Badge niveau="etabli">Ce sont des faits expérimentaux reproduits, pas des hypothèses. On les enseignera encore dans mille ans.</Badge>
+
+**🔵 Solidement modélisé — compris en pratique, sans preuve complète.** Le *mécanisme* de Higgs (comment le champ donne la masse), le *confinement* (pourquoi on n'observe jamais un quark seul) et l'unification *électrofaible* (l'électromagnétisme et la force faible, deux visages d'une même force au-delà de $\sim 100\ \text{GeV}$). <Badge niveau="modelise">Les modèles fonctionnent et prédisent juste, mais une démonstration mathématique complète du confinement reste un problème du millénaire non résolu.</Badge>
+
+**🟡 En débat — la frontière mouvante.** La nature de la **masse des neutrinos**. Qu'ils aient une masse minuscule est désormais un fait, prouvé par les oscillations <Badge niveau="etabli">oscillations mesurées par Super-Kamiokande et SNO ; prix Nobel 2015.</Badge> ; mais on ignore sa valeur exacte et son **origine**. Surtout, on ne sait pas si le neutrino est une particule de **Majorana** (sa propre antiparticule) ou de Dirac. <Badge niveau="plausible">La question se tranchera peut-être avec la détection de la double désintégration bêta sans neutrino — jamais observée à ce jour.</Badge>
+
+**🔴 Ouvert — les vraies côtes inexplorées.** Là, on l'admet : on ne sait pas.
+
+| Question ouverte | Ce qu'on observe | Ce qui manque |
+|---|---|---|
+| Matière noire | La gravité « en trop » dans les galaxies | Aucune particule identifiée |
+| Énergie noire | L'expansion de l'Univers s'accélère | Aucune explication satisfaisante |
+| Gravité quantique | Relativité générale + quantique incompatibles | Une théorie unificatrice testée |
+| Asymétrie matière/antimatière | L'Univers contient de la matière | Pourquoi pas autant d'antimatière ? |
+| Problème de hiérarchie | La gravité est $\sim 10^{32}$ fois plus faible que la force faible | Pourquoi cet écart vertigineux ? |
+| Énigme des saveurs | Trois « générations » de particules | Pourquoi trois, et ces masses ? |
+
+<Badge niveau="ouvert">Matière et énergie noires représentent ensemble près de 95 % du contenu de l'Univers — autrement dit, l'essentiel nous échappe encore. C'est le plus grand chantier de la physique.</Badge>
+
+<Encart type="plusloin" titre="Pourquoi la gravité résiste-t-elle au quantique ?">
+Quand on tente de quantifier la gravité comme on a quantifié l'électromagnétisme, les calculs produisent des infinis qu'on ne sait pas éliminer (la théorie est dite *non renormalisable*). Aux toutes petites échelles — la longueur de Planck, $\ell_P \approx 1{,}6\times10^{-35}\ \text{m}$ — l'espace-temps lisse de la relativité générale devrait laisser place à quelque chose de granuleux et fluctuant. Théorie des cordes, gravité quantique à boucles : ce sont des pistes, **aucune n'est confirmée expérimentalement**. <Badge niveau="ouvert">C'est sans doute LA question centrale de la physique fondamentale du XXIe siècle.</Badge>
+</Encart>
+
+### Le mot de la fin
+
+Regarde la carte une dernière fois. Le centre est massif, immobile, vérifié — tu peux t'y appuyer sans crainte. Les bords vibrent de points d'interrogation. **Et c'est exactement ce qui rend la physique vivante.** Une science « finie » serait une science morte.
+
+Tout ce halo de mystères — matière noire, gravité quantique, l'origine même des masses — repose, sans contradiction, sur le même socle que nous avons bâti depuis le tout début : deux postulats, une exigence de cohérence, et le courage de suivre la logique jusqu'au bout.
+
+Alors si une seule idée doit rester, c'est celle-ci : ces grandes questions ne sont pas réservées aux génies d'un autre monde. Elles attendent. Peut-être quelqu'un qui lit cette page. Et le meilleur endroit pour reprendre l'aventure, maintenant que tu en vois la structure entière, c'est de revenir au <Prereq href="/physique/partie-i/postulats">tout début</Prereq> — et de relire ces deux phrases avec des yeux neufs. Tu sais désormais l'univers entier qu'elles contiennent.

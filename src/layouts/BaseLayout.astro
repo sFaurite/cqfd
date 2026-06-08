@@ -1,0 +1,249 @@
+---
+/**
+ * Layout de base — coquille HTML commune à toutes les pages.
+ * Header collant (recherche, légende fiabilité, thème), barre latérale persistante,
+ * et slot de contenu. La math est rendue au build (KaTeX CSS importée ici).
+ */
+import 'katex/dist/katex.min.css';
+import '../styles/global.css';
+import { SITE } from '../lib/site.config';
+import { navFor, type CourseId } from '../lib/nav';
+import { courseById } from '../lib/courses';
+import Sidebar from '../components/Sidebar.astro';
+import Search from '../components/Search.astro';
+import LegendFiabilite from '../components/LegendFiabilite.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** identifiant du cours courant (pour la barre latérale + l'échelle de fiabilité) */
+  courseId?: CourseId | null;
+  /** route complète de la page courante (pour surligner la barre latérale) */
+  currentPath?: string;
+  showSidebar?: boolean;
+}
+const {
+  title,
+  description = SITE.description,
+  courseId = null,
+  currentPath,
+  showSidebar = true,
+} = Astro.props;
+const titreComplet = title === SITE.brand ? title : `${title} — ${SITE.brand}`;
+const cours = courseById(courseId);
+const parties = courseId ? navFor(courseId) : [];
+---
+
+<!doctype html>
+<html lang="fr" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titreComplet}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={titreComplet} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {/* Évite le flash de thème : applique le thème mémorisé AVANT le rendu. */}
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'light' || t === 'dark')
+            document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body data-has-sidebar={showSidebar ? 'true' : 'false'}>
+    <a class="skip-link" href="#contenu">Aller au contenu principal</a>
+
+    <header class="app-header">
+      <div class="hd-left">
+        {
+          showSidebar && (
+            <button
+              id="menu-toggle"
+              class="menu-toggle"
+              type="button"
+              aria-label="Ouvrir le sommaire"
+              aria-controls="sidebar"
+              aria-expanded="false"
+            >
+              <span></span><span></span><span></span>
+            </button>
+          )
+        }
+        <a href="/" class="hd-brand">
+          <span class="hd-logo" aria-hidden="true">{SITE.logo}</span>
+          <span class="hd-name">{SITE.brand}</span>
+        </a>
+      </div>
+      <div class="hd-right">
+        <Search />
+        {courseId && <LegendFiabilite courseId={courseId} />}
+        <ThemeToggle />
+      </div>
+    </header>
+
+    <div class="layout">
+      {
+        showSidebar && (
+          <>
+            <div class="sidebar-col" id="sidebar-col">
+              <Sidebar parties={parties} currentPath={currentPath} course={cours} />
+            </div>
+            <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+          </>
+        )
+      }
+      <div class="main-col" data-full={!showSidebar}>
+        <slot />
+      </div>
+    </div>
+
+    {showSidebar && (
+      <script>
+        const toggle = document.getElementById('menu-toggle');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        function setOpen(open: boolean) {
+          document.body.classList.toggle('sidebar-open', open);
+          toggle?.setAttribute('aria-expanded', String(open));
+        }
+        toggle?.addEventListener('click', () =>
+          setOpen(!document.body.classList.contains('sidebar-open')),
+        );
+        backdrop?.addEventListener('click', () => setOpen(false));
+        document
+          .getElementById('sidebar-col')
+          ?.addEventListener('click', (e) => {
+            if ((e.target as HTMLElement).closest('a')) setOpen(false);
+          });
+      </script>
+    )}
+
+    <script>
+      import '../scripts/accordion.ts';
+    </script>
+
+    <style>
+      .app-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0 0.9rem;
+        background: color-mix(in srgb, var(--c-bg-elev) 92%, transparent);
+        backdrop-filter: saturate(140%) blur(8px);
+        border-bottom: 1px solid var(--c-border);
+      }
+      .hd-left,
+      .hd-right {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .hd-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.45em;
+        color: var(--c-text);
+        font-weight: 700;
+      }
+      .hd-brand:hover {
+        text-decoration: none;
+        color: var(--c-blue);
+      }
+      .hd-logo {
+        color: var(--c-blue);
+        font-size: 1.4rem;
+      }
+      .hd-name {
+        font-size: 0.95rem;
+      }
+      @media (max-width: 600px) {
+        .hd-name {
+          display: none;
+        }
+      }
+      .menu-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        width: 38px;
+        height: 38px;
+        border: 1px solid var(--c-border);
+        background: var(--c-surface);
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .menu-toggle span {
+        display: block;
+        height: 2px;
+        width: 18px;
+        margin: 0 auto;
+        background: var(--c-text);
+        border-radius: 2px;
+      }
+
+      .layout {
+        display: flex;
+        align-items: stretch;
+      }
+      .sidebar-col {
+        position: sticky;
+        top: var(--header-h);
+        height: calc(100vh - var(--header-h));
+        flex: none;
+      }
+      .main-col {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+      .sidebar-backdrop {
+        display: none;
+      }
+
+      /* Drawer mobile */
+      @media (max-width: 980px) {
+        .menu-toggle {
+          display: flex;
+        }
+        .sidebar-col {
+          position: fixed;
+          top: var(--header-h);
+          left: 0;
+          height: calc(100vh - var(--header-h));
+          z-index: 90;
+          transform: translateX(-105%);
+          transition: transform 0.25s ease;
+        }
+        :global(body.sidebar-open) .sidebar-col {
+          transform: translateX(0);
+          box-shadow: var(--shadow);
+        }
+        .sidebar-backdrop {
+          position: fixed;
+          inset: var(--header-h) 0 0 0;
+          background: rgba(2, 6, 12, 0.5);
+          z-index: 85;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.25s;
+        }
+        :global(body.sidebar-open) .sidebar-backdrop {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+    </style>
+  </body>
+</html>

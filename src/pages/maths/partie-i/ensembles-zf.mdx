@@ -1,0 +1,171 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les axiomes des ensembles (ZF)"
+chapter: ensembles-zf
+description: "Le langage (ensemble, ∈) et les axiomes de Zermelo-Fraenkel : le sol commun d'où tout se construit."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le sol de tout l'édifice
+
+<Tournant titre="Tournant : on pose le sol de tout l'édifice">
+
+Jusqu'ici nous avons décrit la *méthode* axiomatique sans l'appliquer (voir <Prereq href="/maths/partie-i/methode-axiomatique">la méthode axiomatique</Prereq>). À partir de maintenant, **on cesse de déduire** : on POSE les fondations. Les axiomes de la théorie des ensembles ne se démontrent pas — ce sont les **hypothèses primitives** de toutes les mathématiques que nous construirons. Les nombres, les fonctions, l'analyse : tout en découlera. Ici, et seulement ici, nous avons le droit de dire « admettons ».
+
+Et il faut commencer par le plus modeste des gestes : choisir un **langage**.
+
+</Tournant>
+
+### Deux mots qu'on n'explique pas
+
+Imaginez vouloir tout définir. « Un ensemble est une collection d'objets. » Mais qu'est-ce qu'une *collection* ? Et un *objet* ? On tourne en rond. À un moment, il faut s'arrêter et déclarer : voici mes notions **primitives**, je ne les définis pas, je dis seulement comment elles se comportent.
+
+En théorie des ensembles, ces notions sont au nombre de deux :
+
+- le mot **ensemble** lui-même ;
+- la relation d'**appartenance**, notée $\in$. L'énoncé $a \in E$ se lit « $a$ est élément de $E$ ».
+
+C'est tout. Tout objet est un ensemble (même ses éléments sont des ensembles), et la seule chose qu'on sait faire est demander : *est-ce que ceci appartient à cela ?* Les axiomes, ci-dessous, fixent les règles du jeu sur $\in$.
+
+<Badge niveau="admis">Que tout se réduise à $\in$ est un choix de modélisation extraordinairement fécond, standard depuis un siècle — mais c'est un choix, pas une vérité imposée.</Badge>
+
+### Pourquoi des axiomes ? Le paradoxe de Russell
+
+La tentation naïve serait : « pour toute propriété $P$, l'ensemble des $x$ tels que $P(x)$ existe ». C'est la **compréhension non restreinte**. Elle paraît inoffensive. Elle est catastrophique.
+
+<Encart type="calcul" titre="Le paradoxe de Russell (1901)">
+
+Supposons la compréhension non restreinte. On peut alors former
+
+$$
+R = \{\, x : x \notin x \,\}
+$$
+
+l'ensemble de tous les ensembles qui ne s'appartiennent pas. Posons la question : **$R$ appartient-il à lui-même ?**
+
+- **Si** $R \in R$ : alors $R$ vérifie la propriété qui définit $R$, c'est-à-dire $R \notin R$. Contradiction.
+- **Si** $R \notin R$ : alors $R$ vérifie justement « ne s'appartient pas », donc par définition $R \in R$. Contradiction.
+
+Dans les deux cas on aboutit à $R \in R \iff R \notin R$, une absurdité logique.
+
+<Resultat label="Conclusion">
+
+$$
+\text{La compréhension non restreinte est contradictoire.}
+$$
+
+<Badge niveau="demontre" slot="badge">Raisonnement purement logique, vérifiable en trois lignes. Il force à restreindre la formation d'ensembles.</Badge>
+
+</Resultat>
+
+</Encart>
+
+La leçon est limpide : on ne peut **pas** fabriquer un ensemble à partir de n'importe quelle propriété appliquée à *tout l'univers*. La parade — l'axiome de **séparation** — n'autorise à former $\{x \in E : P(x)\}$ qu'à l'intérieur d'un ensemble $E$ **déjà donné**. On découpe dans de l'existant ; on ne crée pas un « ensemble de tout ». C'est exactement ce qui désamorce Russell.
+
+### Les axiomes de Zermelo–Fraenkel (ZF)
+
+Voici le système standard. Je les énonce intuitivement ; leur version logique formelle viendra plus tard si nécessaire.
+
+<Hypotheses titre="Hypothèses de départ : les axiomes ZF">
+
+1. **Extensionnalité.** Deux ensembles qui ont exactement les mêmes éléments sont égaux. Un ensemble *est* l'ensemble de ses éléments — rien d'autre.
+2. **Paire.** Pour tous $a$, $b$, il existe un ensemble $\{a, b\}$ dont les éléments sont précisément $a$ et $b$.
+3. **Réunion.** Pour tout ensemble $E$, il existe l'ensemble $\bigcup E$ des éléments des éléments de $E$.
+4. **Ensemble des parties.** Pour tout $E$, il existe $\mathcal{P}(E)$, l'ensemble de tous les sous-ensembles de $E$.
+5. **Séparation (restreinte, schéma).** Pour tout ensemble $E$ et toute propriété $P$, il existe $\{x \in E : P(x)\}$. **Restreinte** à un $E$ donné : c'est elle qui évite Russell. (C'est un *schéma* : une instance par propriété $P$.)
+6. **Infini.** Il existe un ensemble *inductif* (contenant $\varnothing$ et stable par $x \mapsto x \cup \{x\}$). C'est l'axiome qui rendra $\mathbb{N}$ possible.
+7. **Remplacement (schéma).** L'image d'un ensemble par une « fonction » définissable est encore un ensemble.
+8. **Fondation.** Aucun ensemble ne contient de chaîne d'appartenance infinie descendante ; en particulier $x \in x$ est interdit.
+
+</Hypotheses>
+
+<Badge niveau="admis">ZF (avec ou sans choix) est le cadre de référence dans lequel se font aujourd'hui presque toutes les mathématiques. Très solidement établi par un siècle de pratique sans contradiction connue — mais sa non-contradiction elle-même ne se démontre pas de l'intérieur (Gödel).</Badge>
+
+### À part : l'axiome du choix
+
+On adjoint souvent un neuvième axiome, l'**axiome du choix** (AC) : étant donnée une famille d'ensembles non vides, on peut choisir simultanément un élément dans chacun. ZF + AC se note **ZFC**.
+
+<Encart type="plusloin" titre="AC est indépendant de ZF">
+
+Gödel (1938) a montré qu'on ne peut pas **réfuter** AC à partir de ZF (en construisant un modèle, l'univers constructible $L$, où AC est vrai) ; Cohen (1963), par la méthode du *forcing*, qu'on ne peut pas le **démontrer** non plus. AC est donc strictement **indépendant** de ZF : ajouter AC ou sa négation donne deux théories également cohérentes (si ZF l'est).
+
+<Badge niveau="demontre">L'indépendance est un théorème démontré (Gödel/Cohen).</Badge> Quant à l'*adoption* d'AC : <Badge niveau="admis">c'est un **choix** (un axiome supplémentaire), quasi universel car très commode, mais philosophiquement discuté — surtout pour ses conséquences contre-intuitives (Banach–Tarski).</Badge>
+
+</Encart>
+
+### On construit : l'ensemble vide
+
+Premier objet. Prenons n'importe quel ensemble $E$ (l'axiome d'infini en fournit un) et séparons avec une propriété toujours fausse :
+
+$$
+\varnothing := \{\, x \in E : x \neq x \,\}
+$$
+
+Aucun $x$ ne vérifie $x \neq x$, donc $\varnothing$ n'a aucun élément. Son **unicité** mérite, elle, une preuve.
+
+<Encart type="calcul" titre="Unicité de l'ensemble vide">
+
+Supposons deux ensembles $\varnothing_1$ et $\varnothing_2$ sans aucun élément. Comparons-les par l'extensionnalité : il faut vérifier qu'ils ont les mêmes éléments.
+
+- Soit $x \in \varnothing_1$. Impossible, $\varnothing_1$ est vide : l'implication $x \in \varnothing_1 \Rightarrow x \in \varnothing_2$ est **vraie par vacuité** (hypothèse jamais réalisée).
+- De même $x \in \varnothing_2 \Rightarrow x \in \varnothing_1$.
+
+Les deux ensembles ont donc exactement les mêmes éléments (aucun). Par **extensionnalité** (axiome 1), $\varnothing_1 = \varnothing_2$.
+
+<Resultat label="Unicité">
+
+$$
+\exists!\, \varnothing \quad \text{tel que} \quad \forall x,\ x \notin \varnothing
+$$
+
+<Badge niveau="demontre" slot="badge">Déduit rigoureusement de l'axiome d'extensionnalité.</Badge>
+
+</Resultat>
+
+</Encart>
+
+### Singletons, paires, réunions
+
+L'axiome de la paire donne directement $\{a, b\}$. En l'appliquant avec $a = b$, on obtient le **singleton** $\{a\} := \{a, a\}$ (un seul élément, par extensionnalité). En combinant paire et réunion, on forme $\{a\} \cup \{b\} = \{a, b\}$, puis de proche en proche n'importe quel ensemble fini écrit en extension. <Badge niveau="demontre">Constructions directes à partir des axiomes 2 et 3.</Badge>
+
+### Le couple ordonné : encoder l'ordre avec des accolades
+
+Un défi subtil : $\{a, b\} = \{b, a\}$, l'ensemble ne retient **pas** l'ordre. Or pour faire des mathématiques (fonctions, plan…) il nous faut un *couple ordonné* $(a, b)$ où le premier et le second rôle sont distingués. L'astuce de **Kuratowski** :
+
+$$
+(a, b) := \{\, \{a\},\ \{a, b\} \,\}
+$$
+
+L'idée géniale : le « premier » $a$ est marqué deux fois (il est dans les deux blocs), le « second » $b$ une seule. L'asymétrie est encodée dans la structure même.
+
+<Encart type="plusloin" titre="Pourquoi (a,b) encode vraiment l'ordre">
+
+On veut la propriété caractéristique :
+
+$$
+(a, b) = (c, d) \iff a = c \ \text{et} \ b = d
+$$
+
+Le sens $\Leftarrow$ est immédiat. Pour $\Rightarrow$, on récupère $a$ comme l'unique élément de l'intersection $\bigcap (a,b) = \{a\} \cap \{a, b\} = \{a\}$, puis $b$ par élimination. Un examen des cas (selon que $a = b$ ou non) montre qu'on reconstruit $a$ puis $b$ sans ambiguïté.
+
+<Badge niveau="demontre">Vérification finie, entièrement mécanique : Kuratowski encode bien le couple ordonné.</Badge>
+
+</Encart>
+
+<Encart type="intuition" titre="Image mentale">
+
+Pensez au couple comme à une boîte à deux compartiments fermés. L'ensemble $\{a,b\}$ est une boîte *ouverte* où les deux objets flottent librement. Kuratowski rajoute une étiquette discrète — $\{a\}$ tout seul — qui dit « celui-ci d'abord ». Avec rien que des accolades, on a fabriqué une flèche.
+
+</Encart>
+
+De là, le **produit cartésien** $A \times B = \{(a, b) : a \in A,\ b \in B\}$ s'obtient par séparation à l'intérieur d'un $\mathcal{P}(\mathcal{P}(A \cup B))$ bien choisi — tout existe déjà grâce aux axiomes 3, 4 et 5. <Badge niveau="demontre">Construction standard, légitimée par les axiomes posés.</Badge>
+
+### Ce qui vient ensuite
+
+Nous avons un sol : $\varnothing$, les paires, les couples, les produits. Mais tout cela reste *fini*. Le seul axiome que nous n'avons pas encore exploité — l'**Infini** — est précisément celui qui va nous offrir le premier objet véritablement riche des mathématiques. C'est avec lui que, dans le prochain chapitre, nous construirons $\mathbb{N}$ à partir du vide.
