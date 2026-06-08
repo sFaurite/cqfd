@@ -1,0 +1,132 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L’additionneur et l’ALU"
+chapter: additionneur-alu
+description: "Demi-additionneur, additionneur complet, retenue propagée, puis l’unité arithmétique et logique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import FullAdder from '../../../components/interactive/FullAdder.astro';
+
+## Additionner : la première vraie opération
+
+Nous savons fabriquer des portes logiques et combiner leurs sorties en **somme de produits** (<Prereq href="/processeurs/partie-iii/circuits-combinatoires">circuits combinatoires</Prereq>). Nous savons aussi représenter les entiers, y compris négatifs, en **complément à deux** (<Prereq href="/processeurs/partie-iii/binaire-complement">le binaire et le complément à deux</Prereq>). Il est temps de fabriquer une machine qui *calcule*. Pas par magie : nous allons retrouver, dans des XOR et des AND, l'addition que vous posez à la main depuis l'école primaire. Et nous verrons qu'une fois l'addition construite, **la soustraction est gratuite**.
+
+<Encart type="intuition" titre="L'addition d'école, colonne par colonne">
+Posez $7 + 5$ en base 10. Colonne des unités : $7+5=12$, vous écrivez **2** et vous **retenez 1**. En binaire, c'est pareil, mais chaque colonne ne connaît que deux chiffres. $1+1 = 10_2$ : on écrit **0** et on retient **1**. Tout l'additionneur tient dans cette phrase : *pour chaque colonne, produire un chiffre de résultat et une retenue, en tenant compte de la retenue venue de la colonne précédente.*
+</Encart>
+
+## Le demi-additionneur : une seule colonne, sans retenue entrante
+
+Commençons par le cas le plus simple : additionner **deux** bits $A$ et $B$, sans rien recevoir d'en dessous. Le résultat tient sur deux bits : une **somme** $s$ (le chiffre écrit) et une **retenue** $c$ (le chiffre reporté).
+
+| $A$ | $B$ | $c$ (retenue) | $s$ (somme) |
+|:---:|:---:|:---:|:---:|
+| 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 1 |
+| 1 | 0 | 0 | 1 |
+| 1 | 1 | 1 | 0 |
+
+Lisons la table. La somme $s$ vaut 1 exactement quand **une seule** des entrées vaut 1 : c'est la définition du **OU exclusif**. La retenue $c$ vaut 1 exactement quand **les deux** entrées valent 1 : c'est le **ET**.
+
+<Resultat label="Demi-additionneur">
+
+$$
+s = A \oplus B \qquad\qquad c = A \cdot B
+$$
+
+<Badge niveau="fonde" slot="badge">Lecture directe de la table de l'addition binaire d'un bit : aucune convention, ces équations sont imposées par l'arithmétique.</Badge>
+</Resultat>
+
+On l'appelle *demi*-additionneur car il lui manque l'essentiel pour chaîner : il ne sait pas **recevoir** une retenue.
+
+## L'additionneur complet : trois entrées
+
+Une vraie colonne reçoit la retenue $c_{in}$ de la colonne précédente. Il faut donc additionner **trois** bits : $a$, $b$ et $c_{in}$. Le résultat va de $0$ à $3$, soit toujours deux bits : la somme $s$ et la retenue sortante $c_{out}$.
+
+| $a$ | $b$ | $c_{in}$ | $c_{out}$ | $s$ |
+|:---:|:---:|:---:|:---:|:---:|
+| 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 1 |
+| 0 | 1 | 0 | 0 | 1 |
+| 0 | 1 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 1 |
+| 1 | 0 | 1 | 1 | 0 |
+| 1 | 1 | 0 | 1 | 0 |
+| 1 | 1 | 1 | 1 | 1 |
+
+<Encart type="calcul" titre="Dériver les deux équations">
+**La somme.** $s$ vaut 1 quand le nombre d'entrées à 1 est **impair** (1 ou 3). Or le XOR de plusieurs bits vaut précisément 1 quand un nombre impair d'entre eux valent 1. Donc directement :
+
+$$
+s = a \oplus b \oplus c_{in}
+$$
+
+**La retenue sortante.** $c_{out}$ vaut 1 quand **au moins deux** entrées valent 1 : c'est la fonction **majorité**. En somme de produits, en relevant les lignes où $c_{out}=1$ :
+
+$$
+c_{out} = a\,b + a\,c_{in} + b\,c_{in}
+$$
+
+On vérifie : chaque terme détecte une paire à 1, et la ligne « tout à 1 » est couverte par les trois termes à la fois (le OU s'en moque, $1+1+1 = 1$).
+
+<Resultat label="Additionneur complet (full adder)">
+
+$$
+s = a \oplus b \oplus c_{in} \qquad c_{out} = a\,b + a\,c_{in} + b\,c_{in}
+$$
+
+<Badge niveau="fonde" slot="badge">Déduit ligne à ligne de la table d'addition de trois bits. Inattaquable.</Badge>
+</Resultat>
+</Encart>
+
+Manipulez ses huit cas pour vous convaincre que la cellule est correcte :
+
+<FullAdder />
+
+## Chaîner : l'additionneur à retenue propagée
+
+Un additionneur complet traite **une** colonne. Pour additionner deux nombres de $n$ bits, on en aligne $n$ et on **branche la retenue sortante de chacun sur la retenue entrante du suivant**, du bit de poids faible vers le poids fort. La toute première retenue entrante est mise à $0$. C'est l'**additionneur à retenue propagée** (*ripple-carry*) : la retenue « ondule » de droite à gauche, exactement comme votre crayon quand vous posez l'opération.
+
+<VideoManim src="binary-addition" scene="BinaryAddition" titre="L'addition binaire" legende="Colonne par colonne, la retenue se propage du bit de poids faible au bit de poids fort." />
+
+<Badge niveau="fonde">La correction du montage est garantie : chaque cellule applique l'arithmétique exacte d'une colonne, et le chaînage des retenues reproduit fidèlement l'addition posée.</Badge>
+
+Il y a pourtant un prix. La retenue du bit le plus fort ne peut être connue qu'**après** que toutes les retenues précédentes se soient stabilisées, l'une après l'autre. Le délai du circuit croît donc **linéairement** avec $n$ : on parle d'un délai en $O(n)$. <Badge niveau="idealise">Modèle de premier ordre : on suppose chaque cellule de délai constant. Les durées réelles dépendent de la techno.</Badge>
+
+Pour des additionneurs 32 ou 64 bits, cette propagation devient le goulot d'étranglement. Les processeurs réels emploient des schémas d'**anticipation de retenue** (*carry-lookahead*) : on calcule en parallèle, par des termes « génère / propage », si une retenue *va* apparaître, sans attendre qu'elle remonte la chaîne. On gagne un délai en $O(\log n)$, au prix de plus de portes. <Badge niveau="implementation">Choix d'architecture propre à chaque puce : ripple-carry, lookahead, carry-select… le résultat calculé est le même, seule la vitesse change.</Badge>
+
+## La soustraction : aucun circuit nouveau
+
+Voici l'élégance du complément à deux. Soustraire, c'est ajouter l'opposé, et l'opposé de $B$ s'obtient en **inversant tous ses bits puis en ajoutant 1** :
+
+<Resultat label="Soustraction réutilisant l'additionneur">
+
+$$
+A - B = A + \overline{B} + 1
+$$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe de la convention du complément à deux : $-B = \overline{B}+1$. Une fois ce choix posé, la formule se déduit.</Badge>
+</Resultat>
+
+En pratique : on intercale un inverseur (un XOR commandé) sur l'entrée $B$, et on injecte le « $+1$ » comme **retenue entrante initiale** $c_0 = 1$. Le même additionneur fait donc somme **et** différence selon un bit de commande. On ne fabrique rien de neuf : on *réutilise*.
+
+## L'ALU : un couteau suisse combinatoire
+
+L'**Unité Arithmétique et Logique** rassemble, sur les deux mêmes opérandes, plusieurs traitements menés *en parallèle* : addition, soustraction, ET, OU, XOR, comparaison… Tous ces blocs calculent en même temps ; un **multiplexeur** piloté par un **code d'opération** (le sélecteur) ne laisse passer en sortie que le résultat voulu.
+
+<Tournant titre="Ici, l'ingénieur choisit">
+Quelles opérations l'ALU propose-t-elle ? Comment les numérote-t-on ? Rien dans la physique ni l'arithmétique ne l'impose. **C'est une convention de conception** : un processeur peut offrir une division câblée, un autre non ; tel code peut désigner le AND, tel autre le XOR. On cesse ici de déduire — on *décide*.
+</Tournant>
+
+<Badge niveau="convention">Le jeu d'opérations et leur encodage par le sélecteur du multiplexeur sont des choix d'architecture, reflétés dans le jeu d'instructions de la puce.</Badge>
+
+L'ALU produit aussi quatre **drapeaux** (*flags*), bits de statut résumant le résultat : **Z** (zéro, vrai si toutes les sorties sont nulles), **C** (retenue/emprunt, la retenue sortante du dernier étage), **N** (signe, le bit de poids fort du résultat), **V** (débordement signé, vrai quand additionner deux nombres de même signe donne un signe opposé). <Badge niveau="convention">L'existence et le sens exact de Z, C, N, V relèvent de la définition du processeur ; leur *calcul*, lui, découle de l'arithmétique.</Badge>
+
+Nous savons désormais **calculer** : combiner des bits, additionner, soustraire, comparer. Mais une ALU oublie tout à l'instant suivant — elle n'a ni passé ni horloge. Pour bâtir une machine qui *retient* et qui *avance*, il nous faut deux ingrédients encore absents : la **mémoire** et le **temps**.

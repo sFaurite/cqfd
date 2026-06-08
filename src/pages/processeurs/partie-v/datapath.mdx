@@ -1,0 +1,113 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le chemin de données"
+chapter: datapath
+description: "Banc de registres, ALU, compteur de programme, bus : par où circulent et se transforment les bits."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import Datapath from '../../../components/interactive/Datapath.astro';
+
+## Le chemin de données : faire circuler les bits
+
+Nous avons un jeu d'instructions à exécuter — un <Prereq href="/processeurs/partie-v/isa">vocabulaire fini d'ordres élémentaires</Prereq> codés en binaire. Nous avons aussi, en stock, deux outils décisifs : une <Prereq href="/processeurs/partie-iii/additionneur-alu">ALU capable de calculer</Prereq> (additionner, comparer, faire des ET/OU bit à bit) et des <Prereq href="/processeurs/partie-iv/bascule-d-horloge">registres capables de mémoriser</Prereq>. Il nous manque la **plomberie** : le réseau de fils et d'aiguillages qui amène les bons bits, au bon bloc, au bon instant. Ce réseau s'appelle le **chemin de données**, ou *datapath*. C'est l'objet de ce chapitre.
+
+<Encart type="intuition" titre="Une gare de triage pour les bits">
+Imaginez une gare de triage. Les **registres** sont des quais où stationnent des wagons (des nombres). L'**ALU** est un atelier où deux wagons entrent et un wagon transformé ressort. Les **bus** sont les voies. Et à chaque embranchement, un **aiguillage** décide quelle voie suivre. Le datapath, c'est tout ce réseau figé dans le silicium. Ce qui change d'une instruction à l'autre, ce n'est pas la voie ferrée — c'est la **position des aiguillages**. Qui les commande ? Une cabine de contrôle, qu'on découvrira au chapitre suivant. Ici, on pose les rails.
+</Encart>
+
+<Hypotheses titre="Ce qu'on tient pour acquis dans ce chapitre">
+1. Le **jeu d'instructions** est fixé : on dispose d'un répertoire fini d'instructions au format connu (registre-registre, accès mémoire, branchement), <Prereq href="/processeurs/partie-v/isa">posé au chapitre précédent</Prereq>.
+2. Les **briques de calcul et de mémoire** existent déjà : une <Prereq href="/processeurs/partie-iii/additionneur-alu">ALU</Prereq> qui additionne, soustrait, compare et lève des indicateurs, et des <Prereq href="/processeurs/partie-iv/bascule-d-horloge">registres synchrones</Prereq> qui échantillonnent leur entrée au front d'horloge.
+3. On ne s'intéresse ici qu'à la **circulation des bits** (le datapath), pas encore à qui commande les aiguillages : la production des signaux de commande est renvoyée au chapitre suivant.
+</Hypotheses>
+
+## Les blocs du chemin de données
+
+Un datapath rassemble un petit nombre de blocs, chacun déjà construit ou aisément constructible :
+
+- Le **compteur de programme** (PC, *Program Counter*) : un registre qui contient l'**adresse de l'instruction courante**. <Badge niveau="convention">Le PC est un choix d'architecture : on aurait pu adresser le code autrement, mais « une adresse, qui avance » est la convention universelle issue du modèle de von Neumann.</Badge>
+- La **mémoire d'instructions** : on lui donne une adresse (le PC), elle rend l'instruction codée.
+- Le **banc de registres** (*register file*) : un petit ensemble de registres rapides — typiquement 16 ou 32 — avec deux **ports de lecture** et un **port d'écriture**, pour lire deux opérandes et en écrire un par cycle. <Badge niveau="implementation">Le nombre exact de registres et de ports dépend de la puce ; c'est un compromis surface/performance choisi par le concepteur.</Badge>
+- L'**ALU** : reçoit deux opérandes, produit un résultat et des indicateurs (zéro, retenue, signe). <Badge niveau="fonde">Une fois l'opération sélectionnée, le résultat et les indicateurs sont entièrement déterminés par les deux opérandes : c'est de la logique combinatoire établie au chapitre de l'ALU.</Badge>
+- La **mémoire de données** : lue ou écrite par les instructions `LOAD` / `STORE`.
+- Les **multiplexeurs** (`MUX`) : des aiguillages électroniques qui, selon un bit de commande, laissent passer l'**une** parmi plusieurs sources vers une destination.
+- Les **bus** : les faisceaux de fils (souvent 32 ou 64 en parallèle) qui transportent un mot entier d'un bloc à l'autre. <Badge niveau="convention">La largeur d'un bus (32, 64 bits…) est un choix d'architecture, aligné sur la taille du mot machine.</Badge>
+
+<Encart type="rappel" titre="Le multiplexeur, l'aiguillage à un bit de commande">
+Un multiplexeur 2 vers 1 choisit entre deux entrées $A$ et $B$ selon un bit de sélection $s$ :
+
+$$ Y = (\lnot s \land A) \lor (s \land B). $$
+
+Si $s=0$, $Y=A$ ; si $s=1$, $Y=B$. Pour un bus de $n$ fils, on met $n$ de ces cellules en parallèle, toutes commandées par le **même** $s$. Le `MUX` est donc l'organe qui permet à un *seul* chemin physique de servir *plusieurs* instructions différentes. <Badge niveau="fonde">C'est de la logique combinatoire pure : la sortie est entièrement déterminée par les entrées et le bit de sélection.</Badge>
+</Encart>
+
+## Une vérité à séparer en deux
+
+Avant de tracer les parcours, posons une distinction qui est la marque de fabrique de ce cours.
+
+L'**organisation** du datapath — combien de bus, où placer tel MUX, regrouper ou non les mémoires — relève du **choix**. <Badge niveau="convention">Deux ingénieurs raisonnables peuvent dessiner deux datapaths différents pour la même ISA. Il n'y a pas *un* datapath nécessaire, il y a des familles de choix d'architecture.</Badge>
+
+En revanche, sa **correction fonctionnelle** — le fait que, pour `ADD R1, R2, R3`, ce soit bien $R_2 + R_3$ qui finisse dans $R_1$ et nulle part ailleurs — n'est, elle, **pas négociable**. <Badge niveau="fonde">Une fois les blocs et les connexions fixés, le résultat est imposé par la logique combinatoire et séquentielle des composants. Si les bons fils sont reliés, les bons bits arrivent ; c'est une déduction, pas une opinion.</Badge>
+
+## Tracer le parcours de trois instructions
+
+<Encart type="plusloin" titre="Calcul registre-registre : ADD R1, R2, R3">
+1. Le **PC** désigne l'instruction ; la **mémoire d'instructions** rend son code.
+2. Le décodage extrait trois numéros de registre : deux sources ($R_2$, $R_3$) et une destination ($R_1$).
+3. Les deux **ports de lecture** du banc sortent les valeurs de $R_2$ et $R_3$ sur deux bus.
+4. Ces deux bus entrent dans l'**ALU**, dont la commande est réglée sur « addition ».
+5. La sortie de l'ALU revient au **port d'écriture** du banc, dirigée vers $R_1$.
+
+Aucune mémoire de données n'est touchée : un `MUX` en amont du port d'écriture choisit « sortie ALU » plutôt que « sortie mémoire ». <Badge niveau="fonde">Le trajet est entièrement déterminé une fois les sélections posées.</Badge>
+</Encart>
+
+<Encart type="plusloin" titre="Accès mémoire : LOAD R1, 8(R2) puis STORE">
+1. On lit $R_2$ (le registre de base) sur un port de lecture.
+2. Un `MUX` présente à l'ALU, en second opérande, non pas un registre mais la **constante** $8$ (le déplacement, extrait de l'instruction).
+3. L'ALU **additionne** : elle calcule l'**adresse** $R_2 + 8$. La même ALU sert ici de calculatrice d'adresse !
+4. Cette adresse attaque la **mémoire de données**.
+   - Pour un `LOAD` : la mémoire rend la donnée, qu'un `MUX` route vers le port d'écriture du banc (vers $R_1$).
+   - Pour un `STORE` : on lit aussi $R_1$ (sur le second port de lecture) et on l'**écrit** à l'adresse calculée ; rien ne revient au banc.
+
+<Badge niveau="convention">Réutiliser l'ALU pour le calcul d'adresse est un choix d'économie matérielle, très répandu, mais non obligatoire.</Badge>
+</Encart>
+
+<Encart type="plusloin" titre="Branchement : BEQ R2, R3, cible">
+Par défaut, à chaque cycle, le PC reçoit $\text{PC}+1$ (un petit additionneur dédié qui pointe l'instruction suivante). <Badge niveau="idealise">On compte ici les instructions une à une ($+1$) : c'est le modèle d'une mémoire d'instructions adressée par mot. Une machine réelle adressée par octet incrémente d'autant d'octets que pèse une instruction (souvent $+4$). Le principe — « avancer d'une instruction » — est le même.</Badge> Pour un branchement conditionnel :
+1. L'ALU **compare** $R_2$ et $R_3$ (soustraction) et lève l'indicateur **zéro** s'ils sont égaux.
+2. Un `MUX` en entrée du PC choisit alors entre deux valeurs : $\text{PC}+1$ (on continue) ou l'**adresse cible** (on saute).
+3. C'est l'indicateur *zéro* qui commande ce `MUX`.
+
+<Badge niveau="fonde">Le PC est un registre : sa nouvelle valeur est échantillonnée au front d'horloge, donc le saut prend effet au cycle suivant, de façon déterministe.</Badge>
+</Encart>
+
+## Le modèle de départ : le datapath « à cycle unique »
+
+<Tournant titre="Tournant : on adopte un modèle simplifié">
+Jusqu'ici, on a seulement décrit des blocs et des fils. Pour raisonner sur l'exécution, on **ajoute maintenant une hypothèse de travail** : **une instruction s'exécute entièrement en un seul coup d'horloge**. Ce n'est pas imposé par la physique — c'est une simplification pédagogique qu'on assume, et qu'on lèvera plus tard (multicycle, puis pipeline). Tant qu'on la garde, tout le parcours — lire l'instruction, lire les registres, calculer, accéder à la mémoire, réécrire — se déroule à l'intérieur d'**un seul cycle**.
+</Tournant>
+
+<Resultat label="Datapath à cycle unique">
+
+$$ \text{1 instruction} \;=\; \text{1 cycle d'horloge complet.} $$
+
+<Badge niveau="idealise" slot="badge">Modèle pédagogique. En réalité, le cycle doit durer aussi longtemps que le **chemin le plus lent** (typiquement le LOAD, qui traverse tout) : c'est lent et gaspilleur. Les vrais processeurs découpent le travail en étapes (multicycle, puis **pipeline**) pour gagner en débit. Le single-cycle est juste *fonctionnellement*, pas *performant*.</Badge>
+</Resultat>
+
+## À manipuler
+
+Parcourez les six phases d'exécution d'une instruction et observez quels blocs et quels bus s'activent à chaque étape, le jeton matérialisant le flux des bits :
+
+<Datapath />
+
+## Qui tient les aiguillages ?
+
+Remarquez ce qui revient sans cesse : « un `MUX` choisit… », « la commande de l'ALU est réglée sur… », « le port d'écriture est activé… ». Tous ces **signaux de commande** — sélections des multiplexeurs, opération de l'ALU, autorisation d'écrire dans un registre ou en mémoire — ne sont *pas* produits par le chemin de données lui-même. <Badge niveau="convention">Le datapath fournit les rails et les aiguillages ; il ne décide pas de leur position.</Badge>
+
+Ces signaux sont engendrés, à partir du **code de l'instruction**, par un second organe : l'**unité de contrôle**. C'est elle qui orchestre la danse, instruction après instruction, en bouclant sans relâche sur le cycle **fetch — decode — execute** (lire, décoder, exécuter). Le chemin de données est le corps ; le chapitre suivant lui donne sa volonté.

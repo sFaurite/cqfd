@@ -1,0 +1,50 @@
+---
+/**
+ * VirtualMemory — traduction d'adresse par pagination (MMU).
+ * Une adresse virtuelle se découpe en [numéro de page | déplacement]. La MMU
+ * lit la table des pages pour traduire le numéro de page virtuelle en numéro
+ * de cadre physique, puis recompose l'adresse physique en concaténant le cadre
+ * et le même déplacement. Une page de la table est marquée « absente » : la
+ * sélectionner provoque un DÉFAUT DE PAGE (le noyau devrait charger la page).
+ */
+---
+
+<div class="iw" data-iw="virtual-memory">
+  <div class="iw__head"><span class="tag">Interactif</span> Traduction d’adresse par pagination (MMU)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="vm-page">Numéro de page virtuelle</label>
+      <input id="vm-page" type="range" min="0" max="7" step="1" value="2" data-page />
+      <output data-out-page>2</output>
+    </div>
+    <div class="iw__row">
+      <label for="vm-off">Déplacement dans la page</label>
+      <input id="vm-off" type="range" min="0" max="255" step="1" value="48" data-off />
+      <output data-out-off>48</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">adresse virtuelle</span> <b data-out-va>—</b></span>
+    <span class="iw__chip"><span class="k">cadre physique</span> <b data-out-frame>—</b></span>
+    <span class="iw__chip"><span class="k">adresse physique</span> <b data-out-pa>—</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque programme croit disposer de <strong>toute la mémoire</strong> : il manipule des
+    <em>adresses virtuelles</em>. Une adresse virtuelle se découpe en deux champs —
+    <span style="color:var(--c-blue)">numéro de page</span> et
+    <span style="color:var(--c-yellow)">déplacement</span> dans la page. La
+    <strong>MMU</strong> lit la <span style="color:var(--c-purple)">table des pages</span> à l’entrée
+    correspondant au numéro de page : celle-ci donne le
+    <span style="color:var(--c-teal)">cadre physique</span> qui héberge réellement la page. L’adresse
+    physique recompose alors <em>cadre × taille_page + déplacement</em> ; le déplacement, lui, ne change
+    jamais. Si l’entrée est marquée <span style="color:var(--c-red)">absente</span> (la page n’est pas en
+    mémoire), la MMU lève un <span style="color:var(--c-red)">défaut de page</span> : le noyau doit charger
+    la page depuis le disque avant de poursuivre. (Le mécanisme est une convention idéalisée ; ici on fixe
+    une implémentation à <strong>taille de page = 256 octets</strong>, soit 8 bits de déplacement.)
+  </p>
+</div>
+
+<script>
+  import './VirtualMemory.client.ts';
+</script>

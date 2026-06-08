@@ -1,0 +1,84 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Méthodologie : les niveaux de fiabilité"
+chapter: methodologie
+description: Ce que veut dire « fondé », « convention », « idéalisé » et « implémentation » — l’axe de ce cours n’est pas la certitude, mais le degré de nécessité.
+---
+
+import Badge from '../../components/Badge.astro';
+import Encart from '../../components/Encart.astro';
+
+Un ordinateur n’est pas un bloc de vérités également « solides ». Certaines affirmations sont
+**imposées par la physique** ou par la logique : elles ne pourraient pas être autrement. D’autres
+sont des **choix d’ingénieurs** : commodes, cohérents, mais qui auraient pu être différents.
+D’autres encore sont des **idéalisations** qui simplifient une réalité plus nuancée. Et beaucoup
+de « détails » dépendent enfin de **la puce précise** que vous avez sous la main.
+
+Confondre ces statuts, c’est le grand malentendu sur l’informatique — croire que « l’ordinateur
+fonctionne comme ça » alors qu’une moitié relève de lois et l’autre de décisions humaines. Pour
+l’éviter, **chaque affirmation notable** de ce cours porte l’un de ces quatre niveaux. L’axe n’est
+pas « à quel point est-ce vrai » mais **« à quel point est-ce nécessaire »**.
+
+## Les quatre niveaux
+
+### 🟢 Fondé <Badge niveau="fonde">Exemple : la jonction PN ne conduit que dans un sens.</Badge>
+
+Imposé par une **loi physique vérifiée** ou par une **déduction logique stricte**. Ce n’est pas un
+choix : étant donné ce qui précède, il ne pourrait pas en être autrement. C’est le socle dur du
+cours.
+
+> Exemples : le redressement d’une diode, le fait qu’une porte NAND soit universelle, le résultat
+> d’une addition binaire, le théorème selon lequel $n$ bits codent $2^n$ valeurs.
+
+### 🔵 Convention <Badge niveau="convention">Exemple : coder les entiers signés en complément à deux.</Badge>
+
+Un **choix d’ingénierie** ou une **convention** adoptée parce qu’elle est utile et cohérente — mais
+qui **pourrait être différente**. C’est « vrai par décret ». Reconnaître une convention, c’est
+comprendre qu’un autre ingénieur, ailleurs, a parfois décidé autrement (et que les deux mondes
+coexistent).
+
+> Exemples : la logique positive (1 = tension haute), le complément à deux, l’ordre des octets
+> (boutisme), le modèle de von Neumann, le choix d’un jeu d’instructions (x86, ARM, RISC-V).
+
+### 🟡 Idéalisé <Badge niveau="idealise">Exemple : « le transistor est un interrupteur parfait ».</Badge>
+
+Un **modèle simplifié**, valable sous conditions, qu’on adopte pour pouvoir raisonner. Très utile,
+mais la réalité physique est plus subtile — il y a des résistances, des délais, des fuites, du
+bruit. On signale ainsi les endroits où l’on **gomme volontairement** une complication.
+
+> Exemples : transistor = interrupteur idéal, délai de porte supposé nul, fil sans résistance,
+> horloge parfaitement carrée, mémoire à accès instantané.
+
+### 🔴 Implémentation <Badge niveau="implementation">Exemple : l’adresse exacte du vecteur de reset.</Badge>
+
+Dépend de la **puce, du fabricant ou du firmware**. Il n’existe pas de valeur universelle : ce qui
+est vrai sur un processeur ne l’est pas forcément sur un autre. On le marque pour éviter de prendre
+un détail particulier pour une loi générale.
+
+> Exemples : la tension d’alimentation exacte, l’adresse de démarrage après reset, le microcode, le
+> contenu des tables ACPI, la taille des caches, les timings mémoire précis.
+
+## Comment lit-on un badge ?
+
+Chaque badge est **survolable** (souris) et **focusable** (clavier) : une infobulle explique
+*pourquoi* ce niveau — quelle loi physique, quelle convention, quelle idéalisation.
+
+<Encart type="plusloin" titre="Pourquoi distinguer « fondé » et « convention » ?">
+Parce que c’est la clé pour comprendre vraiment une machine. « Une jonction PN redresse le
+courant » est un **fait physique** : aucun ingénieur n’a décidé cela, la nature l’impose. « Un octet
+fait huit bits » est une **convention** : historiquement il en a existé d’autres tailles, et c’est
+un accord, pas une loi. Les deux sont parfaitement fiables — mais pas *de la même façon*. Confondre
+les deux, c’est soit croire qu’on pourrait « changer la physique », soit prendre une habitude
+humaine pour une nécessité éternelle. Le badge rend cette frontière visible à chaque ligne.
+</Encart>
+
+## Sur les valeurs numériques
+
+Quand une valeur est citée, on précise son statut :
+
+- **Constante physique** (mesurée ou définie) : la charge élémentaire $e$, le gap du silicium
+  $E_g \approx 1{,}12$ eV. <Badge niveau="fonde">Propriétés de la nature : universelles, indépendantes du fabricant.</Badge>
+- **Ordre de grandeur d’implémentation** : une fréquence d’horloge « de l’ordre du GHz », une
+  tension d’alimentation « ≈ 1 V », une page mémoire de 4 Kio. <Badge niveau="implementation">Varie d’une puce et d’une génération à l’autre ; on en donne l’ordre de grandeur typique.</Badge>
+
+L’<a href="/processeurs/symboles">index des symboles</a> récapitule ces grandeurs et leur statut.

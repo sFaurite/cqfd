@@ -1,0 +1,73 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le bootloader et le chargement du noyau"
+chapter: bootloader
+description: "Le relais, souvent en plusieurs étages, qui charge le noyau en mémoire et lui passe la main."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le dernier maillon avant le système
+
+À la fin du chapitre précédent, le <Prereq href="/processeurs/partie-vi/firmware-uefi">firmware</Prereq> a accompli sa mission : il a réveillé le processeur, testé et **initialisé la RAM**, énuméré les périphériques, puis cédé la main à un petit programme. Mais ce programme n'est pas encore le système d'exploitation. Entre le firmware gravé dans la puce et le **noyau** qui régira la machine, il manque un intermédiaire : le **bootloader** (gestionnaire d'amorçage). Ce chapitre raconte son rôle — et surtout, ce qu'il révèle de l'architecture entière d'un démarrage.
+
+<Encart type="intuition" titre="Une chaîne de coureurs de relais">
+Imaginez une course de relais. Le firmware court le premier tronçon : il part du néant électrique et amène la machine à un état utilisable (RAM prête, périphériques visibles). Mais il ne connaît rien au système d'exploitation — ce n'est pas son métier. Alors il tend le **témoin** à un coureur spécialisé, le bootloader, qui sait lire un disque, comprendre un système de fichiers, et trouver l'**image du noyau**. Une fois le noyau chargé en mémoire, le bootloader lui tend à son tour le témoin, et s'efface. Personne ne court toute la course : chacun fait un bout, puis **passe le relais**. C'est l'idée centrale de ce chapitre.
+</Encart>
+
+## Le passage de relais : la structure profonde du démarrage
+
+Pourquoi cette chaîne ? Parce qu'un ordinateur ne peut pas, à la mise sous tension, exécuter directement un programme arbitraire choisi par l'utilisateur. À l'instant zéro, **un seul** code est exécutable : celui que le matériel pointe par construction (le firmware). Tout le reste — bootloader, noyau, applications — réside sur des supports (disque, SSD) que le processeur ne sait pas lire **tant qu'aucun programme ne le lui a appris**. La seule manière de démarrer un programme plus gros et plus capable est donc qu'un programme déjà en cours **le charge en mémoire et saute dedans**.
+
+<Resultat label="Principe du passage de relais (chaîne d'amorçage)">
+
+$$ \text{firmware} \;\longrightarrow\; \text{bootloader} \;\longrightarrow\; \text{noyau} \;\longrightarrow\; \text{espace utilisateur} $$
+
+<Badge niveau="fonde" slot="badge">Nécessité logique : à la mise sous tension un seul code s'exécute. Tout autre programme doit être chargé puis lancé par le précédent. La chaîne « charger / sauter » n'est pas un choix, c'est la seule façon de démarrer.</Badge>
+</Resultat>
+
+Chaque maillon fait trois choses pour le suivant : il le **localise** (où est son code ?), il le **copie en RAM** (la RAM ayant justement été rendue utilisable par le firmware), puis il **transfère le contrôle** en y sautant. Ce dernier saut est l'essentiel : à cet instant, le maillon précédent **cesse d'exister** en tant qu'autorité — son code peut même être écrasé. Le relais est passé. <Badge niveau="fonde">Un seul cœur d'exécution suit un seul flot d'instructions : après le saut, c'est le code du suivant qui s'exécute. Le précédent n'a plus aucune autorité — déduction directe du modèle d'exécution séquentiel.</Badge>
+
+## La tâche concrète du bootloader
+
+Posons précisément le contrat du bootloader. Le firmware lui a donné une RAM initialisée et un environnement minimal ; à lui de produire un noyau prêt à démarrer.
+
+<Hypotheses titre="Ce que le bootloader trouve et doit fournir">
+1. **Acquis** (du firmware) : RAM initialisée, accès basique aux disques, console d'affichage rudimentaire.
+2. **À localiser** : l'image du noyau, rangée dans un **fichier** sur une **partition** d'un disque — le bootloader doit donc savoir interpréter un *système de fichiers*.
+3. **À charger** : copier cette image (plusieurs Mo) en RAM, à une adresse connue.
+4. **À préparer** : les **paramètres** que le noyau attend — la *ligne de commande* (quelle partition racine, options de débogage…), éventuellement une image **initrd** (un mini-disque en RAM contenant les pilotes nécessaires au tout début), et une **carte de la mémoire** (quelles zones de RAM sont libres).
+5. **À transférer** : sauter à l'entrée du noyau, en lui passant ces paramètres selon une convention fixée.
+</Hypotheses>
+
+Le point 2 est plus subtil qu'il n'y paraît. Le firmware sait lire des **secteurs** bruts (des blocs numérotés), mais ignore la notion de « fichier nommé dans un dossier ». Comprendre un système de fichiers (FAT, ext4, NTFS…) demande du code — trop pour tenir dans le tout premier morceau qu'on peut lancer. D'où une contrainte historique célèbre.
+
+<Encart type="plusloin" titre="Pourquoi 512 octets, et pourquoi plusieurs étages">
+Sur les anciennes machines (amorçage *BIOS* hérité), le firmware ne sait charger qu'**un seul secteur** : le tout premier du disque, appelé **MBR** (*Master Boot Record*), historiquement de **512 octets**. Cette taille n'a rien d'une loi physique — c'était la taille d'un secteur de disque de l'époque, devenue une convention figée pour des raisons de compatibilité. <Badge niveau="convention">512 octets : taille de secteur héritée, gelée par compatibilité. Aurait pu être autre.</Badge>
+
+Or 512 octets, dont une partie réservée à la table des partitions, ne suffisent pas à coder la lecture d'un système de fichiers moderne. La solution d'ingénierie : le **multi-étages**. Le MBR (étage 1) ne contient qu'un code minuscule dont le seul but est de localiser et charger un **étage 2** bien plus gros, qui lui sait lire les fichiers et charge enfin le noyau. <Badge niveau="implementation">Le découpage en étages est un contournement de la limite de 512 octets, propre à l'amorçage BIOS. L'UEFI, qui charge un vrai fichier exécutable depuis une partition, n'en a pas besoin.</Badge>
+</Encart>
+
+## Deux incarnations concrètes
+
+**GRUB** (*GRand Unified Bootloader*) est le bootloader multi-étages classique du monde Linux : un étage minimal, puis un étage capable de lire des dizaines de systèmes de fichiers, d'afficher un menu, de charger noyau et initrd. **L'UEFI**, lui, intègre un *gestionnaire d'amorçage* : le firmware sait déjà lire une partition (la *EFI System Partition*) et y lancer un fichier `.efi` — le bootloader devient un simple programme posé dans un fichier, sans bidouille de secteur. <Badge niveau="implementation">GRUB, l'ordre des étages, le format des fichiers : choix logiciels et de plateforme. Le rôle (localiser-charger-lancer le noyau) reste le même partout.</Badge>
+
+Ce qu'il faut retenir n'est pas la mécanique — variable d'une machine à l'autre — mais l'**invariant** : un programme déjà actif trouve le noyau, le copie en RAM, et lui saute dessus.
+
+<Resultat label="Chargement du noyau en mémoire">
+
+$$ \text{image du noyau (disque)} \;\xrightarrow{\;\text{copie}\;}\; \text{RAM initialisée} \;\xrightarrow{\;\text{saut}\;}\; \text{exécution du noyau} $$
+
+<Badge niveau="fonde" slot="badge">Le processeur n'exécute que du code en mémoire adressable. Le noyau résidant sur disque, il doit nécessairement être copié dans la RAM (rendue disponible par le firmware) avant tout saut. Inévitable.</Badge>
+</Resultat>
+
+## Le relais final
+
+Au moment où le bootloader saute à l'adresse d'entrée du noyau, son travail est terminé : il a fait passer la machine d'un firmware ignorant du système à un **noyau chargé, paramétré, prêt à régner**. Le témoin est tendu une dernière fois — et cette fois, le coureur qui le reçoit ne le repassera à personne : il garde le contrôle jusqu'à l'extinction. <Badge niveau="convention">Que le noyau conserve le contrôle « jusqu'à l'extinction » décrit l'architecture usuelle d'un OS monolithique à noyau résident : un choix de conception, non une nécessité physique.</Badge>
+
+Car le noyau, lui, ne va pas se contenter de continuer la course : il va **changer les règles du jeu**. Sa toute première décision sera d'activer ce que tout le reste du cours a préparé sans encore l'utiliser — la **protection mémoire** et la **mémoire virtuelle** — pour s'arroger un privilège que plus aucun programme utilisateur ne pourra contourner. C'est l'objet du <Prereq href="/processeurs/partie-vi/mode-protege-mmu">prochain chapitre</Prereq>.

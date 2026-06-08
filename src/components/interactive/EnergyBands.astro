@@ -1,0 +1,48 @@
+---
+/**
+ * EnergyBands — bandes d'énergie d'un solide.
+ * On visualise la bande de valence (basse, remplie d'électrons), la bande de
+ * conduction (haute, vide) et, entre elles, la bande interdite (gap Eg). Le
+ * matériau choisi fixe la largeur du gap : grand pour un isolant, petit pour un
+ * semiconducteur, nul (bandes qui se chevauchent) pour un conducteur. Pour un
+ * semiconducteur, monter la température fait sauter thermiquement des électrons
+ * de la valence vers la conduction, en laissant des trous dans la valence.
+ */
+---
+
+<div class="iw" data-iw="energy-bands">
+  <div class="iw__head"><span class="tag">Interactif</span> Bandes d’énergie et conductivité d’un solide</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="eb-mat">Matériau</label>
+      <select id="eb-mat" data-mat>
+        <option value="isolant">Isolant</option>
+        <option value="semiconducteur" selected>Semiconducteur</option>
+        <option value="conducteur">Conducteur</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="eb-temp">Température</label>
+      <input id="eb-temp" type="range" min="0" max="100" step="1" value="20" data-temp />
+      <output data-out-temp>20</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">largeur du gap E<sub>g</sub></span> <b data-out-eg></b></span>
+    <span class="iw__chip"><span class="k">conduit</span> <b data-out-cond></b></span>
+  </div>
+  <p class="iw__note">
+    C’est la largeur de la <em>bande interdite</em> E<sub>g</sub> qui décide de la conductivité. Dans un
+    <strong>isolant</strong> le gap est large (~5 eV) : aucun électron ne peut le franchir, le solide ne conduit
+    pas. Dans un <strong>semiconducteur</strong> le gap est étroit (~1,1 eV) : en chauffant, l’agitation
+    thermique fait <em>sauter</em> quelques électrons vers la bande de conduction, laissant des
+    <span style="color:var(--c-red)">trous</span> dans la bande de valence — le solide conduit un peu. Dans un
+    <strong>conducteur</strong>, les deux bandes se chevauchent (E<sub>g</sub> = 0) : la conduction est toujours
+    possible. (Schéma idéalisé et pédagogique.)
+  </p>
+</div>
+
+<script>
+  import './EnergyBands.client.ts';
+</script>

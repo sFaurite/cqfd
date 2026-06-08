@@ -1,0 +1,104 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La hiérarchie mémoire et le cache"
+chapter: hierarchie-cache
+description: "Concilier vitesse et capacité grâce à la localité : registres, caches, RAM, disque."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import CacheHierarchy from '../../../components/interactive/CacheHierarchy.astro';
+
+## Le dilemme : grande OU rapide, jamais les deux
+
+Nous savons désormais stocker un bit de deux façons : la <Prereq href="/processeurs/partie-iv/memoires-sram-dram">SRAM</Prereq>, rapide mais encombrante et chère (six transistors par bit), et la **DRAM**, dense et bon marché mais lente (un transistor, un condensateur qu'il faut rafraîchir). Le processeur, lui, voudrait une mémoire **immense** *et* **instantanée**. Le problème, c'est que ces deux désirs se contredisent à un niveau presque physique.
+
+<Encart type="intuition" titre="Le bureau et l'entrepôt">
+Pensez à votre espace de travail. Sur le **bureau**, à portée de main, tiennent quelques feuilles : vous y accédez instantanément, mais la place est minuscule. Dans l'**armoire** derrière vous, des dizaines de classeurs : plus lent à atteindre, mais bien plus vaste. À la **cave**, des cartons entiers d'archives : énorme, mais il faut descendre les chercher. Personne ne range tout sur son bureau, et personne ne travaille depuis la cave. On organise une *hiérarchie*, et le secret est que ce qui sert maintenant a de bonnes chances de resservir bientôt.
+</Encart>
+
+Pourquoi ne peut-on pas avoir une SRAM gigantesque ? Trois contraintes se conjuguent. **(1) La taille.** Une cellule rapide occupe beaucoup de silicium ; multipliée par des milliards, elle deviendrait colossale et coûteuse. **(2) La distance.** Plus une mémoire est grande, plus le signal doit parcourir de chemin physique pour l'atteindre. Or l'information ne se propage pas plus vite que la lumière, et sur une puce le délai réel est encore plus défavorable : entre la résistance et la capacité des interconnexions, un signal ne franchit grossièrement que quelques centimètres par nanoseconde. Une mémoire plus étendue est donc *intrinsèquement* plus lente à adresser. **(3) Le coût.** Le silicium rapide se paie au millimètre carré.
+
+<Resultat label="Le compromis fondamental">
+
+$$ \text{rapide} \Rightarrow \text{petit et cher} \qquad ; \qquad \text{grand et bon marché} \Rightarrow \text{lent} $$
+
+<Badge niveau="fonde" slot="badge">Tension imposée par la physique : densité, distance de propagation finie et coût ne se contournent pas simultanément. On ne peut qu'arbitrer.</Badge>
+</Resultat>
+
+## La parade : empiler les mémoires
+
+Puisqu'aucune mémoire unique ne peut être à la fois grande et rapide, on en met **plusieurs**, classées du plus petit/rapide au plus grand/lent. Chaque niveau garde une **copie** des données les plus susceptibles d'être réutilisées de celui du dessous.
+
+| Niveau | Techno | Taille typique | Latence typique |
+|---|---|---|---|
+| Registres | bascules | quelques centaines d'octets | $\sim 1$ cycle |
+| Cache L1 | SRAM | $\sim 32$–$64$ Kio | $\sim 1$–$4$ cycles |
+| Cache L2 | SRAM | $\sim 256$ Kio–$1$ Mio | $\sim 10$–$15$ cycles |
+| Cache L3 | SRAM | $\sim 8$–$32$ Mio | $\sim 40$ cycles |
+| Mémoire vive | DRAM | plusieurs Gio | $\sim 100$–$300$ cycles |
+| Disque / SSD | flash, magnétique | To | $\sim 10^4$–$10^7$ cycles |
+
+<Badge niveau="implementation">Ces chiffres — nombre de niveaux, tailles, latences — varient d'une puce à l'autre et d'une génération à l'autre. Seul le *principe* d'ordre (chaque étage plus grand et plus lent que le précédent) est universel.</Badge>
+
+Mais attention : empiler des mémoires ne sert à rien si l'on accède au hasard partout. Si chaque lecture tombait dans une zone toujours différente, le petit cache rapide ne contiendrait presque jamais la bonne donnée, et l'on paierait *toujours* le prix de la DRAM. La hiérarchie ne fonctionne que parce que les programmes réels ont une propriété remarquable.
+
+## Pourquoi ça marche : la localité
+
+<Tournant titre="Tournant : on s'appuie sur une propriété des programmes, pas sur une loi de la nature">
+Jusqu'ici, nos résultats venaient de la physique du transistor. Ici, le pilier est différent : c'est une régularité **empirique** du *comportement des programmes*. Rien dans les lois physiques n'oblige un programme à être local — on *pourrait* écrire un code qui saute partout en mémoire. Mais dans la pratique, presque tous les programmes utiles exhibent une forte localité. On l'admet comme un fait d'observation, vérifié sur des décennies de mesures.
+</Tournant>
+
+On distingue deux formes de localité :
+
+- **Localité temporelle** : une donnée utilisée récemment a de fortes chances d'être réutilisée *bientôt*. (Le compteur d'une boucle, une variable, une fonction appelée en boucle.)
+- **Localité spatiale** : si l'on accède à une adresse, on accédera probablement *aux adresses voisines* peu après. (Parcourir un tableau case par case, exécuter des instructions consécutives.)
+
+<Badge niveau="fonde">La localité est une propriété empirique, mais observée si universellement sur les programmes réels qu'on la traite comme un fondement de l'architecture. Le succès de la hiérarchie mémoire en est la conséquence logique directe : il suffit de garder près du processeur ce qui vient de servir, plus son voisinage.</Badge>
+
+Ces deux localités dictent la mécanique du **cache**. La localité spatiale explique qu'on ne transfère jamais un octet isolé, mais un **bloc** contigu (une *ligne de cache*, typiquement 64 octets) : on précharge les voisins « gratuitement ». La localité temporelle explique qu'on **conserve** ce bloc une fois chargé.
+
+## Hit, miss, et le coût moyen d'un accès
+
+Le processeur demande une adresse. Deux cas :
+
+- **Hit** (succès) : la donnée est déjà dans le cache. On la sert vite, à la latence de ce niveau.
+- **Miss** (échec) : elle est absente. On descend au niveau suivant, on récupère la ligne, on en **recopie** une copie dans le cache (espérant la réutiliser), puis on sert le processeur. On a payé la latence du niveau inférieur.
+
+Notons $h$ le **taux de hits** (fraction des accès servis par le cache), $t_{\text{hit}}$ la latence en cas de succès et $t_{\text{miss}}$ la **pénalité** supplémentaire payée en cas d'échec. Le **temps d'accès moyen** (AMAT, *Average Memory Access Time*) s'écrit :
+
+<Resultat label="Temps d'accès moyen (AMAT)">
+
+$$ \text{AMAT} = t_{\text{hit}} + (1 - h)\times t_{\text{miss}} $$
+
+<Badge niveau="fonde" slot="badge">Simple espérance : on paie toujours $t_{\text{hit}}$ ; et avec probabilité $(1-h)$ on subit en plus la pénalité $t_{\text{miss}}$. Déduction probabiliste stricte.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="L'effet spectaculaire d'un bon taux de hits">
+Prenons des ordres de grandeur réalistes : un accès L1 coûte $t_{\text{hit}} = 1$ cycle, et un échec qui force à aller en DRAM ajoute $t_{\text{miss}} = 100$ cycles.
+
+**Cache médiocre**, $h = 0{,}90$ (un accès sur dix rate) :
+
+$$ \text{AMAT} = 1 + (1 - 0{,}90)\times 100 = 1 + 0{,}10 \times 100 = 1 + 10 = 11 \text{ cycles}. $$
+
+**Bon cache**, $h = 0{,}99$ (un accès sur cent rate) :
+
+$$ \text{AMAT} = 1 + (1 - 0{,}99)\times 100 = 1 + 0{,}01 \times 100 = 1 + 1 = 2 \text{ cycles}. $$
+
+Passer de $90\%$ à $99\%$ de hits — un gain de neuf points seulement — fait chuter le temps moyen de $11$ à $2$ cycles, un facteur **5,5**. C'est pourquoi les architectes se battent pour le dernier pour-cent : sans cache on serait bloqué à $\approx 100$ cycles par accès, et la localité nous ramène près de $1$.
+
+$$ \boxed{\,h : 0{,}90 \to 0{,}99 \;\Longrightarrow\; \text{AMAT} : 11 \to 2 \text{ cycles}\,} $$
+
+</Encart>
+
+Manipulez vous-même cet effet : comparez un profil d'accès **local** (une boucle qui retombe sur des lignes déjà chargées) et un profil **aléatoire** (qui rate sans cesse).
+
+<CacheHierarchy />
+
+Pour décider *quoi* garder et *quoi* jeter quand le cache est plein, on applique une **politique de remplacement** (souvent une approximation de « évincer le moins récemment utilisé », un pari direct sur la localité temporelle), et l'on choisit une **associativité** (à quels emplacements une adresse a le droit d'aller). <Badge niveau="implementation">LRU exact ou pseudo-LRU, taille de ligne, degré d'associativité, inclusivité entre niveaux : ce sont des choix de conception propres à chaque puce, pas des nécessités. Seul demeure universel le principe « exploiter la localité ».</Badge>
+
+Nous tenons maintenant les trois piliers : de quoi **calculer** (l'ALU), de quoi **mémoriser** (la hiérarchie), et de quoi **séquencer** (l'horloge et les registres). Il est temps de les assembler en une véritable machine programmable.

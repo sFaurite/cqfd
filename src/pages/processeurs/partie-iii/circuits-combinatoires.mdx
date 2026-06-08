@@ -1,0 +1,123 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Circuits combinatoires : MUX, décodeurs"
+chapter: circuits-combinatoires
+description: "D’une table de vérité au circuit : multiplexeurs, décodeurs, et la synthèse logique."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Du « ET/OU » aux blocs qui calculent
+
+Nous savons fabriquer n'importe quelle fonction logique : les <Prereq href="/processeurs/partie-iii/portes-nand">portes NAND universelles</Prereq> nous ont montré qu'avec un seul type de porte, on reconstruit tout. Mais « pouvoir tout faire » ne dit pas *comment* le faire proprement. Ce chapitre répond à deux questions : d'abord, **comment passer d'une description (« je veux que la sortie vaille 1 dans ces cas-là ») à un circuit réel** ; ensuite, quels **blocs réutilisables** reviennent si souvent qu'on les nomme une fois pour toutes. C'est l'étape où la boîte à outils prend forme.
+
+<Encart type="intuition" titre="Sans mémoire : la sortie ne regarde que le présent">
+Imaginez une machine qui n'a aucun souvenir. On lui présente des interrupteurs ; elle répond instantanément, et si vous remettez les mêmes interrupteurs dans la même position, vous obtenez **toujours** la même réponse — peu importe ce qui s'est passé avant. C'est un circuit *combinatoire*. Son contraire, qu'on verra plus tard (les bascules, les registres), garde une trace du passé. Tout ce chapitre vit dans le monde sans mémoire.
+</Encart>
+
+## Définir un circuit combinatoire
+
+<Tournant titre="On pose une restriction : le monde sans mémoire">
+Jusqu'ici nous parlions de portes en général. À partir d'ici, nous **décidons** de ne regarder qu'une famille particulière de montages : ceux où la sortie ne dépend que des entrées **présentes**, sans aucune boucle de rétroaction ni élément mémoire. Ce n'est pas une loi de la physique qui nous l'impose — les circuits à mémoire existent et viendront plus tard. C'est une hypothèse de travail qu'on adopte par décret pour rendre le raisonnement systématique. Tout ce chapitre se déduit de ce choix.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de ce chapitre">
+1. **Sans mémoire.** Chaque sortie est une fonction $f$ fixe des seules entrées présentes ; aucune dépendance au passé, aucune boucle de rétroaction.
+2. **Niveaux logiques propres.** Chaque fil porte une valeur booléenne franche, 0 ou 1 ; on raisonne au niveau logique, en laissant de côté les transitoires électriques.
+3. **Portes idéalisées.** Pour les comptages de coût, on assimile chaque porte à un bloc élémentaire ; le délai et la consommation réels d'une porte dépendent de la technologie et seront convoqués comme ordres de grandeur, non comme valeurs exactes.
+</Hypotheses>
+
+Posons précisément l'objet d'étude.
+
+<Resultat label="Circuit combinatoire">
+
+$$ S = f(E_1, E_2, \ldots, E_n) $$
+
+<Badge niveau="convention" slot="badge">Définition adoptée : la (ou les) sortie ne dépend QUE des entrées présentes, par une fonction $f$ fixe. On exclut par décret toute dépendance au passé (aucune mémoire, aucune boucle de rétroaction).</Badge>
+</Resultat>
+
+Une fois cette définition posée, la fonction $f$ est entièrement décrite par sa **table de vérité** : pour chacune des $2^n$ combinaisons d'entrées, on note la sortie voulue. La table est la spécification ; le circuit en est une réalisation.
+
+## La synthèse : de la table au circuit
+
+Voici le résultat central, celui qui rend la conception *systématique* plutôt qu'artisanale.
+
+<Encart type="rappel" titre="Trois opérations, trois symboles">
+On note le **ET** logique par un produit ($A\cdot B$, vaut 1 seulement si $A$ et $B$ valent 1), le **OU** par une somme ($A+B$, vaut 1 si au moins l'un vaut 1), et le **NON** par une barre ($\overline{A}$). Ces noms « somme » et « produit » ne sont pas qu'une image : ils obéissent aux mêmes règles de distributivité que l'arithmétique, ce qui justifie le mot *algèbre* de Boole.
+</Encart>
+
+L'idée tient en une phrase : **chaque ligne de la table où la sortie vaut 1 décrit une combinaison précise d'entrées**, qu'on peut détecter par un seul ET ; il suffit ensuite de relier toutes ces détections par un OU.
+
+<Encart type="calcul" titre="Toute fonction est une somme de produits">
+Prenons une fonction $f(A,B)$ qui vaut 1 sur exactement deux lignes : $(A=0,B=1)$ et $(A=1,B=1)$.
+
+**Étape 1 — un produit par ligne gagnante.** Pour la ligne $(A=0,B=1)$, le produit $\overline{A}\cdot B$ vaut 1 *uniquement* sur cette combinaison (il faut $A=0$ donc $\overline{A}=1$, et $B=1$). C'est un **minterme** : un ET qui n'allume qu'une case.
+
+Pour la ligne $(A=1,B=1)$, le minterme est $A\cdot B$.
+
+**Étape 2 — on additionne les mintermes.**
+
+$$ f(A,B) = \overline{A}\cdot B + A\cdot B $$
+
+Ce OU vaut 1 si l'on est sur *l'une ou l'autre* des lignes voulues, et 0 partout ailleurs : c'est exactement la table de départ.
+
+**Pourquoi ça marche toujours.** Quelle que soit la table, on reprend le même raisonnement pour chaque ligne où la sortie vaut 1. Chaque minterme n'allume que sa propre case ; leur OU allume donc précisément l'ensemble des cases voulues, ni plus ni moins.
+
+<Resultat label="Forme somme de produits (SOP)">
+
+$$ f = \sum_{\text{lignes où } f=1} (\text{minterme correspondant}) $$
+
+<Badge niveau="fonde" slot="badge">Théorème : TOUTE fonction booléenne admet une écriture en somme de produits. Déduction logique stricte — c'est ce qui garantit qu'aucune table n'est « irréalisable ».</Badge>
+</Resultat>
+</Encart>
+
+Et comme chaque minterme est un ET (de variables éventuellement niées) et que le tout est un OU, on réalise n'importe quelle table avec trois couches de portes : NON, puis ET, puis OU — ou, en n'utilisant que des NAND, le même circuit traduit porte à porte. <Badge niveau="fonde">La SOP plus l'universalité du NAND prouvent ensemble : toute fonction combinatoire est physiquement constructible.</Badge>
+
+## Les blocs réutilisables
+
+Certaines fonctions reviennent partout. On les fige en composants nommés.
+
+**Le décodeur** ($n$ entrées $\to$ $2^n$ sorties) : il interprète un nombre binaire de $n$ bits et active **exactement une** sortie, celle dont le numéro correspond. Un décodeur 2:4 reçoit $(A_1,A_0)$ et lève la sortie $S_0,\,S_1,\,S_2$ ou $S_3$. <Badge niveau="fonde">Chaque sortie $S_i$ est simplement le minterme numéro $i$ des entrées : pure application de la SOP.</Badge> C'est l'organe qui, dans une mémoire, choisit *quelle* case lire.
+
+**Le multiplexeur (MUX)** ($2^k$ entrées de données $\to$ 1 sortie, piloté par $k$ bits de commande) : l'**aiguilleur**. Selon la valeur des bits de sélection, il laisse passer une entrée et bloque les autres.
+
+<Encart type="intuition" titre="Le MUX est un aiguillage de chemin de fer">
+Plusieurs voies arrivent ; une seule continue. Les bits de commande sont la position de l'aiguille : ils ne *transforment* pas les données, ils choisissent **laquelle** poursuit sa route vers la sortie. Renverser l'aiguille (le décodeur, ou plutôt le démultiplexeur) envoie au contraire une voie unique vers la destination choisie.
+</Encart>
+
+Détaillons le plus petit, le **MUX 2:1** : deux entrées $A$ et $B$, un bit de sélection $S$, une sortie $Y$. Convenons que $S=0$ choisit $A$ et $S=1$ choisit $B$ (l'affectation inverse serait tout aussi légitime). <Badge niveau="convention">Quelle entrée correspond à $S=0$ est un choix de câblage ; seule la structure « aiguiller selon $S$ » est imposée.</Badge>
+
+| $S$ | $Y$ |
+|----|------|
+| 0  | $A$  |
+| 1  | $B$  |
+
+En écrivant la table complète et en appliquant la SOP, on obtient directement :
+
+<Resultat label="Multiplexeur 2:1">
+
+$$ Y = \overline{S}\cdot A + S\cdot B $$
+
+<Badge niveau="fonde" slot="badge">Déduction directe de la table par somme de produits : si $S=0$, le terme $\overline{S}\cdot A=A$ et $S\cdot B=0$, donc $Y=A$ ; si $S=1$, symétriquement $Y=B$.</Badge>
+</Resultat>
+
+Deux autres blocs complètent la panoplie. L'**encodeur** fait l'inverse du décodeur : une entrée active parmi $2^n$ $\to$ son numéro sur $n$ bits. Le **comparateur** prend deux nombres et sort des bits « égal », « inférieur », « supérieur ». <Badge niveau="fonde">Tous deux se synthétisent par SOP à partir de leur table.</Badge>
+
+## Simplifier : moins de portes, moins de délai
+
+La SOP brute n'est presque jamais le circuit le plus économique. Reprenons $f = \overline{A}\cdot B + A\cdot B$ : par distributivité, $f = (\overline{A}+A)\cdot B = 1\cdot B = B$. Deux portes ET et un OU se sont évaporés en **un seul fil**.
+
+<Encart type="plusloin" titre="Lois de Boole et tableaux de Karnaugh">
+La réécriture ci-dessus utilise les **lois de Boole** : distributivité, $\overline{A}+A=1$, $1\cdot B=B$. Faite à la main, elle devient vite pénible au-delà de trois variables. Le **tableau de Karnaugh** est un outil graphique : on dispose la table de vérité de façon que les cases voisines ne diffèrent que d'une variable, et **regrouper** des cases adjacentes à 1 correspond exactement à factoriser un terme. On lit alors la forme simplifiée à l'œil. Pour les très grandes fonctions, des algorithmes (Quine-McCluskey, puis les outils de synthèse modernes) prennent le relais.
+</Encart>
+
+Pourquoi s'acharner ? Parce que chaque porte coûte des transistors (donc de la surface et de l'énergie) et ajoute un **délai de propagation** : moins le signal traverse de couches de portes, plus il sort vite. <Badge niveau="fonde">Supprimer des portes réduit nécessairement le nombre de transistors, donc la surface et l'énergie consommée — c'est arithmétique.</Badge> Le lien avec la *vitesse* est lui plus subtil : il repose sur le modèle « chaque traversée de porte coûte un délai » et ne vaut que si la simplification raccourcit aussi la plus longue chaîne de portes. <Badge niveau="idealise">« Moins de portes $\Rightarrow$ plus rapide » suppose un délai par porte et un chemin critique raccourci ; une forme plus compacte peut être plus *profonde* et donc pas plus rapide.</Badge>
+
+Attention, donc, au mot « optimal ». Le circuit minimal en *nombre de portes* n'est pas forcément le plus *rapide*, ni le moins gourmand, ni le plus facile à router sur la puce. <Badge niveau="convention">« Optimal » n'a de sens qu'une fois choisi un critère (surface ? vitesse ? consommation ?) ; ce choix est une décision d'ingénierie.</Badge> Et le résultat concret dépend de la bibliothèque de portes du fondeur. <Badge niveau="implementation">Deux technologies différentes minimisent vers deux circuits différents.</Badge>
+
+Nous avons maintenant des aiguilleurs, des décodeurs et une méthode pour bâtir n'importe quelle fonction sans mémoire. Pour leur faire calculer des **nombres**, il reste deux briques à poser : savoir représenter un entier en binaire, et savoir en additionner deux. C'est l'objet du chapitre suivant.

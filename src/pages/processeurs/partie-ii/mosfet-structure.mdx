@@ -1,0 +1,86 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le transistor MOSFET : effet de champ"
+chapter: mosfet-structure
+description: "Structure métal-oxyde-semiconducteur ; une tension de grille crée un canal d’inversion entre source et drain."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## De la jonction au transistor : un nouveau geste
+
+Nous savons accoler du silicium <Prereq href="/processeurs/partie-i/silicium-dopage">de type N et de type P</Prereq>, et nous avons vu qu'une <Prereq href="/processeurs/partie-i/jonction-pn">jonction PN</Prereq> ne laisse passer le courant que dans un sens. Mais une diode subit le courant ; elle ne le **commande** pas. Or tout calcul numérique repose sur un geste plus puissant : qu'un signal en **contrôle** un autre. Il nous faut un robinet électrique. Ce robinet, c'est le transistor MOSFET, et le principe qui l'anime — l'**effet de champ** — est l'un des plus élégants de toute l'électronique.
+
+<Encart type="intuition" titre="Une armoire à charges">
+Imaginez une plaque métallique posée juste au-dessus d'une nappe d'eau, sans la toucher. Si vous chargez la plaque positivement, vous n'envoyez aucun courant dans l'eau — il y a de l'air entre les deux. Pourtant, par **influence électrostatique**, vous attirez vers la surface tout ce qui est négatif dans l'eau. La plaque ne *touche* rien et ne *consomme* rien en continu : elle **range** les charges sous elle, à distance, comme une armoire range des objets. Le MOSFET fait exactement cela : une grille isolée attire des électrons sous elle et leur ouvre un chemin.
+</Encart>
+
+## La structure : métal, oxyde, semiconducteur
+
+<Tournant titre="Tournant : on fixe une convention de construction">
+Deux MOSFET miroirs existent : le **canal N** (électrons mobiles, sur substrat P) et le **canal P** (trous mobiles, sur substrat N). La physique n'en impose aucun — c'est l'ingénieur qui **choisit**. Pour décrire un dispositif concret, nous adoptons ici le canal N (« NMOS ») ; tout ce qui suit se transpose au canal P en inversant les dopages et le signe des tensions. On le signale franchement : cette première décision n'est pas déduite, elle est posée.
+</Tournant>
+
+Construisons donc un MOSFET **à canal N** (le « NMOS »), couche par couche.
+
+1. On part d'un **substrat de type P** : du silicium dopé, dont les porteurs majoritaires sont des **trous** (charges positives mobiles). <Badge niveau="convention">Le choix « canal N sur substrat P » est une convention d'ingénierie ; le miroir « canal P sur substrat N » existe aussi. On fixe ici l'un des deux.</Badge>
+
+2. Dans ce substrat, on implante **deux îlots fortement dopés N**, notés $n^+$ : ce sont la **source** et le **drain**. Entre eux deux, un intervalle de substrat P les sépare.
+
+3. Au-dessus de cet intervalle, on fait croître une **très fine couche d'oxyde de silicium** ($\mathrm{SiO_2}$), un excellent **isolant** électrique.
+
+4. Enfin, on dépose par-dessus l'oxyde un matériau conducteur : la **grille** (historiquement du métal, d'où le sigle **M**étal-**O**xyde-**S**emiconducteur ; aujourd'hui souvent du silicium polycristallin).
+
+L'épaisseur de l'oxyde — quelques nanomètres seulement — et la longueur du canal sont des paramètres de fabrication.
+
+<Resultat label="Empilement MOS">
+
+$$ \underbrace{\text{Grille (conducteur)}}_{\text{M}} \;\big/\; \underbrace{\mathrm{SiO_2}}_{\text{O, isolant}} \;\big/\; \underbrace{\text{substrat Si}}_{\text{S}} $$
+
+<Badge niveau="implementation" slot="badge">Les dimensions (épaisseur d'oxyde ≈ quelques nm, longueur de canal) dépendent du nœud technologique et du fabricant. Rien d'universel dans les valeurs.</Badge>
+</Resultat>
+
+Point capital : **la grille ne touche jamais le silicium.** Elle en est séparée par l'oxyde isolant. Retenez bien cette barrière : c'est elle qui fait toute la magie qui suit.
+
+## L'effet de champ : naissance d'un canal
+
+Au repos (grille non polarisée), regardons le chemin entre source et drain. Pour aller de l'une à l'autre, un électron devrait traverser le substrat P. Mais source/substrat et drain/substrat forment deux jonctions PN dos à dos : quel que soit le sens, l'une des deux est toujours bloquée. <Badge niveau="fonde">Conséquence directe de la jonction PN : deux îlots N dans un substrat P sont mutuellement isolés. Aucun courant ne passe spontanément.</Badge>
+
+Appliquons maintenant une tension **positive** sur la grille (par rapport au substrat). La grille chargée positivement crée un **champ électrique** qui plonge à travers l'oxyde dans le silicium juste en dessous. Ce champ agit en deux temps sur le substrat P :
+
+- d'abord, il **repousse les trous** (positifs) loin de la surface, laissant derrière eux une zone vidée de porteurs majoritaires (une zone de déplétion) ;
+- ensuite, si la tension monte assez, il **attire les électrons** minoritaires vers la surface, qui s'y accumulent en une fine pellicule.
+
+<Encart type="plusloin" titre="Pourquoi une couche d'inversion ?">
+Le substrat est de type P : ses porteurs majoritaires sont des trous, ses électrons sont rares (minoritaires). Mais un semiconducteur en contient toujours quelques-uns, créés par agitation thermique. Le champ de la grille les **trie** : il les rassemble juste sous l'oxyde. Localement, à cet endroit précis, les électrons deviennent plus nombreux que les trous : le silicium s'y comporte comme du **type N**, alors qu'il est globalement P. On dit que la couche superficielle est **inversée** — d'où le nom de **couche d'inversion**. C'est un type N créé non par dopage, mais par *influence électrostatique*, et qui disparaît dès qu'on coupe la tension.
+</Encart>
+
+Cette pellicule d'électrons forme un **canal de type N** continu, reliant la source au drain. Le verrou des deux jonctions est levé : un courant peut désormais circuler de la source au drain. La grille, sans rien toucher, vient d'ouvrir le robinet.
+
+<Resultat label="Effet de champ et couche d'inversion">
+
+$$ V_{\text{grille}} > 0 \;\Longrightarrow\; \text{trous repoussés, électrons attirés} \;\Longrightarrow\; \text{canal N entre source et drain} $$
+
+<Badge niveau="fonde" slot="badge">L'attraction des charges par un champ électrique est une loi physique (électrostatique). La formation de la couche d'inversion en découle nécessairement.</Badge>
+</Resultat>
+
+## Une commande qui ne coûte (presque) rien
+
+Voici la deuxième élégance du dispositif. Puisque la grille est **isolée** du silicium par l'oxyde, aucun courant continu ne la traverse pour aller dans le canal. Grille, oxyde et substrat forment exactement un **condensateur** : deux conducteurs séparés par un isolant. Commander le transistor revient donc à **charger un condensateur**, pas à alimenter une résistance.
+
+<Encart type="rappel" titre="Le condensateur en une ligne">
+Un condensateur, ce sont deux conducteurs séparés par un isolant. On y **stocke** une charge $Q = C\,V$ proportionnelle à la tension appliquée. En **régime continu** (tension fixe), une fois chargé, il ne laisse passer **aucun courant** : l'isolant l'interdit. Le courant n'existe que *pendant* la charge ou la décharge.
+</Encart>
+
+La conséquence est belle : pour **maintenir** le canal ouvert, la grille ne consomme idéalement **aucun courant**. On paie de l'énergie seulement à l'instant où l'on charge ou décharge la grille, c'est-à-dire au moment où l'on *change* d'état. <Badge niveau="fonde">Principe : une électrode isolée ne peut pas conduire de courant continu vers le canal. La commande est capacitive, pas résistive.</Badge>
+
+<Encart type="plusloin" titre="« Aucun courant » : l'honnêteté du physicien">
+Affirmer un courant de grille rigoureusement nul est une idéalisation. L'oxyde est mince — quelques nanomètres — et un mince isolant n'est jamais parfait : un faible **courant de fuite** le traverse (par effet tunnel quantique notamment), d'autant plus que l'oxyde est fin. <Badge niveau="idealise">Le courant de grille continu est *négligeable*, pas exactement nul. Aux nœuds très avancés, ces fuites deviennent une vraie préoccupation de consommation.</Badge>
+</Encart>
+
+Nous tenons donc un dispositif où une tension, presque gratuitement, ouvre ou ferme un passage pour le courant. Mais une question reste en suspens : **à partir de quelle tension** la couche d'inversion se forme-t-elle vraiment ? Tant qu'on ne le sait pas, on a un robinet sans cran d'arrêt. Fixer cette frontière — la **tension de seuil** — c'est précisément ce qui transformera l'effet de champ en véritable **interrupteur**. C'est l'objet du chapitre suivant.

@@ -1,0 +1,51 @@
+---
+/**
+ * BootSequence — frise du démarrage, du reset à init.
+ * Six jalons ordonnés (mise sous tension → reset → firmware/POST →
+ * bootloader → noyau → init) reliés en frise horizontale, avec barre de
+ * progression, étape courante mise en évidence et panneau descriptif :
+ * ce qui s'exécute, le niveau de privilège, ce qui est initialisé, et où
+ * l'on se trouve (ROM → RAM → disque). On avance pas à pas avec « étape
+ * suivante » ; « reset » revient à l'origine.
+ */
+---
+
+<div class="iw" data-iw="boot-sequence">
+  <div class="iw__head"><span class="tag">Interactif</span> Séquence de démarrage : du reset à init</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="bs-next">Avancer dans la frise</label>
+      <button id="bs-next" type="button" data-next>étape suivante ▶</button>
+    </div>
+    <div class="iw__row">
+      <label for="bs-reset">Revenir au point de départ</label>
+      <button id="bs-reset" type="button" data-reset>↺ reset</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">étape</span> <b data-out-etape>—</b></span>
+    <span class="iw__chip"><span class="k">privilège</span> <b data-out-priv>—</b></span>
+    <span class="iw__chip"><span class="k">emplacement</span> <b data-out-loc>—</b></span>
+  </div>
+  <p class="iw__note">
+    Au démarrage, le matériel impose un <strong>état connu</strong> : à la
+    <span style="color:var(--c-yellow)">mise sous tension</span>, le signal de
+    <em>reset</em> force le processeur à charger un point d'entrée fixe (le
+    <strong>vecteur de boot</strong>), depuis la <span style="color:var(--c-purple)">ROM</span>. Le
+    <span style="color:var(--c-blue)">firmware/POST</span> initialise la mémoire et les bus puis teste le
+    matériel ; le <span style="color:var(--c-teal)">bootloader</span> charge le noyau depuis le
+    <span style="color:var(--c-teal)">disque</span> vers la <span style="color:var(--c-green)">RAM</span> ; le
+    <span style="color:var(--c-green)">noyau</span> bascule en <em>mode protégé</em> et active la
+    <em>pagination</em> via la MMU ; enfin <span style="color:var(--c-red)">init</span> lance le premier
+    processus et l'<strong>espace utilisateur</strong> démarre. Le niveau de privilège <em>décroît</em> le long
+    de la frise : firmware (le plus privilégié) → noyau → utilisateur. <strong>Statut :</strong> l'ordre des
+    étapes est une <em>convention</em> stable ; les détails (UEFI vs BIOS hérité, GRUB vs autre chargeur,
+    systemd vs autre init, anneaux x86 vs niveaux d'exception ARM) relèvent de l'<em>implémentation</em> propre
+    à chaque machine.
+  </p>
+</div>
+
+<script>
+  import './BootSequence.client.ts';
+</script>

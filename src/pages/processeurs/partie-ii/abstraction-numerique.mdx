@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le tournant numérique : 0 et 1"
+chapter: abstraction-numerique
+description: "On décide d’interpréter les tensions comme 0/1. Seuils, marges de bruit, régénération : pourquoi le numérique est robuste."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import NoiseMargin from '../../../components/interactive/NoiseMargin.astro';
+
+## Décider que les tensions sont des chiffres
+
+<Tournant titre="Tournant : on cesse de mesurer, on commence à lire">
+Jusqu'ici, la **physique commandait** : un canal s'ouvre, un courant s'établit, une tension monte ou descend de façon parfaitement continue. Le monde du silicium ne connaît que des grandeurs analogiques — un nœud peut valoir $0{,}00\,\text{V}$, $1{,}73\,\text{V}$, ou n'importe quoi entre les deux.
+
+Ici, **nous décidons**. Nous choisissons de ne plus voir un nombre réel de volts, mais l'un de **deux symboles** : `0` ou `1`. Tout le continuum intermédiaire est volontairement jeté. Rien dans la nature n'impose ce choix — c'est une **abstraction d'ingénieur**. Et pourtant c'est précisément elle, comme on va le démontrer, qui rend le calcul fiable à l'échelle de milliards de portes. À partir de maintenant, on ne mesure plus une tension : on **lit** un chiffre.
+</Tournant>
+
+<Hypotheses titre="Conventions de départ">
+1. On dispose d'une tension d'alimentation $V_{DD}$ (la « pleine échelle ») et d'une masse $0\,\text{V}$.
+2. On adopte la **logique positive** : la tension *haute* (proche de $V_{DD}$) code `1`, la tension *basse* (proche de $0\,\text{V}$) code `0`.
+3. On admet l'<Prereq href="/processeurs/partie-ii/inverseur-cmos">inverseur CMOS</Prereq> et sa caractéristique de transfert $V_{out}(V_{in})$.
+</Hypotheses>
+
+La convention 2 mérite qu'on s'arrête. Associer `1` au haut et `0` au bas est **arbitraire** : on pourrait faire l'inverse (logique *négative*), et certaines familles logiques l'ont fait. Le silicium se moque de l'étiquette qu'on colle.
+
+<Badge niveau="convention">Logique positive (1 = haut). Choix d'ingénierie pur ; la logique négative est tout aussi valide, elle échange seulement les rôles des symboles.</Badge>
+
+## Des seuils, pas une frontière unique
+
+Si l'on devait dire « au-dessus de $V_{DD}/2$ c'est un `1`, en dessous c'est un `0` », un signal posé pile sur la frontière serait indécis, et le moindre parasite le ferait basculer. La parade : ne pas définir **un** seuil mais **deux**, séparés par une bande qu'on s'interdit d'habiter.
+
+- $V_{IL}$ : tension d'entrée *maximale* encore lue comme un `0` valide.
+- $V_{IH}$ : tension d'entrée *minimale* encore lue comme un `1` valide.
+- Entre $V_{IL}$ et $V_{IH}$ : **zone interdite** — aucune signification logique garantie.
+
+Symétriquement, du côté de ce qu'une porte **produit**, on garantit $V_{OL}$ (sa sortie « basse », au plus haut) et $V_{OH}$ (sa sortie « haute », au plus bas). Une conception saine impose $V_{OL} < V_{IL}$ et $V_{OH} > V_{IH}$.
+
+<Badge niveau="convention">Le découpage en quatre niveaux $V_{OL}, V_{IL}, V_{IH}, V_{OH}$ et l'existence d'une zone interdite sont un choix de méthode. Leurs *valeurs* dépendent de la techno.</Badge>
+
+<Badge niveau="implementation">Pour une famille CMOS à $V_{DD}=1{,}8\,\text{V}$, on aura typiquement $V_{IL}\approx 0{,}6\,\text{V}$ et $V_{IH}\approx 1{,}2\,\text{V}$ ; ces chiffres changent avec chaque nœud et chaque fabricant.</Badge>
+
+## Les marges de bruit : la place qu'on laisse au parasite
+
+Pourquoi $V_{OL} < V_{IL}$ et $V_{OH} > V_{IH}$ ? Parce qu'entre deux portes, un fil ramasse du **bruit** : couplages, fluctuations d'alimentation, agitation thermique. Le `0` qui part à $V_{OL}$ peut arriver un peu plus haut, le `1` parti à $V_{OH}$ un peu plus bas. La **marge de bruit** est l'écart que l'on s'autorise avant que la lecture ne soit compromise.
+
+<Encart type="calcul" titre="Définition des marges de bruit">
+Considérons une porte émettrice et une porte réceptrice reliées par un fil. La réceptrice exige $\le V_{IL}$ pour lire `0`, et l'émettrice promet au plus $V_{OL}$. La marge sur le niveau bas est l'écart entre la promesse et l'exigence :
+
+$$ NM_L = V_{IL} - V_{OL}. $$
+
+De même, pour le niveau haut, la réceptrice exige $\ge V_{IH}$ et l'émettrice promet au moins $V_{OH}$ :
+
+$$ NM_H = V_{OH} - V_{IH}. $$
+
+Tant qu'un parasite reste, en valeur absolue, **inférieur** à la marge correspondante, la lecture logique est inchangée. En effet, un `0` quitte l'émettrice à $V \le V_{OL}$ ; après ajout d'un bruit $\delta$, la réceptrice voit $V + \delta \le V_{OL} + |\delta|$. Si $|\delta| < NM_L = V_{IL} - V_{OL}$, alors $V + \delta < V_{IL}$ : le niveau reste lu comme `0`. Le raisonnement est symétrique pour le `1` avec $NM_H$.
+
+<Resultat label="Robustesse garantie au bruit">
+
+$$ |\delta| < \min(NM_L,\, NM_H) \;\Longrightarrow\; \text{le bit lu est inchangé.} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence logique stricte des définitions de seuils : sous la marge, l'inégalité de classement est préservée. Inattaquable une fois les conventions posées.</Badge>
+</Resultat>
+</Encart>
+
+Manipulez les niveaux et injectez du bruit pour voir quand la lecture tient et quand elle craque :
+
+<NoiseMargin />
+
+## Le cœur du miracle : la porte régénère le signal
+
+Des marges, c'est bien, mais elles seraient vite épuisées : après mille portes traversées, mille petits bruits accumulés finiraient par franchir n'importe quel seuil. C'est exactement le drame de l'**analogique**, où les erreurs *s'additionnent* le long d'une chaîne. Pourquoi le numérique y échappe-t-il ?
+
+<Encart type="intuition" titre="La bille qui retombe au fond du bol">
+Imaginez deux bols côte à côte, séparés par une bosse. Le `0` est le fond du bol de gauche, le `1` celui de droite. Donnez une petite chiquenaude à une bille posée au fond : elle remonte un peu la paroi… puis **redescend au fond**. Le signal bruité, lui aussi, est ramené vers la valeur propre. Tant que la chiquenaude ne franchit pas la bosse, on revient toujours à un `0` ou un `1` net. La porte logique est ce bol : elle ne *transmet* pas le bruit, elle l'**efface**.
+</Encart>
+
+La raison physique tient dans la **caractéristique de transfert** de l'inverseur. Autour du point de basculement, sa pente — son **gain** $|dV_{out}/dV_{in}|$ — est très supérieure à $1$ : NMOS et PMOS conduisent simultanément un bref instant et la sortie chute brutalement. Aux extrémités, au contraire, la pente est quasi nulle : la sortie est *plaquée* contre $V_{DD}$ ou la masse, indifférente aux petites variations d'entrée.
+
+<Encart type="plusloin" titre="Pourquoi le gain &gt; 1 régénère, ligne à ligne">
+Une variation de bruit $\Delta V_{in}$ en entrée produit en sortie $\Delta V_{out} \approx -A\,\Delta V_{in}$, où $A = |dV_{out}/dV_{in}|$ est le gain local.
+
+- **Aux extrémités** ($V_{in}$ très bas ou très haut) : $A \approx 0$. Donc $\Delta V_{out} \approx 0$ : le bruit d'entrée **ne ressort pas**. Une entrée « sale mais clairement basse » donne une sortie **propre** collée à $V_{OH}$.
+- **Au centre** : $A \gg 1$. La transition est si raide que tout point d'entrée légèrement décalé est projeté vers l'un des deux plateaux.
+
+Conséquence quantitative : il existe deux régions stables, l'une autour de $V \approx V_{OL}$ et l'autre autour de $V \approx V_{OH}$, vers lesquelles la sortie est ramenée. C'est la **restauration** : tant que l'entrée reste hors de la zone interdite, la sortie est toujours plus propre que l'entrée.
+
+<Resultat label="Régénération">
+
+$$ A \gg 1 \text{ au basculement} \;\text{et}\; A \approx 0 \text{ aux plateaux} \;\Longrightarrow\; V_{out}\in\{\,\approx V_{OL},\ \approx V_{OH}\,\}. $$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe de la forme de la caractéristique de transfert CMOS (gain &gt; 1). C'est la physique de la porte, pas une convention.</Badge>
+</Resultat>
+</Encart>
+
+Voilà le résultat capital. Comme **chaque** porte nettoie son entrée, le bruit **ne s'accumule pas** : il est remis à zéro à chaque étage. Une chaîne d'un million de portes est, pour la **valeur logique**, aussi sûre qu'une seule, pourvu qu'à chaque maillon le bruit reste sous la marge.
+
+<Badge niveau="fonde">La robustesse du numérique à grande échelle est une *déduction* : régénération à chaque porte ⇒ pas d'accumulation d'erreur logique, contrairement à l'analogique où elle est additive.</Badge>
+
+C'est l'unique raison pour laquelle on peut empiler des milliards de transistors et croire le résultat. La discipline `0`/`1` n'est pas une commodité de notation : c'est elle qui transforme un océan de tensions bruitées en un calcul exact.
+
+Maintenant que nous disposons de symboles `0` et `1` propres, stables et fiables, nous pouvons cesser de parler de volts et raisonner sur les symboles eux-mêmes : combiner, nier, additionner des bits. C'est l'objet du chapitre suivant — l'**algèbre de Boole**.

@@ -1,0 +1,35 @@
+---
+/**
+ * MosfetSwitch — un MOSFET (canal N) vu comme interrupteur commandé en tension.
+ * On fait varier la tension de grille V_GS : sous le seuil V_th, le canal est
+ * fermé (bloqué, courant nul) ; au-dessus, un canal conducteur relie source et
+ * drain (passant), et la lampe s'allume.
+ */
+---
+
+<div class="iw" data-iw="mosfet-switch">
+  <div class="iw__head"><span class="tag">Interactif</span> Le MOSFET comme interrupteur commandé</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="ms-vgs">Tension de grille V<sub>GS</sub></label>
+      <input id="ms-vgs" type="range" min="0" max="2" step="0.02" value="0.4" data-vgs />
+      <output data-out-vgs>0,40 V</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">seuil V<sub>th</sub></span> <b>0,70 V</b></span>
+    <span class="iw__chip"><span class="k">état</span> <b data-out-etat></b></span>
+    <span class="iw__chip"><span class="k">courant I<sub>DS</sub></span> <b data-out-i></b></span>
+  </div>
+  <p class="iw__note">
+    Glissez la tension de grille. Tant que V<sub>GS</sub> &lt; V<sub>th</sub>, aucun canal ne relie
+    la source au drain : le transistor est <em>bloqué</em>. Dès que V<sub>GS</sub> dépasse le seuil,
+    un canal d’électrons se forme : le transistor devient <em>passant</em> et la lampe s’allume.
+    (Modèle idéalisé : on néglige la résistance du canal et les fuites.)
+  </p>
+</div>
+
+<script>
+  import './MosfetSwitch.client.ts';
+</script>

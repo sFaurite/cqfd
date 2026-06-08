@@ -1,0 +1,76 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le MOSFET comme interrupteur"
+chapter: mosfet-interrupteur
+description: "Sous le seuil, bloqué ; au-dessus, passant. L’idéalisation « interrupteur commandé » qui fonde toute la suite du cours."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import MosfetSwitch from '../../../components/interactive/MosfetSwitch.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+
+Nous savons déjà fabriquer un transistor. Au chapitre précédent, l’<Prereq href="/processeurs/partie-ii/mosfet-structure">effet de champ</Prereq> nous a montré qu’une tension sur la **grille**, isolée du silicium par une fine couche d’oxyde, peut attirer des électrons juste sous la surface et y former un **canal** conducteur reliant la **source** au **drain**. Toute la suite du cours — les portes, l’ALU, le processeur — repose sur une seule lecture de ce phénomène : **le MOSFET est un interrupteur dont la poignée est une tension.** Ce chapitre établit cette lecture, en précise les limites, et en fait l’outil de base de tout ce qui suit.
+
+<Encart type="intuition" titre="Un robinet commandé par une tension">
+Imaginez un robinet d’eau. D’ordinaire, on tourne une poignée *mécanique* pour laisser couler. Le MOSFET, lui, n’a pas de poignée : c’est une **tension** sur la grille qui ouvre ou ferme le passage. Tant que la tension reste faible, le robinet est fermé — aucun courant. Dès qu’elle dépasse une certaine valeur, le robinet s’ouvre et le courant coule de la source vers le drain. Aucune pièce ne bouge : tout est électrostatique, donc rapide et sans usure. C’est ce qui rend possibles des milliards de commutations par seconde.
+</Encart>
+
+## Le seuil : la frontière entre bloqué et passant
+
+L’existence du canal n’est pas progressive « depuis zéro » : il faut une tension de grille **minimale** pour que des électrons s’accumulent en nombre suffisant et forment un canal continu. Cette tension s’appelle la **tension de seuil**, notée $V_{th}$.
+
+- Si $V_{GS} < V_{th}$ : pas de canal. Source et drain sont séparés par le substrat ; **aucun courant** ne passe. Le transistor est **bloqué**. <Badge niveau="fonde">Conséquence directe de l’effet de champ : sans charge d’inversion suffisante, il n’y a pas de chemin conducteur.</Badge>
+- Si $V_{GS} \ge V_{th}$ : un canal d’électrons relie source et drain ; **un courant peut circuler**. Le transistor est **passant**. <Badge niveau="fonde">Le canal d’inversion établit un chemin conducteur continu entre les deux régions n+.</Badge>
+
+La valeur exacte de $V_{th}$ — typiquement quelques dixièmes de volt — dépend de l’épaisseur de l’oxyde, du dopage et du procédé de fabrication. <Badge niveau="implementation">Il n’y a pas de seuil universel : chaque technologie (« nœud ») a le sien, ajusté par le fabricant.</Badge>
+
+<Encart type="calcul" titre="D’où vient le seuil : la grille est un condensateur">
+La grille, l’oxyde et le silicium forment un **condensateur plan** de capacité surfacique $C_{ox}$. Appliquer $V_{GS}$ y stocke une charge surfacique
+
+$$ Q = C_{ox}\,V_{GS}. $$
+
+Mais une partie de cette charge sert seulement à *repousser les trous* du substrat P et à courber les bandes : tant que ce « coût » n’est pas payé, aucun électron libre ne s’accumule. On note $V_{th}$ la tension à partir de laquelle ce coût est couvert. La charge réellement disponible pour le **canal** d’électrons est donc
+
+$$ Q_{canal} = C_{ox}\,(V_{GS} - V_{th}) \quad\text{si } V_{GS} \ge V_{th}, \qquad Q_{canal} = 0 \text{ sinon}. $$
+
+C’est la quantité $V_{GS} - V_{th}$ (appelée *tension de surcharge*) qui commande l’abondance des porteurs, donc l’intensité du courant. En première approximation, dans le régime « interrupteur fermé », le courant croît avec cette surcharge.
+
+<Resultat label="Condition de conduction">
+$$ V_{GS} \ge V_{th} \;\Longleftrightarrow\; \text{canal présent} \;\Longleftrightarrow\; \text{transistor passant.} $$
+<Badge niveau="fonde" slot="badge">Découle de la formation de la charge d’inversion sous la grille (effet de champ).</Badge>
+</Resultat>
+</Encart>
+
+## L’idéalisation « interrupteur parfait »
+
+Pour raisonner en logique, on ne garde de tout cela que **deux états** : ouvert (bloqué) et fermé (passant). On modélise alors le MOSFET comme un **interrupteur idéal** commandé par $V_{GS}$ :
+
+<Resultat label="Le MOSFET comme interrupteur">
+$$ V_{GS} < V_{th} : \text{interrupteur ouvert} \qquad V_{GS} \ge V_{th} : \text{interrupteur fermé}. $$
+<Badge niveau="idealise" slot="badge">On néglige la résistance du canal passant, le courant de fuite à l’état bloqué, et la transition progressive autour du seuil. Excellent modèle pour la logique, faux pour l’électronique analogique fine.</Badge>
+</Resultat>
+
+Cette idéalisation est-elle honnête ? Un vrai transistor n’est jamais *parfaitement* ouvert (il fuit un peu) ni *parfaitement* fermé (le canal a une résistance). Mais en logique numérique on s’arrange pour travailler **loin du seuil**, là où ces écarts sont négligeables — et le chapitre <Prereq href="/processeurs/partie-ii/abstraction-numerique">sur l’abstraction 0/1</Prereq> montrera que les marges de bruit rendent cette approximation non seulement commode, mais **robuste**.
+
+<Tournant titre="Ce qu’on garde, ce qu’on jette">
+Ici nous **choisissons** délibérément de ne retenir que deux états et d’oublier tout le continuum analogique intermédiaire. Ce n’est pas la physique qui l’impose — elle, connaît un courant qui varie continûment. C’est *nous* qui décidons de ne lire que « ouvert / fermé », parce que c’est cette abstraction qui rendra le calcul fiable. On le signale franchement : à partir d’ici, le fil « numérique » s’éloigne volontairement de la réalité analogique sous-jacente.
+</Tournant>
+
+## À manipuler
+
+Faites varier la tension de grille et observez le canal se former, le courant s’établir et la lampe s’allumer dès que l’on franchit le seuil :
+
+<MosfetSwitch />
+
+<VideoManim src="mosfet-switch" scene="MosfetSwitch" titre="Le MOSFET : du seuil au canal" legende="En montant la tension de grille, le canal d’inversion apparaît au seuil et le courant s’établit entre source et drain." />
+
+## Deux saveurs, et la suite
+
+Le transistor que nous venons de décrire est un **NMOS** : il conduit quand sa grille est **haute**. Il existe son miroir, le **PMOS**, qui conduit quand sa grille est **basse**. <Badge niveau="fonde">Symétrie de construction : on inverse les dopages (canal de trous au lieu d’électrons), d’où la commande inversée.</Badge>
+
+Pris isolément, chacun a un défaut : laissé « fermé » en permanence, il laisse filer un courant continu et **dissipe de l’énergie pour rien**. <Badge niveau="idealise">Dans le modèle d’interrupteur pur on l’ignore ; en pratique cette dissipation est le nerf de la guerre.</Badge> La parade géniale consiste à **associer un NMOS et un PMOS** pour que l’un soit toujours bloqué quand l’autre conduit : c’est la logique **CMOS**, et la première fonction qu’elle nous donnera est la plus simple de toutes — l’inverseur, le « NON » logique. C’est l’objet du chapitre suivant.

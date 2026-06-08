@@ -1,0 +1,46 @@
+---
+/**
+ * DFlipFlop — bascule D synchrone et chronogramme.
+ *
+ * Une bascule D (« Data ») recopie son entrée D sur sa sortie Q, mais seulement
+ * à l'instant précis du front montant de l'horloge CLK. Entre deux fronts, Q
+ * reste figé même si D change. Le composant trace un chronogramme à trois pistes
+ * (CLK, D, Q) qui défile vers la gauche à chaque cycle, plus un schéma-bloc de la
+ * bascule. On bascule D quand on veut, on déclenche un front avec « front
+ * d'horloge », et on observe que Q ne change qu'aux fronts montants.
+ */
+---
+
+<div class="iw" data-iw="d-flip-flop">
+  <div class="iw__head"><span class="tag">Interactif</span> Bascule D synchrone et chronogramme</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols3">
+    <div class="iw__row">
+      <button class="iw__btn" data-tick>front d'horloge ▶</button>
+    </div>
+    <div class="iw__row">
+      <button class="iw__btn" data-d>basculer D (0 ⇄ 1)</button>
+    </div>
+    <div class="iw__row">
+      <button class="iw__btn" data-reset>réinitialiser</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">D (entrée)</span> <b data-out-d></b></span>
+    <span class="iw__chip"><span class="k">Q (sortie)</span> <b data-out-q></b></span>
+    <span class="iw__chip"><span class="k">cycle n°</span> <b data-out-t></b></span>
+  </div>
+  <p class="iw__note">
+    À chaque <em>front montant</em> de l'horloge (bord gauche du créneau CLK), la sortie
+    <b>Q</b> recopie la valeur de l'entrée <b>D</b> à cet instant. Entre deux fronts, Q reste
+    <em>constant</em> même si l'on modifie D : changez D puis observez que Q ne bouge pas tant
+    que vous n'avez pas cliqué sur « front d'horloge ». Échantillonner toutes les bascules sur le
+    même front, c'est ce qui synchronise l'ensemble d'un processeur.
+    <em>Statut : modèle fondé / idéalisé (bascule parfaite, sans temps de propagation ni
+    contraintes de setup/hold).</em>
+  </p>
+</div>
+
+<script>
+  import './DFlipFlop.client.ts';
+</script>

@@ -1,0 +1,93 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Se souvenir : la bascule RS"
+chapter: bascule-rs
+description: "En rebouclant deux portes l’une sur l’autre, le circuit garde un état : la naissance du bit mémoire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Boucler une sortie sur une entrée
+
+<Tournant titre="Tournant : on change de cadre">
+Jusqu'ici, **tout circuit était combinatoire** : sa sortie ne dépendait *que* de ses entrées présentes. Donnez les mêmes entrées, vous obtenez toujours la même sortie, instantanément, sans histoire. C'est vrai de l'inverseur, du NAND, de l'additionneur — tout ce que nous avons construit.
+
+Nous allons faire **un geste neuf** : prendre la sortie d'une porte et la **rebrancher** sur l'entrée d'une autre, et réciproquement. Ce simple bouclage — la **rétroaction** — fait apparaître quelque chose que le combinatoire ne pouvait pas produire : un circuit dont la sortie dépend de son **passé**. Une **mémoire**. On le dit franchement : ici on ne déduit plus une fonction à partir d'entrées, on crée un système qui *se souvient*. C'est le premier circuit **séquentiel** du cours, et la rupture avec tout ce qui précède est totale.
+</Tournant>
+
+Reprenons nos <Prereq href="/processeurs/partie-iii/portes-nand">portes logiques</Prereq> — disons deux portes **NOR**. Une porte NOR sort $1$ si et seulement si **toutes** ses entrées valent $0$ ; dès qu'une entrée vaut $1$, sa sortie est $0$. Croisons-en deux : la sortie de la première alimente une entrée de la seconde, et la sortie de la seconde revient sur une entrée de la première.
+
+<Encart type="intuition" titre="Un interrupteur qui se tient lui-même">
+Imaginez deux personnes qui se tiennent mutuellement debout, chacune appuyée sur l'autre. Tant que personne ne pousse de l'extérieur, **la configuration se maintient toute seule** : A tient B parce que B tient A. Il existe deux façons stables de se tenir (A debout/B couché, ou l'inverse), et il faut une **action extérieure** pour basculer de l'une à l'autre. La bascule RS, c'est exactement ça : la boucle se confirme elle-même, et c'est cette auto-confirmation qui *est* le souvenir.
+</Encart>
+
+## Les deux entrées : SET et RESET
+
+Nommons les sorties $Q$ et $\overline{Q}$ (elles seront complémentaires en fonctionnement normal), et les deux entrées **S** (*Set*) et **R** (*Reset*). Avec des portes NOR croisées :
+
+$$ Q = \text{NOR}(R,\ \overline{Q}) \qquad \overline{Q} = \text{NOR}(S,\ Q) $$
+
+Lisons la table en distinguant les quatre cas d'entrées.
+
+| S | R | Q | $\overline{Q}$ | Effet |
+|---|---|---|----|-------|
+| 1 | 0 | 1 | 0 | **SET** : force $Q=1$ |
+| 0 | 1 | 0 | 1 | **RESET** : force $Q=0$ |
+| 0 | 0 | $Q$ | $\overline{Q}$ | **HOLD** : mémorise |
+| 1 | 1 | 0 | 0 | **interdit** |
+
+<Encart type="calcul" titre="Pourquoi HOLD mémorise — déroulé ligne à ligne">
+Plaçons $S=1,\ R=0$ et trouvons l'état stable.
+
+$$ \overline{Q} = \text{NOR}(S,Q) = \text{NOR}(1,Q) = 0 $$
+
+car une entrée à $1$ suffit à mettre un NOR à $0$. Puis
+
+$$ Q = \text{NOR}(R,\overline{Q}) = \text{NOR}(0,0) = 1. $$
+
+On a bien $Q=1$ : c'est **SET**. Par symétrie $R=1,\ S=0$ donne $Q=0$ : **RESET**.
+
+Passons maintenant à **HOLD**, $S=0,\ R=0$, en supposant qu'on venait de mettre $Q=1$ (donc $\overline{Q}=0$) :
+
+$$ \overline{Q} = \text{NOR}(0,Q) = \text{NOR}(0,1) = 0 \quad\text{(inchangé)} $$
+
+$$ Q = \text{NOR}(0,\overline{Q}) = \text{NOR}(0,0) = 1 \quad\text{(inchangé)}. $$
+
+Les deux équations sont **satisfaites** : l'état se reproduit lui-même. Le même calcul avec $Q=0$ au départ (donc $\overline{Q}=1$) redonne $Q=0$ : on vérifie $Q=\text{NOR}(0,1)=0$ et $\overline{Q}=\text{NOR}(0,0)=1$, tout aussi cohérent. Donc avec $S=R=0$, **chacun des deux états antérieurs est un point fixe** de la boucle.
+
+<Resultat label="Mémorisation par rétroaction">
+$$ S=R=0 \;\Longrightarrow\; (Q,\overline{Q})\ \text{reste à sa valeur antérieure.} $$
+<Badge niveau="fonde" slot="badge">Conséquence logique stricte du bouclage : sans entrée active, la seule configuration cohérente est l'état déjà présent. Le circuit conserve un bit.</Badge>
+</Resultat>
+</Encart>
+
+Voilà le fait central : **sans aucune entrée active, le circuit garde sa valeur**. Il n'oublie pas. Or garder une valeur parmi deux possibles, c'est exactement retenir **un bit**. Nous venons de fabriquer la plus petite mémoire possible. <Badge niveau="fonde">La bistabilité de la boucle (deux états stables auto-confirmés) découle directement de la rétroaction et de la table des NOR — elle ne pourrait pas être autrement.</Badge>
+
+## Bistable : deux états stables, pas un de plus
+
+Cherchons *toutes* les configurations stables en HOLD ($S=R=0$). Pour ne pas présupposer leur complémentarité, traitons les deux sorties comme des nœuds indépendants : appelons $a$ le nœud nommé $Q$ et $b$ le nœud nommé $\overline{Q}$. La cohérence de la boucle impose
+
+$$ a = \text{NOR}(0,\ b) = \overline{b} \qquad b = \text{NOR}(0,\ a) = \overline{a}. $$
+
+Ces deux relations disent la **même** chose : chaque nœud est le complément de l'autre. En reportant l'une dans l'autre, $a = \overline{b} = \overline{\overline{a}} = a$ : l'équation est satisfaite dès que $a$ et $b$ sont complémentaires, et **seulement** dans ce cas. Restent exactement deux solutions : $(a,b)=(1,0)$ ou $(0,1)$, c'est-à-dire $(Q,\overline{Q})=(1,0)$ ou $(0,1)$. Le circuit est **bistable** : exactement deux états d'équilibre, et c'est aussi en ces deux états que le nom $\overline{Q}$ tient sa promesse. <Badge niveau="fonde">Le décompte des points fixes est une déduction directe ; deux états stables, c'est précisément ce qu'il faut pour coder $0$ et $1$.</Badge>
+
+## L'état interdit, et pourquoi on l'évite
+
+Posons $S=R=1$. Les deux NOR ont chacun une entrée à $1$, donc
+
+$$ Q = \text{NOR}(1,\overline{Q}) = 0 \qquad \overline{Q} = \text{NOR}(1,Q) = 0. $$
+
+Les deux sorties valent $0$ **en même temps** : $Q$ et $\overline{Q}$ ne sont plus complémentaires, le nom même de $\overline{Q}$ devient un mensonge. Pire : si l'on relâche $S$ et $R$ **simultanément** vers $0$, les deux portes se relancent en course, et l'état final est **imprévisible** — il dépend d'infimes écarts de vitesse entre les deux chemins. <Badge niveau="fonde">L'incohérence de $S=R=1$ et l'indétermination au relâchement sont des faits logiques/physiques inévitables de cette structure.</Badge> On **interdit** donc cette combinaison par convention d'usage : la bascule RS se pilote en garantissant qu'on n'active jamais SET et RESET ensemble. <Badge niveau="convention">Choix d'ingénierie sur la *façon de s'en servir* ; rien n'empêche d'appliquer $S=R=1$, on décide de ne pas le faire.</Badge>
+
+<Encart type="plusloin" titre="Métastabilité : quand la bascule reste sur la crête">
+Notre modèle suppose des transitions nettes, idéalisées. <Badge niveau="idealise">Tant qu'on raisonne en logique pure $0/1$ avec des portes parfaites, la bascule tombe toujours sur l'un des deux états ; la métastabilité est invisible dans ce modèle.</Badge> La réalité physique est plus subtile. Si une entrée bascule **juste au mauvais instant**, ou si l'on quitte l'état interdit de façon trop symétrique, la bascule peut se retrouver **entre** ses deux états stables, sorties à une tension intermédiaire — comme une bille en équilibre exact au sommet d'une colline. Cet état **métastable** n'est pas un équilibre stable : le moindre bruit thermique finit par la faire tomber d'un côté. <Badge niveau="fonde">La métastabilité est un phénomène réel, garanti par la continuité du circuit autour d'un point d'équilibre instable.</Badge> Combien de temps tient-elle ? C'est aléatoire, avec une probabilité de **survie** qui **décroît exponentiellement** dans le temps ; la constante de temps dépend du gain des portes et des capacités. <Badge niveau="implementation">Durée et fréquence d'occurrence varient selon la techno, la tension, la température — propres à chaque puce. On les rend négligeables, jamais nuls.</Badge>
+</Encart>
+
+## Vers le contrôle du temps
+
+La bascule RS nous donne le souvenir, mais elle change d'état **dès qu'une entrée bouge** — au gré des aléas de propagation. Pour orchestrer un calcul, il faut décider **quand** la mémoire a le droit de changer : un signal de rythme commun à tout le circuit. C'est l'**horloge**, et la bascule **D** qui ne se met à jour qu'à son top — l'objet du chapitre suivant.

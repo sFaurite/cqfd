@@ -1,0 +1,119 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Mémoires : SRAM et DRAM"
+chapter: memoires-sram-dram
+description: "Six transistors (rapide) ou un condensateur (dense) : deux façons de stocker un bit en très grand nombre."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Stocker en masse : le problème, et deux réponses opposées
+
+Nous savons fabriquer **un** bit mémoire. La <Prereq href="/processeurs/partie-iv/bascule-d-horloge">bascule D</Prereq> conserve son état entre deux fronts d'horloge : c'est un point de mémoire. Mais un processeur ne manipule pas un bit, ni mille : il lui faut des **milliards** de cases. Empiler des milliards de bascules D telles quelles serait ruineux. La question de ce chapitre est donc : **comment stocker du bit en masse ?** Et la réponse n'est pas unique. Deux technologies dominent — la SRAM et la DRAM — et leur intérêt vient précisément de ce qu'elles font des choix **opposés**. L'une privilégie la vitesse, l'autre la densité, et c'est cette opposition qui, à la fin du chapitre, nous forcera à les empiler en hiérarchie.
+
+<Encart type="intuition" titre="Deux façons de garder une bille">
+Pour mémoriser « 1 », vous pouvez tenir une bille **en équilibre dans un creux** : tant que rien ne la pousse, elle y reste indéfiniment — c'est la SRAM, un état stable qui se maintient tout seul. Ou bien vous pouvez **remplir un seau d'eau** : c'est beaucoup plus simple à construire, mais le seau fuit, et il faut le **remplir à nouveau** régulièrement sous peine de tout perdre — c'est la DRAM. Stable mais coûteux contre simple mais fuyard : tout le chapitre tient dans cette image.
+</Encart>
+
+<Hypotheses titre="Ce que l'on admet en entrant dans ce chapitre">
+1. **Le transistor comme interrupteur** et **la paire d'inverseurs croisés comme point mémoire bistable** : acquis du chapitre sur la bascule.
+2. **Modèle de fuite d'un condensateur** : on représente la décharge d'une cellule DRAM par un **unique circuit RC** (une résistance de fuite $R$, une capacité $C$), donnant une décroissance exponentielle. C'est une **idéalisation** : la fuite réelle combine plusieurs mécanismes (courant de sous-seuil, fuite de jonction, fuite de grille) dépendant de la température et de la tension. Seul le **fait** de la fuite, lui, est inéluctable.
+3. **Organisation matricielle** : on **choisit** de ranger les cellules en grille lignes/colonnes plutôt qu'un fil par bit. C'est un choix d'ingénierie (imposé par le coût), pas une nécessité physique.
+
+Tout le reste du chapitre se déduit de ces points (ou de résultats déjà démontrés).
+</Hypotheses>
+
+## SRAM : la mémoire statique, une bascule par bit
+
+La **SRAM** (*Static RAM*) reprend exactement l'idée de la bascule : un bit y est stocké par **deux inverseurs croisés**, la sortie de l'un alimentant l'entrée de l'autre. Ce bouclage crée deux états stables — c'est le cœur d'un point mémoire statique. À ces deux inverseurs (4 transistors) on ajoute **2 transistors d'accès** qui connectent la cellule aux fils de lecture/écriture quand on la sélectionne : d'où la cellule **6T** (six transistors par bit).
+
+<Encart type="plusloin" titre="Pourquoi « statique » et pourquoi non destructive">
+Tant que la cellule est alimentée, le bouclage des deux inverseurs **régénère en permanence** le niveau logique : si la tension dérive un peu, l'inverseur la repousse vers le 0 ou le 1 le plus proche. L'information ne s'use donc pas avec le temps — d'où *statique*. Et comme l'état est maintenu activement, **lire** la cellule (observer ses sorties à travers les transistors d'accès) ne la détruit pas : la lecture est **non destructive**.
+</Encart>
+
+Bilan : la SRAM est **rapide** (pas de mécanisme lent à attendre) et sa lecture est non destructive. <Badge niveau="fonde">L'état stable d'une paire d'inverseurs croisés se maintient et se régénère tant qu'il y a alimentation : ni rafraîchissement, ni réécriture après lecture ne sont nécessaires.</Badge> Mais six transistors par bit, c'est **encombrant** : à surface de silicium égale, on stocke peu. <Badge niveau="fonde">Six transistors occupent intrinsèquement plus de place qu'un seul ; la faible densité de la SRAM est une conséquence directe de sa structure.</Badge> C'est pourquoi on la réserve à ce qui doit être petit et ultra-rapide : **registres** et **caches**.
+
+## DRAM : la mémoire dynamique, un transistor et un condensateur
+
+La **DRAM** (*Dynamic RAM*) fait le pari inverse : réduire la cellule à son strict minimum. Un bit y est stocké par **un condensateur** — chargé pour « 1 », déchargé pour « 0 » — et **un seul transistor** qui sert de robinet pour y accéder. C'est la cellule **1T1C**. Une seule charge à stocker, un seul interrupteur : la cellule est minuscule, donc **dense et bon marché**. <Badge niveau="fonde">Une cellule à un transistor occupe bien moins de surface qu'une cellule à six : la forte densité de la DRAM découle directement de sa simplicité structurelle.</Badge>
+
+Mais cette simplicité a un prix, imposé par la physique du condensateur.
+
+<Encart type="rappel" titre="La décharge d'un condensateur à travers une fuite">
+Un condensateur de capacité $C$ chargé à $Q_0$ et relié à une résistance $R$ se décharge à travers elle. La charge $Q(t)$ et le courant $i(t) = -\,\mathrm{d}Q/\mathrm{d}t$ obéissent à la loi des mailles $Q/C = R\,i$, soit l'équation différentielle
+
+$$ \frac{\mathrm{d}Q}{\mathrm{d}t} = -\frac{Q}{R\,C}. $$
+
+Sa solution est une **décroissance exponentielle** de constante de temps $\tau = R\,C$. C'est l'outil que nous appliquons à la cellule DRAM, dont le transistor bloqué joue le rôle de la résistance de fuite.
+</Encart>
+
+<Encart type="calcul" titre="La charge stockée décroît exponentiellement">
+Partons de l'équation de décharge, où $R$ est la résistance de fuite et $C$ la capacité de la cellule :
+
+$$ \frac{\mathrm{d}Q}{\mathrm{d}t} = -\frac{Q}{R\,C}. $$
+
+On sépare les variables :
+
+$$ \frac{\mathrm{d}Q}{Q} = -\frac{\mathrm{d}t}{R\,C}. $$
+
+On intègre de l'instant initial ($Q = Q_0$) à l'instant $t$ :
+
+$$ \int_{Q_0}^{Q(t)} \frac{\mathrm{d}Q}{Q} = -\frac{1}{R\,C}\int_0^t \mathrm{d}t'. $$
+
+$$ \ln\!\frac{Q(t)}{Q_0} = -\frac{t}{R\,C}. $$
+
+En posant $\tau = R\,C$ et en passant à l'exponentielle :
+
+$$ Q(t) = Q_0\,e^{-t/\tau}, \qquad \tau = R\,C. $$
+
+Au bout de quelques $\tau$, la charge est si faible qu'un « 1 » devient indiscernable d'un « 0 ».
+</Encart>
+
+<Encart type="plusloin" titre="Le condensateur fuit : la décharge est inévitable">
+Aucun isolant n'est parfait. Le transistor d'accès bloqué laisse passer un minuscule **courant de fuite**, et la charge stockée s'écoule lentement. **Rien ne peut empêcher cette fuite** : c'est une fatalité physique, pas un défaut de fabrication. <Badge niveau="fonde">Tout isolant réel laisse passer un courant de fuite non nul : la charge d'une cellule DRAM finit toujours par s'échapper. C'est inéluctable.</Badge> La **forme exponentielle** précise, elle, n'est qu'un modèle : <Badge niveau="idealise">la loi $Q(t) = Q_0\,e^{-t/\tau}$ suppose une fuite assimilable à une **seule** résistance $R$ constante. La fuite réelle agrège plusieurs mécanismes dépendant de la température et de la tension ; l'exponentielle n'en est qu'une approximation de premier ordre.</Badge>
+</Encart>
+
+Deux conséquences en découlent, toutes deux **imposées** :
+
+- **Le rafraîchissement.** Comme la charge s'échappe, il faut périodiquement **relire chaque cellule et la réécrire** avant qu'elle ne devienne ambiguë. <Badge niveau="fonde">La décharge inévitable du condensateur force un rafraîchissement périodique : sans lui, l'information disparaît. C'est une nécessité physique propre à la DRAM.</Badge>
+- **La lecture destructive.** Lire la cellule, c'est connecter le condensateur au fil de colonne et observer la minuscule variation de tension qu'il y provoque — ce qui **vide en partie le condensateur**. Après chaque lecture, il faut donc **réécrire** la valeur lue. <Badge niveau="fonde">Lire une cellule 1T1C partage sa charge avec la ligne de bit et l'altère : la lecture est intrinsèquement destructive et impose une réécriture.</Badge>
+
+Ces opérations supplémentaires rendent la DRAM **plus lente** que la SRAM, par construction. On l'utilise donc là où le volume compte plus que la vitesse : la **mémoire principale** (la « RAM » du grand public).
+
+## L'organisation matricielle et les décodeurs
+
+Avec des milliards de cellules, il est impensable de tirer un fil par bit. On les range donc en **matrice** : une grille de lignes et de colonnes. Activer une **ligne** sélectionne toute une rangée de cellules ; les **colonnes** transportent alors les bits lus ou à écrire. Adresser une case revient à choisir *une* ligne parmi $2^n$ à partir de $n$ bits d'adresse — exactement le travail d'un **décodeur**.
+
+<Encart type="rappel" titre="Le décodeur, déjà rencontré">
+Un décodeur $n \to 2^n$ est un circuit purement combinatoire : il reçoit $n$ bits d'adresse et active **une seule** de ses $2^n$ sorties, celle dont le numéro vaut l'adresse. Nous l'avons construit avec les <Prereq href="/processeurs/partie-iii/circuits-combinatoires">circuits combinatoires</Prereq> ; ici, ses sorties pilotent directement les lignes de la matrice mémoire.
+</Encart>
+
+<Badge niveau="fonde">Sélectionner une ligne parmi $2^n$ à partir de $n$ bits est précisément la fonction d'un décodeur ; son emploi ici est une conséquence directe de l'organisation matricielle.</Badge> Cette structure en grille est commune à la SRAM et à la DRAM : seule la cellule au croisement diffère.
+
+## Volatilité : tout repose sur l'alimentation
+
+Un point fondamental les réunit. La SRAM maintient son état **uniquement tant qu'elle est alimentée** (la régénération s'arrête sans courant) ; la DRAM, elle, perd sa charge en l'absence de rafraîchissement, lui-même impossible sans courant. Dans les deux cas : **coupez l'alimentation, tout est perdu.** <Badge niveau="fonde">La SRAM comme la DRAM sont volatiles : leur information disparaît à la coupure, conséquence directe de leur principe de stockage (état actif ou charge entretenue).</Badge> Conserver des données **après** extinction exigera une autre technologie (mémoire non volatile), hors de ce chapitre.
+
+## Tableau comparatif
+
+Les ordres de grandeur ci-dessous ne sont pas des constantes physiques : ils **dépendent de la puce, du nœud de gravure et du fabricant**. <Badge niveau="implementation">Tailles, temps d'accès et coûts varient selon la technologie et l'année ; seules les tendances relatives (SRAM rapide/peu dense, DRAM dense/lente) sont structurelles.</Badge>
+
+| Critère | SRAM | DRAM |
+|---|---|---|
+| Cellule | 6 transistors (6T) | 1 transistor + 1 condensateur (1T1C) |
+| Densité | faible | élevée |
+| Vitesse d'accès | très rapide (≈ 1 ns) | plus lente (≈ 10–50 ns) |
+| Coût par bit | élevé | faible |
+| Rafraîchissement | non | **oui** (périodique) |
+| Lecture | non destructive | **destructive** (réécriture) |
+| Volatilité | volatile | volatile |
+| Usage typique | caches, registres | mémoire principale |
+
+Le compromis est net et **structurel** : la SRAM achète la vitesse au prix de la place, la DRAM achète la place au prix de la vitesse. <Badge niveau="fonde">Ce sont les structures mêmes des cellules (6T contre 1T1C) qui produisent ces avantages opposés ; aucune technologie ne réunit les deux qualités.</Badge>
+
+Puisque aucune mémoire n'est à la fois rapide, dense et bon marché, il faut **les combiner** : un peu de SRAM ultra-rapide près du processeur, beaucoup de DRAM plus loin. C'est précisément cette idée d'empilement par niveaux que développe le chapitre suivant, sur la **hiérarchie mémoire et les caches**.

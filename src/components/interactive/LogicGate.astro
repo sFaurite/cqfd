@@ -1,0 +1,52 @@
+---
+/**
+ * LogicGate — atelier de portes logiques.
+ * Choix de la porte (ET, OU, NON, NAND, NOR, XOR), bascule des entrées A et B,
+ * dessin du symbole normalisé avec fils colorés selon les valeurs, calcul de la
+ * sortie et table de vérité complète avec la ligne courante surlignée.
+ */
+---
+
+<div class="iw" data-iw="logic-gate">
+  <div class="iw__head"><span class="tag">Interactif</span> Atelier de portes logiques</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols3">
+    <div class="iw__row">
+      <label for="lg-gate">Porte</label>
+      <select id="lg-gate" data-gate>
+        <option value="ET">ET</option>
+        <option value="OU">OU</option>
+        <option value="NON">NON</option>
+        <option value="NAND">NON-ET (NAND)</option>
+        <option value="NOR">NON-OU (NOR)</option>
+        <option value="XOR">OU exclusif (XOR)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="lg-a">Entrée A</label>
+      <input id="lg-a" type="checkbox" data-a />
+      <output data-out-a>0</output>
+    </div>
+    <div class="iw__row">
+      <label for="lg-b">Entrée B</label>
+      <input id="lg-b" type="checkbox" data-b />
+      <output data-out-b>0</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">A</span> <b data-out-a>0</b></span>
+    <span class="iw__chip"><span class="k">B</span> <b data-out-b>0</b></span>
+    <span class="iw__chip"><span class="k">S</span> <b data-out-s>0</b></span>
+  </div>
+  <p class="iw__note">
+    Une porte logique calcule une sortie binaire S à partir d'entrées binaires A
+    (et B). Bascule les entrées et change de porte : le fil passe au vert quand il
+    vaut 1, gris quand il vaut 0, et la ligne courante de la table de vérité est
+    surlignée. Toutes ces portes se construisent à partir de transistors, et en
+    pratique à partir de la seule porte NON-ET (NAND), dite « universelle ».
+  </p>
+</div>
+
+<script>
+  import './LogicGate.client.ts';
+</script>

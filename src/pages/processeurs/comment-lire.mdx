@@ -1,0 +1,139 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: Comment lire ce cours
+chapter: comment-lire
+description: Le système d’encarts dépliables, l’échelle de fiabilité « ingénierie », et la promesse exacte. À lire en premier.
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Hypotheses from '../../components/Hypotheses.astro';
+import Resultat from '../../components/Resultat.astro';
+import Prereq from '../../components/Prereq.astro';
+import Tournant from '../../components/Tournant.astro';
+
+Ce cours raconte **d’un seul tenant** comment un caillou de silicium en arrive à exécuter un
+système d’exploitation. On part des **niveaux d’énergie d’un atome** et on remonte, étage par
+étage : semiconducteur → transistor → porte logique → circuit → processeur → boot du noyau.
+La règle, non négociable : *on ne vous demande jamais de croire sur parole.* Chaque maillon est
+soit **posé explicitement comme hypothèse**, soit **construit** à partir du précédent.
+
+Une précision d’honnêteté, dès maintenant. « Tout se déduit » serait **trompeur** ici, et pour
+deux raisons opposées :
+
+- En bas, on **admet la physique quantique** : la quantification des niveaux d’énergie, le
+  principe de Pauli. On ne la démontre pas — c’est notre socle, posé au grand jour.
+- À chaque étage, l’ingénieur **ajoute des choix** que la physique n’impose pas : coder en
+  binaire, le complément à deux, ranger programme et données dans la même mémoire, tel jeu
+  d’instructions. Ce ne sont pas des déductions : ce sont des **conventions**, et on les signale
+  comme telles (un bandeau « Tournant » le dit).
+
+La promesse exacte est donc : *rien n’est utilisé sans être, soit une hypothèse / une convention
+posée au grand jour, soit une déduction de ce qui précède.* C’est tout l’intérêt de l’échelle de
+fiabilité de ce cours — elle distingue, à chaque ligne, **ce que la nature impose** de **ce que
+l’ingénieur décide**.
+
+## À qui s’adresse ce cours ?
+
+Le niveau de départ visé est la **fin du lycée / début de licence** : vous êtes à l’aise avec la
+notion de tension et de courant, les puissances de 2, et un peu de logique (et / ou / non).
+**Aucun prérequis en électronique ou en informatique n’est supposé.** Dès qu’un outil nouveau
+apparaît, un encart « Rappel » le ramène à des bases simples.
+
+<Encart type="rappel" titre="Exemple de rappel — tension, courant, et le binaire">
+La **tension** (en volts, V) est une différence de potentiel ; le **courant** (en ampères) est un
+débit de charges. Un transistor, pour nous, sera surtout un **interrupteur** : une tension de
+commande laisse passer — ou non — un courant.
+
+Et **compter en binaire**, c’est compter avec deux chiffres seulement, 0 et 1 : chaque position
+vaut une puissance de 2. Ainsi $1011_2 = 8 + 0 + 2 + 1 = 11$.
+</Encart>
+
+## Les encadrés « Hypothèses » et les « Tournants »
+
+Au début d’une partie qui **pose** quelque chose (la physique de départ, une convention de
+codage, un modèle d’architecture), un encadré liste **noir sur blanc** ce qui est admis.
+
+<Hypotheses titre="Exemple d’encadré d’hypothèses">
+1. Une hypothèse se présente ainsi, numérotée.
+2. Tant qu’un résultat n’a pas été démontré (ou posé ici), on n’a pas le droit de s’en servir.
+</Hypotheses>
+
+Et quand on **cesse de déduire pour adopter un choix d’ingénierie** — coder en binaire, fixer un
+jeu d’instructions —, un **bandeau « Tournant »** le signale sans détour :
+
+<Tournant titre="Exemple de bandeau « Tournant »">
+Ici, la physique ne dicte plus la suite. On **décide** d’une convention, parce qu’elle est commode
+et cohérente — et on le dit, plutôt que de la faire passer en contrebande. La construction reprend
+ensuite à partir de ce choix.
+</Tournant>
+
+## Les encarts dépliables
+
+Le fil de lecture principal reste **conceptuel et fluide**. Les détails — calculs, rappels,
+approfondissements — sont rangés dans des encarts que vous **dépliez d’un clic** (ou avec la
+touche <kbd>Entrée</kbd>). Quatre familles, reconnaissables à leur couleur et leur icône.
+
+<Encart type="intuition" titre="L’intuition (ouvert par défaut)">
+Les encarts 💡 contiennent une analogie ou une image mentale. Ouverts par défaut, car ils aident
+à comprendre *avant* de formaliser. Exemple : « un transistor CMOS, c’est un robinet dont la
+poignée est une tension ».
+</Encart>
+
+<Encart type="calcul" titre="Le calcul détaillé (fermé par défaut)">
+Les encarts 🧮 déroulent une démonstration **ligne à ligne**, sans étape sautée. Par exemple, on y
+montrerait pourquoi un mot de $n$ bits code exactement
+
+$$ 2^{n} \text{ valeurs distinctes,} $$
+
+en raisonnant sur le nombre de combinaisons. Chaque ligne est justifiée par la précédente.
+</Encart>
+
+<Encart type="rappel" titre="Le rappel (fermé par défaut)">
+Les encarts 📐 ramènent un outil à des bases simples : une puissance de 2, ce qu’est une table de
+vérité, une loi d’Ohm. Pour ne jamais vous laisser sur le bord de la route.
+</Encart>
+
+<Encart type="plusloin" titre="Pour aller plus loin (fermé par défaut)">
+Les encarts 🔬 contiennent un approfondissement **hors fil principal** : le détail physique d’un
+canal MOSFET, un protocole de cohérence de cache. Facultatifs : on peut les sauter.
+</Encart>
+
+En haut de chaque page, deux boutons **« ⊕ Tout déplier »** et **« ⊖ Tout replier »** agissent sur
+tous les encarts à la fois.
+
+## Les badges de fiabilité
+
+C’est le cœur de l’honnêteté de ce cours. **Chaque affirmation notable** porte une pastille
+colorée qui dit *à quel point elle est nécessaire* — imposée par la nature, ou choisie par
+l’ingénieur. Survolez un badge (ou donnez-lui le focus au clavier) pour lire **pourquoi**.
+
+- Un courant ne traverse une jonction PN que dans un sens <Badge niveau="fonde">Conséquence directe de la physique de la zone de déplétion : le champ interne s’oppose au passage en inverse.</Badge>
+- On code les entiers signés en complément à deux <Badge niveau="convention">Choix d’ingénierie : il rend l’addition signée identique à l’addition non signée. D’autres codages existeraient.</Badge>
+- Un transistor est un interrupteur parfait (passant = fil, bloqué = coupure) <Badge niveau="idealise">Modèle commode : en réalité il a une résistance, un seuil, des fuites. Suffisant pour raisonner en logique.</Badge>
+- L’adresse du tout premier code exécuté après le reset <Badge niveau="implementation">Dépend de l’architecture et du fabricant (x86, ARM…) ; il n’y a pas de valeur universelle.</Badge>
+
+Une **légende** est accessible en permanence depuis le bouton « Fiabilité » en haut de page, et la
+page <a href="/processeurs/methodologie">Méthodologie</a> détaille les quatre niveaux.
+
+## Résultats encadrés et liens « prérequis »
+
+Les résultats importants sont mis en valeur, souvent accompagnés de leur badge :
+
+<Resultat label="Exemple de résultat">
+$$ \text{une porte NAND suffit à construire toute fonction logique.} $$
+<Badge niveau="fonde" slot="badge">Démontrable : on réalise NON, ET, OU à partir de NAND seules, et ces trois-là engendrent tout.</Badge>
+</Resultat>
+
+Et quand une page s’appuie sur un résultat établi ailleurs, un lien **prérequis** vous y renvoie :
+par exemple, on invoquera plus tard l’<Prereq href="/processeurs/partie-ii/inverseur-cmos">inverseur CMOS</Prereq> en pointant vers la page qui le construit.
+
+## Comment naviguer
+
+- La **barre latérale** (à gauche) liste les six parties et leurs chapitres, dans l’ordre de lecture.
+- Le **fil d’Ariane** et les boutons **précédent / suivant** suivent ce même ordre.
+- Le **sommaire de page** (à droite, sur grand écran) suit votre progression dans la page.
+- La **recherche** (icône 🔍 ou touche <kbd>/</kbd>) explore tout le site (sur le site construit).
+- Le **glossaire** et l’**index des symboles** sont accessibles à tout moment.
+
+Prêt ? La construction commence tout en bas : un atome, et ses niveaux d’énergie.

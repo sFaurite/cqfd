@@ -1,0 +1,97 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Des niveaux aux bandes d’énergie"
+chapter: bandes-energie
+description: "En rapprochant N atomes, les niveaux discrets se fondent en bandes quasi continues, séparées par une bande interdite (gap)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import EnergyBands from '../../../components/interactive/EnergyBands.astro';
+
+## Un atome est seul. Que se passe-t-il quand ils sont un milliard de milliards ?
+
+Au chapitre précédent, nous avons admis deux choses sur un atome isolé : ses électrons n'occupent que des **niveaux d'énergie discrets**, et le **principe de Pauli** interdit à deux électrons de partager exactement le même état quantique (<Prereq href="/processeurs/partie-i/atomes-niveaux">niveaux discrets et Pauli</Prereq>). Tout cela vaut pour *un* atome, seul dans le vide. Mais un cristal de silicium n'a rien d'un atome isolé : dans le moindre grain de poussière, il y en a déjà des milliards de milliards, rangés bien serrés. La question de ce chapitre est simple et lourde de conséquences : **que deviennent les niveaux d'énergie quand on entasse autant d'atomes côte à côte ?** La réponse — les *bandes* — est la clé de tout ce qui suit : conducteurs, isolants, et surtout semi-conducteurs.
+
+<Encart type="intuition" titre="Deux diapasons qui s'écoutent">
+Frappez un diapason seul : il sonne à sa fréquence propre, nette. Approchez-en un second, identique, accordé à la même note. Ils ne peuvent plus vibrer indépendamment : ils se *couplent*. À deux, le système n'a plus *une* fréquence mais *deux* — l'une un peu plus grave (les diapasons en phase), l'autre un peu plus aiguë (en opposition de phase). C'est exactement ce que vont faire deux atomes voisins avec leurs niveaux d'énergie. Et avec $N$ diapasons couplés, on obtient $N$ fréquences si proches qu'elles forment un continuum sonore.
+</Encart>
+
+<Tournant titre="Tournant : on quitte l'atome isolé pour le solide">
+
+Jusqu'ici, tout était déduit du modèle de l'atome **isolé**. En passant au cristal, nous ajoutons un fait nouveau, non contenu dans le chapitre précédent : les atomes sont **assez proches pour que leurs orbitales se recouvrent**, donc leurs niveaux ne sont plus indépendants. C'est ce recouvrement (mesurable, fixé par la distance interatomique du matériau réel) qui déclenche tout le mécanisme des bandes. Et la valeur finale du gap du silicium ne se *démontre* pas à partir de Pauli : elle se **mesure**. Nous le signalerons au moment voulu.
+
+</Tournant>
+
+## Deux atomes : chaque niveau se dédouble
+
+Rapprochons deux atomes identiques jusqu'à ce que leurs nuages électroniques **se recouvrent**. Un électron du premier atome « sent » désormais le noyau du second : les deux atomes ne sont plus indépendants. Ce **couplage** lève la dégénérescence — ce qui était *un* niveau d'énergie devient *deux* niveaux distincts — et le principe de Pauli garantit que ces deux états séparés peuvent loger leurs électrons sans jamais partager le même état quantique.
+
+- Le niveau le plus bas correspond à l'état **liant** : les fonctions d'onde s'ajoutent, la densité électronique se concentre *entre* les noyaux, ce qui abaisse l'énergie (c'est, littéralement, ce qui colle les deux atomes ensemble — la liaison chimique).
+- Le niveau le plus haut est l'état **antiliant** : les fonctions d'onde se retranchent, la densité s'évide entre les noyaux, l'énergie monte.
+
+<Badge niveau="fonde">La levée de dégénérescence est imposée : le couplage des atomes (recouvrement des orbitales) sépare le niveau en deux états distincts, et le principe de Pauli interdit à deux électrons d'occuper le même état. Les niveaux *ne peuvent pas* rester confondus.</Badge>
+
+<Badge niveau="idealise">L'image « liant / antiliant » est une intuition guidée, exacte pour la molécule à deux atomes (type $\mathrm{H_2}$). Pour un vrai cristal, c'est une représentation simplifiée du mécanisme, pas un calcul complet.</Badge>
+
+## N atomes : le niveau devient une bande
+
+Le raisonnement ne s'arrête pas à deux. Mettons $N$ atomes en interaction. Chaque niveau atomique doit alors se scinder non plus en 2, mais en **$N$ sous-niveaux distincts** — un par atome, le couplage les séparant et Pauli garantissant que les électrons trouvent autant d'états distincts qu'il en faut.
+
+<Encart type="calcul" titre="Pourquoi N niveaux deviennent un continuum">
+Comptons. La largeur totale sur laquelle s'étale un niveau dédoublé — appelons-la $\Delta E$ — dépend du recouvrement des orbitales, *pas* du nombre d'atomes : elle reste de l'ordre de quelques électron-volts, fixée par la distance interatomique. En revanche, ce $\Delta E$ doit maintenant loger $N$ sous-niveaux. L'écart **entre deux sous-niveaux voisins** vaut donc, en ordre de grandeur,
+
+$$ \delta E \;\sim\; \frac{\Delta E}{N}. $$
+
+Prenons des valeurs réalistes : $\Delta E \approx 1\ \mathrm{eV}$ et, pour un cristal macroscopique, $N \approx 10^{22}$ atomes. Alors
+
+$$ \delta E \;\sim\; \frac{1\ \mathrm{eV}}{10^{22}} = 10^{-22}\ \mathrm{eV}. $$
+
+C'est inimaginablement petit — bien plus fin que tout ce que l'agitation thermique ($k_B T \approx 0{,}025\ \mathrm{eV}$ à $300\ \mathrm{K}$) permettrait de distinguer. À cette échelle, les sous-niveaux sont si serrés qu'on ne peut plus les séparer : ils forment un **continuum** d'états permis.
+
+<Resultat label="Naissance d'une bande">
+
+$$ \text{1 niveau atomique} \;\xrightarrow{\;N \text{ atomes couplés}\;}\; N \text{ sous-niveaux} \;\Rightarrow\; \text{1 bande quasi continue.} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence stricte du couplage (recouvrement) et de Pauli. Le caractère « quasi continu » découle de $N$ gigantesque.</Badge>
+</Resultat>
+</Encart>
+
+Voilà le mot lâché : une **bande** est un *continuum* d'états d'énergie permis, né de la fusion de $N$ niveaux. Attention à ne pas confondre les deux notions : un **niveau** est une valeur d'énergie unique (un atome isolé) ; une **bande** est un *intervalle continu* d'énergies autorisées (un cristal). Ce ne sont pas des objets de même nature.
+
+<Encart type="plusloin" titre="Largeur de bande et recouvrement des orbitales">
+Pourquoi certaines bandes sont-elles larges et d'autres étroites ? La largeur $\Delta E$ d'une bande croît avec le **recouvrement** des orbitales des atomes voisins. Les électrons des couches *externes* (valence), dont les orbitales sont étendues et se chevauchent fortement, donnent des bandes **larges**. Les électrons des couches *internes*, blottis près du noyau, se recouvrent à peine : leurs niveaux restent presque ponctuels, à peine élargis. Aucune formule lourde n'est nécessaire ici — retenez la proportionnalité qualitative : <Badge niveau="fonde">plus les orbitales se recouvrent (atomes plus proches, couches plus externes), plus la bande est large.</Badge>
+</Encart>
+
+## Bande de valence, bande de conduction, et le gap entre les deux
+
+Tous les niveaux atomiques s'élargissent ainsi en bandes. Deux d'entre elles nous intéressent particulièrement :
+
+- La **bande de valence** : celle issue des niveaux occupés par les électrons de valence (les plus externes). À basse température, elle est *pleine* — tous ses états sont occupés.
+- La **bande de conduction** : la bande permise juste au-dessus, faite d'états *vides*.
+
+Entre les deux peut subsister un intervalle d'énergies où **aucun état n'est permis** : la **bande interdite**, ou *gap*, de largeur $E_g$. Un électron ne peut pas avoir une énergie située dans ce trou — il n'y a tout simplement aucun état pour l'y accueillir.
+
+<VideoManim src="energy-bands" scene="EnergyBands" titre="Des niveaux aux bandes" legende="En rapprochant N atomes, les niveaux discrets se fondent en bandes séparées par une bande interdite." />
+
+Manipulez vous-même le rapprochement des atomes ci-dessous : faites varier la distance interatomique et observez les niveaux s'élargir en bandes, puis le gap se former.
+
+<EnergyBands />
+
+Pour le **silicium**, matériau roi de l'électronique, la largeur du gap vaut, à température ambiante :
+
+<Resultat label="Gap du silicium">
+
+$$ E_g(\mathrm{Si}) \approx 1{,}12\ \mathrm{eV} \quad (\text{à } 300\ \mathrm{K}). $$
+
+<Badge niveau="fonde" slot="badge">Valeur **mesurée** expérimentalement, propriété physique du silicium (et non une déduction depuis Pauli). Elle décroît légèrement quand la température monte — ce n'est pas un choix d'ingénieur.</Badge>
+</Resultat>
+
+À titre de comparaison, le diamant (carbone, même colonne) a $E_g \approx 5{,}5\ \mathrm{eV}$ et le germanium $\approx 0{,}66\ \mathrm{eV}$. <Badge niveau="fonde">Ce sont aussi des valeurs **mesurées** (à $300\ \mathrm{K}$), propres à chaque matériau.</Badge> Ces écarts ne sont pas anecdotiques : ce sont eux qui rangent les matériaux en isolants, semi-conducteurs et conducteurs.
+
+Nous tenons maintenant le décor complet : des bandes d'états permis, séparées par des gaps interdits. Mais un décor vide ne dit rien. Ce qui décidera si le matériau **conduit le courant** ou non, c'est le **remplissage** de ces bandes par les électrons — et la **taille du gap** qu'il faudrait franchir. C'est précisément ce que nous attaquons au chapitre suivant : pourquoi une bande pleine ne conduit pas, et comment un petit gap fait toute la différence.

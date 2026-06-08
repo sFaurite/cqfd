@@ -1,0 +1,78 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le firmware (BIOS/UEFI) et le POST"
+chapter: firmware-uefi
+description: "Initialiser la mémoire et les bus, tester le matériel, trouver de quoi démarrer."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le premier programme : qui réveille la machine ?
+
+Au chapitre précédent, le <Prereq href="/processeurs/partie-vi/reset-rom">reset et la ROM</Prereq> nous ont laissés sur une image précise : à la mise sous tension, le processeur sort du reset, charge dans son compteur de programme une **adresse de démarrage câblée**, et exécute la première instruction qu'il y trouve. Cette adresse pointe vers une mémoire non volatile — la **ROM de démarrage**, ou *boot ROM*. Le code qui s'y trouve a un nom : le **firmware**.
+
+Le firmware est donc, par construction, **le premier logiciel exécuté par la machine**. <Badge niveau="fonde">Conséquence directe du reset : le PC pointe vers une mémoire câblée, et le code qui y réside s'exécute nécessairement en premier. Rien d'autre ne peut tourner avant lui.</Badge> Mais *ce qu'il fait* relève très largement du choix d'ingénierie. Tout ce chapitre consiste à séparer ce qui est **imposé** (il faut réveiller le matériel dans un certain ordre) de ce qui est **convenu** (BIOS, UEFI, ACPI, ordre de boot : autant de conventions, propres au monde du PC).
+
+<Encart type="intuition" titre="Le concierge qui allume le bâtiment">
+Imaginez un grand immeuble éteint la nuit. Avant que le moindre employé puisse travailler, un concierge passe : il vérifie que les disjoncteurs tiennent (POST), allume le chauffage et la lumière étage par étage (initialisation), fait l'inventaire des bureaux occupés (énumération), affiche un plan à l'entrée (tables ACPI), puis ouvre la porte au premier arrivant — le système d'exploitation. Le firmware est ce concierge. Il ne *fait* pas le travail de la journée ; il rend le bâtiment **utilisable** par celui qui le fera.
+</Encart>
+
+## Pourquoi un firmware est nécessaire : le matériel ne se réveille pas seul
+
+Le point crucial, celui que la physique impose, est que **le silicium au reset n'est pas dans un état utilisable**. Le processeur fonctionne, mais presque rien autour de lui n'est configuré. Le cas le plus parlant est la mémoire vive.
+
+<Tournant titre="Tournant : on entre dans le monde du PC">
+Jusqu'ici nous raisonnions sur un processeur abstrait. À partir de maintenant, pour être concrets, nous adoptons l'organisation d'un **ordinateur de type PC** (carte mère, DRAM, bus PCIe, périphériques). C'est un **choix de cadre** : un microcontrôleur embarqué, une console ou un téléphone réveillent leur matériel différemment. Ce qui suit comme *nécessité* (il faut configurer la DRAM avant de l'utiliser) reste vrai partout ; ce qui suit comme *organisation* (POST, ACPI, MBR/GPT) est la convention du PC.
+</Tournant>
+
+<Hypotheses titre="Hypothèses adoptées pour ce chapitre">
+1. La machine étudiée est un **PC** au sens architectural : un processeur de type x86 (ou compatible), une carte mère portant de la **DRAM**, un ou plusieurs **bus** (notamment PCIe) et des périphériques amovibles.
+2. Le firmware réside dans une **mémoire non volatile** directement adressable au reset (la *boot ROM*), conformément au chapitre précédent.
+3. Le système d'exploitation **n'est pas** dans cette ROM : il vit sur un support de masse (disque, SSD, réseau) qu'il faudra aller chercher.
+
+Tout ce qui est présenté comme *organisation* (les sections POST, ACPI, BIOS/UEFI) découle de ces choix de cadre ; tout ce qui est présenté comme *nécessité* (configurer la DRAM, les horloges, trouver un support amorçable) reste vrai au-delà du PC.
+</Hypotheses>
+
+La **DRAM** stocke chaque bit dans un minuscule condensateur qui se décharge spontanément : sans entretien, sa charge devient illisible en quelques dizaines de millisecondes. Pour rester lisible, elle doit être **rafraîchie périodiquement** — chaque ligne est réécrite dans une fenêtre de l'ordre de quelques dizaines de millisecondes — et ses temps d'accès (ouverture de ligne, latences) doivent être négociés. <Badge niveau="implementation">La valeur exacte de cette fenêtre (souvent autour de 64 ms, divisée par deux à haute température) dépend de la puce mémoire et de la norme.</Badge> Tout cela est piloté par un **contrôleur de DRAM** intégré au processeur. Tant que ce contrôleur n'a pas été *programmé* — fréquence d'horloge, timings, calibration électrique des lignes — **la RAM ne répond pas correctement**. <Badge niveau="fonde">Physique de la DRAM : un condensateur fuit, il faut le rafraîchir ; sans contrôleur configuré, aucune donnée n'y est fiable. Utiliser la RAM avant son initialisation est impossible.</Badge>
+
+On touche ici une difficulté presque paradoxale : le firmware doit configurer la RAM **sans pouvoir s'en servir**, puisqu'elle n'existe pas encore comme mémoire fiable. Le tout premier code du firmware s'exécute donc en utilisant uniquement la ROM et les registres internes — parfois en transformant le **cache du processeur en mémoire temporaire** (technique dite *Cache-as-RAM*). <Badge niveau="implementation">Cette astuce, son existence et ses détails dépendent du processeur et du fabricant ; ce n'est pas une loi, c'est un contournement d'ingénierie.</Badge>
+
+D'autres éléments ne s'auto-configurent pas davantage : les **horloges** (les PLL qui multiplient le quartz pour fournir les fréquences internes), les **bus** comme PCIe (entraînement des liens, négociation de débit), les contrôleurs d'interruption, les ports. Chacun part dans un état neutre et attend d'être réveillé.
+
+## Les tâches du firmware, dans l'ordre
+
+On peut donc lister ce que tout firmware accomplit. Certaines étapes sont **logiquement nécessaires** (on ne peut pas les sauter sans rendre la machine inutilisable), d'autres relèvent de l'**organisation choisie**.
+
+1. **POST** — *Power-On Self-Test*. Le firmware teste le matériel vital : présence et intégrité de la RAM, du processeur, des bus essentiels. En cas d'échec, il signale l'erreur (bips, codes, diagnostic) car la suite est impossible. <Badge niveau="convention">Le *principe* de vérifier avant d'avancer est sain, mais l'étendue exacte des tests, les codes d'erreur et les bips sont propres au fabricant.</Badge>
+
+2. **Initialisation matérielle** — contrôleur de DRAM, horloges/PLL, bus PCIe, contrôleurs d'E/S. <Badge niveau="fonde">Init de la DRAM et des horloges : nécessaire, sans quoi rien d'autre ne fonctionne.</Badge> <Badge niveau="implementation">L'ordre précis et les paramètres dépendent de la carte et du *chipset*.</Badge>
+
+3. **Énumération des périphériques** — parcours des bus pour découvrir ce qui est branché (cartes PCIe, contrôleurs de stockage, USB), attribution d'adresses et de ressources à chacun. <Badge niveau="implementation">Dépend des composants physiquement présents et de la topologie de la carte.</Badge>
+
+4. **Services et tables pour l'OS** — le firmware construit des **tables de description du matériel** que le système lira ensuite. La principale, dans le monde PC, est **ACPI** (*Advanced Configuration and Power Interface*) : elle décrit la gestion d'énergie, les états de veille et les périphériques que l'OS ne peut pas découvrir seul par énumération de bus. <Badge niveau="convention">ACPI est un standard adopté, pas une nécessité physique. Un autre monde (ARM avec *Device Tree*) décrit le matériel autrement.</Badge>
+
+5. **Recherche d'un support amorçable et passage de main** — le firmware cherche, parmi les disques et autres supports, lequel contient un code de démarrage, le charge et lui transfère le contrôle. <Badge niveau="fonde">Trouver *un* support de démarrage est nécessaire : le firmware ne contient pas l'OS, il doit aller le chercher.</Badge> <Badge niveau="convention">*Comment* on le cherche (l'ordre de boot, les formats reconnus) est entièrement conventionnel.</Badge>
+
+## BIOS et UEFI : deux conventions, pas deux nécessités
+
+La manière de réaliser tout cela a évolué. Le **BIOS** historique et l'**UEFI** moderne remplissent le même rôle, mais avec des conventions très différentes — et c'est précisément un cas d'école de « convention, pas nécessité ».
+
+| Aspect | BIOS (historique) | UEFI (moderne) |
+|---|---|---|
+| Mode du processeur | 16 bits (mode réel) | 32/64 bits dès le départ |
+| Découpage du disque | table **MBR** (max 4 partitions primaires, ~2 To) | table **GPT** (beaucoup de partitions, gros disques) |
+| Code de démarrage | un **secteur d'amorçage** de 512 octets | de vraies **applications EFI** dans une partition dédiée (ESP) |
+| Vérification | aucune | **Secure Boot** : signatures cryptographiques optionnelles |
+
+<Badge niveau="convention">BIOS et UEFI réalisent la *même tâche imposée* (réveiller, énumérer, amorcer) par des *choix d'organisation* différents. L'un n'est pas plus « vrai » que l'autre.</Badge> Le fait que le BIOS démarre en 16 bits ou que MBR limite à quatre partitions primaires ne reflète aucune loi physique : ce sont des décisions héritées, qu'UEFI a remplacées par d'autres décisions. <Badge niveau="implementation">**Secure Boot**, l'ordre de boot, les formats de table : activables, configurables, variables d'une machine à l'autre. Ne jamais présenter un comportement de PC comme universel.</Badge>
+
+<Encart type="plusloin" titre="Pourquoi 512 octets, et pourquoi c'est devenu trop petit">
+Le secteur d'amorçage MBR tient dans **512 octets** : c'est la taille historique d'un secteur de disque. Sur ces 512 octets, il faut loger du code *et* la table des partitions *et* une signature — il ne reste qu'environ **446 octets** de code exécutable (512 = 446 de code + 64 de table de partitions + 2 de signature). Bien trop peu pour comprendre un système de fichiers : le secteur d'amorçage ne sait que charger l'étage suivant. UEFI rompt avec cette contrainte en plaçant de véritables programmes (les applications EFI) sur une partition lisible, libérant le démarrage de la camisole des 512 octets. <Badge niveau="convention">Le passage de 512 octets de code à des applications complètes est un choix d'architecture, motivé par les limites du modèle précédent.</Badge>
+</Encart>
+
+Une fois le support trouvé et le premier morceau de code chargé en mémoire, le firmware a terminé son office : il **passe la main**. Le programme auquel il cède le contrôle a pour mission, à son tour, de charger le système d'exploitation. C'est lui que nous allons rencontrer au chapitre suivant : le **bootloader**.

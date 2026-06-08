@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { navFor } from '../../lib/nav';
+import { courseById } from '../../lib/courses';
+import { niveauxFor } from '../../lib/fiability';
+
+const courseId = 'processeurs';
+const course = courseById(courseId)!;
+const all = navFor(courseId);
+const parties = all.filter((p) => p.id !== 'annexes' && p.id !== 'introduction');
+const niveaux = niveauxFor(courseId);
+const premier = parties[0]?.chapitres[0]?.path ?? course.home;
+---
+
+<BaseLayout title={course.title} courseId={courseId} showSidebar={false}>
+  <main class="home" data-pagefind-body>
+    <section class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <p class="kicker"><a href="/">← Tous les cours</a></p>
+        <h1>{course.logo} {course.title}</h1>
+        <p class="tagline">{course.blurb}</p>
+        <div class="cta">
+          <a class="btn primary" href="/processeurs/comment-lire">Comment lire ce cours</a>
+          <a class="btn" href={premier}>Commencer →</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>L’échelle de fiabilité (ingénierie)</h2>
+      <p class="intro">
+        Du silicium à l’OS, chaque étage ajoute des choix qui ne se déduisent pas de la physique.
+        Le badge dit, pour chaque affirmation, <strong>à quel point elle est nécessaire</strong> :
+      </p>
+      <div class="niv-grid">
+        {niveaux.map((n) => (
+          <div class="niv" style={`--cc:${n.color}`}>
+            <span class="d" /><strong>{n.emoji} {n.label}</strong>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2>Le parcours, en six parties</h2>
+      <div class="parts">
+        {parties.map((p) => (
+          <a class="partcard" href={p.chapitres[0].path}>
+            <div class="pc-roman">{p.roman}</div>
+            <div class="pc-body">
+              <h3>{p.titre}</h3>
+              <p>{p.accroche}</p>
+              <span class="pc-count">{p.chapitres.length} chapitre{p.chapitres.length > 1 ? 's' : ''} →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <footer class="home-foot">
+      <p>Annexes : <a href="/processeurs/glossaire">glossaire</a> · <a href="/processeurs/symboles">index des symboles</a>.</p>
+    </footer>
+  </main>
+</BaseLayout>

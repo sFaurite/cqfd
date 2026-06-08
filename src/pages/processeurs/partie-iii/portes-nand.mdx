@@ -1,0 +1,124 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Portes universelles : NAND et NOR"
+chapter: portes-nand
+description: "Une seule porte suffit à réaliser toute fonction logique : complétude fonctionnelle de NAND (et de NOR)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import LogicGate from '../../../components/interactive/LogicGate.astro';
+
+## Une seule brique pour tout construire
+
+Au fil des chapitres précédents, nous avons accumulé une petite collection de portes : le NON (inverseur), le ET, le OU. Chacune réalise une opération de l'<Prereq href="/processeurs/partie-iii/algebre-boole">algèbre de Boole</Prereq>. Mais une question d'ingénieur surgit naturellement : **de combien de portes différentes a-t-on vraiment besoin ?** Faut-il fabriquer un catalogue infini de circuits sur mesure, ou existe-t-il un petit jeu de briques élémentaires à partir duquel on peut composer *n'importe quelle* fonction logique ?
+
+La réponse est spectaculaire : **une seule** porte bien choisie suffit. Toute la complexité d'un processeur — additionneur, mémoire, unité de calcul — se ramène à la répétition d'un unique motif. Cette porte s'appelle **NAND**, et c'est l'objet de ce chapitre.
+
+<Encart type="intuition" titre="Comme un alphabet de deux lettres">
+On pourrait croire qu'écrire des textes riches exige beaucoup de symboles. Pourtant le code Morse n'utilise que deux signes (point, trait) et exprime tout le langage. De même, on imagine qu'un ordinateur a besoin de dizaines d'opérations câblées différentes. En réalité, comme nous allons le prouver, **un seul type de porte** répété des milliards de fois suffit à tout calculer. La diversité naît de l'assemblage, pas des pièces.
+</Encart>
+
+## Définir NAND et NOR
+
+Partons de deux portes que nous connaissons déjà — ET et OU — et **nions** leur sortie.
+
+La porte **NAND** (de l'anglais *Not-AND*, « NON-ET ») renvoie le contraire du ET :
+
+$$ \mathrm{NAND}(A,B) = \overline{A \cdot B}. $$
+
+La porte **NOR** (*Not-OR*, « NON-OU ») renvoie le contraire du OU :
+
+$$ \mathrm{NOR}(A,B) = \overline{A + B}. $$
+
+Voici leurs tables de vérité. NAND ne vaut $0$ que lorsque **les deux** entrées valent $1$ ; NOR ne vaut $1$ que lorsque les **deux** valent $0$.
+
+| $A$ | $B$ | $A\cdot B$ | NAND | $A+B$ | NOR |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 0 | 0 | 0 | **1** | 0 | **1** |
+| 0 | 1 | 0 | **1** | 1 | 0 |
+| 1 | 0 | 0 | **1** | 1 | 0 |
+| 1 | 1 | 1 | **0** | 1 | 0 |
+
+<Badge niveau="fonde">Ces tables sont la simple négation, ligne à ligne, des tables de ET et de OU établies en algèbre de Boole.</Badge>
+
+## Qu'est-ce qu'un jeu de portes *universel* ?
+
+<Encart type="rappel" titre="Complétude fonctionnelle">
+Une fonction booléenne à $n$ entrées est n'importe quelle application $f:\{0,1\}^n \to \{0,1\}$. Il y en a $2^{2^n}$ pour $n$ entrées. Un ensemble de portes est dit **universel** (ou *fonctionnellement complet*) si, en les combinant, on peut réaliser **toutes** ces fonctions, sans exception.
+</Encart>
+
+Notre stratégie de preuve tient en deux maillons. D'abord, montrer que le trio $\{\text{ET}, \text{OU}, \text{NON}\}$ est universel. Ensuite, montrer que NAND seule sait imiter ces trois portes. Par transitivité, NAND seule sera universelle.
+
+<Encart type="calcul" titre="Étape 1 — le trio ET, OU, NON est universel">
+Soit $f$ une fonction booléenne quelconque, donnée par sa table de vérité. Repérons toutes les lignes où $f = 1$. Pour chacune de ces lignes, écrivons le **produit** (ET) des entrées, chaque variable apparaissant telle quelle si elle vaut $1$ sur cette ligne, et niée ($\overline{\cdot}$) si elle vaut $0$. Ce produit, appelé **minterme**, vaut $1$ exactement sur cette ligne et $0$ partout ailleurs.
+
+Exemple sur la ligne $A=1, B=0, C=1$ : le minterme est $A \cdot \overline{B} \cdot C$.
+
+On fait ensuite la **somme** (OU) de tous ces mintermes. Le résultat vaut $1$ dès qu'une des lignes « gagnantes » est atteinte, et $0$ sinon : c'est exactement $f$. On obtient la **forme canonique en somme de produits** :
+
+$$ f = \sum_{\text{lignes où } f=1} \big( \text{produit des littéraux} \big). $$
+
+Cette écriture n'utilise **que** des ET, des OU et des NON. Comme $f$ était arbitraire, le procédé marche pour toute fonction.
+
+Un seul cas demande une mention : la fonction constante $f \equiv 0$ n'a **aucune** ligne gagnante, donc la somme est vide. Mais le $0$ s'écrit déjà avec nos portes, par exemple $A \cdot \overline{A} = 0$. Le procédé reste donc complet, sans exception.
+
+<Resultat label="Universalité de ET, OU, NON">
+$$ \forall f:\{0,1\}^n\to\{0,1\}, \quad f \text{ s'écrit avec ET, OU, NON seuls.} $$
+<Badge niveau="fonde" slot="badge">Preuve constructive : la somme de produits fournit explicitement le circuit, pour toute table de vérité (cas $f\equiv 0$ inclus).</Badge>
+</Resultat>
+</Encart>
+
+Reste le maillon décisif : se débarrasser de trois portes pour n'en garder qu'une.
+
+<Encart type="calcul" titre="Étape 2 — NAND seule réalise NON, ET et OU">
+**NON.** Branchons la même entrée sur les deux pattes de la NAND :
+
+$$ \mathrm{NAND}(A,A) = \overline{A \cdot A} = \overline{A}. $$
+
+On a utilisé l'<Prereq href="/processeurs/partie-iii/algebre-boole">idempotence</Prereq> $A\cdot A = A$. Une NAND donne donc l'inverseur.
+
+**ET.** Le ET est la *négation* du NAND. Il suffit donc de nier la sortie d'une NAND… avec une autre NAND montée en inverseur :
+
+$$ \mathrm{NAND}\big(\mathrm{NAND}(A,B),\,\mathrm{NAND}(A,B)\big) = \overline{\overline{A\cdot B}} = A\cdot B. $$
+
+**OU.** C'est ici qu'intervient <Prereq href="/processeurs/partie-iii/algebre-boole">De Morgan</Prereq>, qui transforme un OU en un ET de négations :
+
+$$ A + B = \overline{\overline{A}\cdot\overline{B}} = \mathrm{NAND}(\overline{A},\,\overline{B}). $$
+
+Or $\overline{A}$ et $\overline{B}$ s'obtiennent chacun par une NAND (étape NON). Le OU coûte donc trois NAND : deux pour inverser les entrées, une pour les combiner.
+
+<Resultat label="NAND est universelle">
+$$ \mathrm{NON}, \ \mathrm{ET}, \ \mathrm{OU} \ \text{se construisent à partir de NAND seule}. $$
+<Badge niveau="fonde" slot="badge">Construction explicite ci-dessus + universalité de ET, OU, NON. Donc NAND seule réalise toute fonction booléenne.</Badge>
+</Resultat>
+</Encart>
+
+Le raisonnement est **strictement symétrique pour NOR** : $\mathrm{NOR}(A,A) = \overline{A}$ donne le NON, l'autre De Morgan ($A\cdot B = \overline{\overline{A}+\overline{B}} = \mathrm{NOR}(\overline{A},\overline{B})$) donne le ET, et nier une NOR donne le OU. <Badge niveau="fonde">Même preuve constructive, en échangeant le rôle de ET et OU via la dualité de De Morgan.</Badge>
+
+<VideoManim src="nand-universal" scene="NandUniversal" titre="NAND est universelle" legende="NON, ET et OU se construisent à partir de la seule porte NAND." />
+
+## À manipuler
+
+Câblez vous-même une NAND pour reproduire un inverseur, un ET, puis un OU, et vérifiez les tables de vérité sur chaque sortie :
+
+<LogicGate />
+
+## Pourquoi NAND et NOR plutôt qu'autre chose ?
+
+L'universalité de NAND est une **nécessité mathématique** : elle ne dépend ni de la technologie, ni de l'époque. Mais le fait que l'industrie construise réellement ses circuits autour de NAND et NOR relève, lui, d'un **choix**.
+
+<Tournant titre="De la nécessité au choix d'ingénieur">
+La preuve précédente dit seulement que NAND *peut* tout faire — pas qu'il *faut* l'utiliser. Ici nous posons un choix d'implémentation : les fonderies privilégient NAND et NOR. La raison n'est pas logique mais **physique**. En technologie CMOS — celle de l'<Prereq href="/processeurs/partie-ii/inverseur-cmos">inverseur CMOS</Prereq> — une NAND ou une NOR se réalisent naturellement avec seulement **quatre transistors** (deux NMOS, deux PMOS), et le circuit est *naturellement inverseur*, ce qui colle à la structure CMOS. Un ET ou un OU « purs », eux, exigent une NAND/NOR **suivie** d'un inverseur : plus de transistors, plus de surface, plus de délai.
+</Tournant>
+
+<Badge niveau="convention">Bâtir les circuits à partir de NAND/NOR est un choix motivé par l'efficacité du CMOS, pas par la logique. On pourrait tout faire avec NOR seule, ou tout autre ensemble universel.</Badge>
+
+On tient là un principe d'une portée immense. Un seul motif de quatre transistors, gravé des milliards de fois sur une puce et interconnecté, suffit *en principe* à réaliser tout calcul logique imaginable. La complexité d'un processeur ne vient pas de la richesse de ses briques, mais de leur **nombre** et de leur **agencement**.
+
+Reste à passer de cette brique universelle à des circuits *utiles* : additionner deux nombres, choisir une donnée parmi plusieurs, mémoriser un bit. C'est ce que nous assemblerons au chapitre suivant.

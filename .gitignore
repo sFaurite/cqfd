@@ -6,6 +6,7 @@ dist/
 # Manim : environnement Python + sorties intermédiaires
 manim/.venv/
 manim/media/
+manim/__pycache__/
 manim/*.log
 
 # divers

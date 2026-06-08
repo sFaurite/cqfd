@@ -1,0 +1,43 @@
+---
+/**
+ * FullAdder — additionneur binaire à retenue propagée (ripple-carry) sur 4 bits.
+ * On choisit deux nombres A et B (0..15) avec des curseurs. Le composant montre
+ * les 4 cellules d'addition (bit 3 → bit 0), la chaîne de retenue qui se propage
+ * du poids faible vers le poids fort, l'opération posée en binaire colonne par
+ * colonne, et la retenue finale (dépassement sur 4 bits).
+ */
+---
+
+<div class="iw" data-iw="full-adder">
+  <div class="iw__head"><span class="tag">Interactif</span> Additionneur binaire 4 bits (retenue propagée)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="fa-a">Nombre A</label>
+      <input id="fa-a" type="range" min="0" max="15" step="1" value="6" data-a />
+      <output data-out-a-slider>6</output>
+    </div>
+    <div class="iw__row">
+      <label for="fa-b">Nombre B</label>
+      <input id="fa-b" type="range" min="0" max="15" step="1" value="11" data-b />
+      <output data-out-b-slider>11</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">A</span> <b data-out-a></b></span>
+    <span class="iw__chip"><span class="k">B</span> <b data-out-b></b></span>
+    <span class="iw__chip"><span class="k">S = A + B</span> <b data-out-s></b></span>
+    <span class="iw__chip"><span class="k">retenue finale</span> <b data-out-carry></b></span>
+  </div>
+  <p class="iw__note">
+    Réglez A et B (de 0 à 15). Chaque cellule additionne un bit de A, le bit de B de même rang et la
+    retenue entrante c<sub>i</sub> ; elle produit le bit de somme s<sub>i</sub> et la retenue sortante
+    c<sub>i+1</sub>, transmise à la cellule de poids supérieur. La <em>chaîne de retenue</em> (flèches)
+    se propage du poids faible vers le poids fort. Si la retenue finale c<sub>4</sub> vaut 1, le résultat
+    dépasse 4 bits : il y a <em>dépassement</em>.
+  </p>
+</div>
+
+<script>
+  import './FullAdder.client.ts';
+</script>

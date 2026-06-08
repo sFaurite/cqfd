@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le modèle de von Neumann"
+chapter: von-neumann
+description: "Programme et données dans la même mémoire : le choix d’architecture qui rend la machine universelle."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import MiniCpu from '../../../components/interactive/MiniCpu.astro';
+
+## Toutes les briques sont là — reste à les organiser
+
+Nous savons fabriquer des interrupteurs, les assembler en portes, en faire une <Prereq href="/processeurs/partie-iv/machines-etats">machine à états</Prereq> qui avance au rythme d'une horloge, et nous savons stocker des bits dans une <Prereq href="/processeurs/partie-iv/memoires-sram-dram">mémoire</Prereq>. Il ne nous manque plus aucune brique : il nous manque un **plan**. Comment relier un organe qui *calcule*, un organe qui *se souvient* et le monde *extérieur*, de façon à obtenir une machine non pas figée, mais **reprogrammable** ?
+
+<Tournant titre="Tournant : on pose une architecture, on ne déduit plus">
+Jusqu'ici chaque résultat découlait de la physique ou de la logique. Ce chapitre est différent : nous **choisissons** une organisation. Le modèle de **von Neumann** — instructions et données rangées dans **une seule et même mémoire** — n'est imposé par aucune loi. C'est une convention d'architecture, et il en existe une autre (Harvard). Mais ce choix précis a une conséquence extraordinaire qui, elle, sera *forcée* : la machine devient **universellement programmable**. On distingue donc soigneusement ce qu'on décide de ce qu'on en déduit.
+</Tournant>
+
+<Hypotheses titre="Ce qu'on admet en entrant dans ce chapitre">
+
+1. Toutes les **briques matérielles** des parties précédentes sont disponibles : interrupteurs (transistors), portes logiques, <Prereq href="/processeurs/partie-iv/machines-etats">machines à états</Prereq> synchronisées par une horloge, et <Prereq href="/processeurs/partie-iv/memoires-sram-dram">mémoires</Prereq> capables de retenir des bits.
+2. Une **information quelconque se code par un nombre** (binaire) — y compris, on va le voir, une instruction. C'est l'acquis du chapitre sur le complément à deux.
+3. **Hypothèse propre à ce chapitre** (un *choix*, pas une loi) : on range instructions **et** données dans une mémoire **unique**, adressable par des nombres. C'est la convention de von Neumann. Toute la suite explore ce que ce choix entraîne — sa puissance (universalité) comme son prix (le goulot d'étranglement).
+
+</Hypotheses>
+
+## L'idée géniale : le programme enregistré
+
+Imaginez deux façons de faire faire un calcul à une machine. **Première façon** : on la *câble*. Pour additionner, on relie physiquement les fils qui font une addition ; pour multiplier, on recâble tout. Changer de tâche, c'est changer la machine — comme refaire le standard téléphonique à la main. C'était l'ENIAC : reprogrammer prenait des jours de branchements.
+
+**Seconde façon**, celle de von Neumann : on remarque qu'une instruction (« additionne », « charge ce nombre », « saute là-bas ») peut elle-même être **codée par un nombre**. Et un nombre, on sait déjà le ranger en mémoire. Donc on range le **programme dans la même mémoire que les données**. Pour changer ce que fait la machine, on ne touche plus un seul fil : on écrit d'autres nombres en mémoire.
+
+<Encart type="intuition" titre="Une partition, pas un orgue de Barbarie">
+Un orgue de Barbarie joue *une* mélodie : elle est gravée dans ses tuyaux et ses cames. Pour une autre mélodie, autre instrument. Le piano est différent : un seul instrument, et c'est la **partition** — extérieure, échangeable — qui dicte quoi jouer. Von Neumann transforme l'ordinateur en piano : le matériel est fixe, le « programme » est une partition de nombres qu'on remplace à volonté. La machine ne *sait* rien faire de précis ; elle sait **lire et exécuter** ce qu'on lui présente.
+</Encart>
+
+Ce renversement — *les instructions sont des données comme les autres* — porte un nom : le **programme enregistré** (*stored program*).
+
+<Resultat label="Programme enregistré">
+
+$$ \text{instruction} \;\equiv\; \text{nombre en mémoire} \;=\; \text{même nature qu'une donnée} $$
+
+<Badge niveau="convention" slot="badge">Choix d'architecture, non une nécessité physique. On *décide* de coder les instructions comme des nombres et de les loger dans la mémoire des données. Génial, mais on aurait pu câbler, ou séparer les deux.</Badge>
+</Resultat>
+
+De ce choix découle, lui sans alternative, le résultat majeur : **une même machine peut exécuter n'importe quel programme**. On ne construit plus une machine par tâche, mais **une machine universelle** dont le comportement est défini par les nombres qu'elle contient.
+
+<Resultat label="Universalité de la machine programmable">
+
+$$ \text{matériel fixe} \;+\; \text{programme variable} \;\Longrightarrow\; \text{n'importe quel calcul} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence stricte du programme enregistré : si tout traitement se décrit par une suite de nombres, et que la machine lit ces nombres, alors elle peut réaliser tout traitement descriptible. C'est une déduction, pas un choix.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="Le lien avec Turing">
+Cette universalité n'est pas une coïncidence. Dès 1936, Alan Turing avait imaginé une **machine universelle** : un automate capable de simuler *n'importe quel* autre automate, à condition qu'on lui fournisse sur sa bande la *description* de l'automate à imiter. Von Neumann réalise concrètement cette idée : la mémoire est la « bande », le programme enregistré est la « description ». Un processeur von Neumann est donc, à la mémoire finie près, une machine de Turing universelle physique. L'universalité est mathématique ; von Neumann en donne l'incarnation en silicium. <Badge niveau="fonde">Équivalence établie : tout ce que calcule une machine de Turing (à mémoire finie près), une machine à programme enregistré le calcule, et réciproquement.</Badge>
+</Encart>
+
+## Les organes et le bus
+
+Concrètement, le plan répartit le travail entre quelques organes reliés par des fils communs, le **bus**.
+
+| Organe | Rôle |
+|---|---|
+| **Processeur (CPU)** | exécute les instructions |
+| → unité de contrôle | lit l'instruction, décode, orchestre |
+| → ALU | effectue les opérations (add, et, ou…) |
+| → registres | mémoire ultra-rapide de travail |
+| **Mémoire** | contient instructions **et** données |
+| **Entrées/Sorties (E/S)** | clavier, écran, disque, réseau |
+| **Bus** | relie le tout, transporte adresses et nombres |
+
+<Badge niveau="convention">Ce découpage en organes (CPU / mémoire / E/S reliés par un bus) est l'organisation canonique de von Neumann, pas une nécessité physique : le partitionnement exact varie d'une machine à l'autre.</Badge>
+
+Le processeur fonctionne en boucle, une **machine à états** que nous connaissons déjà : il *lit* l'instruction pointée en mémoire (*fetch*), la *décode*, l'*exécute*, puis passe à la suivante. <Badge niveau="convention">Ce cycle « lire-décoder-exécuter » est l'organisation retenue ; le découpage exact des étapes varie d'une puce à l'autre.</Badge> L'unité de contrôle n'est rien d'autre que la machine à états qui pilote cette boucle ; l'ALU et les registres sont ses muscles et son carnet de notes.
+
+## Le prix du choix : le goulot d'étranglement
+
+Une seule mémoire, donc **un seul bus** pour y accéder. Or à chaque cycle le processeur doit y chercher *l'instruction*, puis souvent *une donnée*. Les deux empruntent le même chemin et ne peuvent passer en même temps : le bus est un robinet unique pour deux flux.
+
+<Resultat label="Goulot d'étranglement de von Neumann">
+
+$$ \text{débit utile} \;\le\; \frac{\text{débit du bus}}{\text{instructions} + \text{données}} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe du partage : avec un canal unique, instructions et données se disputent la bande passante. Le débit total est borné par celui du bus, quelle que soit la vitesse du CPU.</Badge>
+</Resultat>
+
+C'est le fameux **von Neumann bottleneck** : on peut accélérer le processeur autant qu'on veut, il attendra toujours après le bus. Les caches, eux, atténueront ce mur plus tard.
+
+<Encart type="plusloin" titre="L'alternative : l'architecture Harvard">
+On peut faire un *autre* choix : deux mémoires séparées, l'une pour les instructions, l'autre pour les données, chacune avec son propre bus. C'est l'**architecture Harvard**. Avantage immédiat : on lit une instruction *et* une donnée dans le même cycle, le goulot disparaît. Inconvénient : on perd la souplesse du programme enregistré pur (modifier du code à la volée devient malaisé) et le matériel se complique. Beaucoup de processeurs réels sont *hybrides* : von Neumann vu de la mémoire principale, mais Harvard au niveau des caches (cache d'instructions séparé du cache de données). <Badge niveau="convention">Harvard contre von Neumann est un arbitrage d'ingénierie, pas une vérité physique. Chaque puce tranche selon ses contraintes.</Badge> <Badge niveau="implementation">Le mélange exact (caches séparés, bus internes) dépend entièrement du modèle de processeur.</Badge>
+</Encart>
+
+## Voir cohabiter programme et données
+
+Dans le simulateur ci-dessous, observez la marque de fabrique de von Neumann : la **même** mémoire héberge à la fois les instructions du programme et les nombres qu'il manipule. Le processeur va chercher tantôt l'une, tantôt l'autre, par le même bus.
+
+<MiniCpu />
+
+## Reste une question : comment le logiciel parle au matériel ?
+
+Nous tenons le plan. Mais nous avons dit « l'instruction est un nombre » sans préciser **quels** nombres signifient **quelles** opérations. Quel code veut dire « additionne » ? Comment désigne-t-on un registre, une adresse ? Ce dictionnaire entre nombres et actions — l'interface exacte par laquelle un programme commande le silicium — porte un nom et fera l'objet du chapitre suivant : le **jeu d'instructions**.

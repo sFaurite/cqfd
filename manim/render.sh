@@ -36,7 +36,19 @@ render() {
 }
 
 # ============================ VOS SCÈNES ============================
+# — cours « maths »
 render build_naturals.py BuildNaturals build-naturals
+# — cours « processeurs » (de l'atome au système d'exploitation)
+render mosfet_switch.py   MosfetSwitch    mosfet-switch
+render energy_bands.py    EnergyBands     energy-bands
+render pn_junction.py     PNJunction      pn-junction
+render cmos_inverter.py   CmosInverter    cmos-inverter
+render nand_universal.py  NandUniversal   nand-universal
+render binary_addition.py BinaryAddition  binary-addition
+render d_flip_flop.py     DFlipFlop       d-flip-flop
+render fetch_execute.py   FetchExecute    fetch-execute
+render virtual_memory.py  VirtualMemory   virtual-memory
+render boot_sequence.py   BootSequence    boot-sequence
 # ===================================================================
 
 echo "Terminé. Vidéos dans $OUT :"

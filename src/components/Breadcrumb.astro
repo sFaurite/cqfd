@@ -19,7 +19,7 @@ const premierDeLaPartie = partie.chapitres[0]?.path ?? '/';
     <li aria-hidden="true" class="sep">›</li>
     {course && (
       <>
-        <li><a href={course.home}>{course.logo} {course.id === 'maths' ? 'Maths' : 'Physique'}</a></li>
+        <li><a href={course.home}>{course.logo} {course.short}</a></li>
         <li aria-hidden="true" class="sep">›</li>
       </>
     )}

@@ -1,0 +1,54 @@
+---
+/**
+ * PipelineDiagram — chronogramme de Gantt illustrant le pipeline d'un processeur.
+ *
+ * Cinq étages classiques (IF, ID, EX, MEM, WB) sont représentés par des couleurs.
+ * Lignes = instructions, colonnes = cycles d'horloge. Deux modes :
+ *   - séquentiel : chaque instruction occupe 5 cycles l'un après l'autre ;
+ *   - pipeline : chaque instruction démarre un cycle après la précédente (diagonale).
+ * Un bouton facultatif insère une bulle (stall) sur une instruction pour illustrer
+ * un aléa de données. Les indicateurs donnent le nombre total de cycles et
+ * l'accélération obtenue par rapport au mode séquentiel.
+ */
+---
+
+<div class="iw" data-iw="pipeline-diagram">
+  <div class="iw__head"><span class="tag">Interactif</span> Pipeline d'instructions (chronogramme de Gantt)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols3">
+    <div class="iw__row">
+      <label for="pd-n">Nombre d'instructions</label>
+      <input id="pd-n" type="range" min="1" max="6" step="1" value="4" data-n />
+      <output data-out-n>4</output>
+    </div>
+    <div class="iw__row">
+      <label for="pd-pipe">Pipeline activé</label>
+      <input id="pd-pipe" type="checkbox" checked data-pipe />
+      <output data-out-pipe>oui</output>
+    </div>
+    <div class="iw__row">
+      <label for="pd-hazard">Aléa de données</label>
+      <button id="pd-hazard" type="button" data-hazard>insérer une bulle ⦸</button>
+      <output data-out-hazard>0</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">cycles totaux</span> <b data-out-cycles></b></span>
+    <span class="iw__chip"><span class="k">accélération</span> <b data-out-speedup></b></span>
+  </div>
+  <p class="iw__note">
+    Chaque instruction traverse cinq étages : <strong>IF</strong> (lecture de l'instruction),
+    <strong>ID</strong> (décodage et lecture des registres), <strong>EX</strong> (calcul dans l'ALU),
+    <strong>MEM</strong> (accès mémoire) et <strong>WB</strong> (écriture en retour).
+    En mode <em>séquentiel</em>, une instruction attend la fin de la précédente : 5 cycles chacune.
+    En mode <em>pipeline</em>, une nouvelle instruction démarre à chaque cycle, ce qui superpose les
+    étages en diagonale et rapproche le débit de l'idéal d'<strong>une instruction par cycle</strong>.
+    Le bouton <em>insérer une bulle</em> ajoute un <em>stall</em> : l'instruction concernée patiente un
+    cycle (aléa de données), ce qui décale les suivantes et réduit l'accélération.
+    Modèle idéalisé : conventions d'organisation, sans détailler la logique de transfert (forwarding).
+  </p>
+</div>
+
+<script>
+  import './PipelineDiagram.client.ts';
+</script>

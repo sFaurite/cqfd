@@ -1,0 +1,41 @@
+---
+/**
+ * CmosInverter — l'inverseur CMOS (la fonction logique NON).
+ * Un PMOS (en haut, vers V_DD) et un NMOS (en bas, vers la masse) ont leurs
+ * grilles reliées à l'entrée A ; la sortie Y est le nœud entre les deux.
+ * A = 0 → PMOS passant, NMOS bloqué → Y tiré vers V_DD (Y = 1).
+ * A = 1 → PMOS bloqué, NMOS passant → Y tiré vers la masse (Y = 0).
+ * À tout instant un seul transistor conduit : aucun chemin V_DD→GND, donc
+ * pas de courant statique. C'est le tout premier « calcul » : le NON logique.
+ */
+---
+
+<div class="iw" data-iw="cmos-inverter">
+  <div class="iw__head"><span class="tag">Interactif</span> L’inverseur CMOS — la fonction NON</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 11"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="ci-a">Entrée A</label>
+      <button id="ci-a" type="button" data-toggle>A = 0</button>
+      <output data-out-state>PMOS passant — Y tiré vers V_DD</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">entrée A</span> <b data-out-a>0</b></span>
+    <span class="iw__chip"><span class="k">sortie Y</span> <b data-out-y>1</b></span>
+    <span class="iw__chip"><span class="k">courant statique</span> <b data-out-i>0</b></span>
+  </div>
+  <p class="iw__note">
+    Cliquez sur le bouton pour basculer l’entrée A entre 0 et 1. Les deux transistors sont
+    complémentaires : pour A = 0, le PMOS conduit (en vert) et tire la sortie Y vers V<sub>DD</sub>
+    (niveau 1) ; pour A = 1, le NMOS conduit et tire Y vers la masse (niveau 0). À chaque instant,
+    <em>exactement un</em> transistor est passant : il n’existe jamais de chemin direct
+    V<sub>DD</sub>→GND, d’où l’absence de courant statique. La sortie vaut donc toujours
+    l’inverse de l’entrée : c’est la fonction logique <strong>NON</strong>. (Modèle idéalisé :
+    on néglige les fuites et le bref courant de commutation.)
+  </p>
+</div>
+
+<script>
+  import './CmosInverter.client.ts';
+</script>

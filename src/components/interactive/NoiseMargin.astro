@@ -1,0 +1,43 @@
+---
+/**
+ * NoiseMargin — marges de bruit et régénération du signal numérique.
+ * Une échelle verticale de tension (0..V_DD normalisé) découpe trois zones :
+ * « 0 logique » (sous V_IL), « zone interdite » (entre V_IL et V_IH, en rouge)
+ * et « 1 logique » (au-dessus de V_IH). On choisit une tension d'entrée idéale
+ * (0..1) et une amplitude de bruit ; la tension réelle = entrée + bruit. Tant que
+ * le bruit reste sous la marge, la sortie est régénérée en un 0/1 propre.
+ */
+---
+
+<div class="iw" data-iw="noise-margin">
+  <div class="iw__head"><span class="tag">Interactif</span> Marges de bruit et régénération du signal numérique</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="nm-in">Tension d’entrée idéale (0 → 1)</label>
+      <input id="nm-in" type="range" min="0" max="1" step="0.01" value="1" data-in />
+      <output data-out-in>1,00</output>
+    </div>
+    <div class="iw__row">
+      <label for="nm-noise">Amplitude de bruit</label>
+      <input id="nm-noise" type="range" min="0" max="0.5" step="0.01" value="0.15" data-noise />
+      <output data-out-noise>0,15</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">tension réelle V<sub>in</sub></span> <b data-out-vin></b></span>
+    <span class="iw__chip"><span class="k">sortie régénérée</span> <b data-out-out></b></span>
+    <span class="iw__chip"><span class="k">marge restante</span> <b data-out-marge></b></span>
+  </div>
+  <p class="iw__note">
+    La tension réelle vaut l’entrée idéale plus le bruit. Tant qu’elle reste sous V<sub>IL</sub> ou
+    au-dessus de V<sub>IH</sub>, la sortie est ramenée à un <em>0</em> ou un <em>1</em> propre : le
+    numérique se <em>régénère</em>. Si le bruit dépasse la marge (V<sub>IH</sub>−1 côté « 1 », ou
+    0−V<sub>IL</sub> côté « 0 »), la tension tombe dans la zone interdite et la sortie devient
+    <em>indéterminée</em>. (Modèle idéalisé : seuils V<sub>IL</sub>=0,30 et V<sub>IH</sub>=0,70 choisis par convention.)
+  </p>
+</div>
+
+<script>
+  import './NoiseMargin.client.ts';
+</script>

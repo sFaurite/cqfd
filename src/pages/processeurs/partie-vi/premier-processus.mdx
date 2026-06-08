@@ -1,0 +1,101 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le premier processus et la pile complète"
+chapter: premier-processus
+description: "init / l’ordonnanceur démarrent : la synthèse, de l’électron au système d’exploitation."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import BootSequence from '../../../components/interactive/BootSequence.astro';
+
+## Le noyau crée le premier processus
+
+Au chapitre précédent, le noyau a pris le pouvoir : il s'exécute en mode privilégié, la <Prereq href="/processeurs/partie-vi/mode-protege-mmu">MMU traduit chaque adresse virtuelle</Prereq> et la table des pages protège la mémoire. Mais un noyau seul ne **sert** à rien : il est l'arbitre, pas le joueur. Pour qu'un ordinateur *fasse* quelque chose, il faut au moins un programme **utilisateur**. Le tout dernier geste du démarrage consiste donc à fabriquer ce programme : le **premier processus**.
+
+<Hypotheses titre="Ce que le noyau tient déjà en main (acquis du chapitre MMU)">
+1. **Mode privilégié actif** : le noyau s'exécute au niveau le plus haut et contrôle seul le matériel.
+2. **MMU et pagination en service** : toute adresse manipulée est *virtuelle* ; la table des pages traduit et protège.
+3. **Exceptions/traps installées** : un vecteur d'exceptions est en place — c'est lui qui permettra, plus bas, les interruptions et les appels système.
+4. **Horloge programmable disponible** : un compteur matériel peut être armé pour lever une interruption périodique.
+
+Tout ce que ce chapitre construit s'appuie *uniquement* sur ces acquis — rien n'est invoqué avant d'avoir été posé.
+</Hypotheses>
+
+<Encart type="intuition" titre="Le noyau allume une bougie, puis se met en retrait">
+Pensez au noyau comme à un régisseur de théâtre : il a installé les décors (la mémoire), réglé les lumières (les interruptions), verrouillé les loges (la protection). Mais il ne monte pas sur scène. Il allume une première bougie — le processus `init` — puis recule dans les coulisses. C'est cette bougie qui, à son tour, en allumera mille autres : les services, l'interface, vos applications.
+</Encart>
+
+Un **processus**, c'est un programme *en train de s'exécuter*, doté de son propre espace d'adressage virtuel. Le noyau construit pour lui une table des pages neuve, y charge le code d'un programme stocké sur le disque (sous Linux, le fichier `/sbin/init`), place le pointeur d'instruction sur sa première ligne, **rétablit le mode utilisateur**, et lui rend la main. <Badge niveau="fonde">Le principe est nécessaire : un noyau en mode privilégié ne peut produire de travail utile qu'en transférant l'exécution à du code non privilégié, isolé par la MMU. Sans ce premier saut vers l'espace utilisateur, la machine resterait inerte.</Badge>
+
+Le *nom* et le *contenu* de ce premier processus, eux, ne sont pas imposés par la physique. Historiquement c'est `init` ; les Linux modernes lancent `systemd`, BSD lance son propre `init`, Android son `init` à lui. <Badge niveau="implementation">`init` vs `systemd` vs autre : c'est un choix de distribution et de firmware, pas une loi. En revanche, que le tout premier processus porte le **PID 1** est une convention universelle des systèmes Unix — non une nécessité physique.</Badge>
+
+## L'ordonnanceur : partager un seul CPU
+
+Le processus 1 va en engendrer d'autres. Très vite, il y aura plus de processus *prêts à tourner* que de cœurs disponibles. Comment un unique cœur, qui ne sait exécuter **qu'une instruction à la fois**, peut-il faire tourner cent programmes « en même temps » ?
+
+La réponse boucle directement sur deux briques déjà posées : l'**horloge** et les **interruptions**. On programme un compteur matériel pour qu'il lève une interruption à intervalle régulier — disons toutes les quelques millisecondes. À chaque « tic », le CPU interrompt le processus courant, bascule en mode noyau, et l'**ordonnanceur** (*scheduler*) choisit le prochain processus à servir, restaure son contexte (registres, table des pages) et lui rend la main.
+
+<Encart type="plusloin" titre="Pourquoi l'interruption d'horloge est indispensable">
+Sans interruption périodique, un processus utilisateur qui ne rendrait *jamais* la main — une boucle infinie — gèlerait la machine pour toujours : le noyau, n'étant pas exécuté, ne pourrait pas reprendre le contrôle. C'est l'horloge qui garantit que le noyau **reprend forcément** la main, qu'on le veuille ou non. On parle d'ordonnancement **préemptif**. La préemption transforme une suite d'exécutions séquentielles en une **illusion de simultanéité** : chaque programme avance par petites tranches, si rapprochées que l'utilisateur ne voit qu'un déroulement fluide.
+</Encart>
+
+<Resultat label="Multitâche préemptif">
+
+$$ \text{horloge} \;\xrightarrow{\text{interruption}}\; \text{noyau} \;\xrightarrow{\text{scheduler}}\; \text{processus suivant} $$
+
+<Badge niveau="fonde" slot="badge">Que la reprise de contrôle par le noyau exige un signal asynchrone indépendant du processus courant est nécessaire : c'est exactement le rôle de l'interruption d'horloge. Un cœur suivant un seul flot séquentiel ne peut s'interrompre lui-même « de l'intérieur ».</Badge>
+</Resultat>
+
+*Quel* processus est choisi, et *à quelle* fréquence on découpe le temps, relèvent en revanche de la décision d'ingénieur. <Badge niveau="convention">La politique d'ordonnancement (tourniquet, priorités, équité, temps réel) et la durée du quantum sont des choix de conception, réglables, propres à chaque OS.</Badge>
+
+## Les appels système : la frontière contrôlée
+
+Un processus utilisateur est volontairement **impuissant** : il ne peut ni écrire sur le disque, ni allouer de la mémoire physique, ni parler à une carte réseau — toutes ces opérations exigent le mode privilégié. Comment, alors, ouvre-t-il un fichier ? Il **demande** au noyau de le faire pour lui. C'est l'**appel système** (*syscall*).
+
+Le mécanisme réutilise l'exception/trap déjà rencontrée. Le programme range un numéro de service et ses arguments dans des registres convenus, puis exécute une instruction spéciale (`syscall`, `svc`, `int 0x80`…) qui provoque délibérément une **trap** : le CPU bascule en mode noyau, à une adresse fixée d'avance par le noyau. Celui-ci vérifie la demande, l'exécute si elle est légitime, puis rend la main en mode utilisateur. <Badge niveau="fonde">Que la *seule* manière de franchir la frontière utilisateur → noyau soit une trap menant à un point d'entrée contrôlé par le noyau est nécessaire : c'est la définition même de la protection. Sinon, n'importe quel programme deviendrait tout-puissant.</Badge>
+
+<Encart type="intuition" titre="Le guichet blindé">
+Imaginez une banque. Les clients (processus) ne peuvent pas entrer dans la salle des coffres. Ils glissent un formulaire sous une vitre blindée (la trap), à un *unique* guichet (le point d'entrée syscall). L'employé (le noyau) lit la demande, vérifie l'identité, et n'agit que si tout est en règle. La vitre ne s'ouvre jamais : seuls des formulaires passent. C'est cette discipline — un point de passage unique et contrôlé — qui rend le système à la fois sûr et utile.
+</Encart>
+
+Le *catalogue* exact des services, lui, varie. <Badge niveau="implementation">La liste et la numérotation des syscalls (read, write, open, mmap, fork…) diffèrent selon l'OS et l'architecture ; ce sont des conventions d'interface, pas des lois.</Badge> Une fois ce guichet ouvert, `init` peut s'en servir pour lire ses fichiers de configuration, puis **engendrer** (sous Unix, par `fork` puis `exec`) tous les autres processus : le journal système, le serveur graphique, le shell, votre navigateur. L'espace utilisateur prend vie.
+
+<Tournant titre="Tournant : l'arbitre fait entrer les joueurs">
+Jusqu'ici, depuis le reset, chaque maillon était **seul maître** de la machine à son tour — firmware, bootloader, puis noyau se passaient un contrôle exclusif. À l'instant où `init` démarre et où le guichet des syscalls s'ouvre, ce régime change de nature : pour la première fois, **plusieurs flots d'exécution coexistent**, et la frontière user/noyau devient permanente. On quitte le récit linéaire du démarrage pour le régime stationnaire du système d'exploitation. C'est moins une nouvelle loi qu'un **nouveau cadre de fonctionnement** — celui dans lequel l'ordinateur passera tout le reste de sa vie allumée.
+</Tournant>
+
+## Synthèse : remonter toute la pile
+
+Nous y voici. Reconstituons d'un trait toute la chaîne, du caillou au système d'exploitation. À chaque maillon, une seule question : la **physique** l'imposait-elle, ou l'**ingénieur** l'a-t-il choisi ?
+
+<VideoManim src="boot-sequence" scene="BootSequence" titre="De l'électron au système" legende="La frise du démarrage : reset, firmware, bootloader, noyau, puis le premier processus." />
+
+| Maillon | Statut | Pourquoi |
+|---|---|---|
+| Niveaux d'énergie atomiques | **fonde** | La quantification est imposée par la mécanique quantique. |
+| Semiconducteur dopé | **fonde** | Bandes et porteurs découlent de la structure cristalline ; le *type* de dopant est, lui, choisi. |
+| Jonction PN | **fonde** | Le redressement naît de la diffusion des porteurs — physique pure. |
+| Transistor MOSFET | **fonde** | L'effet de champ impose la commande par tension. |
+| Lecture « interrupteur » | **convention** | On *choisit* de ne retenir que deux états. |
+| Logique CMOS, portes | **convention** | Associer NMOS/PMOS, le jeu de portes : choix d'ingénierie. |
+| Circuits, additionneur, ALU | **convention** | Architecture assemblée à partir des portes. |
+| Bascules, mémoires, <Prereq href="/processeurs/partie-iv/machines-etats">machines à états</Prereq> | **fonde** (bistabilité) | Le bouclage *crée* la mémorisation — physique du circuit. *Organiser* le séquencement, lui, est un choix. |
+| Datapath + contrôle | **convention** | Découpage chemin de données / unité de commande. |
+| Modèle von Neumann, ISA | **convention** | Code et données dans une même mémoire ; le jeu d'instructions est décrété. |
+| Firmware, bootloader | **convention** | Séquence de démarrage propre à chaque machine. |
+| Noyau, mémoire virtuelle | **convention** | Mode protégé et MMU : choix d'organisation, appuyés sur du matériel. |
+| Premier processus, syscalls | **fonde** (principe) | Sauter en mode utilisateur et franchir la frontière par trap : nécessaire. Le *contenu* (init, table des syscalls) est implémentation. |
+
+À manipuler vous-même cette frise complète, étage par étage :
+
+<BootSequence />
+
+Le motif est limpide : la **physique** fonde le bas de la pile — l'atome, le dopage, la jonction, le transistor, et jusqu'à la bistabilité d'une bascule sont ce qu'ils sont, on ne les négocie pas. Puis, dès qu'on *lit* le transistor comme un interrupteur, l'**ingénieur** prend le relais : presque tout l'édifice numérique, des portes au noyau, est une cathédrale de conventions, chacune posée pour une raison, chacune révisable. Et au sommet, le premier processus referme la boucle en s'appuyant à nouveau sur des nécessités logiques — non sur de la physique, mais sur la logique stricte de la protection et de l'exécution séquentielle.
+
+Un système d'exploitation tourne sur un caillou de silicium. Entre l'électron piégé dans son niveau d'énergie et la fenêtre qui s'ouvre sur votre écran, chaque maillon a été soit **posé** comme une hypothèse ou une convention assumée, soit **déduit** de ce qui précédait. Il n'y a, nulle part dans la chaîne, de magie — seulement de la physique qu'on respecte et des choix qu'on assume. C'est tout le pari de ce cours : à aucun étage nous n'avons fait passer une convention pour une nécessité, ni une nécessité pour un caprice. Le silicium calcule, et nous savons désormais, ligne à ligne, pourquoi.

@@ -1,0 +1,123 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L’inverseur CMOS : le premier calcul"
+chapter: inverseur-cmos
+description: "NMOS et PMOS en tandem réalisent la fonction NON, sans courant statique. Le premier calcul fait de transistors."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import CmosInverter from '../../../components/interactive/CmosInverter.astro';
+
+## Deux transistors complémentaires, un seul fil de sortie
+
+Le chapitre précédent nous a laissés avec un outil et une promesse. L'outil : le <Prereq href="/processeurs/partie-ii/mosfet-interrupteur">MOSFET vu comme un interrupteur commandé par une tension</Prereq>. La promesse : associer un NMOS et un PMOS pour qu'**un seul des deux conduise à la fois**, et obtenir ainsi notre première fonction logique sans gaspiller d'énergie. Tenons-la.
+
+Posons d'abord, noir sur blanc, ce que nous admettons en entrant dans ce chapitre — tout le reste en sera déduit.
+
+<Hypotheses titre="Ce dont nous partons">
+1. **Le MOSFET est un interrupteur idéal commandé en tension** : passant (résistance faible $R_{\text{on}}$) ou bloqué (résistance immense $R_{\text{off}}$), selon sa grille. <Badge niveau="idealise">Idéalisation établie au chapitre précédent : un vrai transistor a un seuil flou et une zone de transition continue ; on travaille loin du seuil.</Badge>
+2. **NMOS et PMOS sont complémentaires** : à grille haute, le NMOS conduit et le PMOS bloque ; à grille basse, l'inverse. <Badge niveau="fonde">Conséquence de l'inversion des dopages, démontrée au chapitre sur le MOSFET.</Badge>
+3. Une **alimentation continue** fournit deux références de tension stables : $V_{DD}$ (le « haut ») et la masse (le « bas »). <Badge niveau="convention">Choix de cadre : on convient que $V_{DD}$ vaut « 1 » et la masse « 0 » (logique positive).</Badge>
+</Hypotheses>
+
+Rappelons les deux pièces, en insistant sur leur **complémentarité** — c'est tout le sel de l'affaire.
+
+<Encart type="rappel" titre="NMOS et PMOS : commandes inversées">
+Les deux transistors réagissent de façon **opposée** à la même tension de grille :
+
+- **NMOS** : conduit quand sa grille est **haute** ($V_{GS} \ge V_{th}$), bloqué quand elle est basse. On le place côté **masse**.
+- **PMOS** : c'est le miroir. Il conduit quand sa grille est **basse** (sa tension grille-source est suffisamment négative), bloqué quand elle est haute. On le place côté **alimentation** $V_{DD}$.
+
+Cette inversion de comportement vient de l'inversion des dopages : le PMOS conduit par des trous, le NMOS par des électrons. <Badge niveau="fonde">Symétrie de construction établie au chapitre précédent : inverser les dopages inverse la commande.</Badge>
+</Encart>
+
+Posons d'emblée le cadre dans lequel nous travaillons, car le choix de cette architecture n'a rien d'inévitable.
+
+<Tournant titre="Tournant : on choisit la logique complémentaire">
+La physique ne nous oblige pas à construire nos portes avec **deux** transistors complémentaires. On pourrait câbler un seul NMOS avec une résistance de rappel (logique « NMOS »), ou tout autre montage. Ici nous **adoptons** la stratégie **CMOS** — *Complementary MOS* — qui consiste à mettre face à face un réseau de PMOS (vers $V_{DD}$) et un réseau de NMOS (vers la masse), agencés pour ne jamais conduire ensemble. C'est un choix d'ingénieur, pas une nécessité ; mais nous allons voir *pourquoi* il a écrasé toutes les alternatives. <Badge niveau="convention">La technologie CMOS est le standard dominant de l'industrie — un choix, justifié par ses propriétés, non une loi de la nature.</Badge>
+</Tournant>
+
+## Le montage : PMOS en haut, NMOS en bas
+
+Voici l'inverseur, la plus simple des portes CMOS. On empile deux transistors entre l'alimentation et la masse, et on les commande par la **même** entrée :
+
+- le **PMOS** en haut, sa source reliée à $V_{DD}$ (le « 1 ») ;
+- le **NMOS** en bas, sa source reliée à la **masse** (le « 0 ») ;
+- les **deux grilles** sont reliées ensemble à l'entrée $A$ ;
+- les **deux drains** sont joints au nœud de sortie $Y$.
+
+L'entrée $A$ pilote donc simultanément les deux interrupteurs — mais comme ils sont complémentaires, elle en ouvre toujours un et en ferme l'autre. C'est exactement ce que nous cherchions.
+
+## Analyse des deux cas : la table de vérité tombe toute seule
+
+Parcourons les deux seules entrées possibles, en lisant chaque transistor comme un interrupteur.
+
+**Cas $A = 0$ (entrée basse).** La grille basse **ferme** le PMOS (il conduit) et **bloque** le NMOS (ouvert). Il existe alors un chemin fermé de $V_{DD}$ jusqu'à $Y$, et aucun chemin de $Y$ vers la masse. La sortie est **tirée vers $V_{DD}$** : $Y = 1$.
+
+**Cas $A = 1$ (entrée haute).** La grille haute **ferme** le NMOS (il conduit) et **bloque** le PMOS (ouvert). Cette fois $Y$ est relié à la masse, et coupé de $V_{DD}$. La sortie est **tirée vers la masse** : $Y = 0$.
+
+Dans les deux cas, $Y$ vaut le **contraire** de $A$. Résumons :
+
+| $A$ | PMOS (haut) | NMOS (bas) | Nœud $Y$ relié à | $Y$ |
+|:---:|:-----------:|:----------:|:----------------:|:---:|
+| 0   | passant     | bloqué     | $V_{DD}$         | 1   |
+| 1   | bloqué      | passant    | masse            | 0   |
+
+<Resultat label="L'inverseur réalise le NON logique">
+
+$$ Y = \overline{A} = \text{NON } A $$
+
+<Badge niveau="fonde" slot="badge">Déduit, sans aucune hypothèse nouvelle, du seul comportement d'interrupteur complémentaire des deux transistors. La complémentarité garantit que la sortie est toujours connectée à exactement une des deux références.</Badge>
+</Resultat>
+
+Remarquez la beauté de la chose : nous n'avons rien calculé d'analogique, aucune tension intermédiaire. Nous avons juste suivi *quel interrupteur est fermé*, et la fonction NON est apparue.
+
+## Le coup de génie : aucun courant statique
+
+Voici le point qui justifie la domination du CMOS, et il vaut la peine qu'on s'y arrête.
+
+Dans chacun des deux états stables, **un seul** des deux transistors conduit ; l'autre est bloqué. Or pour qu'un courant continu coule de $V_{DD}$ vers la masse, il faudrait un chemin **entièrement fermé** entre les deux. Ce chemin traverse obligatoirement les deux transistors en série. Et comme l'un est toujours ouvert, **ce chemin n'existe jamais** à l'état stable.
+
+<Encart type="calcul" titre="Pourquoi le courant statique est nul">
+Le courant de $V_{DD}$ à la masse traverse PMOS *puis* NMOS, en **série**. En idéalisant chaque transistor par une résistance $R_{\text{on}}$ (passant, faible) ou $R_{\text{off}}$ (bloqué, immense), le courant statique vaut
+
+$$ I_{\text{stat}} = \frac{V_{DD}}{R_{\text{haut}} + R_{\text{bas}}} $$
+
+Dans l'état $A=0$ : $R_{\text{haut}} = R_{\text{on}}$ mais $R_{\text{bas}} = R_{\text{off}} \to \infty$, donc le dénominateur diverge et $I_{\text{stat}} \to 0$. Dans l'état $A=1$ : c'est l'inverse, $R_{\text{haut}} = R_{\text{off}} \to \infty$, et de nouveau $I_{\text{stat}} \to 0$. Dans les deux cas, c'est le transistor **bloqué** (le grand $R_{\text{off}}$) qui domine la somme au dénominateur et étrangle le courant.
+
+<Resultat label="Courant statique de l'inverseur">
+
+$$ I_{\text{stat}} \approx \frac{V_{DD}}{R_{\text{off}}} \approx 0 $$
+
+<Badge niveau="fonde" slot="badge">Conséquence logique directe : un transistor toujours bloqué interrompt le seul chemin $V_{DD}\to$ masse. Pas de chemin fermé, pas de courant continu.</Badge>
+</Resultat>
+</Encart>
+
+<Encart type="intuition" titre="Deux vannes en série, jamais ouvertes ensemble">
+Imaginez un tuyau vertical entre un réservoir (en haut) et un évier (en bas), avec deux vannes en série. Le montage est conçu pour que, au repos, l'une soit toujours fermée. Résultat : l'eau ne s'écoule jamais en continu — elle ne bouge **qu'au moment précis où l'on bascule** d'une configuration à l'autre, le temps que les deux vannes se croisent. C'est exactement ce que fait le CMOS : il ne « dépense » de l'énergie qu'aux **commutations**.
+</Encart>
+
+Faut-il en conclure que l'inverseur CMOS consomme *zéro* ? Non, et ce serait malhonnête de le laisser croire. Deux nuances :
+
+- Pendant la **transition** de $A$, il existe un bref instant où les deux transistors sont *partiellement* passants à la fois : un mince courant de court-circuit passe, et surtout il faut **charger ou décharger** la capacité du nœud de sortie. C'est la **consommation dynamique**, proportionnelle à la fréquence de commutation. <Badge niveau="idealise">Le modèle « interrupteur parfait » ignore cet instant intermédiaire ; la réalité dissipe de l'énergie à chaque basculement, $E \sim C\,V_{DD}^2$.</Badge>
+- Un transistor « bloqué » réel **fuit** un peu ($R_{\text{off}}$ est grand mais fini). <Badge niveau="implementation">Ce courant de fuite dépend du nœud technologique et devient non négligeable sur les puces très fines ; il n'a rien d'universel.</Badge>
+
+L'essentiel demeure : à l'état stable, **pas de courant qui coule pour rien**. C'est cette propriété — déduite, pas postulée — qui a rendu possibles les processeurs à des milliards de transistors sans qu'ils fondent.
+
+## À manipuler
+
+Basculez l'entrée et observez quel transistor conduit, où va la sortie, et l'absence de chemin direct entre $V_{DD}$ et la masse :
+
+<CmosInverter />
+
+<VideoManim src="cmos-inverter" scene="CmosInverter" titre="L’inverseur CMOS" legende="NMOS et PMOS en tandem réalisent la fonction NON, sans courant statique." />
+
+## Et maintenant ?
+
+Nous tenons notre première brique de calcul : la porte **NON**, propre et économe. Mais une porte isolée ne « calcule » rien tant que nous n'avons pas décidé, explicitement, ce que signifient un « 0 » et un « 1 » en termes de tensions, ni comment garantir qu'un signal reste lisible malgré le bruit. Avant d'empiler des portes, il nous faut donc poser franchement la **convention numérique** : travailler en 0/1, et formaliser cette abstraction. C'est l'objet du chapitre suivant.

@@ -1,0 +1,40 @@
+---
+/**
+ * StateMachine — machine à états finis, exemple du tourniquet (péage).
+ * Deux états (VERROUILLÉ / DÉVERROUILLÉ) dessinés comme deux nœuds reliés par des
+ * flèches de transition étiquetées par l'entrée. L'état courant est surligné, la
+ * flèche empruntée est animée à chaque entrée, et un petit journal indique la
+ * dernière entrée et son effet.
+ */
+---
+
+<div class="iw" data-iw="state-machine">
+  <div class="iw__head"><span class="tag">Interactif</span> Machine à états finis — le tourniquet</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="sm-coin">Insérer une pièce</label>
+      <button id="sm-coin" type="button" data-coin>Pièce</button>
+    </div>
+    <div class="iw__row">
+      <label for="sm-push">Pousser le bras</label>
+      <button id="sm-push" type="button" data-push>Pousser</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">État</span> <b data-out-etat>VERROUILLÉ</b></span>
+    <span class="iw__chip"><span class="k">Dernier</span> <b data-out-last>—</b></span>
+  </div>
+  <p class="iw__note">
+    Un tourniquet de péage est une machine à états finis : deux états seulement,
+    <b>VERROUILLÉ</b> et <b>DÉVERROUILLÉ</b>. Une <em>pièce</em> déverrouille, une
+    <em>poussée</em> reverrouille ; toute autre combinaison laisse l'état inchangé
+    (boucle sur lui-même). Un registre qui mémorise l'état + de la logique qui
+    calcule le prochain état = un automate : c'est le séquenceur d'un circuit. Le
+    comportement est <b>déterministe</b> : même état + même entrée ⇒ même résultat.
+  </p>
+</div>
+
+<script>
+  import './StateMachine.client.ts';
+</script>

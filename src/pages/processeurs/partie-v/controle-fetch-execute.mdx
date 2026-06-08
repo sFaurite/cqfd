@@ -1,0 +1,128 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L’unité de contrôle : fetch–decode–execute"
+chapter: controle-fetch-execute
+description: "Le cycle qui anime tout : chercher l’instruction, la décoder, l’exécuter — une instruction après l’autre."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import MiniCpu from '../../../components/interactive/MiniCpu.astro';
+
+## Animer la machine
+
+Nous avons un corps : le <Prereq href="/processeurs/partie-v/datapath">chemin de données</Prereq> sait additionner, comparer, déplacer des mots entre registres et mémoire. Mais ce corps est inerte. À chaque instant, des dizaines de **signaux de contrôle** attendent une valeur : quel registre lire ? quelle opération demander à l'ALU ? faut-il écrire le résultat, et où ? Tant que personne ne fixe ces signaux, le datapath ne fait rien d'utile. Il lui manque un **chef d'orchestre**. Ce chef, c'est l'**unité de contrôle**, et ce chapitre montre qu'elle n'est rien d'autre qu'une **machine à états** qui répète éternellement le même geste.
+
+<Encart type="intuition" titre="Un musicien qui lit une partition">
+Imaginez un pianiste qui déchiffre une partition inconnue. Il pose les yeux sur la mesure courante (où en suis-je ?), *lit* la note, *comprend* ce qu'elle demande, *joue* — puis son regard glisse à la mesure suivante. Lire, comprendre, jouer, avancer. Recommencer. Un processeur fait exactement cela, des milliards de fois par seconde : la partition est le programme en mémoire, le doigt qui suit la portée est un compteur, et « jouer » signifie piloter le datapath. Tout le secret tient dans la régularité de ce battement.
+</Encart>
+
+<Hypotheses titre="Ce qu'on réutilise pour ce chapitre">
+1. **Architecture von Neumann** : programme et données vivent dans la même mémoire, et une instruction se désigne par son **adresse** (hypothèse posée à l'ouverture de la partie).
+2. Le <Prereq href="/processeurs/partie-v/datapath">datapath</Prereq> existe et obéit à un faisceau de **signaux de contrôle** combinatoires.
+3. La notion de <Prereq href="/processeurs/partie-iv/machines-etats">machine à états finis</Prereq> (FSM) — registre d'état + logique d'état suivant + logique de sortie — est acquise.
+
+Tout le cycle d'exécution se **déduit** de ces trois acquis ; nous n'ajoutons aucune loi physique nouvelle.
+</Hypotheses>
+
+## Le cycle fondamental découle de von Neumann
+
+Rappelons l'hypothèse structurante que nous avons admise : programme et données vivent dans **la même mémoire**, et une instruction se désigne par son **adresse**. De ce seul fait découle, sans choix supplémentaire, la nature du travail à accomplir. Pour exécuter une instruction, il faut nécessairement, et dans cet ordre :
+
+1. **Chercher** (*fetch*) l'instruction — donc connaître son adresse, et la lire en mémoire ;
+2. **Décoder** (*decode*) ce mot binaire — car la mémoire ne renvoie que des bits, dont il faut extraire le *sens* ;
+3. **Exécuter** (*execute*) — faire agir l'ALU ou la mémoire ;
+4. **Ranger** (*write-back*) le résultat là où l'instruction l'a prescrit.
+
+<Resultat label="Le cycle fetch–decode–execute">
+
+$$ \textbf{fetch} \;\rightarrow\; \textbf{decode} \;\rightarrow\; \textbf{execute} \;\rightarrow\; \textbf{write-back} \;\rightarrow\; \textbf{fetch} \;\rightarrow\; \cdots $$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe du modèle von Neumann : une instruction réside en mémoire et se désigne par adresse ; la lire, l'interpréter puis l'appliquer est logiquement obligatoire et ordonné.</Badge>
+</Resultat>
+
+Ce qui est **fondé**, c'est l'ordre logique « lire → interpréter → appliquer » : on ne peut pas exécuter ce qu'on n'a pas encore lu ni compris. C'est, au sens propre, le **battement de cœur** du processeur — la seule façon de faire travailler une mémoire qui mélange code et données.
+
+<Tournant titre="Quatre phases : une découpe de conception">
+Le *nombre* de phases et leurs frontières, eux, relèvent d'un **choix**. Séparer le *write-back* de l'*execute*, ou fusionner *fetch* et *decode*, donne des machines tout aussi correctes : c'est le concepteur qui tranche ce découpage. Nous adoptons ici la découpe classique en quatre temps parce qu'elle est la plus lisible.
+
+<Badge niveau="convention">L'ordre logique lire → interpréter → appliquer est imposé ; le **grain** du découpage (combien d'états, où placer les coupures) est une convention de conception, variable d'une architecture à l'autre.</Badge>
+</Tournant>
+
+## Le compteur de programme : où en sommes-nous ?
+
+Pour « chercher » une instruction, l'unité de contrôle doit savoir **laquelle**. Elle tient pour cela un registre dédié, le **compteur de programme** (*Program Counter*, PC), qui contient l'adresse de l'instruction courante. <Badge niveau="convention">L'existence de registres dédiés (PC, registre d'instruction IR) et leur rôle exact sont des choix d'organisation : le modèle von Neumann impose qu'une adresse soit mémorisée quelque part, pas qu'on lui consacre tel registre nommé.</Badge>
+
+La phase *fetch* se décompose alors, étape par étape :
+
+<Encart type="calcul" titre="Anatomie d'un fetch">
+Soit $\text{PC}$ l'adresse courante et $M[\cdot]$ le contenu de la mémoire. Le *fetch* exécute deux micro-actions.
+
+On charge l'instruction lue à l'adresse PC dans le **registre d'instruction** IR, où elle restera disponible pendant tout le décodage :
+
+$$ \text{IR} \leftarrow M[\text{PC}] $$
+
+Puis on fait pointer le compteur vers l'instruction *suivante*, par défaut la contiguë :
+
+$$ \text{PC} \leftarrow \text{PC} + 1 $$
+
+</Encart>
+
+<Resultat label="Séquencement par défaut">
+
+$$ \text{PC} \leftarrow \text{PC} + 1 $$
+
+<Badge niveau="fonde" slot="badge">Un programme stocké en mémoire est une suite ordonnée ; en l'absence de saut, l'instruction suivante est l'adresse contiguë. Le « +1 » est en unités d'instruction — l'incrément réel en octets dépend de la taille du mot.</Badge>
+</Resultat>
+
+Pourquoi incrémenter *avant* d'exécuter ? Parce qu'ainsi, quand l'instruction courante sera un **branchement**, elle n'aura qu'à *écraser* PC pour rediriger le flot. Le cas normal (avancer) est ainsi traité une fois pour toutes, et les sauts deviennent de simples exceptions à la règle. <Badge niveau="convention">Incrémenter PC pendant le fetch est une astuce de conception (le « cas normal » câblé une fois pour toutes) ; d'autres machines calculent l'adresse suivante autrement. Le résultat fonctionnel est identique.</Badge>
+
+## Decode : transformer des bits en ordres
+
+Le mot chargé dans IR contient un champ **opcode** (le « quoi faire ») et des champs d'opérandes (« sur quoi »). Décoder, c'est faire passer ces bits dans un réseau combinatoire qui produit, pour ce cycle précis, **toutes les valeurs des signaux de contrôle** : quel sélecteur de MUX activer, quelle opération imposer à l'ALU, faut-il autoriser une écriture registre, faut-il lire ou écrire la mémoire.
+
+<Badge niveau="fonde">Le décodeur est une fonction logique pure de l'opcode (et, le cas échéant, de l'état courant) vers les signaux de contrôle : c'est de la logique combinatoire, comme une grande table de vérité.</Badge> Sa table *exacte* — quel opcode produit quels signaux — est, elle, le jeu d'instructions de la puce. <Badge niveau="implementation">Le format des opcodes et la liste des signaux dépendent entièrement de l'architecture (x86, ARM, RISC-V…).</Badge>
+
+## L'unité de contrôle EST une machine à états
+
+Mettons bout à bout les phases. À chaque étape, l'unité de contrôle se trouve dans un **état** (« je suis en train de chercher », « de décoder », « d'exécuter »…), produit des sorties (les signaux de contrôle de cet état) et, au front d'horloge, **transite** vers l'état suivant. C'est mot pour mot la définition d'une <Prereq href="/processeurs/partie-iv/machines-etats">machine à états finis</Prereq>.
+
+<Resultat label="Nature de l'unité de contrôle">
+
+$$ \text{unité de contrôle} \;=\; \text{FSM} \;:\; (\text{état},\, \text{opcode}) \longmapsto (\text{signaux de contrôle},\, \text{état suivant}) $$
+
+<Badge niveau="fonde" slot="badge">Piloter un cycle ordonné à étapes successives, c'est par définition réaliser une machine à états : la formalisation ne laisse pas d'alternative.</Badge>
+</Resultat>
+
+Cette FSM est l'élément **séquentiel** ; le datapath qu'elle commande est l'élément **opérationnel**. Leur danse, cadencée par l'horloge, est tout le processeur.
+
+<VideoManim src="fetch-execute" scene="FetchExecute" titre="Le cycle fetch–decode–execute" legende="Chercher l’instruction, la décoder, l’exécuter, ranger le résultat — puis recommencer." />
+
+## Les branchements : casser la séquence
+
+Le « PC ← PC+1 » fait avancer en ligne droite. Mais un programme doit pouvoir **tester** et **boucler**. Une instruction de branchement le permet en faisant, dans sa phase *execute*, autre chose que calculer : elle **remplace** la valeur préparée du PC par une **adresse cible**.
+
+$$ \text{si condition vraie} \;:\; \text{PC} \leftarrow \text{adresse cible} \qquad \text{sinon} \;:\; \text{PC inchangé (déjà PC+1)} $$
+
+<Badge niveau="fonde">Détourner le flot, c'est par construction écrire dans le PC une valeur autre que l'incrément. Boucles, tests et appels de fonction se réduisent tous à cette unique opération : modifier le compteur de programme.</Badge>
+
+## Microcode : des micro-programmes cachés
+
+Certaines instructions sont trop riches pour tenir en un cycle (un « multiplie puis additionne en mémoire » par exemple). On les réalise alors comme de **petits programmes internes** : une suite de micro-instructions élémentaires, stockée dans une mémoire de contrôle, que la FSM déroule. C'est le **microcode**.
+
+<Badge niveau="implementation">Le découpage d'une instruction en micro-opérations, son éventuel microcode, sont propres à chaque puce et parfois modifiables par mise à jour du firmware (*microcode update*). Rien d'universel : une autre architecture pourra câbler directement la même instruction.</Badge>
+
+## Voir le cœur battre
+
+Place à l'expérience. Le composant ci-dessous exécute **pas à pas** un vrai petit programme. Observez le PC désigner l'instruction, l'IR la capturer, l'ALU travailler, les registres et la mémoire se modifier — puis le cycle reprendre. C'est le fetch–decode–execute, en chair et en bits :
+
+<MiniCpu />
+
+## Et après ? Chevaucher les cycles
+
+Notre machine exécute une instruction **entièrement** avant d'en chercher la suivante : pendant le *decode*, l'étage de *fetch* dort ; pendant l'*execute*, le décodeur dort. Quel gaspillage. L'idée suivante, décisive pour la vitesse, sera de faire travailler tous les étages **en même temps** sur des instructions différentes — chercher la n+1 pendant qu'on exécute la n. Ce chevauchement porte un nom : le **pipeline**, et c'est l'objet du chapitre suivant.

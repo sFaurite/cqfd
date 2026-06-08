@@ -1,0 +1,51 @@
+---
+/**
+ * TwosComplement — codage des entiers signés en complément à deux.
+ * On choisit une valeur entière (curseur) et une largeur (4 ou 8 bits).
+ * Le composant affiche les n cases de bits (du MSB = bit de signe, à gauche,
+ * au LSB, à droite), le poids de chaque colonne (−2^{n−1} pour le MSB,
+ * +2^k sinon) et la somme pondérée qui redonne la valeur. Pour une valeur
+ * négative, il illustre la construction « inverser tous les bits de |x|,
+ * puis ajouter 1 ». Une roue circulaire (mod 2^n) montre l'enroulement
+ * (… 7 → −8 …) avec un curseur sur la valeur courante.
+ */
+---
+
+<div class="iw" data-iw="twos-complement">
+  <div class="iw__head"><span class="tag">Interactif</span> Complément à deux : codage des entiers signés</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="tc-val">Valeur entière</label>
+      <input id="tc-val" type="range" min="-128" max="127" step="1" value="-6" data-val />
+      <output data-out-val>-6</output>
+    </div>
+    <div class="iw__row">
+      <label for="tc-bits">Largeur</label>
+      <select id="tc-bits" data-bits>
+        <option value="4">4 bits</option>
+        <option value="8" selected>8 bits</option>
+      </select>
+      <output data-out-range>-128..127</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">décimal</span> <b data-out-dec></b></span>
+    <span class="iw__chip"><span class="k">binaire</span> <b data-out-bin></b></span>
+    <span class="iw__chip"><span class="k">hexadécimal</span> <b data-out-hex></b></span>
+  </div>
+  <p class="iw__note">
+    Réglez la valeur et la largeur (4 bits → −8 à 7, 8 bits → −128 à 127). Le bit de poids fort
+    (à gauche, en évidence) est le <em>bit de signe</em> : son poids vaut −2<sup>n−1</sup>, tous
+    les autres ont un poids positif +2<sup>k</sup>. La <em>somme pondérée</em> des bits redonne la
+    valeur. Pour un nombre négatif, on retrouve son code en inversant tous les bits de sa valeur
+    absolue puis en ajoutant 1. La roue (modulo 2<sup>n</sup>) montre l'enroulement : juste après
+    la plus grande valeur positive, on retombe sur la plus petite valeur négative. Cette convention
+    rend l'addition signée <em>identique</em> à l'addition non signée — c'est pourquoi elle est
+    universellement utilisée. Statut : convention.
+  </p>
+</div>
+
+<script>
+  import './TwosComplement.client.ts';
+</script>

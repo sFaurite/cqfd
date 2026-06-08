@@ -1,0 +1,40 @@
+---
+/**
+ * PNJunction — une jonction PN polarisée vue comme une diode.
+ * Région P (trous, +) à gauche, région N (électrons, −) à droite, séparées par
+ * la zone de déplétion centrale. La largeur de cette zone et le passage du
+ * courant dépendent de la tension appliquée V : en direct (V au-delà du seuil)
+ * la zone se rétrécit et un courant s'établit ; en inverse ou faible, la zone
+ * reste large et le courant est nul (effet diode, conduction dans un seul sens).
+ */
+---
+
+<div class="iw" data-iw="pn-junction">
+  <div class="iw__head"><span class="tag">Interactif</span> La jonction PN : une diode polarisée</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="pn-v">Tension appliquée V</label>
+      <input id="pn-v" type="range" min="-1" max="1" step="0.02" value="0" data-v />
+      <output data-out-v>0,00 V</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">seuil V<sub>seuil</sub></span> <b>0,60 V</b></span>
+    <span class="iw__chip"><span class="k">état</span> <b data-out-etat></b></span>
+    <span class="iw__chip"><span class="k">courant I</span> <b data-out-i></b></span>
+  </div>
+  <p class="iw__note">
+    Glissez la tension. En <em>polarisation directe</em> (V au-delà de
+    V<sub>seuil</sub> &approx; 0,6 V), la zone de déplétion se rétrécit : trous et
+    électrons traversent la jonction, un courant s'établit. En
+    <em>polarisation nulle ou inverse</em> (V &lt; V<sub>seuil</sub>), la zone de
+    déplétion reste large et bloque les porteurs : aucun courant. La diode ne
+    conduit donc que dans <strong>un seul sens</strong>, ce que résume sa
+    caractéristique I(V) tracée en haut à droite.
+  </p>
+</div>
+
+<script>
+  import './PNJunction.client.ts';
+</script>

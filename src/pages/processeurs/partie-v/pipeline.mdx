@@ -1,0 +1,116 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le pipeline et les aléas"
+chapter: pipeline
+description: "Traiter les instructions à la chaîne pour accélérer ; gérer les aléas et prédire les branchements."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import PipelineDiagram from '../../../components/interactive/PipelineDiagram.astro';
+
+## Une instruction à la fois, c'est du gâchis
+
+Au chapitre précédent, nous avons vu le processeur battre au rythme du cycle <Prereq href="/processeurs/partie-v/controle-fetch-execute">fetch–decode–execute</Prereq> : il **cherche** une instruction, la **décode**, l'**exécute** — puis recommence. Décomposons un peu plus finement le travail réel d'une instruction. On distingue classiquement cinq étapes :
+
+| Étage | Sigle | Ce qu'il fait |
+|---|---|---|
+| Fetch | **IF** | lire l'instruction en mémoire |
+| Decode | **ID** | la décoder, lire les registres sources |
+| Execute | **EX** | faire le calcul dans l'ALU |
+| Memory | **MEM** | lire/écrire la mémoire de données |
+| Write-back | **WB** | écrire le résultat dans un registre |
+
+<Badge niveau="convention">Ce découpage en exactement cinq étages est un choix d'architecture (le pipeline « RISC classique »). D'autres processeurs en ont 3, 14, ou plus de 20.</Badge>
+
+Le problème saute aux yeux. Pendant qu'une instruction occupe l'étage EX (l'ALU travaille), l'unité de lecture (IF), le décodeur (ID), l'accès mémoire (MEM) et le banc de registres en écriture (WB) sont **inactifs**. À chaque cycle, un seul des cinq circuits travaille ; les quatre autres regardent passer le temps. On paie cinq blocs de silicium pour n'en faire fonctionner qu'un.
+
+<Encart type="intuition" titre="La chaîne de montage">
+Imaginez une usine qui assemble des voitures avec cinq postes : châssis, moteur, portes, peinture, contrôle. La méthode « naïve » : une voiture entre, passe par les cinq postes, ressort — et seulement alors la suivante entre. Pendant que la voiture est à la peinture, l'ouvrier du châssis se tourne les pouces. Henry Ford a eu l'idée géniale : ne **jamais** laisser un poste vide. Dès que la voiture quitte le poste « châssis », la suivante y entre. À plein régime, **cinq voitures** sont en chantier simultanément, une à chaque poste, et une voiture finie sort à chaque pas de temps. C'est exactement le **pipeline**.
+</Encart>
+
+## Recouvrir : faire avancer cinq instructions de front
+
+L'idée du pipeline est de **superposer** les instructions. Au cycle où l'instruction $I_1$ passe en ID, on lance $I_2$ en IF. Au cycle suivant, $I_1$ est en EX, $I_2$ en ID, $I_3$ en IF. Une fois le pipeline rempli, les cinq étages travaillent **tous en même temps**, chacun sur une instruction différente.
+
+Tout le raisonnement qui suit — latence, débit, accélération — repose sur quelques hypothèses de travail qu'il faut poser explicitement avant de calculer.
+
+<Hypotheses titre="Le modèle de pipeline qu'on adopte">
+1. **Cinq étages équilibrés.** Le travail d'une instruction se découpe en $k = 5$ étapes (IF, ID, EX, MEM, WB) de **durée égale**, chacune tenant en un cycle d'horloge. <Badge niveau="idealise">En pratique les étages ne sont jamais parfaitement équilibrés : c'est le plus lent qui fixe la période d'horloge, et le découpage ajoute des registres de pipeline (coût et délai supplémentaires).</Badge>
+2. **Un étage = une instruction par cycle.** À chaque cycle, chaque étage peut accueillir une nouvelle instruction ; les étages sont séparés par des registres qui mémorisent l'état entre cycles.
+3. **Issue d'un branchement connue après EX.** On suppose que la condition d'un saut est calculée par l'ALU à l'étage EX. <Badge niveau="implementation">L'étage où le branchement est résolu (ID, EX ou MEM) dépend de la microarchitecture ; il fixe le nombre de cycles perdus en cas d'erreur.</Badge>
+</Hypotheses>
+
+<PipelineDiagram />
+
+Manipulez le chronogramme ci-dessus : en mode séquentiel, les instructions se suivent en escalier vertical (5 cycles chacune) ; en mode pipeline, elles se décalent en **diagonale**, une nouvelle entrant à chaque cycle.
+
+## Débit contre latence : ne pas confondre
+
+Voici le point conceptuel le plus important du chapitre. Le pipeline n'accélère **pas** une instruction individuelle. Il faut bien distinguer deux grandeurs.
+
+<Resultat label="Latence et débit">
+
+$$ \text{Latence} = 5 \text{ cycles (inchangée)} \qquad \text{Débit} \to 1 \text{ instruction / cycle.} $$
+
+<Badge niveau="fonde" slot="badge">Toute instruction doit traverser les cinq étages : sa durée propre reste 5 cycles. Seul change le rythme auquel les instructions *terminées* sortent.</Badge>
+</Resultat>
+
+La **latence** est le temps que met une instruction pour traverser toute la chaîne : toujours 5 cycles, qu'on pipeline ou non. Le **débit** (throughput) est le nombre d'instructions terminées par unité de temps. Sans pipeline, on en termine une tous les 5 cycles. Avec pipeline plein, on en termine une **à chaque cycle**.
+
+<Encart type="calcul" titre="Le débit tend vers une instruction par cycle">
+Pour $N$ instructions dans un pipeline à $k = 5$ étages, comptons les cycles. Il faut $k$ cycles pour que la **première** instruction ressorte (remplissage), puis chaque instruction suivante sort un cycle plus tard, soit $N-1$ cycles supplémentaires :
+
+$$ T_{\text{pipeline}} = k + (N - 1) = 5 + (N - 1) = N + 4 \text{ cycles.} $$
+
+Sans pipeline, chaque instruction monopolise les 5 cycles :
+
+$$ T_{\text{séquentiel}} = k \cdot N = 5N \text{ cycles.} $$
+
+Le **CPI** (cycles par instruction) en pipeline vaut donc
+
+$$ \text{CPI} = \frac{T_{\text{pipeline}}}{N} = \frac{N + 4}{N} = 1 + \frac{4}{N} \xrightarrow[N \to \infty]{} 1. $$
+
+Et l'**accélération** (rapport des durées) vaut
+
+$$ \frac{T_{\text{séquentiel}}}{T_{\text{pipeline}}} = \frac{5N}{N + 4} = \frac{5}{1 + 4/N} \xrightarrow[N \to \infty]{} 5 = k. $$
+
+<Resultat label="CPI idéal du pipeline">
+
+$$ \text{CPI}_{\text{idéal}} \longrightarrow 1, \qquad \text{accélération} \longrightarrow k = 5. $$
+
+<Badge niveau="idealise" slot="badge">Limite atteinte seulement si le pipeline ne se vide jamais : flot d'instructions infini, aucun aléa, étages parfaitement équilibrés. Le terme $4/N$ (coût de remplissage) et les aléas dégradent ce chiffre.</Badge>
+</Resultat>
+</Encart>
+
+Le facteur $4/N$ est le **coût de démarrage** : sur peu d'instructions, le remplissage du pipeline pèse lourd. Et il y a pire.
+
+## Les aléas : le prix inévitable du recouvrement
+
+Dès qu'on fait avancer plusieurs instructions de front, on crée des conflits. Ils sont de trois familles.
+
+<Tournant titre="Une nécessité, puis des choix">
+L'**existence** des aléas n'est pas une option : c'est une conséquence logique du recouvrement. Si plusieurs instructions partagent le même circuit ou dépendent l'une de l'autre, on *ne peut pas* toujours les laisser progresser sans heurt. <Badge niveau="fonde">Inévitable : dès qu'on superpose des opérations partageant ressources et données, des conflits apparaissent nécessairement.</Badge> En revanche, les **parades** ci-dessous (forwarding, bulles, prédiction) sont des choix d'ingénierie, et leur efficacité dépend de la puce.
+</Tournant>
+
+**Aléa structurel.** Deux instructions veulent le même circuit au même cycle (par exemple un accès mémoire unique servant à la fois IF et MEM). Parade : dupliquer la ressource (caches d'instructions et de données séparés). <Badge niveau="convention">Choix d'architecture : on dimensionne le matériel pour éviter le conflit.</Badge>
+
+**Aléa de données.** Une instruction a besoin d'un résultat qu'une instruction précédente n'a **pas encore écrit** (elle est encore dans le pipeline, avant WB). Deux réponses :
+- **Court-circuit (forwarding)** : on tire le résultat directement de la sortie de l'ALU et on le réinjecte à l'étage qui en a besoin, sans attendre l'écriture en registre. <Badge niveau="implementation">Réseau de bypass câblé dans la puce ; son étendue varie d'un processeur à l'autre.</Badge>
+- **Bulle (stall)** : quand le court-circuit ne suffit pas, on insère un cycle d'attente — l'instruction patiente, les suivantes se décalent. <Badge niveau="convention">Solution de repli : on perd un cycle pour garantir la correction.</Badge> (Le bouton « insérer une bulle » du diagramme illustre exactement ce décalage.)
+
+**Aléa de contrôle.** Un **branchement** (saut conditionnel) décide quelle instruction lire ensuite — mais, sous notre hypothèse, on ne connaît la réponse qu'après l'étage EX. Or le pipeline a déjà commencé à charger les instructions suivantes ! Si le saut est pris, ces instructions étaient les mauvaises : il faut les **annuler** (vider le pipeline). Parade : la **prédiction de branchement** — la puce parie sur l'issue la plus probable et continue ; si le pari est juste, zéro perte ; sinon, on purge. <Badge niveau="implementation">Les prédicteurs (compteurs de saturation, tables d'historique) sont propres à chaque microarchitecture ; leur taux de réussite, souvent &gt;95 %, varie selon le code et la puce.</Badge>
+
+<Encart type="plusloin" titre="Le CPI réel">
+En présence d'aléas, le CPI s'écrit comme une somme de pénalités :
+
+$$ \text{CPI}_{\text{réel}} = 1 + \text{pénalités}_{\text{données}} + \text{pénalités}_{\text{contrôle}} + \dots $$
+
+Chaque bulle, chaque mauvaise prédiction ajoute des cycles « morts ». Tout l'art de l'architecte consiste à pousser ce CPI au plus près de 1 — sans jamais l'atteindre exactement. <Badge niveau="idealise">Le « CPI = 1 » est un horizon, pas une réalité mesurée.</Badge>
+</Encart>
+
+Le pipeline nous donne donc un processeur qui dévore les instructions presque une par cycle. Mais il suppose un flot d'instructions bien sage, prévu d'avance. Que se passe-t-il quand le **monde extérieur** frappe à la porte — une touche pressée, un disque prêt, une alarme ? Le processeur doit pouvoir **interrompre** ce qu'il fait pour réagir. C'est l'objet du chapitre suivant : les **interruptions**.

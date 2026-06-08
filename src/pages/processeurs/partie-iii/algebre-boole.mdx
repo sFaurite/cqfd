@@ -1,0 +1,146 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L’algèbre de Boole"
+chapter: algebre-boole
+description: "Deux valeurs, trois opérations (ET, OU, NON), des lois démontrables : le langage mathématique des circuits."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import LogicGate from '../../../components/interactive/LogicGate.astro';
+
+## Le bit ne suffit pas : il faut un calcul
+
+Nous avons un bit : un fil qui vaut $0$ ou $1$ selon sa tension (<Prereq href="/processeurs/partie-ii/abstraction-numerique">les niveaux logiques 0 et 1</Prereq>). Mais un bit isolé ne fait rien. La question est : comment **combiner** des bits pour produire de nouveaux bits ? Additionner, comparer, décider — tout cela demande des règles. Il nous faut une *algèbre* : un petit monde où l'on calcule, non pas sur des nombres réels, mais sur l'ensemble à deux éléments $\{0, 1\}$.
+
+La bonne nouvelle : ce monde existe, il est minuscule, et il est entièrement démontrable. C'est l'**algèbre de Boole**.
+
+<Tournant titre="Tournant : on choisit un formalisme">
+Attention, ici on pose un choix, on ne déduit plus. Le matériel nous a *imposé* deux niveaux de tension stables. Mais rien ne nous force à les appeler « $0$ » et « $1$ », ni à décrire leurs combinaisons par l'algèbre inventée par George Boole en 1854. Nous **adoptons** ce formalisme parce qu'il colle parfaitement à un support physique binaire — c'est une convention motivée, pas une nécessité. Une fois ce cadre choisi, en revanche, ses théorèmes deviennent strictement nécessaires : on ne peut plus en sortir.
+
+<Badge niveau="convention">Le choix d'un formalisme à deux valeurs et d'une logique « positive » ($1$ = vrai, tension haute) est une convention d'ingénierie.</Badge>
+</Tournant>
+
+<Hypotheses titre="Ce qu'on pose en entrant dans ce chapitre">
+1. L'ensemble des valeurs est $\mathbb{B} = \{0, 1\}$ — exactement deux éléments (convention adoptée ci-dessus).
+2. Trois opérations sont **définies** par leurs tables de vérité : la négation $\overline{a}$, le ET ($a \cdot b$) et le OU ($a + b$). Ces trois tables sont nos seuls axiomes.
+
+Tout le reste de ce chapitre — commutativité, distributivité, De Morgan, universalité du NAND — est **déduit** de ces trois tables par épuisement des cas. Rien d'autre n'est admis.
+</Hypotheses>
+
+## Deux valeurs, trois opérations
+
+On se donne l'ensemble $\mathbb{B} = \{0, 1\}$ et trois opérations. Leur *définition* tient dans trois tables de vérité — une table de vérité énumère exhaustivement les sorties pour toutes les entrées possibles. Comme il n'y a que deux valeurs, l'énumération est finie : c'est ce qui rend tout démontrable.
+
+**NON** (négation, noté $\overline{a}$) inverse l'unique entrée :
+
+| $a$ | $\overline{a}$ |
+|:---:|:---:|
+| 0 | 1 |
+| 1 | 0 |
+
+**ET** (conjonction, noté $a \cdot b$ ou $a \wedge b$) vaut $1$ seulement si les deux entrées valent $1$ :
+
+| $a$ | $b$ | $a \cdot b$ |
+|:---:|:---:|:---:|
+| 0 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
+
+**OU** (disjonction, noté $a + b$ ou $a \vee b$) vaut $1$ dès qu'une entrée au moins vaut $1$ :
+
+| $a$ | $b$ | $a + b$ |
+|:---:|:---:|:---:|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 1 |
+
+<Encart type="intuition" titre="Pourquoi ces symboles « · » et « + » ?">
+Ce n'est pas un hasard. Sur $\{0,1\}$, le ET se comporte exactement comme une **multiplication** ($1\cdot 1 = 1$, sinon $0$) et le OU presque comme une **addition** ($0+0=0$, $0+1=1$)… avec UN écart capital : $1 + 1 = 1$ en Boole, pas $2$. Le OU n'est pas une vraie addition — il « sature ». Garder cette image en tête aide, mais ne l'oubliez jamais : ici il n'y a pas de retenue.
+</Encart>
+
+## Les lois : un terrain de jeu fermé
+
+À partir de ces trois tables, on **déduit** des identités vraies pour tout choix de $a, b, c \in \{0,1\}$. Chacune se vérifie en testant les quelques lignes possibles — c'est une déduction logique stricte, donc *fondée*.
+
+<Resultat label="Lois fondamentales de Boole">
+
+$$
+a \cdot b = b \cdot a \qquad a + b = b + a \qquad a + (b+c) = (a+b)+c
+$$
+
+<Badge niveau="fonde" slot="badge">Commutativité et associativité : vérifiables ligne à ligne sur les tables.</Badge>
+</Resultat>
+
+On a aussi les **éléments neutres et absorbants**, l'**idempotence**, la **complémentation** et la **distributivité** :
+
+$$
+a \cdot 1 = a \qquad a \cdot 0 = 0 \qquad a + 0 = a \qquad a + 1 = 1
+$$
+
+$$
+a \cdot a = a \qquad a + a = a \qquad a \cdot \overline{a} = 0 \qquad a + \overline{a} = 1
+$$
+
+$$
+a \cdot (b + c) = a\cdot b + a\cdot c \qquad a + (b \cdot c) = (a+b)\cdot(a+c)
+$$
+
+<Badge niveau="fonde">Toutes ces lois sont des théorèmes : chacune se prouve par épuisement des cas. Notez la deuxième distributivité ($+$ sur $\cdot$), qui n'a PAS d'équivalent en arithmétique ordinaire — preuve que Boole est un monde à part.</Badge>
+
+## Le joyau : les lois de De Morgan
+
+Les deux identités les plus utiles relient ET, OU et NON. Elles disent qu'une négation « traverse » une opération en la retournant :
+
+$$
+\overline{a \cdot b} = \overline{a} + \overline{b} \qquad \overline{a + b} = \overline{a} \cdot \overline{b}
+$$
+
+Intuitivement : « il est faux que les deux soient vrais » équivaut à « l'un au moins est faux ». Démontrons la première rigoureusement.
+
+<Encart type="calcul" titre="Preuve de De Morgan par table de vérité">
+On construit toutes les colonnes intermédiaires pour les $4$ combinaisons de $(a,b)$ et on compare la colonne $\overline{a \cdot b}$ à la colonne $\overline{a} + \overline{b}$.
+
+| $a$ | $b$ | $a\cdot b$ | $\overline{a\cdot b}$ | $\overline{a}$ | $\overline{b}$ | $\overline{a}+\overline{b}$ |
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| 0 | 0 | 0 | **1** | 1 | 1 | **1** |
+| 0 | 1 | 0 | **1** | 1 | 0 | **1** |
+| 1 | 0 | 0 | **1** | 0 | 1 | **1** |
+| 1 | 1 | 1 | **0** | 0 | 0 | **0** |
+
+Ligne par ligne, la 4ᵉ colonne ($\overline{a\cdot b}$) et la 7ᵉ ($\overline{a}+\overline{b}$) sont **identiques** : $1,1,1,0$. Les deux fonctions coïncident sur la totalité de leur domaine.
+
+$$
+\boxed{\;\overline{a \cdot b} = \overline{a} + \overline{b}\;}
+$$
+
+La seconde loi se démontre de la même manière (ou en l'appliquant à $\overline{a}, \overline{b}$ puis en niant). <Badge niveau="fonde" slot="badge">Égalité de deux fonctions sur un domaine fini, vérifiée exhaustivement : c'est une nécessité logique.</Badge>
+</Encart>
+
+## Des opérations aux portes
+
+Voilà le pont avec le matériel. Chaque opération booléenne se réalise par un circuit physique appelé **porte logique**, dont la table de vérité *est* la table de l'opération. Ces portes seront construites en CMOS au chapitre suivant ; pour l'instant, manipulez-les comme des boîtes noires fidèles à l'algèbre.
+
+<LogicGate />
+
+La correspondance opération ↔ porte est exacte : `NOT`, `AND`, `OR` calculent respectivement $\overline{a}$, $a\cdot b$, $a+b$.
+
+<Badge niveau="fonde">Une porte qui respecte sa table de vérité réalise exactement l'opération booléenne : l'adéquation est garantie par définition.</Badge>
+
+<Encart type="plusloin" titre="Avec quelle(s) porte(s) peut-on TOUT construire ?">
+Question de complétude : quel jeu minimal de portes suffit à exprimer *n'importe quelle* fonction booléenne ?
+
+- L'ensemble $\{\text{ET}, \text{OU}, \text{NON}\}$ est complet (toute table se met en forme normale disjonctive).
+- Mieux : grâce à De Morgan, $a+b = \overline{\overline{a}\cdot\overline{b}}$ — le OU se fabrique avec ET + NON. Donc $\{\text{ET}, \text{NON}\}$ suffit déjà.
+- Encore mieux : la porte **NON-ET** (`NAND`, $\overline{a\cdot b}$) est à elle seule *universelle*. On retrouve NON en posant $\overline{a} = \overline{a\cdot a}$, puis ET, puis OU. Idem pour `NOR`.
+
+<Badge niveau="fonde">La complétude de NAND est un théorème de l'algèbre de Boole.</Badge> <Badge niveau="implementation">Mais qu'une puce *préfère* le NAND tient à des raisons technologiques (en CMOS, NAND est plus simple et rapide que AND) : ça, c'est de l'implémentation.</Badge>
+</Encart>
+
+Nous tenons donc un calcul complet sur les bits, et une brique unique — le NAND — capable de tout exprimer. Reste à descendre d'un cran : **comment fabrique-t-on physiquement une porte avec des transistors ?** C'est l'objet du chapitre suivant, le CMOS.

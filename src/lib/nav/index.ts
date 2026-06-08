@@ -5,9 +5,10 @@
  */
 import { PARTIES as P_MATHS, type Partie, type Chapitre } from './_maths';
 import { PARTIES as P_PHYS } from './_physique';
+import { PARTIES as P_PROC } from './_processeurs';
 
 export type { Partie, Chapitre };
-export type CourseId = 'physique' | 'maths';
+export type CourseId = 'physique' | 'maths' | 'processeurs';
 
 /** Préfixe tous les `path` d'une arborescence par la base du cours. */
 function prefixer(parties: Partie[], base: string): Partie[] {
@@ -20,11 +21,14 @@ function prefixer(parties: Partie[], base: string): Partie[] {
 export const NAVS: Record<CourseId, Partie[]> = {
   physique: prefixer(P_PHYS, '/physique'),
   maths: prefixer(P_MATHS, '/maths'),
+  processeurs: prefixer(P_PROC, '/processeurs'),
 };
+
+const COURSE_IDS = Object.keys(NAVS) as CourseId[];
 
 export function courseIdFromPath(path: string): CourseId | null {
   const seg = path.replace(/^\//, '').split('/')[0];
-  return seg === 'physique' || seg === 'maths' ? (seg as CourseId) : null;
+  return (COURSE_IDS as string[]).includes(seg) ? (seg as CourseId) : null;
 }
 
 export function navFor(courseId: CourseId): Partie[] {

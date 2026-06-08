@@ -1,0 +1,58 @@
+---
+/**
+ * MiniCpu — mini-processeur à programme enregistré (architecture de von Neumann).
+ *
+ * Machine jouet déterministe : un accumulateur A, un compteur de programme PC,
+ * un registre d'instruction IR, un drapeau Z (zéro), et UNE seule mémoire de
+ * 16 octets (0..15) qui contient À LA FOIS le programme et les données — c'est
+ * tout l'intérêt du modèle de von Neumann.
+ *
+ * Encodage d'une instruction sur un octet : quartet haut = code-opération,
+ * quartet bas = adresse / opérande (0..15).
+ *   0x  HLT (arrêt)        1x  LDA a (A←mem[a])     2x  ADD a (A←A+mem[a])
+ *   3x  STA a (mem[a]←A)   4x  SUB a (A←A−mem[a])   5x  JMP a (PC←a)
+ *   6x  JZ  a (si Z PC←a)  7x  OUT (émet A)
+ * Le drapeau Z est mis à jour après chaque opération modifiant A.
+ *
+ * Le bouton « pas » exécute le cycle fetch → decode → execute phase par phase.
+ * Le bouton « exécuter » enchaîne automatiquement jusqu'au HLT (arrêtable).
+ */
+---
+
+<div class="iw" data-iw="mini-cpu">
+  <div class="iw__head"><span class="tag">Interactif</span> Mini-processeur à programme enregistré (von Neumann)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols3">
+    <div class="iw__row">
+      <label for="cpu-step">Cycle</label>
+      <button id="cpu-step" type="button" data-step>pas (fetch→decode→execute) ▶</button>
+    </div>
+    <div class="iw__row">
+      <label for="cpu-run">Automatique</label>
+      <button id="cpu-run" type="button" data-run>exécuter ⏩</button>
+    </div>
+    <div class="iw__row">
+      <label for="cpu-reset">Remise à zéro</label>
+      <button id="cpu-reset" type="button" data-reset>réinitialiser ↺</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">A</span> <b data-out-a></b></span>
+    <span class="iw__chip"><span class="k">PC</span> <b data-out-pc></b></span>
+    <span class="iw__chip"><span class="k">IR</span> <b data-out-ir></b></span>
+    <span class="iw__chip"><span class="k">phase</span> <b data-out-phase></b></span>
+  </div>
+  <p class="iw__note">
+    La <strong>mémoire unique</strong> (16 cases) contient le programme <em>et</em> les données :
+    c'est l'idée de <em>von Neumann</em>. À chaque <em>pas</em>, le processeur
+    <strong>charge</strong> l'instruction pointée par le compteur de programme PC (la case est
+    surlignée), <strong>décode</strong> le code-opération et l'adresse, puis <strong>exécute</strong>
+    en modifiant l'accumulateur A, la mémoire (case écrite mise en évidence) ou le PC. Le drapeau
+    <em>Z</em> vaut 1 quand A est nul. Le programme préchargé calcule 3 + 2 = 5 puis décrémente
+    en boucle, émettant 5, 4, 3, 2, 1 par l'instruction <em>OUT</em> avant de s'arrêter (<em>HLT</em>).
+  </p>
+</div>
+
+<script>
+  import './MiniCpu.client.ts';
+</script>

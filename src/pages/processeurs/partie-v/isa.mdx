@@ -1,0 +1,87 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le jeu d’instructions (ISA)"
+chapter: isa
+description: "Le contrat entre matériel et logiciel : opcodes, registres, encodage. Une convention (x86, ARM, RISC-V)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le contrat entre le matériel et le logiciel
+
+Nous avons un processeur : une <Prereq href="/processeurs/partie-v/von-neumann">machine de von Neumann</Prereq> qui lit des nombres en mémoire, les interprète comme des ordres et les exécute. Mais une question décisive est restée en suspens : **quels nombres veulent dire quoi ?** Quand le matériel lit le mot binaire `01001000`, comment sait-il s'il doit additionner, charger une valeur, ou sauter ailleurs ? La réponse n'est ni cachée ni magique : c'est un **accord publié**, fixé une fois pour toutes par le concepteur de la puce. Cet accord porte un nom — le **jeu d'instructions**, ou **ISA** (*Instruction Set Architecture*).
+
+<Tournant titre="Tournant : on ne déduit plus, on signe un contrat">
+Tout ce que nous avons construit jusqu'ici — le transistor, les portes, l'ALU, la mémoire — était **imposé** par la physique ou déduit par la logique. Ici, ce fil se rompt. Le jeu d'instructions est le **contrat** entre le matériel et le logiciel : la liste de ce que la puce **promet** d'exécuter, et la façon exacte dont chaque ordre s'écrit en binaire. Or ce contrat n'est pas dicté par la nature. **x86** (Intel/AMD), **ARM** (téléphones, Mac récents) et **RISC-V** (libre) définissent chacun le leur, incompatibles entre eux. Aucun n'est « le bon » : ce sont des accords humains. À partir d'ici, quand vous lisez « l'instruction `ADD` a tel encodage », comprenez : *on a décidé qu'il en serait ainsi*. <Badge niveau="convention">L'ISA tout entière — instructions, encodage, registres, modes d'adressage, boutisme — est un choix d'ingénierie. Elle pourrait être radicalement différente, et l'est d'une architecture à l'autre.</Badge>
+</Tournant>
+
+## Ce que l'ISA spécifie
+
+Un jeu d'instructions, c'est un document qui fixe quatre choses. **(1)** La liste des **instructions** disponibles et ce que chacune fait. **(2)** L'**encodage binaire** de chaque instruction : comment elle se découpe en champs (l'*opcode*, qui dit *quelle* opération, et les *opérandes*, qui disent *sur quoi*). **(3)** Les **registres** visibles du programmeur : ces quelques cases ultra-rapides à l'intérieur du processeur, nommées et numérotées par convention. **(4)** Les **modes d'adressage** : les manières autorisées de désigner une donnée (une constante écrite dans l'instruction, le contenu d'un registre, une case mémoire dont l'adresse est calculée…).
+
+S'y ajoute une convention sournoise mais cruciale : le **boutisme** (*endianness*). Un entier de 32 bits tient sur 4 octets. Faut-il ranger l'octet de poids fort en premier (**gros-boutiste**, *big-endian*) ou l'octet de poids faible en premier (**petit-boutiste**, *little-endian*) ? Les deux marchent ; il faut juste que tout le monde s'accorde. <Badge niveau="convention">Le boutisme est un pur choix d'ordre de rangement. x86 est petit-boutiste, l'ordre réseau (TCP/IP) est gros-boutiste ; ARM sait faire les deux. Aucune loi physique ne tranche.</Badge>
+
+<Encart type="intuition" titre="Une langue, pas une vérité">
+Pensez à l'ISA comme à une **langue**. Le français et le japonais expriment les mêmes idées avec des sons et une grammaire incompatibles ; ni l'un ni l'autre n'est « la vraie langue ». De même, `ADD` en ARM et `ADD` en x86 obtiennent une addition, mais les phrases binaires qui les portent n'ont rien en commun. Compiler un programme, c'est traduire d'une langue source (C, Rust…) vers la langue particulière que *cette* puce comprend. Changez de puce, vous changez de langue cible.
+</Encart>
+
+## Trois familles d'instructions
+
+Aussi vaste qu'un ISA puisse paraître, ses instructions se rangent en trois grandes familles. <Badge niveau="convention">Ce classement est un découpage pédagogique commode ; les ISA réels mêlent parfois les genres dans une même instruction.</Badge>
+
+| Famille | Rôle | Exemples typiques |
+|---|---|---|
+| **Calcul** | combiner des valeurs dans les registres | `ADD`, `SUB`, `AND`, `OR`, `SHL` |
+| **Accès mémoire** | échanger entre registres et mémoire | `LOAD` (lire), `STORE` (écrire) |
+| **Contrôle de flot** | décider *quelle instruction* exécuter ensuite | `JMP` (saut), `BEQ` (branchement si égal), `CALL` |
+
+La troisième famille est celle qui fait d'un calculateur un véritable *ordinateur* : sans branchement conditionnel, pas de « si… alors », pas de boucle, pas de décision. C'est elle qui transforme une liste figée d'opérations en un programme capable de réagir à ses propres résultats.
+
+## Langage machine et assembleur
+
+Le processeur ne lit que du binaire : c'est le **langage machine**. Mais `10110000 01100001` est illisible pour un humain. On lui associe donc, un pour un, une notation textuelle — l'**assembleur** — faite de **mnémoniques** comme `MOV AL, 97`. <Badge niveau="convention">L'assembleur n'est qu'une réécriture lisible du binaire ; la correspondance mnémonique ↔ encodage est, elle aussi, définie par l'ISA.</Badge> Assembleur et langage machine sont les **deux faces d'une même chose** : un *assembleur* (l'outil) traduit mécaniquement l'un dans l'autre, sans rien inventer.
+
+<Encart type="calcul" titre="Encodage d'une instruction de calcul (style RISC-V)">
+Prenons une instruction d'addition registre-à-registre : « ajoute le contenu de $x2$ et $x3$, range le résultat dans $x1$ », noté en assembleur `ADD x1, x2, x3`. Dans un format de type R sur 32 bits, les 32 bits se découpent en champs **convenus** :
+
+$$
+\underbrace{0000000}_{funct7}\ \underbrace{00011}_{rs2=x3}\ \underbrace{00010}_{rs1=x2}\ \underbrace{000}_{funct3}\ \underbrace{00001}_{rd=x1}\ \underbrace{0110011}_{opcode}
+$$
+
+Vérifions d'abord que le compte est bon : $7 + 5 + 5 + 3 + 5 + 7 = 32$ bits, soit exactement un mot d'instruction.
+
+Lecture champ par champ, de droite à gauche :
+
+- `opcode` (7 bits) $= 0110011$ : famille « opération registre-registre ».
+- `rd` (5 bits) $= 00001 = 1$ : registre **destination**, ici $x1$.
+- `funct3` (3 bits) et `funct7` (7 bits) : précisent l'opération exacte ; $000$ et $0000000$ signifient *addition* (le `funct7` $= 0100000$ donnerait au contraire la soustraction).
+- `rs1` $= 00010 = 2$ et `rs2` $= 00011 = 3$ : les deux registres **sources**, $x2$ et $x3$.
+
+Cinq bits pour désigner un registre, c'est $2^5 = 32$ registres adressables — exactement le nombre de registres entiers visibles en RISC-V.
+
+<Resultat label="Une instruction = des champs binaires concaténés">
+
+$$
+\texttt{ADD x1, x2, x3} \;\longrightarrow\; \texttt{0000000\,00011\,00010\,000\,00001\,0110011}_2 = \texttt{0x003100B3}
+$$
+
+<Badge niveau="convention" slot="badge">Largeur des champs, position de l'opcode, code de l'addition : tout est fixé par décret dans la spécification RISC-V. Une autre ISA encoderait la même addition tout autrement.</Badge>
+</Resultat>
+</Encart>
+
+## RISC contre CISC : deux philosophies
+
+Comment *choisir* son jeu d'instructions ? Deux grandes écoles s'affrontent. Le **CISC** (*Complex Instruction Set*, dont x86 est l'héritier) offre beaucoup d'instructions, certaines très riches, de longueurs variables — une seule instruction peut lire en mémoire, calculer et réécrire. Le **RISC** (*Reduced Instruction Set*, dont ARM et RISC-V) parie à l'inverse sur un petit nombre d'instructions simples, de **taille fixe**, où seuls `LOAD`/`STORE` touchent la mémoire. <Badge niveau="convention">Ce n'est pas « le simple contre le complexe a raison » : c'est un arbitrage entre simplicité du matériel, densité du code et facilité de décodage. Chaque camp a ses succès commerciaux.</Badge>
+
+## Un petit jeu suffit — et c'est un théorème
+
+Voici le point où l'on retrouve du **fondé**, au milieu de toutes ces conventions. On pourrait croire qu'un ISA puissant *exige* des centaines d'instructions. C'est faux. Un jeu d'instructions minuscule — savoir lire et écrire en mémoire, faire une opération arithmétique simple, et un **saut conditionnel** — suffit déjà à être **Turing-complet** : il peut, en principe, calculer tout ce qui est calculable. <Badge niveau="fonde">Résultat de calculabilité, démontré mathématiquement et indépendant de toute technologie : le pouvoir de calcul ne vient pas de la richesse de l'ISA, mais de la présence du branchement conditionnel et d'une mémoire en quantité suffisante.</Badge>
+
+C'est ce qui rend le contrat si précieux. Parce qu'il est **stable** et **public**, des couches entières peuvent s'appuyer dessus sans connaître la puce : un **compilateur** traduit n'importe quel langage vers ces quelques instructions ; un **système d'exploitation** orchestre les programmes en se reposant sur ce socle. Le silicium change tous les deux ans ; le contrat, lui, reste — et c'est pour ça que vos logiciels survivent aux générations de processeurs.
+
+Reste une dernière marche, la plus concrète de toutes. Nous savons maintenant *ce que* le matériel promet d'exécuter. Mais lorsqu'un mot binaire arrive, *comment* les transistors le réalisent-ils physiquement — comment l'opcode actionne-t-il l'ALU, et les champs de registres ouvrent-ils les bonnes portes ? C'est le rôle du **chemin de données**, que nous suivons au chapitre suivant.

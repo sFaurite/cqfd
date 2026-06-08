@@ -1,0 +1,96 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le silicium et le dopage (N et P)"
+chapter: silicium-dopage
+description: "Ajouter des impuretés crée des porteurs libres : type N (électrons) ou type P (trous)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le silicium pur : un cristal presque isolant
+
+Nous avons vu qu'un <Prereq href="/processeurs/partie-i/conducteurs-isolants">semi-conducteur possède un gap modéré</Prereq> : une bande interdite assez petite pour que l'agitation thermique fasse passer, de temps en temps, un électron dans la bande de conduction. Le silicium en est l'exemple emblématique. Mais avant d'en faire la matière première des transistors, il faut comprendre une chose : **le silicium pur est un piètre conducteur**. Tout l'art de la microélectronique consiste à le rendre conducteur *sur commande*, en y introduisant volontairement des impuretés. Cette opération s'appelle le **dopage**, et c'est elle qui donne au silicium ses deux personnalités, le type **N** et le type **P**.
+
+Commençons par le cristal pur. Chaque atome de silicium possède **4 électrons de valence**. Dans le cristal, il s'entoure de 4 voisins et partage avec chacun une paire d'électrons : ce sont les **liaisons covalentes**. <Badge niveau="fonde">La colonne IV du tableau périodique impose 4 électrons de valence ; la structure tétraédrique en découle.</Badge> À température nulle, tous les électrons sont engagés dans ces liaisons : aucun n'est libre de se déplacer, le cristal est un isolant parfait.
+
+<Encart type="intuition" titre="Une foule où tout le monde se tient par la main">
+Imaginez une immense ronde où chaque personne tient les mains de ses quatre voisins. Personne ne peut bouger : tous les bras sont occupés. Pour qu'un déplacement de charge — un courant — soit possible, il faut qu'une main se libère. Dans le silicium pur, seule l'agitation thermique peut, çà et là, casser une liaison. À température ambiante, cela arrive si rarement que le cristal reste quasi isolant.
+</Encart>
+
+À température ambiante ($\approx 300$ K), l'agitation thermique libère bien quelques électrons, mais en nombre dérisoire : environ $10^{10}$ porteurs par cm³, à comparer aux $\approx 5\times 10^{22}$ atomes par cm³. <Badge niveau="idealise">Ordre de grandeur pour le silicium intrinsèque à 300 K ; cette densité de porteurs varie exponentiellement avec la température et le gap.</Badge> Autrement dit, un atome sur plusieurs milliers de milliards seulement fournit un porteur. C'est très peu — et c'est précisément ce vide que le dopage va combler.
+
+<Tournant titre="Tournant : on introduit volontairement des impuretés">
+Jusqu'ici, la physique du cristal pur s'imposait à nous. Maintenant, **nous faisons un choix d'ingénieur** : nous décidons d'altérer le matériau en y substituant, çà et là, des atomes d'une autre espèce. La nature des impuretés (donneuses ou acceptrices) et leur concentration sont des **décisions de fabrication**, pas des nécessités physiques. Ce que la physique impose ensuite, c'est ce qui *arrive* à ces impuretés une fois placées dans le cristal.
+</Tournant>
+
+<Hypotheses titre="Le cadre adopté dans ce chapitre">
+1. **Substitution choisie (convention d'ingénieur).** On remplace une fraction des atomes de silicium par des atomes d'une autre colonne (V ou III). Le *choix* de l'impureté et sa *concentration* sont décidés, non imposés.
+2. **Le trou comme porteur effectif (idéalisation commode).** On modélise une liaison incomplète, et son déplacement collectif, par une unique « particule » de charge $+e$. C'est une description efficace, pas un objet fondamental.
+
+Tout le reste de la page (libération des porteurs, neutralité globale) est ensuite **déduit** de la physique du cristal.
+</Hypotheses>
+
+## Dopage de type N : les donneurs
+
+Remplaçons un atome de silicium par un atome de **phosphore** (ou d'arsenic), qui possède **5 électrons de valence**. Quatre d'entre eux complètent les 4 liaisons covalentes avec les voisins de silicium, exactement comme l'aurait fait le silicium remplacé. Mais le **cinquième électron** n'a plus de liaison à former : il reste très faiblement lié à son atome d'origine.
+
+L'énergie qui le retient est minuscule — bien plus petite que le gap. <Badge niveau="fonde">Cet électron surnuméraire occupe un niveau juste sous la bande de conduction ; l'écart est de quelques centièmes d'électron-volt (de l'ordre de $0{,}04$ à $0{,}05$ eV pour P ou As), très en dessous du gap du silicium ($\approx 1{,}1$ eV).</Badge> À température ambiante, l'agitation thermique suffit largement à l'arracher : il devient un **électron libre**, prêt à conduire. L'impureté qui *donne* cet électron s'appelle un **donneur**.
+
+<Resultat label="Effet d'un donneur">
+$$ \text{Si} \rightarrow \text{P (5 e}^-\text{) : 4 liaisons} + 1\ e^-\ \text{libre} \;\Longrightarrow\; \text{type N} $$
+<Badge niveau="fonde" slot="badge">Le déficit de liaison du 5ᵉ électron le libère à T ambiante : mécanisme imposé par la structure électronique.</Badge>
+</Resultat>
+
+Dans un cristal dopé N, les porteurs de charge sont essentiellement ces électrons : on les appelle les **porteurs majoritaires**. Quelques rares trous (créés par agitation thermique) subsistent : ce sont les **porteurs minoritaires**.
+
+## Dopage de type P : les accepteurs et le trou
+
+Faisons l'inverse : substituons un atome de **bore**, qui n'a que **3 électrons de valence**. Il ne peut former que 3 des 4 liaisons attendues : **il manque un électron**. Cette liaison incomplète constitue un **trou** — une place vide dans le réseau des liaisons. L'impureté qui *capture* un électron pour combler ce manque s'appelle un **accepteur**.
+
+Or ce trou n'est pas immobile. Un électron d'une liaison voisine peut sauter dedans pour la compléter… laissant alors un trou à *sa* place d'origine. De proche en proche, le trou se déplace dans le cristal **comme s'il était une charge positive mobile**.
+
+<Encart type="intuition" titre="La place vide qui voyage">
+Pensez à une rangée de sièges tous occupés, sauf un. La personne à côté de la place vide s'y déplace ; sa place devient vide à son tour ; le voisin suivant l'occupe, et ainsi de suite. Personne ne traverse toute la rangée — pourtant **la place vide, elle, voyage** d'un bout à l'autre. Le trou, c'est cette place vide. Il est plus commode de suivre le mouvement de l'unique vide que celui des milliers d'électrons qui se décalent chacun d'un cran.
+</Encart>
+
+Voilà le point délicat à manier avec honnêteté. Le trou se comporte **vraiment** comme un porteur de charge $+e$ : il dérive sous un champ électrique, transporte du courant, possède même une masse effective. <Badge niveau="fonde">Le trou est un porteur de charge positive bien réel au sens de son effet mesurable (courant, effet Hall).</Badge> Mais il ne faut pas s'y tromper : aucune charge positive ne se promène physiquement. <Badge niveau="idealise">Le « trou » est une description collective commode du déplacement, en sens inverse, des électrons de valence voisins. La particule positive est une fiction efficace, pas un objet fondamental.</Badge>
+
+<Resultat label="Effet d'un accepteur">
+$$ \text{Si} \rightarrow \text{B (3 e}^-\text{) : 3 liaisons} + 1\ \text{trou} \;\Longrightarrow\; \text{type P} $$
+<Badge niveau="fonde" slot="badge">La liaison manquante crée un trou mobile, porteur effectif positif.</Badge>
+</Resultat>
+
+Dans un cristal dopé P, les **majoritaires** sont les trous, et les **minoritaires** sont les rares électrons libres. La symétrie avec le type N est parfaite — à l'échange électron ↔ trou près.
+
+## Le cristal reste électriquement neutre
+
+On pourrait croire qu'en ajoutant des électrons libres (type N), on charge négativement le cristal. **Il n'en est rien**, et c'est essentiel. Lorsqu'un donneur libère son électron, l'atome de phosphore qui reste devient un **ion positif fixe**, accroché au réseau. La charge négative de l'électron mobile est exactement compensée par la charge positive de l'ion immobile.
+
+<Encart type="calcul" titre="Bilan de charge dans un cristal dopé N">
+Comptons, pour un atome donneur ionisé :
+
+$$ q_{\text{ion fixe}} = +e, \qquad q_{\text{électron libéré}} = -e. $$
+
+Charge totale apportée par ce donneur :
+
+$$ q_{\text{total}} = (+e) + (-e) = 0. $$
+
+Comme c'est vrai pour chaque donneur, et que le cristal pur de départ était neutre, l'ensemble reste neutre :
+
+$$ \boxed{\ \rho_{\text{globale}} = 0\ } $$
+
+Le dopage **redistribue** les charges (il crée des porteurs mobiles et des ions fixes) sans en **créer** : il déplace, il ne charge pas.
+</Encart>
+
+<Badge niveau="fonde">La neutralité électrique globale découle de la conservation de la charge : doper n'ajoute aucune charge nette.</Badge> Le même raisonnement vaut pour le type P : chaque accepteur ionisé devient un **ion négatif fixe**, compensé par le trou positif mobile. Retenez cette image : dans un semi-conducteur dopé, **des charges mobiles se baladent sur un fond d'ions fixes de signe opposé**, et le tout reste neutre.
+
+Une dernière précision : *combien* dope-t-on ? Les concentrations vont typiquement de $10^{15}$ à $10^{19}$ atomes dopants par cm³, soit une impureté pour quelques millions à quelques milliers d'atomes de silicium. <Badge niveau="implementation">Ces valeurs précises sont fixées par le procédé du fabricant ; elles règlent la conductivité et varient d'une zone à l'autre d'une même puce.</Badge>
+
+## Et si on accolait un N et un P ?
+
+Nous disposons maintenant de deux matériaux complémentaires : l'un riche en électrons mobiles, l'autre riche en trous mobiles, chacun neutre de son côté. Que se passe-t-il si on les met **en contact**, fabriquant un même cristal dont une moitié est dopée N et l'autre P ? Les électrons en excès d'un côté vont voir, juste à côté, une foule de trous qui ne demandent qu'à être comblés… La rencontre ne sera pas anodine : elle fait naître la **jonction PN**, la première brique qui sait laisser passer le courant dans un sens et le bloquer dans l'autre. C'est l'objet du chapitre suivant.

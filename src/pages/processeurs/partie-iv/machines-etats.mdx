@@ -1,0 +1,93 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les machines à états finis"
+chapter: machines-etats
+description: "Registre d’état + logique combinatoire = automate. Le séquenceur qui orchestrera le processeur."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import StateMachine from '../../../components/interactive/StateMachine.astro';
+
+## D'une horloge qui bat, un comportement qui avance
+
+Nous savons fabriquer deux briques aux rôles opposés. D'un côté, les <Prereq href="/processeurs/partie-iii/circuits-combinatoires">circuits combinatoires</Prereq> : leur sortie ne dépend que de leurs entrées **présentes**, sans aucune mémoire du passé. De l'autre, la <Prereq href="/processeurs/partie-iv/bascule-d-horloge">bascule D</Prereq> : à chaque front d'horloge, elle **fige** sa sortie sur la valeur de son entrée et la conserve jusqu'au front suivant. Le combinatoire calcule mais oublie ; la bascule se souvient mais ne calcule pas. La question de ce chapitre est : que se passe-t-il si on **reboucle** la sortie mémorisée vers l'entrée du calcul ?
+
+<Encart type="intuition" titre="La boucle qui fait avancer le monde">
+Imaginez un randonneur qui consulte une carte. La carte (le combinatoire) dit : « si tu es **ici** et que tu vois **ce panneau**, va **là** ». Le randonneur retient seulement *où il est* (la bascule). À chaque coup de sifflet (le front d'horloge), il regarde sa position et le panneau, lit la carte, et fait **un** pas vers la case suivante — où il attend le sifflet d'après. La carte ne change jamais ; c'est la position mémorisée qui évolue. Une suite de sifflets identiques engendre alors un **voyage** : un comportement organisé né d'impulsions toutes pareilles.
+</Encart>
+
+## Anatomie d'une machine à états finis
+
+Formalisons ce randonneur. Une **machine à états finis** (FSM, *finite state machine*) est faite de trois organes :
+
+1. Un **registre d'état** : un paquet de $n$ bascules D partageant la même horloge. Il mémorise l'**état courant**, un mot de $n$ bits. Comme $n$ est fini, il existe au plus $2^n$ états distincts — d'où le mot *finie*. <Badge niveau="fonde">Un registre de $n$ bascules ne peut coder que $2^n$ configurations : c'est une borne de dénombrement, pas un choix.</Badge>
+2. La **logique d'état suivant** : un circuit combinatoire qui, à partir de l'état courant et des **entrées**, calcule l'état qui sera chargé au prochain front. On le note $\delta$.
+3. La **logique de sortie** : un circuit combinatoire qui produit les **sorties** à partir de l'état (et parfois des entrées). On le note $\lambda$.
+
+Le câblage est une boucle synchrone : sortie du registre $\to$ logique $\delta$ $\to$ entrée du registre $\to$ (front d'horloge) $\to$ nouvelle sortie du registre.
+
+<Resultat label="Loi d'évolution d'une FSM">
+
+$$ s_{t+1} = \delta(s_t,\, e_t), \qquad y_t = \lambda(s_t,\, e_t) $$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe du rebouclage : la bascule charge $\delta(s_t,e_t)$ au front, donc $s_{t+1}$ est entièrement déterminé par $s_t$ et $e_t$.</Badge>
+</Resultat>
+
+Le point capital tient en un mot : **déterminisme**. Comme $\delta$ est un circuit combinatoire, à un couple (état, entrée) donné il associe **un seul** état suivant. Il n'y a pas d'ambiguïté, pas de tirage au sort : connaître $s_t$ et la suite des entrées suffit à prédire toute la trajectoire. <Badge niveau="fonde">Univocité de l'état suivant : une fonction combinatoire renvoie une valeur unique pour chaque entrée. La FSM est déterministe par construction.</Badge>
+
+<Encart type="rappel" titre="Pourquoi l'horloge évite la catastrophe">
+La boucle « sortie $\to$ logique $\to$ entrée » est une rétroaction : sans précaution, le nouvel état pourrait re-déclencher un calcul *avant* d'être stabilisé, créant des oscillations. La bascule D synchronise tout cela : elle ne **regarde** son entrée qu'à l'instant du front, puis la **verrouille** pendant tout le cycle. Le combinatoire a ainsi une période entière pour se stabiliser avant le prochain « cliché ». L'horloge transforme une boucle dangereuse en une suite d'instantanés propres — un pas, un seul, par front.
+</Encart>
+
+## Le diagramme d'états : la carte du randonneur
+
+On représente une FSM par un **diagramme d'états** : un graphe orienté où chaque **nœud** est un état, et chaque **flèche** une transition, étiquetée par l'entrée qui la déclenche (et, selon le style, par la sortie produite). C'est exactement la « carte » de notre randonneur — un dessin qui contient toute la fonction $\delta$.
+
+Prenons un **détecteur de séquence** : il reçoit un bit par cycle et doit allumer sa sortie dès qu'il a vu deux `1` consécutifs. Trois états suffisent :
+
+| État courant | Signification | Entrée `0` | Entrée `1` |
+|---|---|---|---|
+| `A` | aucun `1` en attente | $\to$ `A` | $\to$ `B` |
+| `B` | un `1` vu juste avant | $\to$ `A` | $\to$ `C` |
+| `C` | deux `1` (ou plus) vus | $\to$ `A` | $\to$ `C` |
+
+La sortie vaut `1` exactement dans l'état `C`. Vérifions sur l'entrée `0 1 1 0` en partant de `A` : `A` $\xrightarrow{0}$ `A` $\xrightarrow{1}$ `B` $\xrightarrow{1}$ `C` (sortie `1` !) $\xrightarrow{0}$ `A`. La séquence `11` est bien détectée au troisième bit, et la sortie retombe ensuite. <Badge niveau="fonde">Chaque transition du tableau est l'unique image de $\delta$ pour son couple (état, entrée) ; le comportement décrit est donc l'exécution littérale de la loi d'évolution.</Badge>
+
+## Moore ou Mealy : deux écoles, un même pouvoir
+
+Où lit-on la sortie ? Deux conventions coexistent.
+
+- **Moore** : la sortie ne dépend **que de l'état**, $y_t = \lambda(s_t)$. Dans le diagramme, on écrit la sortie *dans* le nœud. Notre détecteur ci-dessus est de style Moore : « sortie `1` $\iff$ état `C` ».
+- **Mealy** : la sortie dépend de **l'état ET de l'entrée**, $y_t = \lambda(s_t, e_t)$. On écrit la sortie *sur la flèche*. Le même détecteur en Mealy n'aurait que deux états, et déclencherait la sortie sur la transition « état `un 1 vu`, entrée `1` ».
+
+<Tournant titre="Ici, un choix de conception — pas une nécessité">
+Moore et Mealy ne sont pas deux vérités physiques : ce sont deux **façons de câbler** la logique de sortie, et l'ingénieur tranche selon ses priorités. Moore donne des sorties parfaitement synchrones (elles ne bougent qu'au front, jamais entre deux), au prix d'états parfois plus nombreux et d'un cycle de latence. Mealy réagit plus vite et économise des états, mais ses sorties peuvent frémir au gré des entrées en cours de cycle. On peut **toujours** traduire l'une en l'autre : elles reconnaissent les mêmes comportements. C'est donc une convention, pas une loi.
+</Tournant>
+
+<Badge niveau="convention">Moore vs Mealy : deux conceptions équivalentes en pouvoir d'expression. Le choix relève du compromis latence / nombre d'états / synchronisme, décidé par le concepteur.</Badge>
+
+## L'équivalence fondamentale, et le cœur du processeur
+
+Voici le théorème qui justifie tout ce chapitre. **Tout** circuit numérique synchrone — c'est-à-dire toute machine cadencée dont le comportement à un instant dépend de son passé *résumé en un nombre fini de bits* — **est** une FSM, et **toute** FSM se réalise avec un registre de bascules plus du combinatoire. Les deux descriptions sont une seule et même chose.
+
+<Resultat label="FSM ↔ comportement séquentiel synchrone">
+
+$$ \text{(registre d'état + logique } \delta,\lambda) \;\Longleftrightarrow\; \text{tout comportement séquentiel synchrone à mémoire finie} $$
+
+<Badge niveau="fonde" slot="badge">Sens direct : par construction une FSM est synchrone à mémoire finie. Sens réciproque : un comportement à mémoire finie n'a qu'un nombre fini de « situations » distinctes, que $n$ bascules suffisent à coder — c'est une déduction, non un choix.</Badge>
+</Resultat>
+
+Pourquoi est-ce *le* résultat de la partie ? Parce que **l'unité de contrôle d'un processeur est exactement une FSM**. Son état, c'est l'étape courante de l'exécution d'une instruction (« je vais chercher l'instruction », « je la décode », « je calcule », « j'écris le résultat »). Ses entrées, ce sont les bits de l'instruction et les drapeaux de l'ALU. Ses sorties, ce sont les signaux de commande qui ouvrent les portes, choisissent l'opération, activent l'écriture. Le séquenceur qui orchestrera le processeur entier n'est rien d'autre que la machine de ce chapitre, en plus grand. <Badge niveau="fonde">Le cycle d'instruction est un parcours d'états déterministe piloté par l'horloge : c'est littéralement une FSM.</Badge>
+
+## À manipuler
+
+Faites avancer l'horloge pas à pas, injectez des entrées, et observez l'état glisser de nœud en nœud le long des transitions :
+
+<StateMachine />
+
+Une FSM transforme donc une simple suite de tics en comportement structuré — mais son registre d'état ne retient qu'une poignée de bits. Pour exécuter de vrais programmes, il faudra ranger des millions de mots : c'est l'affaire des **mémoires denses**, que nous abordons au chapitre suivant.

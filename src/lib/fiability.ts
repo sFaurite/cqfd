@@ -36,14 +36,28 @@ export const PRESET_MATHS = {
   indecidable: { color: ROUGE, emoji: '🔴', label: 'Indécidable', sens: 'Démontré ni prouvable ni réfutable dans le cadre adopté (ex. hypothèse du continu dans ZFC).' },
 } as const;
 
-/** Map FUSIONNÉE (clés disjointes) : sert au composant <Badge> pour les deux cours. */
-export const FIABILITE = { ...PRESET_EMPIRIQUE, ...PRESET_MATHS };
+/**
+ * Ingénierie / informatique matérielle : l'axe n'est ni « certitude empirique » ni
+ * « statut mathématique », mais le DEGRÉ DE NÉCESSITÉ. Du silicium à l'OS, chaque
+ * étage ajoute des choix qui ne se déduisent pas de la physique. Distinguer ce que
+ * la nature impose de ce que l'ingénieur décide est ici le cœur de l'honnêteté.
+ */
+export const PRESET_INGENIERIE = {
+  fonde: { color: VERT, emoji: '🟢', label: 'Fondé', sens: 'Imposé par une loi physique vérifiée ou une déduction logique stricte (jonction PN, théorème de Boole). Nécessaire : ne pourrait pas être autrement.' },
+  convention: { color: BLEU, emoji: '🔵', label: 'Convention', sens: 'Choix d’ingénierie ou convention adoptée (logique positive, complément à deux, jeu d’instructions). Vrai « par décret » — utile et cohérent, mais pourrait être différent.' },
+  idealise: { color: AMBRE, emoji: '🟡', label: 'Idéalisé', sens: 'Modèle simplifié, valable sous conditions (transistor = interrupteur parfait, délai de porte nul). La réalité physique est plus nuancée.' },
+  implementation: { color: ROUGE, emoji: '🔴', label: 'Implémentation', sens: 'Dépend de la puce, du fabricant ou du firmware (timings exacts, microcode, tables ACPI). Non universel : varie d’un système à l’autre.' },
+} as const;
+
+/** Map FUSIONNÉE (clés disjointes) : sert au composant <Badge> pour les trois cours. */
+export const FIABILITE = { ...PRESET_EMPIRIQUE, ...PRESET_MATHS, ...PRESET_INGENIERIE };
 export type NiveauFiabilite = keyof typeof FIABILITE;
 
 /** Échelle (4 niveaux) PAR COURS — pour la légende et la page Méthodologie. */
 const PAR_COURS: Record<string, Record<string, NiveauDef>> = {
   physique: PRESET_EMPIRIQUE,
   maths: PRESET_MATHS,
+  processeurs: PRESET_INGENIERIE,
 };
 
 export function niveauxFor(courseId: string | null): Array<{ cle: string } & NiveauDef> {

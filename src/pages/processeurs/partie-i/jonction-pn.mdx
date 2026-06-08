@@ -1,0 +1,117 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La jonction PN et la diode"
+chapter: jonction-pn
+description: "Accoler N et P crée une zone de déplétion et un champ interne : le courant ne passe que dans un sens."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import PNJunction from '../../../components/interactive/PNJunction.astro';
+
+## Accoler P et N : une frontière qui s'auto-organise
+
+Nous savons fabriquer deux silicium différents : le silicium <Prereq href="/processeurs/partie-i/silicium-dopage">dopé N</Prereq>, riche en électrons mobiles, et le silicium dopé P, riche en trous mobiles. Chacun, pris seul, est globalement neutre : autant de charges positives fixes que de charges mobiles, et réciproquement. La question de ce chapitre est d'une simplicité trompeuse : que se passe-t-il si on les **colle l'un à l'autre** ? La réponse, purement physique, va nous donner notre premier composant qui « décide » — la **diode** — et nous mettre à un cheveu du transistor.
+
+<Hypotheses titre="Ce qu'on admet au départ">
+1. On dispose de deux blocs de silicium <Prereq href="/processeurs/partie-i/silicium-dopage">dopés</Prereq> — l'un N (donneurs, dopage $N_D$), l'autre P (accepteurs, dopage $N_A$) —, chacun **globalement neutre** avant contact.
+2. La jonction est **abrupte** : on passe brutalement du dopage P au dopage N sur une interface plane (idéalisation usuelle de la jonction réelle).
+3. On raisonne à l'**équilibre thermodynamique** (température $T$ uniforme, pas de tension extérieure) avant d'appliquer une polarisation.
+</Hypotheses>
+
+<Encart type="intuition" titre="Deux foules qui se mélangent à la frontière">
+Imaginez une salle bondée de gens (les électrons, côté N) accolée à une salle pleine de places vides (les trous, côté P). Ouvrez la cloison : par simple agitation, des gens vont passer du côté plein vers le côté vide. Mais en partant, chaque électron laisse derrière lui une charge positive fixe (l'ion donneur), et en arrivant côté P il comble un trou, ce qui dévoile une charge négative fixe. Très vite, la frontière se hérisse de charges fixes qui *repoussent* les nouveaux arrivants. Le mélange s'arrête tout seul. Personne n'a rien commandé : c'est un équilibre que la physique impose.
+</Encart>
+
+## La zone de déplétion et le champ interne
+
+À l'instant du contact, les électrons du côté N diffusent vers le côté P (où ils sont rares) et les trous font le trajet inverse : c'est la **diffusion**, le mouvement spontané des porteurs des régions concentrées vers les régions pauvres. <Badge niveau="fonde">La diffusion est un fait statistique inéluctable dès qu'existe un gradient de concentration : c'est de l'agitation thermique, pas un choix.</Badge>
+
+Mais chaque porteur qui s'en va **démasque une charge fixe** : côté N, les ions donneurs positifs ne sont plus compensés ; côté P, les ions accepteurs négatifs non plus. Il se forme donc, de part et d'autre de l'interface, une région **vidée de porteurs mobiles** mais bordée de charges fixes : la **zone de déplétion** (ou zone de charge d'espace). Ces charges fixes — positives côté N, négatives côté P — créent un **champ électrique interne** $\vec{E}$ pointant du N vers le P.
+
+<Resultat label="Champ interne à l'équilibre">
+
+$$ \vec{E}_{\text{int}} \ \text{dirigé de la zone N (chargée +) vers la zone P (chargée -)} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence directe de la loi de Coulomb appliquée aux ions fixes démasqués. Le champ s'oppose à la diffusion qui l'a engendré.</Badge>
+</Resultat>
+
+Ce champ exerce sur les porteurs une force qui les **ramène en arrière** : il repousse les électrons vers le N et les trous vers le P, contrant exactement la diffusion. <Badge niveau="fonde">À l'équilibre, ces deux flux opposés (diffusion contre dérive) se compensent : le courant net est nul, sans aucune intervention extérieure.</Badge> On lui associe une **barrière de potentiel** $V_{bi}$ (le « built-in »), différence de potentiel à franchir pour traverser la jonction.
+
+<Encart type="rappel" titre="Diffusion et dérive : les deux mouvements d'un porteur">
+Un porteur de charge dans un semi-conducteur est soumis à deux moteurs distincts :
+
+- la **diffusion**, due à un *gradient de concentration* : les porteurs migrent spontanément des régions où ils sont nombreux vers celles où ils sont rares (comme une goutte d'encre qui s'étale) ;
+- la **dérive**, due à un *champ électrique* $\vec{E}$ : une charge $q$ subit la force $\vec{F} = q\,\vec{E}$ et se déplace dans le sens (ou le sens opposé pour les charges négatives) du champ.
+
+Ces deux mécanismes sont **indépendants** et peuvent se renforcer ou s'opposer. À la jonction PN à l'équilibre, ils s'opposent exactement.
+</Encart>
+
+<Encart type="plusloin" titre="Pourquoi l'équilibre, et combien vaut la barrière">
+À l'équilibre, le courant total est nul : le flux de diffusion (porteurs poussés par le gradient de concentration) est exactement annulé par le flux de **dérive** (porteurs poussés par le champ $\vec{E}$). En écrivant cette égalité pour les électrons, on obtient la relation d'Einstein puis, par intégration, la hauteur de barrière
+
+$$ V_{bi} = \frac{k_B T}{q}\,\ln\!\left(\frac{N_A N_D}{n_i^2}\right), $$
+
+où $N_A, N_D$ sont les dopages, $n_i$ la concentration intrinsèque, $T$ la température et $k_B/q \approx 25{,}9\ \text{mV}$ à 300 K (soit $k_B T/q \approx 25{,}9\ \text{mV}$ à cette température). <Badge niveau="fonde">La *forme* logarithmique découle de la statistique de Boltzmann des porteurs.</Badge> Sa *valeur* numérique (typiquement $0{,}6$–$0{,}8$ V pour le silicium) dépend des dopages et de la température. <Badge niveau="implementation">Pas de barrière universelle : elle se règle par le procédé de fabrication.</Badge>
+</Encart>
+
+<VideoManim src="pn-junction" scene="PNJunction" titre="La jonction PN" legende="La zone de déplétion et le champ interne ne laissent passer le courant que dans le sens direct." />
+
+## Polariser la jonction : le redressement
+
+Branchons maintenant une tension extérieure aux bornes de notre jonction. Tout se joue sur la barrière interne : la tension externe vient soit l'abaisser, soit la renforcer.
+
+**Polarisation directe** — on relie le **+** au côté P, le **−** au côté N. La tension appliquée s'oppose au champ interne : elle **abaisse la barrière** et la zone de déplétion **rétrécit**. <Badge niveau="fonde">Le potentiel externe se retranche du potentiel interne $V_{bi}$ : abaisser la barrière laisse davantage de porteurs majoritaires la franchir.</Badge> Au-delà d'un certain **seuil** $V_\gamma$, la barrière est suffisamment effacée pour que les porteurs la franchissent en masse : un courant s'établit, et il **croît exponentiellement** avec la tension.
+
+**Polarisation inverse** — on relie le **+** au côté N. La tension s'ajoute au champ interne : la barrière est **renforcée**, la zone de déplétion **s'élargit**, et plus aucun porteur majoritaire ne peut traverser. <Badge niveau="fonde">La barrière relevée bloque les majoritaires ; seuls les rares porteurs minoritaires subsistent, d'où un courant résiduel minuscule.</Badge> Le courant est **quasi nul**.
+
+<Resultat label="Comportement de diode (redresseur)">
+
+$$ I = I_S\left(e^{\,qV/k_B T} - 1\right) $$
+
+<Badge niveau="fonde" slot="badge">Le caractère unidirectionnel — passe dans un sens, bloque dans l'autre — est imposé par la physique de la barrière, asymétrique par construction.</Badge>
+</Resultat>
+
+<Badge niveau="idealise">Cette loi exacte (équation de Shockley) suppose une jonction idéale : en pratique on ajoute un facteur d'idéalité $n$ (entre 1 et 2) et une résistance série, et la courbe réelle s'écarte un peu de l'exponentielle pure.</Badge>
+
+<Encart type="calcul" titre="Pourquoi un « seuil » apparaît vers 0,7 V">
+Le courant direct suit $I = I_S\,(e^{\,qV/k_B T}-1)$. Posons $V_T = k_B T/q \approx 26\ \text{mV}$ à 300 K. L'exponentielle est si raide que le courant reste **imperceptible** tant que $V$ est petit, puis « décolle » brutalement. Calculons le facteur de multiplication du courant pour chaque tranche de tension. Pour $V$ déjà nettement supérieur à $V_T$, le terme $-1$ est négligeable et $I \approx I_S\,e^{\,V/V_T}$, donc le rapport entre deux courants ne dépend que de l'écart de tension :
+
+$$ \frac{I_2}{I_1} = \frac{I_S\,e^{\,V_2/V_T}}{I_S\,e^{\,V_1/V_T}} = e^{\,(V_2 - V_1)/V_T}. $$
+
+Appliquons-le à une tranche de 60 mV :
+
+$$ V \to V + 60\ \text{mV} \;\Rightarrow\; \frac{I_2}{I_1} = e^{\,0{,}060/0{,}026} \approx e^{2{,}3} \approx 10. $$
+
+Chaque $\sim 60\ \text{mV}$ supplémentaires **multiplient le courant par 10**. Partant d'un $I_S$ minuscule (de l'ordre du nanoampère pour le Si), il faut accumuler environ une dizaine de ces tranches pour atteindre un courant « utile » (le milliampère) : d'où un coude marqué autour de
+
+$$ \boxed{V_\gamma \approx 0{,}6\text{–}0{,}7\ \text{V}\quad(\text{silicium})}. $$
+
+<Badge niveau="fonde">L'*existence* d'un seuil découle de la forme exponentielle de la loi.</Badge> <Badge niveau="implementation">Sa *valeur* dépend du matériau (≈ 0,3 V pour le germanium, ≈ 3 V pour une LED bleue — contre ≈ 1,8 V pour une LED rouge) et de la température (elle baisse d'environ 2 mV/°C).</Badge>
+</Encart>
+
+C'est exactement le comportement d'une **diode** : un composant qui laisse passer le courant dans un seul sens. On peut en faire un **redresseur**, brique de toute conversion alternatif → continu. <Badge niveau="fonde">Le redressement découle directement de l'unidirectionnalité : la diode « coupe » l'alternance qui la polariserait en inverse.</Badge>
+
+<PNJunction />
+
+## La diode idéale, et ses limites
+
+Pour raisonner simplement, on idéalise souvent : passante sans résistance dans le sens direct, **parfaitement bloquée** dans le sens inverse.
+
+<Resultat label="Diode idéale">
+
+$$ V \ge 0 : I \ \text{libre},\ V \approx 0 \qquad V < 0 : I = 0 $$
+
+<Badge niveau="idealise" slot="badge">En réalité : un courant de fuite $I_S$ subsiste en inverse, et au-delà d'une tension de claquage la diode conduit brutalement en inverse. Le modèle idéal ignore ces deux phénomènes.</Badge>
+</Resultat>
+
+## Et si on commandait la barrière ?
+
+<Tournant titre="Tournant : de la barrière figée à la barrière commandée">
+Notre jonction est **figée** : c'est sa géométrie qui décide du sens passant. Mais le courant n'est gouverné que par la **hauteur de la barrière**. Imaginons alors qu'au lieu de la fixer une fois pour toutes, on place une troisième électrode, **isolée** du silicium, dont la tension viendrait moduler cette barrière — ouvrir ou fermer le passage à volonté. Nous ne dépendrions plus du branchement : nous aurions un **interrupteur commandé**. C'est précisément l'idée du **transistor**, objet du chapitre suivant.
+</Tournant>

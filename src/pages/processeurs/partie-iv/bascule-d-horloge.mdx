@@ -1,0 +1,111 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La bascule D et l’horloge"
+chapter: bascule-d-horloge
+description: "Échantillonner D sur un front d’horloge : le registre synchrone, brique du séquencement."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import DFlipFlop from '../../../components/interactive/DFlipFlop.astro';
+
+## Du verrou à la bascule : apprendre à compter le temps
+
+Au chapitre précédent, la <Prereq href="/processeurs/partie-iv/bascule-rs">bascule RS</Prereq> nous a offert notre première mémoire : deux portes NON-OU bouclées l'une sur l'autre, capables de **tenir** un bit indéfiniment. Mais elle souffrait de deux maux. D'abord un **état interdit** ($S=R=1$). Ensuite, et c'est plus grave, elle réagit **à tout instant** : dès qu'une entrée bouge, la sortie peut bouger. Or un processeur, c'est des millions de portes dont les sorties oscillent en permanence pendant que les signaux se propagent. Si la mémoire écoutait sans cesse, elle enregistrerait ces remous transitoires. Il nous faut un moyen de dire à la mémoire : *« n'écoute que maintenant »*. C'est toute l'histoire de ce chapitre — et la clé qui rend le temps **maîtrisable**.
+
+<Hypotheses titre="Ce qu'on admet pour ce chapitre">
+1. On dispose de la **bascule RS** et des **portes logiques** (ET, NON) des chapitres précédents.
+2. Les portes ont un délai de propagation **fini mais borné** : elles ne basculent pas instantanément, mais ce délai est connu et majoré. C'est cette finitude qui rendra setup/hold nécessaires.
+3. Les signaux logiques valent franchement 0 ou 1 *au repos*, mais peuvent transiter par des valeurs intermédiaires *pendant* une commutation.
+</Hypotheses>
+
+<Encart type="intuition" titre="Photographier plutôt que filmer">
+Imaginez que vous vouliez retenir la position d'une aiguille qui tremble. Si vous la suivez du regard (vous « filmez »), vous voyez le tremblement et vous ne savez jamais quelle est *la* valeur. Mais si vous prenez une **photo** à un instant précis, vous figez une valeur nette, qui ne bougera plus jusqu'à la prochaine photo. La bascule sur front, c'est exactement ça : un appareil photo qui déclenche au rythme d'un métronome — l'horloge — et garde l'image entre deux déclenchements.
+</Encart>
+
+## Étape 1 : le verrou commandé
+
+Ajoutons à la RS une entrée de validation, le signal **enable** (noté $E$). L'idée : ne laisser $S$ et $R$ agir sur la bascule que lorsque $E=1$. Il suffit de placer deux portes ET en amont, qui « coupent » $S$ et $R$ quand $E=0$ :
+
+$$ S' = S \cdot E \qquad R' = R \cdot E $$
+
+Quand $E=0$, on a $S'=R'=0$ : la RS est en mode mémoire, elle ignore tout. Quand $E=1$, $S'=S$ et $R'=R$ : elle réagit normalement. <Badge niveau="fonde">Conséquence logique directe : une porte ET force sa sortie à 0 dès qu'une entrée vaut 0, donc $E=0$ neutralise les deux commandes.</Badge> Nous tenons un **verrou commandé**.
+
+## Étape 2 : le verrou D — la fin de l'état interdit
+
+L'état interdit venait de pouvoir poser $S=R=1$. Empêchons-le par construction : n'utilisons **qu'une seule** entrée de donnée, $D$, et fabriquons $R$ comme l'inverse de $S$.
+
+$$ S = D \qquad R = \overline{D} $$
+
+Ainsi $S$ et $R$ sont toujours opposés : jamais tous deux à 1. Combiné au signal $E$, on obtient le **verrou D** (*D latch*) :
+
+| $E$ | $D$ | comportement de $Q$ |
+|----|----|----|
+| 0 | × | $Q$ inchangé (mémoire) |
+| 1 | 0 | $Q \leftarrow 0$ |
+| 1 | 1 | $Q \leftarrow 1$ |
+
+Quand $E=1$, la sortie **suit** $D$ : on dit que le verrou est **transparent**. Quand $E=0$, il **mémorise** la dernière valeur vue. <Badge niveau="fonde">L'élimination de l'état interdit est une conséquence structurelle : avec $R=\overline{S}$, la configuration $S=R=1$ est inatteignable.</Badge>
+
+## Le problème de la transparence
+
+Le verrou D est propre, mais sa transparence est dangereuse. Pendant **toute** la durée où $E=1$, $Q$ recopie $D$ — y compris ses tremblements. Si $D$ change trois fois pendant que $E$ est haut, $Q$ change trois fois. Pire : si la sortie d'un verrou alimente l'entrée d'un autre verrou ouvert en même temps, la donnée peut traverser plusieurs étages dans le même cycle — une « course » incontrôlable. <Badge niveau="fonde">Tant qu'un verrou est transparent, sa sortie est une simple copie retardée de son entrée : rien ne s'oppose à ce qu'une donnée se propage à travers tous les verrous ouverts à la file.</Badge> La transparence est une fenêtre trop large. Nous voudrions une fenêtre **infiniment fine** : capter $D$ à un *instant* unique, pas pendant une durée.
+
+## Étape 3 : la bascule D sur front (montage maître-esclave)
+
+L'astuce est d'enchaîner **deux** verrous D commandés par des signaux **opposés**. Le premier (le *maître*) est ouvert quand l'horloge $\mathrm{Clk}=0$ ; le second (l'*esclave*) est ouvert quand $\mathrm{Clk}=1$. À aucun moment les deux ne sont transparents ensemble.
+
+- Tant que $\mathrm{Clk}=0$ : le maître suit $D$, mais l'esclave est fermé — sa sortie $Q$ reste figée.
+- À l'instant où $\mathrm{Clk}$ **monte** de 0 à 1 : le maître se ferme (il capture la valeur de $D$ qu'il avait juste avant), et l'esclave s'ouvre pour recopier cette valeur capturée.
+- Tant que $\mathrm{Clk}=1$ : l'esclave répète une valeur déjà figée par le maître ; changer $D$ n'a plus aucun effet.
+
+Résultat : $Q$ ne change **qu'au front montant** de l'horloge, et reste rigoureusement constant le reste du temps. La fenêtre d'écoute s'est réduite à un instant. C'est la **bascule D sur front** (*edge-triggered D flip-flop*).
+
+<Resultat label="Échantillonnage sur front">
+
+$$ Q(t^+) = D(t^-) \ \text{au front montant};\qquad Q \ \text{figé entre deux fronts.} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence du montage maître-esclave : les deux verrous ne sont jamais transparents simultanément, donc la capture est instantanée et la donnée ne peut pas « traverser ».</Badge>
+</Resultat>
+
+<DFlipFlop />
+
+<VideoManim src="d-flip-flop" scene="DFlipFlop" titre="La bascule D" legende="Sur chaque front montant d’horloge, Q recopie D ; entre deux fronts, Q reste figé." />
+
+## Setup et hold : la donnée doit être stable autour du front
+
+« Capturer à un instant » suppose que cet instant ait un sens physique. Or les portes mettent un temps fini à basculer. Pour que le maître fige une valeur **nette**, il faut que $D$ soit déjà stable un peu **avant** le front, et le reste un peu **après**. Ces deux durées sont le **temps de setup** $t_{su}$ (avant) et le **temps de hold** $t_h$ (après).
+
+<Encart type="plusloin" titre="Ce qui arrive si on viole setup/hold : la métastabilité">
+Si $D$ change pile pendant la fenêtre interdite, le maître reçoit une valeur ambiguë au moment où il se referme. Sa boucle interne peut alors se retrouver à mi-chemin entre 0 et 1, dans un équilibre instable appelé **métastabilité** : la sortie peut rester indécise un temps imprévisible avant de retomber sur l'un des deux états — au hasard. Ce n'est pas un défaut de fabrication, c'est une **fatalité** mathématique de tout élément bistable analogique forcé sur sa crête. On ne l'élimine jamais totalement ; on rend seulement sa probabilité négligeable.
+</Encart>
+
+L'**existence** de ces contraintes est imposée par la physique des circuits bistables. <Badge niveau="fonde">Tout élément à deux états stables possède une crête instable entre eux ; échantillonner en respectant setup/hold sert précisément à ne jamais s'y arrêter.</Badge> En revanche leurs **valeurs** — quelques dizaines de picosecondes typiquement — varient d'une puce à l'autre. <Badge niveau="implementation">$t_{su}$ et $t_h$ dépendent de la technologie, de la tension d'alimentation et de la température ; le fabricant les garantit dans une fiche technique.</Badge>
+
+## Le registre : un mot mémorisé d'un coup
+
+Une bascule garde un bit. Pour mémoriser un mot de $n$ bits, on aligne **$n$ bascules D partageant la même horloge**. Au même front, toutes capturent leur bit respectif : le mot entier est figé simultanément.
+
+<Resultat label="Registre de n bits">
+
+$$ \text{registre } n\text{ bits} = n \ \text{bascules D, horloge commune.} $$
+
+<Badge niveau="fonde" slot="badge">Construction par juxtaposition : $n$ bascules indépendantes cadencées ensemble mémorisent $n$ bits en parallèle.</Badge>
+</Resultat>
+
+## La discipline synchrone : maîtriser le temps
+
+Voici le saut conceptuel. On décide de cadencer **toutes** les bascules d'un circuit par **une seule horloge globale**. Entre deux fronts, la logique combinatoire a tout le temps de se calmer et de produire un résultat stable ; au front suivant, les registres en prennent un instantané. Le circuit n'avance plus en continu : il **saute** d'un état stable au suivant, par **pas discrets**.
+
+<Tournant titre="Un choix de conception, pas une loi de la nature">
+Rien dans la physique n'oblige à n'avoir qu'une horloge. On **choisit** la discipline synchrone parce qu'elle transforme un système analogique grouillant en une machine à états nette, où il suffit de garantir une seule chose : « entre deux fronts, tout doit s'être stabilisé ». Des circuits **asynchrones** existent et fonctionnent sans horloge globale — souvent plus rapides ou plus sobres, mais bien plus durs à concevoir. Ici on pose franchement une convention d'ingénierie.
+</Tournant>
+
+<Badge niveau="convention">La synchronie globale est un parti pris de conception : elle simplifie énormément le raisonnement, au prix de l'existence de l'asynchrone.</Badge>
+
+Nous avons désormais les deux ingrédients d'une machine : un **registre d'état** qui se souvient *où l'on en est*, et la **logique combinatoire** qui calcule *où aller ensuite*. Brancher la sortie du registre dans la logique, et la sortie de la logique dans l'entrée du registre, c'est construire un **automate** : au prochain chapitre, nous bouclerons cette structure pour faire naître le compteur, première machine qui agit toute seule.

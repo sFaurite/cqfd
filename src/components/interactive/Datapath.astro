@@ -1,0 +1,40 @@
+---
+/**
+ * Datapath — chemin de données d'un petit processeur (modèle RISC à cycle unique
+ * décomposé en phases). On y trouve les blocs PC → Mémoire d'instructions →
+ * Banc de registres → ALU → Mémoire de données → écriture en retour (write-back),
+ * reliés par des bus, plus le retour PC+1. Le bouton « étape suivante » parcourt
+ * en boucle les six phases (Fetch, Decode, Read, Execute, Memory, Write-back) :
+ * à chaque phase, les blocs et le bus actifs sont surlignés, le reste est grisé,
+ * et un jeton circule le long du bus actif pour matérialiser le flux d'information.
+ */
+---
+
+<div class="iw" data-iw="datapath">
+  <div class="iw__head"><span class="tag">Interactif</span> Chemin de données d'un processeur (phases)</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="dp-step">Avancer dans le cycle</label>
+      <button id="dp-step" type="button" data-step>étape suivante ▶</button>
+      <output data-out-step>Fetch · 1 / 6</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">phase</span> <b data-out-phase></b></span>
+    <span class="iw__chip"><span class="k">ce qui se passe</span> <b data-out-desc></b></span>
+  </div>
+  <p class="iw__note">
+    Cliquez sur <em>étape suivante</em> pour parcourir les six phases d'exécution d'une instruction :
+    <em>Fetch</em> (lecture de l'instruction en mémoire), <em>Decode</em> (décodage),
+    <em>Read</em> (lecture des registres sources), <em>Execute</em> (calcul dans l'ALU),
+    <em>Memory</em> (accès à la mémoire de données) et <em>Write-back</em> (écriture du résultat
+    dans un registre). Les blocs et le bus <strong>actifs</strong> sont surlignés, le reste est grisé ;
+    un jeton circule sur le bus pour montrer le sens du flux d'information. Le compteur de programme
+    avance ensuite de <em>PC + 1</em> (retour en pointillés) pour préparer l'instruction suivante.
+  </p>
+</div>
+
+<script>
+  import './Datapath.client.ts';
+</script>

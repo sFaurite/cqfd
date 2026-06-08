@@ -1,0 +1,85 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Atomes, électrons et niveaux d’énergie"
+chapter: atomes-niveaux
+description: "Le point de départ admis : la matière est quantique. Niveaux d’énergie discrets, principe de Pauli, électrons de valence."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le socle quantique : pourquoi l'électron ne fait pas n'importe quoi
+
+Avant de parler de transistors, de bits ou de systèmes d'exploitation, il faut comprendre une chose minuscule : ce que fait un électron autour d'un atome. Tout — absolument tout ce qui suivra — repose sur le fait que cet électron ne peut pas avoir n'importe quelle énergie. Il est *quantifié*. C'est cette discipline microscopique qui, plus haut dans l'édifice, rendra possibles le conducteur, l'isolant, et la vedette de ce cours : le semi-conducteur.
+
+<Tournant titre="Tournant : ici, on admet la physique quantique">
+Ce cours commence en **admettant** la mécanique quantique. Nous ne la démontrons pas, nous ne la justifions pas à partir de plus fondamental : c'est notre **socle**, posé au grand jour. Pourquoi ce choix ? Parce que la physique du XXᵉ siècle a montré qu'à l'échelle de l'atome, les règles classiques (un électron est une petite bille qui tourne) sont tout simplement fausses. Plutôt que de refaire cette histoire, on pose ses conclusions comme point de départ. **À partir d'ici, on ne déduit plus ces faits : on les prend pour acquis, et tout le reste se construira dessus.** C'est un choix assumé, pas une nécessité logique de ce qui précède.
+</Tournant>
+
+<Hypotheses titre="Hypothèses de départ">
+1. **Niveaux discrets.** Un électron lié à un atome ne peut occuper que certains niveaux d'énergie **discrets** (quantifiés), séparés par des « interdits ». Il n'existe pas de continuum d'énergies accessibles : entre deux niveaux permis, rien.
+2. **Principe d'exclusion de Pauli.** Deux électrons ne peuvent jamais occuper le **même état quantique**. Conséquence directe : les électrons ne s'entassent pas tous au plus bas ; ils **remplissent les niveaux du bas vers le haut**, un état après l'autre.
+3. **Validité expérimentale.** Ces deux faits sont **vérifiés expérimentalement** (notamment par les spectres atomiques, ces ensembles de raies lumineuses très précises). On les admet comme point de départ, sans les redémontrer.
+</Hypotheses>
+
+<Badge niveau="fonde">Quantification des niveaux et exclusion de Pauli sont des faits solidement vérifiés — mais ici, soyons honnêtes : on ne les **déduit** pas, on les **pose** en hypothèse. Le badge « fondé » dit qu'ils sont nécessaires et vrais, pas qu'on les démontre sur cette page.</Badge>
+
+### L'intuition : un électron lié est une onde qui « rentre juste »
+
+Pourquoi diable l'énergie serait-elle quantifiée ? La réponse complète passe par l'équation de Schrödinger, qu'on ne dérivera pas ici. Mais il existe une image mentale étonnamment fidèle.
+
+<Encart type="intuition" titre="La corde de guitare et le tambour">
+Pincez une corde de guitare tendue entre deux extrémités fixes. Elle ne peut pas vibrer de n'importe quelle façon : seules certaines formes « rentrent juste » entre les deux bouts — une demi-onde (la note fondamentale), une onde entière (l'octave), une et demie, etc. Ce sont les **ondes stationnaires**. Toutes les autres fréquences s'auto-détruisent en quelques allers-retours. Résultat : une corde donne un **ensemble discret** de notes, pas un continuum.
+
+En mécanique quantique, l'électron lié à un atome n'est pas une bille : il se comporte comme une **onde** confinée autour du noyau. Comme la corde, il ne peut adopter que les formes qui « rentrent juste » dans l'espace disponible. À chaque forme permise correspond une **énergie permise** — et entre elles, rien. La quantification de l'énergie devient alors aussi naturelle que les notes d'une corde ou les modes d'un tambour.
+</Encart>
+
+Attention : cette analogie est une **béquille pour l'intuition**, pas une preuve. La corde vibre dans l'espace ordinaire ; l'onde électronique est une amplitude de probabilité, objet bien plus subtil. Le mécanisme exact est plus riche que l'image, et c'est pourquoi on ne lui colle aucun badge « fondé ».
+
+<Badge niveau="idealise">L'image « onde stationnaire = note permise » capture bien l'origine de la quantification, mais elle simplifie. La vraie onde quantique est tridimensionnelle, complexe, et probabiliste. Excellente intuition, mauvaise preuve.</Badge>
+
+### Le remplissage : Pauli construit l'édifice du bas vers le haut
+
+Imaginons les niveaux d'énergie comme les marches d'un escalier, la plus basse en bas. Sans contrainte, tous les électrons dégringoleraient sur la marche la plus basse — l'état d'énergie minimale. Le principe de Pauli l'interdit : **chaque état ne peut héberger qu'un électron à la fois.**
+
+<Encart type="plusloin" titre="Pourquoi deux électrons par niveau spatial, et pas un seul">
+Un « état quantique » complet inclut une propriété supplémentaire de l'électron, le **spin**, qui peut prendre deux valeurs (notées familièrement « haut » et « bas »). Deux électrons peuvent donc partager la même forme spatiale (le même niveau « géographique ») à condition d'avoir des spins opposés : ce sont alors des états quantiques *différents*, ce que Pauli autorise. C'est pourquoi on entend souvent « deux électrons par niveau » : il s'agit de deux états de spin pour une même orbitale. Le principe lui-même reste « un électron par état quantique ».
+</Encart>
+
+Les électrons remplissent donc l'escalier marche par marche, du bas vers le haut, jusqu'à épuisement du stock — un stock fixé par le numéro atomique (le nombre de protons, donc d'électrons de l'atome neutre).
+
+<Resultat label="Principe de remplissage">
+
+$$ \text{On occupe les niveaux par énergie croissante, un électron par état quantique (Pauli).} $$
+
+<Badge niveau="fonde" slot="badge">Déduction directe de l'hypothèse de Pauli posée plus haut : interdire le partage d'état force l'empilement du bas vers le haut.</Badge>
+</Resultat>
+
+### Couches et électrons de valence : la couche qui commande
+
+Les niveaux ne sont pas répartis uniformément : ils se regroupent en **couches** (des paquets de niveaux d'énergies voisines), séparées par de plus grands écarts. On remplit une couche, puis on passe à la suivante.
+
+La dernière couche entamée — la plus externe occupée — porte un nom décisif : c'est la couche de **valence**, et ses électrons sont les **électrons de valence**. Ils sont les moins liés au noyau (énergie la plus haute), donc les plus faciles à arracher, à partager ou à mettre en mouvement.
+
+<Encart type="intuition" titre="Les électrons du dernier étage">
+Pensez à un immeuble dont on remplit les étages du bas vers le haut. Les habitants du **dernier étage occupé** sont les seuls qui sortent, échangent avec les voisins, déménagent facilement. Les électrons des couches profondes, eux, sont enfouis et verrouillés : ils ne participent presque jamais à la vie de l'atome. Toute la chimie, et toute l'électricité, se jouent au dernier étage.
+</Encart>
+
+Ce n'est pas un détail : ce sont **les électrons de valence qui gouvernent à la fois les propriétés chimiques** (comment l'atome se lie à ses voisins) **et les propriétés électriques** (sa capacité à conduire le courant). Un atome avec sa couche de valence pleine est inerte (gaz nobles) ; un atome à qui il manque un ou deux électrons, ou qui en a un ou deux en trop, est réactif et potentiellement conducteur.
+
+<Resultat label="Rôle directeur des électrons de valence">
+
+$$ \text{Propriétés chimiques et électriques d'un atome} \;\Longleftarrow\; \text{ses électrons de valence.} $$
+
+<Badge niveau="fonde" slot="badge">Conséquence du remplissage par énergie croissante : seuls les électrons les moins liés (couche externe) interagissent avec l'extérieur. Fait central et universel de la matière.</Badge>
+</Resultat>
+
+Remarquez qu'on n'a donné **aucune valeur numérique** d'énergie. C'est volontaire : chaque atome a ses propres niveaux, fixés par sa charge nucléaire. Il n'existe pas de « valeur universelle » d'un niveau. <Badge niveau="implementation">Les énergies précises dépendent de l'élément considéré (hydrogène, silicium, cuivre…). Ce qui est universel, c'est la *structure* — discrète, remplie par Pauli, gouvernée par la valence — pas les chiffres.</Badge>
+
+### La question qui ouvre la suite
+
+Nous tenons notre socle : des niveaux discrets, un remplissage par Pauli, une couche de valence qui commande tout. Mais cette belle histoire vaut pour **un atome isolé**. Or un cristal de silicium, c'est des milliards de milliards d'atomes rangés côte à côte, si proches que leurs couches de valence se touchent presque. Que deviennent ces niveaux discrets quand on rapproche autant d'atomes ? Se gênent-ils ? Fusionnent-ils ? C'est précisément cette question — et sa réponse spectaculaire, les **bandes d'énergie** — qui fait l'objet du chapitre suivant.

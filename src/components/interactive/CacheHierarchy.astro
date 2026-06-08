@@ -1,0 +1,51 @@
+---
+/**
+ * CacheHierarchy — hiérarchie mémoire et localité.
+ * Trois niveaux empilés (L1, L2, RAM) dont les barres de latence sont
+ * proportionnelles (1, ~10, ~100 cycles). À chaque « accès », on cherche
+ * l'adresse dans L1 (succès → vert, servi vite), sinon dans L2, sinon en RAM
+ * (échec → rouge, on remonte la ligne dans les caches). Deux modes illustrent
+ * la localité : « accès locaux (boucle) » retombe souvent sur des lignes déjà
+ * présentes (beaucoup de succès) ; « accès aléatoires » multiplie les échecs.
+ */
+---
+
+<div class="iw" data-iw="cache-hierarchy">
+  <div class="iw__head"><span class="tag">Interactif</span> Hiérarchie mémoire et localité du cache</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 10"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="ch-mode">Profil d’accès</label>
+      <select id="ch-mode" data-mode>
+        <option value="local" selected>Accès locaux (boucle)</option>
+        <option value="random">Accès aléatoires</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="ch-access">Adresse demandée</label>
+      <button id="ch-access" type="button" data-access>Accéder à une adresse</button>
+      <output data-out-addr>—</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">servi par</span> <b data-out-niveau>—</b></span>
+    <span class="iw__chip"><span class="k">latence</span> <b data-out-latence>—</b></span>
+    <span class="iw__chip"><span class="k">taux de succès</span> <b data-out-taux>—</b></span>
+  </div>
+  <p class="iw__note">
+    La <strong>hiérarchie mémoire</strong> empile des niveaux de plus en plus grands mais de plus en plus
+    lents : le <span style="color:var(--c-blue)">L1</span> est minuscule et quasi instantané (≈ 1 cycle), le
+    <span style="color:var(--c-teal)">L2</span> est moyen (≈ 10 cycles), la
+    <span style="color:var(--c-purple)">RAM</span> est vaste mais lente (≈ 100 cycles). Lors d’un accès, on
+    cherche d’abord en L1 : si la ligne y est (<span style="color:var(--c-green)">succès</span>), elle est
+    servie tout de suite ; sinon on descend, et en cas d’<span style="color:var(--c-red)">échec</span> jusqu’en
+    RAM on <em>remonte</em> la ligne dans les caches (en évinçant la plus ancienne). Le
+    <strong>principe de localité</strong> explique le gain : en mode <em>boucle</em>, on réaccède sans cesse aux
+    mêmes lignes (presque tous succès) ; en mode <em>aléatoire</em>, on tombe sans cesse à côté (beaucoup
+    d’échecs). (Modèle pédagogique idéalisé : caches associatifs à éviction de la plus ancienne ligne, LRU.)
+  </p>
+</div>
+
+<script>
+  import './CacheHierarchy.client.ts';
+</script>

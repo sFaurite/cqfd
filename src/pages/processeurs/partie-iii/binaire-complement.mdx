@@ -1,0 +1,162 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Représenter les nombres : le complément à deux"
+chapter: binaire-complement
+description: "Binaire positionnel, entiers signés en complément à deux : l’astuce qui rend l’addition signée gratuite."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import TwosComplement from '../../../components/interactive/TwosComplement.astro';
+
+## Le problème : comment écrire un nombre avec des interrupteurs ?
+
+Nos circuits ne savent manipuler que des bits : $0$ et $1$. Mais un processeur doit *calculer* — donc additionner, soustraire, comparer des **nombres**. Il nous faut donc une règle qui traduise une suite de bits en un entier, et réciproquement. Cette règle n'est écrite nulle part dans la nature.
+
+<Tournant titre="Tournant : coder un nombre est un choix, pas une loi">
+La physique nous a donné des interrupteurs, donc des suites de $0$ et de $1$. Elle ne dit **rien** de ce qu'une telle suite « signifie ». Décréter que `101` vaut « cinq », ou que `1111` vaut « moins un », est une **convention** humaine, pas une nécessité. Plusieurs codages sont possibles et ont réellement été utilisés. Nous allons en construire un, le **complément à deux**, parce qu'il est d'une élégance redoutable : il rend la soustraction *gratuite*. Mais gardons ceci en tête — ici on **pose un choix**, on ne déduit plus.
+</Tournant>
+
+<Hypotheses titre="Conventions adoptées dans ce chapitre">
+1. **Notation positionnelle en base 2** : un mot de bits se lit comme une somme pondérée par des puissances de $2$ (poids fort à gauche).
+2. **Codage en complément à deux** : sur $n$ bits, le bit de poids fort reçoit le poids **négatif** $-2^{n-1}$ ; tous les autres gardent un poids positif.
+
+Le binaire positionnel sans signe découle de (1) seul ; tout ce qui concerne les entiers signés découle de (1) **et** (2). Ces deux points sont des **choix** : ils pourraient être autres, et le reste s'en déduit.
+</Hypotheses>
+
+## Le binaire positionnel : compter sans signe
+
+Commençons par le cas simple, les nombres positifs. On adopte la **notation positionnelle en base 2** : un mot de $n$ bits $b_{n-1}\,b_{n-2}\dots b_1\,b_0$ représente l'entier
+
+$$ x = \sum_{k=0}^{n-1} b_k \, 2^k = b_{n-1}2^{n-1} + \dots + b_1 2^1 + b_0 2^0 . $$
+
+Chaque colonne a un **poids** : $1, 2, 4, 8, \dots$ Ainsi `1011` vaut $8+0+2+1 = 11$. <Badge niveau="convention">On *choisit* la base 2 et l'ordre des poids (bit de poids fort à gauche). On pourrait écrire à l'envers, ou en base 3 ; le binaire s'impose seulement parce que nos interrupteurs ont deux états.</Badge>
+
+Combien de nombres distincts un mot de $n$ bits peut-il coder ? La réponse est exacte, et démontrable.
+
+<Encart type="calcul" titre="Un mot de n bits a exactement 2ⁿ valeurs">
+Un mot de $n$ bits est une suite $(b_{n-1}, \dots, b_0)$ où **chaque** $b_k$ vaut $0$ ou $1$, indépendamment des autres.
+
+- Le bit $b_0$ : $2$ choix.
+- Le bit $b_1$ : $2$ choix, *pour chacun* des choix précédents.
+- … et ainsi de suite jusqu'à $b_{n-1}$.
+
+Par le principe du produit (les choix sont indépendants), le nombre total de combinaisons est le produit des possibilités colonne par colonne :
+
+$$ \underbrace{2 \times 2 \times \cdots \times 2}_{n \text{ facteurs}} = 2^{n}. $$
+
+Ces $2^n$ combinaisons sont toutes différentes, et il n'en existe pas d'autre. En interprétation non signée, elles codent les entiers de $0$ (tous les bits à $0$) à $2^n - 1$ (tous à $1$).
+
+<Resultat label="Capacité d'un mot de n bits">
+
+$$ n \text{ bits} \;\Longrightarrow\; 2^{n} \text{ valeurs}, \quad \text{de } 0 \text{ à } 2^{n}-1 \text{ (non signé)}. $$
+
+<Badge niveau="fonde" slot="badge">Déduction logique stricte (principe du produit). Ne pourrait pas être autrement : c'est du dénombrement.</Badge>
+</Resultat>
+</Encart>
+
+Pour $n=8$ (un **octet**), cela fait $2^8 = 256$ valeurs, de $0$ à $255$.
+
+## Première idée pour le signe : signe-magnitude, et ses défauts
+
+Comment loger les négatifs ? L'idée naïve : réserver le bit de poids fort comme **bit de signe** ($0 = +$, $1 = -$) et coder la valeur absolue sur les bits restants. C'est la représentation **signe-magnitude**. Sur 4 bits, `0011` $= +3$ et `1011` $= -3$.
+
+Séduisante, mais bancale. Deux problèmes la condamnent.
+
+- **Deux zéros.** `0000` $= +0$ et `1000` $= -0$. On gaspille un motif, et tout test « est-ce nul ? » doit vérifier deux cas. <Badge niveau="fonde">Conséquence directe de la convention : un signe explicite sur une magnitude nulle produit fatalement $\pm 0$.</Badge>
+- **Addition compliquée.** Pour calculer $5 + (-3)$, le circuit doit comparer les magnitudes, décider qui soustraire de qui, et choisir le signe du résultat. Cela exige une **logique de cas** lourde, donc un circuit plus gros et plus lent. <Badge niveau="implementation">Le surcoût exact dépend du circuit, mais l'aiguillage par cas est inévitable avec ce codage.</Badge>
+
+On voudrait que l'addition « marche toute seule ». C'est précisément ce que le complément à deux nous offre.
+
+## Le complément à deux : le bit de signe porte un poids négatif
+
+Le coup de génie : on garde la formule positionnelle, mais on rend **négatif le poids du bit de poids fort**. Sur $n$ bits :
+
+$$ x = -\,b_{n-1}\,2^{n-1} + \sum_{k=0}^{n-2} b_k\, 2^k . $$
+
+Le bit de gauche pèse désormais $-2^{n-1}$ ; tous les autres gardent leur poids positif. Sur 4 bits, `1011` vaut $-8 + 0 + 2 + 1 = -5$, et `0101` vaut $+5$. <Badge niveau="convention">C'est *le* choix de design. Rien dans la physique ne réclame un poids négatif ; on l'adopte parce qu'il va simplifier l'arithmétique.</Badge>
+
+Calculer l'opposé devient mécanique : pour obtenir $-x$, on **inverse tous les bits** (le complément, noté $\overline{x}$, que nous fournit l'<Prereq href="/processeurs/partie-iii/algebre-boole">algèbre de Boole</Prereq>) **puis on ajoute $1$**.
+
+<Encart type="rappel" titre="L'inversion bit à bit vient de l'algèbre de Boole">
+Inverser un bit, c'est lui appliquer la fonction **NON** : $\overline{0} = 1$ et $\overline{1} = 0$, ce qui s'écrit arithmétiquement $\bar b = 1 - b$. Le mot inversé $\overline{x}$ s'obtient en appliquant NON à *chaque* colonne, indépendamment. C'est un outil déjà établi dans l'<Prereq href="/processeurs/partie-iii/algebre-boole">algèbre de Boole</Prereq> ; nous ne faisons que le réutiliser. <Badge niveau="fonde">Théorème de Boole : NON est une fonction totale, déterministe, $\overline{\overline{b}} = b$.</Badge>
+</Encart>
+
+<Encart type="calcul" titre="Pourquoi « inverser puis +1 » donne l'opposé">
+Appliquons la formule positionnelle complète (poids du MSB négatif) au mot inversé $\overline{x}$, en remplaçant chaque bit $b_k$ par $1 - b_k$ :
+
+$$ \overline{x} = -(1-b_{n-1})2^{n-1} + \sum_{k=0}^{n-2}(1-b_k)2^k. $$
+
+Regroupons les « $1$ » de chaque colonne d'un côté, les bits originaux de l'autre :
+
+$$ \overline{x} = \Big[ -2^{n-1} + \sum_{k=0}^{n-2} 2^k \Big] - \Big[ -b_{n-1}2^{n-1} + \sum_{k=0}^{n-2} b_k 2^k \Big]. $$
+
+Le second crochet est exactement $x$. Le premier vaut $-2^{n-1} + (2^{n-1}-1) = -1$ (la somme des poids positifs $1+2+\dots+2^{n-2}$ fait $2^{n-1}-1$). Donc
+
+$$ \overline{x} = -1 - x. $$
+
+On ajoute $1$ des deux côtés :
+
+<Resultat label="Opposé en complément à deux">
+
+$$ \overline{x} + 1 = -x. $$
+
+<Badge niveau="fonde" slot="badge">Déduction algébrique stricte *à partir de* la convention adoptée. La convention est libre ; cette conséquence, non.</Badge>
+</Resultat>
+</Encart>
+
+## L'astuce centrale : additionner signé = additionner non signé
+
+Voici la récompense. Le bit du MSB ne pèse plus $+2^{n-1}$ mais $-2^{n-1}$ — soit un écart de $2^{n-1} - (-2^{n-1}) = 2^n$. Or, **travailler modulo $2^n$ est exactement ce que fait un additionneur de $n$ bits** : la retenue qui sort du bit le plus à gauche est simplement jetée. C'est ce qui rend les deux interprétations compatibles bit pour bit.
+
+<Encart type="calcul" titre="x + (−x) = 0, et un seul circuit pour les deux mondes">
+Vérifions d'abord que l'opposé s'annule bien. On a établi $\overline{x} + 1 = -x$. Comme $x + \overline{x} = \underbrace{11\dots1}_{n} = 2^n - 1$ (chaque colonne vaut $b_k + \bar b_k = 1$), on obtient :
+
+$$ x + (-x) = x + \overline{x} + 1 = (2^n - 1) + 1 = 2^n. $$
+
+Sur $n$ bits, $2^n$ s'écrit `1` suivi de $n$ zéros : la retenue finale déborde et est **abandonnée**. Il reste les $n$ bits de poids faible, soit $0$ :
+
+$$ x + (-x) \equiv 0 \pmod{2^n}. $$
+
+Plus fort encore : prenons **n'importe quels** $a, b$ codés en complément à deux. Leur somme positionnelle est congrue à $a + b$ modulo $2^n$, *que l'on lise le MSB avec un poids $+2^{n-1}$ ou $-2^{n-1}$* — car ces deux lectures diffèrent justement d'un multiple de $2^n$, invisible modulo $2^n$.
+
+<Resultat label="Un additionneur unique">
+
+$$ \text{addition signée} \equiv \text{addition non signée} \pmod{2^n}. $$
+
+<Badge niveau="fonde" slot="badge">Conséquence démontrée de la convention. Le *même* circuit additionne les deux interprétations sans le savoir.</Badge>
+</Resultat>
+</Encart>
+
+C'est l'idée la plus rentable de tout le cours : **un seul additionneur** sert pour le signé et le non signé. La soustraction $a - b$ devient $a + (\overline{b} + 1)$ — une addition. Plus aucune logique de cas.
+
+## Plage et débordement
+
+Avec le MSB à $-2^{n-1}$, la valeur la plus négative est `1000…0` $= -2^{n-1}$ et la plus positive `0111…1` $= 2^{n-1}-1$.
+
+<Resultat label="Plage du complément à deux">
+
+$$ -2^{n-1} \;\le\; x \;\le\; 2^{n-1}-1. $$
+
+<Badge niveau="fonde" slot="badge">Déduit de la formule : extrema obtenus en activant seul le MSB, ou tous les bits sauf lui.</Badge>
+</Resultat>
+
+Pour $n=8$ : de $-128$ à $+127$. La plage est *asymétrique* — un négatif de plus que de positifs, séquelle inévitable du zéro unique. <Badge niveau="fonde">Il y a $2^n$ motifs pour $2^n$ valeurs ; un seul code $0$, donc le partage $+/-$ ne peut pas être symétrique.</Badge>
+
+Quand un résultat sort de cette plage, il y a **débordement** (*overflow*) : l'addition modulo $2^n$ « enroule » et renvoie un nombre du signe contraire. Sur 8 bits, $127 + 1$ donne `10000000` $= -128$. <Badge niveau="fonde">L'arithmétique modulaire est cyclique : franchir le bord supérieur fait réapparaître au bord inférieur.</Badge>
+
+## Hexadécimal : juste une écriture plus courte
+
+Lire `11010110` fatigue l'œil. On groupe alors les bits par paquets de 4 (un *quartet*), chacun valant $0$ à $15$, noté par un chiffre **hexadécimal** ($0$–$9$ puis $A$–$F$). Ainsi `1101 0110` s'écrit `D6`. <Badge niveau="convention">Pure notation pour humains : la machine, elle, ne voit que des bits. On aurait pu choisir l'octal ; l'hexadécimal gagne car $16 = 2^4$ tombe juste sur le quartet.</Badge>
+
+## À manipuler
+
+Faites glisser la valeur, changez la largeur, et regardez le poids négatif du bit de signe, l'enroulement modulo $2^n$ et le passage de $7$ à $-8$ :
+
+<TwosComplement />
+
+Nous tenons notre codage et la promesse qu'il nous fait : un additionneur unique pour le signé et le non signé. Au chapitre suivant, **construisons-le** — porte par porte, du demi-additionneur à l'additionneur complet en cascade.

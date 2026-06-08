@@ -1,0 +1,102 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Mode protégé et mémoire virtuelle (MMU)"
+chapter: mode-protege-mmu
+description: "Le noyau active la protection et la pagination : chaque programme croit disposer de toute la mémoire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import VirtualMemory from '../../../components/interactive/VirtualMemory.astro';
+
+## Le noyau prend le pouvoir
+
+Le <Prereq href="/processeurs/partie-vi/bootloader">bootloader</Prereq> a chargé le noyau du système d'exploitation en mémoire et lui a passé la main. Mais à cet instant, le processeur ne fait aucune différence entre le code du noyau et n'importe quel autre programme : toute instruction est permise, toute adresse mémoire est accessible. Si l'on lançait maintenant un programme utilisateur, rien ne l'empêcherait d'écraser le noyau, de lire les secrets d'un voisin, ou d'arrêter la machine. Le noyau doit donc d'abord **bâtir les remparts** : un mode protégé qui le place en maître, et une mémoire virtuelle qui donne à chaque programme sa propre bulle isolée. C'est tout l'objet de ce chapitre.
+
+<Encart type="intuition" titre="Le concierge et les locataires">
+Imaginez un immeuble. Le concierge (le noyau) possède le passe-partout : il peut entrer partout, couper l'eau, gérer les compteurs. Les locataires (les programmes utilisateurs), eux, n'ont que la clé de *leur* appartement. Mieux : chaque locataire est persuadé d'habiter au même numéro — « appartement 1 » — sans jamais se croiser, parce qu'un système d'adressage secret traduit son « 1 » vers un étage réel différent pour chacun. Personne ne peut frapper à la porte d'un autre : il ne connaît même pas son adresse réelle. Le mode protégé, c'est le passe-partout réservé au concierge ; la mémoire virtuelle, c'est ce système d'adresses qui isole les locataires.
+</Encart>
+
+## Les niveaux de privilège : le mode protégé
+
+Le mécanisme fondateur est minuscule : le processeur range, quelque part dans son état interne, **un bit (ou quelques bits) indiquant son niveau de privilège courant**. Certaines instructions — modifier la table des pages, configurer les interruptions, parler directement aux périphériques, halter le CPU — sont marquées **privilégiées**. Le matériel applique une règle dure et non négociable.
+
+<Resultat label="Règle du mode protégé">
+
+$$ \text{instruction privilégiée exécutée en mode utilisateur} \;\Longrightarrow\; \text{exception matérielle (faute)} $$
+
+<Badge niveau="fonde" slot="badge">Le mécanisme lui-même — un niveau de privilège vérifié par le matériel à chaque instruction sensible — est une nécessité logique : sans contrôle au niveau du silicium, aucune isolation logicielle ne peut être garantie, puisque le programme contrôlerait justement le logiciel censé le surveiller.</Badge>
+</Resultat>
+
+Quand un programme utilisateur tente une telle instruction (ou un accès interdit), le CPU **n'exécute pas** : il bascule en mode noyau et saute vers un gestionnaire prévu par l'OS. Le noyau reprend la main et décide — souvent en tuant le fautif. C'est aussi par ce passage contrôlé, l'**appel système**, qu'un programme demande poliment un service au noyau plutôt que de le voler.
+
+En revanche, *l'organisation* de ces privilèges est un choix. Combien de niveaux ? Comment les nommer ?
+
+<Tournant titre="Tournant : ici l'ingénieur choisit l'organisation">
+La nécessité s'arrête au principe « il faut au moins deux niveaux séparés par le matériel ». Tout le reste se décrète. L'architecture x86 définit quatre **anneaux** (rings) numérotés de 0 à 3, l'anneau 0 étant le plus privilégié ; en pratique presque tous les OS n'en utilisent que **deux** — noyau (anneau 0) et utilisateur (anneau 3) — ignorant les deux du milieu. D'autres architectures n'en proposent que deux dès le départ. On ne déduit plus rien ici : on adopte une convention.
+</Tournant>
+
+<Badge niveau="convention">Le nombre de niveaux, le terme « anneaux », la numérotation où 0 = le plus privilégié : autant de conventions d'architecture, pas de lois physiques. On pourrait organiser les privilèges tout autrement.</Badge>
+
+## La mémoire virtuelle : traduire chaque adresse
+
+Le mode protégé interdit les instructions dangereuses, mais il reste un problème : comment empêcher le programme A de **lire l'octet** que le programme B a écrit, alors que tous deux manipulent la même RAM décrite par le modèle de <Prereq href="/processeurs/partie-v/von-neumann">von Neumann</Prereq> ? La réponse est d'une élégance redoutable : **on ment au programme sur les adresses**.
+
+Toute adresse qu'un programme calcule et place sur le bus est une **adresse virtuelle**. Avant d'atteindre la RAM, elle traverse un circuit dédié, la **MMU** (Memory Management Unit), qui la **traduit** en **adresse physique** réelle. Le programme ne voit jamais la mémoire réelle : il vit dans son **espace virtuel** privé.
+
+Faire cette traduction adresse par adresse serait absurde (autant de correspondances que d'octets). On découpe donc l'espace en blocs de taille fixe, les **pages**. Une adresse virtuelle se lit alors en deux morceaux.
+
+<Encart type="calcul" titre="Décomposer une adresse en (page | déplacement)">
+Soit des pages de taille $P = 4\ \text{Kio} = 4096$ octets. Comme $4096 = 2^{12}$, repérer un octet *à l'intérieur* d'une page demande exactement
+
+$$ \log_2(4096) = 12 \text{ bits.} $$
+
+On coupe donc toute adresse virtuelle sur $n$ bits en deux champs : les **12 bits de poids faible** forment le **déplacement** $d$ (l'octet visé dans la page), et les **$n-12$ bits de poids fort** forment le **numéro de page virtuelle** $p$ :
+
+$$ \text{VA} = p \times 2^{12} + d \qquad\text{avec}\qquad 0 \le d < 2^{12}. $$
+
+La MMU n'a plus qu'à traduire le **numéro de page** $p$ en un **numéro de cadre physique** $f$ (frame) ; le déplacement, lui, est **recopié tel quel** puisqu'un octet garde sa position à l'intérieur de son bloc :
+
+$$ \text{PA} = f \times 2^{12} + d. $$
+
+<Resultat label="Traduction par pagination">
+
+$$ (p \mid d) \;\xrightarrow{\;\text{table des pages}\;}\; (f \mid d) $$
+
+<Badge niveau="fonde" slot="badge">Le principe — découper en pages et ne traduire que le numéro de page via une table — suffit logiquement à réaliser l'isolation et l'illusion d'espace privé. C'est le mécanisme fondateur.</Badge>
+</Resultat>
+</Encart>
+
+La correspondance $p \to f$ est rangée dans une **table des pages**, propre à chaque processus, que seul le noyau (mode protégé !) peut modifier. Changer de processus, c'est faire pointer la MMU vers une autre table : aussitôt, le même « numéro 1 » désigne une zone physique différente.
+
+<Resultat label="Isolation des processus">
+
+$$ \text{tables disjointes} \;\Longrightarrow\; \text{aucune adresse virtuelle de } A \text{ ne traduit vers la mémoire de } B $$
+
+<Badge niveau="fonde" slot="badge">Conséquence stricte du mécanisme : si la table de A ne contient aucune entrée vers les cadres de B, A ne peut littéralement pas fabriquer une adresse physique tombant chez B. L'isolation n'est pas une promesse logicielle, c'est une impossibilité matérielle.</Badge>
+</Resultat>
+
+Chaque processus croit ainsi disposer de **toute** la mémoire, à lui seul, à partir de l'adresse zéro : c'est l'illusion offerte par l'espace virtuel.
+
+<Badge niveau="idealise">Le modèle « une table plate qui mappe page → cadre » est simplifié. La réalité ajoute des bits de droits (lecture / écriture / exécution), des pages partagées volontairement, et une traduction *en plusieurs étages* pour ne pas stocker une table gigantesque. L'idée reste exacte ; les détails sont plus riches.</Badge>
+
+<VirtualMemory />
+
+<VideoManim src="virtual-memory" scene="VirtualMemory" titre="La mémoire virtuelle" legende="La MMU traduit chaque adresse virtuelle en adresse physique via la table des pages." />
+
+## Pages absentes et accélérateurs
+
+Deux raffinements rendent le tout vivable. D'abord, une page virtuelle peut **ne pas être en RAM** : son entrée est marquée « absente ». Y accéder déclenche un **défaut de page** — une exception qui rend la main au noyau. Celui-ci va chercher la page là où elle dort, plus bas dans la <Prereq href="/processeurs/partie-iv/hierarchie-cache">hiérarchie mémoire</Prereq> (sur le disque, dans la zone d'**échange** ou *swap*), la recopie dans un cadre libre, met à jour la table, puis **rejoue** l'instruction fautive comme si de rien n'était. La mémoire virtuelle peut ainsi dépasser la RAM réelle.
+
+<Encart type="plusloin" titre="Le TLB : un cache pour la traduction elle-même">
+Traduire chaque adresse en lisant la table des pages en RAM coûterait un accès mémoire supplémentaire **avant** chaque accès mémoire utile — ruineux. La MMU embarque donc un petit cache des traductions récentes, le **TLB** (Translation Lookaside Buffer). S'y trouve déjà $p \to f$ ? La traduction est immédiate. Sinon, c'est un *TLB miss* : on lit la table, et on garnit le TLB. C'est exactement le principe de localité de la hiérarchie mémoire, appliqué aux traductions.
+
+<Badge niveau="implementation">Taille de page (4 Kio est courant, mais 2 Mio ou 1 Gio existent), format exact des entrées de table, nombre d'étages, taille et associativité du TLB : tout cela dépend de l'architecture et de la puce. Rien d'universel.</Badge>
+</Encart>
+
+Les remparts sont en place. Le noyau règne en mode privilégié, chaque futur programme aura son espace virtuel étanche, et le matériel garantit l'isolation. Il ne reste plus qu'un geste : remplir une première table des pages, basculer le CPU en mode utilisateur et sauter dans le code chargé — c'est-à-dire **lancer le tout premier processus utilisateur**, ce que nous ferons au chapitre suivant.

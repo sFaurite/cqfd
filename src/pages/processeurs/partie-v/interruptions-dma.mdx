@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Interruptions, exceptions et DMA"
+chapter: interruptions-dma
+description: "Comment le matériel interrompt le flot d’exécution pour réagir au monde extérieur."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le problème : un processeur qui ne regarde que devant lui
+
+Jusqu'ici, notre machine est admirable mais bornée. Elle exécute le **cycle fetch–decode–execute** de la machine de <Prereq href="/processeurs/partie-v/von-neumann">von Neumann</Prereq> instruction après instruction, le nez collé sur le compteur de programme. Or le monde, lui, ne suit pas ce rythme : une touche est frappée à un instant imprévisible, un paquet réseau arrive, un disque finit de lire un secteur des millions de cycles après qu'on le lui a demandé. Comment un automate qui n'avance que tout droit peut-il **réagir** à ce qui surgit de l'extérieur ?
+
+<Hypotheses titre="Ce qu'on admet en entrant dans ce chapitre">
+
+1. La machine de <Prereq href="/processeurs/partie-v/von-neumann">von Neumann</Prereq> est en place : un CPU exécute en boucle un cycle **fetch–decode–execute**, instructions et données logées dans une mémoire unique reliée par un bus.
+2. Des **périphériques** (clavier, disque, réseau) sont raccordés au système et peuvent agir sur des lignes physiques du bus — on admet l'existence de fils de signalisation entre eux et le processeur.
+3. On cherche un mécanisme par lequel le matériel **détourne** le flot d'exécution pour réagir à un événement. Tout ce chapitre **déduit** la forme de ce mécanisme de l'exigence de transparence ; seuls les détails (tables, numéros, registres) relèveront d'un choix d'architecture.
+
+</Hypotheses>
+
+<Encart type="intuition" titre="Lire un livre, ou être tapé sur l'épaule">
+Première stratégie : toutes les deux phrases, vous levez les yeux pour vérifier si quelqu'un est entré dans la pièce. Vous ne ratez personne — mais vous passez votre temps à regarder une porte qui reste close. Seconde stratégie : vous lisez sans lever les yeux, et **on vous tape sur l'épaule** quand quelqu'un arrive. Vous lisez à pleine vitesse, et vous réagissez exactement quand il le faut. La première stratégie, c'est la **scrutation** ; la seconde, l'**interruption**. C'est tout ce chapitre.
+</Encart>
+
+## La scrutation, et pourquoi elle gaspille
+
+La solution naïve s'appelle la **scrutation** (*polling*) : le programme insère régulièrement une boucle « le clavier a-t-il un caractère prêt ? Non ? Alors je continue ». C'est correct, mais c'est un gâchis. <Badge niveau="fonde">Logiquement, scruter un événement rare consomme un travail proportionnel au temps d'attente, pas au nombre d'événements : la quasi-totalité des lectures du statut renvoient « rien ».</Badge> Pire : on est tiraillé entre scruter souvent (coûteux) et scruter rarement (on réagit en retard). Il faut renverser la logique : que ce ne soit plus le CPU qui demande, mais le périphérique qui **signale**.
+
+## L'interruption : suspendre, traiter, reprendre
+
+Posons le mécanisme. Le périphérique dispose d'une ligne physique vers le processeur. Quand un événement survient, il y impose un signal : la **requête d'interruption** (IRQ). Le CPU, lui, vérifie cette ligne à un moment bien précis et bien choisi : **entre deux instructions**, une fois l'instruction courante terminée.
+
+<Badge niveau="fonde">Ce point d'insertion n'est pas arbitraire : interrompre *au milieu* d'une instruction laisserait la machine dans un état incohérent (registres à moitié écrits, mémoire à moitié mise à jour). On attend donc une frontière où l'état architectural est propre.</Badge> Le moment exact où cette vérification a lieu dans le micro-cycle, lui, dépend de la puce. <Badge niveau="implementation">Certains processeurs autorisent l'interruption d'instructions très longues à des points de reprise internes ; c'est un choix de conception.</Badge>
+
+Si une requête est présente (et autorisée — voir le masquage), le processeur exécute une séquence imposée par sa propre logique :
+
+1. il **sauvegarde le contexte** : au minimum le compteur de programme (PC), pour savoir où reprendre, et l'état des indicateurs ;
+2. il consulte un **vecteur d'interruption** pour trouver l'adresse de la routine à exécuter ;
+3. il saute à la **routine de traitement** (ISR, *Interrupt Service Routine*), qui fait le travail (lire le caractère, acquitter le périphérique) ;
+4. il **restaure le contexte** et reprend l'instruction qui suivait, *comme si rien ne s'était passé*.
+
+<Resultat label="Principe de l'interruption">
+
+$$ \text{IRQ} \;\Rightarrow\; \text{sauvegarde}(PC, \text{état}) \;\to\; \text{ISR} \;\to\; \text{restauration} \;\to\; \text{reprise} $$
+
+<Badge niveau="fonde" slot="badge">La transparence — le programme interrompu ne doit rien percevoir — impose logiquement de sauvegarder puis restaurer tout l'état qu'on touche. C'est une nécessité, pas un choix.</Badge>
+</Resultat>
+
+Ce qui **se sauvegarde automatiquement** par le matériel (juste le PC ? le PC et les indicateurs ? davantage ?) et ce qui doit être sauvegardé *à la main* par l'ISR, en revanche, relève de l'architecture. <Badge niveau="implementation">Certaines machines empilent seulement le PC ; à l'ISR de préserver les registres qu'elle utilise. D'autres sauvegardent un large jeu de registres d'office.</Badge>
+
+<Encart type="plusloin" titre="Le vecteur : un annuaire d'adresses">
+Comment le CPU sait-il *où* sauter ? Il faut une correspondance « numéro d'interruption → adresse de routine ». On la range dans une **table des vecteurs** en mémoire (ou en ROM) : la $n$-ième entrée contient l'adresse de l'ISR de la source $n$. Le périphérique fournit son numéro, le CPU lit l'entrée correspondante, et saute. <Badge niveau="convention">L'idée d'une table indexée est quasi universelle, mais sa position en mémoire, le format des entrées et la façon dont le périphérique transmet son numéro sont des conventions d'architecture.</Badge> Les numéros de vecteurs précis et les registres de contrôle associés, eux, sont propres à chaque puce. <Badge niveau="implementation">Aucun « numéro 14 » universel : c'est dans le manuel du fabricant.</Badge>
+</Encart>
+
+## Priorité et masquage : choisir quand on est sourd
+
+Deux événements peuvent surgir ensemble ; et parfois une section de code ne doit *pas* être interrompue. D'où deux mécanismes. La **priorité** classe les sources : si une interruption plus urgente arrive pendant une ISR moins urgente, elle peut la préempter. Le **masquage** permet de dire « ignore (diffère) les interruptions pour l'instant » en armant ou désarmant un bit. <Badge niveau="fonde">Le *besoin* d'arbitrer des requêtes simultanées et de protéger des sections critiques est une nécessité logique de tout système concurrent.</Badge> Le nombre de niveaux, les bits exacts, le fait qu'une source soit masquable ou non (les NMI, *non-maskable*, ne le sont pas) sont des choix. <Badge niveau="implementation">Le contrôleur d'interruptions, ses niveaux et ses registres varient d'une plateforme à l'autre.</Badge>
+
+## Exceptions et déroutements : les interruptions venues de l'intérieur
+
+Tout ce mécanisme — sauvegarder, vectoriser, sauter, reprendre — est trop précieux pour ne servir qu'aux périphériques. On le réutilise pour des événements **internes** au processeur : ce sont les **exceptions** ou **déroutements** (*traps*).
+
+- Une **division par zéro**, un opcode invalide, un accès mémoire interdit : le matériel détecte l'anomalie *pendant* l'exécution et déroute vers une routine.
+- Un **défaut de page** : la mémoire demandée n'est pas présente ; on déroute pour aller la chercher, puis on **reprend l'instruction fautive**.
+- L'**appel système** : le programme exécute volontairement une instruction spéciale (*syscall*, *trap*) pour demander un service au noyau.
+
+<Resultat label="L'appel système est une exception logicielle">
+
+$$ \texttt{instruction\_trap} \;\Rightarrow\; \text{même mécanisme : sauvegarde} \to \text{routine du noyau} \to \text{retour} $$
+
+<Badge niveau="fonde" slot="badge">Un appel système n'est rien d'autre qu'une exception déclenchée à dessein par le programme : il réemploie exactement la machinerie de l'interruption pour franchir la frontière vers le noyau.</Badge>
+</Resultat>
+
+Et c'est ici que se noue un fil qu'on tirera dans la Partie VI : une interruption ou un déroutement fait **basculer le processeur en mode privilégié** (mode noyau). <Badge niveau="fonde">C'est structurel : pour qu'un programme utilisateur n'accède aux ressources protégées qu'à travers des points d'entrée contrôlés, le seul moment où l'on gagne le privilège doit être l'entrée dans une routine choisie par le noyau — donc précisément l'instant de l'interruption.</Badge> Le syscall est ainsi la porte officielle entre vos programmes et le système. Nous y reviendrons.
+
+## Le DMA : transférer sans déranger le CPU
+
+Reste un dernier gaspillage. Lire un secteur de disque, c'est déplacer des milliers d'octets entre le périphérique et la mémoire. Si le CPU copie chaque octet lui-même — lire un registre, écrire en mémoire, recommencer — il est entièrement mobilisé par une tâche bête, et toute la finesse des interruptions n'y change rien.
+
+La solution est le **DMA** (*Direct Memory Access*) : un petit contrôleur dédié auquel le CPU délègue le transfert. On lui dit une fois « copie ce bloc, de telle adresse vers tel périphérique, sur tant d'octets », et il s'en charge **seul**, en accédant directement au bus mémoire. Le CPU est **libéré** : il exécute d'autres instructions pendant ce temps. Quand le bloc est transféré, le contrôleur lève… une interruption, pour signaler la fin.
+
+<Resultat label="Le DMA décharge le CPU">
+
+$$ \text{transfert de bloc} \;\not\Rightarrow\; \text{occupation du CPU} \qquad \text{(contrôleur DMA autonome)} $$
+
+<Badge niveau="fonde" slot="badge">Le gain est structurel : un transfert de masse ne requiert aucune décision instruction par instruction, donc il peut être confié à un automate dédié pendant que le CPU travaille à autre chose. Le déchargement est réel, pas une approximation.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="Le prix du DMA : partager le bus">
+Rien n'est gratuit. Le DMA et le CPU veulent tous deux accéder à la mémoire, et le bus ne sert qu'un maître à la fois. On arbitre : « vol de cycle » (le DMA prend un accès de temps en temps) ou « rafale » (il prend le bus le temps d'un bloc). <Badge niveau="implementation">Le mode d'arbitrage, le nombre de canaux DMA et leur configuration dépendent du chipset.</Badge> Dans le modèle idéal on dit « le CPU est totalement libre » ; en réalité il peut être très légèrement ralenti par cette contention. <Badge niveau="idealise">Le déchargement est presque total, pas absolument total.</Badge>
+</Encart>
+
+## On peut enfin allumer la machine
+
+Mesurons le chemin parcouru. Interruptions et DMA sont précisément ce qui rend un système d'exploitation *possible* : sans interruption d'horloge, pas de **multitâche** (rien ne reprendrait la main à un programme parti en boucle) ; sans interruptions de périphériques, pas de **réactivité** ; sans syscall, pas de frontière entre vos programmes et le noyau ; sans DMA, le CPU croulerait sous les copies. <Badge niveau="fonde">Ces trois mécanismes sont les conditions logiques minimales d'un OS multitâche réactif et protégé.</Badge>
+
+Nous avons désormais tout : du transistor à l'instruction, du cycle d'exécution à la capacité de réagir au monde et de déléguer les transferts. Il ne manque plus qu'à appuyer sur le bouton — et c'est l'objet du chapitre suivant : **comment une machine démarre**, du tout premier signal électrique jusqu'au passage de relais au système d'exploitation.

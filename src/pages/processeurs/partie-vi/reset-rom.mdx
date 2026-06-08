@@ -1,0 +1,77 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le reset et le vecteur de boot"
+chapter: reset-rom
+description: "À la mise sous tension : un état connu, une adresse fixe, du code en ROM. Le tout premier pas."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import BootSequence from '../../../components/interactive/BootSequence.astro';
+
+## Le tout premier octet
+
+Nous avons construit, étage par étage, une machine capable d'exécuter des instructions : un processeur qui suit le cycle *fetch–decode–execute*, un compteur de programme (PC) qui pointe l'instruction à venir, une mémoire qui contient le programme. Mais une question gênante restait suspendue : **quelle est la première instruction ?** Quand on appuie sur le bouton d'alimentation, le silicium s'éveille — mais éveillé où, sur quoi, dans quel état ? Ce chapitre franchit la frontière la plus subtile de tout le cours : celle qui sépare le **matériel** du **logiciel**. Le tout premier octet exécuté.
+
+<Encart type="intuition" titre="Un orchestre sans chef au lever de rideau">
+Imaginez un orchestre dont les musiciens arrivent un à un, instruments en main, énergie dans les bras — mais sans partition ni chef. Chacun pourrait jouer n'importe quelle note. Le résultat serait du bruit. Pour qu'une *symphonie* commence, il faut un instant précis et partagé où tout le monde ouvre la **même** page à la **même** mesure. Le RESET d'un processeur, c'est exactement ce coup de baguette : il ne dit pas *quoi* jouer, il dit *par où commencer*, identiquement à chaque allumage.
+</Encart>
+
+## À la mise sous tension, l'état est indéterminé
+
+Un registre, un *flip-flop*, est un circuit bistable : il mémorise un 0 ou un 1. Mais que mémorise-t-il *avant* qu'on lui ait jamais rien écrit ? Au moment où la tension d'alimentation monte, chaque bascule bascule vers l'un de ses deux états **au gré des infimes déséquilibres** du circuit — bruit thermique, asymétries de fabrication, vitesse de montée de la tension. Le PC, qui est lui aussi un <Prereq href="/processeurs/partie-iv/bascule-d-horloge">registre fait de bascules</Prereq>, ne fait pas exception.
+
+<Badge niveau="fonde">À la mise sous tension, rien dans la physique ne privilégie « PC = 0 » plutôt qu'une autre valeur. L'état initial des bascules est physiquement indéterminé — c'est une conséquence directe de leur nature bistable et du bruit.</Badge>
+
+Or le processeur, lui, ne sait pas hésiter. À son premier coup d'horloge, il lira l'instruction *à l'adresse contenue dans le PC*, quelle qu'elle soit, et l'exécutera. Si cette adresse est aléatoire, l'instruction lue est aléatoire, donc le comportement est aléatoire. **Une machine déterministe partant d'un état indéterminé est inutilisable** : on ne pourrait jamais garantir qu'elle fasse deux fois la même chose. Il faut donc, impérativement, forcer un point de départ connu.
+
+## Le signal de RESET force un état connu
+
+C'est le rôle du signal **RESET**. C'est une entrée physique du processeur — une broche, un fil — qui, lorsqu'elle est activée (au démarrage, ou via un bouton de redémarrage), **impose** par câblage électrique un état déterminé à des registres clés. En particulier, elle charge le PC avec une valeur **fixe et toujours la même** : l'adresse de la **première instruction**.
+
+<Resultat label="Effet du RESET sur le compteur de programme">
+
+$$ \text{RESET actif} \;\Longrightarrow\; PC \leftarrow A_{\text{reset}} \quad (\text{valeur câblée, identique à chaque démarrage}) $$
+
+<Badge niveau="fonde" slot="badge">Nécessité logique : une machine déterministe doit partir d'un état connu, sinon sa première instruction — donc tout son comportement — serait imprévisible. Forcer cet état est indispensable ; le RESET est le mécanisme matériel qui l'impose.</Badge>
+</Resultat>
+
+L'adresse $A_{\text{reset}}$ s'appelle le **vecteur de reset** (*reset vector*). « Vecteur » au sens informatique : un pointeur, une adresse à laquelle le contrôle saute. Ce qui est crucial, c'est qu'elle est **gravée dans le matériel**, pas calculée : le circuit de RESET *contient* la valeur $A_{\text{reset}}$. Le PC ne peut pas la rater.
+
+<Encart type="plusloin" titre="Reset asynchrone et durée minimale">
+En pratique, le RESET agit le plus souvent de façon **asynchrone** : il force l'état des bascules indépendamment de l'horloge, dès qu'il est actif. On le maintient un certain temps (le temps que l'alimentation se stabilise et que l'oscillateur d'horloge démarre), puis on le relâche — et c'est au *relâchement* que le processeur commence vraiment à exécuter, PC déjà chargé. Beaucoup de processeurs réinitialisent aussi d'autres registres (mode du cœur, désactivation des interruptions, et sur certains cœurs le pointeur de pile, chargé *avant* le PC). Mais le minimum logiquement indispensable pour démarrer de façon reproductible, c'est de fixer le PC. <Badge niveau="implementation">L'ensemble exact des registres remis dans un état défini, leur ordre de chargement et la polarité active (niveau bas ou haut) du signal varient selon le cœur et le fabricant.</Badge>
+</Encart>
+
+## Pourquoi ce code doit être en mémoire *non volatile*
+
+Le PC pointe maintenant vers $A_{\text{reset}}$. Encore faut-il qu'il y ait **quelque chose à lire** à cette adresse. Et ici la physique tranche de nouveau. La <Prereq href="/processeurs/partie-iv/memoires-sram-dram">mémoire vive (RAM) que nous avons étudiée</Prereq> est **volatile** : ses cellules ne conservent leur contenu que tant qu'elles sont alimentées. Au tout premier instant qui suit la mise sous tension, la RAM ne contient aucune donnée utile — ses cellules portent des valeurs arbitraires, exactement comme les bascules du PC.
+
+<Badge niveau="fonde">Le code exécuté au reset ne peut pas résider en RAM : la RAM est volatile et son contenu au démarrage est indéterminé. Le premier code doit donc être stocké dans une mémoire qui survit à la coupure d'alimentation, c'est-à-dire une mémoire **non volatile**. C'est imposé, pas choisi.</Badge>
+
+<Tournant titre="Tournant : la physique impose une contrainte, l'ingénieur tranche les détails">
+Jusqu'ici tout était **déduit** : l'état initial est indéterminé (nature des bascules), il faut donc un RESET qui fixe le PC (déterminisme), et le code visé doit survivre à la coupure (volatilité de la RAM). Trois nécessités, aucune alternative.
+
+Mais à partir d'ici, la nécessité s'arrête et le **choix d'ingénierie** commence. La physique dit « *une* mémoire non volatile, à *une* adresse fixe ». Elle ne dit ni **laquelle** (ROM gravée ? flash réinscriptible ?), ni **quelle adresse** ($0$ ? une adresse haute ? une indirection ?). Ces réponses-là sont des conventions d'architecture : utiles, cohérentes, mais qui pourraient être — et sont — différentes d'une puce à l'autre. Les deux sections suivantes distinguent soigneusement ce qui est *fondé* de ce qui est *décrété*.
+</Tournant>
+
+C'est pourquoi, à l'adresse $A_{\text{reset}}$, l'ingénieur place une mémoire **non volatile** : historiquement une **ROM** (gravée une fois pour toutes), aujourd'hui le plus souvent une **mémoire flash** (réinscriptible, ce qui permet les mises à jour). Le choix ROM contre flash, lui, n'est dicté par aucune loi : c'est un arbitrage entre coût, immuabilité et possibilité de mise à jour.
+
+<Badge niveau="convention">ROM ou flash : la *non-volatilité* est imposée par la physique, mais le type précis de mémoire non volatile, et la décision de la rendre ou non réinscriptible, sont des choix d'ingénierie.</Badge>
+
+## L'adresse exacte dépend de l'architecture
+
+Quelle est, numériquement, la valeur de $A_{\text{reset}}$ ? Il n'y a **aucune réponse universelle**. Certaines familles de processeurs démarrent à l'adresse $0$. D'autres placent le vecteur tout en haut de l'espace d'adressage, juste sous l'adresse maximale. D'autres encore lisent d'abord, à une adresse fixe, *l'adresse* du premier code (une indirection : une table de vecteurs). C'est purement une décision des concepteurs de l'architecture.
+
+<Badge niveau="implementation">La valeur du vecteur de reset dépend de l'architecture et du fabricant : adresse haute $\texttt{0xFFFFFFF0}$ sur x86 ; sur Cortex-M, le mot à $\texttt{0x00000000}$ donne la pile initiale et celui à $\texttt{0x00000004}$ l'adresse de départ ; valeur définie par l'implémentation sur RISC-V. Ce qui est *fondé*, c'est qu'elle soit **fixe et connue d'avance** ; sa valeur précise est, elle, conventionnelle.</Badge>
+
+<BootSequence />
+
+## La frontière exacte matériel → logiciel
+
+Reprenons le fil <Prereq href="/processeurs/partie-v/von-neumann">de l'architecture de von Neumann</Prereq> : le PC pointe une instruction, le processeur la lit en mémoire et l'exécute. Tout ce que le RESET apporte, c'est de **fixer la première valeur du PC** et de garantir qu'à cette adresse l'attend du code persistant. À partir de l'instant où le RESET est relâché, le matériel a fini son travail conceptuel : il a livré un PC valide pointant un octet exécutable.
+
+Cet octet, et ceux qui le suivent, forment le premier **programme** qui tourne sur la machine. C'est lui qui, ensuite, configurera la mémoire, initialisera la RAM, activera les <Prereq href="/processeurs/partie-v/interruptions-dma">interruptions</Prereq> et chargera la suite. Ce premier code a un nom : le **firmware**. La baguette du chef vient de s'abaisser ; c'est désormais une partition logicielle qui se joue. Au chapitre suivant, nous suivons ce firmware pas à pas.
