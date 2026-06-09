@@ -11,16 +11,18 @@
  *     2. Second postulat…
  *   </Hypotheses>
  */
+import { titreHtml, titreTexte } from '../lib/titre-math';
+
 interface Props {
   titre?: string;
 }
 const { titre = 'Hypothèses de départ' } = Astro.props;
 ---
 
-<aside class="hypotheses" aria-label={titre}>
+<aside class="hypotheses" aria-label={titreTexte(titre)}>
   <div class="head">
     <span class="icon" aria-hidden="true">⚖️</span>
-    <h2 class="t">{titre}</h2>
+    <h2 class="t" set:html={titreHtml(titre)} />
   </div>
   <div class="body">
     <p class="intro">Tout ce qui suit est <strong>déduit</strong> de ces seules hypothèses (ou de résultats déjà démontrés). Rien d’autre n’est admis.</p>

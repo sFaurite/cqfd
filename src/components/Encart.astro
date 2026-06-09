@@ -16,6 +16,7 @@
  * d'ouverture est ajoutée par src/scripts/accordion.ts.
  */
 import { ENCART, type TypeEncart } from '../lib/palette';
+import { titreHtml } from '../lib/titre-math';
 
 interface Props {
   type: TypeEncart;
@@ -35,7 +36,7 @@ const libelle = titre ?? meta.label;
     <span class="emoji" aria-hidden="true">{meta.emoji}</span>
     <span class="kind">{meta.label}</span>
     {titre && <span class="sep" aria-hidden="true">·</span>}
-    {titre && <span class="titre">{titre}</span>}
+    {titre && <span class="titre" set:html={titreHtml(titre)} />}
     <svg class="chev" viewBox="0 0 16 16" aria-hidden="true" width="16" height="16">
       <path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
     </svg>

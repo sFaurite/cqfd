@@ -41,7 +41,7 @@ C'est la « sensibilité » de la perte au signal qui entre dans la couche $\ell
 
 ### La récurrence : remonter d'une couche
 
-<Encart type="calcul" titre="Démonstration : delta-ell = ((W^(ell+1))^T delta^(ell+1)) ⊙ sigma'(z^ell)">
+<Encart type="calcul" titre="Démonstration : $\delta^\ell = ((W^{\ell+1})^\top \delta^{\ell+1}) \odot \sigma'(z^\ell)$">
 
 **Étape 1 — La règle de la chaîne.** La pré-activation $z^\ell$ n'influence $L$ qu'à travers la couche suivante $z^{\ell+1}$. Donc, pour chaque composante $j$ :
 
@@ -78,7 +78,7 @@ Il manque l'amorce de la récurrence : à la sortie, $\delta^L = \dfrac{\partial
 
 ### Des erreurs aux gradients des poids
 
-<Encart type="calcul" titre="Démonstration : dL/dW^ell = delta^ell (a^(ell-1))^T">
+<Encart type="calcul" titre="Démonstration : $\partial L/\partial W^\ell = \delta^\ell\,(a^{\ell-1})^\top$">
 
 On dérive par rapport à un poids $W^\ell_{ji}$. Il n'intervient que dans $z^\ell_j$ :
 

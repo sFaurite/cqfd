@@ -10,16 +10,18 @@
  *     Texte expliquant quelles hypothèses nouvelles on adopte et pourquoi.
  *   </Tournant>
  */
+import { titreHtml, titreTexte } from '../lib/titre-math';
+
 interface Props {
   titre?: string;
 }
 const { titre = 'Tournant : on change de cadre' } = Astro.props;
 ---
 
-<aside class="tournant" aria-label={titre}>
+<aside class="tournant" aria-label={titreTexte(titre)}>
   <div class="head">
     <span class="icon" aria-hidden="true">🧭</span>
-    <h2 class="t">{titre}</h2>
+    <h2 class="t" set:html={titreHtml(titre)} />
   </div>
   <div class="body">
     <slot />

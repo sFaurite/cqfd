@@ -10,6 +10,8 @@
  * Un badge de fiabilité peut être passé en attribut `badge` (slot nommé) ou placé
  * juste après dans le texte.
  */
+import { titreHtml, titreTexte } from '../lib/titre-math';
+
 interface Props {
   label?: string;
 }
@@ -17,9 +19,9 @@ const { label = 'Résultat' } = Astro.props;
 const hasBadge = await Astro.slots.has('badge');
 ---
 
-<div class="resultat" role="figure" aria-label={label}>
+<div class="resultat" role="figure" aria-label={titreTexte(label)}>
   <div class="ribbon">
-    <span aria-hidden="true">★</span> {label}
+    <span aria-hidden="true">★</span> <span set:html={titreHtml(label)} />
     {hasBadge && <span class="badge-slot"><slot name="badge" /></span>}
   </div>
   <div class="content">
@@ -48,6 +50,10 @@ const hasBadge = await Astro.slots.has('badge');
     text-transform: uppercase;
     letter-spacing: 0.06em;
     border-bottom: 1px solid color-mix(in srgb, var(--c-yellow) 30%, var(--c-border));
+  }
+  /* la casse des maths est significative : on neutralise l'uppercase du ruban */
+  .ribbon :global(.katex) {
+    text-transform: none;
   }
   .badge-slot {
     margin-left: auto;
