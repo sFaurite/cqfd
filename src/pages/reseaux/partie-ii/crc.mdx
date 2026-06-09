@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Le problème : la parité voit trop peu
 
@@ -84,6 +85,8 @@ $$ T(x) = x^{r}M(x) + \big(x^{r}M(x) \bmod G(x)\big) \;\equiv\; 0 \pmod{G(x)} . 
 <Badge niveau="theoreme" slot="badge">Démontré : par construction du reste, $T$ est un multiple de $G$.</Badge>
 </Resultat>
 </Encart>
+
+<VideoManim src="reseaux-crc-division-xor" scene="ReseauCrcDivision" titre="CRC : la division par XOR" legende="La division polynomiale modulo 2 se déroule comme une cascade de XOR alignés qui font tomber le diviseur étage par étage jusqu'au reste de 4 bits." />
 
 ## Pourquoi ça détecte : l'algèbre du polynôme d'erreur
 

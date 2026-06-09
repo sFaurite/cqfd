@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import ReseauSousReseau from '../../../components/interactive/ReseauSousReseau.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Là où l'adresse se coupe en deux
 
@@ -60,6 +61,8 @@ L'hôte `.37` tombe dans le réseau `192.168.10.0/26`.
 Manipulez vous-même le ET binaire : changez l'adresse, faites glisser la frontière du masque, et regardez le préfixe se recalculer bit à bit en direct.
 
 <ReseauSousReseau />
+
+<VideoManim src="reseaux-masque-et-binaire-prefixe" scene="ReseauMasqueEtBinaire" titre="Masque /26 : le ET qui coupe l'adresse" legende="L'adresse et le masque s'alignent bit à bit, le ET logique efface les bits hôte et fait émerger le préfixe réseau, puis la frontière du masque glisse pour subdiviser." />
 
 ## Compter les hôtes d'un /n
 

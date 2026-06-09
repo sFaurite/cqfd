@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import IaAttentionHeatmap from '../../../components/interactive/IaAttentionHeatmap.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Le problème : un mot ne se comprend pas tout seul
 
@@ -85,6 +86,9 @@ $$ \operatorname{Attention}(Q,K,V) = \operatorname{softmax}\!\left(\frac{Q K^{\t
 </Resultat>
 
 La dernière multiplication par $V$ est la moyenne pondérée annoncée : la sortie à la position $i$ est $\sum_j p_{ij}\, v_j$, où $p_{ij}$ est le poids d'attention (la ligne $i$ du softmax). On va chercher, dans toutes les valeurs, celles que la requête juge pertinentes.
+
+<VideoManim src="ia-attention-qkv" scene="IaAttentionQkv" titre="Chercher par contenu : Q, K, V" legende="Une requête compare son produit scalaire à chaque clé, le softmax pondère, puis mélange les valeurs." />
+
 
 ## Self-attention et têtes multiples
 

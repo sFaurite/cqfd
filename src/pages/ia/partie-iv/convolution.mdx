@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import IaConvFilter from '../../../components/interactive/IaConvFilter.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Une architecture qui sait quelque chose sur ses données
 
@@ -40,6 +41,8 @@ S(i,j) = \sum_{u=-m}^{m}\sum_{v=-m}^{m} K(u,v)\, I(i+u,\, j+v)
 $$
 
 On *pose* le noyau sur le voisinage, on multiplie terme à terme, on somme. Puis on glisse d'un cran et on recommence. (Au sens strict des mathématiques, c'est une *corrélation croisée* ; en apprentissage on l'appelle « convolution » par tradition, et comme $K$ est appris, la distinction est sans effet — le réseau apprend le noyau retourné si besoin.)
+
+<VideoManim src="ia-convolution-filtre" scene="IaConvolutionFiltre" titre="Un filtre qui glisse sur l'image" legende="Un noyau 3×3 balaie l'image, multiplie terme à terme et somme, construisant la carte de sortie case par case." />
 
 <Encart type="calcul" titre="Détecter un bord vertical, à la main">
 Prenons le noyau de Sobel horizontal, qui répond fort là où la luminosité change de gauche à droite :

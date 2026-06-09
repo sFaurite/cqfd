@@ -13,6 +13,7 @@ import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import ChimieOrbitalViewer from '../../../components/interactive/ChimieOrbitalViewer.astro';
 import ChimieSpectreRaies from '../../../components/interactive/ChimieSpectreRaies.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## L'atome d'hydrogène : niveaux et orbitales
 
@@ -104,6 +105,8 @@ La prédiction est radicale : comme seules certaines énergies existent, la lumi
 Explorez les séries et lisez directement les transitions :
 
 <ChimieSpectreRaies />
+
+<VideoManim src="chimie-saut-quantique-raie-spectrale" scene="ChimieSautQuantiqueRaie" titre="Le saut quantique fait une raie" legende="Un électron descend d'un niveau d'énergie à un autre et émet un photon dont la couleur tombe pile sur une raie du spectre de l'hydrogène." />
 
 Que les positions mesurées de ces raies tombent *pile* sur les écarts $E_{n_i}-E_{n_f}$ prédits, c'est la confirmation éclatante que la quantification posée en hypothèse n'est pas une commodité mathématique : c'est ainsi que la nature fonctionne. Historiquement, c'est même l'ordre inverse qui s'est imposé — les raies ont été *mesurées d'abord*, et c'est leur régularité énigmatique qui a forcé la quantification.
 

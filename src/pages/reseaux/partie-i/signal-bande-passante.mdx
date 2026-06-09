@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import ReseauSpectre from '../../../components/interactive/ReseauSpectre.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Signal, fréquences et bande passante
 
@@ -43,6 +44,8 @@ L'interactif ci-dessous vous laisse manipuler ce spectre : ajoutez les harmoniqu
 <ReseauSpectre />
 
 Observez le point crucial : avec seulement le fondamental, vous avez une vague ; avec quelques harmoniques, des coins qui se devinent ; il faudrait l'infini des harmoniques pour un angle parfait. **Un créneau parfait exige un spectre s'étendant jusqu'à l'infini.** <Badge niveau="theoreme">Conséquence directe du théorème de Fourier : une transition abrupte (discontinuité) ne peut être reconstruite qu'avec des composantes de fréquence arbitrairement élevées. C'est mathématiquement inévitable.</Badge>
+
+<VideoManim src="reseaux-fourier-creneau-synthese" scene="ReseauFourierCreneau" titre="Le créneau né des sinus" legende="Les harmoniques impaires s'empilent une à une et reconstruisent un signal carré, montrant qu'un coin net exige des fréquences toujours plus hautes." />
 
 ### La bande passante d'un canal : une grandeur physique
 

@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import IaUniversalApprox from '../../../components/interactive/IaUniversalApprox.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Le théorème d'approximation universelle
 
@@ -67,6 +68,8 @@ Cette construction donne l'intuition ; la preuve rigoureuse de Cybenko passe en 
 </Encart>
 
 La même mécanique fonctionne avec des **ReLU** : deux ReLU décalées font un coude, et l'on approche $f$ par une fonction affine par morceaux. Plus on ajoute de neurones, plus le maillage est fin, plus l'erreur tombe. L'interactif ci-dessous rend ce processus tangible : ajoutez des neurones et regardez la sortie se mouler sur la cible.
+
+<VideoManim src="ia-approximation-bosses" scene="IaApproximationBosses" titre="Construire une fonction avec des bosses" legende="Deux sigmoïdes se soustraient en une bosse ; en empilant des bosses, le réseau épouse n'importe quelle courbe." />
 
 <IaUniversalApprox />
 

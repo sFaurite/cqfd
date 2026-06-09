@@ -56,6 +56,26 @@ render histoire_thermique.py     HistoireThermique     histoire-thermique
 render recombinaison_cmb.py      RecombinaisonCMB      recombinaison-cmb
 render courbe_rotation.py        CourbeRotation        courbe-rotation
 render acceleration_expansion.py AccelerationExpansion acceleration-expansion
+# — cours « chimie » (depuis l'atome quantique)
+render chimie_saut_quantique_raie_spectrale.py  ChimieSautQuantiqueRaie             chimie-saut-quantique-raie-spectrale
+render chimie_vsepr_angle_qui_se_referme.py     ChimieVseprAngleQuiSeReferme        chimie-vsepr-angle-qui-se-referme
+render chimie_barriere_activation_catalyseur.py ChimieBarriereActivationCatalyseur  chimie-barriere-activation-catalyseur
+render chimie_fleches_courbes_sn2.py            ChimieFlechesCourbesSn2             chimie-fleches-courbes-sn2
+# — cours « réseaux » (depuis le bit)
+render reseaux_fourier_creneau_synthese.py      ReseauFourierCreneau                reseaux-fourier-creneau-synthese
+render reseaux_crc_division_xor.py              ReseauCrcDivision                   reseaux-crc-division-xor
+render reseaux_csma_cd_collision.py             ReseauCsmaCollision                 reseaux-csma-cd-collision
+render reseaux_masque_et_binaire_prefixe.py     ReseauMasqueEtBinaire               reseaux-masque-et-binaire-prefixe
+# — cours « histoire » (des premiers hommes aux temps modernes)
+render histoire_decroissance_carbone14.py       HistoireDecroissanceCarbone14       histoire-decroissance-carbone14
+render histoire_jeton_vers_signe.py             HistoireJetonVersSigne              histoire-jeton-vers-signe
+render histoire_tirage_au_sort_kleroterion.py   HistoireKleroterion                 histoire-tirage-au-sort-kleroterion
+render histoire_caracteres_mobiles.py           HistoireCaracteresMobiles           histoire-caracteres-mobiles
+# — cours « IA » (de zéro au transformer)
+render ia_descente_gradient.py                  IaDescenteGradient                  ia-descente-gradient
+render ia_approximation_bosses.py               IaApproximationBosses               ia-approximation-bosses
+render ia_convolution_filtre.py                 IaConvolutionFiltre                 ia-convolution-filtre
+render ia_attention_qkv.py                      IaAttentionQkv                      ia-attention-qkv
 # ===================================================================
 
 echo "Terminé. Vidéos dans $OUT :"

@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Quand tout le monde parle en même temps
 
@@ -43,6 +44,8 @@ Une première idée naturelle : **écouter avant de parler**. C'est le *Carrier 
 Supposons deux stations A et B aux deux extrémités du câble. A commence à émettre à l'instant $t=0$. Son signal n'atteint B qu'à $t=\tau$. Si B écoute à $t = \tau/2$, elle entend... le silence, car le signal de A n'est pas encore arrivé chez elle. Elle se croit autorisée à émettre, et émet. À $t=\tau$, les deux signaux se rencontrent : collision. L'écoute ne supprime donc pas les collisions, elle les rend seulement plus rares.
 
 </Encart>
+
+<VideoManim src="reseaux-csma-cd-collision" scene="ReseauCsmaCollision" titre="CSMA/CD : la collision inévitable" legende="Deux signaux partis des deux bouts d'un bus se propagent à vitesse finie, se rencontrent au milieu en une collision, puis le backoff aléatoire brise la symétrie." />
 
 ## CSMA/CD : écouter, et détecter pendant qu'on parle
 

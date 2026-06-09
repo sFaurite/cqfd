@@ -13,6 +13,7 @@ import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import HistoireDatationCarbone14 from '../../../components/interactive/HistoireDatationCarbone14.astro';
 import HistoireFriseChrono from '../../../components/interactive/HistoireFriseChrono.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Entrer dans le temps, sans un seul texte pour nous guider
 
@@ -62,6 +63,8 @@ Voici l'horloge la plus célèbre pour les temps récents. Son mécanisme tient 
 **Quatre.** On mesure aujourd'hui le rapport carbone 14 restant. Plus il est faible, plus la mort est ancienne. La **demi-vie du carbone 14 vaut environ 5 730 ans** : tous les 5 730 ans, il reste la moitié du stock. L'horloge interne suit ce rythme.
 
 <HistoireDatationCarbone14 />
+
+<VideoManim src="histoire-decroissance-carbone14" scene="HistoireDecroissanceCarbone14" titre="L'horloge du carbone 14" legende="La courbe de décroissance exponentielle du carbone 14 se trace et un curseur lit l'âge en demi-vies successives (50 %, 25 %, 12,5 %), jusqu'à la limite des ~50 000 ans." />
 
 <Encart type="calcul" titre="Critique des sources : ce que mesure vraiment le carbone 14">
 Manipulez l'outil ci-dessus : à une demi-vie (≈ 5 730 ans), il reste 50 % ; à deux, 25 % ; à trois, 12,5 %. La décroissance est **exponentielle**, jamais nulle mais vite minuscule. D'où la **limite pratique d'environ 50 000 ans** : 50 000 ans représentent à peu près huit à neuf demi-vies, et au-delà il reste si peu de carbone 14 (moins de 0,4 %) que le bruit de mesure et la moindre contamination par du carbone moderne ruinent le résultat. **Le carbone 14 ne dit donc rien du Paléolithique ancien** : il ne couvre que la fin de l'histoire humaine.

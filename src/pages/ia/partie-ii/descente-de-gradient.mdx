@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import IaLossLandscape from '../../../components/interactive/IaLossLandscape.astro';
+import VideoManim from '../../../components/VideoManim.astro';
 
 ## Suivre la pente, pas après pas
 
@@ -54,6 +55,8 @@ Prenons la <Prereq href="/ia/partie-i/regression-logistique">régression logisti
 <IaLossLandscape />
 
 Faites varier $\eta$ : à pas modéré, la trajectoire descend en s'incurvant doucement vers le centre. Trop petit, elle rampe. Trop grand, elle se met à **zigzaguer** d'un bord à l'autre du bol, et au-delà d'un seuil elle **diverge** — elle s'éloigne du minimum à chaque pas. Comprenons ce seuil exactement.
+
+<VideoManim src="ia-descente-gradient" scene="IaDescenteGradient" titre="Le pas d'apprentissage décide de tout" legende="Une bille descend la vallée de la perte ; selon le pas, elle glisse, zigzague ou diverge." />
 
 ### 3. Le pas d'apprentissage, analysé sur une parabole
 
