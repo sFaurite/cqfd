@@ -117,7 +117,7 @@ L'universalité de NAND est une **nécessité mathématique** : elle ne dépend 
 La preuve précédente dit seulement que NAND *peut* tout faire — pas qu'il *faut* l'utiliser. Ici nous posons un choix d'implémentation : les fonderies privilégient NAND et NOR. La raison n'est pas logique mais **physique**. En technologie CMOS — celle de l'<Prereq href="/processeurs/partie-ii/inverseur-cmos">inverseur CMOS</Prereq> — une NAND ou une NOR se réalisent naturellement avec seulement **quatre transistors** (deux NMOS, deux PMOS), et le circuit est *naturellement inverseur*, ce qui colle à la structure CMOS. Un ET ou un OU « purs », eux, exigent une NAND/NOR **suivie** d'un inverseur : plus de transistors, plus de surface, plus de délai.
 </Tournant>
 
-<Badge niveau="convention">Bâtir les circuits à partir de NAND/NOR est un choix motivé par l'efficacité du CMOS, pas par la logique. On pourrait tout faire avec NOR seule, ou tout autre ensemble universel.</Badge>
+<Badge niveau="implementation">Bâtir les circuits à partir de NAND/NOR est un choix motivé par l'efficacité du CMOS, pas par la logique. On pourrait tout faire avec NOR seule, ou tout autre ensemble universel.</Badge>
 
 On tient là un principe d'une portée immense. Un seul motif de quatre transistors, gravé des milliards de fois sur une puce et interconnecté, suffit *en principe* à réaliser tout calcul logique imaginable. La complexité d'un processeur ne vient pas de la richesse de ses briques, mais de leur **nombre** et de leur **agencement**.
 

@@ -18,14 +18,14 @@ import MiniCpu from '../../../components/interactive/MiniCpu.astro';
 Nous savons fabriquer des interrupteurs, les assembler en portes, en faire une <Prereq href="/processeurs/partie-iv/machines-etats">machine à états</Prereq> qui avance au rythme d'une horloge, et nous savons stocker des bits dans une <Prereq href="/processeurs/partie-iv/memoires-sram-dram">mémoire</Prereq>. Il ne nous manque plus aucune brique : il nous manque un **plan**. Comment relier un organe qui *calcule*, un organe qui *se souvient* et le monde *extérieur*, de façon à obtenir une machine non pas figée, mais **reprogrammable** ?
 
 <Tournant titre="Tournant : on pose une architecture, on ne déduit plus">
-Jusqu'ici chaque résultat découlait de la physique ou de la logique. Ce chapitre est différent : nous **choisissons** une organisation. Le modèle de **von Neumann** — instructions et données rangées dans **une seule et même mémoire** — n'est imposé par aucune loi. C'est une convention d'architecture, et il en existe une autre (Harvard). Mais ce choix précis a une conséquence extraordinaire qui, elle, sera *forcée* : la machine devient **universellement programmable**. On distingue donc soigneusement ce qu'on décide de ce qu'on en déduit.
+Jusqu'ici chaque résultat découlait de la physique ou de la logique. Ce chapitre est différent : nous **choisissons** une organisation. Le modèle de **von Neumann** — instructions et données rangées dans **une seule et même mémoire** — n'est imposé par aucune loi. C'est une convention d'architecture, et il en existe une autre (Harvard). Mais l'idée qu'il incarne — le **programme enregistré** —, jointe à un jeu d'instructions suffisant, a une conséquence extraordinaire qui, elle, sera *forcée* : la machine devient **universellement programmable**. On distingue donc soigneusement ce qu'on décide de ce qu'on en déduit.
 </Tournant>
 
 <Hypotheses titre="Ce qu'on admet en entrant dans ce chapitre">
 
 1. Toutes les **briques matérielles** des parties précédentes sont disponibles : interrupteurs (transistors), portes logiques, <Prereq href="/processeurs/partie-iv/machines-etats">machines à états</Prereq> synchronisées par une horloge, et <Prereq href="/processeurs/partie-iv/memoires-sram-dram">mémoires</Prereq> capables de retenir des bits.
 2. Une **information quelconque se code par un nombre** (binaire) — y compris, on va le voir, une instruction. C'est l'acquis du chapitre sur le complément à deux.
-3. **Hypothèse propre à ce chapitre** (un *choix*, pas une loi) : on range instructions **et** données dans une mémoire **unique**, adressable par des nombres. C'est la convention de von Neumann. Toute la suite explore ce que ce choix entraîne — sa puissance (universalité) comme son prix (le goulot d'étranglement).
+3. **Hypothèse propre à ce chapitre** (un *choix*, pas une loi) : on range instructions **et** données dans une mémoire **unique**, adressable par des nombres. C'est la convention de von Neumann. Toute la suite explore ce que ce choix entraîne — la reprogrammabilité qu'apporte le programme enregistré, comme son prix (le goulot d'étranglement).
 
 </Hypotheses>
 
@@ -48,13 +48,13 @@ $$ \text{instruction} \;\equiv\; \text{nombre en mémoire} \;=\; \text{même nat
 <Badge niveau="convention" slot="badge">Choix d'architecture, non une nécessité physique. On *décide* de coder les instructions comme des nombres et de les loger dans la mémoire des données. Génial, mais on aurait pu câbler, ou séparer les deux.</Badge>
 </Resultat>
 
-De ce choix découle, lui sans alternative, le résultat majeur : **une même machine peut exécuter n'importe quel programme**. On ne construit plus une machine par tâche, mais **une machine universelle** dont le comportement est défini par les nombres qu'elle contient.
+De ce choix découle le résultat majeur — pourvu que le répertoire d'instructions soit suffisant (lire/écrire la mémoire, une opération simple et un branchement conditionnel, on le verra au chapitre suivant) : **une même machine peut exécuter n'importe quel programme**. On ne construit plus une machine par tâche, mais **une machine universelle** dont le comportement est défini par les nombres qu'elle contient. Notez que c'est le programme enregistré qui rend la machine reprogrammable, pas la mémoire unique : une machine Harvard à programme enregistré l'est tout autant.
 
 <Resultat label="Universalité de la machine programmable">
 
 $$ \text{matériel fixe} \;+\; \text{programme variable} \;\Longrightarrow\; \text{n'importe quel calcul} $$
 
-<Badge niveau="fonde" slot="badge">Conséquence stricte du programme enregistré : si tout traitement se décrit par une suite de nombres, et que la machine lit ces nombres, alors elle peut réaliser tout traitement descriptible. C'est une déduction, pas un choix.</Badge>
+<Badge niveau="fonde" slot="badge">Déduction stricte du programme enregistré *joint à* un jeu d'instructions suffisant (branchement conditionnel compris, cf. chapitre sur l'ISA). Le programme enregistré seul, sans branchement conditionnel, ne suffirait pas.</Badge>
 </Resultat>
 
 <Encart type="plusloin" titre="Le lien avec Turing">
@@ -85,7 +85,7 @@ Une seule mémoire, donc **un seul bus** pour y accéder. Or à chaque cycle le 
 
 <Resultat label="Goulot d'étranglement de von Neumann">
 
-$$ \text{débit utile} \;\le\; \frac{\text{débit du bus}}{\text{instructions} + \text{données}} $$
+$$ \text{débit}_{\text{instructions}} \;+\; \text{débit}_{\text{données}} \;\le\; \text{débit du bus} $$
 
 <Badge niveau="fonde" slot="badge">Conséquence directe du partage : avec un canal unique, instructions et données se disputent la bande passante. Le débit total est borné par celui du bus, quelle que soit la vitesse du CPU.</Badge>
 </Resultat>

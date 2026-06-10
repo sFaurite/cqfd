@@ -34,7 +34,7 @@ Construisons donc un MOSFET **à canal N** (le « NMOS »), couche par couche.
 
 3. Au-dessus de cet intervalle, on fait croître une **très fine couche d'oxyde de silicium** ($\mathrm{SiO_2}$), un excellent **isolant** électrique.
 
-4. Enfin, on dépose par-dessus l'oxyde un matériau conducteur : la **grille** (historiquement du métal, d'où le sigle **M**étal-**O**xyde-**S**emiconducteur ; aujourd'hui souvent du silicium polycristallin).
+4. Enfin, on dépose par-dessus l'oxyde un matériau conducteur : la **grille** (historiquement du métal, d'où le sigle **M**étal-**O**xyde-**S**emiconducteur ; puis du silicium polycristallin des années 1970 aux années 2000 ; les nœuds avancés sont revenus depuis ~2007 à une grille métallique, sur un isolant à haute permittivité (« high-k ») remplaçant le SiO₂).
 
 L'épaisseur de l'oxyde — quelques nanomètres seulement — et la longueur du canal sont des paramètres de fabrication.
 
@@ -57,7 +57,7 @@ Appliquons maintenant une tension **positive** sur la grille (par rapport au sub
 - ensuite, si la tension monte assez, il **attire les électrons** minoritaires vers la surface, qui s'y accumulent en une fine pellicule.
 
 <Encart type="plusloin" titre="Pourquoi une couche d'inversion ?">
-Le substrat est de type P : ses porteurs majoritaires sont des trous, ses électrons sont rares (minoritaires). Mais un semiconducteur en contient toujours quelques-uns, créés par agitation thermique. Le champ de la grille les **trie** : il les rassemble juste sous l'oxyde. Localement, à cet endroit précis, les électrons deviennent plus nombreux que les trous : le silicium s'y comporte comme du **type N**, alors qu'il est globalement P. On dit que la couche superficielle est **inversée** — d'où le nom de **couche d'inversion**. C'est un type N créé non par dopage, mais par *influence électrostatique*, et qui disparaît dès qu'on coupe la tension.
+Le substrat est de type P : ses porteurs majoritaires sont des trous, ses électrons sont rares (minoritaires). Mais un semiconducteur en contient toujours quelques-uns, créés par agitation thermique. Le champ de la grille les **trie** : il les rassemble juste sous l'oxyde. Dans le transistor complet, ces électrons sont surtout fournis — presque instantanément — par les réservoirs $n^+$ de la source et du drain tout proches ; la génération thermique seule y parviendrait aussi, mais lentement (de l'ordre de la milliseconde). Localement, à cet endroit précis, les électrons deviennent plus nombreux que les trous : le silicium s'y comporte comme du **type N**, alors qu'il est globalement P. On dit que la couche superficielle est **inversée** — d'où le nom de **couche d'inversion**. C'est un type N créé non par dopage, mais par *influence électrostatique*, et qui disparaît dès qu'on coupe la tension.
 </Encart>
 
 Cette pellicule d'électrons forme un **canal de type N** continu, reliant la source au drain. Le verrou des deux jonctions est levé : un courant peut désormais circuler de la source au drain. La grille, sans rien toucher, vient d'ouvrir le robinet.

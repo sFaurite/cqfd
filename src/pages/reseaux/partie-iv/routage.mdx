@@ -112,7 +112,7 @@ Cette dernière ligne, `0.0.0.0/0`, est la **route par défaut** : un préfixe d
 
 ## Pourquoi l'agrégation est vitale
 
-Il y a plusieurs centaines de milliers de réseaux dans l'Internet mondial. Si chaque routeur de cœur devait stocker une ligne par réseau de destination, les tables exploseraient. C'est ici que le <Prereq href="/reseaux/partie-iv/sous-reseaux">CIDR</Prereq> sauve la mise : un opérateur qui possède `203.0.0.0/16` … `203.0.255.0/24` peut les **agréger** en une seule annonce `203.0.0.0/16`. Une ligne au lieu de 256.
+Il y a plusieurs centaines de milliers de réseaux dans l'Internet mondial. Si chaque routeur de cœur devait stocker une ligne par réseau de destination, les tables exploseraient. C'est ici que le <Prereq href="/reseaux/partie-iv/sous-reseaux">CIDR</Prereq> sauve la mise : un opérateur qui possède `203.0.0.0/24` … `203.0.255.0/24` peut les **agréger** en une seule annonce `203.0.0.0/16`. Une ligne au lieu de 256.
 
 <Encart type="intuition" titre="L'agrégation, c'est résumer une direction">
 Le longest prefix match et l'agrégation forment un couple. L'agrégation comprime la table en remplaçant beaucoup de préfixes longs par un préfixe court ; le longest prefix match permet malgré tout d'insérer une **exception** plus spécifique quand il le faut (par exemple un sous-bloc routé différemment). La règle « le plus long gagne » garantit que l'exception l'emporte sur le résumé.

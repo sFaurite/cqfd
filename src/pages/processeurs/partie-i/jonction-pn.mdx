@@ -57,7 +57,7 @@ Ces deux mécanismes sont **indépendants** et peuvent se renforcer ou s'opposer
 
 $$ V_{bi} = \frac{k_B T}{q}\,\ln\!\left(\frac{N_A N_D}{n_i^2}\right), $$
 
-où $N_A, N_D$ sont les dopages, $n_i$ la concentration intrinsèque, $T$ la température et $k_B/q \approx 25{,}9\ \text{mV}$ à 300 K (soit $k_B T/q \approx 25{,}9\ \text{mV}$ à cette température). <Badge niveau="fonde">La *forme* logarithmique découle de la statistique de Boltzmann des porteurs.</Badge> Sa *valeur* numérique (typiquement $0{,}6$–$0{,}8$ V pour le silicium) dépend des dopages et de la température. <Badge niveau="implementation">Pas de barrière universelle : elle se règle par le procédé de fabrication.</Badge>
+où $N_A, N_D$ sont les dopages, $n_i$ la concentration intrinsèque, $T$ la température et $k_B T/q \approx 25{,}9\ \text{mV}$ à 300 K. <Badge niveau="fonde">La *forme* logarithmique découle de la statistique de Boltzmann des porteurs.</Badge> Sa *valeur* numérique (typiquement $0{,}6$–$0{,}8$ V pour le silicium) dépend des dopages et de la température. <Badge niveau="implementation">Pas de barrière universelle : elle se règle par le procédé de fabrication.</Badge>
 </Encart>
 
 <VideoManim src="pn-junction" scene="PNJunction" titre="La jonction PN" legende="La zone de déplétion et le champ interne ne laissent passer le courant que dans le sens direct." />
@@ -88,7 +88,7 @@ Appliquons-le à une tranche de 60 mV :
 
 $$ V \to V + 60\ \text{mV} \;\Rightarrow\; \frac{I_2}{I_1} = e^{\,0{,}060/0{,}026} \approx e^{2{,}3} \approx 10. $$
 
-Chaque $\sim 60\ \text{mV}$ supplémentaires **multiplient le courant par 10**. Partant d'un $I_S$ minuscule (de l'ordre du nanoampère pour le Si), il faut accumuler environ une dizaine de ces tranches pour atteindre un courant « utile » (le milliampère) : d'où un coude marqué autour de
+Chaque $\sim 60\ \text{mV}$ supplémentaires **multiplient le courant par 10**. Partant d'un $I_S$ minuscule (de l'ordre du picoampère, voire du femtoampère, pour une jonction Si idéale), il faut accumuler une dizaine de ces tranches — 10 à 12 décades — pour atteindre un courant « utile » (le milliampère) : d'où un coude marqué autour de
 
 $$ \boxed{V_\gamma \approx 0{,}6\text{–}0{,}7\ \text{V}\quad(\text{silicium})}. $$
 

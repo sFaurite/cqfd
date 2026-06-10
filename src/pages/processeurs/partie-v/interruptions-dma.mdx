@@ -66,7 +66,7 @@ Deux événements peuvent surgir ensemble ; et parfois une section de code ne do
 
 Tout ce mécanisme — sauvegarder, vectoriser, sauter, reprendre — est trop précieux pour ne servir qu'aux périphériques. On le réutilise pour des événements **internes** au processeur : ce sont les **exceptions** ou **déroutements** (*traps*).
 
-- Une **division par zéro**, un opcode invalide, un accès mémoire interdit : le matériel détecte l'anomalie *pendant* l'exécution et déroute vers une routine.
+- Une **division par zéro** (sur les architectures qui la déroutent, comme x86 — RISC-V et ARM renvoient un résultat défini sans exception), un opcode invalide, un accès mémoire interdit : le matériel détecte l'anomalie *pendant* l'exécution et déroute vers une routine. <Badge niveau="implementation">La liste exacte des anomalies qui déroutent dépend de l'ISA.</Badge>
 - Un **défaut de page** : la mémoire demandée n'est pas présente ; on déroute pour aller la chercher, puis on **reprend l'instruction fautive**.
 - L'**appel système** : le programme exécute volontairement une instruction spéciale (*syscall*, *trap*) pour demander un service au noyau.
 

@@ -49,7 +49,7 @@ La matrice $E$ est faite de paramètres, exactement comme les poids d'un <Prereq
 <Tournant titre="Un principe empirique, pas un théorème">
 Nous posons une hypothèse de travail, héritée de la linguistique (Firth, 1957) : **un mot se caractérise par les contextes dans lesquels il apparaît**. Si deux mots apparaissent dans des phrases similaires (« le ___ ronronne », « le ___ chasse »), ils ont des sens voisins. C'est l'**hypothèse distributionnelle**. Rien ne la démontre : c'est un postulat fécond, validé par ses résultats, pas par une preuve.
 
-<Badge niveau="boitenoire">Principe linguistique empirique. Il fonctionne remarquablement bien, mais reste une hypothèse posée, jamais établie comme théorème.</Badge>
+<Badge niveau="robuste">Principe linguistique empirique. Il fonctionne remarquablement bien, mais reste une hypothèse posée, jamais établie comme théorème.</Badge>
 </Tournant>
 
 Cette hypothèse transforme un texte non étiqueté en problème d'apprentissage **auto-supervisé** : le contexte d'un mot devient sa propre cible. C'est exactement ce qu'exploite **word2vec** (Mikolov, 2013). Deux variantes :
@@ -99,4 +99,4 @@ Un plongement vit en haute dimension ($d \gg 3$), invisible directement. On le *
 
 Le point le plus important dépasse word2vec. Un plongement est la **première couche de représentation** : il convertit des symboles discrets en vecteurs qu'un réseau peut manipuler. Tout comme les <Prereq href="/ia/partie-iv/reseaux-convolutifs">réseaux convolutifs</Prereq> apprennent des features d'image réutilisables, la matrice $E$ apprend des features de mots. Et elle ne reste pas un objet à part : dans un transformer, la toute première opération est précisément un plongement des tokens, ensuite raffiné couche après couche.
 
-Nous tenons donc l'idée centrale — *une représentation s'apprend* — mais nos plongements sont encore **statiques** : *banque* a un seul vecteur, qu'il s'agisse d'une rivière ou d'un guichet. Pour que la représentation dépende du contexte de la phrase, il faut une machinerie qui fasse **dialoguer les mots entre eux**. C'est le rôle de l'attention — mais avant, voyons pourquoi les modèles séquentiels classiques échouent à l'orchestrer.
+Nous tenons donc l'idée centrale — *une représentation s'apprend* — mais nos plongements sont encore **statiques** : *banque* a un seul vecteur, qu'il s'agisse d'une rivière ou d'un guichet (calque assumé du célèbre exemple anglais *bank*, qui signifie aussi bien « banque » que « berge »). Pour que la représentation dépende du contexte de la phrase, il faut une machinerie qui fasse **dialoguer les mots entre eux**. C'est le rôle de l'attention — mais avant, voyons pourquoi les modèles séquentiels classiques échouent à l'orchestrer.

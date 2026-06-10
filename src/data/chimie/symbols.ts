@@ -28,12 +28,12 @@ export const SYMBOLES: Symbole[] = [
   { katex: 'i', nom: 'Ordre de liaison', desc: 'Demi-différence entre électrons en orbitales liantes et antiliantes. Mesure la « force » de la liaison.', unite: '—', voir: '/chimie/partie-ii/orbitales-moleculaires' },
 
   // Géométrie & polarité
-  { katex: 'AX_nE_m', nom: 'Notation VSEPR', desc: 'A = atome central, X = doublets liants, E = doublets non liants ; détermine la géométrie de la molécule.', unite: '—', voir: '/chimie/partie-iii/vsepr-geometrie' },
+  { katex: 'AX_nE_m', nom: 'Notation VSEPR', desc: 'A = atome central, X = atomes liés à A (une liaison multiple compte pour un seul X), E = doublets non liants ; détermine la géométrie de la molécule.', unite: '—', voir: '/chimie/partie-iii/vsepr-geometrie' },
   { katex: '\\vec{\\mu}', nom: 'Moment dipolaire', desc: 'Vecteur mesurant la séparation des charges dans une molécule ; sa norme dit si elle est polaire.', unite: 'D (debye)', valeur: '1 D ≈ 3,336×10⁻³⁰ C·m ; H₂O ≈ 1,85 D', voir: '/chimie/partie-iii/polarite-moments-dipolaires' },
 
   // Thermochimie
   { katex: '\\Delta_r H', nom: 'Enthalpie de réaction', desc: 'Chaleur échangée à pression constante. < 0 : exothermique ; > 0 : endothermique. Additive (loi de Hess).', unite: 'kJ·mol⁻¹', voir: '/chimie/partie-iv/energie-enthalpie' },
-  { katex: '\\Delta_r S', nom: 'Entropie de réaction', desc: 'Variation du nombre de micro-états accessibles au cours de la réaction.', unite: 'J·K⁻¹·mol⁻¹', voir: '/chimie/partie-iv/entropie-second-principe' },
+  { katex: '\\Delta_r S', nom: 'Entropie de réaction', desc: 'Mesure la variation du nombre de micro-états accessibles au cours de la réaction : ΔS = k_B ln(Ω_f/Ω_i).', unite: 'J·K⁻¹·mol⁻¹', voir: '/chimie/partie-iv/entropie-second-principe' },
   { katex: 'S = k_B \\ln \\Omega', nom: 'Entropie de Boltzmann', desc: 'Définition statistique de l’entropie : Ω est le nombre de micro-états compatibles avec l’état macroscopique.', unite: 'J·K⁻¹', voir: '/chimie/partie-iv/entropie-second-principe' },
   { katex: '\\Delta_r G = \\Delta_r H - T\\,\\Delta_r S', nom: 'Enthalpie libre de réaction', desc: 'Critère de spontanéité à T et P constantes : ΔG < 0, réaction spontanée.', unite: 'kJ·mol⁻¹', voir: '/chimie/partie-iv/enthalpie-libre-spontaneite' },
 
@@ -43,6 +43,6 @@ export const SYMBOLES: Symbole[] = [
   { katex: 'N_A', nom: 'Constante d’Avogadro', desc: 'Nombre d’entités par mole : fait le pont entre l’atome et le gramme.', unite: 'mol⁻¹', valeur: '6,02214076×10²³ mol⁻¹ (défini exactement)', voir: '/chimie/partie-ii/tableau-periodique' },
   { katex: 'K', nom: 'Constante d’équilibre', desc: 'Rapport des activités à l’équilibre ; sa valeur situe l’avancement final de la réaction.', unite: '—', voir: '/chimie/partie-v/equilibre-chimique' },
   { katex: 'E_a', nom: 'Énergie d’activation', desc: 'Barrière d’énergie à franchir pour réagir. Intervient dans la loi d’Arrhenius k = A·exp(−Eₐ/RT).', unite: 'kJ·mol⁻¹', voir: '/chimie/partie-v/cinetique-chimique' },
-  { katex: '\\text{p}K_a', nom: 'Constante d’acidité', desc: 'pKa = −log Ka : mesure la force d’un acide. À la demi-équivalence d’un titrage, pH = pKa.', unite: '—', valeur: 'tabulé (règle empirique) ; ex. CH₃COOH ≈ 4,76', voir: '/chimie/partie-v/acide-base' },
+  { katex: '\\text{p}K_a', nom: 'Constante d’acidité', desc: 'pKa = −log Ka : mesure la force d’un acide. À la demi-équivalence d’un titrage, pH = pKa.', unite: '—', valeur: 'tabulé (mesuré expérimentalement) ; ex. CH₃COOH ≈ 4,76', voir: '/chimie/partie-v/acide-base' },
   { katex: 'E^{\\circ}', nom: 'Potentiel standard', desc: 'Potentiel d’un couple redox dans les conditions standard ; classe le pouvoir oxydant/réducteur.', unite: 'V', valeur: 'tabulé par rapport à l’électrode à hydrogène (E° = 0 V)', voir: '/chimie/partie-v/oxydoreduction' },
 ];

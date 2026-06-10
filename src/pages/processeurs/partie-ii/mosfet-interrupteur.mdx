@@ -24,7 +24,7 @@ Imaginez un robinet d’eau. D’ordinaire, on tourne une poignée *mécanique* 
 
 L’existence du canal n’est pas progressive « depuis zéro » : il faut une tension de grille **minimale** pour que des électrons s’accumulent en nombre suffisant et forment un canal continu. Cette tension s’appelle la **tension de seuil**, notée $V_{th}$.
 
-- Si $V_{GS} < V_{th}$ : pas de canal. Source et drain sont séparés par le substrat ; **aucun courant** ne passe. Le transistor est **bloqué**. <Badge niveau="fonde">Conséquence directe de l’effet de champ : sans charge d’inversion suffisante, il n’y a pas de chemin conducteur.</Badge>
+- Si $V_{GS} < V_{th}$ : pas de canal d’inversion fort. Source et drain sont séparés par le substrat ; **pratiquement aucun courant** ne passe. Le transistor est **bloqué**. <Badge niveau="idealise">En réalité subsiste une conduction sous-seuil, exponentiellement faible en $V_{GS}$ (≈ 60–100 mV par décade à température ambiante) ; on la néglige en logique — c’est l’idéalisation assumée plus bas (« interrupteur parfait »).</Badge>
 - Si $V_{GS} \ge V_{th}$ : un canal d’électrons relie source et drain ; **un courant peut circuler**. Le transistor est **passant**. <Badge niveau="fonde">Le canal d’inversion établit un chemin conducteur continu entre les deux régions n+.</Badge>
 
 La valeur exacte de $V_{th}$ — typiquement quelques dixièmes de volt — dépend de l’épaisseur de l’oxyde, du dopage et du procédé de fabrication. <Badge niveau="implementation">Il n’y a pas de seuil universel : chaque technologie (« nœud ») a le sien, ajusté par le fabricant.</Badge>

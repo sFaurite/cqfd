@@ -27,7 +27,7 @@ Notons $L$ la perte d'entropie croisée de test (celle du pré-entraînement) et
 
 $$ L(N) \approx L_\infty + \frac{a}{N^{\alpha}} $$
 
-où $a > 0$ et $\alpha > 0$ sont des constantes **ajustées sur les données** (typiquement $\alpha$ de l'ordre de $0{,}05$ à $0{,}1$ pour le langage), et $L_\infty \ge 0$ est une perte irréductible — le bruit intrinsèque du langage, qu'aucun modèle ne peut franchir. La même forme vaut si on fait varier la **quantité de données** $D$ ou le **budget de calcul** $C$ : chacun donne sa propre droite log-log.
+où $a > 0$ et $\alpha > 0$ sont des constantes **ajustées sur les données** (pour le langage, les premières mesures donnaient $\alpha$ de l'ordre de $0{,}05$ à $0{,}1$ — Kaplan et al., 2020 ; des protocoles plus soignés comme Chinchilla, 2022, qu'on retrouvera plus bas, trouvent plutôt $\alpha \approx 0{,}3$ : la valeur dépend fortement du protocole d'entraînement), et $L_\infty \ge 0$ est une perte irréductible — le bruit intrinsèque du langage, qu'aucun modèle ne peut franchir. La même forme vaut si on fait varier la **quantité de données** $D$ ou le **budget de calcul** $C$ : chacun donne sa propre droite log-log.
 
 <Resultat label="Loi d'échelle (forme empirique)">
 

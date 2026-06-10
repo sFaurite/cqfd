@@ -77,7 +77,7 @@ $$ \mathrm{Attn}(PX) = P\,\mathrm{Attn}(X) \quad \text{pour toute permutation } 
 </Resultat>
 </Encart>
 
-Conséquence inévitable : sans information ajoutée, « le chat mange la souris » et « la souris mange le chat » seraient indiscernables. Il **faut** injecter l'ordre. C'est l'**encodage positionnel** : on ajoute à chaque token un vecteur dépendant de sa position — sinusoïdal (des sinus/cosinus de fréquences variées) ou directement appris. <Badge niveau="prouve">La *nécessité* d'ajouter une information de position découle de l'équivariance ci-dessus.</Badge> <Badge niveau="recette">La *forme* de cet encodage (sinusoïdal, appris, rotatif…) est, elle, un choix d'ingénierie comparé à l'expérience.</Badge>
+Conséquence inévitable : sans information ajoutée, « le chat mange la souris » et « la souris mange le chat » seraient indiscernables. Il **faut** injecter l'ordre. C'est l'**encodage positionnel** : on ajoute à chaque token un vecteur dépendant de sa position — sinusoïdal (des sinus/cosinus de fréquences variées) ou directement appris. <Badge niveau="prouve">Pour l'attention *bidirectionnelle* (non masquée), la nécessité d'ajouter une information de position découle de l'équivariance ci-dessus.</Badge> <Badge niveau="robuste">Le masque causal du décodeur (section suivante) brise cette équivariance : des décodeurs *sans aucun* encodage positionnel explicite (« NoPE ») apprennent l'ordre malgré tout (Haviv et al. 2022 ; Kazemnejad et al. 2023). Pour eux, l'encodage positionnel est une aide empirique, pas une nécessité démontrée.</Badge> <Badge niveau="recette">La *forme* de cet encodage (sinusoïdal, appris, rotatif…) est, elle, un choix d'ingénierie comparé à l'expérience.</Badge>
 
 ## Encodeur, décodeur : qui peut regarder quoi
 

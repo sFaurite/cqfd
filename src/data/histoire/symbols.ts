@@ -23,7 +23,7 @@ export const SYMBOLES: Symbole[] = [
 
   // Grands repères de durée (la profondeur du temps)
   { katex: '\\sim 7\\,\\text{Ma}', nom: 'Premiers homininés', desc: 'Apparition estimée des premiers homininés bipèdes, après la séparation d’avec la lignée des chimpanzés.', unite: 'année', valeur: '≈ −7 millions d’années (probable)', voir: '/histoire/partie-i/premiers-hominines' },
-  { katex: '\\sim 3{,}3\\,\\text{Ma}', nom: 'Premiers outils de pierre', desc: 'Plus anciens outils taillés attestés, marquant le début du Paléolithique.', unite: 'année', valeur: '≈ −3,3 millions d’années (attesté)', voir: '/histoire/partie-i/genre-homo-outils-feu' },
+  { katex: '\\sim 3{,}3\\,\\text{Ma}', nom: 'Premiers outils de pierre', desc: 'Plus anciens outils taillés attestés, marquant le début du Paléolithique.', unite: 'année', valeur: '≈ −3,3 millions d’années (débattu)', voir: '/histoire/partie-i/genre-homo-outils-feu' },
   { katex: '\\sim 300\\,\\text{ka}', nom: 'Apparition d’Homo sapiens', desc: 'Plus anciens fossiles connus de notre espèce, en Afrique.', unite: 'année', valeur: '≈ −300 000 ans (attesté)', voir: '/histoire/partie-i/sapiens-sortie-afrique' },
   { katex: '\\sim 10\\,\\text{ka}', nom: 'Débuts du Néolithique', desc: 'Premières domestications au Proche-Orient après la fin de la dernière glaciation.', unite: 'année', valeur: '≈ −10 000 ans (attesté)', voir: '/histoire/partie-ii/fin-glaciaire-domestication' },
   { katex: '\\sim 5{,}3\\,\\text{ka}', nom: 'Invention de l’écriture', desc: 'Premières écritures (cunéiforme, hiéroglyphes) : début de l’histoire « écrite ».', unite: 'année', valeur: '≈ −3300 (attesté)', voir: '/histoire/partie-iii/invention-ecriture' },
@@ -35,5 +35,5 @@ export const SYMBOLES: Symbole[] = [
   // Jalons historiques
   { katex: '476', nom: 'Fin de Rome en Occident', desc: 'Date-repère (déposition du dernier empereur d’Occident) — un jalon symbolique d’une mutation, plus qu’une rupture nette.', unite: 'apr. J.-C.', valeur: '476 (repère conventionnel, débattu)', voir: '/histoire/partie-iv/fin-rome-recompositions' },
   { katex: '\\sim 1450', nom: 'Imprimerie de Gutenberg', desc: 'Mise au point des caractères mobiles métalliques en Europe : révolution de la diffusion du savoir.', unite: 'apr. J.-C.', valeur: '≈ 1450 (attesté)', voir: '/histoire/partie-vi/imprimerie-revolution-information' },
-  { katex: '1492', nom: 'Premier voyage transatlantique', desc: 'Traversée de Christophe Colomb : début de la mise en contact durable des continents.', unite: 'apr. J.-C.', valeur: '1492 (attesté)', voir: '/histoire/partie-vi/grandes-decouvertes-premier-monde-global' },
+  { katex: '1492', nom: 'Voyage de Colomb', desc: 'Traversée de Christophe Colomb : début de la mise en contact durable des continents (des Scandinaves avaient atteint Terre-Neuve vers l’an 1000, sans contact durable).', unite: 'apr. J.-C.', valeur: '1492 (attesté)', voir: '/histoire/partie-vi/grandes-decouvertes-premier-monde-global' },
 ];

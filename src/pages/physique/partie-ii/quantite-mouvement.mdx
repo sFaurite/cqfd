@@ -17,7 +17,7 @@ import LorentzSlider from '../../../components/interactive/LorentzSlider.astro';
 En mécanique classique, la quantité de mouvement d'un objet vaut $p = mv$. C'est une grandeur précieuse : dans un système isolé, **elle se conserve** — la somme des $mv$ avant un choc égale la somme après. Cette loi est si robuste qu'on aimerait la garder. Mais la relativité nous force à un constat dérangeant : avec la composition relativiste des vitesses, $p = mv$ **n'est plus conservée**. Il va falloir réparer la définition.
 
 <Encart type="intuition" titre="Le problème en une image">
-Imaginez deux billes identiques qui se cognent de plein fouet et rebondissent. Dans un référentiel bien choisi, par symétrie, le total des quantités de mouvement est nul avant et après : tout va bien. Mais changez de référentiel (regardez la scène depuis un train qui passe). Les vitesses ne s'ajoutent plus simplement — elles se composent selon la formule relativiste, qui « tasse » les grandes vitesses. Du coup, en recalculant naïvement $\sum mv$, le bilan **ne tombe plus juste**. Soit on abandonne la conservation, soit on change la formule de $p$. La physique choisit toujours la deuxième option : on garde la loi de conservation, on corrige l'outil.
+Imaginez deux billes identiques qui se cognent de plein fouet et restent collées. Dans un référentiel bien choisi, par symétrie, le total des quantités de mouvement est nul avant et après : tout va bien. Mais changez de référentiel (regardez la scène depuis un train qui passe). Les vitesses ne s'ajoutent plus simplement — elles se composent selon la formule relativiste, qui « tasse » les grandes vitesses. Du coup, en recalculant naïvement $\sum mv$, le bilan **ne tombe plus juste**. Soit on abandonne la conservation, soit on change la formule de $p$. La physique choisit toujours la deuxième option : on garde la loi de conservation, on corrige l'outil.
 </Encart>
 
 <Prereq href="/physique/partie-i/transformations-lorentz">La composition relativiste des vitesses</Prereq> et <Prereq href="/physique/partie-i/lorentz-gamma">le facteur de Lorentz $\gamma$</Prereq> sont les deux ingrédients dont nous aurons besoin.
@@ -27,19 +27,19 @@ Imaginez deux billes identiques qui se cognent de plein fouet et rebondissent. D
 Le principe de relativité exige qu'une loi de conservation vraie dans un référentiel le soit dans **tous** les référentiels inertiels. Vérifions que $p = mv$ échoue à ce test.
 
 <Encart type="calcul" titre="Une collision qui trahit p = mv">
-On considère deux objets identiques de masse $m$. Dans le référentiel $R'$ du centre de masse, ils arrivent l'un vers l'autre à la même vitesse $\pm u$ et, après un choc symétrique, repartent à $\mp u$.
+On considère deux objets identiques de masse $m$ qui se percutent et **restent collés** (collision parfaitement inélastique). Dans le référentiel $R'$ du centre de masse, ils arrivent l'un vers l'autre à la même vitesse $\pm u$ et l'amas final est au repos.
 
-**Étape 1 — Bilan dans $R'$.** Avant : $p'_{\text{av}} = m u + m(-u) = 0$. Après : $p'_{\text{ap}} = m(-u) + m(u) = 0$. La quantité de mouvement classique est conservée. ✔
+**Étape 1 — Bilan dans $R'$.** Avant : $p'_{\text{av}} = m u + m(-u) = 0$. Après : l'amas est immobile, donc $p'_{\text{ap}} = 0$. La quantité de mouvement classique est conservée. ✔
 
 **Étape 2 — On change de référentiel.** $R'$ se déplace à la vitesse $V$ par rapport au laboratoire $R$. Pour trouver les vitesses dans $R$, on **n'ajoute pas** simplement $V$ : on utilise la composition relativiste
 
 $$ w = \frac{u + V}{1 + \dfrac{uV}{c^2}}. $$
 
-**Étape 3 — Vitesse de chaque objet dans $R$.** L'objet à $+u$ a dans $R$ la vitesse $w_1 = \dfrac{u+V}{1+uV/c^2}$ ; celui à $-u$ a la vitesse $w_2 = \dfrac{-u+V}{1-uV/c^2}$.
+**Étape 3 — Vitesses dans $R$.** Avant le choc, l'objet à $+u$ a la vitesse $w_1 = \dfrac{u+V}{1+uV/c^2}$ ; celui à $-u$ a la vitesse $w_2 = \dfrac{-u+V}{1-uV/c^2}$. Après le choc, l'amas — immobile dans $R'$ — avance à la vitesse $V$ dans $R$.
 
-**Étape 4 — Bilan classique dans $R$ (avant).** On forme $p_{\text{av}} = m w_1 + m w_2$. À cause des **dénominateurs différents** ($1+uV/c^2$ et $1-uV/c^2$), la somme ne se simplifie pas en $2mV$ comme on l'attendrait classiquement.
+**Étape 4 — Bilan classique dans $R$.** Avant : $p_{\text{av}} = m w_1 + m w_2 = 2mV\,\dfrac{1-u^2/c^2}{1-u^2V^2/c^4}$. Après : $p_{\text{ap}} = 2mV$.
 
-**Étape 5 — Le verdict.** Un calcul de la même quantité après le choc donne une valeur **différente** : $p_{\text{av}} \neq p_{\text{ap}}$ dans $R$. Or rien de physique n'a changé en changeant de point de vue. Donc $\sum m v$ **n'est pas un invariant de conservation** en relativité. ∎
+**Étape 5 — Le verdict.** Dès que $u \neq 0$ (et $V \neq 0$), le facteur $\dfrac{1-u^2/c^2}{1-u^2V^2/c^4}$ est strictement inférieur à 1 : $p_{\text{av}} \neq p_{\text{ap}}$ dans $R$. Or rien de physique n'a changé en changeant de point de vue. Donc $\sum m v$ **n'est pas un invariant de conservation** en relativité. ∎
 </Encart>
 
 La cause profonde est simple : la composition des vitesses est **non linéaire** (elle déforme les additions), alors que $p = mv$ est linéaire en $v$. Les deux sont incompatibles. <Badge niveau="etabli">La non-conservation de $\sum mv$ entre référentiels est une conséquence directe de la composition relativiste des vitesses, elle-même démontrée à partir des postulats.</Badge>
@@ -78,7 +78,7 @@ $$ p = \gamma\,m\,v = \frac{m\,v}{\sqrt{1 - v^2/c^2}} $$
 Pourquoi *cette* forme et pas une autre ? Parce que c'est la **seule** définition « masse × vitesse » qui se conserve simultanément dans tous les référentiels inertiels. C'est exactement l'argument de symétrie qui manquait à $p=mv$.
 
 <Encart type="plusloin" titre="L'argument complet : pourquoi $\gamma mv$ et rien d'autre">
-On exige que la quantité de mouvement totale soit conservée dans **tout** référentiel. En reprenant la collision symétrique de tout à l'heure, et en imposant la conservation à la fois dans $R'$ et dans $R$, on est conduit à chercher une fonction $p = f(v)\,v$ telle que le bilan reste nul après transformation de Lorentz des vitesses. La condition se résout en $f(v) = \gamma(v)$, à une constante multiplicative près fixée par la limite newtonienne $f(0)=1$. La raison structurelle profonde : $(\,E/c,\ p\,)$ forment un **quadrivecteur énergie-impulsion** $\left(\gamma m c, \gamma m v\right)$ qui se transforme exactement comme $(c\,t, x)$ sous Lorentz. Conserver un quadrivecteur dans un référentiel le conserve donc automatiquement dans tous les autres — c'est la garantie d'invariance qu'on cherchait.
+On exige que la quantité de mouvement totale soit conservée dans **tout** référentiel. En reprenant la collision symétrique de tout à l'heure, et en imposant la conservation à la fois dans $R'$ et dans $R$, on est conduit à chercher une fonction $p = f(v)\,v$ telle que le bilan reste nul après transformation de Lorentz des vitesses. La dérivation complète de la condition — qui se résout en $f(v) = \gamma(v)$, à une constante multiplicative près fixée par la limite newtonienne $f(0)=1$ — utilise la collision rasante à deux dimensions de Lewis–Tolman (1909). La raison structurelle profonde : $(\,E/c,\ p\,)$ forment un **quadrivecteur énergie-impulsion** $\left(\gamma m c, \gamma m v\right)$ qui se transforme exactement comme $(c\,t, x)$ sous Lorentz. Conserver un quadrivecteur dans un référentiel le conserve donc automatiquement dans tous les autres — c'est la garantie d'invariance qu'on cherchait.
 </Encart>
 
 ### La masse $m$ est invariante (oubliez la « masse relativiste »)

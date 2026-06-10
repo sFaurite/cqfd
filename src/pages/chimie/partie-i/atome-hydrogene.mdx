@@ -24,7 +24,7 @@ Nous avons posé, au chapitre précédent, que la matière est quantique. C'éta
 <Hypotheses titre="Hypothèses de départ">
 1. **Le potentiel coulombien.** Le proton (charge $+e$) attire l'électron (charge $-e$). L'énergie potentielle ne dépend que de la distance $r$ : $V(r) = -\dfrac{e^2}{4\pi\varepsilon_0\, r}$. C'est un fait électrostatique mesuré, hérité de la physique classique.
 2. **L'électron est lié.** On s'intéresse aux états où l'électron reste accroché au proton (énergie négative, électron confiné). Le socle quantique impose alors que l'énergie ne peut prendre que des valeurs **discrètes**.
-3. **Le proton est fixe.** Le noyau étant près de 1 800 fois plus lourd que l'électron, on le suppose immobile. Cette approximation rend le problème *exactement* soluble ; elle n'introduit qu'un écart infime sur la valeur de l'énergie.
+3. **Le proton est fixe.** Le noyau étant près de 1 800 fois plus lourd que l'électron, on le suppose immobile. Cette approximation simplifie le problème sans changer sa solubilité *exacte* (le problème à deux corps se ramène exactement à un corps de masse réduite) ; elle n'introduit qu'un écart infime (~0,05 %) sur la valeur de l'énergie.
 </Hypotheses>
 
 ### L'intuition : confiner, c'est quantifier
@@ -61,7 +61,7 @@ La constante qui rassemble tout est appelée énergie de Rydberg, $E_R$ :
 
 $$ E_R = \frac{m_e\, e^4}{8\,\varepsilon_0^2\, h^2}. $$
 
-On y reconnaît des constantes **fondamentales** (valeurs mesurées) : masse de l'électron $m_e = 9{,}109 \times 10^{-31}$ kg ; charge élémentaire $e = 1{,}602 \times 10^{-19}$ C ; permittivité du vide $\varepsilon_0 = 8{,}854 \times 10^{-12}$ F/m ; constante de Planck $h = 6{,}626 \times 10^{-34}$ J·s.
+On y reconnaît des constantes **fondamentales** ($h$ et $e$ sont fixées par définition du SI depuis 2019 ; $m_e$ et $\varepsilon_0$ sont mesurées) : masse de l'électron $m_e = 9{,}109 \times 10^{-31}$ kg ; charge élémentaire $e = 1{,}602 \times 10^{-19}$ C ; permittivité du vide $\varepsilon_0 = 8{,}854 \times 10^{-12}$ F/m ; constante de Planck $h = 6{,}626 \times 10^{-34}$ J·s.
 
 **Numériquement :**
 
@@ -82,7 +82,7 @@ Le pont entre la théorie et le chiffre du laboratoire est ainsi bouclé.
 - $l$ (azimutal, $0 \leq l \leq n-1$) : fixe la **forme** — on note $s$ ($l=0$), $p$ ($l=1$), $d$ ($l=2$)…
 - $m$ (magnétique, $-l \leq m \leq l$) : fixe l'**orientation** dans l'espace.
 
-<Badge niveau="quantique">Les contraintes $0 \leq l \leq n-1$ et $-l \leq m \leq l$ découlent des conditions de normalisation (partie radiale) et de mono-valuation de $\psi$ (partie angulaire).</Badge>
+<Badge niveau="quantique">Les contraintes $0 \leq l \leq n-1$ et $-l \leq m \leq l$ découlent de la normalisabilité de la partie radiale ($l \leq n-1$) et de la régularité de la partie angulaire aux pôles ($|m| \leq l$) ; la mono-valuation de $\psi$ n'impose que $m$ entier.</Badge>
 
 Insistons sur un point que tout le reste du cours respectera : **une orbitale n'est pas une trajectoire.** L'électron ne décrit aucune orbite. La grandeur physique, c'est $|\psi(x,y,z)|^2$, la **densité de probabilité** de *trouver* l'électron là si on le mesure (postulat du chapitre précédent). On dessine une orbitale comme le nuage qui contient, disons, 90 % de cette probabilité. Parler d'« orbite » serait revenir au modèle de Bohr, faux dans son image même.
 

@@ -77,7 +77,7 @@ $$ \text{PC} \leftarrow \text{PC} + 1 $$
 
 $$ \text{PC} \leftarrow \text{PC} + 1 $$
 
-<Badge niveau="fonde" slot="badge">Un programme stocké en mémoire est une suite ordonnée ; en l'absence de saut, l'instruction suivante est l'adresse contiguë. Le « +1 » est en unités d'instruction — l'incrément réel en octets dépend de la taille du mot.</Badge>
+<Badge niveau="fonde" slot="badge">Un programme stocké en mémoire est une suite ordonnée ; en l'absence de saut, l'instruction suivante est l'adresse contiguë. Le « +1 » est en unités d'instruction — l'incrément réel en octets dépend de la taille de l'instruction (fixe en RISC, souvent +4 ; variable sur x86).</Badge>
 </Resultat>
 
 Pourquoi incrémenter *avant* d'exécuter ? Parce qu'ainsi, quand l'instruction courante sera un **branchement**, elle n'aura qu'à *écraser* PC pour rediriger le flot. Le cas normal (avancer) est ainsi traité une fois pour toutes, et les sauts deviennent de simples exceptions à la règle. <Badge niveau="convention">Incrémenter PC pendant le fetch est une astuce de conception (le « cas normal » câblé une fois pour toutes) ; d'autres machines calculent l'adresse suivante autrement. Le résultat fonctionnel est identique.</Badge>

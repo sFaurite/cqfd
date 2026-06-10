@@ -69,13 +69,13 @@ Imaginez une bille qui dévale le relief. La descente exacte la fait rouler tout
 Quant à la **convergence**, elle est prouvée — mais seulement dans un cadre restreint et sous condition sur le pas.
 
 <Encart type="plusloin" titre="Convergence du SGD : le théorème de Robbins-Monro">
-Pour une fonction **convexe**, le SGD converge vers le minimum si la suite des pas $\eta_t$ (le pas peut décroître au cours du temps) satisfait les **conditions de Robbins-Monro** :
+Pour une fonction **convexe** et sous des hypothèses de régularité standard (fonction suffisamment lisse, variance des gradients stochastiques bornée), le SGD converge vers le minimum si la suite des pas $\eta_t$ (le pas peut décroître au cours du temps) satisfait les **conditions de Robbins-Monro** :
 
 $$
 \sum_{t=1}^{\infty} \eta_t = \infty \qquad \text{et} \qquad \sum_{t=1}^{\infty} \eta_t^2 < \infty
 $$
 
-La première (somme divergente) garantit qu'on peut atteindre n'importe quel point, aussi loin soit-il. La seconde (somme des carrés finie) force le pas à décroître assez vite pour que le bruit s'éteigne et qu'on se stabilise. Un choix classique est $\eta_t \propto 1/t$. <Badge niveau="prouve" slot="badge">Convergence garantie en convexe sous ces conditions sur le pas.</Badge>
+La première (somme divergente) garantit qu'on peut atteindre n'importe quel point, aussi loin soit-il. La seconde (somme des carrés finie) force le pas à décroître assez vite pour que le bruit s'éteigne et qu'on se stabilise. Un choix classique est $\eta_t \propto 1/t$. <Badge niveau="prouve" slot="badge">Convergence garantie en convexe sous ces conditions sur le pas et des hypothèses de régularité standard (lissité, variance bornée).</Badge>
 
 Hors du convexe — c'est-à-dire pour tout vrai réseau profond — **aucune garantie de ce type ne tient**. <Badge niveau="boitenoire">Pourquoi le SGD trouve de bonnes solutions dans des paysages non convexes reste mal compris théoriquement.</Badge>
 </Encart>

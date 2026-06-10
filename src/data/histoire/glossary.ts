@@ -45,7 +45,7 @@ export const GLOSSAIRE: TermeGlossaire[] = [
 
   // Moyen Âge
   { terme: 'Féodalité', def: 'Système médiéval de liens personnels entre seigneurs et vassaux, fondé sur le <em>fief</em> et le service, dans un Occident sans État central fort.', voir: '/histoire/partie-v/feodalite-societe-medievale', alias: ['fief', 'seigneur', 'vassal'] },
-  { terme: 'Byzance', def: 'L’Empire romain d’Orient, de capitale Constantinople, qui prolonge Rome plus de mille ans après la chute de l’Occident.', voir: '/histoire/partie-v/trois-heritiers-rome', alias: ['Constantinople', 'empire byzantin'] },
+  { terme: 'Byzance', def: 'L’Empire romain d’Orient, de capitale Constantinople, qui prolonge Rome près de mille ans après la chute de l’Occident.', voir: '/histoire/partie-v/trois-heritiers-rome', alias: ['Constantinople', 'empire byzantin'] },
   { terme: 'Routes de la soie', def: 'Réseau de routes commerciales et de transmission de savoirs reliant la Chine à la Méditerranée à travers l’Eurasie.', voir: '/histoire/partie-v/routes-echanges-eurasie', alias: ['route de la soie', 'commerce'] },
   { terme: 'Peste noire', def: 'Pandémie du milieu du XIVᵉ siècle qui tua une grande part de la population d’Eurasie, bouleversant durablement les sociétés.', voir: '/histoire/partie-v/ruptures-fin-moyen-age', alias: ['peste', 'pandémie'] },
 

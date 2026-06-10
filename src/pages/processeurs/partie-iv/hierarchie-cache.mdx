@@ -27,7 +27,7 @@ Pourquoi ne peut-on pas avoir une SRAM gigantesque ? Trois contraintes se conjug
 
 $$ \text{rapide} \Rightarrow \text{petit et cher} \qquad ; \qquad \text{grand et bon marché} \Rightarrow \text{lent} $$
 
-<Badge niveau="fonde" slot="badge">Tension imposée par la physique : densité, distance de propagation finie et coût ne se contournent pas simultanément. On ne peut qu'arbitrer.</Badge>
+<Badge niveau="fonde" slot="badge">Densité et distance de propagation finie sont imposées par la physique : rapide ⇒ petit, grand ⇒ lent. Le volet coût, lui, est un fait économique et industriel. On ne peut qu'arbitrer.</Badge>
 </Resultat>
 
 ## La parade : empiler les mémoires
@@ -58,7 +58,7 @@ On distingue deux formes de localité :
 - **Localité temporelle** : une donnée utilisée récemment a de fortes chances d'être réutilisée *bientôt*. (Le compteur d'une boucle, une variable, une fonction appelée en boucle.)
 - **Localité spatiale** : si l'on accède à une adresse, on accédera probablement *aux adresses voisines* peu après. (Parcourir un tableau case par case, exécuter des instructions consécutives.)
 
-<Badge niveau="fonde">La localité est une propriété empirique, mais observée si universellement sur les programmes réels qu'on la traite comme un fondement de l'architecture. Le succès de la hiérarchie mémoire en est la conséquence logique directe : il suffit de garder près du processeur ce qui vient de servir, plus son voisinage.</Badge>
+<Badge niveau="idealise">La localité est une régularité empirique des programmes réels, pas une loi de la nature : on l'admet comme hypothèse de modèle, si universellement vérifiée qu'on la traite comme un fondement de l'architecture. Une fois la localité admise, le succès de la hiérarchie mémoire en est la conséquence logique directe : il suffit de garder près du processeur ce qui vient de servir, plus son voisinage.</Badge>
 
 Ces deux localités dictent la mécanique du **cache**. La localité spatiale explique qu'on ne transfère jamais un octet isolé, mais un **bloc** contigu (une *ligne de cache*, typiquement 64 octets) : on précharge les voisins « gratuitement ». La localité temporelle explique qu'on **conserve** ce bloc une fois chargé.
 

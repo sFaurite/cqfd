@@ -50,7 +50,7 @@ Le terme retranché est positif (un carré). Donc **tant que $\eta$ est assez pe
 
 ### 2. Voir la descente sur un paysage convexe
 
-Prenons la <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq>. Sa perte (l'entropie croisée) est **convexe** en ses paramètres : son paysage est un grand bol lisse, sans bosse ni vallée parasite. Pas de creux parasite ; en l'absence de séparation parfaite des données (sinon le minimum file à l'infini), un unique fond, qui est le minimum global. Sur un tel terrain, la descente de gradient est dans son élément : où qu'on parte, on glisse vers ce fond.
+Prenons la <Prereq href="/ia/partie-i/regression-logistique">régression logistique</Prereq>. Sa perte (l'entropie croisée) est **convexe** en ses paramètres : son paysage est un grand bol lisse, sans bosse ni vallée parasite. Pas de creux parasite ; en l'absence de séparation parfaite des données (sinon le minimum file à l'infini), un fond, qui est le minimum global — un point unique dès que les variables d'entrée ne sont pas linéairement redondantes (matrice de données de rang plein, qui rend la perte strictement convexe). Sur un tel terrain, la descente de gradient est dans son élément : où qu'on parte, on glisse vers ce fond.
 
 <IaLossLandscape />
 
@@ -149,7 +149,7 @@ Les réseaux de neurones profonds, eux, ont une perte **non convexe** : un paysa
 
 Que reste-t-il alors ? Au mieux, la descente converge vers un **point critique** ($\nabla L = 0$) : un minimum local, voire un simple point-selle. Rien ne garantit que sa qualité approche celle du minimum global. Il serait donc **faux** de dire « la descente trouve le minimum » en général : ce n'est vrai que dans le bol convexe.
 
-<Badge niveau="prouve">En non convexe lisse (avec $\eta \le 1/\beta$), on démontre seulement que le gradient s'annule à la limite ($\min_{s \le t}\|\nabla L(\theta_s)\| \to 0$) : convergence vers un point critique, pas vers un minimum, encore moins le minimum global.</Badge>
+<Badge niveau="prouve">En non convexe lisse, si $L$ est **minorée** (cas d'une perte $\ge 0$) et $\eta \le 1/\beta$, on démontre seulement $\min_{s \le t}\|\nabla L(\theta_s)\| \to 0$ : le gradient devient arbitrairement petit le long de la trajectoire — pas la convergence des itérés vers un minimum, encore moins le minimum global.</Badge>
 
 Et pourtant — c'est l'un des grands mystères de ce cours — **ça marche**. En pratique, la descente de gradient sur des réseaux gigantesques trouve des solutions excellentes, comme si les mauvais minima locaux étaient rares ou bénins. C'est massivement reproductible, mais **non démontré en général** : un fait empirique robuste, pas un théorème.
 

@@ -63,7 +63,7 @@ Le signal est donc **mille fois** plus puissant que le bruit.
 
 ### Le théorème de Shannon-Hartley
 
-Voici le résultat central de toute cette partie. En 1948, Claude Shannon a démontré qu'il existe une borne supérieure absolue au débit qu'on peut transmettre **avec un taux d'erreur arbitrairement faible** sur un canal bruité de bande $B$ et de rapport signal sur bruit $S/N$ :
+Voici le résultat central de toute cette partie. En 1948, Claude Shannon a démontré qu'il existe une borne supérieure absolue au débit qu'on peut transmettre **avec un taux d'erreur arbitrairement faible** sur un canal à bruit additif blanc gaussien (AWGN) de bande $B$ et de rapport signal sur bruit $S/N$ — précisément le modèle du bruit thermique introduit plus haut, qui est de surcroît le pire cas : à puissance de bruit fixée, un bruit non gaussien permet une capacité au moins égale :
 
 <Resultat label="Capacité de canal de Shannon-Hartley">$$ C = B \, \log_2\!\left(1 + \frac{S}{N}\right) \quad \text{(bits/s)} $$ <Badge niveau="theoreme" slot="badge">Borne infranchissable, démontrée par Shannon (1948), valable quel que soit le codage employé.</Badge></Resultat>
 
@@ -114,7 +114,7 @@ Or $\log_2(1001) = \dfrac{\ln 1001}{\ln 2} \approx 9{,}97$, soit presque $\log_2
 
 $$ C \approx 3100 \times 9{,}97 \approx 30\,900\ \mathrm{bits/s} \approx 31\ \mathrm{kbit/s}. $$
 
-C'est exactement pourquoi les modems analogiques plafonnaient vers $33{,}6\ \mathrm{kbit/s}$ : ils butaient sur la borne de Shannon de la bande vocale.
+C'est pourquoi les modems analogiques plafonnaient vers $33{,}6\ \mathrm{kbit/s}$ : ce débit exige un SNR d'au moins $32{,}6\ \mathrm{dB}$, que seules les bonnes lignes (SNR réel de 33 à 38 dB, borne de Shannon vers 35–38 kbit/s) offraient. Les modems V.34 frôlaient ainsi la borne de la bande vocale sans jamais pouvoir la franchir.
 
 **Cas 2 — ADSL.** L'ADSL ne se contente plus de la bande vocale : il exploite tout le câble de cuivre, soit $B \approx 1\ \mathrm{MHz} = 10^6\ \mathrm{Hz}$, avec un SNR d'ordre $1000$ ($30\ \mathrm{dB}$) :
 

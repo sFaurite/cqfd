@@ -41,7 +41,7 @@ L'idée est qu'en combinant « identité du fabricant » et « numéro de série
 
 Mais attention : l'unicité *mondiale réelle* est plus fragile qu'elle n'en a l'air. <Badge niveau="deploiement">Une adresse MAC peut être réécrite par logiciel (MAC spoofing), et il existe des plages d'adresses « localement administrées » non garanties uniques. L'unicité effective dépend donc du déploiement, pas d'une loi : la norme attribue des OUI distincts, mais ne peut empêcher qu'une adresse soit rejouée ou collisionne sur un réseau local.</Badge>
 
-Deux bits du premier octet ont un sens particulier et permettent de classer les destinataires :
+Le bit « individuel/groupe » (I/G) du premier octet permet de classer les destinataires :
 
 - **unicast** : l'adresse désigne *une seule* carte ;
 - **multicast** : un groupe de machines abonnées ;

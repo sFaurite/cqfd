@@ -55,7 +55,7 @@ Dans les deux cas, l'octet finit par être livré exactement une fois, ou l'éme
 
 ### Le three-way handshake : pourquoi trois temps ?
 
-Avant d'échanger des données, les deux parties doivent **se mettre d'accord sur les numéros de séquence initiaux**. Chaque sens a son propre flux, donc son propre point de départ. Ce point de départ — l'*ISN*, Initial Sequence Number — n'est pas choisi à zéro : il est tiré de façon imprévisible, et nous allons voir pourquoi.
+Avant d'échanger des données, les deux parties doivent **se mettre d'accord sur les numéros de séquence initiaux**. Chaque sens a son propre flux, donc son propre point de départ. Ce point de départ — l'*ISN*, Initial Sequence Number — n'est pas choisi à zéro : c'est un point de départ frais, jamais réutilisé récemment — nous allons voir pourquoi.
 
 <ReseauTcpHandshake />
 
@@ -73,7 +73,7 @@ Tentons une ouverture en **deux** temps (SYN, puis SYN-ACK), et cherchons la fai
 - Le **troisième message** ferme la faille : il force le client à *prouver* qu'il a vu le $y$ frais du serveur. Un client fantôme, qui n'a pas reçu ce $y$, ne peut pas produire l'ACK $y+1$ correct. La connexion ne s'établit donc que si les **deux** parties ont confirmé l'ISN **courant** de l'autre.
 </Encart>
 
-Voilà le rôle profond de l'ISN imprévisible et du troisième message : ils prouvent que les deux pairs sont **vivants et synchronisés *maintenant***, et non victimes d'un écho du passé. <Badge niveau="norme">Le three-way handshake (SYN / SYN-ACK / ACK) et la synchronisation des ISN sont normalisés et universels.</Badge> Trois est le minimum : il faut un aller-retour complet *dans chaque sens* pour qu'un ISN soit annoncé **et** confirmé, et le SYN-ACK condense deux de ces messages en un seul.
+Voilà le rôle profond de l'ISN frais et du troisième message : ils prouvent que les deux pairs sont **vivants et synchronisés *maintenant***, et non victimes d'un écho du passé. Les piles modernes rendent de plus l'ISN imprévisible (RFC 6528), pour qu'un attaquant qui n'a pas vu $y$ ne puisse pas forger l'ACK $y+1$. <Badge niveau="norme">Le three-way handshake (SYN / SYN-ACK / ACK) et la synchronisation des ISN sont normalisés et universels.</Badge> Trois est le minimum : il faut un aller-retour complet *dans chaque sens* pour qu'un ISN soit annoncé **et** confirmé, et le SYN-ACK condense deux de ces messages en un seul.
 
 ### Fermer proprement
 

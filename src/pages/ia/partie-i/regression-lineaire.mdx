@@ -46,15 +46,15 @@ Voilà ce qu'on appelle une **fonction de perte** : un nombre, fonction des para
 
 ### La forme du paysage : un bol
 
-Avant de chercher le minimum, regardons à quoi ressemble $L$ vue comme fonction de $(w, b)$. C'est une somme de carrés de fonctions **affines** des paramètres. Or un carré d'une quantité affine est une fonction quadratique, et une somme de fonctions quadratiques reste quadratique. La perte $L$ est donc une **forme quadratique** en $(w, b)$ : géométriquement, une surface en forme de **bol** (un paraboloïde) posé au-dessus du plan des paramètres.
+Avant de chercher le minimum, regardons à quoi ressemble $L$ vue comme fonction de $(w, b)$. C'est une somme de carrés de fonctions **affines** des paramètres. Or un carré d'une quantité affine est une fonction quadratique, et une somme de fonctions quadratiques reste quadratique. La perte $L$ est donc une **fonction quadratique** (un polynôme de degré 2) en $(w, b)$ : géométriquement, une surface en forme de **bol** (un paraboloïde) posé au-dessus du plan des paramètres.
 
 <IaLossLandscape />
 
-Faites tourner ce bol. Le point le plus bas, le fond de la cuvette, c'est le couple $(w^*, b^*)$ qui minimise l'erreur. Et tout l'intérêt vient de ce que ce bol n'a **qu'un seul** fond.
+Faites tourner ce bol. Le point le plus bas, le fond de la cuvette, c'est le couple $(w^*, b^*)$ qui minimise l'erreur. Et tout l'intérêt vient de la forme de ce bol : pas de fausse cuvette où se piéger, tout creux en est le fond.
 
-### La convexité : un seul minimum, et il est global
+### La convexité : tout minimum est global
 
-Que le bol n'ait qu'un fond n'est pas un dessin, c'est un théorème. Une fonction est **convexe** si le segment reliant deux points de son graphe reste au-dessus du graphe ; concrètement, elle ne peut pas avoir deux creux séparés par une bosse. Pour une fonction deux fois dérivable, la convexité équivaut à ce que sa **matrice hessienne** (la matrice des dérivées secondes) soit **semi-définie positive** partout.
+Que ce bol n'ait aucune fausse cuvette n'est pas un dessin, c'est un théorème. Une fonction est **convexe** si le segment reliant deux points de son graphe reste au-dessus du graphe ; concrètement, elle ne peut pas avoir deux creux séparés par une bosse. Pour une fonction deux fois dérivable, la convexité équivaut à ce que sa **matrice hessienne** (la matrice des dérivées secondes) soit **semi-définie positive** partout.
 
 <Encart type="rappel" titre="Matrice semi-définie positive">
 Une matrice symétrique $H$ est dite **semi-définie positive** si, pour tout vecteur $u$, on a $u^\top H\, u \ge 0$. Intuition : $H$ ne « courbe » jamais vers le bas, dans aucune direction. Si de plus $u^\top H\, u > 0$ pour tout $u \neq 0$, $H$ est dite **définie positive** : la courbure est strictement positive partout, et le bol a un fond unique et pointu.
@@ -91,6 +91,8 @@ $$ \nabla^2 L \succeq 0 \quad\Longrightarrow\quad L \text{ est convexe} $$
 </Resultat>
 
 La conséquence est capitale : pour une fonction convexe, **tout minimum local est global**. Il n'y a pas de fausse cuvette où se piéger. <Badge niveau="prouve">Propriété classique de l'analyse convexe : pour une fonction convexe différentiable sur un domaine convexe, tout point où $\nabla L = 0$ est un minimiseur global.</Badge> Annuler le gradient suffit donc à trouver la meilleure solution. Savourez ce confort : c'est précisément ce que nous **perdrons** dès que des non-linéarités entreront en jeu.
+
+Un mot de prudence : la convexité garantit que tout minimum est global, pas qu'il est unique. Si les colonnes de $X$ sont liées (variables redondantes), le fond du bol est une vallée plate : tout un sous-espace affine de minimiseurs, tous aussi bons. L'unicité exige la convexité **stricte** (hessienne définie positive), c'est-à-dire $X$ de rang plein — exactement la condition de l'encart sur les équations normales ci-dessous.
 
 ### Résoudre exactement : le cas 1D, ligne à ligne
 

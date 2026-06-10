@@ -31,7 +31,7 @@ $$ \text{firmware} \;\longrightarrow\; \text{bootloader} \;\longrightarrow\; \te
 <Badge niveau="fonde" slot="badge">Nécessité logique : à la mise sous tension un seul code s'exécute. Tout autre programme doit être chargé puis lancé par le précédent. La chaîne « charger / sauter » n'est pas un choix, c'est la seule façon de démarrer.</Badge>
 </Resultat>
 
-Chaque maillon fait trois choses pour le suivant : il le **localise** (où est son code ?), il le **copie en RAM** (la RAM ayant justement été rendue utilisable par le firmware), puis il **transfère le contrôle** en y sautant. Ce dernier saut est l'essentiel : à cet instant, le maillon précédent **cesse d'exister** en tant qu'autorité — son code peut même être écrasé. Le relais est passé. <Badge niveau="fonde">Un seul cœur d'exécution suit un seul flot d'instructions : après le saut, c'est le code du suivant qui s'exécute. Le précédent n'a plus aucune autorité — déduction directe du modèle d'exécution séquentiel.</Badge>
+Chaque maillon fait trois choses pour le suivant : il le **localise** (où est son code ?), il le **copie en RAM** (la RAM ayant justement été rendue utilisable par le firmware), puis il **transfère le contrôle** en y sautant. Ce dernier saut est l'essentiel : à cet instant, le maillon précédent **perd l'initiative** — c'est le code du suivant qui s'exécute et décide. Le relais est passé. <Badge niveau="fonde">Un seul cœur suit un seul flot d'instructions : après le saut, c'est le code du suivant qui s'exécute — déduction du modèle séquentiel.</Badge> Mais « passer le relais » ne veut pas dire disparaître : le bootloader **rappelle les services du firmware** (INT 13h, Boot Services UEFI) ; le code du firmware ne peut être écrasé qu'après y avoir renoncé (ExitBootServices), et les Runtime Services comme le SMM restent actifs jusque sous l'OS. <Badge niveau="implementation">Quels services persistent, et jusqu'à quand, dépend de la plateforme (BIOS hérité vs UEFI).</Badge>
 
 ## La tâche concrète du bootloader
 
@@ -45,7 +45,7 @@ Posons précisément le contrat du bootloader. Le firmware lui a donné une RAM 
 5. **À transférer** : sauter à l'entrée du noyau, en lui passant ces paramètres selon une convention fixée.
 </Hypotheses>
 
-Le point 2 est plus subtil qu'il n'y paraît. Le firmware sait lire des **secteurs** bruts (des blocs numérotés), mais ignore la notion de « fichier nommé dans un dossier ». Comprendre un système de fichiers (FAT, ext4, NTFS…) demande du code — trop pour tenir dans le tout premier morceau qu'on peut lancer. D'où une contrainte historique célèbre.
+Le point 2 est plus subtil qu'il n'y paraît. Le firmware BIOS hérité ne sait lire que des **secteurs** bruts (des blocs numérotés), et ignore la notion de « fichier nommé dans un dossier ». Comprendre un système de fichiers (FAT, ext4, NTFS…) demande du code — trop pour tenir dans le tout premier morceau qu'on peut lancer. D'où une contrainte historique célèbre.
 
 <Encart type="plusloin" titre="Pourquoi 512 octets, et pourquoi plusieurs étages">
 Sur les anciennes machines (amorçage *BIOS* hérité), le firmware ne sait charger qu'**un seul secteur** : le tout premier du disque, appelé **MBR** (*Master Boot Record*), historiquement de **512 octets**. Cette taille n'a rien d'une loi physique — c'était la taille d'un secteur de disque de l'époque, devenue une convention figée pour des raisons de compatibilité. <Badge niveau="convention">512 octets : taille de secteur héritée, gelée par compatibilité. Aurait pu être autre.</Badge>

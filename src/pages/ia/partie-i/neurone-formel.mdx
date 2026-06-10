@@ -72,7 +72,7 @@ Le neurone répond alors $1$ ou $0$ selon le signe de $z = \mathbf{w}\cdot\mathb
 
 $$ \mathcal{H} = \{\, \mathbf{x} \in \mathbb{R}^n : \mathbf{w}\cdot\mathbf{x} + b = 0 \,\}. $$
 
-**Étape 2 — C'est un hyperplan.** L'équation $\mathbf{w}\cdot\mathbf{x} + b = 0$ est *linéaire* en $\mathbf{x}$. En dimension $n=2$, $w_1 x_1 + w_2 x_2 + b = 0$ est l'équation d'une **droite** ; en dimension $n=3$, d'un **plan** ; en général, d'un **hyperplan** (un sous-espace affine de dimension $n-1$).
+**Étape 2 — C'est un hyperplan.** L'équation $\mathbf{w}\cdot\mathbf{x} + b = 0$ est *linéaire* en $\mathbf{x}$. En dimension $n=2$, $w_1 x_1 + w_2 x_2 + b = 0$ est l'équation d'une **droite** ; en dimension $n=3$, d'un **plan** ; en général, d'un **hyperplan** (un sous-espace affine de dimension $n-1$) — à condition que $\mathbf{w} \neq \mathbf{0}$, ce que nous supposons désormais : si $\mathbf{w} = \mathbf{0}$, la sortie du neurone est constante et il n'y a pas de frontière.
 
 **Étape 3 — $\mathbf{w}$ est orthogonal à l'hyperplan.** Soient $\mathbf{x}_1, \mathbf{x}_2$ deux points de $\mathcal{H}$. Alors $\mathbf{w}\cdot\mathbf{x}_1 + b = 0$ et $\mathbf{w}\cdot\mathbf{x}_2 + b = 0$. En soustrayant :
 

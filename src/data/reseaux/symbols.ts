@@ -27,7 +27,7 @@ export const SYMBOLES: Symbole[] = [
 
   // Lien & adresses
   { katex: '\\text{MAC}', nom: 'Adresse MAC', desc: 'Adresse matérielle de couche liaison, 48 bits, locale au lien.', unite: 'bit', valeur: '48 bits (norme IEEE 802)', voir: '/reseaux/partie-iii/mac-ethernet' },
-  { katex: '\\text{MTU}', nom: 'Unité de transmission maximale', desc: 'Taille maximale de charge utile d’une trame ; au-delà, il faut fragmenter.', unite: 'octet', valeur: '1500 octets sur Ethernet (convention courante)', voir: '/reseaux/partie-iii/mac-ethernet' },
+  { katex: '\\text{MTU}', nom: 'Unité de transmission maximale', desc: 'Taille maximale de charge utile d’une trame ; au-delà, il faut fragmenter.', unite: 'octet', valeur: '1500 octets sur Ethernet (norme IEEE 802.3 ; jumbo frames possibles selon déploiement)', voir: '/reseaux/partie-iii/mac-ethernet' },
 
   // IP & routage
   { katex: '\\text{IP}', nom: 'Adresse IP', desc: 'Adresse logique hiérarchique identifiant une interface sur l’interréseau.', unite: 'bit', valeur: '32 bits en IPv4 (norme)', voir: '/reseaux/partie-iv/adressage-ip' },

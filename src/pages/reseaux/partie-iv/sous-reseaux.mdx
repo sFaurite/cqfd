@@ -81,10 +81,10 @@ D'où le nombre d'adresses **attribuables** à une machine :
 
 $$ N_{\text{hôtes}} = 2^{\,32 - n} - 2 $$
 
-Exemple, un /26 : $N_{\text{hôtes}} = 2^{6} - 2 = 64 - 2 = 62$ hôtes.
+formule valable pour $n \le 30$. Exemple, un /26 : $N_{\text{hôtes}} = 2^{6} - 2 = 64 - 2 = 62$ hôtes.
 </Encart>
 
-Pourquoi ces deux exclusions ? Les bits hôte **tout à zéro** désignent le réseau lui-même (`192.168.10.0`) ; les bits hôte **tout à un** désignent l'adresse de **diffusion** (broadcast, `192.168.10.63`), qui s'adresse à toutes les machines du réseau d'un coup. Aucune des deux ne peut nommer *une* machine particulière.
+Pourquoi ces deux exclusions ? Les bits hôte **tout à zéro** désignent le réseau lui-même (`192.168.10.0`) ; les bits hôte **tout à un** désignent l'adresse de **diffusion** (broadcast, `192.168.10.63`), qui s'adresse à toutes les machines du réseau d'un coup. Aucune des deux ne peut nommer *une* machine particulière. Deux exceptions normalisées : le /31 (RFC 3021, liens point à point) offre 2 hôtes sans adresse réseau ni broadcast, et le /32 désigne une adresse d'hôte unique.
 
 <Badge niveau="theoreme">Le décompte $2^{32-n}$ est un dénombrement de combinaisons binaires : exact par construction.</Badge>
 <Badge niveau="norme">Réserver l'adresse réseau (bits à 0) et l'adresse de diffusion (bits à 1) est une convention de l'architecture IP, fixée par les standards, et non une nécessité mathématique. Le « −2 » en découle.</Badge>
@@ -106,7 +106,7 @@ Quel /n choisir, et combien de sous-réseaux tracer ? Cela, en revanche, dépend
 
 ## Agréger : le chemin inverse, qui prépare le routage
 
-Si raccourcir le masque divise, **rallonger les zéros** réunit. Deux réseaux contigus `192.168.0.0/24` et `192.168.1.0/24` partagent les 23 premiers bits : on peut les annoncer comme un seul `192.168.0.0/23`. C'est l'**agrégation** (ou *supernetting*) : un préfixe court qui en résume plusieurs longs.
+Si allonger le préfixe divise, **rallonger les zéros** réunit. Deux réseaux contigus `192.168.0.0/24` et `192.168.1.0/24` partagent les 23 premiers bits : on peut les annoncer comme un seul `192.168.0.0/23`. C'est l'**agrégation** (ou *supernetting*) : un préfixe court qui en résume plusieurs longs.
 
 <Badge niveau="norme">L'agrégation de préfixes est le mécanisme central de CIDR (RFC 1519) ; elle est ce qui a freiné l'explosion des tables de routage de l'Internet.</Badge>
 

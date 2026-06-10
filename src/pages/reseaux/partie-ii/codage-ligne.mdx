@@ -69,13 +69,13 @@ $$ f_{\max}^{\text{Manch}} = \frac{1}{T_b} = D. $$
 
 (Sur une alternance `0 1 0 1`, certaines transitions de bord fusionnent et la fréquence n'augmente pas : la suite constante reste bien le cas le plus exigeant pour Manchester.)
 
-Le rapport est sans appel : Manchester contient des composantes **deux fois plus hautes** en fréquence. Or, par <Prereq href="/reseaux/partie-i/nyquist">le théorème de Nyquist</Prereq>, transmettre une fréquence maximale $f_{\max}$ exige une bande $B \ge f_{\max}$. Doubler la fréquence maximale, c'est exiger une bande **deux fois plus large**.
+Le rapport est sans appel : Manchester contient des composantes **deux fois plus hautes** en fréquence. Or, par la physique du canal à bande limitée (<Prereq href="/reseaux/partie-i/signal-bande-passante">signal et bande passante</Prereq>), un canal de bande $B$ ne laisse passer aucune composante au-delà de $B$ : transmettre une fréquence maximale $f_{\max}$ exige $B \ge f_{\max}$. Doubler la fréquence maximale, c'est exiger une bande **deux fois plus large**.
 
 <Resultat label="Manchester double la bande occupée">
 
 $$ B_{\text{Manch}} \;\approx\; 2\,B_{\text{NRZ}} \quad\text{pour le même débit binaire } D. $$
 
-<Badge niveau="theoreme" slot="badge">Le **lien** transitions → fréquence → bande est imposé par Nyquist : c'est une conséquence physique inattaquable. (Le *choix* de Manchester, lui, reste une convention.)</Badge>
+<Badge niveau="theoreme" slot="badge">Le **lien** transitions → fréquence → bande est imposé par la physique du canal (Fourier) : c'est une conséquence physique inattaquable. (Le *choix* de Manchester, lui, reste une convention.)</Badge>
 </Resultat>
 </Encart>
 
@@ -89,7 +89,7 @@ Retenons la leçon de méthode. La **contrainte** est fondée : il faut une horl
 
 <Badge niveau="heuristique">Le verdict NRZ-vs-Manchester **dépend du contexte** (support, débit, contraintes d'horloge). Présenter l'un comme universellement supérieur serait une faute épistémique.</Badge>
 
-C'est précisément pourquoi, sur les supports à **large bande** et haut débit, on abandonne Manchester — son facteur 2 devient ruineux — au profit de codes plus subtils : le **scrambling** (brouillage pseudo-aléatoire qui casse les longues suites sans doubler la bande) et les codages par blocs comme le **4B/5B**, qui n'insèrent qu'un surcoût de $25\,\%$ (5 bits transmis pour 4 bits utiles) tout en garantissant assez de transitions.
+C'est précisément pourquoi, sur les supports à **large bande** et haut débit, on abandonne Manchester — son facteur 2 devient ruineux — au profit de codes plus subtils : le **scrambling** (brouillage pseudo-aléatoire qui rend les longues suites très improbables sans doubler la bande — garantie statistique, contrairement au 4B/5B) et les codages par blocs comme le **4B/5B**, qui n'insèrent qu'un surcoût de $25\,\%$ (5 bits transmis pour 4 bits utiles) tout en garantissant assez de transitions.
 
 <Badge niveau="norme">Le 4B/5B et le scrambling sont **normalisés** dans des standards comme le 100BASE-TX (Fast Ethernet, IEEE 802.3u) : des choix de codage fixés par la norme, et non des recettes universelles.</Badge>
 

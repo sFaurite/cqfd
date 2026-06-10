@@ -39,11 +39,11 @@ Un principe sobre mais incontournable gouverne tout diagramme d'OM.
 
 <Hypotheses titre="Règle de construction des OM">
 1. **Conservation du nombre d'orbitales.** En combinant $N$ orbitales atomiques, on obtient **exactement $N$ orbitales moléculaires**. Les orbitales ne se créent ni ne se détruisent : elles se réarrangent.
-2. **Autant de liantes que d'antiliantes.** Chaque combinaison « somme » liante est accompagnée d'une combinaison « différence » antiliante. Pour deux OA, une liante et une antiliante.
+2. **Pour deux OA, une liante et une antiliante.** La combinaison « somme » est liante, la combinaison « différence » antiliante. Au-delà de deux OA, certaines des $N$ OM peuvent être **non liantes** : c'est le cas des liaisons à 3 centres invoquées pour $SF_6$ au chapitre précédent (une liante, une non liante, une antiliante).
 3. **Remplissage.** On place les électrons dans ces OM par énergie croissante, deux par orbitale au maximum (Pauli), et on applique la règle de Hund (un électron seul dans chaque orbitale de même énergie avant d'apparier).
 </Hypotheses>
 
-Les points 1 et 2 découlent de l'algèbre linéaire appliquée à Schrödinger ; le point 3 reprend les règles déjà posées pour les atomes dans <Prereq href="/chimie/partie-i/atome-hydrogene">les orbitales de l'hydrogène</Prereq>. <Badge niveau="quantique">Conservation du nombre d'états et appariement liant/antiliant sont des conséquences mathématiques directes de la méthode variationnelle sur l'équation de Schrödinger.</Badge>
+Le point 1 découle de l'algèbre linéaire appliquée à Schrödinger ; le point 2 décrit le cas de deux OA — celui de tout ce chapitre ; le point 3 reprend les règles déjà posées pour les atomes dans <Prereq href="/chimie/partie-i/atome-hydrogene">les orbitales de l'hydrogène</Prereq>. <Badge niveau="quantique">La conservation du nombre d'états est une conséquence mathématique directe de la méthode variationnelle ; l'appariement strict liant/antiliant, lui, ne vaut que pour deux OA.</Badge>
 
 ### L'outil décisif : l'ordre de liaison
 
@@ -53,7 +53,7 @@ De combien de liaisons parle-t-on, au fond ? On le mesure par l'**ordre de liais
 
 $$ \text{OL} = \frac{1}{2}\left( n_{\text{liants}} - n_{\text{antiliants}} \right) $$
 
-<Badge niveau="quantique" slot="badge">Chaque électron antiliant annule la stabilisation apportée par un électron liant. La demi-somme convertit un comptage d'électrons en nombre de liaisons. OL &gt; 0 : molécule liée ; OL = 0 : pas de molécule.</Badge>
+<Badge niveau="quantique" slot="badge">Chaque électron antiliant annule (au moins) la stabilisation apportée par un électron liant. La demi-somme convertit un comptage d'électrons en nombre de liaisons. OL &gt; 0 : molécule liée ; OL = 0 : pas de molécule.</Badge>
 </Resultat>
 
 Testons-le immédiatement sur les cas les plus simples.
@@ -69,7 +69,7 @@ Une liaison simple : H₂ est stable. Conforme à Lewis.
 
 $$ \text{OL}(\text{He}_2) = \tfrac{1}{2}(2 - 2) = 0 $$
 
-Ordre de liaison nul : aucune liaison nette, He₂ ne se forme pas. Lewis « expliquait » cela en disant que He a déjà son octet ; l'OM **le démontre** : le gain de la liante est exactement effacé par le coût de l'antiliante.
+Ordre de liaison nul : aucune liaison nette, He₂ ne se forme pas. Lewis « expliquait » cela en disant que He a déjà son duet (couche 1s saturée, 2 électrons) ; l'OM **le démontre** : le coût de l'antiliante efface — et même dépasse légèrement, à cause du recouvrement des orbitales — le gain de la liante : le bilan net est répulsif.
 </Encart>
 
 Manipulez le diagramme ci-dessous pour remplir vous-même les orbitales de chaque diatomique et lire l'ordre de liaison.

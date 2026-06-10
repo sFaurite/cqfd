@@ -16,7 +16,7 @@ import VideoManim from '../../../components/VideoManim.astro';
 
 ## Le problème : un mot ne se comprend pas tout seul
 
-Reprenons la phrase « la banque de la rivière était boueuse ». Le mot « banque » n'a de sens qu'à la lumière de « rivière » — qui se trouve cinq mots plus loin. Pour représenter correctement « banque », il faudrait donc aller **chercher** l'information pertinente ailleurs dans la phrase, où qu'elle soit.
+Reprenons la phrase « la banque de la rivière était boueuse » — calque assumé du célèbre exemple anglais *the bank of the river*, où *bank* signifie aussi bien « banque » que « berge ». Le mot « banque » n'a de sens qu'à la lumière de « rivière » — qui se trouve trois mots plus loin. Pour représenter correctement « banque », il faudrait donc aller **chercher** l'information pertinente ailleurs dans la phrase, où qu'elle soit.
 
 Le modèle récurrent que nous avons étudié résout ce problème en faisant transiter toute l'information par un état caché propagé pas à pas. Nous avons vu que cela impose deux fléaux : le <Prereq href="/ia/partie-v/sequences-limite-rnn">gradient qui s'évanouit sur les longues séquences et la séquentialité non parallélisable</Prereq>. L'attention propose une idée radicalement différente : **chaque position regarde directement toutes les autres**, sans relais, en une seule opération matricielle.
 

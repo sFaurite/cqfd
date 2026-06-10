@@ -50,7 +50,7 @@ Reprenons `https://exemple.fr`. Voici, dans l'ordre, ce que la pile entière acc
 
 2. **Établir TCP.** Le client ouvre une connexion fiable vers l'IP obtenue, port 443, par le *three-way handshake*. *(Voir <Prereq href="/reseaux/partie-v/tcp-connexion">TCP : établir une connexion fiable</Prereq>.)*
 
-3. **Émettre la requête HTTP.** Sur ce flux fiable, le client écrit `GET / HTTP/1.1` avec ses en-têtes.
+3. **Émettre la requête HTTP.** Sur ce flux fiable — préalablement chiffré par le handshake TLS qu'exige le https (objet du chapitre suivant) — le client écrit `GET / HTTP/1.1` avec ses en-têtes.
 
 4. **Descendre la pile.** Ces octets sont découpés en segments TCP, encapsulés dans des **paquets IP**, routés saut par saut par *longest prefix match*, mis dans des **trames Ethernet** adressées par MAC, et finalement émis comme un **signal** modulé sur le support physique.
 

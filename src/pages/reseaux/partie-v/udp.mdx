@@ -40,7 +40,7 @@ Les deux premiers champs ne sont que l'application directe du multiplexage par p
 <Encart type="rappel" titre="Le checksum : la parité, en plus robuste">
 Le checksum UDP reprend exactement l'idée de la <Prereq href="/reseaux/partie-ii/trame-parite">parité</Prereq> : un champ déduit des données, recalculé à l'arrivée, qui doit concorder. La technique diffère : on découpe le datagramme (plus un *pseudo-en-tête* contenant les adresses IP) en mots de 16 bits, on les **additionne en complément à un**, et on stocke le complément du total. À la réception, on refait la somme *incluant* le checksum : le résultat doit être une suite de 1. S'il ne l'est pas, le datagramme est silencieusement **jeté**.
 
-<Badge niveau="norme">L'algorithme du checksum 16 bits en complément à un est spécifié par le RFC 768 (et le RFC 1071). En IPv4, il est facultatif ; en IPv6, il est obligatoire car IP ne protège plus les données.</Badge>
+<Badge niveau="norme">L'algorithme du checksum 16 bits en complément à un est spécifié par le RFC 768 (et le RFC 1071). En IPv4, il est facultatif ; en IPv6, il est obligatoire, car IPv6 a supprimé la somme de contrôle d'en-tête IP : le checksum UDP (qui couvre aussi les adresses via le pseudo-en-tête) devient alors la seule protection contre une corruption de l'adressage.</Badge>
 
 Comme la parité, ce checksum **détecte** sans **corriger**, et certaines erreurs combinées passent au travers. Mais il suffit pour écarter la plupart des datagrammes corrompus avant qu'ils ne remontent à l'application.
 </Encart>

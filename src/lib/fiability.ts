@@ -74,7 +74,7 @@ export const PRESET_COSMO = {
 export const PRESET_CHIMIE = {
   quantique: { color: VERT, emoji: '🟢', label: 'Quantique / fondamental', sens: 'Découle des principes quantiques et des lois de conservation (structure électronique, conservation de la matière et de la charge). Nécessaire : ne pourrait pas être autrement.' },
   experimental: { color: BLEU, emoji: '🔵', label: 'Établi par l’expérience', sens: 'Mesuré de façon reproductible (enthalpies, constantes d’équilibre, périodicité). Fait expérimental robuste reposant sur la mesure.' },
-  empirique: { color: AMBRE, emoji: '🟡', label: 'Règle empirique', sens: 'Modèle ou règle prédictive mais approchée (règle de l’octet, VSEPR, électronégativité, pKa tabulés). Utile, pas exacte.' },
+  empirique: { color: AMBRE, emoji: '🟡', label: 'Règle empirique', sens: 'Modèle ou règle prédictive mais approchée (règle de l’octet, VSEPR, électronégativité, règles de prédiction des pKa). Utile, pas exacte.' },
   qualitatif: { color: ROUGE, emoji: '🔴', label: 'Qualitatif / contextuel', sens: 'Tendance qualitative dépendant fortement du contexte (réactivité « générale », effets de solvant). Non universel.' },
 } as const;
 

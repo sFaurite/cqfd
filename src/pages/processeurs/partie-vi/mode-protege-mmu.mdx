@@ -30,7 +30,7 @@ Le mécanisme fondateur est minuscule : le processeur range, quelque part dans s
 
 $$ \text{instruction privilégiée exécutée en mode utilisateur} \;\Longrightarrow\; \text{exception matérielle (faute)} $$
 
-<Badge niveau="fonde" slot="badge">Le mécanisme lui-même — un niveau de privilège vérifié par le matériel à chaque instruction sensible — est une nécessité logique : sans contrôle au niveau du silicium, aucune isolation logicielle ne peut être garantie, puisque le programme contrôlerait justement le logiciel censé le surveiller.</Badge>
+<Badge niveau="fonde" slot="badge">Le mécanisme lui-même — un niveau de privilège vérifié par le matériel à chaque instruction sensible — est une nécessité logique dès lors qu'on exécute du code machine natif arbitraire, non vérifié avant exécution : un tel programme contrôlerait sinon le logiciel censé le surveiller. Si l'on renonce à cette hypothèse (bytecode vérifié JVM/WebAssembly, SFI), l'isolation peut être garantie sans matériel : l'OS Singularity faisait tourner tous ses processus en ring 0.</Badge>
 </Resultat>
 
 Quand un programme utilisateur tente une telle instruction (ou un accès interdit), le CPU **n'exécute pas** : il bascule en mode noyau et saute vers un gestionnaire prévu par l'OS. Le noyau reprend la main et décide — souvent en tuant le fautif. C'est aussi par ce passage contrôlé, l'**appel système**, qu'un programme demande poliment un service au noyau plutôt que de le voler.
@@ -38,7 +38,7 @@ Quand un programme utilisateur tente une telle instruction (ou un accès interdi
 En revanche, *l'organisation* de ces privilèges est un choix. Combien de niveaux ? Comment les nommer ?
 
 <Tournant titre="Tournant : ici l'ingénieur choisit l'organisation">
-La nécessité s'arrête au principe « il faut au moins deux niveaux séparés par le matériel ». Tout le reste se décrète. L'architecture x86 définit quatre **anneaux** (rings) numérotés de 0 à 3, l'anneau 0 étant le plus privilégié ; en pratique presque tous les OS n'en utilisent que **deux** — noyau (anneau 0) et utilisateur (anneau 3) — ignorant les deux du milieu. D'autres architectures n'en proposent que deux dès le départ. On ne déduit plus rien ici : on adopte une convention.
+La nécessité s'arrête au principe « pour du code natif non vérifié, il faut au moins deux niveaux séparés par le matériel ». Tout le reste se décrète. L'architecture x86 définit quatre **anneaux** (rings) numérotés de 0 à 3, l'anneau 0 étant le plus privilégié ; en pratique presque tous les OS n'en utilisent que **deux** — noyau (anneau 0) et utilisateur (anneau 3) — ignorant les deux du milieu. D'autres architectures n'en proposent que deux dès le départ. On ne déduit plus rien ici : on adopte une convention.
 </Tournant>
 
 <Badge niveau="convention">Le nombre de niveaux, le terme « anneaux », la numérotation où 0 = le plus privilégié : autant de conventions d'architecture, pas de lois physiques. On pourrait organiser les privilèges tout autrement.</Badge>

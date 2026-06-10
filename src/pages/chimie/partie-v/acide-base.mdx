@@ -15,7 +15,7 @@ import ChimieTitrage from '../../../components/interactive/ChimieTitrage.astro';
 
 ## Réactions acide-base
 
-Un acide qui « pique », une base qui « rend savonneux » : derrière ces sensations se cache l'un des mouvements les plus simples de toute la chimie — le déplacement d'un seul proton, $\text{H}^+$, d'une molécule à une autre. Et nous allons voir que ce chapitre n'introduit presque rien de neuf : une réaction acide-base est un **équilibre chimique** comme un autre. Tout ce que nous avons bâti au chapitre précédent — la constante $K$, le sens d'évolution, la relation avec l'enthalpie libre — s'applique directement.
+Un acide qui « pique », une base qui « rend savonneux » : derrière ces sensations se cache l'un des mouvements les plus simples de toute la chimie — le déplacement d'un seul proton, $\text{H}^+$, d'une molécule à une autre. Et nous allons voir que ce chapitre n'introduit presque rien de neuf : une réaction acide-base est un **équilibre chimique** comme un autre. Tout ce que nous avons bâti au chapitre sur l'équilibre chimique — la constante $K$, le sens d'évolution, la relation avec l'enthalpie libre — s'applique directement.
 
 <Encart type="intuition" titre="L'idée en une image">
 
@@ -43,7 +43,7 @@ Brønsted parle de protons. Mais on peut remonter d'un cran : un proton n'est qu
 
 ### La force d'un acide : la constante $K_a$
 
-La double flèche $\rightleftharpoons$ signale un **équilibre**. Appliquons-lui exactement l'outil du chapitre précédent : la <Prereq href="/chimie/partie-v/equilibre-chimique">constante d'équilibre</Prereq>. Pour la réaction de l'acide avec l'eau, on l'appelle **constante d'acidité** $K_a$ :
+La double flèche $\rightleftharpoons$ signale un **équilibre**. Appliquons-lui exactement l'outil du chapitre sur l'équilibre chimique : la <Prereq href="/chimie/partie-v/equilibre-chimique">constante d'équilibre</Prereq>. Pour la réaction de l'acide avec l'eau, on l'appelle **constante d'acidité** $K_a$ :
 
 <Resultat label="Constante d'acidité">
 
@@ -59,7 +59,7 @@ Plus $K_a$ est grand (donc $pK_a$ petit), plus l'équilibre est déplacé vers l
 
 <Badge niveau="qualitatif">« Acide fort/faible » classe les couples par $K_a$ ; « solution acide/basique » décrit un mélange précis. Confondre les deux est l'erreur la plus fréquente du domaine.</Badge>
 
-Et puisque $K_a$ est une constante d'équilibre, elle est gouvernée par la thermodynamique via la relation <Prereq href="/chimie/partie-v/equilibre-chimique">$\Delta_r G^\circ = -RT\ln K$</Prereq> établie au chapitre précédent, appliquée ici à $K_a$ : un $pK_a$ n'est, au fond, qu'une enthalpie libre standard déguisée.
+Et puisque $K_a$ est une constante d'équilibre, elle est gouvernée par la thermodynamique via la relation <Prereq href="/chimie/partie-v/equilibre-chimique">$\Delta_r G^\circ = -RT\ln K$</Prereq> établie au chapitre sur l'équilibre chimique, appliquée ici à $K_a$ : un $pK_a$ n'est, au fond, qu'une enthalpie libre standard déguisée.
 
 ### L'eau réagit avec elle-même : $K_e$
 
@@ -103,7 +103,7 @@ Un **titrage** verse progressivement une base de concentration connue dans un ac
 
 <ChimieTitrage />
 
-Deux points sont remarquables. À l'**équivalence**, on a versé exactement la quantité de base nécessaire pour consommer tout l'acide : le saut de pH y est brutal et permet de doser. À la **demi-équivalence**, on a neutralisé la moitié de l'acide — et là, un résultat se déduit sans approximation.
+Deux points sont remarquables. À l'**équivalence**, on a versé exactement la quantité de base nécessaire pour consommer tout l'acide : le saut de pH y est brutal et permet de doser. À la **demi-équivalence**, on a neutralisé la moitié de l'acide — et là, un résultat se déduit presque sans approximation.
 
 <Encart type="calcul" titre="Pourquoi pH = pKa à la demi-équivalence">
 
@@ -123,7 +123,7 @@ $$
 \text{pH} = pK_a + \log\frac{[\text{A}^-]}{[\text{AH}]}
 $$
 
-À la demi-équivalence, la moitié de l'acide a été transformée en sa base conjuguée : $[\text{AH}] = [\text{A}^-]$. Le rapport vaut $1$, son logarithme est nul, et il reste $\text{pH} = pK_a$.
+À la demi-équivalence, la moitié de l'acide a été transformée en sa base conjuguée : $[\text{AH}] \approx [\text{A}^-]$. En toute rigueur, les bilans de matière et de charge donnent $[\text{A}^-] = C/2 + [\text{H}_3\text{O}^+] - [\text{OH}^-]$ : négliger les termes $[\text{H}_3\text{O}^+] - [\text{OH}^-]$ est une excellente approximation tant que l'acide n'est ni trop dilué ni de $pK_a$ extrême. Le rapport vaut alors $1$, son logarithme est nul, et il reste $\text{pH} = pK_a$.
 
 </Encart>
 
