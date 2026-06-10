@@ -24,7 +24,7 @@ class IaAttentionQkv(Scene):
         # ============================================================
         # (0-3 s) Les 5 tokens
         # ============================================================
-        words = ["la", "banque", "de", "la", "riviere"]
+        words = ["la", "banque", "de", "la", "rivière"]
         query_idx = 1  # « banque »
 
         boxes = VGroup()
@@ -127,7 +127,12 @@ class IaAttentionQkv(Scene):
         self.wait(0.2)
 
         # Normalisation par sqrt(d_k)
-        norm_form = MathTex(r"\frac{QK^\top}{\sqrt{d_k}}", color=TEXT).scale(0.7).move_to(s_form)
+        norm_form = (
+            MathTex(r"\frac{QK^\top}{\sqrt{d_k}}", color=TEXT)
+            .scale(0.7)
+            .move_to(s_form)
+            .align_to(s_form, RIGHT)
+        )
         self.play(ReplacementTransform(s_form, norm_form))
         # Indicate sur le facteur 1/sqrt(d_k) -> le denominateur
         self.play(Indicate(norm_form[0][3:], color=ORANGE, scale_factor=1.3), run_time=0.8)
@@ -215,7 +220,7 @@ class IaAttentionQkv(Scene):
             color=YELLOW, angle=-0.9, stroke_width=2.5, tip_length=0.16,
         ).shift(DOWN * 0.05)
         msg = Text(
-            "« banque » va chercher l'info de « riviere »",
+            "« banque » va chercher l'info de « rivière »",
             color=PURPLE,
         ).scale(0.42).move_to(np.array([0.0, -0.6, 0.0]))
         self.play(Create(link), FadeIn(msg, shift=UP * 0.1), run_time=0.9)

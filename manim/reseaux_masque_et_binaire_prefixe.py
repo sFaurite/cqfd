@@ -99,13 +99,13 @@ class ReseauMasqueEtBinaire(Scene):
         mur = Line([x_mur, y_adr + 0.45, 0], [x_mur, y_res - 0.45, 0],
                    color=TEXT, stroke_width=5)
         mur.set_opacity(0.95)
-        lab_front = Text("frontiere /26", color=TEXT, font=MONO).scale(0.34)
+        lab_front = Text("frontière /26", color=TEXT, font=MONO).scale(0.34)
         lab_front.next_to([x_mur, y_res - 0.45, 0], DOWN, buff=0.12)
         self.play(Create(mur), FadeIn(lab_front))
         self.wait(0.4)
 
         # ETAPE 3 : derouler le ET bit a bit, colonne par colonne
-        lab_res = Text("resultat", color=GREEN, font=MONO).scale(0.4).next_to(
+        lab_res = Text("résultat", color=GREEN, font=MONO).scale(0.4).next_to(
             [xs[0], y_res, 0], LEFT, buff=0.25)
         self.play(FadeIn(lab_res))
 
@@ -173,7 +173,7 @@ class ReseauMasqueEtBinaire(Scene):
             run_time=1.0,
         )
         cadre = SurroundingRectangle(cible, color=GREEN, buff=0.18)
-        lab_prefixe = Text("prefixe = 192.168.10.0/26", color=GREEN, font=MONO).scale(0.4)
+        lab_prefixe = Text("préfixe = 192.168.10.0/26", color=GREEN, font=MONO).scale(0.4)
         lab_prefixe.next_to(cadre, DOWN, buff=0.18)
         hotes = MathTex(r"2^{32-26}-2 = 62", color=TEXT).scale(0.55)
         hotes.next_to(lab_prefixe, DOWN, buff=0.18)
@@ -194,11 +194,11 @@ class ReseauMasqueEtBinaire(Scene):
         self.play(mur.animate.put_start_and_end_on(
             [x_24, y_adr + 0.45, 0], [x_24, y_res - 0.45, 0]),
             lab_front.animate.next_to([x_24, y_res - 0.45, 0], DOWN, buff=0.12)
-            .become(Text("frontiere /24", color=TEXT, font=MONO).scale(0.34)
+            .become(Text("frontière /24", color=TEXT, font=MONO).scale(0.34)
                     .next_to([x_24, y_res - 0.45, 0], DOWN, buff=0.12)),
             run_time=0.8)
         self.wait(0.3)
-        new_lab = Text("frontiere /26", color=TEXT, font=MONO).scale(0.34)
+        new_lab = Text("frontière /26", color=TEXT, font=MONO).scale(0.34)
         new_lab.next_to([x_mur, y_res - 0.45, 0], DOWN, buff=0.12)
         self.play(mur.animate.put_start_and_end_on(
             [x_mur, y_adr + 0.45, 0], [x_mur, y_res - 0.45, 0]),
@@ -220,7 +220,7 @@ class ReseauMasqueEtBinaire(Scene):
             plages.add(VGroup(box, txt))
         self.play(LaggedStartMap(FadeIn, plages, lag_ratio=0.25, run_time=1.2))
 
-        msg = Text("allonger le prefixe = subdiviser", color=YELLOW, font=MONO).scale(0.42)
+        msg = Text("allonger le préfixe = subdiviser", color=YELLOW, font=MONO).scale(0.42)
         msg.to_edge(DOWN).shift(UP * 0.1)
         self.play(Write(msg))
         self.wait(1)

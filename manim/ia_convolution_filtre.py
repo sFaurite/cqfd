@@ -180,13 +180,13 @@ class IaConvolutionFiltre(Scene):
         share = MathTex(
             r"\text{le \textit{m\^eme}}\ K\ \text{partout}",
             color=TEXT,
-        ).scale(0.7).move_to(UP * 0.3)
+        ).scale(0.7).move_to(UP * 0.3 + RIGHT * 0.4)
         self.play(Write(share), run_time=0.9)
 
         # Badge : 9 poids (jaune) vs 1,6e9 barre (rouge)
         few = VGroup(
             Text("9 poids", color=YELLOW, weight=BOLD).scale(0.6),
-            Text("filtre partage", color=MUTED).scale(0.4),
+            Text("filtre partagé", color=MUTED).scale(0.4),
         ).arrange(DOWN, buff=0.12)
         few_box = SurroundingRectangle(few, color=YELLOW, buff=0.22, corner_radius=0.1)
         few_grp = VGroup(few_box, few)
@@ -198,7 +198,9 @@ class IaConvolutionFiltre(Scene):
         dense_box = SurroundingRectangle(dense, color=RED, buff=0.22, corner_radius=0.1)
         dense_grp = VGroup(dense_box, dense)
 
-        badges = VGroup(few_grp, dense_grp).arrange(RIGHT, buff=1.4).next_to(share, DOWN, buff=0.7)
+        # centrés sur la zone libre entre la grille image (gauche) et la sortie
+        # (droite) ; buff réduit pour tenir entre les deux grilles
+        badges = VGroup(few_grp, dense_grp).arrange(RIGHT, buff=0.7).next_to(share, DOWN, buff=0.7)
 
         self.play(FadeIn(few_grp, shift=LEFT * 0.2),
                   FadeIn(dense_grp, shift=RIGHT * 0.2), run_time=0.8)

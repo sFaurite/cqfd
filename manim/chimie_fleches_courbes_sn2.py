@@ -21,7 +21,7 @@ class ChimieFlechesCourbesSn2(Scene):
         # =====================================================================
         # 0-3 s : MISE EN PLACE
         # =====================================================================
-        titre = Text("Nucleophile  →  Electrophile", color=TEXT, weight=BOLD)
+        titre = Text("Nucléophile  →  Électrophile", color=TEXT, weight=BOLD)
         titre.scale(0.55).to_edge(UP, buff=0.35)
         self.play(Write(titre), run_time=1.0)
 
@@ -107,7 +107,7 @@ class ChimieFlechesCourbesSn2(Scene):
         self.wait(0.4)
 
         # rappel : une fleche = 2 electrons (carte de legende discrete, en haut a droite)
-        legende = MathTex(r"1\ \text{fleche} = 2\,e^{-}", color=YELLOW).scale(0.5)
+        legende = MathTex(r"1\ \text{fl\`eche} = 2\,e^{-}", color=YELLOW).scale(0.5)
         legende.to_corner(UR, buff=0.4).shift(DOWN * 0.55)
         self.play(FadeIn(legende))
         self.wait(0.3)
@@ -178,7 +178,8 @@ class ChimieFlechesCourbesSn2(Scene):
             run_time=1.1,
         )
         inv_note = Text("inversion de Walden", color=MUTED).scale(0.4)
-        inv_note.next_to(C_circ, UP, buff=0.6)
+        # au-dessus des R : à 0.6 le texte touche l'atome R supérieur
+        inv_note.next_to(C_circ, UP, buff=1.05)
         self.play(FadeIn(inv_note))
         self.wait(0.3)
 
@@ -204,7 +205,7 @@ class ChimieFlechesCourbesSn2(Scene):
         bilan[2].set_color(TEXT)
         bilan.to_edge(DOWN, buff=0.95)
 
-        encadre_txt = MathTex(r"\text{charge conservee} : -1", color=GREEN).scale(0.5)
+        encadre_txt = MathTex(r"\text{charge conserv\'ee} : -1", color=GREEN).scale(0.5)
         encadre_txt.next_to(bilan, DOWN, buff=0.25)
         box = SurroundingRectangle(encadre_txt, color=GREEN, buff=0.12, corner_radius=0.08)
 

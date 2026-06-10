@@ -41,7 +41,7 @@ def _profile(x, y_ts):
 
 class ChimieBarriereActivationCatalyseur(Scene):
     def construct(self):
-        titre = Text("La barriere et le raccourci", color=TEXT).scale(0.5).to_edge(UP)
+        titre = Text("La barrière et le raccourci", color=TEXT).scale(0.5).to_edge(UP)
         self.play(Write(titre))
 
         # --- Axes ------------------------------------------------------------
@@ -54,9 +54,9 @@ class ChimieBarriereActivationCatalyseur(Scene):
             axis_config={"color": MUTED, "stroke_width": 2, "include_ticks": False},
         ).to_edge(DOWN, buff=0.55).shift(DOWN * 0.05)
 
-        x_lab = Text("coordonnee de reaction", color=MUTED).scale(0.34)
+        x_lab = Text("coordonnée de réaction", color=MUTED).scale(0.34)
         x_lab.next_to(axes.x_axis, DOWN, buff=0.08).align_to(axes.x_axis, RIGHT).shift(LEFT * 0.2)
-        y_lab = Text("energie potentielle", color=MUTED).scale(0.34)
+        y_lab = Text("énergie potentielle", color=MUTED).scale(0.34)
         y_lab.rotate(PI / 2).next_to(axes.y_axis, LEFT, buff=0.05)
 
         self.play(Create(axes), FadeIn(x_lab), FadeIn(y_lab))
@@ -75,11 +75,11 @@ class ChimieBarriereActivationCatalyseur(Scene):
         self.play(Create(curve_high), run_time=2.2)
 
         # etiquettes reactifs / produits / etat de transition
-        l_rea = Text("reactifs", color=BLUE).scale(0.38)
+        l_rea = Text("réactifs", color=BLUE).scale(0.38)
         l_rea.next_to(P(0.8, Y_REA), UP, buff=0.18)
         l_pro = Text("produits", color=GREEN).scale(0.38)
         l_pro.next_to(P(9.2, Y_PRO), UP, buff=0.18)
-        l_ts = Text("etat de transition", color=YELLOW).scale(0.36)
+        l_ts = Text("état de transition", color=YELLOW).scale(0.36)
         l_ts.next_to(P(X_PEAK, Y_TS_HIGH), UP, buff=0.14)
 
         self.play(FadeIn(l_rea, shift=UP * 0.1), FadeIn(l_pro, shift=UP * 0.1))
@@ -192,7 +192,7 @@ class ChimieBarriereActivationCatalyseur(Scene):
         self.play(FadeOut(ball), FadeOut(ball2), FadeOut(ineq))
 
         concl1 = MathTex(r"E_a \downarrow \Rightarrow v \uparrow", color=BLUE).scale(0.7)
-        concl2 = MathTex(r"\Delta G,\ \Delta H,\ K", r"\ \text{inchanges}", color=TEXT).scale(0.55)
+        concl2 = MathTex(r"\Delta G,\ \Delta H,\ K", r"\ \text{inchang\'es}", color=TEXT).scale(0.55)
         concl2.set_color_by_tex(r"\Delta G", GREEN)
         box = SurroundingRectangle(concl2, color=GREEN, buff=0.18, corner_radius=0.1)
         right_grp = VGroup(concl2, box)

@@ -64,7 +64,7 @@ class ReseauCrcDivision(Scene):
         # Ajout des r=4 zeros : '0000' glissent a droite de M.
         zeros = bit_row("0000", color=GREEN)
         zeros.next_to(m_row2, RIGHT, buff=0)
-        zlab = Text("+ x^4  (4 zeros)", font=MONO, color=GREEN).scale(0.4)
+        zlab = Text("+ x^4  (4 zéros)", font=MONO, color=GREEN).scale(0.4)
         zlab.next_to(zeros, UP, buff=0.25)
         self.play(FadeIn(zeros, shift=LEFT * 0.5), FadeIn(zlab), run_time=0.9)
         self.wait(0.5)
@@ -141,7 +141,7 @@ class ReseauCrcDivision(Scene):
 
         def slide_step(from_pos, to_pos, run=0.8):
             nonlocal g_div
-            label = Text("tete=0, on glisse", font=MONO, color=MUTED).scale(0.4)
+            label = Text("tête=0, on glisse", font=MONO, color=MUTED).scale(0.4)
             label.next_to(g_div, DOWN, buff=0.3)
             g_target = g_div.copy()
             g_target.shift(RIGHT * CELL * (to_pos - from_pos))

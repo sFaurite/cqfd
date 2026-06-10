@@ -105,8 +105,9 @@ class HistoireKleroterion(Scene):
                 lab = Text(names[r][c], color=TEXT).scale(0.22)
                 jeton = VGroup(tok, lab)
                 lab.move_to(tok.get_center())
-                # départ : au-dessus de la plaque
-                jeton.move_to([target.get_center()[0], plate.get_top()[1] + 1.4, 0])
+                # départ : léger tassement au-dessus de sa fente — plus haut,
+                # le jeton chevauche la rangée déjà remplie au-dessus
+                jeton.move_to(target.get_center() + UP * 0.15)
                 jeton.set_opacity(0)
                 row_tokens.add(jeton)
             token_rows.append(row_tokens)

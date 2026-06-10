@@ -23,7 +23,7 @@ def make_type(letter, w=0.45, h=0.62, body=SILVER, glyph_color=INK, fs=24):
 
 class HistoireCaracteresMobiles(Scene):
     def construct(self):
-        title = Text("Les caracteres mobiles", color=TEXT).scale(0.5).to_edge(UP)
+        title = Text("Les caractères mobiles", color=TEXT).scale(0.5).to_edge(UP)
         self.play(Write(title), run_time=0.8)
 
         # ============================================================
@@ -41,7 +41,7 @@ class HistoireCaracteresMobiles(Scene):
         poincon_A = Text("A", color=TEXT, weight=BOLD).scale(0.5)
         poincon_A.move_to(poincon_blk.get_bottom() + UP * 0.28)
         poincon = VGroup(poincon_blk, poincon_A).move_to(LEFT * 4.2 + UP * 0.7)
-        plbl = Text("poincon", color=MUTED).scale(0.32).next_to(poincon, UP, buff=0.12)
+        plbl = Text("poinçon", color=MUTED).scale(0.32).next_to(poincon, UP, buff=0.12)
 
         # Matrice : bloc de cuivre ou recevoir le creux
         matrice = RoundedRectangle(
@@ -78,7 +78,7 @@ class HistoireCaracteresMobiles(Scene):
             stroke_color=MUTED, stroke_width=1.5,
         ).move_to(LEFT * 3.0 + DOWN * 0.4)
         moule_r = moule_l.copy().move_to(LEFT * 1.6 + DOWN * 0.4)
-        molbl = Text("moule a main", color=MUTED).scale(0.32)
+        molbl = Text("moule à main", color=MUTED).scale(0.32)
         molbl.next_to(VGroup(moule_l, moule_r), DOWN, buff=0.2)
 
         self.play(
@@ -97,7 +97,7 @@ class HistoireCaracteresMobiles(Scene):
 
         # Metal liquide (argent) coule dans le moule
         metal = Dot(color=SILVER, radius=0.13).move_to(LEFT * 2.3 + UP * 1.2)
-        mtlbl = Text("metal liquide", color=SILVER).scale(0.3).next_to(metal, RIGHT, buff=0.15)
+        mtlbl = Text("métal liquide", color=SILVER).scale(0.3).next_to(metal, RIGHT, buff=0.15)
         self.play(FadeIn(metal), FadeIn(mtlbl), run_time=0.3)
         self.play(
             metal.animate.move_to(LEFT * 2.3 + DOWN * 0.4).scale(1.6),
@@ -123,7 +123,7 @@ class HistoireCaracteresMobiles(Scene):
 
         # ---- En accelere : des milliers de lettres identiques ----
         formule = MathTex(
-            r"1\ \text{poincon} \rightarrow 1\ \text{matrice} \rightarrow n\ \text{caracteres}",
+            r"1\ \text{poin\c{c}on} \rightarrow 1\ \text{matrice} \rightarrow n\ \text{caract\`eres}",
             color=YELLOW,
         ).scale(0.55).to_edge(DOWN, buff=0.35)
         many_lbl = Text("des milliers de lettres identiques", color=TEXT).scale(0.4)
@@ -253,7 +253,7 @@ class HistoireCaracteresMobiles(Scene):
         )
 
         page_block = VGroup(line1, *extra_lines)
-        modul = Text("lettres = objets distincts, reutilisables", color=MUTED).scale(0.34)
+        modul = Text("lettres = objets distincts, réutilisables", color=MUTED).scale(0.34)
         modul.to_edge(DOWN, buff=0.4)
         self.play(FadeIn(modul), run_time=0.4)
         self.wait(0.2)
@@ -339,7 +339,7 @@ class HistoireCaracteresMobiles(Scene):
         # ============================================================
         # ETAPE 4 — redistribution
         # ============================================================
-        step4 = Text("4. Defaire et recomposer a l'infini", color=YELLOW).scale(0.42)
+        step4 = Text("4. Défaire et recomposer à l'infini", color=YELLOW).scale(0.42)
         step4.next_to(title, DOWN, buff=0.15)
         # on enleve l'ancien step3 si present
         self.play(
@@ -369,7 +369,7 @@ class HistoireCaracteresMobiles(Scene):
             disperse.append(t.animate.move_to(tg))
         self.play(LaggedStart(*disperse, lag_ratio=0.08), run_time=1.0)
 
-        synth = Text("composer, imprimer, defaire, recomposer", color=TEXT).scale(0.4)
+        synth = Text("composer, imprimer, défaire, recomposer", color=TEXT).scale(0.4)
         synth.to_edge(DOWN, buff=0.5)
         self.play(FadeIn(synth), run_time=0.4)
 
@@ -379,9 +379,9 @@ class HistoireCaracteresMobiles(Scene):
             width=2.6, height=1.7, fill_color=BLUE_D, fill_opacity=0.85,
             stroke_color=MUTED, stroke_width=2,
         ).move_to(ORIGIN + UP * 0.1)
-        xylo_txt = Text("planche gravee\n(bloc unique)", color=TEXT).scale(0.34)
+        xylo_txt = Text("planche gravée\n(bloc unique)", color=TEXT).scale(0.34)
         xylo_txt.move_to(xylo.get_center())
-        xlbl = Text("gravee = usage unique", color=RED).scale(0.36)
+        xlbl = Text("gravée = usage unique", color=RED).scale(0.36)
         xlbl.next_to(xylo, UP, buff=0.2)
         self.play(FadeIn(xylo, scale=0.8), FadeIn(xylo_txt), FadeIn(xlbl), run_time=0.5)
         cross1 = Line(xylo.get_corner(UL), xylo.get_corner(DR), color=RED, stroke_width=8)

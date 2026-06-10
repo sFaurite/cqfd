@@ -79,7 +79,8 @@ class ChimieSautQuantiqueRaie(Scene):
         spectrum.move_to([(spec_x0 + spec_x1) / 2, (spec_y0 + spec_y1) / 2, 0])
 
         spec_title = Text("Spectre visible", color=MUTED).scale(0.4)
-        spec_title.next_to(spectrum, UP, buff=0.15)
+        # assez haut pour laisser la place aux labels H-alpha / H-beta des raies
+        spec_title.next_to(spectrum, UP, buff=0.55)
 
         lbl_400 = MathTex(r"400\,\text{nm}", color=MUTED).scale(0.38)
         lbl_400.next_to(spectrum.get_corner(DL), DOWN, buff=0.1).shift(RIGHT * 0.1)
@@ -120,7 +121,8 @@ class ChimieSautQuantiqueRaie(Scene):
             r"13{,}6\,\text{eV}\left(\dfrac{1}{n_f^2}-\dfrac{1}{n_i^2}\right)",
             color=TEXT,
         ).scale(0.6)
-        formule.to_edge(DOWN, buff=0.55)
+        # décalée à droite : centrée, elle chevauche le niveau n=1 et son label
+        formule.to_edge(DOWN, buff=0.55).shift(RIGHT * 1.8)
 
         # ----------------------------------------------------------------
         # Fonction utilitaire : photon (onde sinusoidale courte)
@@ -173,7 +175,7 @@ class ChimieSautQuantiqueRaie(Scene):
             color=H_ALPHA, stroke_width=4,
         )
         lbl_a = Text("H-alpha", color=H_ALPHA).scale(0.34)
-        lbl_a.next_to([nm_to_x(656), spec_y1, 0], UP, buff=0.08).shift(UP * 0.25)
+        lbl_a.next_to([nm_to_x(656), spec_y1, 0], UP, buff=0.08)
         self.play(GrowFromCenter(raie_a), FadeOut(photon_a))
         self.play(FadeIn(lbl_a, shift=DOWN * 0.1), run_time=0.6)
 
@@ -186,10 +188,12 @@ class ChimieSautQuantiqueRaie(Scene):
             r"\approx 1{,}89\,\text{eV}",
             color=TEXT,
         ).scale(0.6)
-        formule2.to_edge(DOWN, buff=0.55)
+        formule2.to_edge(DOWN, buff=0.55).shift(RIGHT * 1.8)
         formule2[5].set_color(H_ALPHA)
 
-        self.play(TransformMatchingTex(formule, formule2), run_time=1.6)
+        # ReplacementTransform et non TransformMatchingTex : ce dernier laisse
+        # les sous-formules non appariées des deux MathTex superposées à l'écran.
+        self.play(ReplacementTransform(formule, formule2), run_time=1.6)
         self.wait(0.6)
 
         # ----------------------------------------------------------------
@@ -235,14 +239,14 @@ class ChimieSautQuantiqueRaie(Scene):
             color=H_BETA, stroke_width=4,
         )
         lbl_b = Text("H-beta", color=H_BETA).scale(0.34)
-        lbl_b.next_to([nm_to_x(486), spec_y1, 0], UP, buff=0.08).shift(UP * 0.25)
+        lbl_b.next_to([nm_to_x(486), spec_y1, 0], UP, buff=0.08)
         self.play(GrowFromCenter(raie_b), FadeOut(photon_b))
         self.play(FadeIn(lbl_b, shift=DOWN * 0.1), run_time=0.5)
 
         # ----------------------------------------------------------------
         # Message final
         # ----------------------------------------------------------------
-        final = Text("Niveaux discrets  =>  raies discretes", color=YELLOW).scale(0.5)
+        final = Text("Niveaux discrets  ⇒  raies discrètes", color=YELLOW).scale(0.5)
         final.move_to([0, -3.55, 0])
         self.play(
             FadeOut(formule2, shift=DOWN * 0.3),

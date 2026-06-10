@@ -66,7 +66,7 @@ class IaDescenteGradient(Scene):
 
         step_counter = MathTex(r"\text{pas } 0", color=MUTED).scale(0.5)
         step_counter = Text("pas 0", color=MUTED).scale(0.5).to_corner(DL, buff=0.4).shift(UP * 0.1)
-        eta_label = Text("eta modere", color=MUTED).scale(0.5).next_to(step_counter, RIGHT, buff=0.6)
+        eta_label = Text("η modéré", color=MUTED).scale(0.5).next_to(step_counter, RIGHT, buff=0.6)
 
         self.play(FadeIn(ball, scale=0.6), FadeIn(step_counter), FadeIn(eta_label))
 
@@ -111,7 +111,7 @@ class IaDescenteGradient(Scene):
             run_time=0.6,
         )
 
-        eta_big_label = Text("eta trop grand", color=ORANGE).scale(0.5).next_to(
+        eta_big_label = Text("η trop grand", color=ORANGE).scale(0.5).next_to(
             step_counter, RIGHT, buff=0.6
         )
         # Reset bille en haut a gauche
@@ -170,6 +170,10 @@ class IaDescenteGradient(Scene):
         ).scale(0.8)
 
         analysis = VGroup(rec1, rec2, cond).arrange(DOWN, buff=0.45).move_to(UP * 0.3)
+
+        # fond opaque : sans lui, l'axe vertical et son pointillé barrent les formules
+        analysis_bg = BackgroundRectangle(analysis, color=BG, fill_opacity=0.92, buff=0.3)
+        self.add(analysis_bg)
 
         self.play(Write(rec1), run_time=0.9)
         self.play(TransformFromCopy(rec1, rec2), run_time=0.9)

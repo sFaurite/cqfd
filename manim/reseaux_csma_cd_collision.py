@@ -29,7 +29,7 @@ class ReseauCsmaCollision(Scene):
         BUS_L, BUS_R = -5.2, 5.2
         BUS_Y = 0.4
 
-        title = Text("CSMA/CD : la collision inevitable", color=TEXT).scale(0.5).to_edge(UP)
+        title = Text("CSMA/CD : la collision inévitable", color=TEXT).scale(0.5).to_edge(UP)
         self.play(Write(title))
 
         # --- Decor : le bus partage + stations A et B ---
@@ -57,7 +57,7 @@ class ReseauCsmaCollision(Scene):
         # =========================================================
         # ETAPE 1 (0-3s) : A emet a t=0, front bleu se propage ->
         # =========================================================
-        lab1 = MathTex(r"A \text{ emet a } t=0", color=BLUE).scale(0.6).to_corner(DL).shift(UP * 0.4)
+        lab1 = MathTex(r"A \text{ \'emet \`a } t=0", color=BLUE).scale(0.6).to_corner(DL).shift(UP * 0.4)
         self.play(Write(lab1), A[0].animate.set_fill(BLUE, opacity=0.45))
 
         # tracker pour le front bleu (position de droite du paquet)
@@ -77,7 +77,7 @@ class ReseauCsmaCollision(Scene):
         # =========================================================
         # B regarde le milieu : le cable parait libre cote B
         sense = DashedLine([0, BUS_Y + 0.1, 0], [BUS_R, BUS_Y + 0.1, 0], color=GREEN).set_stroke(width=3)
-        lab2 = MathTex(r"B \text{ ecoute a } t=\tau/2 : \text{ silence}", color=GREEN).scale(0.55)
+        lab2 = MathTex(r"B \text{ \'ecoute \`a } t=\tau/2 : \text{ silence}", color=GREEN).scale(0.55)
         lab2.to_corner(DR).shift(UP * 0.4)
         free_zone = Rectangle(width=BUS_R - 0.2, height=0.5, color=GREEN, fill_color=GREEN, fill_opacity=0.10)
         free_zone.move_to([(0.2 + BUS_R) / 2 + 0.0, BUS_Y, 0])
@@ -162,7 +162,7 @@ class ReseauCsmaCollision(Scene):
         slotB = Rectangle(width=1.4, height=0.5, color=ORANGE, fill_color=ORANGE, fill_opacity=0.25)
         slotB.next_to(B, DOWN, buff=0.5)
         slotB_lbl = MathTex(r"1 \times 2\tau", color=ORANGE).scale(0.45).move_to(slotB.get_center())
-        readyA = Text("pret", color=GREEN).scale(0.4).next_to(A, DOWN, buff=0.5)
+        readyA = Text("prêt", color=GREEN).scale(0.4).next_to(A, DOWN, buff=0.5)
         self.play(FadeIn(slotB), FadeIn(slotB_lbl), FadeIn(readyA), run_time=0.6)
         self.wait(0.6)
 
@@ -191,7 +191,7 @@ class ReseauCsmaCollision(Scene):
             [[-0.25, 0, 0], [-0.05, -0.22, 0], [0.35, 0.3, 0]]
         ).set_stroke(width=8)
         check.next_to(B, UP, buff=0.4)
-        succ = Text("symetrie brisee par le hasard", color=GREEN).scale(0.45).to_edge(DOWN).shift(UP * 0.2)
+        succ = Text("symétrie brisée par le hasard", color=GREEN).scale(0.45).to_edge(DOWN).shift(UP * 0.2)
         self.play(
             B[0].animate.set_fill(GREEN, opacity=0.4),
             Create(check),

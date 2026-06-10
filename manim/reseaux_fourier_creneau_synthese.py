@@ -36,7 +36,8 @@ class ReseauFourierCreneau(Scene):
             axis_config={"color": MUTED, "include_tip": False, "include_ticks": False},
         ).shift(UP * 1.2)
         lab_t = MathTex("t", color=MUTED).scale(0.55).next_to(ax.x_axis.get_end(), RIGHT, buff=0.15)
-        lab_s = MathTex("s(t)", color=MUTED).scale(0.55).next_to(ax.y_axis.get_end(), UP, buff=0.1)
+        # à DROITE du sommet de l'axe : au-dessus, il chevauche le « k impair » du titre
+        lab_s = MathTex("s(t)", color=MUTED).scale(0.55).next_to(ax.y_axis.get_end(), RIGHT, buff=0.15)
 
         # Diagramme spectral (bas)
         sax = Axes(
@@ -120,7 +121,7 @@ class ReseauFourierCreneau(Scene):
             color=TEXT, x_range=[0, 2, 0.001], stroke_width=3, use_smoothing=False,
         )
         ideal.set_stroke(opacity=0.55)
-        leg_ideal = Text("creneau ideal", color=TEXT).scale(0.42)
+        leg_ideal = Text("créneau idéal", color=TEXT).scale(0.42)
         leg_ideal.next_to(ax.c2p(0.5, 1.3), UP, buff=0.05)
         self.play(Create(ideal), ReplacementTransform(leg, leg_ideal), run_time=1.4)
         self.wait(0.4)
