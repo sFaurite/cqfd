@@ -56,7 +56,7 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Dénombrable', def: 'Équipotent à ℕ : dont on peut énumérer les éléments en une liste sans répétition. ℤ et ℚ le sont ; ℝ non.', voir: '/maths/partie-iii/denombrables' },
   { terme: 'Argument diagonal (Cantor)', def: 'Toute liste de réels en oublie un : celui construit en changeant le n-ième chiffre du n-ième. Prouve que ℝ n’est pas dénombrable.', voir: '/maths/partie-iii/diagonale-cantor' },
   { terme: 'Théorème de Cantor', def: 'Pour tout ensemble E, il n’y a pas de surjection de E sur P(E) : |E| < |P(E)|. D’où une tour d’infinis sans sommet.', voir: '/maths/partie-iii/diagonale-cantor' },
-  { terme: 'Nombre transcendant', def: 'Réel qui n’est racine d’aucun polynôme à coefficients entiers. Les transcendants forment « presque tout » ℝ (Cantor) ; e et π en sont.', voir: '/maths/partie-iii/diagonale-cantor' },
+  { terme: 'Nombre transcendant', def: 'Réel qui n’est racine d’aucun polynôme non nul à coefficients entiers. Les transcendants forment « presque tout » ℝ (Cantor) ; e et π en sont.', voir: '/maths/partie-iii/diagonale-cantor' },
   { terme: 'Hypothèse du continu (CH)', def: 'Y a-t-il un infini strictement entre |ℕ| et |ℝ| ? CH répond « non ». Démontrée indécidable dans ZFC (Gödel 1938, Cohen 1963).', voir: '/maths/partie-iii/hypothese-continu' },
   { terme: 'Indécidable', def: 'Un énoncé est indécidable dans un système s’il n’y est ni démontrable ni réfutable. À ne pas confondre avec « conjecturé » (encore inconnu).', voir: '/maths/partie-iii/hypothese-continu' },
 
