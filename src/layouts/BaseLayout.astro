@@ -9,6 +9,7 @@ import '../styles/global.css';
 import { SITE } from '../lib/site.config';
 import { navFor, type CourseId } from '../lib/nav';
 import { courseById } from '../lib/courses';
+import { withBase } from '../lib/base';
 import Sidebar from '../components/Sidebar.astro';
 import Search from '../components/Search.astro';
 import LegendFiabilite from '../components/LegendFiabilite.astro';
@@ -43,7 +44,7 @@ const parties = courseId ? navFor(courseId) : [];
     <title>{titreComplet}</title>
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark light" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
     <meta property="og:title" content={titreComplet} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -77,7 +78,7 @@ const parties = courseId ? navFor(courseId) : [];
             </button>
           )
         }
-        <a href="/" class="hd-brand">
+        <a href={withBase('/')} class="hd-brand">
           <span class="hd-logo" aria-hidden="true">{SITE.logo}</span>
           <span class="hd-name">{SITE.brand}</span>
         </a>

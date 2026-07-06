@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/base';
 import { GLOSSAIRE } from '../../data/maths/glossary';
 
 const termes = [...GLOSSAIRE].sort((a, b) =>
@@ -36,7 +37,7 @@ const termes = [...GLOSSAIRE].sort((a, b) =>
               <dd>
                 <span set:html={t.def} />
                 {t.voir && (
-                  <a class="voir" href={t.voir}>
+                  <a class="voir" href={withBase(t.voir)}>
                     voir la page →
                   </a>
                 )}

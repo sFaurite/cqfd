@@ -4,18 +4,19 @@
  */
 import type { Partie, Chapitre } from '../lib/nav';
 import type { Course } from '../lib/courses';
+import { withBase } from '../lib/base';
 interface Props {
   partie: Partie;
   chap: Chapitre;
   course?: Course;
 }
 const { partie, chap, course } = Astro.props;
-const premierDeLaPartie = partie.chapitres[0]?.path ?? '/';
+const premierDeLaPartie = partie.chapitres[0]?.path ?? withBase('/');
 ---
 
 <nav class="breadcrumb" aria-label="Fil d'Ariane">
   <ol>
-    <li><a href="/">Accueil</a></li>
+    <li><a href={withBase('/')}>Accueil</a></li>
     <li aria-hidden="true" class="sep">›</li>
     {course && (
       <>

@@ -4,6 +4,7 @@
  * domaine coloré par son niveau de fiabilité et cliquable vers sa page.
  */
 import { FIABILITE, type NiveauFiabilite } from '../../lib/palette';
+import { withBase } from '../../lib/base';
 
 interface Domaine {
   titre: string;
@@ -53,7 +54,7 @@ const parNiveau = (n: NiveauFiabilite) => domaines.filter((d) => d.niveau === n)
         <div class="opm__col" style={`--cc:${FIABILITE[n].color}`}>
           <div class="opm__colhead">{FIABILITE[n].label}</div>
           {parNiveau(n).map((d) => (
-            <a class="opm__card" href={d.voir ?? '#'}>
+            <a class="opm__card" href={d.voir ? withBase(d.voir) : '#'}>
               <strong>{d.titre}</strong>
               <span>{d.desc}</span>
             </a>

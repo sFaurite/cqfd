@@ -5,6 +5,7 @@
  */
 import type { Partie } from '../lib/nav';
 import type { Course } from '../lib/courses';
+import { withBase } from '../lib/base';
 
 interface Props {
   parties: Partie[];
@@ -22,8 +23,8 @@ const progress = idx >= 0 ? Math.round(((idx + 1) / total) * 100) : 0;
 ---
 
 <nav class="sidebar" id="sidebar" aria-label="Sommaire du cours">
-  <a href="/" class="all-courses">← Tous les cours</a>
-  <a href={course?.home ?? '/'} class="brand">
+  <a href={withBase('/')} class="all-courses">← Tous les cours</a>
+  <a href={course?.home ?? withBase('/')} class="brand">
     <span class="logo" aria-hidden="true">{course?.logo ?? '⊙'}</span>
     <span class="brand-txt">
       <strong>{course?.title ?? 'Cours'}</strong>

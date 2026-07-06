@@ -15,6 +15,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { withBase } from '../lib/base';
 
 interface Props {
   src: string;
@@ -37,9 +38,9 @@ const hasMp4 = has('mp4');
 const hasPoster = has('png');
 const hasVtt = has('fr.vtt');
 
-const mp4Url = `/videos/${src}.mp4`;
-const posterUrl = hasPoster ? `/videos/${src}.png` : undefined;
-const vttUrl = `/videos/${src}.fr.vtt`;
+const mp4Url = withBase(`/videos/${src}.mp4`);
+const posterUrl = hasPoster ? withBase(`/videos/${src}.png`) : undefined;
+const vttUrl = withBase(`/videos/${src}.fr.vtt`);
 const renderCmd = scene ? `manim -qh manim/${src.replace(/-/g, '_')}.py ${scene}` : `bash manim/render.sh`;
 ---
 

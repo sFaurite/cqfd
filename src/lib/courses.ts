@@ -2,6 +2,7 @@
  * Registre des cours du hub. La page d'accueil (hub) en dérive.
  */
 import type { CourseId } from './nav';
+import { withBase } from './base';
 
 export interface Course {
   id: CourseId;
@@ -14,7 +15,7 @@ export interface Course {
   accent: string; // variable CSS de couleur d'accent
 }
 
-export const COURSES: Course[] = [
+const COURSES_RAW: Course[] = [
   {
     id: 'physique',
     title: 'De la relativité au Modèle Standard',
@@ -96,6 +97,9 @@ export const COURSES: Course[] = [
     accent: 'var(--c-yellow)',
   },
 ];
+
+/** La racine de chaque cours est préfixée par la base du site (déploiement /cqfd/). */
+export const COURSES: Course[] = COURSES_RAW.map((c) => ({ ...c, home: withBase(c.home) }));
 
 export function courseById(id: CourseId | null): Course | undefined {
   return COURSES.find((c) => c.id === id);

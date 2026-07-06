@@ -3,6 +3,7 @@
  * par son identifiant (/physique/…, /maths/…). Sidebar, fil d'Ariane, précédent/
  * suivant résolvent le cours courant d'après le PRÉFIXE D'URL.
  */
+import { withBase, stripBase } from '../base';
 import { PARTIES as P_MATHS, type Partie, type Chapitre } from './_maths';
 import { PARTIES as P_PHYS } from './_physique';
 import { PARTIES as P_PROC } from './_processeurs';
@@ -23,11 +24,17 @@ export type CourseId =
   | 'histoire'
   | 'ia';
 
-/** Préfixe tous les `path` d'une arborescence par la base du cours. */
+/**
+ * Préfixe tous les `path` d'une arborescence par le cours ET la base du site.
+ * On stocke donc directement les chemins déployés (« /cqfd/maths/… ») : les
+ * composants (Sidebar, Breadcrumb, PrevNext) émettent alors des liens corrects
+ * sans rien changer. La résolution du cours courant (courseIdFromPath) retire la
+ * base avant de lire le segment de cours.
+ */
 function prefixer(parties: Partie[], base: string): Partie[] {
   return parties.map((p) => ({
     ...p,
-    chapitres: p.chapitres.map((c) => ({ ...c, path: base + c.path })),
+    chapitres: p.chapitres.map((c) => ({ ...c, path: withBase(base + c.path) })),
   }));
 }
 
@@ -45,7 +52,7 @@ export const NAVS: Record<CourseId, Partie[]> = {
 const COURSE_IDS = Object.keys(NAVS) as CourseId[];
 
 export function courseIdFromPath(path: string): CourseId | null {
-  const seg = path.replace(/^\//, '').split('/')[0];
+  const seg = stripBase(path).replace(/^\//, '').split('/')[0];
   return (COURSE_IDS as string[]).includes(seg) ? (seg as CourseId) : null;
 }
 

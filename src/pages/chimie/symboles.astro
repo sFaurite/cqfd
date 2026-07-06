@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { withBase } from '../../lib/base';
 import { SYMBOLES } from '../../data/chimie/symbols';
 import katex from 'katex';
 
@@ -37,7 +38,7 @@ const lignes = SYMBOLES.map((s) => ({
                 <tr>
                   <td class="sym" set:html={s.html} />
                   <td>
-                    {s.voir ? <a href={s.voir}>{s.nom}</a> : s.nom}
+                    {s.voir ? <a href={withBase(s.voir)}>{s.nom}</a> : s.nom}
                   </td>
                   <td>{s.desc}</td>
                   <td class="unite">{s.unite ?? '—'}</td>

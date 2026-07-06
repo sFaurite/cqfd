@@ -5,12 +5,13 @@
  */
 import { niveauxFor } from '../lib/fiability';
 import type { CourseId } from '../lib/nav';
+import { withBase } from '../lib/base';
 interface Props {
   courseId: CourseId;
 }
 const { courseId } = Astro.props;
 const NIVEAUX = niveauxFor(courseId);
-const methodoHref = `/${courseId}/methodologie`;
+const methodoHref = withBase(`/${courseId}/methodologie`);
 ---
 
 <details class="legende">

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { navFor } from '../../lib/nav';
 import { courseById } from '../../lib/courses';
+import { withBase } from '../../lib/base';
 import { niveauxFor } from '../../lib/fiability';
 
 const courseId = 'histoire';
@@ -17,11 +18,11 @@ const premier = parties[0]?.chapitres[0]?.path ?? course.home;
     <section class="hero">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="hero-inner">
-        <p class="kicker"><a href="/">← Tous les cours</a></p>
+        <p class="kicker"><a href={withBase('/')}>← Tous les cours</a></p>
         <h1>{course.logo} {course.title}</h1>
         <p class="tagline">{course.blurb}</p>
         <div class="cta">
-          <a class="btn primary" href="/histoire/comment-lire">Comment lire ce cours</a>
+          <a class="btn primary" href={withBase('/histoire/comment-lire')}>Comment lire ce cours</a>
           <a class="btn" href={premier}>Commencer →</a>
         </div>
       </div>
@@ -59,7 +60,7 @@ const premier = parties[0]?.chapitres[0]?.path ?? course.home;
     </section>
 
     <footer class="home-foot">
-      <p>Annexes : <a href="/histoire/glossaire">glossaire</a> · <a href="/histoire/symboles">repères et symboles</a>.</p>
+      <p>Annexes : <a href={withBase('/histoire/glossaire')}>glossaire</a> · <a href={withBase('/histoire/symboles')}>repères et symboles</a>.</p>
     </footer>
   </main>
 </BaseLayout>
