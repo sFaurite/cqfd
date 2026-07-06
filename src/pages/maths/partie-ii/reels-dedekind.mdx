@@ -29,9 +29,9 @@ L'équation $x^2 = 2$ a une solution géométrique évidente — la diagonale du
 
 <Encart type="calcul" titre="Démonstration : √2 est irrationnel">
 
-Raisonnons **par l'absurde**. Supposons qu'il existe $x \in \mathbb{Q}$ tel que $x^2 = 2$, avec $x > 0$.
+Raisonnons **par l'absurde**. Supposons qu'il existe $x \in \mathbb{Q}$ tel que $x^2 = 2$. Comme $0^2 = 0 \neq 2$, un tel $x$ est non nul, et $(-x)^2 = x^2 = 2$ ; quitte à remplacer $x$ par $-x$, nous pouvons donc supposer $x > 0$.
 
-**Étape 1.** Tout rationnel positif s'écrit sous forme irréductible $x = \dfrac{p}{q}$ avec $p, q \in \mathbb{N}^*$ et $\gcd(p,q) = 1$. (L'existence de la forme irréductible est démontrée au chapitre sur <Prereq href="/maths/partie-ii/rationnels">les rationnels</Prereq>, par bon ordre : on prend le plus petit dénominateur possible.)
+**Étape 1.** Par le chapitre sur <Prereq href="/maths/partie-ii/rationnels">les rationnels</Prereq>, écrivons $x$ sous sa forme à **plus petit dénominateur positif** : $x = \dfrac{p}{q}$ avec $q \geq 1$ minimal et $p \in \mathbb{Z}$ ; comme $x > 0$, on a $p \geq 1$. (Nous n'utilisons **pas** le pgcd — indisponible avant la partie IV : seule sert la minimalité de $q$, obtenue par bon ordre.)
 
 **Étape 2.** De $x^2 = 2$ on tire :
 
@@ -49,7 +49,13 @@ $$
 
 **Étape 5.** Par le même argument qu'à l'étape 3, $q$ est **pair**.
 
-**Étape 6.** Ainsi $p$ et $q$ sont tous deux pairs, donc $2 \mid \gcd(p,q)$. Cela contredit $\gcd(p,q) = 1$.
+**Étape 6.** Ainsi $p = 2m$ et $q = 2r$ avec $m, r \in \mathbb{N}^*$ ; comme $q$ est pair et $q \geq 1$, on a $q \geq 2$, donc $r = q/2 \geq 1$ et $r < q$. Mais alors
+
+$$
+x = \frac{p}{q} = \frac{2m}{2r} = \frac{m}{r} \qquad (\text{car } 2m \cdot r = 2r \cdot m).
+$$
+
+Voilà une écriture de $x$ à dénominateur $r$ **strictement plus petit** que $q$ — ce qui contredit la minimalité de $q$.
 
 L'hypothèse était absurde.
 
@@ -59,7 +65,7 @@ $$
 \nexists\, x \in \mathbb{Q},\quad x^2 = 2.
 $$
 
-<Badge niveau="demontre" slot="badge">Démontrée par l'absurde, argument de parité — vérité mathématique certaine.</Badge>
+<Badge niveau="demontre" slot="badge">Démontrée par l'absurde, argument de parité et de minimalité du dénominateur (aucun pgcd requis) — vérité mathématique certaine.</Badge>
 </Resultat>
 
 </Encart>
@@ -142,7 +148,7 @@ Manipulez vous-même la coupure pour voir le point naître du vide :
 
 <DedekindCut />
 
-<Badge niveau="demontre">$A_{\sqrt2} \in \mathbb{R}$ et $(A_{\sqrt2})^2 = 2$ pour la multiplication des coupures : le nombre absent de $\mathbb{Q}$ est présent dans $\mathbb{R}$.</Badge>
+<Badge niveau="demontre">$A_{\sqrt2} \in \mathbb{R}$ ; une fois la multiplication des coupures définie (section 5 ci-dessous), on vérifie $(A_{\sqrt2})^2 = 2$ : le nombre absent de $\mathbb{Q}$ est présent dans $\mathbb{R}$.</Badge>
 
 ### 4. L'ordre et la propriété qui justifie tout
 
@@ -184,6 +190,124 @@ $$
 </Encart>
 
 Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{q : q^2 < 2\}$ est non vide et majoré, mais **n'a pas de borne supérieure rationnelle** : sa « limite » serait $\sqrt2$, qui n'existe pas. Le trou, c'était exactement *l'absence de borne sup*. En passant aux coupures, chaque borne sup manquante devient l'objet $U$ — et $\mathbb{R}$ devient le continuum sans faille.
+
+### 5. Les opérations : $\mathbb{R}$ est un corps ordonné complet
+
+Une coupure, c'est un point. Encore faut-il pouvoir **calculer** avec — additionner, multiplier, inverser — et retrouver sur ces ombres exactement l'arithmétique de $\mathbb{Q}$. Tout se définit à partir des seules opérations de $\mathbb{Q}$, **sans un axiome de plus**.
+
+**L'addition.** On pose
+
+$$
+A \oplus B := \{\, a + b \ :\ a \in A,\ b \in B \,\}.
+$$
+
+<Encart type="calcul" titre="A ⊕ B est encore une coupure">
+
+- **Non triviale.** $A, B \neq \varnothing$ donnent $A \oplus B \neq \varnothing$. Choisissons $p \notin A$ et $p' \notin B$ ; pour tout $a \in A$ on a $a < p$ (sinon la clôture vers le bas mettrait $p$ dans $A$), de même $b < p'$, donc $a + b < p + p'$ : ainsi $p + p' \notin A \oplus B$, et $A \oplus B \neq \mathbb{Q}$.
+- **Close vers le bas.** Si $q = a + b \in A \oplus B$ et $q' < q$, écrivons $q' = a + \big(b - (q - q')\big)$ ; le second terme est $< b$, donc dans $B$, et $q' \in A \oplus B$.
+- **Sans maximum.** $A$ n'a pas de maximum : il existe $a' \in A$ avec $a' > a$, d'où $a' + b > a + b$ dans $A \oplus B$. $\quad\blacksquare$
+
+</Encart>
+
+Le **zéro** est la coupure $0^* := \{\, q \in \mathbb{Q} : q < 0 \,\}$, et $A \oplus 0^* = A$ : tout $a + s$ avec $s < 0$ est $< a$, donc dans $A$ ; réciproquement, $A$ étant sans maximum, tout $a \in A$ s'écrit $a = a' + (a - a')$ avec $a' > a$ dans $A$ et $a - a' < 0$ dans $0^*$.
+
+**L'opposé.** Pour une coupure $A$, on pose
+
+$$
+\ominus A := \{\, q \in \mathbb{Q} \ :\ \exists\, r > 0,\ \ -q - r \notin A \,\}.
+$$
+
+C'est la coupure symétrique de $A$ par rapport à $0$, et $A \oplus (\ominus A) = 0^*$.
+
+<Encart type="plusloin" titre="A ⊕ (⊖A) = 0* — le seul passage délicat">
+
+$(\subseteq)$ Soient $a \in A$ et $q \in \ominus A$, disons $-q - r \notin A$ avec $r > 0$. Comme $a \in A$ et $-q - r \notin A$, on a $a < -q - r$, donc $a + q < -r < 0$ : $a + q \in 0^*$.
+
+$(\supseteq)$ Soit $v < 0$ ; posons $w := -v/2 > 0$. Les entiers $n$ tels que $nw \in A$ forment un ensemble non vide (pour $n$ très négatif, $nw$ est sous n'importe quel élément de $A$) et **majoré** (la <Prereq href="/maths/partie-ii/rationnels">propriété d'Archimède</Prereq> de $\mathbb{Q}$ interdit à $nw$ de rester dans $A \neq \mathbb{Q}$) ; par bon ordre il admet un plus grand élément $n$. Posons $a := nw \in A$ et $q := -(n+2)w$. Avec $r := w > 0$ on a $-q - r = (n+1)w \notin A$, donc $q \in \ominus A$ ; et $a + q = nw - (n+2)w = -2w = v$. Donc $v \in A \oplus (\ominus A)$. $\quad\blacksquare$
+
+</Encart>
+
+**La multiplication.** Pour deux coupures $A, B \geq 0^*$ (c'est-à-dire $0^* \subseteq A$ et $0^* \subseteq B$) :
+
+$$
+A \otimes B := 0^* \ \cup\ \{\, a\,b \ :\ a \in A,\ b \in B,\ a \geq 0,\ b \geq 0 \,\}.
+$$
+
+On étend ensuite à toutes les coupures **par les signes**, exactement comme dans $\mathbb{Z}$ :
+
+$$
+A \otimes B := \begin{cases}
+\ominus\big((\ominus A) \otimes B\big) & \text{si } A < 0^*,\ B \geq 0^*,\\[2pt]
+\ominus\big(A \otimes (\ominus B)\big) & \text{si } A \geq 0^*,\ B < 0^*,\\[2pt]
+(\ominus A) \otimes (\ominus B) & \text{si } A < 0^*,\ B < 0^*.
+\end{cases}
+$$
+
+Le **un** est $1^* := \{\, q : q < 1 \,\}$ ; pour $A > 0^*$, l'inverse $A^{-1}$ se définit de même sur les rationnels positifs (les $q > 0$ tels que $1/q$ majore $A$ sans en être borne), et $A \otimes A^{-1} = 1^*$.
+
+<Badge niveau="demontre">Que $A \otimes B$ soit une coupure $\geq 0^*$ dans le cas positif, puis que $(\mathbb{R}, \oplus, \otimes)$ vérifie associativité, commutativité, distributivité et existence des inverses, sont des vérifications **de même nature que pour $\mathbb{Q}$** — mécaniques, sans idée nouvelle. Nous ne les déroulons pas toutes, exactement comme au chapitre des rationnels.</Badge>
+
+**Le plongement de $\mathbb{Q}$.** À chaque rationnel $t$ on associe la coupure
+
+$$
+t^* := \{\, q \in \mathbb{Q} : q < t \,\}.
+$$
+
+C'en est bien une (non vide : $t - 1$ ; majorée : $t \notin t^*$ ; close vers le bas ; sans maximum par densité de $\mathbb{Q}$). L'application $t \mapsto t^*$ est injective et respecte tout :
+
+$$
+(t + u)^* = t^* \oplus u^*, \qquad (t\,u)^* = t^* \otimes u^*, \qquad t \leq u \iff t^* \subseteq u^*.
+$$
+
+<Badge niveau="demontre">Injectivité et respect de $\leq$ : si $t < u$, la densité de $\mathbb{Q}$ fournit un rationnel entre eux, donc $t^* \subsetneq u^*$. Le respect de $+$ se vérifie par double inclusion (même schéma que $A \oplus 0^* = A$), celui de $\times$ est de la même farine. On **identifie** alors $t$ et $t^*$ : $\mathbb{Q}$ est un sous-corps ordonné de $\mathbb{R}$.</Badge>
+
+<Resultat label="ℝ est un corps ordonné complet contenant ℚ">
+
+$(\mathbb{R}, \oplus, \otimes, \subseteq)$ est un **corps totalement ordonné**, **complet** (§4), dont $\mathbb{Q}$ — via $t \mapsto t^*$ — est un sous-corps.
+
+<Badge niveau="demontre" slot="badge">Opérations définies à partir de celles de $\mathbb{Q}$ ; axiomes de corps et compatibilités de l'ordre vérifiés comme pour $\mathbb{Q}$ ; complétude déjà démontrée en §4. Aucune hypothèse nouvelle.</Badge>
+</Resultat>
+
+**Le carré qui vaut $2$.** Reste à tenir la promesse : $A_{\sqrt2}$ est bien la racine de $2$.
+
+<Encart type="calcul" titre="(A_√2)² = 2*">
+
+Comme $A_{\sqrt2} \geq 0^*$, on a $(A_{\sqrt2})^2 = 0^* \cup \{\, a\,a' : a, a' \geq 0,\ a^2 < 2,\ a'^2 < 2 \,\}$.
+
+$(\subseteq 2^*)$ Pour $a, a' \geq 0$ avec $a^2 < 2$ et $a'^2 < 2$ : l'inégalité $2\,a\,a' \leq a^2 + a'^2$ (car $(a - a')^2 \geq 0$) donne $a\,a' \leq \tfrac12(a^2 + a'^2) < \tfrac12(2 + 2) = 2$. Les rationnels négatifs sont eux aussi $< 2$. Donc $(A_{\sqrt2})^2 \subseteq 2^*$.
+
+$(\supseteq 2^*)$ Soit $q < 2$. Si $q < 0$, il est dans $0^*$. Si $0 \leq q < 2$, il suffit de trouver un rationnel $a \geq 0$ avec $q < a^2 < 2$ : alors $q < a\cdot a \in (A_{\sqrt2})^2$, donc $q \in (A_{\sqrt2})^2$ (clôture vers le bas). Par Archimède, choisissons un entier $k \geq 1$ avec $\tfrac1k < \tfrac{2 - q}{4}$. Les carrés $\left(\tfrac{m}{k}\right)^2$ valent $0$ pour $m = 0$ (donc $\leq q$) et $4$ pour $m = 2k$ (donc $> q$) ; soit $m$ le **plus grand** entier tel que $\left(\tfrac{m}{k}\right)^2 \leq q$. Alors $\left(\tfrac{m+1}{k}\right)^2 > q$, et comme $\tfrac{m}{k} \leq \sqrt{q} < 2$ on a $2m + 1 \leq 4k$, d'où
+
+$$
+\left(\tfrac{m+1}{k}\right)^2 = \left(\tfrac{m}{k}\right)^2 + \frac{2m+1}{k^2} \leq q + \frac{4k}{k^2} = q + \frac4k < q + (2 - q) = 2.
+$$
+
+Le rationnel $a = \tfrac{m+1}{k}$ vérifie donc $q < a^2 < 2$. D'où $2^* \subseteq (A_{\sqrt2})^2$.
+
+Les deux inclusions donnent $(A_{\sqrt2})^2 = 2^*$, c'est-à-dire, avec l'identification $2 = 2^*$ : $\boxed{(A_{\sqrt2})^2 = 2}$. $\quad\blacksquare$
+
+</Encart>
+
+### 6. Archimède et la densité de $\mathbb{Q}$ dans $\mathbb{R}$
+
+La complétude entraîne, presque gratuitement, deux propriétés dont toute l'analyse (partie V) se servira sans relâche.
+
+<Encart type="calcul" titre="ℝ est archimédien, et ℚ y est dense">
+
+**Archimède.** Soient $x > 0^*$ et $y \in \mathbb{R}$. Il existe $n \in \mathbb{N}$ tel que $n\cdot x > y$ (où $n\cdot x = x \oplus \dots \oplus x$). Sinon, $\{\, n\cdot x : n \in \mathbb{N} \,\}$ serait majoré par $y$ ; par la complétude (§4) il aurait une borne supérieure $s$. Mais $s \ominus x < s$ n'est pas un majorant, donc $n\cdot x > s \ominus x$ pour un certain $n$, d'où $(n+1)\cdot x > s$ — contredisant que $s$ majore. $\blacksquare$
+
+**Densité.** Soient $x < y$ dans $\mathbb{R}$. Alors $y \ominus x > 0^*$ ; par Archimède, il existe $n \in \mathbb{N}^*$ avec $n\cdot(y \ominus x) > 1^*$, c'est-à-dire $\tfrac1n < y - x$ (en identifiant les rationnels à leurs coupures). L'ensemble des entiers $m$ tels que $\tfrac{m}{n} > x$ est non vide et minoré (Archimède appliqué à $x$), donc admet un plus petit élément $m$. Alors $\tfrac{m-1}{n} \leq x$, donc $\tfrac{m}{n} \leq x + \tfrac1n < x + (y - x) = y$. Ainsi $x < \tfrac{m}{n} < y$. $\blacksquare$
+
+</Encart>
+
+<Resultat label="Densité de ℚ dans ℝ">
+
+$$
+\forall\, x, y \in \mathbb{R},\quad x < y \implies \exists\, t \in \mathbb{Q},\quad x < t < y.
+$$
+
+<Badge niveau="demontre" slot="badge">Entre deux réels distincts, toujours un rationnel. Déduit d'Archimède, lui-même conséquence de la complétude. C'est ce résultat — et non la seule densité de $\mathbb{Q}$ en lui-même — que réclamera l'analyse.</Badge>
+</Resultat>
 
 ### Le parcours est bouclé
 

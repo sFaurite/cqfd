@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "La dérivée"
 chapter: derivation
-description: "Dérivée = limite du taux d’accroissement ; dérivable ⇒ continue ; règles (somme, produit, composée) ; extremum intérieur ⇒ dérivée nulle ; ROLLE ; ACCROISSEMENTS FINIS ; f croissante ssi f′ ≥ 0 ; Weierstrass cité (continue nulle part dérivable)."
+description: "Dérivée = limite du taux d’accroissement ; dérivable ⇒ continue ; règles (somme, produit, composée, réciproque) ; extremum intérieur ⇒ dérivée nulle ; ROLLE ; ACCROISSEMENTS FINIS ; f croissante ssi f′ ≥ 0 ; Weierstrass cité (continue nulle part dérivable)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -125,6 +125,30 @@ $$ \frac{g(f(x))-g(f(a))}{x-a} = \varphi\bigl(f(x)\bigr)\cdot\frac{f(x)-f(a)}{x-
 Quand $x \to a$ : $f$ dérivable donc continue, d'où $f(x) \to b$ ; $\varphi$ continue en $b$ donne $\varphi(f(x)) \to \varphi(b) = g'(b)$ ; le second facteur tend vers $f'(a)$. Produit : $g'(f(a))\,f'(a)$. <Badge niveau="demontre" slot="badge">Preuve sans division par zéro, valable même si $f$ prend la valeur $f(a)$ près de $a$.</Badge>
 
 **Quotient, en déduction.** Puisque $\frac{f}{g} = f \cdot \bigl(h \circ g\bigr)$ avec $h(y) = \frac1y$, la chaîne donne $\bigl(\tfrac1g\bigr)' = -\tfrac{g'}{g^2}$, puis le produit : $\boxed{\left(\tfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}}$ (là où $g \neq 0$). <Badge niveau="demontre" slot="badge">Assemblage produit + chaîne + inverse, tous démontrés ci-dessus.</Badge>
+</Encart>
+
+<Encart type="calcul" titre="Dérivée d'une fonction réciproque : (f⁻¹)′ = 1/(f′∘f⁻¹)">
+
+Cette règle est le ressort du logarithme (chapitre 23) : elle dérive une réciproque *sans en connaître de formule*.
+
+**Hypothèses.** $f$ est **continue et strictement monotone** sur un intervalle $I$, et **dérivable en $a \in I$** avec $f'(a) \neq 0$. Par le <Prereq href="/maths/partie-v/continuite">théorème de la bijection</Prereq>, $f$ réalise une bijection de $I$ sur l'intervalle $J = f(I)$, et $g := f^{-1}$ est **continue** sur $J$. Posons $b := f(a)$.
+
+**La fonction taux auxiliaire.** Pour $x \in I$, $x \neq a$, posons $H(x) := \dfrac{x - a}{f(x) - f(a)}$ (le dénominateur est non nul car $f$ est injective), et $H(a) := \dfrac{1}{f'(a)}$. Comme $\displaystyle\lim_{x\to a}\frac{f(x)-f(a)}{x-a} = f'(a) \neq 0$, la règle du quotient sur les limites donne $\displaystyle\lim_{x\to a} H(x) = \frac{1}{f'(a)} = H(a)$ : **$H$ est continue en $a$**.
+
+**Composition.** Pour $y \in J$, $y \neq b$, posons $x := g(y)$ ; alors $x \neq a$ et $f(x) = y$, donc
+
+$$
+\frac{g(y) - g(b)}{y - b} = \frac{x - a}{f(x) - f(a)} = H\bigl(g(y)\bigr).
+$$
+
+Quand $y \to b$ : $g$ est continue en $b$ avec $g(b) = a$, et $H$ est continue en $a$ ; la composée $H \circ g$ est donc continue en $b$, d'où $\dfrac{g(y)-g(b)}{y-b} \to H(a) = \dfrac{1}{f'(a)}$.
+
+$$
+\boxed{\ g \text{ est dérivable en } b,\quad (f^{-1})'(b) = \frac{1}{f'(a)} = \frac{1}{f'\bigl(f^{-1}(b)\bigr)}.\ }
+$$
+
+<Badge niveau="demontre" slot="badge">Continuité de $f^{-1}$ par le théorème de la bijection ; le reste est composition de limites, sans division par zéro.</Badge>
+
 </Encart>
 
 ## Fermat : un extremum intérieur annule la dérivée

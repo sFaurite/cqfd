@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "La continuité et les valeurs intermédiaires"
 chapter: continuite
-description: "Limite d’une fonction, continuité ε-δ ; caractérisation séquentielle (avec l’honnêteté ACω sur un sens) ; opérations ; THÉORÈME DES VALEURS INTERMÉDIAIRES démontré via borne sup ; contre-exemple sur ℚ ; bornes atteintes ; racines n-ièmes construites."
+description: "Limite d’une fonction, continuité ε-δ ; caractérisation séquentielle (avec l’honnêteté ACω sur un sens) ; opérations ; THÉORÈME DES VALEURS INTERMÉDIAIRES démontré via borne sup ; contre-exemple sur ℚ ; bornes atteintes ; racines n-ièmes construites ; théorème de la bijection (réciproque continue)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -50,11 +50,11 @@ Soit $\mathbf{1}_{\mathbb{Q}}$, la **fonction de Dirichlet** : $\mathbf{1}_{\mat
 
 <Encart type="plusloin" titre="Densité des irrationnels, puis discontinuité partout">
 
-Nous savons que $\mathbb{Q}$ est <Prereq href="/maths/partie-ii/rationnels">dense dans $\mathbb{R}$</Prereq> : tout intervalle ouvert contient un rationnel. Il nous faut le symétrique.
+Nous savons que $\mathbb{Q}$ est <Prereq href="/maths/partie-ii/reels-dedekind">dense dans $\mathbb{R}$</Prereq> : tout intervalle ouvert contient un rationnel (démontré au chapitre 8, §6, à partir d'Archimède). Il nous faut le symétrique.
 
-**Densité des irrationnels.** Soit $a \lt b$. L'intervalle $(a - \sqrt 2,\ b - \sqrt 2)$ étant non vide, il contient un rationnel $r$ (densité de $\mathbb{Q}$). Alors $r + \sqrt 2 \in (a,b)$, et $r + \sqrt 2$ est **irrationnel** : si $r + \sqrt 2 = s \in \mathbb{Q}$, alors $\sqrt 2 = s - r \in \mathbb{Q}$, ce que le <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> interdit. Tout intervalle ouvert contient donc un irrationnel. <Badge niveau="demontre">La translation par $\sqrt 2$ transporte la densité de $\mathbb{Q}$ sur son complémentaire.</Badge>
+**Densité des irrationnels.** Soit $a \lt b$. L'intervalle $\left]a - \sqrt 2,\ b - \sqrt 2\right[$ étant non vide, il contient un rationnel $r$ (densité de $\mathbb{Q}$). Alors $r + \sqrt 2 \in \left]a,b\right[$, et $r + \sqrt 2$ est **irrationnel** : si $r + \sqrt 2 = s \in \mathbb{Q}$, alors $\sqrt 2 = s - r \in \mathbb{Q}$, ce que le <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> interdit. Tout intervalle ouvert contient donc un irrationnel. <Badge niveau="demontre">La translation par $\sqrt 2$ transporte la densité de $\mathbb{Q}$ sur son complémentaire.</Badge>
 
-**Discontinuité partout.** Fixons $a$ et $\varepsilon = \tfrac12$. Si $a \in \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 1$ ; pour tout $\delta$, l'intervalle $(a-\delta, a+\delta)$ contient un irrationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 1| = 1 \gt \tfrac12$. Si $a \notin \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 0$ ; tout intervalle $(a-\delta,a+\delta)$ contient un rationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 0| = 1 \gt \tfrac12$. Dans les deux cas, aucun $\delta$ ne répond au défi $\varepsilon = \tfrac12$.
+**Discontinuité partout.** Fixons $a$ et $\varepsilon = \tfrac12$. Si $a \in \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 1$ ; pour tout $\delta$, l'intervalle $\left]a-\delta, a+\delta\right[$ contient un irrationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 1| = 1 \gt \tfrac12$. Si $a \notin \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 0$ ; tout intervalle $\left]a-\delta,a+\delta\right[$ contient un rationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 0| = 1 \gt \tfrac12$. Dans les deux cas, aucun $\delta$ ne répond au défi $\varepsilon = \tfrac12$.
 
 $$ \boxed{\ \mathbf{1}_{\mathbb{Q}} \text{ est discontinue en tout point de } \mathbb{R}.\ } $$
 
@@ -108,13 +108,64 @@ $$ \boxed{\ f+g \ \text{ et }\ f\circ g \ \text{ sont continues en } a.\ } $$
 
 Le **produit** suit le même schéma via $|fg(x) - fg(a)| \le |f(x)|\,|g(x)-g(a)| + |g(a)|\,|f(x)-f(a)|$, en bornant $|f(x)| \le |f(a)|+1$ au voisinage de $a$ (continuité avec $\varepsilon = 1$). <Badge niveau="demontre">Preuve $\varepsilon$-$\delta$ directe, calquée sur la somme.</Badge> Les fonctions constantes ($\delta$ quelconque) et l'identité ($\delta = \varepsilon$) sont continues ; par sommes et produits répétés, **tout polynôme est continu sur $\mathbb{R}$** — récurrence immédiate sur le nombre de monômes. <Badge niveau="demontre">Conséquence des opérations, à partir de $x\mapsto x$ et des constantes.</Badge>
 
+## La limite d'une fonction en un point
+
+La continuité compare $f(x)$ à $f(a)$. Le chapitre suivant aura besoin d'une notion plus souple : la limite de $f(x)$ quand $x$ tend vers $a$ **sans jamais l'atteindre** — car le taux d'accroissement $\dfrac{f(x)-f(a)}{x-a}$ n'est même pas défini en $x = a$.
+
+**Définition.** Soit $f$ définie sur $D \subseteq \mathbb{R}$, et $a$ un point tel que tout intervalle $\left]a-\eta,\, a+\eta\right[$ rencontre $D \setminus \{a\}$ (on dit que $a$ est *adhérent* à $D \setminus \{a\}$). On écrit $\displaystyle\lim_{x \to a} f(x) = \ell$ lorsque :
+
+$$
+\forall\, \varepsilon \gt 0,\ \exists\, \delta \gt 0,\ \forall\, x \in D,\quad 0 \lt |x - a| \lt \delta \implies |f(x) - \ell| \lt \varepsilon.
+$$
+
+La seule différence avec la continuité tient dans le $0 \lt |x-a|$, qui **exclut** $x = a$, et dans $\ell$ qui remplace $f(a)$. <Badge niveau="admis">Définition — nous nommons un concept.</Badge>
+
+Lien immédiat, lorsque $a$ est un **point d'accumulation** de $D$ (tout voisinage de $a$ rencontre $D$ ailleurs qu'en $a$ — c'est le cas partout sur un intervalle) : $f$ est continue en $a \in D$ si et seulement si $\displaystyle\lim_{x\to a} f(x) = f(a)$. En un point isolé, $f$ est toujours continue et la limite ne se pose pas.
+
+<Encart type="calcul" titre="La limite, quand elle existe, est unique">
+
+Supposons $\displaystyle\lim_{x\to a} f = \ell$ et $\displaystyle\lim_{x\to a} f = \ell'$ avec $\ell \neq \ell'$. Posons $\varepsilon = \tfrac12|\ell - \ell'| \gt 0$. Il existe $\delta, \delta' \gt 0$ donnant $|f(x)-\ell| \lt \varepsilon$ (pour $0 \lt |x-a| \lt \delta$) et $|f(x)-\ell'| \lt \varepsilon$ (pour $0 \lt |x-a| \lt \delta'$). Comme $a$ est adhérent à $D\setminus\{a\}$, il existe un $x \in D$ avec $0 \lt |x-a| \lt \min(\delta,\delta')$ ; pour lui,
+
+$$
+|\ell - \ell'| \le |f(x)-\ell| + |f(x)-\ell'| \lt 2\varepsilon = |\ell-\ell'|,
+$$
+
+ce qui est absurde. La limite $\ell$ est donc unique — la notation est légitime. $\quad\blacksquare$
+
+</Encart>
+
+Les limites se combinent exactement comme les continuités — la preuve est mot pour mot celle des opérations ci-dessus, avec $\ell$ à la place de $f(a)$.
+
+<Resultat label="Opérations sur les limites">
+
+Si $\displaystyle\lim_{x\to a} f = \ell$ et $\displaystyle\lim_{x\to a} g = \ell'$, alors
+
+$$
+\lim_{x\to a}(f+g) = \ell + \ell', \qquad \lim_{x\to a}(fg) = \ell\,\ell', \qquad \lim_{x\to a}\frac{f}{g} = \frac{\ell}{\ell'}\ \ (\text{si } \ell' \neq 0).
+$$
+
+<Badge niveau="demontre" slot="badge">Somme et produit : recopie des preuves $\varepsilon$-$\delta$ des opérations sur la continuité. Quotient : détaillé dans l'encart.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="Le quotient : il suffit de traiter 1/g">
+
+Puisque $\dfrac{f}{g} = f \cdot \dfrac1g$, le produit règle tout dès qu'on sait que $\displaystyle\lim_{x\to a}\dfrac1g = \dfrac1{\ell'}$ (pour $\ell' \neq 0$). Prenons $\varepsilon_0 = \tfrac12|\ell'| \gt 0$ dans la définition de $\lim g = \ell'$ : au voisinage épointé de $a$, $|g(x)-\ell'| \lt \tfrac12|\ell'|$, donc $|g(x)| \gt \tfrac12|\ell'| \gt 0$ ($g$ ne s'annule pas et reste minorée). Alors
+
+$$
+\left|\frac1{g(x)} - \frac1{\ell'}\right| = \frac{|g(x)-\ell'|}{|g(x)|\,|\ell'|} \le \frac{2}{|\ell'|^2}\,|g(x)-\ell'|.
+$$
+
+Comme $|g(x)-\ell'| \to 0$, le majorant tend vers $0$ : pour $\varepsilon \gt 0$, prendre $\delta$ rendant $|g(x)-\ell'| \lt \tfrac{|\ell'|^2}{2}\varepsilon$ (et $\lt \tfrac12|\ell'|$) donne $\left|\tfrac1{g(x)} - \tfrac1{\ell'}\right| \lt \varepsilon$. $\quad\blacksquare$
+
+</Encart>
+
 ## Le théorème des valeurs intermédiaires
 
 Voici le climax. Il dit qu'une fonction continue ne peut passer du négatif au positif sans s'annuler — l'énoncé formalise l'idée qu'« on ne franchit pas une rivière sans mouiller ses pieds ».
 
 <Resultat label="Théorème des valeurs intermédiaires (TVI)">
 
-$$ f \text{ continue sur } [a,b],\ f(a) \lt 0 \lt f(b) \implies \exists\, c \in (a,b),\ f(c) = 0. $$
+$$ f \text{ continue sur } [a,b],\ f(a) \lt 0 \lt f(b) \implies \exists\, c \in \left]a,b\right[,\ f(c) = 0. $$
 
 <Badge niveau="demontre" slot="badge">Démonstration complète par la borne supérieure — les deux inégalités finales détaillées.</Badge>
 
@@ -124,13 +175,13 @@ $$ f \text{ continue sur } [a,b],\ f(a) \lt 0 \lt f(b) \implies \exists\, c \in 
 
 **Construction de $c$.** Posons $S := \{x \in [a,b] : f(x) \le 0\}$. Cet ensemble est **non vide** ($a \in S$ car $f(a) \lt 0$) et **majoré** par $b$. Par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, $c := \sup S$ existe et $a \le c \le b$. Montrons $f(c) = 0$ en écartant les deux inégalités strictes.
 
-**$f(c) \le 0$.** Supposons $f(c) \gt 0$. Par continuité en $c$ avec $\varepsilon = f(c)$, il existe $\delta \gt 0$ tel que $|x-c| \lt \delta \implies |f(x)-f(c)| \lt f(c)$, donc $f(x) \gt 0$. Ainsi aucun $x \in (c-\delta,\,c]$ n'est dans $S$. Tout $s \in S$ vérifie alors $s \le c-\delta$ (sinon $s \in (c-\delta, c]$ donnerait $f(s) \gt 0$, contredisant $s \in S$). Donc $c - \delta$ majore $S$ tout en étant $\lt c = \sup S$ : contradiction avec « $\sup$ = plus petit majorant ». Donc $f(c) \le 0$.
+**$f(c) \le 0$.** Supposons $f(c) \gt 0$. Par continuité en $c$ avec $\varepsilon = f(c)$, il existe $\delta \gt 0$ tel que $|x-c| \lt \delta \implies |f(x)-f(c)| \lt f(c)$, donc $f(x) \gt 0$. Ainsi aucun $x \in \left]c-\delta,\,c\right]$ n'est dans $S$. Tout $s \in S$ vérifie alors $s \le c-\delta$ (sinon $s \in \left]c-\delta, c\right]$ donnerait $f(s) \gt 0$, contredisant $s \in S$). Donc $c - \delta$ majore $S$ tout en étant $\lt c = \sup S$ : contradiction avec « $\sup$ = plus petit majorant ». Donc $f(c) \le 0$.
 
 **$f(c) \ge 0$.** Supposons $f(c) \lt 0$. Par continuité en $c$ avec $\varepsilon = -f(c)$, il existe $\delta \gt 0$ tel que $|x-c| \lt \delta \implies |f(x)-f(c)| \lt -f(c)$, donc $f(x) \lt 0$. Comme $f(b) \gt 0$, on a $c \neq b$, donc $c \lt b$. Le point $x_0 := \min\!\big(c+\tfrac{\delta}{2},\, b\big)$ vérifie $c \lt x_0 \le b$ et $|x_0 - c| \lt \delta$, donc $f(x_0) \lt 0$, soit $x_0 \in S$. Mais $x_0 \gt c = \sup S$ contredit que $c$ majore $S$. Donc $f(c) \ge 0$.
 
 **Conclusion.** $f(c) = 0$, et $f(a),f(b) \neq 0$ forcent $a \lt c \lt b$.
 
-$$ \boxed{\ \exists\, c \in (a,b),\ f(c) = 0.\ } $$
+$$ \boxed{\ \exists\, c \in \left]a,b\right[,\ f(c) = 0.\ } $$
 
 </Encart>
 
@@ -156,7 +207,7 @@ La boucle se boucle : l'irrationalité de $\sqrt2$, prouvée pour *construire* $
 
 ## Deux récoltes : les racines et les bornes
 
-**Toute racine $n$-ième existe.** Soient $y \ge 0$ et $n \ge 1$. Si $y = 0$, alors $0^n = 0 = y$ : la racine est $0$. Supposons donc $y \gt 0$. Posons $f(x) = x^n - y$ sur $[0, b]$ avec $b = \max(1, y)$. Alors $f$ est continue, $f(0) = -y \lt 0$ et $f(b) = b^n - y \ge b - y \ge 0$ (car $b \ge 1 \Rightarrow b^n \ge b$, et $b \ge y$). Si $f(b) = 0$, alors $b^n = y$ ; sinon $f(b) \gt 0$ et le TVI donne $c \in (0,b)$ avec $c^n = y$. L'**unicité** vient de la stricte croissance de $x \mapsto x^n$ sur $[0,\infty)$ (si $0 \le x \lt x'$ alors $x^n \lt x'^n$). <Badge niveau="demontre">Existence par TVI, unicité par monotonie.</Badge> La « racine » du module $|z| = \sqrt{a^2+b^2}$, employée au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>, est ainsi **enfin fondée** en toute généralité.
+**Toute racine $n$-ième existe.** Soient $y \ge 0$ et $n \ge 1$. Si $y = 0$, alors $0^n = 0 = y$ : la racine est $0$. Supposons donc $y \gt 0$. Posons $f(x) = x^n - y$ sur $[0, b]$ avec $b = \max(1, y)$. Alors $f$ est continue, $f(0) = -y \lt 0$ et $f(b) = b^n - y \ge b - y \ge 0$ (car $b \ge 1 \Rightarrow b^n \ge b$, et $b \ge y$). Si $f(b) = 0$, alors $b^n = y$ ; sinon $f(b) \gt 0$ et le TVI donne $c \in \left]0,b\right[$ avec $c^n = y$. L'**unicité** vient de la stricte croissance de $x \mapsto x^n$ sur $\left[0,\infty\right[$ (si $0 \le x \lt x'$ alors $x^n \lt x'^n$). <Badge niveau="demontre">Existence par TVI, unicité par monotonie.</Badge> La « racine » du module $|z| = \sqrt{a^2+b^2}$, employée au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>, est ainsi **enfin fondée** en toute généralité.
 
 <Encart type="plusloin" titre="Bornes atteintes — via Bolzano–Weierstrass">
 
@@ -173,5 +224,30 @@ Honnêteté : la version « suite maximisante » utilise $AC_\omega$ ; une varia
 </Encart>
 
 Ce théorème des bornes est la clé de voûte du **théorème de Rolle**, qui ouvre le chapitre suivant : sans un maximum *atteint* à l'intérieur, pas de tangente horizontale à exhiber.
+
+## Le théorème de la bijection
+
+Une dernière conséquence, dont l'exponentielle et le logarithme (chapitre 23) feront un usage constant : une fonction continue et **strictement monotone** sur un intervalle est réversible, et sa réciproque est *elle aussi* continue.
+
+<Resultat label="Théorème de la bijection">
+
+Soit $f$ **continue** et **strictement croissante** (resp. décroissante) sur un intervalle $I$. Alors $J := f(I)$ est un intervalle, $f : I \to J$ est une **bijection**, et sa réciproque $f^{-1} : J \to I$ est continue et strictement croissante (resp. décroissante).
+
+<Badge niveau="demontre" slot="badge">Injectivité par monotonie, surjectivité sur un intervalle par le TVI, continuité de la réciproque par l'encart ci-dessous.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Preuve : bijection, puis continuité de la réciproque">
+
+Traitons le cas strictement croissant (l'autre est identique en renversant les inégalités).
+
+**Injective.** Si $x \neq x'$, disons $x \lt x'$, alors $f(x) \lt f(x')$ : $f$ ne prend jamais deux fois la même valeur.
+
+**Image = intervalle, et surjectivité.** Soient $y_1 \lt y \lt y_2$ avec $y_1, y_2 \in J$, disons $y_1 = f(x_1)$, $y_2 = f(x_2)$ (donc $x_1 \lt x_2$ par croissance). La fonction $x \mapsto f(x) - y$ est continue sur $[x_1, x_2]$, négative en $x_1$, positive en $x_2$ : le **TVI** fournit $x \in \left]x_1, x_2\right[$ avec $f(x) = y$. Donc $y \in J$ : $J$ est un intervalle, et $f : I \to J$ est surjective, donc **bijective**.
+
+**Réciproque croissante.** Notons $g = f^{-1}$. Si $y \lt y'$ dans $J$ mais $g(y) \ge g(y')$, la croissance de $f$ donnerait $y = f(g(y)) \ge f(g(y')) = y'$, contradiction. Donc $g$ est strictement croissante.
+
+**Réciproque continue.** C'est le cœur. Soit $g$ croissante sur l'intervalle $J$, d'image $g(J) = I$ (un intervalle). Supposons $g$ discontinue en un point $d \in J$ — disons, une rupture à droite : comme $g$ est croissante, $g(d^+) := \inf_{\,y \gt d} g(y)$ existe et vaut $\gt g(d)$, et $d$ n'est pas l'extrémité droite de $J$. Choisissons $u$ avec $g(d) \lt u \lt g(d^+)$. Pour $y \le d$ : $g(y) \le g(d) \lt u$ ; pour $y \gt d$ : $g(y) \ge g(d^+) \gt u$. Aucun $y \in J$ ne vérifie donc $g(y) = u$. Pourtant $u$ est **strictement compris** entre $g(d) \in I$ et $g(y_0) \in I$ (pour un $y_0 \gt d$), donc $u$ devrait appartenir à l'intervalle $I = g(J)$ : contradiction. Le cas d'une rupture à gauche est symétrique. Donc $g = f^{-1}$ est continue. $\quad\blacksquare$
+
+</Encart>
 
 Nous savons désormais ce qu'est une fonction continue — et, non moins précieux, ce qu'elle n'est *pas* : ni un dessin, ni une garantie de valeurs intermédiaires hors de $\mathbb{R}$. Il est temps de la faire *bouger* : mesurer sa pente instantanée, sa vitesse de variation. C'est l'objet de la dérivée.
