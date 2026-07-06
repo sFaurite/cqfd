@@ -76,7 +76,7 @@ Déroulons-le sur $\mathrm{pgcd}(252, 198)$ :
 
 $$ 252 = 1 \times 198 + 54,\quad 198 = 3 \times 54 + 36,\quad 54 = 1 \times 36 + 18,\quad 36 = 2 \times 18 + 0. $$
 
-Le dernier reste non nul est $18$ : $\mathrm{pgcd}(252, 198) = 18$. Quatre divisions, aucune factorisation — c'est l'algorithme le plus efficace de toute l'antiquité, et il tourne encore dans votre machine.
+Le dernier reste non nul est $18$ : $\mathrm{pgcd}(252, 198) = 18$. Quatre divisions, aucune factorisation — c'est l'algorithme le plus efficace de toute l'Antiquité, et il tourne encore dans votre machine.
 
 ## Le théorème de Bézout
 
@@ -132,7 +132,7 @@ Un entier $p \ge 2$ est **premier** si ses seuls diviseurs positifs sont $1$ et 
 
 <Encart type="calcul" titre="Il y a une infinité de nombres premiers (Euclide)">
 
-**Lemme préalable.** Tout entier $n \ge 2$ admet un diviseur premier : par récurrence forte, le plus petit diviseur $> 1$ de $n$ est premier (s'il avait lui-même un diviseur propre $>1$, celui-ci diviserait $n$ et serait plus petit — bon ordre à nouveau).
+**Lemme préalable.** Tout entier $n \ge 2$ admet un diviseur premier : par le bon ordre, le plus petit diviseur $> 1$ de $n$ existe, et il est premier (s'il avait lui-même un diviseur propre $>1$, celui-ci diviserait $n$ et serait plus petit — contradiction avec la minimalité).
 
 **Démonstration** (par l'absurde). Supposons les premiers en nombre **fini** : $p_1, p_2, \dots, p_k$. Posons
 
@@ -152,7 +152,7 @@ Attention au contresens classique — le plus répandu de toute l'arithmétique.
 
 $$ 2 \cdot 3 \cdot 5 \cdot 7 \cdot 11 \cdot 13 + 1 = 30031 = 59 \times 509. $$
 
-$30031$ n'est pas premier : mais $59$ et $509$, ses facteurs, ne figurent bien pas dans $\{2,3,5,7,11,13\}$. La démonstration tient exactement, et c'est tout ce qu'elle promet.
+$30031$ n'est pas premier : mais $59$ et $509$, ses facteurs, ne figurent bel et bien pas dans $\{2,3,5,7,11,13\}$. La démonstration tient exactement, et c'est tout ce qu'elle promet.
 
 ## Le théorème fondamental de l'arithmétique
 
@@ -206,7 +206,7 @@ Et voici le contraste précieux, **sur le même sujet** : on ne sait pas prouver
 
 Il existe une infinité de paires de premiers d'écart au plus $246$.
 
-<Badge niveau="demontre" slot="badge">Percée de Yitang Zhang (2013), écart initial affiné à $\le 246$ par Maynard et Tao. Théorème, pas conjecture — un vrai résultat partiel sur la question des jumeaux.</Badge>
+<Badge niveau="demontre" slot="badge">Percée de Yitang Zhang (2013), écart ramené à $\le 246$ par le projet Polymath8b (2014), à partir des méthodes de Maynard et Tao. Théorème, pas conjecture — un vrai résultat partiel sur la question des jumeaux.</Badge>
 
 </Resultat>
 

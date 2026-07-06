@@ -113,7 +113,7 @@ $$[b] = [1]\,[b] = [c][a][b] = [c][0] = [0],$$
 
 ce qui contredit $[b] \neq [0]$. Donc $[a]$ n'est pas inversible, et $\mathbb{Z}/n\mathbb{Z}$ n'est pas un corps. Par contraposée : corps $\Rightarrow$ premier.
 
-**Sens réciproque ($p$ premier $\Rightarrow \mathbb{Z}/p\mathbb{Z}$ corps).** Soit $p$ premier et $[a] \neq [0]$, c'est-à-dire $p \nmid a$. Les seuls diviseurs de $p$ sont $1$ et $p$ ; comme $p \nmid a$, le nombre $p$ n'est pas diviseur commun de $a$ et $p$, donc $\operatorname{pgcd}(a, p) = 1$. Le <Prereq href="/maths/partie-iv/arithmetique">théorème de Bézout</Prereq> fournit alors $u, v \in ℤ$ avec
+**Sens réciproque ($p$ premier $\Rightarrow \mathbb{Z}/p\mathbb{Z}$ corps).** Soit $p$ premier et $[a] \neq [0]$, c'est-à-dire $p \nmid a$. Les seuls diviseurs positifs de $p$ sont $1$ et $p$ ; comme $p \nmid a$, le nombre $p$ n'est pas diviseur commun de $a$ et $p$, donc $\operatorname{pgcd}(a, p) = 1$. Le <Prereq href="/maths/partie-iv/arithmetique">théorème de Bézout</Prereq> fournit alors $u, v \in ℤ$ avec
 
 $$au + pv = 1.$$
 
@@ -146,7 +146,7 @@ $$p \text{ premier}, \; p \nmid a \implies a^{p-1} \equiv 1 \pmod{p}.$$
 
 La preuve tient en trois lignes, à condition d'avoir bâti tout ce qui précède. Puisque $\mathbb{F}_p$ est un corps, ses classes non nulles $[1], \dots, [p-1]$ sont toutes inversibles, et leur produit reste non nul (aucun diviseur de zéro) : elles forment un groupe pour $\times$, noté $(\mathbb{Z}/p\mathbb{Z})^*$, d'ordre $p - 1$. Prenons $[a] \neq [0]$. Par le <Prereq href="/maths/partie-iv/groupes">théorème de Lagrange</Prereq>, l'ordre $d$ de l'élément $[a]$ divise l'ordre du groupe, donc divise $p - 1$ : écrivons $p - 1 = d\,m$. Comme $[a]^{d} = [1]$ par définition de l'ordre, il vient $[a]^{p-1} = \left([a]^{d}\right)^{m} = [1]^{m} = [1]$, c'est-à-dire $a^{p-1} \equiv 1 \pmod{p}$. $\blacksquare$
 
-Prenez un instant pour mesurer ce qui vient de se produire. Un théorème d'**arithmétique de 1640** (Fermat), démontré par la **théorie des groupes des années 1830** (Lagrange), à travers un **quotient de 1870** (la construction ensembliste). Trois siècles se donnent la main en trois lignes. *C'est cela, l'édifice* : chaque étage porte les suivants, et une vérité ancienne trouve sa preuve la plus limpide dans un langage qui n'existait pas quand on l'a énoncée.
+Prenez un instant pour mesurer ce qui vient de se produire. Un théorème d'**arithmétique de 1640** (Fermat), démontré par la **théorie des groupes** (le théorème de Lagrange, 1770), à travers un **quotient de la fin du XIXᵉ siècle** (la construction ensembliste). Trois siècles se donnent la main en trois lignes. *C'est cela, l'édifice* : chaque étage porte les suivants, et une vérité ancienne trouve sa preuve la plus limpide dans un langage qui n'existait pas quand on l'a énoncée.
 
 <Encart type="plusloin" titre="Une preuve directe, sans groupes">
 Fermat n'avait ni groupes ni quotients. Voici l'idée d'une preuve élémentaire : pour $p \nmid a$, multiplier par $[a]$ est une bijection des classes non nulles, donc $[a], [2a], \dots, [(p-1)a]$ sont exactement $[1], \dots, [p-1]$ dans un autre ordre. En multipliant le tout :

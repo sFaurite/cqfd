@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les groupes : la symétrie axiomatisée"
 chapter: groupes
-description: "Axiomes de groupe ; unicité du neutre et des inverses (démontré) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément."
+description: "Axiomes de groupe ; unicité du neutre et des inverses (démontrée) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -31,7 +31,7 @@ Posez un triangle équilatéral sur une feuille et repérez son contour au crayo
 
 </Encart>
 
-Notons ces six transformations $e$ (l'identité, la rotation nulle), $r$ et $r^2$ (les rotations), puis $s$, $sr$, $sr^2$ (les retournements). **Déclarons notre convention une fois pour toutes**, et tenons-la partout : la composée $g \circ h$ se lit *de droite à gauche*, « **d'abord $h$, ensuite $g$** » — exactement la <Prereq href="/maths/partie-i/relations-fonctions">composition des fonctions</Prereq> de la partie I. L'interactif ci-dessous affiche et respecte cette même convention.
+Notons ces six transformations $e$ (l'identité, la rotation nulle), $r$ et $r^2$ (les rotations), puis $s$, $sr$, $sr^2$ (les retournements). **Déclarons notre convention une fois pour toutes**, et tenons-la partout : composer se lit *de droite à gauche*, le composé $h \circ g$ appliquant « **d'abord $g$, ensuite $h$** » — exactement la <Prereq href="/maths/partie-i/relations-fonctions">composition des fonctions</Prereq> de la partie I. L'interactif ci-dessous affiche et respecte cette même convention.
 
 <MathsGroupeSymetries />
 
@@ -56,7 +56,7 @@ Le groupe $D_3$ des six symétries du triangle satisfait (G1)–(G3) : la compos
 | Structure | Groupe ? | Raison |
 |---|---|---|
 | $(\mathbb{Z}, +)$ | oui, abélien | neutre $0$, opposé $-n$ |
-| $(\mathbb{N}, +)$ | **non** | aucun opposé : $3$ n'a pas de $-3$ dans $\mathbb{N}$ |
+| $(\mathbb{N}, +)$ | **non** | les éléments non nuls n'ont pas d'opposé : $3$ n'a pas de $-3$ dans $\mathbb{N}$ |
 | $(\mathbb{Q}^*, \times)$ | oui, abélien | neutre $1$, inverse $1/x$ |
 | $(\mathbb{Q}, \times)$ | **non** | $0$ n'a pas d'inverse |
 | $(\mathrm{Bij}(E), \circ)$ | oui | le *groupe symétrique* de $E$ |

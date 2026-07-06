@@ -57,14 +57,14 @@ export const SYMBOLES: Symbole[] = [
   // — Analyse
   { katex: 'u_n \\to \\ell', nom: 'Limite d’une suite', desc: '∀ε > 0, ∃N, ∀n ≥ N : |uₙ − ℓ| < ε. La définition fondatrice de l’analyse.', voir: '/maths/partie-v/suites-limites' },
   { katex: '\\sum_{n} u_n', nom: 'Série', desc: 'Limite des sommes partielles. Converge ssi (u₀ + … + uₙ) converge.', voir: '/maths/partie-v/series' },
-  { katex: 'e', nom: 'Constante d’Euler (base)', desc: 'e = Σ 1/n!. Irrationnelle, et même transcendante.', valeur: '≈ 2,718281828', voir: '/maths/partie-v/series' },
+  { katex: 'e', nom: 'Nombre d’Euler (base)', desc: 'e = Σ 1/n!. Irrationnelle, et même transcendante.', valeur: '≈ 2,718281828', voir: '/maths/partie-v/series' },
   { katex: "f'(a)", nom: 'Dérivée', desc: 'Limite du taux d’accroissement (f(x) − f(a))/(x − a) en a.', voir: '/maths/partie-v/derivation' },
   { katex: '\\int_a^b f', nom: 'Intégrale de Riemann', desc: 'Aire sous la courbe : valeur commune du sup des sommes inférieures et de l’inf des supérieures.', voir: '/maths/partie-v/integrale' },
-  { katex: '\\exp,\\ \\ln', nom: 'Exponentielle, logarithme', desc: 'exp(z) = Σ zⁿ/n! ; ln est sa réciproque sur ]0, ∞[. Les puissances réelles : aˣ = exp(x ln a).', voir: '/maths/partie-v/exponentielle' },
+  { katex: '\\exp,\\ \\ln', nom: 'Exponentielle, logarithme', desc: 'exp(z) = Σ zⁿ/n! ; ln est sa réciproque sur ]0, ∞[. Les puissances réelles (a > 0) : aˣ = exp(x ln a).', voir: '/maths/partie-v/exponentielle' },
   { katex: '\\pi', nom: 'Pi', desc: 'Défini comme le double du plus petit zéro positif de cos. Vérifie e^{iπ} + 1 = 0. Transcendant.', valeur: '≈ 3,14159265', voir: '/maths/partie-v/exponentielle' },
 
   // — Limites de l’édifice
   { katex: '\\mathrm{Con}(T)', nom: 'Cohérence de T', desc: 'L’énoncé « T ne démontre pas 0 = 1 ». Par Gödel, T ne peut pas le démontrer (s’il est cohérent).', voir: '/maths/partie-vi/godel' },
   { katex: '\\mathsf{ZFC}', nom: 'ZF + choix', desc: 'Les axiomes ZF augmentés de l’axiome du choix : le cadre de référence des mathématiques actuelles.', voir: '/maths/partie-vi/axiome-du-choix' },
-  { katex: '\\zeta(s)', nom: 'Fonction zêta', desc: 'ζ(s) = Σ 1/nˢ (pour s > 1). L’hypothèse de Riemann porte sur ses zéros.', voir: '/maths/partie-vi/grandes-conjectures' },
+  { katex: '\\zeta(s)', nom: 'Fonction zêta', desc: 'ζ(s) = Σ 1/nˢ (pour s > 1), prolongée analytiquement à ℂ. L’hypothèse de Riemann porte sur les zéros de ce prolongement.', voir: '/maths/partie-vi/grandes-conjectures' },
 ];

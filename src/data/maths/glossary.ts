@@ -33,20 +33,20 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Ensemble inductif', def: 'Ensemble contenant 0 = ∅ et le successeur de chacun de ses éléments. ℕ est le plus petit d’entre eux.', voir: '/maths/partie-ii/entiers-naturels' },
   { terme: 'Successeur', def: 'Opération S(n) = n ∪ {n} : on ajoute à n l’élément « n » lui-même. Engendre les entiers à partir de 0.', voir: '/maths/partie-ii/entiers-naturels' },
   { terme: 'Ordinal de von Neumann', def: 'Représentation d’un entier comme l’ensemble de tous ses prédécesseurs : 0 = ∅, n = {0,…,n−1}. Ainsi n possède exactement n éléments.', voir: '/maths/partie-ii/entiers-naturels' },
-  { terme: 'Récurrence', def: 'Principe de démonstration : si P(0) et P(n) ⇒ P(n+1), alors P(n) pour tout n. Ici ce n’est pas un axiome mais un théorème déduit de la minimalité de ℕ.', voir: '/maths/partie-ii/entiers-naturels' },
+  { terme: 'Récurrence', def: 'Principe de démonstration : si P(0) et si, pour tout n, P(n) ⇒ P(n+1), alors P(n) pour tout n. Ici ce n’est pas un axiome mais un théorème déduit de la minimalité de ℕ.', voir: '/maths/partie-ii/entiers-naturels' },
   { terme: 'Axiomes de Peano', def: 'Caractérisation de ℕ : 0 n’est successeur d’aucun entier, S est injective, et la récurrence vaut. La construction de von Neumann les satisfait.', voir: '/maths/partie-ii/entiers-naturels' },
   { terme: 'Théorème de récursion', def: 'Théorème qui légitime la définition « par récurrence » : à partir d’une valeur initiale et d’une règle de passage, il existe une unique fonction sur ℕ. C’est lui qui autorise à définir +, ×, la factorielle…', voir: '/maths/partie-ii/arithmetique-de-n' },
   { terme: 'Bon ordre', def: 'Ordre pour lequel toute partie non vide possède un plus petit élément. ℕ est bien ordonné — propriété qui donne la division euclidienne et l’identité de Bézout.', voir: '/maths/partie-ii/arithmetique-de-n' },
   { terme: 'Entier relatif (ℤ)', def: 'Construit comme quotient de ℕ × ℕ : le couple (a, b) représente la soustraction « a − b » en attente. Rend la soustraction totale.', voir: '/maths/partie-ii/entiers-relatifs' },
-  { terme: 'Intégrité', def: 'Propriété d’un anneau où un produit nul force un facteur nul (ab = 0 ⇒ a = 0 ou b = 0). ℤ est intègre ; ℤ/6ℤ ne l’est pas.', voir: '/maths/partie-ii/entiers-relatifs' },
+  { terme: 'Intégrité', def: 'Propriété d’un anneau non nul où un produit nul force un facteur nul (ab = 0 ⇒ a = 0 ou b = 0). ℤ est intègre ; ℤ/6ℤ ne l’est pas.', voir: '/maths/partie-ii/entiers-relatifs' },
   { terme: 'Nombre rationnel (ℚ)', def: 'Construit comme quotient de ℤ × ℤ* : le couple (a, b) représente la division « a / b ». Corps ordonné, dense, mais « troué ».', voir: '/maths/partie-ii/rationnels' },
   { terme: 'Densité', def: 'Propriété de ℚ (et ℝ) : entre deux nombres distincts, il en existe toujours un troisième. La densité n’est pas la complétude — ℚ est dense mais troué.', voir: '/maths/partie-ii/rationnels' },
-  { terme: 'Corps', def: 'Anneau commutatif où tout élément non nul possède un inverse. ℚ, ℝ, ℂ sont des corps ; ℤ n’en est pas un.', voir: '/maths/partie-ii/rationnels' },
+  { terme: 'Corps', def: 'Anneau commutatif où 1 ≠ 0 et où tout élément non nul possède un inverse. ℚ, ℝ, ℂ sont des corps ; ℤ n’en est pas un.', voir: '/maths/partie-ii/rationnels' },
   { terme: 'Propriété d’Archimède', def: 'Pour tous x, y > 0, un multiple entier de x finit par dépasser y. Vraie dans ℚ et ℝ ; sert à établir 1/n → 0.', voir: '/maths/partie-ii/rationnels' },
-  { terme: 'Coupure de Dedekind', def: 'Partage de ℚ en deux ensembles (A en dessous, son complémentaire au-dessus), où A n’a pas de plus grand élément. Chaque coupure EST un nombre réel.', voir: '/maths/partie-ii/reels-dedekind' },
+  { terme: 'Coupure de Dedekind', def: 'Partage de ℚ en deux ensembles non vides (A en dessous, son complémentaire au-dessus), où A n’a pas de plus grand élément. Chaque coupure EST un nombre réel.', voir: '/maths/partie-ii/reels-dedekind' },
   { terme: 'Nombre réel (ℝ)', def: 'Défini comme une coupure de Dedekind de ℚ. Comble les trous de ℚ (ex. √2) ; ℝ est complet (toute partie non vide et majorée a une borne supérieure).', voir: '/maths/partie-ii/reels-dedekind' },
   { terme: 'Borne supérieure (complétude)', def: 'Plus petit des majorants. Toute partie non vide majorée de ℝ en possède une : c’est LA propriété qui distingue ℝ de ℚ, moteur de toute l’analyse.', voir: '/maths/partie-ii/reels-dedekind' },
-  { terme: 'Nombre complexe (ℂ)', def: 'Défini comme un couple de réels (a, b), noté a + bi, avec la multiplication (a,b)(c,d) = (ac−bd, ad+bc). Alors i = (0,1) vérifie i² = −1. Corps non ordonnable.', voir: '/maths/partie-ii/complexes' },
+  { terme: 'Nombre complexe (ℂ)', def: 'Défini comme un couple de réels (a, b), noté a + bi, avec la multiplication (a,b)(c,d) = (ac−bd, ad+bc). Alors i = (0,1) vérifie i² = −1. Corps sans ordre compatible avec les opérations.', voir: '/maths/partie-ii/complexes' },
   { terme: 'Module, conjugué', def: 'Pour z = a + bi : conjugué z̄ = a − bi, module |z| = √(a²+b²). On a z·z̄ = |z|² et |zw| = |z||w|.', voir: '/maths/partie-ii/complexes' },
 
   // — Partie III : compter l’infini
@@ -57,7 +57,7 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Argument diagonal (Cantor)', def: 'Toute liste de réels en oublie un : celui construit en changeant le n-ième chiffre du n-ième. Prouve que ℝ n’est pas dénombrable.', voir: '/maths/partie-iii/diagonale-cantor' },
   { terme: 'Théorème de Cantor', def: 'Pour tout ensemble E, il n’y a pas de surjection de E sur P(E) : |E| < |P(E)|. D’où une tour d’infinis sans sommet.', voir: '/maths/partie-iii/diagonale-cantor' },
   { terme: 'Nombre transcendant', def: 'Réel qui n’est racine d’aucun polynôme non nul à coefficients entiers. Les transcendants forment « presque tout » ℝ (Cantor) ; e et π en sont.', voir: '/maths/partie-iii/diagonale-cantor' },
-  { terme: 'Hypothèse du continu (CH)', def: 'Y a-t-il un infini strictement entre |ℕ| et |ℝ| ? CH répond « non ». Démontrée indécidable dans ZFC (Gödel 1938, Cohen 1963).', voir: '/maths/partie-iii/hypothese-continu' },
+  { terme: 'Hypothèse du continu (CH)', def: 'Y a-t-il un infini strictement entre |ℕ| et |ℝ| ? CH répond « non ». Démontrée indécidable dans ZFC, si ZFC est cohérente (Gödel 1938, Cohen 1963).', voir: '/maths/partie-iii/hypothese-continu' },
   { terme: 'Indécidable', def: 'Un énoncé est indécidable dans un système s’il n’y est ni démontrable ni réfutable. À ne pas confondre avec « conjecturé » (encore inconnu).', voir: '/maths/partie-iii/hypothese-continu' },
 
   // — Partie IV : structures de l’algèbre
@@ -70,7 +70,7 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Anneau', def: 'Ensemble muni d’une addition (groupe abélien) et d’une multiplication associative distributive. Dans ce cours : commutatif et unitaire. ℤ en est un.', voir: '/maths/partie-iv/anneaux-corps' },
   { terme: 'Arithmétique modulaire (ℤ/nℤ)', def: 'Quotient de ℤ par la congruence modulo n : un anneau fini à n éléments (« l’horloge »). C’est un corps si et seulement si n est premier.', voir: '/maths/partie-iv/anneaux-corps' },
   { terme: 'Petit théorème de Fermat', def: 'Si p est premier et ne divise pas a, alors a^(p−1) ≡ 1 (mod p). Démontré en trois lignes par le théorème de Lagrange.', voir: '/maths/partie-iv/anneaux-corps' },
-  { terme: 'Polynôme', def: 'Suite presque nulle de coefficients — un objet, pas une fonction. Sur un corps fini, le polynôme X^p − X est non nul mais sa fonction est nulle.', voir: '/maths/partie-iv/polynomes' },
+  { terme: 'Polynôme', def: 'Suite presque nulle de coefficients — un objet, pas une fonction. Sur le corps ℤ/pℤ (p premier), le polynôme X^p − X est non nul mais sa fonction est nulle.', voir: '/maths/partie-iv/polynomes' },
   { terme: 'Théorème fondamental de l’algèbre', def: 'Tout polynôme non constant à coefficients complexes a une racine dans ℂ. La preuve utilise l’analyse.', voir: '/maths/partie-iv/polynomes' },
 
   // — Partie V : l’analyse
@@ -78,15 +78,15 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Convergence monotone', def: 'Toute suite croissante majorée converge (vers sa borne supérieure). Faux dans ℚ : c’est la complétude de ℝ qui l’autorise.', voir: '/maths/partie-v/suites-limites' },
   { terme: 'Théorème de Bolzano–Weierstrass', def: 'Toute suite bornée de réels admet une sous-suite convergente. Démontré par dichotomie.', voir: '/maths/partie-v/suites-limites' },
   { terme: 'Série', def: 'Suite des sommes partielles u₀ + u₁ + … + uₙ. Converge si cette suite converge. uₙ → 0 est nécessaire mais pas suffisant (série harmonique).', voir: '/maths/partie-v/series' },
-  { terme: 'Nombre e', def: 'Défini par la série e = Σ 1/n! ≈ 2,71828. Irrationnel (démontré par Fourier) ; base de l’exponentielle.', voir: '/maths/partie-v/series' },
+  { terme: 'Nombre e', def: 'Défini par la série e = Σ 1/n! ≈ 2,71828. Irrationnel (démontré par Euler ; preuve courte par la série due à Fourier) ; base de l’exponentielle.', voir: '/maths/partie-v/series' },
   { terme: 'Continuité', def: 'f est continue en a si f(x) tend vers f(a) quand x tend vers a (définition ε–δ). Une fonction continue n’est pas forcément « un dessin » (fonction de Dirichlet).', voir: '/maths/partie-v/continuite' },
   { terme: 'Théorème des valeurs intermédiaires', def: 'Une fonction continue qui change de signe sur [a, b] s’annule quelque part. Démontré par la borne supérieure ; faux sur ℚ.', voir: '/maths/partie-v/continuite' },
   { terme: 'Dérivée', def: 'Limite du taux d’accroissement (f(x) − f(a))/(x − a). Dérivable ⇒ continue, mais pas l’inverse (|x| en 0).', voir: '/maths/partie-v/derivation' },
   { terme: 'Théorème des accroissements finis', def: 'Il existe un point où la pente de la tangente égale la pente moyenne : f(b) − f(a) = f′(c)(b − a). D’où « f′ ≥ 0 ⇒ f croissante ».', voir: '/maths/partie-v/derivation' },
   { terme: 'Intégrale de Riemann', def: 'Aire sous une courbe définie comme la valeur commune du sup des sommes inférieures et de l’inf des sommes supérieures (sommes de Darboux).', voir: '/maths/partie-v/integrale' },
-  { terme: 'Théorème fondamental de l’analyse', def: 'Dériver et intégrer sont réciproques : si F(x) = ∫ₐˣ f, alors F′ = f. Relie tangentes et aires.', voir: '/maths/partie-v/integrale' },
+  { terme: 'Théorème fondamental de l’analyse', def: 'Dériver et intégrer sont réciproques : si f est continue et F(x) = ∫ₐˣ f, alors F′ = f. Relie tangentes et aires.', voir: '/maths/partie-v/integrale' },
   { terme: 'Exponentielle', def: 'Définie par la série exp(z) = Σ zⁿ/n! sur ℂ. Vérifie exp(a+b) = exp(a)exp(b) et est sa propre dérivée. Sa réciproque sur ]0,∞[ est le logarithme.', voir: '/maths/partie-v/exponentielle' },
-  { terme: 'Formule d’Euler', def: 'e^{iθ} = cos θ + i sin θ, d’où e^{iπ} + 1 = 0 : cinq constantes réunies, démontrée terme à terme. π y est défini comme le double du premier zéro de cos.', voir: '/maths/partie-v/exponentielle' },
+  { terme: 'Formule d’Euler', def: 'e^{iθ} = cos θ + i sin θ, d’où e^{iπ} + 1 = 0 : cinq constantes réunies, démontrée terme à terme. π y est défini comme le double du plus petit zéro positif de cos.', voir: '/maths/partie-v/exponentielle' },
 
   // — Partie VI : les limites de l’édifice
   { terme: 'Théorèmes d’incomplétude (Gödel)', def: 'Résultats (1931) : tout système cohérent, récursivement axiomatisable et assez riche pour l’arithmétique contient des énoncés vrais indémontrables, et ne peut prouver sa propre cohérence.', voir: '/maths/partie-vi/godel' },

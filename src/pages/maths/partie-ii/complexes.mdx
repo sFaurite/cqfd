@@ -100,9 +100,9 @@ Premier calcul, immédiat :
 
 $$ z\bar{z} = (a,b)\cdot(a,-b) = (a\cdot a - b\cdot(-b),\ \ a\cdot(-b) + b\cdot a) = (a^2 + b^2,\ 0) = \lvert z \rvert^2 $$
 
-Le module est *multiplicatif* — la preuve fait surgir une identité due à Brahmagupta (VIIᵉ siècle) :
+Le module est *multiplicatif* — la preuve fait surgir une identité déjà connue de Diophante (IIIᵉ siècle) et systématisée par Brahmagupta (VIIᵉ siècle) :
 
-<Encart type="calcul" titre="|zw| = |z| |w| : l'identité de Brahmagupta">
+<Encart type="calcul" titre="|zw| = |z| |w| : l'identité de Brahmagupta–Fibonacci">
 Posons $z = (a,b)$ et $w = (c,d)$. Par définition du produit, $zw = (ac - bd,\ ad + bc)$, donc, par définition du module :
 
 $$ \lvert zw \rvert^2 = (ac - bd)^2 + (ad + bc)^2 $$
@@ -115,7 +115,7 @@ En sommant, les doubles produits se détruisent, puis on factorise :
 
 $$ \lvert zw \rvert^2 = a^2c^2 + b^2d^2 + a^2d^2 + b^2c^2 = a^2(c^2 + d^2) + b^2(c^2 + d^2) = (a^2 + b^2)(c^2 + d^2) $$
 
-C'est l'identité de Brahmagupta : un produit de deux sommes de deux carrés est encore une somme de deux carrés. Le membre de droite vaut $\lvert z \rvert^2 \lvert w \rvert^2$, donc $\lvert zw \rvert^2 = (\lvert z \rvert \lvert w \rvert)^2$. Or deux réels positifs de même carré sont égaux : si $x^2 = y^2$ avec $x \ge 0$ et $y \ge 0$, alors $(x - y)(x + y) = x^2 - y^2 = 0$ ; dans le corps $\mathbb{R}$, un produit nul a un facteur nul (sinon, multiplier par l'inverse du facteur non nul), donc $x = y$, ou bien $x = -y$ — qui, joint à $x \ge 0$ et $y \ge 0$, force $x = y = 0$. Dans tous les cas $x = y$, donc :
+C'est l'identité de Brahmagupta–Fibonacci : un produit de deux sommes de deux carrés est encore une somme de deux carrés. Le membre de droite vaut $\lvert z \rvert^2 \lvert w \rvert^2$, donc $\lvert zw \rvert^2 = (\lvert z \rvert \lvert w \rvert)^2$. Or deux réels positifs de même carré sont égaux : si $x^2 = y^2$ avec $x \ge 0$ et $y \ge 0$, alors $(x - y)(x + y) = x^2 - y^2 = 0$ ; dans le corps $\mathbb{R}$, un produit nul a un facteur nul (sinon, multiplier par l'inverse du facteur non nul), donc $x = y$, ou bien $x = -y$ — qui, joint à $x \ge 0$ et $y \ge 0$, force $x = y = 0$. Dans tous les cas $x = y$, donc :
 
 $$ \boxed{\,\lvert zw \rvert = \lvert z \rvert \, \lvert w \rvert\,} $$
 
