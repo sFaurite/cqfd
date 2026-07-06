@@ -1,0 +1,60 @@
+---
+/**
+ * MathsGroupeSymetries — le groupe diédral D₃ : les six symétries du triangle
+ * équilatéral (identité, deux rotations, trois retournements). On compose deux
+ * symétries en animant le triangle, et on lit le résultat dans la table de
+ * Cayley. La table n'est pas symétrique : s∘r ≠ r∘s — D₃ est le plus petit
+ * groupe non commutatif, et on le VOIT.
+ */
+---
+
+<div class="iw" data-iw="groupe-symetries">
+  <div class="iw__head"><span class="tag">Interactif</span> Le groupe D₃ : composer les symétries du triangle</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 8"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="gs-g">d’abord g</label>
+      <select id="gs-g" data-g>
+        <option value="0">e — identité</option>
+        <option value="1" selected>r — rotation 120°</option>
+        <option value="2">r² — rotation 240°</option>
+        <option value="3">s — retournement (axe vertical)</option>
+        <option value="4">sr — retournement (2ᵉ axe)</option>
+        <option value="5">sr² — retournement (3ᵉ axe)</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="gs-h">ensuite h</label>
+      <select id="gs-h" data-h>
+        <option value="0">e — identité</option>
+        <option value="1">r — rotation 120°</option>
+        <option value="2">r² — rotation 240°</option>
+        <option value="3" selected>s — retournement (axe vertical)</option>
+        <option value="4">sr — retournement (2ᵉ axe)</option>
+        <option value="5">sr² — retournement (3ᵉ axe)</option>
+      </select>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-compose>Composer</button>
+      <button class="iw__btn" data-swap>Inverser l’ordre</button>
+      <button class="iw__btn" data-reset>Réinitialiser</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">état du triangle</span> <b data-out-state>e</b></span>
+    <span class="iw__chip"><span class="k">composé</span> <b data-out-comp>—</b></span>
+    <span class="iw__chip"><b data-out-cmp>choisissez g et h, puis « Composer »</b></span>
+  </div>
+  <p class="iw__note">
+    Convention : « Composer » applique <b>d’abord g, puis h</b> ; le résultat se note <b>h∘g</b>
+    (lecture de droite à gauche) et retombe toujours sur l’un des 6 éléments — c’est la fermeture du
+    groupe. Regardez le triangle : r fait tourner les sommets d’un tiers de tour, s le retourne autour
+    de l’axe en pointillés. Avec g = r et h = s, cliquez « Composer » puis « Inverser l’ordre » :
+    s∘r = sr mais r∘s = sr². La case surlignée saute de l’autre côté de la diagonale : la table de
+    Cayley n’est pas symétrique — D₃ est le plus petit groupe non commutatif.
+  </p>
+</div>
+
+<script>
+  import './MathsGroupeSymetries.client.ts';
+</script>

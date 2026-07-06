@@ -1,0 +1,237 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L exponentielle, π et la formule d Euler"
+chapter: exponentielle
+description: "Exp définie par série sur ℂ (convergence absolue partout) ; équation fonctionnelle (produit de Cauchy) ; exp = sa propre dérivée ; ln construit ; cos/sin DÉFINIS par séries ; π DÉFINI (premier zéro de cos) ; e^{iπ} + 1 = 0 DÉMONTRÉ ; la géométrie du cercle retrouvée."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+import MathsExpComplexe from '../../../components/interactive/MathsExpComplexe.astro';
+
+## La définition qui contient tout
+
+Vingt-deux chapitres nous mènent ici. Nous possédons une série qui converge, $e = \sum_{n\ge 0} 1/n!$ (<Prereq href="/maths/partie-v/series">chapitre 19</Prereq>), et un corps où l'on multiplie des couples de réels, $\mathbb{C}$ (<Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>). Il suffit de les faire se rencontrer.
+
+<Encart type="intuition" titre="Une seule série, deux visages">
+Le nombre $e$ mesurait une croissance continue. Mais la série $\sum z^n/n!$ a un sens pour *n'importe quel* nombre complexe $z$ : les factorielles au dénominateur écrasent les puissances, si grand soit $|z|$. Sur l'axe réel, elle *grandit* — c'est l'exponentielle du lycée. Sur l'axe imaginaire, où multiplier par $i$ est un quart de tour, elle *tourne*. Même formule, deux visages : la croissance et la rotation. Et $\pi$, que nous n'avons jamais défini, va surgir du second.
+</Encart>
+
+Posons la définition, valable sur $\mathbb{C}$ tout entier.
+
+$$ \exp(z) := \sum_{n=0}^{\infty} \frac{z^n}{n!} \quad (z \in \mathbb{C}). $$
+
+<Badge niveau="admis">Définition : nous choisissons cette série comme point de départ. Reste à prouver qu'elle a un sens.</Badge>
+
+<Encart type="calcul" titre="La série converge absolument, pour tout $z$">
+**Étape 1 — ce qu'il faut montrer.** Une série de termes complexes converge dès que la série des modules converge (<Prereq href="/maths/partie-v/series">convergence absolue</Prereq> : parties réelle et imaginaire sont alors deux séries réelles dominées par $|w_n|$, donc convergentes). Il suffit de majorer $\sum |z^n/n!| = \sum |z|^n/n!$, à termes réels positifs.
+
+**Étape 2 — un rang à partir duquel les termes fondent.** Si $z=0$, tout est trivial. Sinon, comme $\mathbb{N}$ n'est pas majoré dans $\mathbb{R}$, fixons un entier $N \ge 2|z|$ et posons $a_n := |z|^n/n!$. Pour $n \ge N$ :
+
+$$ \frac{a_{n+1}}{a_n} = \frac{|z|}{n+1} \le \frac{|z|}{N+1} \lt \frac{|z|}{2|z|} = \frac12. $$
+
+**Étape 3 — domination géométrique.** Par récurrence à partir de $N$, on a $a_n \le a_N\,(1/2)^{n-N}$ pour $n \ge N$. La somme des $a_n$ au-delà de $N$ est donc majorée par $a_N \sum_{j\ge 0}2^{-j} = 2a_N$ (<Prereq href="/maths/partie-v/series">série géométrique</Prereq>). Les sommes partielles de $\sum a_n$, croissantes et majorées, convergent.
+
+$$ \boxed{\sum_{n\ge 0} \frac{|z|^n}{n!} \text{ converge}\ \Rightarrow\ \exp(z) \text{ est bien défini pour tout } z\in\mathbb{C}.} $$
+
+</Encart>
+
+<Badge niveau="demontre">Convergence absolue partout, établie ligne à ligne.</Badge>
+
+Deux valeurs immédiates : $\exp(0)=1$ (seul le terme $n=0$ survit) et $\exp(1)=\sum 1/n! = e$. L'exponentielle *prolonge* $e$.
+
+## L'équation fonctionnelle
+
+Toute la théorie tient sur une identité : $\exp(a+b)=\exp(a)\exp(b)$. Pour la prouver, multiplions les deux séries (produit de Cauchy) et reconnaissons le binôme — qui n'a pas encore été démontré dans ce cours.
+
+<Encart type="rappel" titre="Le binôme de Newton, par récurrence">
+**Énoncé.** Pour $a,b$ dans un anneau commutatif et $n\in\mathbb{N}$, $(a+b)^n = \sum_{k=0}^n \binom{n}{k}a^k b^{n-k}$, avec $\binom{n}{k}=\frac{n!}{k!(n-k)!}$.
+
+**Rang 0.** $(a+b)^0 = 1 = \binom00 a^0 b^0$.
+
+**Hérédité.** L'identité de Pascal, par mise au même dénominateur, donne $\binom{n}{k-1}+\binom{n}{k} = \frac{n!\,(k + n-k+1)}{k!(n-k+1)!} = \binom{n+1}{k}$. Supposons la formule au rang $n$ ; alors
+
+$$ (a+b)^{n+1} = (a+b)\sum_{k=0}^n \binom{n}{k}a^k b^{n-k} = \sum_{k=0}^n \binom{n}{k}a^{k+1}b^{n-k} + \sum_{k=0}^n \binom{n}{k}a^{k}b^{n+1-k}. $$
+
+En réindexant la première somme ($j=k+1$) et en regroupant le coefficient de $a^j b^{n+1-j}$, on trouve $\binom{n}{j-1}+\binom{n}{j}=\binom{n+1}{j}$ pour $1\le j\le n$, et $1$ aux bords : d'où $(a+b)^{n+1} = \sum_{j=0}^{n+1}\binom{n+1}{j}a^j b^{n+1-j}$.
+</Encart>
+
+<Badge niveau="demontre">Binôme prouvé par récurrence — nous pouvons l'utiliser.</Badge>
+
+<Resultat label="Équation fonctionnelle de l'exponentielle">
+
+$$ \exp(a+b) = \exp(a)\exp(b) \quad (a,b\in\mathbb{C}). $$
+
+<Badge niveau="demontre" slot="badge">Par produit de Cauchy de deux séries absolument convergentes, puis binôme de Newton.</Badge>
+
+</Resultat>
+
+<Encart type="calcul" titre="Le produit de Cauchy fait apparaître le binôme">
+**Étape 1 — le produit de deux séries.** Les séries $\sum a^k/k!$ et $\sum b^k/k!$ convergent absolument. Le *théorème de Mertens* (esquissé ci-dessous) affirme que le produit de leurs sommes est la somme de la série de terme général $c_n := \sum_{k=0}^n \frac{a^k}{k!}\cdot\frac{b^{n-k}}{(n-k)!}$. Ainsi $\exp(a)\exp(b) = \sum_{n\ge 0} c_n$.
+
+**Étape 2 — calcul de $c_n$.** Multiplions et divisons par $n!$ :
+
+$$ c_n = \frac{1}{n!}\sum_{k=0}^n \frac{n!}{k!(n-k)!}\,a^k b^{n-k} = \frac{1}{n!}\sum_{k=0}^n \binom{n}{k}a^k b^{n-k} = \frac{(a+b)^n}{n!}, $$
+
+la dernière égalité étant le binôme de Newton.
+
+**Étape 3 — conclusion.** Donc $\exp(a)\exp(b) = \sum_{n\ge 0} \frac{(a+b)^n}{n!} = \exp(a+b)$.
+
+$$ \boxed{\exp(a+b) = \exp(a)\exp(b).} $$
+
+</Encart>
+
+<Encart type="plusloin" titre="Le théorème de Mertens : esquisse honnête">
+**Énoncé.** Si $\sum a_k$ et $\sum b_j$ convergent absolument, de sommes $A,B$, alors le produit de Cauchy $c_n=\sum_{k=0}^n a_k b_{n-k}$ vérifie $\sum c_n = AB$. **Idée.** Notons $C_N=\sum_{n=0}^N c_n = \sum_{k+j\le N}a_k b_j$ et comparons au produit des sommes partielles $A_N B_N=\sum_{k,j\le N}a_k b_j$. Leur différence ne porte que sur les couples avec $k,j\le N$ mais $k+j\gt N$ — pour lesquels $k\gt N/2$ ou $j\gt N/2$. D'où
+
+$$ |A_N B_N - C_N| \le \Big(\sum_{k\gt N/2}|a_k|\Big)\sum_j|b_j| + \sum_k|a_k|\Big(\sum_{j\gt N/2}|b_j|\Big). $$
+
+Les sommes complètes sont finies (convergence absolue), et les *queues* $\sum_{k\gt N/2}|a_k|$ tendent vers $0$. Donc $C_N - A_N B_N \to 0$ ; comme $A_N B_N\to AB$, on a $C_N\to AB$. Le cœur technique est cette majoration de la queue : nous la donnons, les vérifications d'indices sont routinières. <Badge niveau="demontre">Théorème classique, démontré ; assemblage complet donné, détails d'indices signalés comme routiniers.</Badge>
+</Encart>
+
+Deux corollaires tombent en une ligne. D'abord $\exp(z)\exp(-z)=\exp(z-z)=\exp(0)=1$ : **l'exponentielle ne s'annule jamais**, et $\exp(-z)=1/\exp(z)$. <Badge niveau="demontre">$\exp(z)\neq 0$ pour tout $z$.</Badge> Ensuite, pour $x$ réel : si $x\ge 0$, alors $\exp(x)=1+x+\cdots\ge 1\gt 0$ (termes positifs) ; si $x\lt 0$, alors $\exp(x)=1/\exp(-x)\gt 0$. Donc **$\exp(x)\gt 0$ sur $\mathbb{R}$**. <Badge niveau="demontre">Positivité stricte sur l'axe réel.</Badge>
+
+## Sur $\mathbb{R}$ : continuité, dérivée, bijection
+
+Voici le point de rigueur du chapitre : **aucune dérivation terme à terme**. Tout découle de deux majorations explicites du reste (valables même pour un argument complexe, ce qui resservira).
+
+<Encart type="calcul" titre="Deux majorations, tout en découle">
+**Continuité en $0$.** Pour tout $h$ (réel ou complexe),
+
+$$ |\exp(h)-1| = \Big|\sum_{n\ge 1}\frac{h^n}{n!}\Big| \le \sum_{n\ge 1}\frac{|h|^n}{n!} = |h|\sum_{n\ge 1}\frac{|h|^{n-1}}{n!} \le |h|\sum_{n\ge 1}\frac{|h|^{n-1}}{(n-1)!} = |h|\exp(|h|), $$
+
+car $n!\ge (n-1)!$. Quand $h\to 0$, $|h|\exp(|h|)\to 0$, donc $\exp(h)\to 1=\exp(0)$.
+
+**Continuité partout.** Par l'équation fonctionnelle, $\exp(x+h)-\exp(x)=\exp(x)\big(\exp(h)-1\big)\to 0$. Donc $\exp$ est continue en tout $x$.
+
+**Dérivabilité.** De même, en isolant le terme $n=1$,
+
+$$ \Big|\frac{\exp(h)-1}{h}-1\Big| = \Big|\sum_{n\ge 2}\frac{h^{n-1}}{n!}\Big| \le \sum_{n\ge 2}\frac{|h|^{n-1}}{n!} \le |h|\sum_{n\ge 2}\frac{|h|^{n-2}}{(n-2)!} = |h|\exp(|h|)\to 0, $$
+
+donc $\frac{\exp(h)-1}{h}\to 1$. Alors $\frac{\exp(x+h)-\exp(x)}{h}=\exp(x)\cdot\frac{\exp(h)-1}{h}\to\exp(x)$.
+
+$$ \boxed{\exp' = \exp.} $$
+
+</Encart>
+
+<Badge niveau="demontre">$\exp'=\exp$, sans jamais dériver la série terme à terme.</Badge>
+
+Puisque $\exp\gt 0$, on a $\exp'\gt 0$ : $\exp$ est **strictement croissante** (<Prereq href="/maths/partie-v/derivation">$f'\gt 0 \Rightarrow f$ croissante</Prereq>). De la série, $\exp(x)\ge 1+x$ pour $x\ge 0$, donc $\exp(x)\to+\infty$ ; et $\exp(x)=1/\exp(-x)\to 0^+$ en $-\infty$. Continue, strictement croissante, de limites $0$ et $+\infty$ : par le <Prereq href="/maths/partie-v/continuite">théorème des valeurs intermédiaires</Prereq>, $\exp$ réalise une **bijection de $\mathbb{R}$ sur $\,]0,+\infty[$**. <Badge niveau="demontre">Injective (stricte croissance), surjective (TVI + limites).</Badge>
+
+<Encart type="plusloin" titre="Le logarithme, réciproque de l'exponentielle">
+On *définit* $\ln := \exp^{-1}\colon\,]0,\infty[\,\to\mathbb{R}$. Ce que nous utilisons : la réciproque d'une bijection continue strictement monotone est continue (théorème de la bijection, <Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq>) ; et si $f$ est dérivable en $a$ avec $f'(a)\ne 0$ et de réciproque continue, alors $f^{-1}$ est dérivable en $f(a)$, de dérivée $1/f'(a)$ (<Prereq href="/maths/partie-v/derivation">chapitre 21</Prereq>). Ici $f=\exp$, $f'=\exp\ne 0$ partout, donc
+
+$$ \ln'(x) = \frac{1}{\exp(\ln x)} = \frac1x. $$
+
+<Badge niveau="demontre">ln construit et dérivé, en citant les théorèmes de bijection et de dérivation de la réciproque.</Badge>
+</Encart>
+
+Gain discret mais décisif : jusqu'ici « puissance » signifiait produit itéré — exposants entiers, au mieux rationnels via les racines. Nous pouvons enfin poser, pour $a\gt 0$ et $x$ réel *quelconque*, $a^x := \exp(x\ln a)$. <Badge niveau="admis">Définition qui étend les puissances rationnelles ; $2^{\sqrt2}$ existe désormais. Pour $x$ entier, l'équation fonctionnelle redonne le produit itéré.</Badge>
+
+## Cosinus et sinus, ou l'exponentielle qui tourne
+
+Tournons-nous vers l'axe imaginaire. Pour $\theta$ réel, définissons
+
+$$ \cos\theta := \sum_{n\ge 0} (-1)^n\frac{\theta^{2n}}{(2n)!}, \qquad \sin\theta := \sum_{n\ge 0} (-1)^n\frac{\theta^{2n+1}}{(2n+1)!}. $$
+
+<Badge niveau="admis">Définitions : deux séries absolument convergentes partout (même majoration géométrique), réelles pour $\theta$ réel.</Badge>
+
+<Encart type="calcul" titre="La « formule d'Euler » est une définition dépliée">
+**Étape 1 — regrouper par paires.** Les sommes partielles de rang impair $\sum_{n=0}^{2N+1}(i\theta)^n/n!$ forment une sous-suite, donc convergent aussi vers $\exp(i\theta)$. Groupons les termes consécutifs deux par deux ; avec $i^{2m}=(-1)^m$ et $i^{2m+1}=i(-1)^m$ :
+
+$$ \sum_{n=0}^{2N+1}\frac{(i\theta)^n}{n!} = \sum_{m=0}^{N}\Big(\frac{(-1)^m\theta^{2m}}{(2m)!} + i\,\frac{(-1)^m\theta^{2m+1}}{(2m+1)!}\Big). $$
+
+**Étape 2 — passer à la limite.** Quand $N\to\infty$, le membre de droite tend vers $\cos\theta + i\sin\theta$.
+
+$$ \boxed{e^{i\theta} = \cos\theta + i\sin\theta.} $$
+
+</Encart>
+
+La formule d'Euler n'est donc pas un théorème profond : c'est notre définition de $\cos$ et $\sin$, réécrite. <Badge niveau="demontre">Identité obtenue par simple regroupement d'une série convergente.</Badge> Le vrai contenu se cache dans $\pi$. Mais d'abord, une conséquence géométrique.
+
+<Encart type="calcul" titre="$e^{i\theta}$ vit sur le cercle unité">
+**Conjuguer la série.** La conjugaison est une isométrie de $\mathbb{C}$, donc continue, et $\overline{(i\theta)^n}=(-i\theta)^n$ pour $\theta$ réel. En conjuguant les sommes partielles puis en passant à la limite : $\overline{e^{i\theta}} = \sum_{n\ge 0}(-i\theta)^n/n! = e^{-i\theta}$.
+
+**Le module.** Par l'équation fonctionnelle,
+
+$$ |e^{i\theta}|^2 = e^{i\theta}\,\overline{e^{i\theta}} = e^{i\theta}e^{-i\theta} = e^{0} = 1. $$
+
+Or $e^{i\theta}=\cos\theta+i\sin\theta$ avec $\cos\theta,\sin\theta$ réels, donc <Prereq href="/maths/partie-ii/complexes">$|e^{i\theta}|^2=\cos^2\theta+\sin^2\theta$</Prereq>.
+
+$$ \boxed{\cos^2\theta + \sin^2\theta = 1.} $$
+
+</Encart>
+
+Ainsi $\theta\mapsto e^{i\theta}$ prend ses valeurs sur le cercle unité. <Badge niveau="demontre">Identité fondamentale, démontrée via conjugaison et équation fonctionnelle.</Badge> Manipulez cette rotation : chaque terme de la série est un quart de tour redimensionné, et leur somme s'enroule vers $e^{i\theta}$.
+
+<MathsExpComplexe />
+
+## La naissance de $\pi$
+
+Nous n'avons jamais défini $\pi$. Le moment est venu — non en mesurant un cercle (nous n'avons pas de géométrie), mais en cherchant *le premier endroit où le cosinus s'annule*.
+
+<Encart type="calcul" titre="$\cos 2 \lt 0$ : encadrement d'une série alternée">
+**Les termes.** Posons $u_n := 2^{2n}/(2n)!$, de sorte que $\cos 2 = \sum_{n\ge 0}(-1)^n u_n$. On calcule $u_0=1$, $u_1=4/2=2$, $u_2=16/24=2/3$.
+
+**Décroissance à partir du rang $1$.** Pour $n\ge 1$, $\frac{u_{n+1}}{u_n}=\frac{4}{(2n+2)(2n+1)}\le\frac{4}{4\cdot 3}=\frac13\le 1$ : la suite $(u_n)_{n\ge 1}$ décroît, et tend vers $0$ (convergence absolue).
+
+**L'encadrement.** Isolons les trois premiers termes :
+
+$$ \cos 2 = \big(1 - 2 + \tfrac23\big) - \big(u_3 - u_4 + u_5 - u_6 + \cdots\big) = -\tfrac13 - B. $$
+
+La série $B := u_3 - u_4 + u_5 - \cdots$ a ses termes décroissants ; ses sommes partielles paires $(u_3-u_4)+(u_5-u_6)+\cdots$ forment une sous-suite convergente à paquets $\ge 0$, donc $B\ge 0$. D'où
+
+$$ \boxed{\cos 2 = -\tfrac13 - B \le -\tfrac13 \lt 0.} $$
+
+</Encart>
+
+Le cosinus est continu (combinaison de $e^{i\theta}$ et $e^{-i\theta}$, continues par la majoration de la section 3, valable pour l'argument complexe). Comme $\cos 0=1\gt 0$ et $\cos 2\lt 0$, le <Prereq href="/maths/partie-v/continuite">théorème des valeurs intermédiaires</Prereq> livre un zéro dans $]0,2[$. <Badge niveau="demontre">cos s'annule strictement entre $0$ et $2$.</Badge>
+
+<Encart type="plusloin" titre="Le plus petit zéro positif existe">
+Soit $Z := \{x\gt 0 : \cos x = 0\}$, non vide (ci-dessus) et minoré par $0$. Il possède une borne inférieure $m\ge 0$. Toute borne inférieure est limite d'éléments de l'ensemble : pour chaque $k$, $m+1/k$ n'est pas un minorant, donc il existe $x_k\in Z$ avec $m\le x_k\lt m+1/k$, d'où $x_k\to m$. Par continuité, $\cos m = \lim\cos x_k = 0$. Comme $\cos 0=1\ne 0$, nécessairement $m\gt 0$. Donc $m\in Z$ : c'est le **plus petit zéro positif** de $\cos$. <Badge niveau="demontre">Existence du plus petit zéro : borne inférieure + fermeture par continuité.</Badge>
+</Encart>
+
+Nous posons alors la définition qui fonde toute la trigonométrie :
+
+$$ \pi := 2m, \quad \text{où } m \text{ est le plus petit zéro positif de } \cos. $$
+
+<Badge niveau="admis">Baptême : nous nommons $\pi$ ce nombre. Son existence, elle, est démontrée.</Badge> Autrement dit $\pi/2$ est, *par définition*, le premier zéro de $\cos$ : $\cos(\pi/2)=0$. Les mêmes séries, poussées assez loin avec contrôle du reste, donnent $\pi\approx 3{,}14159$. <Badge niveau="demontre">Valeur approchée calculable par les séries alternées.</Badge> Insistons : ici le cercle vient *après* $\pi$. Le lycée pose $\pi$ par le cercle, puis en déduit $\cos$ ; nous faisons l'inverse. Rien n'est importé.
+
+Reste à fixer $\sin(\pi/2)$. De $\cos^2+\sin^2=1$ et $\cos(\pi/2)=0$ vient $\sin^2(\pi/2)=1$, donc $\sin(\pi/2)=\pm 1$. Le signe :
+
+<Encart type="plusloin" titre="$\sin(\pi/2)=+1$ : le signe, proprement">
+Nous dérivons $e^{i\theta}$ par la majoration de la section 3, non terme à terme : puisque $(e^{ih}-1)/(ih)\to 1$, on a $(e^{ih}-1)/h\to i$, d'où $\frac{d}{d\theta}e^{i\theta}=i\,e^{i\theta}=-\sin\theta+i\cos\theta$. En séparant parties réelle et imaginaire : $\sin'=\cos$ et $\cos'=-\sin$. Sur $[0,\pi/2[$, $\cos\gt 0$ : sinon $\cos$ y prendrait une valeur négative et, continue avec $\cos 0=1\gt 0$, s'annulerait par le TVI *avant* $\pi/2$ — contredisant la minimalité. Donc $\sin'=\cos\gt 0$ sur $[0,\pi/2[$ : $\sin$ y est strictement croissante (<Prereq href="/maths/partie-v/derivation">chapitre 21</Prereq>). Comme $\sin 0=0$, on a $\sin(\pi/2)\gt 0$, donc $\sin(\pi/2)=+1$. <Badge niveau="demontre">Signe déterminé via $\sin'=\cos\gt 0$ sur $[0,\pi/2[$.</Badge>
+</Encart>
+
+## $e^{i\pi} + 1 = 0$
+
+Tout est en place. Évaluons $e^{i\theta}$ en $\theta=\pi/2$ :
+
+$$ e^{i\pi/2} = \cos(\pi/2) + i\sin(\pi/2) = 0 + i\cdot 1 = i. $$
+
+Puis, par l'équation fonctionnelle et $i^2=-1$ (<Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>) :
+
+$$ e^{i\pi} = e^{i(\pi/2 + \pi/2)} = \big(e^{i\pi/2}\big)^2 = i^2 = -1. $$
+
+<Resultat label="L'identité d'Euler">
+
+$$ e^{i\pi} + 1 = 0. $$
+
+<Badge niveau="demontre" slot="badge">Chaîne complète : série, équation fonctionnelle, $\pi$ défini comme zéro de $\cos$, $\sin(\pi/2)=1$, $i^2=-1$.</Badge>
+
+</Resultat>
+
+<VideoManim src="maths-euler-identite" scene="EulerIdentite" titre="e^iπ + 1 = 0" legende="Les sommes partielles de exp(iπ) spiralent vers −1 : la plus célèbre formule des mathématiques, démontrée terme à terme." />
+
+Arrêtez-vous. Cinq constantes se donnent rendez-vous : $0$, né comme l'ensemble vide $\varnothing$ ; $1$, son successeur $\{\varnothing\}$ ; $i$, le couple de réels $(0,1)$ ; $e$, la somme d'une série ; $\pi$, le premier zéro d'un cosinus. Cinq objets surgis de cinq régions de l'édifice — les ensembles, l'arithmétique, les complexes, l'analyse — réunis par une seule identité, non pas décrétée mais *démontrée* ligne à ligne. La série de la partie V a rencontré le couple de la partie II.
+
+<Encart type="plusloin" titre="La dette géométrique du chapitre 9, soldée">
+Le chapitre sur $\mathbb{C}$ *anticipait* la géométrie du cercle (arguments, rotations) sans la fonder. Elle l'est désormais. L'application $\theta\mapsto e^{i\theta}$ envoie $\mathbb{R}$ sur le cercle unité, et cette paramétrisation est **périodique de période $2\pi$** : $e^{2i\pi}=(e^{i\pi})^2=(-1)^2=1$, donc $e^{i(\theta+2\pi)}=e^{i\theta}e^{2i\pi}=e^{i\theta}$. Que ce paramétrage recouvre *tout* le cercle exactement une fois par tour demande encore un argument (surjectivité et injectivité sur $[0,2\pi[$), esquissé mais entièrement fondé sur ce chapitre ; longueur d'arc, aire et angles s'en déduisent. Enfin, $e$ et $\pi$ sont *transcendants* (<Prereq href="/maths/partie-iii/diagonale-cantor">chapitre 12</Prereq>) — racines d'aucun polynôme entier. <Badge niveau="demontre">Transcendance de $e$ (Hermite) et $\pi$ (Lindemann) : théorèmes cités, preuves hors cours.</Badge>
+</Encart>
+
+Ainsi s'achève la partie V : depuis les seuls axiomes de ZF, sans jamais ajouter d'hypothèse, nous avons bâti suites, séries, continuité, dérivée, intégrale, et fait converger le tout vers cette identité. L'édifice est immense — et pourtant une question demeure : que *ne peut-il pas* faire ? Après avoir tant construit, la partie VI en mesure les limites, là où Gödel et l'axiome du choix nous attendent.

@@ -1,0 +1,103 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Le front ouvert : les grandes conjectures"
+chapter: grandes-conjectures
+description: "Ce qu est une conjecture (≠ indécidable !) ; Riemann, Goldbach, jumeaux, Collatz, P vs NP présentées honnêtement ; les tombées : Fermat–Wiles, Poincaré–Perelman, 4 couleurs (et la question de la preuve par ordinateur) ; les réfutées : Euler, Mertens — « vérifié loin » ne prouve rien."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le chapitre du badge jaune
+
+Depuis le premier axiome, ce cours a peint l'écrasante majorité de ses énoncés de deux couleurs : le vert du **démontré** et le bleu de l'**admis** (nos axiomes ZF, jamais augmentés — sauf l'axiome du choix, signalé). Le rouge de l'**indécidable** n'a fait qu'une apparition, emblématique, avec l'hypothèse du continu. Quant au **jaune** — le **conjecturé** —, il n'a jusqu'ici affleuré qu'au détour de quelques pages : la cohérence de ZF, puis Goldbach et les jumeaux glissés parmi les théorèmes de l'arithmétique. Voici enfin le chapitre qui lui appartient tout entier. Aucune hypothèse nouvelle n'est ajoutée ici — nous visitons la frontière de ce que la déduction n'a pas *encore* atteint.
+
+D'abord une distinction que ce site place au cœur de sa promesse : **conjecturé n'est pas indécidable**. Un énoncé <Prereq href="/maths/partie-iii/hypothese-continu">indécidable</Prereq> est *démontré* hors d'atteinte : on sait, théorème à l'appui, qu'aucune preuve ni réfutation n'existe dans le cadre. Un énoncé **conjecturé** est simplement *cru vrai sans preuve* : personne n'a tranché — mais quelqu'un le pourrait demain. Goldbach tombera peut-être avant la fin de votre lecture ; l'hypothèse du continu, elle, ne sera **jamais** démontrée dans ZFC. <Prereq href="/maths/methodologie">Le jaune et le rouge ne sont pas des nuances d'incertitude</Prereq> : ce sont deux statuts logiques distincts.
+
+<Encart type="plusloin" titre="Vertige : si Goldbach était indécidable, elle serait vraie">
+
+Supposons — hypothèse d'école — que la conjecture de Goldbach soit un jour prouvée *indécidable* dans l'arithmétique de Peano (PA). On peut alors en déduire qu'elle est **vraie**. L'argument est court et saisissant.
+
+La *négation* de Goldbach affirme : « il existe un entier pair $n \geq 4$ qui n'est somme d'aucun couple de premiers ». C'est un énoncé dit **$\Sigma_1$** : une simple **existence**, dont le témoin — le nombre fautif $n$ — se **vérifie en temps fini** (on teste les décompositions $n = p+q$ avec $p,q \leq n$, en nombre fini). Or PA jouit d'une propriété remarquable, la **$\Sigma_1$-complétude** : *tout énoncé $\Sigma_1$ vrai y est démontrable*, car PA sait certifier n'importe quel calcul fini.
+
+Or « indécidable » signifie en particulier que PA ne démontre **pas** cette négation. Par contraposée de la $\Sigma_1$-complétude, la négation n'est donc **pas vraie** : aucun contre-exemple n'existe. Autrement dit, Goldbach est vraie. <Badge niveau="demontre">Théorème conditionnel rigoureux, ne supposant que la $\Sigma_1$-complétude de PA (résultat standard). Un énoncé « à contre-exemple vérifiable » ne peut être *indépendant et faux* — une asymétrie que <Prereq href="/maths/partie-vi/godel">Gödel</Prereq> éclaire.</Badge>
+
+</Encart>
+
+## Riemann : la reine des conjectures
+
+Une fonction règne sur l'arithmétique. Pour un réel $s > 1$, posons la **fonction zêta** :
+
+$$\zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^s} = 1 + \frac{1}{2^s} + \frac{1}{3^s} + \cdots$$
+
+Cette <Prereq href="/maths/partie-v/series">série converge</Prereq> pour $s>1$ (ses sommes partielles sont majorées, par comparaison). Rien d'exotique — jusqu'à ce qu'Euler y voie un lien stupéfiant avec les premiers :
+
+$$\zeta(s) = \prod_{p \text{ premier}} \frac{1}{1 - p^{-s}}.$$
+
+<Badge niveau="demontre">Identité d'Euler, vraie pour $s>1$ ; nous en donnons l'intuition et une vérification heuristique, non la preuve complète.</Badge> L'intuition est limpide : chaque facteur $\frac{1}{1-p^{-s}} = 1 + p^{-s} + p^{-2s} + \cdots$ énumère les puissances du premier $p$ ; en développant le produit, chaque entier $n$ surgit **une seule fois**, précisément parce qu'il se <Prereq href="/maths/partie-iv/arithmetique">factorise de manière unique</Prereq>. La série $\zeta$ « contient » toute l'information sur les premiers.
+
+<Encart type="plusloin" titre="Vérification heuristique du produit d'Euler">
+
+Développez chaque facteur en série géométrique, $\frac{1}{1-p^{-s}} = \sum_{k \geq 0} p^{-ks}$, puis multipliez formellement sur tous les premiers. Un terme du produit développé choisit un exposant $k_p$ pour chaque premier (presque tous nuls) et vaut $\prod_p p^{-k_p s} = n^{-s}$, où $n = \prod_p p^{k_p}$. La factorisation unique dit que chaque $n \geq 1$ s'obtient ainsi **exactement une fois** : on récupère $\sum_n n^{-s} = \zeta(s)$. <Badge niveau="demontre">Heuristique : la preuve rigoureuse justifie l'interversion produit infini–somme infinie (convergence absolue pour $s>1$), que nous ne détaillons pas.</Badge>
+
+</Encart>
+
+Reste le saut que ce cours ne franchira pas. On peut **prolonger** $\zeta$ à presque tout le plan complexe — non par notre série (qui diverge pour $\mathrm{Re}(s) \leq 1$), mais par un procédé d'extension analytique que nous *décrivons sans le construire* : il existe une unique fonction *analytique* sur $\mathbb{C} \setminus \{1\}$ coïncidant avec $\zeta$ pour $s>1$. Elle possède des **zéros** : les « triviaux » aux entiers pairs négatifs $-2, -4, -6, \ldots$, et les « non triviaux », tous logés dans la bande $0 < \mathrm{Re}(s) < 1$. Riemann conjectura en 1859 :
+
+<Resultat label="Hypothèse de Riemann (1859)">
+
+$$\text{Tous les zéros non triviaux de } \zeta \text{ vérifient } \mathrm{Re}(s) = \tfrac{1}{2}.$$
+
+<Badge niveau="conjecture" slot="badge">Vérifiée pour les premiers milliers de milliards de zéros — et non démontrée. C'est tout le sujet : aucune quantité de vérifications ne fait une preuve.</Badge>
+
+</Resultat>
+
+Pourquoi « la reine » ? Parce que la position de ces zéros contrôle la régularité de la répartition des premiers : l'hypothèse équivaut à la meilleure borne d'erreur possible dans le <Prereq href="/maths/partie-iv/arithmetique">théorème des nombres premiers</Prereq>. Des centaines d'énoncés commencent par « si l'hypothèse de Riemann est vraie… ». L'Institut Clay l'a inscrite parmi ses sept **problèmes du millénaire**, dotés d'un million de dollars chacun. Le chèque attend toujours.
+
+## La galerie ouverte
+
+**Goldbach.** Tout entier pair $\geq 4$ est somme de deux premiers ($4 = 2+2$, $100 = 3+97$…). Vérifiée jusqu'à $4 \times 10^{18}$. <Badge niveau="conjecture">Aucune preuve connue. Vérifié n'est pas démontré : le refrain de ce chapitre.</Badge>
+
+**Les premiers jumeaux.** Existe-t-il une **infinité** de premiers $p$ tels que $p+2$ le soit aussi ($11$ et $13$, $17$ et $19$…) ? <Badge niveau="conjecture">Conjecture ouverte, pour l'écart exactement $2$.</Badge> Mais une percée récente mérite deux badges côte à côte : là où l'écart $2$ résiste, un écart *borné* est tombé. <Badge niveau="demontre">Théorème (Zhang, 2013) : une infinité de couples de premiers séparés d'au plus $70\,000\,000$ — borne ramenée à $246$ par Maynard et le projet Polymath (2014). Fondé sur l'<Prereq href="/maths/partie-iv/arithmetique">infinité des premiers</Prereq>.</Badge> Deux énoncés voisins, deux statuts opposés : l'esprit même du site.
+
+**Collatz ($3n+1$).** Prenez un entier ; s'il est pair, divisez par $2$ ; s'il est impair, faites $3n+1$ ; recommencez. La conjecture : on retombe toujours sur $1$. Depuis $27$ : $27 \to 82 \to 41 \to 124 \to 62 \to 31 \to \cdots$ — la suite grimpe jusqu'à $9232$ avant de s'effondrer sur $1$ au bout de $111$ pas. Trois lignes d'énoncé, jouable à la main, et pourtant totalement hors de portée. Erdős, offrant une prime pour une preuve, tranchait : « les mathématiques ne sont pas prêtes pour de tels problèmes. » <Badge niveau="conjecture">Vérifiée très loin ; aucune démonstration, ni même de stratégie crédible.</Badge>
+
+**P contre NP.** Distinguez deux gestes : **vérifier** une solution, et la **trouver**. Devant une grille de Sudoku remplie, vérifier qu'elle est correcte est immédiat ; la *résoudre* de zéro peut demander une fouille gigantesque. De même, multiplier deux grands premiers est instantané, mais **factoriser** leur produit semble hors de portée — c'est sur cet écart que repose la cryptographie protégeant vos paiements. La classe **NP** rassemble les problèmes dont une solution se *vérifie* vite ; **P**, ceux qu'on sait *résoudre* vite. La question, encore à un million de dollars : **P = NP** ? <Badge niveau="conjecture">La communauté croit majoritairement $P \neq NP$ — mais c'est un *pari sociologique* (un sondage d'experts), pas un demi-théorème : ni preuve, ni la moindre borne inférieure à la hauteur du problème.</Badge>
+
+## Les tombées : quand le jaune vire au vert
+
+Le jaune a ceci d'exaltant qu'il peut devenir vert — une conjecture est un théorème qui s'ignore.
+
+**Le dernier théorème de Fermat.** Aucun triplet d'entiers strictement positifs ne vérifie $x^n + y^n = z^n$ pour $n \geq 3$. Griffonné en marge vers 1637, resté ouvert **358 ans**. <Badge niveau="demontre">Théorème (Wiles, 1994). Sa preuve, plus de cent pages via les *courbes elliptiques* et le théorème de modularité, dépasse de très loin ce cours : nous la citons sans la donner — l'honnêteté habituelle.</Badge>
+
+**La conjecture de Poincaré.** À ce jour, le **seul** des sept problèmes du millénaire résolu. Grigori Perelman a d'ailleurs refusé et la médaille Fields et le million de dollars — une ligne d'humanité dans une histoire d'équations. <Badge niveau="demontre">Théorème (Perelman, vers 2003), après vérification par la communauté.</Badge>
+
+**Le théorème des quatre couleurs.** Toute carte du plan se colorie avec quatre couleurs sans que deux régions voisines partagent la leur. <Badge niveau="demontre">Théorème (Appel–Haken, 1976) : la première grande preuve par ordinateur, depuis reformalisée et vérifiée par assistant de preuve.</Badge>
+
+<Encart type="plusloin" titre="Une machine peut-elle démontrer ? Le cas des quatre couleurs">
+
+La preuve d'Appel et Haken ramène l'infinité des cartes à un ensemble fini de $1\,936$ configurations « inévitables », puis vérifie **par ordinateur** que chacune est colorable — des mois de calcul, impossibles à relire à la main. D'où un séisme épistémologique, en écho direct à notre tout premier chapitre : <Prereq href="/maths/partie-i/methode-axiomatique">qu'est-ce qu'une démonstration ?</Prereq> Une suite finie de pas justifiés, disions-nous — mais un pas que nul humain ne peut vérifier en est-il un ? Le débat fit rage. Sa résolution est belle : en 2005, Georges Gonthier a entièrement **formalisé** la preuve dans l'assistant Coq, réduisant la confiance requise à celle d'un noyau logique minuscule, lui-même relu. Le doute ne portait plus sur des milliers de cas, mais sur quelques centaines de lignes de fondement. La preuve par machine est ainsi devenue *plus* sûre qu'une preuve humaine — la confiance a changé de nature, pas de camp.
+
+</Encart>
+
+## Les réfutées : le frisson nécessaire
+
+Le jaune peut aussi virer au **noir**. Certaines conjectures, vérifiées effroyablement loin, se sont révélées **fausses** — la leçon la plus importante du chapitre.
+
+**La conjecture d'Euler (sommes de puissances).** Euler pensait qu'il faut au moins quatre puissances quatrièmes pour en sommer une autre : $a^4 + b^4 + c^4 = d^4$ serait impossible. Faux. En 1988, Noam Elkies exhiba :
+
+$$2682440^4 + 15365639^4 + 18796760^4 = 20615673^4.$$
+
+<Badge niveau="demontre">Réfutation par contre-exemple explicite (Elkies, 1988) ; Roger Frye trouva la même année le plus petit, $95800^4 + 217519^4 + 414560^4 = 422481^4$. Deux siècles de crédit, anéantis par une égalité.</Badge>
+
+**La conjecture de Mertens.** Elle affirmait une borne $|M(x)| < \sqrt{x}$ sur une certaine somme arithmétique, vérifiée jusqu'à des seuils astronomiques. <Badge niveau="demontre">Réfutation *non constructive* (Odlyzko–te Riele, 1985) : leur preuve établit qu'un contre-exemple **existe** sans en exhiber **aucun**. On sait la conjecture fausse, on ne connaît toujours aucune valeur qui la mette en défaut — le trouble à son comble.</Badge>
+
+**Pólya, et pire encore.** La conjecture de Pólya, vérifiée jusqu'à près d'un milliard, tombe à $n = 906\,150\,257$. Plus vertigineux : on a longtemps observé $\pi(x) < \mathrm{Li}(x)$ pour tout $x$ calculable — mais Littlewood a **démontré** en 1914 que l'inégalité s'inverse une infinité de fois. Skewes en donna d'abord une borne supérieure proprement délirante — le **nombre de Skewes**, de l'ordre de $10^{10^{10^{34}}}$ ; on localise aujourd'hui la première inversion aux environs de $10^{316}$, ce qui reste hors d'atteinte de tout ordinateur concevable. <Badge niveau="demontre">L'inversion est un théorème (Littlewood, 1914) ; aucun calcul ne l'atteindra jamais.</Badge>
+
+Le refrain, une dernière fois : **aucune quantité de vérifications ne fait une démonstration.** Un milliard, $10^{18}$, $10^{316}$ cas — cela reste zéro preuve. C'est exactement <Prereq href="/maths/methodologie">ce qui sépare les mathématiques des sciences empiriques</Prereq> des cours voisins du hub, où « confirmé par toutes les expériences connues » est le plus haut statut atteignable : ici, ce statut n'existe pas. Une conjecture vérifiée dix mille ans durant resterait jaune. Seule la déduction fait le vert.
+
+Il ne reste qu'à prendre de la hauteur. Le dernier chapitre déplie la **carte complète de l'édifice** : tout ce que nous avons admis, tout ce que nous avons démontré, l'unique rouge indécidable, et ce jaune que l'avenir, peut-être, coloriera de vert.

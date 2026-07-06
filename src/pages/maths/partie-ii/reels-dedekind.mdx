@@ -15,7 +15,7 @@ import DedekindCut from '../../../components/interactive/DedekindCut.astro';
 
 ## Le dernier pas : combler les trous de ℚ
 
-Nous voici au bout d'un long voyage. Parti du vide, nous avons construit $\mathbb{N}$, puis $\mathbb{Z}$ (les paires d'entiers, modulo « même différence »), puis $\mathbb{Q}$ (les fractions, modulo « même rapport »). À chaque étape, une seule règle du jeu : **ne rien admettre**. Tout fut déduit des axiomes <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>, à partir des <Prereq href="/maths/partie-ii/entiers-naturels">entiers naturels</Prereq>.
+Nous voici au bout d'un long voyage. Parti du vide, nous avons construit <Prereq href="/maths/partie-ii/entiers-naturels">$\mathbb{N}$</Prereq>, puis <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$</Prereq> (les paires d'entiers, modulo « même différence »), puis <Prereq href="/maths/partie-ii/rationnels">$\mathbb{Q}$</Prereq> (les fractions, modulo « même rapport »). À chaque étape, une seule règle du jeu : **ne rien admettre**. Tout fut déduit des axiomes <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>.
 
 Et pourtant $\mathbb{Q}$, si dense, si confortable, cache un défaut béant. Ce chapitre le révèle, puis le répare — **toujours sans nouvel axiome**.
 
@@ -31,7 +31,7 @@ L'équation $x^2 = 2$ a une solution géométrique évidente — la diagonale du
 
 Raisonnons **par l'absurde**. Supposons qu'il existe $x \in \mathbb{Q}$ tel que $x^2 = 2$, avec $x > 0$.
 
-**Étape 1.** Tout rationnel positif s'écrit sous forme irréductible $x = \dfrac{p}{q}$ avec $p, q \in \mathbb{N}^*$ et $\gcd(p,q) = 1$. (Existence et unicité de la forme irréductible : conséquence de la division euclidienne dans $\mathbb{Z}$.)
+**Étape 1.** Tout rationnel positif s'écrit sous forme irréductible $x = \dfrac{p}{q}$ avec $p, q \in \mathbb{N}^*$ et $\gcd(p,q) = 1$. (L'existence de la forme irréductible est démontrée au chapitre sur <Prereq href="/maths/partie-ii/rationnels">les rationnels</Prereq>, par bon ordre : on prend le plus petit dénominateur possible.)
 
 **Étape 2.** De $x^2 = 2$ on tire :
 
@@ -197,4 +197,4 @@ $$
 
 <Badge niveau="demontre">La construction de $\mathbb{R}$ par coupures est standard depuis Dedekind (1872) et entièrement formalisée dans ZF.</Badge>
 
-Munis de ce sol ferme, nous pouvons enfin faire de l'analyse : limites, continuité, dérivées — c'est le sujet du prochain chapitre.
+Munis de ce sol ferme, l'analyse — limites, continuité, dérivées — nous attend en partie V. Mais il reste une dernière extension à bâtir : un nombre dont le carré vaut $-1$. Aucun mysticisme là-dedans, seulement des couples de réels — c'est le sujet du prochain chapitre.

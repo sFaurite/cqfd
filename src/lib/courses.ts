@@ -30,7 +30,7 @@ export const COURSES: Course[] = [
     title: 'Les mathématiques depuis les axiomes',
     short: 'Maths',
     blurb:
-      'De la méthode axiomatique aux nombres réels, en construisant tout depuis l’ensemble vide — rien n’est admis sans le dire.',
+      'Des axiomes de ZF à la formule d’Euler : les nombres, les infinis de Cantor, les structures de l’algèbre et l’analyse — tout construit depuis l’ensemble vide, rien n’est admis sans le dire.',
     logo: '∅',
     home: '/maths',
     accent: 'var(--c-purple)',

@@ -1,0 +1,249 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L intégrale de Riemann"
+chapter: integrale
+description: "Sommes de Darboux, intégrabilité ; ∫x dx calculé À LA MAIN par sommes ; Dirichlet non intégrable ; continue ⇒ intégrable (via Heine) ; linéarité, Chasles, positivité ; THÉORÈME FONDAMENTAL DE L ANALYSE démontré."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import MathsSommesRiemann from '../../../components/interactive/MathsSommesRiemann.astro';
+
+## L'aire : la construire, pas la supposer
+
+Quelle est l'aire de la région comprise entre la courbe d'une fonction $f$, l'axe des abscisses et deux verticales ? Pour un rectangle ou un triangle, nous savons répondre ; sous une courbe *quelconque*, le réflexe scolaire — « c'est l'intégrale » — masque une difficulté que l'esprit de ce cours nous interdit d'esquiver : **nous n'avons pas le droit de supposer que cette aire existe.** Il faut la *fabriquer*, ou renoncer.
+
+<Encart type="intuition" titre="L'image à garder en tête : prendre en tenaille">
+Imaginez que vous pavez la région sous la courbe avec de fins rectangles. Vous pouvez les tailler **par en dessous**, chacun s'arrêtant au point le plus bas de la courbe sur sa base : leur aire totale est trop petite, elle *minore* l'aire cherchée. Ou **par au-dessus**, chacun montant jusqu'au point le plus haut : trop grande, elle la *majore*. L'aire véritable, si elle existe, est prise en tenaille entre ces deux estimations. Affinez le pavage : la tenaille se resserre. L'intégrale sera le point où les deux mâchoires se rejoignent — *à condition* qu'elles se rejoignent.
+</Encart>
+
+### 1. Sommes de Darboux et la définition de l'intégrale
+
+Fixons $f : [a,b] \to \mathbb{R}$ **bornée**. Une **subdivision** $\sigma$ de $[a,b]$ est une suite finie $a = x_0 < x_1 < \dots < x_n = b$. Sur chaque morceau $[x_{k-1}, x_k]$, comme $f$ est bornée, l'ensemble $\{f(x) : x \in [x_{k-1},x_k]\}$ est non vide, minoré et majoré : il admet donc une borne inférieure $m_k$ et une borne supérieure $M_k$. Cette existence n'est pas gratuite — c'est exactement la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure de $\mathbb{R}$</Prereq> (dont se déduit, par passage aux opposés, celle de la borne inférieure) qui la garantit.
+
+On forme alors la **somme de Darboux inférieure** et la **somme supérieure** :
+
+$$s(f,\sigma) = \sum_{k=1}^{n} m_k\,(x_k - x_{k-1}), \qquad S(f,\sigma) = \sum_{k=1}^{n} M_k\,(x_k - x_{k-1}).$$
+
+Ce sont les aires des deux pavages de l'intuition. Comme $m_k \le M_k$, on a $s(f,\sigma) \le S(f,\sigma)$ pour toute subdivision. Mais le point crucial est plus fort : **toute** somme inférieure minore **toute** somme supérieure, même issue d'une autre subdivision.
+
+<Encart type="plusloin" titre="Lemme de la tenaille : raffiner resserre l'étau">
+
+**Affiner.** Une subdivision $\sigma'$ **raffine** $\sigma$ si elle contient tous ses points. Ajoutons un point $c$ dans un morceau $[x_{k-1}, x_k]$. Sur les deux sous-morceaux, l'inf de $f$ est $\ge m_k$ (l'inf sur une partie est plus grand que sur le tout), donc $s$ **augmente** ; symétriquement, le sup est $\le M_k$, donc $S$ **diminue**. En ajoutant les points un à un :
+
+$$s(f,\sigma) \ \le\ s(f,\sigma') \qquad\text{et}\qquad S(f,\sigma') \ \le\ S(f,\sigma).$$
+
+**Croisement.** Soient $\sigma_1, \sigma_2$ quelconques et $\sigma^* = \sigma_1 \cup \sigma_2$ leur raffinement commun. Alors
+
+$$s(f,\sigma_1) \ \le\ s(f,\sigma^*) \ \le\ S(f,\sigma^*) \ \le\ S(f,\sigma_2).$$
+
+Donc **toute** somme inférieure est $\le$ **toute** somme supérieure. $\quad\blacksquare$
+</Encart>
+
+<Badge niveau="demontre">Lemme démontré : l'ensemble des sommes inférieures est majoré (par n'importe quelle somme supérieure) et réciproquement.</Badge>
+
+Puisque les sommes inférieures forment un ensemble majoré, elles ont une borne supérieure ; les supérieures, minorées, ont une borne inférieure. On pose l'**intégrale inférieure** $\underline{I} = \sup_\sigma s(f,\sigma)$ et l'**intégrale supérieure** $\overline{I} = \inf_\sigma S(f,\sigma)$. Le lemme donne $\underline{I} \le \overline{I}$ : les mâchoires ne se croisent jamais. Reste à savoir si elles se **touchent**.
+
+<Resultat label="Intégrale de Riemann–Darboux">
+
+$$f \text{ est intégrable} \iff \underline{I} = \overline{I}, \quad\text{et alors}\quad \int_a^b f := \underline{I} = \overline{I}.$$
+
+<Badge niveau="admis" slot="badge">C'est une **définition** : nous décidons d'appeler « aire » cette valeur commune. Rien de faux n'est admis — mais « intégrable » désigne précisément les $f$ pour lesquelles la tenaille se referme. Ce n'est pas un décor : certaines $f$ échouent (§3).</Badge>
+</Resultat>
+
+Manipulez la tenaille : choisissez une fonction, faites croître le nombre de rectangles et regardez l'écart $S - s$ fondre.
+
+<MathsSommesRiemann />
+
+### 2. Le premier calcul, à la main : $\int_0^1 x\,\mathrm{d}x = \tfrac12$
+
+Calculons une intégrale **sans aucune formule toute faite**, directement depuis la définition. La droite $f(x) = x$ sur $[0,1]$ délimite un triangle rectangle de côtés $1$, d'aire attendue $\tfrac12$. Vérifions que les axiomes la produisent.
+
+<Encart type="calcul" titre="Calcul complet : ∫₀¹ x dx = 1/2 par subdivisions régulières">
+
+**Étape 1 — la subdivision.** Découpons $[0,1]$ en $n$ morceaux égaux : $x_k = \dfrac{k}{n}$ pour $k = 0, \dots, n$, chacun de largeur $\dfrac1n$.
+
+**Étape 2 — inf et sup sur chaque morceau.** Sur $[x_{k-1}, x_k]$, la fonction $x \mapsto x$ est croissante : son minimum est atteint à gauche, $m_k = \dfrac{k-1}{n}$, son maximum à droite, $M_k = \dfrac{k}{n}$.
+
+**Étape 3 — les deux sommes.**
+
+$$s(f,\sigma_n) = \sum_{k=1}^{n} \frac{k-1}{n}\cdot\frac1n = \frac{1}{n^2}\sum_{k=1}^{n}(k-1) = \frac{1}{n^2}\sum_{j=0}^{n-1} j, \qquad S(f,\sigma_n) = \frac{1}{n^2}\sum_{k=1}^{n} k.$$
+
+**Étape 4 — la somme des premiers entiers.** On utilise $\displaystyle\sum_{k=1}^{n} k = \frac{n(n+1)}{2}$, démontrée par récurrence au chapitre sur <Prereq href="/maths/partie-ii/arithmetique-de-n">l'arithmétique de $\mathbb{N}$</Prereq> (et donc $\sum_{j=0}^{n-1} j = \frac{(n-1)n}{2}$). D'où
+
+$$s(f,\sigma_n) = \frac{(n-1)n}{2n^2} = \frac{n-1}{2n}, \qquad S(f,\sigma_n) = \frac{n(n+1)}{2n^2} = \frac{n+1}{2n}.$$
+
+**Étape 5 — l'encadrement.** Par définition des bornes, pour tout $n$ :
+
+$$\frac{n-1}{2n} = s(f,\sigma_n) \ \le\ \underline{I} \ \le\ \overline{I} \ \le\ S(f,\sigma_n) = \frac{n+1}{2n}.$$
+
+**Étape 6 — passage à la limite.** Quand $n \to \infty$, $\dfrac{n-1}{2n} \to \dfrac12$ et $\dfrac{n+1}{2n} \to \dfrac12$. Les deux bords convergent vers $\tfrac12$ ; par le théorème des gendarmes, $\underline{I}$ et $\overline{I}$, coincés entre eux, valent tous deux $\tfrac12$. En particulier $\underline{I} = \overline{I}$ : $f$ est intégrable.
+
+<Resultat label="Aire sous y = x">
+
+$$\int_0^1 x\,\mathrm{d}x = \frac12.$$
+
+<Badge niveau="demontre" slot="badge">Démontré depuis la seule définition et $\sum k = \frac{n(n+1)}{2}$. L'aire du triangle n'est pas postulée : elle **sort des axiomes**.</Badge>
+</Resultat>
+</Encart>
+
+### 3. Un contre-exemple : Dirichlet résiste
+
+L'intégrabilité est-elle une condition mordante, ou toute fonction bornée passe-t-elle ? Voici la **fonction de Dirichlet**, indicatrice des rationnels sur $[0,1]$ :
+
+$$D(x) = \begin{cases} 1 & \text{si } x \in \mathbb{Q}, \\ 0 & \text{si } x \notin \mathbb{Q}. \end{cases}$$
+
+<Encart type="calcul" titre="Démonstration : D n'est pas intégrable">
+
+Soit une subdivision $\sigma$ quelconque et un morceau $[x_{k-1}, x_k]$ de largeur **strictement positive**.
+
+**Étape 1 — le sup vaut 1.** Par <Prereq href="/maths/partie-ii/rationnels">densité de $\mathbb{Q}$</Prereq>, l'intervalle ouvert $(x_{k-1}, x_k)$ contient un rationnel $r$, où $D(r) = 1$. Comme $D \le 1$, on a $M_k = \sup D = 1$.
+
+**Étape 2 — l'inf vaut 0.** Le nombre $t = r + \frac{\sqrt2}{m}$ est irrationnel (sinon $t = q \in \mathbb{Q}$ donnerait $\sqrt2 = m(q - r) \in \mathbb{Q}$, absurde) et, pour $m$ assez grand, reste dans $(x_{k-1}, x_k)$ : le morceau contient donc un irrationnel $t$, où $D(t) = 0$. Comme $D \ge 0$, on a $m_k = \inf D = 0$.
+
+**Étape 3 — les sommes ne bougent jamais.** Cela vaut pour *chaque* morceau, donc
+
+$$s(D,\sigma) = \sum_k 0\cdot(x_k - x_{k-1}) = 0, \qquad S(D,\sigma) = \sum_k 1\cdot(x_k - x_{k-1}) = b - a = 1.$$
+
+**Étape 4 — les mâchoires ne se rejoignent pas.** Ainsi $\underline{I} = 0$ et $\overline{I} = 1$, quelle que soit la finesse. L'écart reste bloqué à $1$ : $\underline{I} \ne \overline{I}$.
+
+<Badge niveau="demontre">Démontré via les **deux** densités (rationnels *et* irrationnels). $D$ n'est pas intégrable au sens de Riemann.</Badge>
+</Encart>
+
+Moralité : « intégrable » sépare vraiment le monde en deux. Il nous faut une classe de fonctions dont on soit *sûr* qu'elles passent.
+
+### 4. Le théorème-socle : continue $\Rightarrow$ intégrable
+
+La bonne classe, c'est la continuité — mais la preuve exige une notion plus fine que la continuité ordinaire. Rappelons la continuité (simple) de $f$ sur $I$ :
+
+$$\forall x \in I,\ \forall \varepsilon > 0,\ \exists \delta > 0,\ \forall y \in I,\ |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.$$
+
+Le $\delta$ vient **après** le $\forall x$ : il peut dépendre de $x$. La **continuité uniforme** déplace le $\delta$ **avant** le $\forall x$ — un seul $\delta$ doit marcher partout :
+
+$$\forall \varepsilon > 0,\ \exists \delta > 0,\ \forall x \in I,\ \forall y \in I,\ |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.$$
+
+<Encart type="intuition" titre="La différence en une image : 1/x sur ]0,1]">
+La fonction $x \mapsto \tfrac1x$ est continue sur $]0,1]$, mais **pas uniformément**. Près de $0$, elle plonge si vite que le $\delta$ qui garantit « $f$ varie de moins de $\varepsilon$ » doit rétrécir sans fin. Concrètement, pour $x_n = \tfrac1n$ et $y_n = \tfrac1{n+1}$ : $|x_n - y_n| = \tfrac{1}{n(n+1)} \to 0$, et pourtant $|f(x_n) - f(y_n)| = |n - (n+1)| = 1$ ne tend jamais vers $0$. Aucun $\delta$ unique ne dompte toute la courbe. L'ordre des quantificateurs, encore lui, change tout.
+</Encart>
+
+Sur un segment fermé $[a,b]$, cette pathologie disparaît : c'est le **théorème de Heine**.
+
+<Encart type="plusloin" titre="Théorème de Heine : continue sur [a,b] ⇒ uniformément continue">
+
+**Par l'absurde.** Supposons $f$ continue sur $[a,b]$ mais **pas** uniformément continue. La négation de la définition donne un $\varepsilon > 0$ tel que, pour tout $\delta > 0$, deux points fautifs existent. Prenons $\delta = \tfrac1n$ : on obtient $x_n, y_n \in [a,b]$ avec
+
+$$|x_n - y_n| < \frac1n \qquad\text{et}\qquad |f(x_n) - f(y_n)| \ge \varepsilon.$$
+
+La suite $(x_n)$ vit dans le segment borné $[a,b]$ : par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, elle admet une sous-suite $(x_{\varphi(n)})$ convergeant vers un $\ell \in [a,b]$. Comme $|x_{\varphi(n)} - y_{\varphi(n)}| < \tfrac{1}{\varphi(n)} \to 0$, la sous-suite $(y_{\varphi(n)})$ converge vers le **même** $\ell$. Par continuité de $f$ en $\ell$, $f(x_{\varphi(n)}) \to f(\ell)$ et $f(y_{\varphi(n)}) \to f(\ell)$, donc $|f(x_{\varphi(n)}) - f(y_{\varphi(n)})| \to 0$ — ce qui contredit $\ge \varepsilon$. $\quad\blacksquare$
+
+**Honnêteté.** Fabriquer la suite $(x_n, y_n)$ suppose de *choisir*, pour chaque $n$, un couple témoin : c'est un usage du choix dénombrable $\mathrm{AC}_\omega$, la dette que ce cours assume et soldera au chapitre sur l'axiome du choix.
+</Encart>
+
+<Badge niveau="demontre">Heine démontré par l'absurde via Bolzano–Weierstrass.</Badge>
+
+La preuve du socle en découle presque immédiatement.
+
+<Encart type="calcul" titre="Démonstration : f continue sur [a,b] ⇒ intégrable">
+
+Soit $\varepsilon > 0$. Posons $\varepsilon' = \dfrac{\varepsilon}{b-a}$.
+
+**Étape 1 — uniformité.** Par Heine, $f$ est uniformément continue : il existe $\delta > 0$ tel que $|x-y| < \delta \Rightarrow |f(x)-f(y)| < \varepsilon'$.
+
+**Étape 2 — une subdivision fine.** Choisissons $\sigma$ dont tous les morceaux ont une largeur $< \delta$ (une subdivision régulière avec $n$ assez grand convient).
+
+**Étape 3 — l'oscillation est petite.** Sur chaque $[x_{k-1}, x_k]$, $f$ continue sur un segment **atteint ses bornes** (<Prereq href="/maths/partie-v/continuite">théorème des bornes atteintes</Prereq>) : $M_k = f(\xi_k)$ et $m_k = f(\zeta_k)$ pour certains $\xi_k, \zeta_k$ du morceau. Comme ils sont distants de $< \delta$, l'étape 1 donne $M_k - m_k = f(\xi_k) - f(\zeta_k) < \varepsilon'$.
+
+**Étape 4 — l'écart total.**
+
+$$S(f,\sigma) - s(f,\sigma) = \sum_{k=1}^{n} (M_k - m_k)(x_k - x_{k-1}) \ <\ \varepsilon' \sum_{k=1}^{n}(x_k - x_{k-1}) = \varepsilon'(b-a) = \varepsilon.$$
+
+**Étape 5 — conclusion.** Donc $0 \le \overline{I} - \underline{I} \le S(f,\sigma) - s(f,\sigma) < \varepsilon$, et ce pour **tout** $\varepsilon > 0$. Un nombre positif plus petit que tout $\varepsilon$ est nul : $\overline{I} = \underline{I}$.
+
+<Badge niveau="demontre">Théorème-socle démontré. Toute fonction continue sur $[a,b]$ est intégrable.</Badge>
+</Encart>
+
+### 5. Les propriétés de l'intégrale
+
+Pour toutes fonctions intégrables sur $[a,b]$, la définition livre sans peine (via les sommes de Darboux) :
+
+- **Linéarité** : $\displaystyle\int_a^b (\alpha f + \beta g) = \alpha\!\int_a^b f + \beta\!\int_a^b g$ ;
+- **Relation de Chasles** : pour $a \le c \le b$, $\displaystyle\int_a^b f = \int_a^c f + \int_c^b f$ (une subdivision de $[a,b]$ passant par $c$ scinde chaque somme).
+
+La propriété qui servira au sommet est la **positivité**, que nous détaillons.
+
+<Encart type="calcul" titre="Positivité, croissance, et |∫f| ≤ ∫|f|">
+
+**Positivité.** Si $f \ge 0$ sur $[a,b]$, chaque $m_k = \inf f \ge 0$, donc toute somme inférieure $s(f,\sigma) = \sum m_k(x_k - x_{k-1}) \ge 0$. Ainsi $\int_a^b f = \underline{I} = \sup_\sigma s(f,\sigma) \ge 0$.
+
+**Croissance.** Si $f \le g$, alors $g - f \ge 0$, donc par positivité et linéarité $\int_a^b g - \int_a^b f = \int_a^b (g-f) \ge 0$, soit $\int f \le \int g$.
+
+**Valeur absolue.** De $-|f| \le f \le |f|$, la croissance donne $-\int|f| \le \int f \le \int|f|$, c'est-à-dire
+
+$$\left| \int_a^b f \right| \ \le\ \int_a^b |f|.$$
+
+<Badge niveau="demontre">Démontré. La positivité est le pivot du théorème fondamental.</Badge>
+</Encart>
+
+### 6. Le théorème fondamental de l'analyse
+
+Voici le sommet de toute la partie V. Deux opérations sont nées à deux siècles d'écart et pour des raisons opposées : la **dérivée** mesure une pente (tangentes), l'**intégrale** mesure une aire. Rien ne les prédestinait à se rencontrer. Le théorème fondamental affirme qu'elles sont **réciproques** l'une de l'autre — et ce n'est pas une définition, c'est un fait à démontrer.
+
+<Encart type="intuition" titre="Pourquoi l'aire dérivée redonne la fonction">
+Notez $F(x)$ l'aire accumulée de $a$ jusqu'à $x$. Faites avancer $x$ d'un cheveu $h$ : l'aire gagnée est celle d'une mince tranche verticale, quasiment un rectangle de largeur $h$ et de hauteur $f(x)$. Donc l'aire gagnée par unité de largeur, $\tfrac{F(x+h)-F(x)}{h}$, vaut à peu près $f(x)$. À la limite, exactement $f(x)$ : la **vitesse de croissance de l'aire est la hauteur de la courbe**. Voilà pourquoi $F' = f$.
+</Encart>
+
+<Encart type="calcul" titre="Théorème fondamental : F(x) = ∫ₐˣ f est dérivable, F′ = f">
+
+Soit $f$ **continue** sur $[a,b]$ (donc intégrable, §4) et $F(x) = \displaystyle\int_a^x f$.
+
+**Étape 1 — le taux d'accroissement.** Pour $h \ne 0$ tel que $x + h \in [a,b]$, la relation de Chasles donne
+
+$$\frac{F(x+h) - F(x)}{h} = \frac{1}{h}\int_x^{x+h} f.$$
+
+**Étape 2 — encadrer par les bornes atteintes.** Sur le segment $J_h$ d'extrémités $x$ et $x+h$, $f$ continue **atteint** son minimum $m_h$ et son maximum $M_h$ (<Prereq href="/maths/partie-v/continuite">bornes atteintes</Prereq>). Par croissance de l'intégrale appliquée aux constantes $m_h \le f \le M_h$, le taux ci-dessus est encadré — dans les deux cas $h > 0$ et $h < 0$, le signe de $h$ et celui de l'intégrale se compensent :
+
+$$m_h \ \le\ \frac{F(x+h) - F(x)}{h} \ \le\ M_h.$$
+
+**Étape 3 — les gendarmes.** Quand $h \to 0$, le segment $J_h$ se contracte sur $\{x\}$. La continuité de $f$ en $x$ force $m_h \to f(x)$ et $M_h \to f(x)$ (le min et le max sont atteints en des points qui tendent vers $x$). Le taux, coincé entre deux quantités qui tendent vers $f(x)$, y tend aussi :
+
+$$F'(x) = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} = f(x).$$
+
+<Resultat label="Théorème fondamental de l'analyse">
+
+$$f \text{ continue} \ \Longrightarrow\ F(x) = \int_a^x f \ \text{ est dérivable, et } \ F'(x) = f(x).$$
+
+<Badge niveau="demontre" slot="badge">Démontré : encadrement par bornes atteintes + gendarmes. Intégrer puis dériver **redonne** la fonction.</Badge>
+</Resultat>
+</Encart>
+
+Reste à en tirer l'outil de calcul. Appelons **primitive** de $f$ toute fonction $G$ dérivable telle que $G' = f$ (nous ne nous en étions jamais servis avant de la définir ici).
+
+<Encart type="calcul" titre="Corollaire : ∫ₐᵇ f = G(b) − G(a)">
+
+Soit $G$ une primitive **quelconque** de $f$ continue, et $F(x) = \int_a^x f$.
+
+**Étape 1.** $F' = f$ (théorème ci-dessus) et $G' = f$, donc $(F - G)' = f - f = 0$ sur $[a,b]$.
+
+**Étape 2.** Une fonction de dérivée nulle sur un intervalle est **constante** — corollaire du théorème des <Prereq href="/maths/partie-v/derivation">accroissements finis</Prereq>. Donc $F - G = c$ pour une constante $c$.
+
+**Étape 3.** En $x = a$ : $F(a) = \int_a^a f = 0$, d'où $c = -G(a)$. En $x = b$ : $F(b) = G(b) + c = G(b) - G(a)$. Or $F(b) = \int_a^b f$.
+
+<Resultat label="Formule de Newton–Leibniz">
+
+$$\int_a^b f = G(b) - G(a) \qquad \text{pour toute primitive } G \text{ de } f.$$
+
+<Badge niveau="demontre" slot="badge">Démontré via les accroissements finis. C'est ce qui rend les intégrales *calculables* sans repasser par les sommes.</Badge>
+</Resultat>
+</Encart>
+
+Savourons : dériver et intégrer, séparés par leurs origines, se révèlent inverses l'un de l'autre. Ce n'était écrit nulle part dans les axiomes — c'est un **théorème**, arraché à ZF par la seule déduction.
+
+<Encart type="plusloin" titre="Riemann ne suffit pas à tout : Lebesgue (1902)">
+La fonction de Dirichlet (§3) échappe à Riemann. Pourtant elle « devrait » avoir une intégrale nulle : les rationnels sont si rares (dénombrables) qu'ils n'ont aucune « longueur ». La **théorie de la mesure de Lebesgue** (1902) formalise cette idée et donne $\int_0^1 D = 0$, tout en récupérant l'intégrale de Riemann là où celle-ci existe. C'est la « bonne » théorie pour l'analyse moderne — <Badge niveau="demontre">construite et démontrée, standard</Badge> mais au-delà de ce cours. Retenez seulement : Riemann est un premier étage solide, pas le dernier.
+</Encart>
+
+Nous tenons désormais toute la mécanique de l'analyse : limites, continuité, dérivée, intégrale, et le pont qui les relie. Il ne reste qu'à en récolter les fruits les plus éclatants — définir l'exponentielle et $\cos$, faire surgir $\pi$ du néant, et démontrer la formule que beaucoup tiennent pour la plus belle des mathématiques : $e^{i\pi} + 1 = 0$.

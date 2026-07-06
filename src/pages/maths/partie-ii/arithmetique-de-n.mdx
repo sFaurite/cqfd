@@ -1,0 +1,189 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L arithmétique de ℕ : addition, multiplication, ordre"
+chapter: arithmetique-de-n
+description: "Théorème de récursion (définir par récurrence est légitime) ; + et × définies ; associativité/commutativité démontrées ; 2+2=4 démontré ; ordre total sur ℕ ; BON ORDRE de ℕ démontré ; régularité (a+c = b+c ⇒ a = b)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Qu'est-ce que 2 + 2 ?
+
+Prenons la question au sérieux. Au chapitre précédent, nous avons <Prereq href="/maths/partie-ii/entiers-naturels">construit $\mathbb{N}$</Prereq> : des objets $0, 1, 2, 3, \dots$, une opération de successeur $S$, et le principe de récurrence — démontré, pas admis. Mais nous n'avons **aucune opération de calcul**. Le symbole $+$ ne désigne rien. Avant de démontrer que $2 + 2 = 4$, il faut définir $+$ ; et avant de définir $+$ « de proche en proche », il faut prouver que ce geste-là est légitime. C'est tout le programme de ce chapitre.
+
+<Hypotheses titre="Ce que ce chapitre ajoute">
+1. **Aucune hypothèse nouvelle.** Tout ce qui suit est déduit de ZF, via la construction de $\mathbb{N}$.
+2. Des **définitions** (addition, multiplication, ordre) : elles sont *posées* — badge « admis » — mais leur **légitimité** (l'existence et l'unicité des objets définis) sera **démontrée**.
+</Hypotheses>
+
+## Le théorème de récursion : le droit de définir de proche en proche
+
+<Encart type="intuition" titre="Le domino des valeurs">
+Vous voulez définir une fonction $f$ sur $\mathbb{N}$ en disant : « $f(0)$ vaut $a$, et chaque valeur suivante s'obtient de la précédente en appliquant $h$ ». La valeur en $0$ force la valeur en $1$, qui force la valeur en $2$… comme des dominos. L'intuition crie que $f$ existe et qu'elle est unique. Mais rappelez-vous : pour nous, une fonction est un <Prereq href="/maths/partie-i/relations-fonctions">ensemble de couples</Prereq>. Il faut donc *exhiber* cet ensemble et prouver qu'il fait ce qu'on attend. « Ça se propage, donc ça marche » n'est pas une preuve.
+</Encart>
+
+<Resultat label="Théorème de récursion">
+$$ \forall X,\ \forall a \in X,\ \forall h : X \to X,\quad \exists!\, f : \mathbb{N} \to X \ \text{ telle que }\ f(0) = a \ \text{ et }\ \forall n,\ f(S(n)) = h(f(n)). $$
+<Badge niveau="demontre" slot="badge">Théorème d'existence et d'unicité, démontré dans ZF ; l'esquisse honnête est ci-dessous, l'écriture complète est technique mais sans idée cachée.</Badge>
+</Resultat>
+
+Pourquoi tant de solennité ? Parce que « définir par récurrence » **n'est pas gratuit**. Poser deux équations ne garantit ni qu'une fonction les satisfait, ni qu'une seule le fait. Le théorème de récursion transforme un réflexe en un droit.
+
+<Encart type="plusloin" titre="Esquisse de la preuve (honnête)">
+**Existence.** Appelons *bonne* une relation $R \subseteq \mathbb{N} \times X$ qui contient le couple $(0, a)$ et qui, dès qu'elle contient $(n, x)$, contient aussi $(S(n), h(x))$. Il en existe au moins une : $\mathbb{N} \times X$ tout entier. Posons $f :=$ l'intersection de toutes les bonnes relations. Cette intersection est encore bonne (même argument que pour la minimalité de $\mathbb{N}$). Il reste à prouver que $f$ est **fonctionnelle** : par récurrence sur $n$, chaque $n$ possède une et une seule image — si un $n$ en avait deux, on pourrait retirer un couple de $f$ en restant bon, ce qui contredirait la minimalité de l'intersection.
+
+**Unicité.** Si $f$ et $g$ satisfont les deux équations, on montre $f(n) = g(n)$ par récurrence : $f(0) = a = g(0)$ ; et si $f(n) = g(n)$, alors $f(S(n)) = h(f(n)) = h(g(n)) = g(S(n))$. ∎ (esquisse)
+<Badge niveau="demontre">Résultat entièrement démontrable dans ZF ; seule la vérification détaillée de la fonctionnalité est résumée ici.</Badge>
+</Encart>
+
+## L'addition — et le théorème 2 + 2 = 4
+
+Fixons $m \in \mathbb{N}$ et appliquons le théorème de récursion avec $X = \mathbb{N}$, $a = m$ et $h = S$ : il existe une **unique** fonction « ajouter à $m$ », notée $n \mapsto m + n$. En faisant varier $m$, on assemble l'opération complète.
+
+<Resultat label="Définition de l'addition">
+$$ m + 0 := m, \qquad m + S(n) := S(m + n). $$
+<Badge niveau="admis" slot="badge">Une définition est un choix, pas une vérité. Mais son bon-fondé — l'existence et l'unicité de l'opération — est garanti par le théorème de récursion, lui démontré.</Badge>
+</Resultat>
+
+Deux badges, deux statuts : la *définition* est posée (admis), sa *légitimité* est démontrée. C'est le cœur épistémique de ce chapitre. Et maintenant, le moment que la Partie II vous doit depuis le début.
+
+<Encart type="calcul" titre="Théorème : 2 + 2 = 4, ligne à ligne">
+Rappel du chapitre précédent : $1 = S(0)$, $2 = S(1)$, $3 = S(2)$, $4 = S(3)$.
+
+**Étape 1.** $2 + 2 = 2 + S(1)$ — définition de $2$.
+
+**Étape 2.** $2 + S(1) = S(2 + 1)$ — deuxième équation de la définition de $+$.
+
+**Étape 3.** $2 + 1 = 2 + S(0) = S(2 + 0)$ — définition de $1$, puis deuxième équation.
+
+**Étape 4.** $2 + 0 = 2$ — première équation de la définition de $+$.
+
+**Étape 5.** On remonte : $2 + 1 = S(2) = 3$ (définition de $3$), donc $2 + 2 = S(3) = 4$ (définition de $4$).
+
+$$ \boxed{2 + 2 = 4} $$
+
+Chaque étape cite une définition ; aucune n'invoque l'évidence. ∎ <Badge niveau="demontre">Oui, $2+2=4$ est un théorème de ZF — sans doute le plus célèbre de ceux qu'on ne songe jamais à énoncer.</Badge>
+</Encart>
+
+## Les lois du calcul
+
+La définition est asymétrique : elle décompose le terme de **droite**. Rien ne dit encore que $m + n = n + m$. Il faut le démontrer — et il faut deux lemmes.
+
+<Encart type="calcul" titre="Commutativité de l'addition (deux lemmes, puis le théorème)">
+**Lemme A : $0 + n = n$.** Récurrence sur $n$. *Initialisation* : $0 + 0 = 0$ (première équation). *Hérédité* : si $0 + n = n$, alors $0 + S(n) = S(0 + n)$ (deuxième équation) $= S(n)$ (hypothèse de récurrence). ∎
+
+**Lemme B : $S(m) + n = S(m + n)$.** Récurrence sur $n$, à $m$ fixé. *Initialisation* : $S(m) + 0 = S(m)$ (première équation) $= S(m + 0)$ (première équation, lue à l'envers). *Hérédité* : si $S(m) + n = S(m + n)$, alors $S(m) + S(n) = S(S(m) + n)$ (deuxième équation) $= S(S(m + n))$ (hypothèse de récurrence) $= S(m + S(n))$ (deuxième équation, lue à l'envers). ∎
+
+**Théorème : $m + n = n + m$.** Récurrence sur $n$, à $m$ fixé. *Initialisation* : $m + 0 = m$ (première équation) $= 0 + m$ (lemme A, lu à l'envers). *Hérédité* : supposons $m + n = n + m$. Alors
+
+$$ m + S(n) = S(m + n) = S(n + m) = S(n) + m, $$
+
+où la première égalité est la définition de $+$, la deuxième l'hypothèse de récurrence, la troisième le lemme B lu à l'envers. ∎ <Badge niveau="demontre">Trois récurrences successives, chaque étape justifiée par une définition ou un lemme.</Badge>
+</Encart>
+
+<Encart type="plusloin" titre="Associativité de l'addition">
+**Théorème : $(m + n) + p = m + (n + p)$.** Récurrence sur $p$, à $m$ et $n$ fixés. *Initialisation* : $(m+n) + 0 = m+n = m + (n+0)$ (première équation, deux fois). *Hérédité* : $(m+n) + S(p) = S((m+n)+p)$ $= S(m + (n+p))$ (hypothèse de récurrence) $= m + S(n+p)$ $= m + (n + S(p))$ (deuxième équation, trois fois). ∎ <Badge niveau="demontre">Même mécanique que la commutativité, en plus court.</Badge>
+</Encart>
+
+Un mot d'avertissement : nous n'avons **pas de soustraction** — elle n'existe pas encore, et n'existera jamais totalement dans $\mathbb{N}$. L'outil qui la remplace est la **régularité**.
+
+<Encart type="calcul" titre="Régularité : on peut simplifier sans soustraire">
+**Théorème : si $m + k = n + k$, alors $m = n$.** Récurrence sur $k$.
+
+*Initialisation* : $m + 0 = m$ et $n + 0 = n$ (première équation), donc l'hypothèse $m + 0 = n + 0$ se lit $m = n$.
+
+*Hérédité* : supposons la propriété vraie pour $k$, et $m + S(k) = n + S(k)$. Par définition de $+$, cela s'écrit $S(m + k) = S(n + k)$. Or $S$ est **injective** — c'est l'un des <Prereq href="/maths/partie-ii/entiers-naturels">axiomes de Peano vérifiés</Prereq> au chapitre précédent. Donc $m + k = n + k$, et l'hypothèse de récurrence donne $m = n$. ∎ <Badge niveau="demontre">Aucune soustraction : l'injectivité de $S$ fait tout le travail.</Badge>
+</Encart>
+
+Retenez ce théorème : c'est **lui** qui rendra possible la construction de $\mathbb{Z}$ au chapitre suivant.
+
+## La multiplication
+
+Même machine : à $m$ fixé, le théorème de récursion (avec $a = 0$ et $h : x \mapsto x + m$) légitime la définition
+
+$$ m \times 0 := 0, \qquad m \times S(n) := m \times n + m. $$
+
+<Badge niveau="admis">Définition posée ; sa légitimité est, elle, démontrée par le théorème de récursion.</Badge> Multiplier $m$ par $n$, c'est partir de $0$ et ajouter $m$, $n$ fois — dit *proprement*, sans points de suspension.
+
+<Encart type="plusloin" titre="Distributivité, associativité, commutativité de ×">
+**Distributivité : $m \times (n + p) = m \times n + m \times p$.** Récurrence sur $p$ : l'initialisation est la première équation des deux définitions ; l'hérédité enchaîne la définition de $+$, celle de $\times$, l'hypothèse de récurrence et l'associativité de $+$. **Associativité de $\times$** : récurrence sur $p$, via la distributivité. **Commutativité de $\times$** : deux lemmes ($0 \times n = 0$ et $S(m) \times n = m \times n + n$, chacun par récurrence sur $n$), puis récurrence — exactement le schéma de la commutativité de $+$. ∎ <Badge niveau="demontre">Chaque loi est une récurrence de quelques lignes sur le modèle déjà déroulé pour l'addition.</Badge>
+</Encart>
+
+## L'ordre : comparer sans soustraire
+
+Comment dire que $2$ est plus petit que $5$ ? Pas avec $5 - 2$ : la soustraction n'existe pas. Mais on peut dire : *il manque quelque chose à $2$ pour faire $5$*.
+
+$$ m \le n \quad :\Longleftrightarrow \quad \exists k \in \mathbb{N},\ m + k = n. $$
+
+<Badge niveau="admis">Une définition : nous choisissons le sens du symbole $\le$ — uniquement avec l'addition, déjà construite.</Badge>
+
+La **réflexivité** est immédiate ($m + 0 = m$) et la **transitivité** aussi : si $m + k = n$ et $n + l = p$, alors $m + (k + l) = (m + k) + l = n + l = p$ par associativité. Les deux propriétés restantes demandent plus de soin.
+
+<Encart type="calcul" titre="Antisymétrie et totalité, ligne à ligne">
+**Petit lemme : tout entier est $0$ ou un successeur.** Récurrence immédiate : $0$ l'est ; et $S(n)$ est un successeur. ∎
+
+**Antisymétrie : si $m \le n$ et $n \le m$, alors $m = n$.**
+
+**Étape 1.** Par définition : $m + k = n$ et $n + l = m$ pour certains $k, l$.
+
+**Étape 2.** Alors $m + (k + l) = (m + k) + l$ (associativité) $= n + l = m = m + 0$ (première équation).
+
+**Étape 3.** Par commutativité, $(k + l) + m = 0 + m$ ; par **régularité**, $k + l = 0$.
+
+**Étape 4.** Si $l$ était un successeur $S(l')$, alors $k + l = S(k + l')$ (définition de $+$) serait un successeur ; or $k + l = 0$, et $0$ n'est le successeur d'aucun entier (Peano). Par le petit lemme, $l = 0$, puis $k = k + 0 = 0$.
+
+**Étape 5.** Donc $n = m + k = m + 0 = m$. ∎
+
+**Totalité : pour tous $m, n$, on a $m \le n$ ou $n \le m$.** Récurrence sur $n$, à $m$ fixé.
+
+*Initialisation* : $0 + m = m$ (lemme A), donc $0 \le m$.
+
+*Hérédité* : supposons $m \le n$ ou $n \le m$. Si $m \le n$ : de $m + k = n$ on tire $m + S(k) = S(m + k) = S(n)$, donc $m \le S(n)$. Si $n \le m$ : soit $n + k = m$. Ou bien $k = 0$ : alors $m = n$ et $m + S(0) = S(m + 0) = S(m) = S(n)$, donc $m \le S(n)$. Ou bien $k = S(k')$ (petit lemme) : alors $m = n + S(k') = S(n + k')$ (définition de $+$) $= S(n) + k'$ (lemme B), donc $S(n) \le m$. ∎ <Badge niveau="demontre">Chaque cas est réglé par une définition ou un lemme déjà démontré — jamais par un dessin de droite graduée.</Badge>
+</Encart>
+
+<Resultat label="≤ est un ordre total sur ℕ">
+$$ \le \ \text{est réflexive, transitive, antisymétrique, et}\ \forall m, n \in \mathbb{N} :\ m \le n \ \text{ou}\ n \le m. $$
+<Badge niveau="demontre" slot="badge">Les quatre propriétés sont démontrées ci-dessus à partir des seules définitions de $+$ et de $\le$.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="L'élégance von Neumann : ≤, c'est ⊆">
+Sur les entiers de von Neumann, on démontre (récurrences soignées) que $m \le n \iff m \subseteq n$ et que $m \lt n \iff m \in n$. L'ordre n'est pas une structure plaquée sur les entiers : puisque chaque entier *est* l'ensemble de ses prédécesseurs, comparer deux entiers, c'est littéralement tester une inclusion — écho direct de la construction du chapitre précédent. <Badge niveau="demontre">Équivalences démontrables dans ZF ; nous ne les utiliserons pas, mais elles montrent que la construction « pense » déjà l'ordre.</Badge>
+</Encart>
+
+## Le bon ordre : le superpouvoir de ℕ
+
+Voici maintenant le théorème le plus puissant du chapitre — celui qui distingue $\mathbb{N}$ de presque tous les ensembles ordonnés que vous rencontrerez.
+
+<Encart type="calcul" titre="Toute partie non vide de ℕ a un plus petit élément">
+**Théorème.** Si $A \subseteq \mathbb{N}$ et $A \neq \varnothing$, alors il existe $m \in A$ tel que $m \le a$ pour tout $a \in A$.
+
+**Démonstration** (par l'absurde). Supposons que $A$ n'ait **pas** de plus petit élément, et posons l'ensemble des minorants : $M := \{ n \in \mathbb{N} : \forall a \in A,\ n \le a \}$ (licite par séparation).
+
+**Étape 1.** $0 \in M$ : pour tout $a$, $0 + a = a$ (lemme A), donc $0 \le a$.
+
+**Étape 2.** Soit $n \in M$. Si $n$ appartenait à $A$, il serait un plus petit élément de $A$ (il est dans $A$ et minore $A$) — exclu par hypothèse. Donc $n \notin A$.
+
+**Étape 3.** Soit $a \in A$. On a $n \le a$ (car $n \in M$) et $n \neq a$ (car $n \notin A$ alors que $a \in A$). Donc $n + k = a$ pour un certain $k$, et $k \neq 0$ — sinon $n = n + 0 = a$. Par le petit lemme, $k = S(k')$, d'où $a = n + S(k') = S(n + k')$ (définition de $+$) $= S(n) + k'$ (lemme B). Ainsi $S(n) \le a$, et ceci pour tout $a \in A$ : $S(n) \in M$.
+
+**Étape 4.** L'étape 1 est une initialisation, et les étapes 2 et 3 forment ensemble une hérédité ($n \in M \Rightarrow S(n) \in M$) : par le <Prereq href="/maths/partie-ii/entiers-naturels">principe de récurrence</Prereq>, $M = \mathbb{N}$.
+
+**Étape 5.** $A$ est non vide : prenons $a \in A$. Alors $S(a) \in M$, donc $S(a) \le a$. Mais aussi $a \le S(a)$, car $a + S(0) = S(a + 0) = S(a)$. Par **antisymétrie**, $a = S(a)$.
+
+**Étape 6.** Alors $a + 0 = a = S(a) = S(a + 0) = a + S(0)$. Par commutativité puis régularité, $0 = S(0)$ : mais $0$ n'est le successeur d'aucun entier (Peano). **Contradiction.** Donc $A$ possède un plus petit élément. ∎
+</Encart>
+
+<Resultat label="ℕ est bien ordonné">
+$$ \forall A \subseteq \mathbb{N},\quad A \neq \varnothing \ \Longrightarrow\ \exists m \in A,\ \forall a \in A,\ m \le a. $$
+<Badge niveau="demontre" slot="badge">Démontré ligne à ligne ci-dessus, sans autre ingrédient que la récurrence et les lois de l'addition.</Badge>
+</Resultat>
+
+Ne sous-estimez pas cet énoncé d'apparence modeste : c'est lui qui fournira la **descente infinie**, la **division euclidienne**, l'existence des **formes irréductibles** des fractions. Chaque fois qu'un mathématicien dira « prenons le plus petit entier tel que… », c'est ce théorème qui signera le chèque.
+
+## Le bilan, et la frontière
+
+Nous savons désormais calculer : $+$ et $\times$ avec leurs lois, un ordre total, le bon ordre — et le théorème $2 + 2 = 4$, démontré depuis $\varnothing$. Mais une équation aussi simple que $x + 5 = 3$ n'a **aucune** solution dans $\mathbb{N}$ : il manque les nombres négatifs. Le chapitre suivant les construit par un quotient audacieux — et c'est la régularité démontrée ici qui rendra l'opération possible.

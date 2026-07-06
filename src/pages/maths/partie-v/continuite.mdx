@@ -1,0 +1,177 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La continuité et les valeurs intermédiaires"
+chapter: continuite
+description: "Limite d une fonction, continuité ε-δ ; caractérisation séquentielle (avec l honnêteté ACω sur un sens) ; opérations ; THÉORÈME DES VALEURS INTERMÉDIAIRES démontré via borne sup ; contre-exemple sur ℚ ; bornes atteintes ; racines n-ièmes construites."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Une fonction n'est pas un dessin
+
+Depuis le chapitre sur <Prereq href="/maths/partie-i/relations-fonctions">les relations et fonctions</Prereq>, nous savons qu'une fonction n'est *pas* une courbe tracée d'un trait : c'est un ensemble de couples, rien de plus. L'intuition du « dessin sans lever le crayon » est puissante, mais elle n'est *pas* une définition — et nous verrons une fonction qui la pulvérise. Il nous faut donc dire, en langage d'inégalités, ce que signifie « $f$ ne fait pas de saut en $a$ ». Puis nous en tirerons le joyau de ce chapitre : le théorème des valeurs intermédiaires, et la raison profonde pour laquelle il vit dans $\mathbb{R}$ et nulle part ailleurs.
+
+<Encart type="intuition" titre="Le pari du sceptique">
+Vous annoncez : « $f(x)$ est aussi proche que je veux de $f(a)$ pourvu que $x$ soit assez proche de $a$. » Un sceptique vous défie : « Rends $f(x)$ à moins de $\varepsilon$ de $f(a)$. » Vous devez produire un rayon $\delta$ tel que *tout* $x$ à distance moindre que $\delta$ de $a$ réussisse. S'il existe toujours une riposte $\delta$ à chaque défi $\varepsilon$, $f$ est continue en $a$ ; s'il existe un $\varepsilon$ imbattable, elle saute. C'est exactement le dialogue de la convergence des suites — revoyez le composant interactif du <Prereq href="/maths/partie-v/suites-limites">chapitre 18</Prereq>, il anime la même chorégraphie.
+</Encart>
+
+**Définition ($\varepsilon$-$\delta$).** $f$, définie sur une partie $D \subseteq \mathbb{R}$, est **continue en $a \in D$** si pour tout $\varepsilon \gt 0$ il existe $\delta \gt 0$ tel que, pour tout $x \in D$, $|x - a| \lt \delta \implies |f(x) - f(a)| \lt \varepsilon$. Elle est **continue sur $D$** si elle l'est en chaque point.
+
+<Badge niveau="admis">Définition — nous nommons un concept, il n'y a rien à démontrer. Tout ce qui suit en découle.</Badge>
+
+### Un premier vrai $\delta(\varepsilon)$ : $x \mapsto x^2$
+
+<Encart type="calcul" titre="x ↦ x² est continue en tout point a">
+
+**Étape 1 — factoriser.** Pour tous $x, a$ : $x^2 - a^2 = (x-a)(x+a)$, donc $|x^2 - a^2| = |x-a|\,|x+a|$.
+
+**Étape 2 — borner $|x+a|$ localement.** Imposons $|x-a| \le 1$. Alors $|x| = |(x-a)+a| \le |x-a| + |a| \le 1 + |a|$, d'où $|x+a| \le |x| + |a| \le 2|a| + 1$.
+
+**Étape 3 — majorer.** Sous $|x-a| \le 1$ : $|x^2 - a^2| \le (2|a|+1)\,|x-a|$.
+
+**Étape 4 — répondre au défi.** Soit $\varepsilon \gt 0$. Posons $\delta := \min\!\left(1,\ \dfrac{\varepsilon}{2|a|+1}\right) \gt 0$. Si $|x-a| \lt \delta$, alors $|x-a| \le 1$ (l'étape 3 s'applique) *et* $|x-a| \lt \dfrac{\varepsilon}{2|a|+1}$, donc
+
+$$ |x^2 - a^2| \le (2|a|+1)\,|x-a| \lt (2|a|+1)\cdot \frac{\varepsilon}{2|a|+1} = \varepsilon. $$
+
+$$ \boxed{\ \forall a \in \mathbb{R},\ x \mapsto x^2 \text{ est continue en } a.\ } $$
+
+</Encart>
+
+Le $\delta$ dépend de $\varepsilon$ *et* de $a$ (le facteur $2|a|+1$) : c'est normal, et parfaitement rigoureux. À l'opposé, un saut se repère à un $\varepsilon$ que nul $\delta$ ne bat. La **partie entière** $x \mapsto \lfloor x \rfloor$ en fournit l'exemple type : en un entier $n$, $\lfloor n \rfloor = n$, mais pour $x$ un peu inférieur à $n$, $\lfloor x \rfloor = n-1$. Prenez $\varepsilon = \tfrac12$ : quel que soit $\delta$, le point $x = n - \tfrac12\min(\delta,1)$ vérifie $|x-n| \lt \delta$ et pourtant $|\lfloor x\rfloor - n| = 1 \gt \tfrac12$. Discontinue en chaque entier. <Badge niveau="demontre">Discontinuité prouvée par un $\varepsilon$ imbattable.</Badge>
+
+### La fonction qui tue l'image du crayon
+
+Soit $\mathbf{1}_{\mathbb{Q}}$, la **fonction de Dirichlet** : $\mathbf{1}_{\mathbb{Q}}(x) = 1$ si $x \in \mathbb{Q}$, et $0$ sinon. Aucun crayon ne la trace, et pourtant c'est un ensemble de couples aussi légitime que $x \mapsto x^2$. Elle est discontinue **partout**.
+
+<Encart type="plusloin" titre="Densité des irrationnels, puis discontinuité partout">
+
+Nous savons que $\mathbb{Q}$ est <Prereq href="/maths/partie-ii/rationnels">dense dans $\mathbb{R}$</Prereq> : tout intervalle ouvert contient un rationnel. Il nous faut le symétrique.
+
+**Densité des irrationnels.** Soit $a \lt b$. L'intervalle $(a - \sqrt 2,\ b - \sqrt 2)$ étant non vide, il contient un rationnel $r$ (densité de $\mathbb{Q}$). Alors $r + \sqrt 2 \in (a,b)$, et $r + \sqrt 2$ est **irrationnel** : si $r + \sqrt 2 = s \in \mathbb{Q}$, alors $\sqrt 2 = s - r \in \mathbb{Q}$, ce que le <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> interdit. Tout intervalle ouvert contient donc un irrationnel. <Badge niveau="demontre">La translation par $\sqrt 2$ transporte la densité de $\mathbb{Q}$ sur son complémentaire.</Badge>
+
+**Discontinuité partout.** Fixons $a$ et $\varepsilon = \tfrac12$. Si $a \in \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 1$ ; pour tout $\delta$, l'intervalle $(a-\delta, a+\delta)$ contient un irrationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 1| = 1 \gt \tfrac12$. Si $a \notin \mathbb{Q}$, alors $\mathbf{1}_{\mathbb{Q}}(a) = 0$ ; tout intervalle $(a-\delta,a+\delta)$ contient un rationnel $x$, où $|\mathbf{1}_{\mathbb{Q}}(x) - 0| = 1 \gt \tfrac12$. Dans les deux cas, aucun $\delta$ ne répond au défi $\varepsilon = \tfrac12$.
+
+$$ \boxed{\ \mathbf{1}_{\mathbb{Q}} \text{ est discontinue en tout point de } \mathbb{R}.\ } $$
+
+</Encart>
+
+Retenez la leçon épistémique : « fonction » ne veut pas dire « courbe ». Une fonction est un ensemble de couples ; la continuité est une propriété *supplémentaire* qu'on peut avoir ou non.
+
+## La caractérisation séquentielle
+
+Le langage $\varepsilon$-$\delta$ se traduit dans celui des suites — un pont vers tout l'arsenal du chapitre 18.
+
+<Resultat label="Continuité et suites">
+
+$$ f \text{ continue en } a \iff \text{pour toute suite } x_n \to a,\ f(x_n) \to f(a). $$
+
+<Badge niveau="demontre" slot="badge">Les deux sens sont démontrés ci-dessous — mais avec un statut de choix différent, honnêtement signalé.</Badge>
+
+</Resultat>
+
+<Encart type="calcul" titre="Sens direct (⇒) — sans aucun choix">
+
+**Étape 1.** Supposons $f$ continue en $a$, et soit $x_n \to a$. Fixons $\varepsilon \gt 0$.
+
+**Étape 2.** La continuité fournit $\delta \gt 0$ tel que $|x-a| \lt \delta \implies |f(x)-f(a)| \lt \varepsilon$.
+
+**Étape 3.** Comme $x_n \to a$, il existe $N$ tel que $n \ge N \implies |x_n - a| \lt \delta$.
+
+**Étape 4.** Alors pour $n \ge N$ : $|x_n - a| \lt \delta$, donc $|f(x_n) - f(a)| \lt \varepsilon$. Ainsi $f(x_n) \to f(a)$. $\quad\blacksquare$
+
+</Encart>
+
+<Encart type="plusloin" titre="Sens réciproque (⇐) — et un choix dénombrable en coulisse">
+
+Par contraposée : si $f$ n'est pas continue en $a$, construisons une suite $x_n \to a$ avec $f(x_n) \not\to f(a)$. La négation de la continuité fournit un $\varepsilon \gt 0$ tel que, **pour tout** $\delta \gt 0$, il existe un $x$ avec $|x-a| \lt \delta$ et $|f(x)-f(a)| \ge \varepsilon$. Pour chaque $n$, appliquons-le à $\delta = \tfrac1n$ : l'ensemble $A_n = \{x : |x-a| \lt \tfrac1n \text{ et } |f(x)-f(a)| \ge \varepsilon\}$ est non vide. Il faut alors **choisir** un $x_n \in A_n$, *pour chaque $n$ à la fois* — une infinité de choix simultanés. Ce geste est précisément l'**axiome du choix dénombrable ($AC_\omega$)**, invisible mais bien présent. On obtient $x_n \to a$ (car $|x_n - a| \lt \tfrac1n$) tandis que $|f(x_n)-f(a)| \ge \varepsilon$, donc $f(x_n) \not\to f(a)$.
+
+C'est la **troisième dette de choix dénombrable** du cours, après l'infini de Dedekind (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) et la réunion dénombrable du <Prereq href="/maths/partie-iii/denombrables">chapitre 11</Prereq> ; toutes seront soldées au <Prereq href="/maths/partie-vi/axiome-du-choix">chapitre 25</Prereq>. Le site tient sa promesse : rien n'entre en scène sans être annoncé. <Badge niveau="demontre">Démontré dans $\text{ZF} + AC_\omega$ ; le recours au choix est signalé, non caché.</Badge>
+
+</Encart>
+
+## Les opérations préservent la continuité
+
+<Encart type="calcul" titre="Somme et composée, en ε-δ direct (sans choix)">
+
+**Somme.** Soient $f, g$ continues en $a$ et $\varepsilon \gt 0$. Il existe $\delta_1$ avec $|x-a| \lt \delta_1 \implies |f(x)-f(a)| \lt \tfrac{\varepsilon}{2}$, et $\delta_2$ avec $|x-a| \lt \delta_2 \implies |g(x)-g(a)| \lt \tfrac{\varepsilon}{2}$. Pour $\delta = \min(\delta_1,\delta_2)$ et $|x-a| \lt \delta$, l'inégalité triangulaire donne $|(f+g)(x) - (f+g)(a)| \le |f(x)-f(a)| + |g(x)-g(a)| \lt \tfrac{\varepsilon}{2} + \tfrac{\varepsilon}{2} = \varepsilon$.
+
+**Composée.** Soient $g$ continue en $a$ et $f$ continue en $b := g(a)$. Soit $\varepsilon \gt 0$. La continuité de $f$ en $b$ fournit $\eta \gt 0$ avec $|y-b| \lt \eta \implies |f(y)-f(b)| \lt \varepsilon$. La continuité de $g$ en $a$ fournit $\delta \gt 0$ avec $|x-a| \lt \delta \implies |g(x)-g(a)| \lt \eta$, c'est-à-dire $|g(x)-b| \lt \eta$. Donc $|x-a| \lt \delta \implies |f(g(x)) - f(g(a))| \lt \varepsilon$.
+
+$$ \boxed{\ f+g \ \text{ et }\ f\circ g \ \text{ sont continues en } a.\ } $$
+
+</Encart>
+
+Le **produit** suit le même schéma via $|fg(x) - fg(a)| \le |f(x)|\,|g(x)-g(a)| + |g(a)|\,|f(x)-f(a)|$, en bornant $|f(x)| \le |f(a)|+1$ au voisinage de $a$ (continuité avec $\varepsilon = 1$). <Badge niveau="demontre">Preuve $\varepsilon$-$\delta$ directe, calquée sur la somme.</Badge> Les fonctions constantes ($\delta$ quelconque) et l'identité ($\delta = \varepsilon$) sont continues ; par sommes et produits répétés, **tout polynôme est continu sur $\mathbb{R}$** — récurrence immédiate sur le nombre de monômes. <Badge niveau="demontre">Conséquence des opérations, à partir de $x\mapsto x$ et des constantes.</Badge>
+
+## Le théorème des valeurs intermédiaires
+
+Voici le climax. Il dit qu'une fonction continue ne peut passer du négatif au positif sans s'annuler — l'énoncé formalise l'idée qu'« on ne franchit pas une rivière sans mouiller ses pieds ».
+
+<Resultat label="Théorème des valeurs intermédiaires (TVI)">
+
+$$ f \text{ continue sur } [a,b],\ f(a) \lt 0 \lt f(b) \implies \exists\, c \in (a,b),\ f(c) = 0. $$
+
+<Badge niveau="demontre" slot="badge">Démonstration complète par la borne supérieure — les deux inégalités finales détaillées.</Badge>
+
+</Resultat>
+
+<Encart type="calcul" titre="Preuve du TVI par la borne supérieure">
+
+**Construction de $c$.** Posons $S := \{x \in [a,b] : f(x) \le 0\}$. Cet ensemble est **non vide** ($a \in S$ car $f(a) \lt 0$) et **majoré** par $b$. Par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, $c := \sup S$ existe et $a \le c \le b$. Montrons $f(c) = 0$ en écartant les deux inégalités strictes.
+
+**$f(c) \le 0$.** Supposons $f(c) \gt 0$. Par continuité en $c$ avec $\varepsilon = f(c)$, il existe $\delta \gt 0$ tel que $|x-c| \lt \delta \implies |f(x)-f(c)| \lt f(c)$, donc $f(x) \gt 0$. Ainsi aucun $x \in (c-\delta,\,c]$ n'est dans $S$. Tout $s \in S$ vérifie alors $s \le c-\delta$ (sinon $s \in (c-\delta, c]$ donnerait $f(s) \gt 0$, contredisant $s \in S$). Donc $c - \delta$ majore $S$ tout en étant $\lt c = \sup S$ : contradiction avec « $\sup$ = plus petit majorant ». Donc $f(c) \le 0$.
+
+**$f(c) \ge 0$.** Supposons $f(c) \lt 0$. Par continuité en $c$ avec $\varepsilon = -f(c)$, il existe $\delta \gt 0$ tel que $|x-c| \lt \delta \implies |f(x)-f(c)| \lt -f(c)$, donc $f(x) \lt 0$. Comme $f(b) \gt 0$, on a $c \neq b$, donc $c \lt b$. Le point $x_0 := \min\!\big(c+\tfrac{\delta}{2},\, b\big)$ vérifie $c \lt x_0 \le b$ et $|x_0 - c| \lt \delta$, donc $f(x_0) \lt 0$, soit $x_0 \in S$. Mais $x_0 \gt c = \sup S$ contredit que $c$ majore $S$. Donc $f(c) \ge 0$.
+
+**Conclusion.** $f(c) = 0$, et $f(a),f(b) \neq 0$ forcent $a \lt c \lt b$.
+
+$$ \boxed{\ \exists\, c \in (a,b),\ f(c) = 0.\ } $$
+
+</Encart>
+
+La forme générale (si $\gamma$ est entre $f(a)$ et $f(b)$, alors $\gamma$ est atteint) s'obtient en appliquant ce résultat à $f - \gamma$. Mais la vraie question est : *où* le TVI puise-t-il sa force ?
+
+<Encart type="calcul" titre="Encart vedette — le TVI est FAUX sur ℚ">
+
+Sur $\mathbb{Q} \cap [0,2]$, considérons $g(x) = x^2 - 2$.
+
+**Étape 1 — hypothèses vérifiées.** $g$ est continue (restriction d'un polynôme), $g(0) = -2 \lt 0$ et $g(2) = 2 \gt 0$.
+
+**Étape 2 — aucun zéro.** Un zéro serait un rationnel $c$ avec $c^2 = 2$. Or le <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> a démontré $\nexists\, c \in \mathbb{Q},\ c^2 = 2$.
+
+**Étape 3 — pourquoi.** Reprenez la preuve : $c = \sup\{x \in \mathbb{Q}\cap[0,2] : x^2 \le 2\}$ « devrait » être $\sqrt2$, qui n'existe pas dans $\mathbb{Q}$. La borne supérieure n'a *nulle part où atterrir*.
+
+$$ \boxed{\ \text{Le TVI est une propriété de la } \textbf{complétude}\text{ de } \mathbb{R}\text{, pas des formules.}\ } $$
+
+<Badge niveau="demontre" slot="badge">Contre-exemple rigoureux : hypothèses satisfaites, conclusion en défaut, faute de complétude.</Badge>
+
+</Encart>
+
+La boucle se boucle : l'irrationalité de $\sqrt2$, prouvée pour *construire* $\mathbb{R}$, est exactement l'obstruction qui fait échouer le TVI sur $\mathbb{Q}$.
+
+## Deux récoltes : les racines et les bornes
+
+**Toute racine $n$-ième existe.** Soient $y \ge 0$ et $n \ge 1$. Si $y = 0$, alors $0^n = 0 = y$ : la racine est $0$. Supposons donc $y \gt 0$. Posons $f(x) = x^n - y$ sur $[0, b]$ avec $b = \max(1, y)$. Alors $f$ est continue, $f(0) = -y \lt 0$ et $f(b) = b^n - y \ge b - y \ge 0$ (car $b \ge 1 \Rightarrow b^n \ge b$, et $b \ge y$). Si $f(b) = 0$, alors $b^n = y$ ; sinon $f(b) \gt 0$ et le TVI donne $c \in (0,b)$ avec $c^n = y$. L'**unicité** vient de la stricte croissance de $x \mapsto x^n$ sur $[0,\infty)$ (si $0 \le x \lt x'$ alors $x^n \lt x'^n$). <Badge niveau="demontre">Existence par TVI, unicité par monotonie.</Badge> La « racine » du module $|z| = \sqrt{a^2+b^2}$, employée au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>, est ainsi **enfin fondée** en toute généralité.
+
+<Encart type="plusloin" titre="Bornes atteintes — via Bolzano–Weierstrass">
+
+**Énoncé.** Une fonction continue sur $[a,b]$ y est bornée et atteint ses bornes.
+
+**Bornée.** Si $f$ n'était pas majorée, pour chaque $n$ il existerait $x_n \in [a,b]$ avec $f(x_n) \gt n$ ($AC_\omega$, une fois de plus). Par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, une sous-suite $x_{n_k} \to \ell \in [a,b]$ ; par le sens direct de la caractérisation séquentielle, $f(x_{n_k}) \to f(\ell)$, donc $(f(x_{n_k}))$ est bornée — mais $f(x_{n_k}) \gt n_k \to +\infty$. Contradiction.
+
+**Atteinte.** Soit $M = \sup f([a,b])$ (existe, $f$ bornée). Pour chaque $n$, choisissons $x_n$ avec $f(x_n) \gt M - \tfrac1n$ ($AC_\omega$). Une sous-suite $x_{n_k} \to \ell \in [a,b]$ donne $f(x_{n_k}) \to f(\ell)$ ; comme $M - \tfrac{1}{n_k} \lt f(x_{n_k}) \le M$, on a $f(\ell) = M$. Le maximum est atteint ; de même pour le minimum.
+
+$$ \boxed{\ f \text{ continue sur } [a,b] \text{ atteint son max et son min.}\ } $$
+
+Honnêteté : la version « suite maximisante » utilise $AC_\omega$ ; une variante purement par borne supérieure l'évite, mais nous adoptons celle-ci, dette signalée et renvoyée au <Prereq href="/maths/partie-vi/axiome-du-choix">chapitre 25</Prereq>. <Badge niveau="demontre">Démontré dans $\text{ZF}+AC_\omega$.</Badge>
+
+</Encart>
+
+Ce théorème des bornes est la clé de voûte du **théorème de Rolle**, qui ouvre le chapitre suivant : sans un maximum *atteint* à l'intérieur, pas de tangente horizontale à exhiber.
+
+Nous savons désormais ce qu'est une fonction continue — et, non moins précieux, ce qu'elle n'est *pas* : ni un dessin, ni une garantie de valeurs intermédiaires hors de $\mathbb{R}$. Il est temps de la faire *bouger* : mesurer sa pente instantanée, sa vitesse de variation. C'est l'objet de la dérivée.

@@ -1,0 +1,116 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L hypothèse du continu"
+chapter: hypothese-continu
+description: "L énoncé CH (formulation élémentaire) ; Gödel 1938 : ¬CH indémontrable ; Cohen 1963 : CH indémontrable ; CH est INDÉCIDABLE dans ZFC — le badge rouge emblématique ; ce que « indécidable » veut dire et ne veut pas dire."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La question laissée ouverte
+
+Le chapitre précédent nous a laissés devant une <Prereq href="/maths/partie-iii/diagonale-cantor">tour d'infinis sans sommet</Prereq> : $|\mathbb{N}| \lt |\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$, puis les parties de $\mathbb{R}$, et ainsi de suite. Une marche a été franchie sous nos yeux : $\mathbb{N}$ et $\mathbb{R}$ ne sont pas de la même taille. Mais aussitôt une question brûle, celle que Georg Cantor pose dès 1878 : *entre* ces deux marches, y a-t-il quelque chose ? Existe-t-il un ensemble trop grand pour être énuméré, mais strictement plus petit que le continu ?
+
+<Encart type="intuition" titre="Une marche manquante ?">
+Imaginez l'échelle des infinis. Tout en bas, le barreau du dénombrable : $\mathbb{N}$, et tout ce qui se met en file. Plus haut, le barreau du continu : $\mathbb{R}$. Cantor a montré qu'ils sont distincts — mais y a-t-il un barreau *coincé entre les deux* ? Un ensemble $A \subseteq \mathbb{R}$ trop gros pour tenir dans une liste, et pourtant impossible à mettre en bijection avec $\mathbb{R}$ tout entier ? Cantor a passé les dernières années de sa vie à essayer de prouver que non. Il n'y a pas de barreau intermédiaire — telle était sa conviction.
+</Encart>
+
+Cette conviction porte un nom. Formulons-la sans détour, dans un langage qui ne demande que ce que nous avons déjà construit : l'<Prereq href="/maths/partie-iii/equipotence">équipotence</Prereq>.
+
+<Resultat label="Hypothèse du continu (CH)">
+
+$$ \text{Toute partie infinie de } \mathbb{R} \text{ est équipotente à } \mathbb{N}, \text{ ou bien à } \mathbb{R}. $$
+
+<Badge niveau="admis" slot="badge">Nous *nommons* CH cet énoncé : c'est une définition, pas un théorème. Rien n'est ici affirmé de sa vérité.</Badge>
+
+</Resultat>
+
+Autrement dit : aucune taille strictement comprise entre $|\mathbb{N}|$ et $|\mathbb{R}|$. Nous préférons cette forme élémentaire — elle ne parle que de parties de $\mathbb{R}$ et de bijections — à la célèbre écriture $2^{\aleph_0} = \aleph_1$, qui suppose une machinerie que ce cours n'a pas montée.
+
+<Encart type="plusloin" titre="Et la forme « $2^{\aleph_0} = \aleph_1$ » ?">
+On rencontre souvent CH sous la forme $2^{\aleph_0} = \aleph_1$ : le cardinal de $\mathbb{R}$ (noté $2^{\aleph_0}$ car $|\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$) est le *tout premier* cardinal indénombrable, $\aleph_1$. Honnêteté sur nos limites : les alephs $\aleph_0, \aleph_1, \ldots$ sont des cardinaux *indexés par les ordinaux*, que ce cours n'a pas construits, et l'équivalence des deux formes utilise l'<Prereq href="/maths/partie-i/ensembles-zf">axiome du choix</Prereq> (pour bien ordonner tout ensemble et parler du « plus petit » cardinal indénombrable). La forme élémentaire, elle, se passe d'alephs *et* de choix : c'est pourquoi nous l'adoptons comme énoncé principal. Notez enfin que CH ne concerne QUE le saut $\aleph_0 \to \aleph_1$ ; l'affirmation analogue à *tous* les étages, $2^{\aleph_\alpha} = \aleph_{\alpha+1}$, est l'hypothèse *généralisée* du continu (GCH), bien plus forte — ne les confondons jamais.
+</Encart>
+
+## Pourquoi on y a cru
+
+L'intuition de Cantor n'était pas gratuite. Toutes les parties infinies « naturelles » de $\mathbb{R}$ que l'on sait décrire tombent proprement d'un côté ou de l'autre. D'un côté, le dénombrable : $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, les nombres <Prereq href="/maths/partie-iii/denombrables">algébriques</Prereq> — tous équipotents à $\mathbb{N}$. De l'autre, le continu : le moindre intervalle $[a,b]$ avec $a \lt b$, l'ensemble des irrationnels, l'ensemble de Cantor triadique — tous équipotents à $\mathbb{R}$. Jamais rien au milieu. Chaque exemple concret que l'on jette dans la balance confirme CH.
+
+<Encart type="plusloin" titre="Un indice historique : Cantor–Bendixson">
+Cantor lui-même avait un argument sérieux pour une classe entière de parties. Le théorème de Cantor–Bendixson affirme que tout fermé de $\mathbb{R}$ se décompose en une partie au plus dénombrable et un ensemble *parfait* (fermé sans point isolé), et que tout ensemble parfait non vide est équipotent à $\mathbb{R}$. Conséquence : tout fermé infini de $\mathbb{R}$ est dénombrable ou équipotent à $\mathbb{R}$ — CH est *vraie* si l'on se restreint aux fermés. <Badge niveau="demontre">Théorème classique, rigoureusement démontré ; sa preuve dépasse ce cours, nous le citons sans le donner.</Badge> Le drame de CH, c'est que ce beau résultat ne s'étend pas à *toutes* les parties de $\mathbb{R}$ — et l'obstacle, on le verra, n'est pas un manque d'ingéniosité.
+</Encart>
+
+L'enthousiasme était tel qu'en 1900, David Hilbert plaça la résolution de CH en **tête** de sa liste des vingt-trois problèmes pour le siècle à venir. Problème n°1. On attendait une preuve. On allait recevoir tout autre chose.
+
+## Gödel 1938 : un monde où CH est vraie
+
+Premier acte, signé Kurt Gödel. Son idée : au lieu d'attaquer CH de front, construire un *modèle* de ZF particulièrement économe, et regarder si CH y tient.
+
+<Encart type="intuition" titre="L'univers constructible L">
+La théorie des ensembles habituelle est généreuse : l'axiome des parties donne *tous* les sous-ensembles de $\mathbb{N}$, même ceux qu'aucune formule ne décrit. Gödel construit un univers avare, noté $L$, étage par étage : on part de l'ensemble vide, et à chaque étage on n'ajoute *que* les ensembles explicitement *définissables* à partir des étages déjà bâtis. Rien de gratuit, rien d'arbitraire — que le strictement nécessaire. Dans ce monde minimal, on peut *compter* les parties de $\mathbb{N}$ dans l'ordre où elles apparaissent, et ce décompte ne laisse aucune place à une taille intermédiaire.
+</Encart>
+
+Gödel démontre que dans $L$, l'axiome du choix *et* CH (mieux : GCH) sont vrais. Comme $L$ est un modèle de ZF dès que ZF en a un, il en tire un méta-théorème sur la théorie elle-même.
+
+<Resultat label="Théorème (Gödel, 1938)">
+
+$$ \text{Si } \mathrm{ZF} \text{ est cohérente, alors } \mathrm{ZFC} + \mathrm{CH} \text{ l'est aussi.} $$
+
+<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré. Il parle *de* ZFC ; ce n'est PAS une preuve *dans* ZFC de CH.</Badge>
+
+</Resultat>
+
+Lisez bien la conclusion : elle ne dit pas « CH est vraie ». Elle dit qu'aucune démonstration ne pourra jamais **réfuter** CH à partir de ZFC — sinon cette réfutation vaudrait dans $L$, où CH est pourtant vraie, et ZFC serait contradictoire. La moitié du verdict est tombée : $\neg\mathrm{CH}$ n'est pas démontrable.
+
+## Cohen 1963 : des mondes où CH est fausse
+
+Il restait l'autre moitié : et si CH était démontrable ? Vingt-cinq ans plus tard, Paul Cohen invente pour la trancher une technique entièrement neuve, le **forcing**, qui lui vaudra la médaille Fields en 1966 — la seule jamais décernée pour un travail de logique.
+
+<Encart type="plusloin" titre="L'idée du forcing (honnêtement : c'est technique)">
+Là où Gödel *rétrécissait* l'univers, Cohen l'*élargit* sur mesure. Le forcing part d'un modèle de ZFC et lui adjoint de nouveaux réels — autant qu'on veut, disons $\aleph_2$ d'entre eux — sans effondrer les cardinaux existants. L'outil : approcher chaque nouveau réel par des *conditions finies* (des bouts d'information, « le 3ᵉ chiffre est 0, le 7ᵉ est 1… »), et montrer qu'un objet générique, compatible avec toutes ces approximations, existe et se comporte bien. On obtient un modèle où $\mathbb{R}$ contient strictement plus que $\aleph_1$ réels : CH y est *fausse*. La construction est délicate — nous n'en donnons ici que l'intention, pas la preuve.
+</Encart>
+
+<Resultat label="Théorème (Cohen, 1963)">
+
+$$ \text{Si } \mathrm{ZF} \text{ est cohérente, alors } \mathrm{ZFC} + \neg\mathrm{CH} \text{ l'est aussi.} $$
+
+<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré par forcing. À nouveau : un résultat *sur* ZFC, pas une preuve *dans* ZFC.</Badge>
+
+</Resultat>
+
+Même logique que chez Gödel, symétrique : si CH était démontrable dans ZFC, elle vaudrait dans le modèle de Cohen, où elle est pourtant fausse — donc ZFC serait contradictoire. La seconde moitié tombe : CH n'est pas démontrable non plus.
+
+## Le verdict : indécidable
+
+Réunissons les deux méta-théorèmes. Aucune démonstration ne réfute CH (Gödel) ; aucune ne la prouve (Cohen). Voici le sommet de toute la partie III.
+
+<Resultat label="CH est indécidable dans ZFC">
+
+$$ \text{Si } \mathrm{ZF} \text{ est cohérente, } \mathrm{CH} \text{ n'est ni démontrable ni réfutable à partir de } \mathrm{ZFC}. $$
+
+<Badge niveau="indecidable" slot="badge">Démontré ni prouvable ni réfutable dans le cadre adopté. C'est un STATUT établi, pas une ignorance provisoire.</Badge>
+
+</Resultat>
+
+Ce badge rouge est le plus délicat du cours, et tout se joue sur un mot. « Indécidable » ne signifie **pas** « on ne sait pas encore ». Comparez avec la conjecture de Goldbach — tout entier pair $\geq 4$ est somme de deux premiers : personne ne sait la prouver, mais une preuve *pourrait* exister demain ; son statut est *conjecturé*, badge jaune. CH, c'est autre chose et c'est bien pire : on a **démontré** qu'aucune preuve ni aucune réfutation n'existe. Ce n'est pas notre ignorance qui bloque ; ce sont les axiomes eux-mêmes qui, prouvablement, ne suffisent pas. Rangeons enfin côte à côte les quatre statuts qui rythment ce cours :
+
+| Statut | Ce que le badge affirme | Exemple |
+|---|---|---|
+| **Démontré** | Prouvé depuis les axiomes ; consensus | L'infinité des premiers ; $\mathbb{R}$ indénombrable |
+| **Admis** | Posé par choix : axiome, définition, cadre | Les axiomes de ZF ; l'axiome du choix |
+| **Conjecturé** | Cru vrai, non prouvé — *peut-être* prouvable un jour | Goldbach ; l'hypothèse de Riemann |
+| **Indécidable** | *Prouvé* ni prouvable ni réfutable dans le cadre | CH dans ZFC |
+
+La ligne rouge et la ligne jaune se ressemblent de loin — « pas de preuve connue » — et sont en réalité aux antipodes : l'une constate une absence, l'autre démontre une impossibilité.
+
+## Alors, CH est-elle vraie ?
+
+La question survit-elle au verdict ? Ici le cours s'arrête de trancher et se contente de rapporter — la discussion est philosophique, et n'appelle aucun badge de vérité. Deux camps s'opposent. Pour le **réaliste** (Gödel lui-même en tête), l'univers des ensembles existe indépendamment de nos axiomes ; CH y est vraie ou fausse *en fait*, et l'indécidabilité prouve seulement que ZFC est trop pauvre pour le voir — il faut donc chercher de *nouveaux* axiomes, mieux justifiés, qui trancheront. C'est le sens des grands cardinaux et des travaux de Hugh Woodin. Pour le **formaliste**, au contraire, un énoncé n'a de valeur de vérité que *relativement* à un système d'axiomes ; « CH est-elle vraie ? » n'a alors pas plus de sens que « la cinquième symphonie est-elle vraie ? ». On classe, on ne juge pas.
+
+Un fait tempère les espoirs du premier camp : les axiomes de grands cardinaux usuels **ne tranchent pas** CH. Le théorème de Levy–Solovay (1967) montre qu'ils survivent au forcing de Cohen, donc restent muets sur le continu. <Badge niveau="demontre">Résultat de logique rigoureusement établi ; cité, non démontré ici.</Badge> La recherche d'un axiome naturel et décisif reste ouverte — c'est un *programme*, pas un théorème.
+
+Ce cours ne tranchera pas non plus. Fidèle à sa promesse, il *classe* : CH n'est ni un théorème, ni une conjecture, ni un axiome que nous ayons adopté — c'est le premier énoncé mathématique concret dont nous savons, avec certitude, que nos axiomes ne l'atteignent pas. Nous avons compté l'infini, gravi une tour sans sommet, et découvert au passage une porte que ZFC ne peut ni ouvrir ni verrouiller. La partie III s'achève ici, sur ce vertige. La partie IV redescend sur terre : après avoir mesuré les ensembles, nous allons les faire *travailler* — en les munissant d'opérations et en étudiant les **structures** qui en émergent, à commencer par la plus pure d'entre elles, le groupe.

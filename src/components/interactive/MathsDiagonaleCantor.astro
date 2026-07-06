@@ -1,0 +1,39 @@
+---
+/**
+ * MathsDiagonaleCantor — l'argument diagonal de Cantor, manipulable. Une liste de
+ * 8 « réels » (suites binaires) prétend énumérer ℝ ; on construit l'intrus en
+ * inversant chaque chiffre de la diagonale. Chaque case est cliquable : quelle que
+ * soit la liste, l'intrus diffère de la ligne n au rang n — il n'y figure jamais.
+ * Conclusion : aucune énumération n'épuise ℝ (non-dénombrabilité).
+ */
+---
+
+<div class="iw" data-iw="cantor-diagonale">
+  <div class="iw__head"><span class="tag">Interactif</span> L’argument diagonal de Cantor : ℝ n’est pas dénombrable</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 4 / 3"></canvas></div>
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label>liste</label>
+      <div class="iw__btns" role="group" aria-label="Actions sur la liste">
+        <button type="button" class="iw__btn" data-new>Nouvelle liste</button>
+        <button type="button" class="iw__btn" data-anim aria-pressed="false">Animer la diagonale ▶</button>
+      </div>
+      <output></output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">intrus d =</span> <b data-out-intrus>—</b></span>
+    <span class="iw__chip"><b data-out-diff>survolez une ligne de la liste</b></span>
+  </div>
+  <p class="iw__note">
+    Chaque ligne r<sub>n</sub> prétend énumérer les réels de [0, 1[ écrits en binaire. L’intrus
+    <b>d</b> inverse le n-ième chiffre de la n-ième ligne (la diagonale, en jaune). <b>Cliquez sur
+    n’importe quelle case</b> pour la basculer : modifiez la liste autant que vous voulez, l’intrus
+    se reconstruit instantanément et <b>diffère de la ligne n au rang n</b> — il n’est <b>jamais</b>
+    dans la liste. Aucune énumération ne peut épuiser ℝ : c’est la non-dénombrabilité.
+  </p>
+</div>
+
+<script>
+  import './MathsDiagonaleCantor.client.ts';
+</script>

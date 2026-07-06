@@ -1,0 +1,185 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les nombres rationnels (ℚ)"
+chapter: rationnels
+description: "ℚ = (ℤ × ℤ*)/~ avec (a,b) ~ (c,d) ssi ad = bc ; opérations bien définies ; tout non nul est inversible ; ordre total compatible ; densité ; forme irréductible (existence par bon ordre) ; archimédien."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La division en attente
+
+Le chapitre précédent nous a légué une méthode. Dans $\mathbb{N}$, la soustraction $3 - 5$ n'existait pas : nous avons construit un ensemble où elle existe, en décrétant qu'un entier relatif *est* une soustraction en attente. Dans $\mathbb{Z}$, c'est la division qui fait défaut — l'équation $4x = 3$ n'a aucune solution entière. Même diagnostic, même remède, et cette fois nous l'assumons dès la première ligne : un rationnel *sera* une division en attente. Aucune hypothèse nouvelle dans ce chapitre : tout se déduit de ce qui précède.
+
+<Encart type="intuition" titre="La fraction comme promesse">
+
+Voyez le couple $(3, 4)$ comme une promesse : « trois divisé par quatre — un jour ». Plusieurs promesses visent le même résultat : $(1, 2)$, $(2, 4)$, $(3, 6)$ annoncent toutes la même moitié. Comment le dire *sans jamais diviser*, puisque nous ne savons pas encore le faire ? Par les produits croisés : « $a$ divisé par $b$ » et « $c$ divisé par $d$ » devraient coïncider exactement quand $ad = bc$ — une condition qui ne fait intervenir que des multiplications, opération que $\mathbb{Z}$ maîtrise parfaitement. Toute la construction tient dans cette pirouette.
+
+</Encart>
+
+### Une équivalence sur les couples
+
+Notons $\mathbb{Z}^* = \mathbb{Z} \setminus \{0\}$ et travaillons sur $\mathbb{Z} \times \mathbb{Z}^*$ : le couple $(a, b)$ représentera le futur « $a$ divisé par $b$ ». Nous y définissons la relation
+
+$$(a, b) \sim (c, d) \iff ad = bc.$$
+
+Elle est réflexive ($ab = ba$ par commutativité) et symétrique (si $ad = bc$, alors $cb = da$). La transitivité, elle, cache la vraie subtilité du chapitre : elle exige l'<Prereq href="/maths/partie-ii/entiers-relatifs">intégrité de $\mathbb{Z}$</Prereq>, établie au chapitre précédent. <Badge niveau="demontre">Les trois propriétés se vérifient par calcul dans $\mathbb{Z}$ ; la transitivité est détaillée dans l'encart.</Badge>
+
+<Encart type="calcul" titre="La transitivité, ligne à ligne">
+
+Supposons $(a, b) \sim (c, d)$ et $(c, d) \sim (e, f)$, avec $b, d, f \in \mathbb{Z}^*$ :
+
+$$\text{(1)}\quad ad = bc \qquad \text{et} \qquad \text{(2)}\quad cf = de.$$
+
+Objectif : $af = be$.
+
+1. Multiplions (1) par $f$ : $adf = bcf$.
+2. Dans le membre de droite, $bcf = b(cf) = b(de) = bde$ par (2) et associativité.
+3. Donc $adf = bde$, soit, en réordonnant par commutativité et associativité : $(af)\,d = (be)\,d$.
+4. Soustrayons et factorisons par distributivité : $(af - be)\,d = 0$.
+5. C'est ici que tout se joue : $\mathbb{Z}$ est intègre — un produit nul a un facteur nul. Or $d \neq 0$ (c'est un dénominateur !). Donc $af - be = 0$, c'est-à-dire $af = be$.
+
+$$\boxed{\sim \text{ est une relation d'équivalence sur } \mathbb{Z} \times \mathbb{Z}^*}$$
+
+Remarquez le rôle décisif du dénominateur *central* $d$ : simplifier par un facteur non nul, c'est exactement la régularité multiplicative de $\mathbb{Z}$, conséquence directe de l'intégrité. Sans elle, tout s'effondrerait.
+
+</Encart>
+
+### $\mathbb{Q}$, et la barre de fraction enfin définie
+
+Puisque $\sim$ est une équivalence, le <Prereq href="/maths/partie-i/relations-fonctions">théorème de partition</Prereq> découpe $\mathbb{Z} \times \mathbb{Z}^*$ en classes disjointes, et l'ensemble quotient existe. Nous posons
+
+$$\mathbb{Q} := (\mathbb{Z} \times \mathbb{Z}^*) / \sim$$
+
+et nous notons $\frac{a}{b}$ (ou $a/b$) **la classe d'équivalence** du couple $(a, b)$. <Badge niveau="admis">Définition : la barre de fraction est une notation pour une classe d'équivalence — avant cette ligne, elle n'existait pas.</Badge>
+
+Savourez : $\frac{1}{2} = \frac{2}{4}$ n'est plus une convention d'écolier, c'est un micro-théorème — même classe, car $1 \times 4 = 2 \times 2$.
+
+### Additionner et multiplier des classes
+
+Nous définissons, sur des représentants :
+
+$$\frac{a}{b} + \frac{c}{d} := \frac{ad + bc}{bd} \qquad \text{et} \qquad \frac{a}{b} \cdot \frac{c}{d} := \frac{ac}{bd}.$$
+
+Deux vigilances. D'abord, ces formules n'ont de sens que si $bd \neq 0$ : c'est précisément l'intégrité de $\mathbb{Z}$ qui le garantit ($b \neq 0$ et $d \neq 0$ entraînent $bd \neq 0$). Ensuite, elles utilisent des représentants : il faut démontrer que le résultat n'en dépend pas. <Badge niveau="demontre">L'addition est traitée ligne à ligne ci-dessous, la multiplication (plus courte) en approfondissement.</Badge>
+
+<Encart type="calcul" titre="L'addition est bien définie">
+
+Soient $(a, b) \sim (a', b')$ et $(c, d) \sim (c', d')$ :
+
+$$\text{(1)}\quad ab' = a'b \qquad \text{et} \qquad \text{(2)}\quad cd' = c'd.$$
+
+Objectif : $(ad + bc,\, bd) \sim (a'd' + b'c',\, b'd')$, soit $(ad + bc)\,b'd' = (a'd' + b'c')\,bd$.
+
+1. Développons le membre de gauche par distributivité : $(ad + bc)\,b'd' = adb'd' + bcb'd'$.
+2. Réordonnons chaque terme (commutativité, associativité) : $adb'd' = (ab')(dd')$ et $bcb'd' = (cd')(bb')$.
+3. Substituons (1) et (2) : cela vaut $(a'b)(dd') + (c'd)(bb')$.
+4. Réordonnons à nouveau : $(a'b)(dd') = (a'd')(bd)$ et $(c'd)(bb') = (b'c')(bd)$.
+5. Factorisons par distributivité : la somme vaut $(a'd' + b'c')\,bd$.
+
+$$\boxed{(ad + bc)\,b'd' = (a'd' + b'c')\,bd}$$
+
+Chaque étape n'est qu'un calcul dans $\mathbb{Z}$ : la somme de deux classes ne dépend pas des représentants choisis.
+
+</Encart>
+
+<Encart type="plusloin" titre="La multiplication est bien définie">
+
+Avec les mêmes hypothèses, il faut $(ac)(b'd') = (a'c')(bd)$. Or $(ac)(b'd') = (ab')(cd') = (a'b)(c'd) = (a'c')(bd)$ : réordonnement, substitution de (1) et (2), réordonnement. $\square$
+
+</Encart>
+
+Les identités usuelles — associativité, commutativité, distributivité, neutres $0 := \frac{0}{1}$ et $1 := \frac{1}{1}$, opposé $-\frac{a}{b} = \frac{-a}{b}$ (d'où une soustraction totale, $x - y := x + (-y)$) — se vérifient toutes selon le même schéma : représentants, calcul dans $\mathbb{Z}$, produits croisés. <Badge niveau="demontre">Vérifications de la même farine que les encarts ci-dessus, sans idée nouvelle ; nous ne les écrivons pas toutes ici.</Badge> L'application $n \mapsto \frac{n}{1}$ plonge $\mathbb{Z}$ dans $\mathbb{Q}$ en respectant les opérations — et aussi, nous le vérifierons une fois l'ordre défini plus bas, les inégalités : nous identifierons $n$ et $\frac{n}{1}$. Enfin, une observation qui servira plusieurs fois : $\frac{a}{b} = 0$ si et seulement si $a = 0$, car $(a, b) \sim (0, 1)$ signifie $a \times 1 = b \times 0$.
+
+### Le premier corps : diviser, enfin
+
+Voici la récompense. Soit $x = \frac{a}{b}$ un rationnel **non nul**. Par l'observation précédente, $a \neq 0$ : le couple $(b, a)$ appartient à $\mathbb{Z} \times \mathbb{Z}^*$, donc la classe $\frac{b}{a}$ existe. Vérifions que c'est un inverse de $x$ : $\frac{a}{b} \cdot \frac{b}{a} = \frac{ab}{ba}$ par définition du produit ; or $(ab, ba) \sim (1, 1)$ car $ab \times 1 = ba \times 1$ (commutativité) ; donc $\frac{a}{b} \cdot \frac{b}{a} = 1$.
+
+<Resultat label="Tout rationnel non nul est inversible : la division devient totale">
+
+$$\forall x \in \mathbb{Q}, \quad x \neq 0 \implies \exists\, z \in \mathbb{Q}, \quad x \cdot z = 1$$
+
+<Badge niveau="demontre" slot="badge">Un inverse de $\frac{a}{b}$ est $\frac{b}{a}$ : vérification directe par produits croisés, faite dans le texte.</Badge>
+
+</Resultat>
+
+Un tel inverse est d'ailleurs unique : si $xz = 1$ et $xz' = 1$, alors $z = z \cdot 1 = z\,(xz') = (xz)\,z' = 1 \cdot z' = z'$ par associativité et commutativité. Nous pouvons donc le noter $x^{-1}$ sans ambiguïté, et poser, pour $y \neq 0$ : $\frac{x}{y} := x \cdot y^{-1}$ — notation cohérente avec la barre déjà définie, puisque $\frac{a}{1} \cdot \left(\frac{b}{1}\right)^{-1} = \frac{a}{1} \cdot \frac{1}{b} = \frac{a}{b}$. La promesse fondatrice du chapitre est tenue, la division est totale. Une structure où l'on ajoute, soustrait, multiplie et divise par tout non nul s'appelle un **corps** — $\mathbb{Q}$ est le premier que nous rencontrons. Le mot reste ici informel ; sa définition officielle attendra la partie IV, avec les anneaux.
+
+### Ordonner les fractions
+
+Déclarons $\frac{a}{b}$ **positif** lorsque $ab \geq 0$ dans $\mathbb{Z}$. Piège classique : cette phrase parle d'un *représentant* — il faut vérifier que le signe de $ab$ ne dépend pas du couple choisi, sans quoi la définition s'écroule. C'est l'objet de l'encart. Nous posons ensuite $x \leq y$ lorsque $y - x$ est positif, et $x < y$ lorsque de plus $x \neq y$ : on obtient un ordre total, compatible avec l'addition et avec la multiplication par un positif. <Badge niveau="demontre">L'invariance du signe — le seul vrai piège — est démontrée dans l'encart ; les compatibilités restantes sont des vérifications routinières du même type, non détaillées ici.</Badge>
+
+<Encart type="plusloin" titre="Le signe ne dépend pas du représentant">
+
+Supposons $(a, b) \sim (a', b')$, c'est-à-dire $ab' = a'b$. Alors $(ab)\,b'^2 = (ab')(bb') = (a'b)(bb') = (a'b')\,b^2$ en réordonnant. Or $b^2 > 0$ et $b'^2 > 0$ (carré d'un non nul, règle des signes dans $\mathbb{Z}$). Supposons $ab \geq 0$ : alors $(a'b')\,b^2 = (ab)\,b'^2 \geq 0$ ; si l'on avait $a'b' < 0$, la compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication par $b^2 > 0$ donnerait $(a'b')\,b^2 < 0$, contradiction. Donc $a'b' \geq 0$, et l'argument est symétrique : la positivité est une propriété de la classe. $\square$
+
+</Encart>
+
+### La densité : plus aucun trou visible
+
+$\mathbb{N}$ et $\mathbb{Z}$ sont discrets : entre $n$ et $n + 1$, rien. $\mathbb{Q}$ est d'une nature radicalement différente.
+
+<Resultat label="Densité : entre deux rationnels, toujours un troisième">
+
+$$\forall x, y \in \mathbb{Q}, \quad x < y \implies \exists z \in \mathbb{Q}, \quad x < z < y$$
+
+<Badge niveau="demontre" slot="badge">Le milieu $(x+y)/2$ convient : démonstration ligne à ligne dans l'encart, chaque inégalité justifiée.</Badge>
+
+</Resultat>
+
+<Encart type="calcul" titre="Le milieu est strictement entre les deux">
+
+Soient $x < y$ deux rationnels.
+
+1. Le rationnel $2 := 1 + 1 = \frac{2}{1}$ est non nul : dans $\mathbb{Z}$, $1 > 0$ donc $2 = 1 + 1 > 1 > 0$, et une fraction n'est nulle que si son numérateur l'est. Son inverse $\frac{1}{2}$ existe donc — c'est le corps qui parle. Son signe : le représentant $(1, 2)$ donne $1 \times 2 \geq 0$, donc $\frac{1}{2} \geq 0$ ; et $\frac{1}{2} \neq 0$ puisque son numérateur $1$ est non nul. Ainsi $\frac{1}{2} > 0$.
+2. De $x < y$, la compatibilité avec l'addition donne $x + x < x + y$ (on ajoute $x$) et $x + y < y + y$ (on ajoute $y$).
+3. Or $x + x = (1 + 1)\,x = 2x$ par distributivité, de même $y + y = 2y$. D'où $2x < x + y < 2y$.
+4. Multiplions par $\frac{1}{2} > 0$ : la compatibilité avec la multiplication par un positif donne $\frac{1}{2}(2x) \leq \frac{1}{2}(x + y) \leq \frac{1}{2}(2y)$, et ces inégalités restent strictes : si l'on avait $\frac{1}{2}\,u = \frac{1}{2}\,v$, multiplier par $2$ redonnerait $u = v$ — or $2x \neq x + y$ et $x + y \neq 2y$.
+5. Enfin $\frac{1}{2}(2x) = \left(\frac{1}{2} \times 2\right) x = 1 \cdot x = x$ par associativité et définition de l'inverse ; de même à droite.
+
+$$\boxed{x < \frac{x + y}{2} < y}$$
+
+En réappliquant le théorème entre $x$ et $z_1 = \frac{x+y}{2}$, on obtient $z_2$, puis $z_3$… Une récurrence immédiate construit, entre deux rationnels distincts, une infinité de rationnels deux à deux distincts.
+
+</Encart>
+
+Aucun rationnel n'a de « successeur » : la droite rationnelle semble pleine, sans le moindre interstice. Retenez cette impression — le prochain chapitre la brisera : une longueur parfaitement concrète, la diagonale du carré de côté $1$, échappe à tous les rationnels.
+
+### La forme irréductible, par le bon ordre
+
+Un même rationnel a une infinité d'écritures : $\frac{2}{4} = \frac{3}{6} = \frac{-1}{-2}\,$… Peut-on en choisir une canonique ? Oui : celle de plus petit dénominateur positif. <Badge niveau="demontre">L'existence repose uniquement sur le bon ordre de $\mathbb{N}$ — aucun outil d'arithmétique fine n'est nécessaire.</Badge>
+
+<Encart type="calcul" titre="Existence d'un plus petit dénominateur">
+
+Soit $x = \frac{a}{b}$ un rationnel.
+
+1. Ramenons-nous à un dénominateur positif : si $b < 0$, alors $(a, b) \sim (-a, -b)$ car $a(-b) = -ab = b(-a)$, et $-b > 0$.
+2. Posons $D := \{\, q \geq 1 : \text{il existe } p \in \mathbb{Z} \text{ tel que } x = p/q \,\}$, vu comme partie de $\mathbb{N}$ via le <Prereq href="/maths/partie-ii/entiers-relatifs">plongement de $\mathbb{N}$ dans $\mathbb{Z}$</Prereq>.
+3. $D$ est non vide : $b$ étant un entier non nul, ou bien $b \geq 1$ et alors $b \in D$ directement (avec $p = a$), ou bien $b \leq -1$ et l'étape 1 fournit $-b \geq 1$ avec $x = (-a)/(-b)$, donc $-b \in D$.
+4. Le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> — toute partie non vide de $\mathbb{N}$ a un plus petit élément — fournit le minimum $q_0$ de $D$. Choisissons $p_0$ avec $x = p_0/q_0$.
+5. Ce numérateur est unique pour ce dénominateur : si $p_0/q_0 = p/q_0$, alors $p_0 q_0 = p q_0$ ; comme $q_0 \neq 0$, on simplifie par régularité (conséquence de l'intégrité de $\mathbb{Z}$) : $p = p_0$.
+
+$$\boxed{\text{Tout rationnel s'écrit } p_0/q_0 \text{ avec } q_0 \geq 1 \text{ minimal, et } p_0 \text{ est alors unique}}$$
+
+</Encart>
+
+Honnêteté oblige : relier cette minimalité à la condition familière « $p_0$ et $q_0$ sans diviseur commun » demandera le pgcd, qui attendra la partie IV. Mais ce que nous venons de démontrer suffit exactement à nos besoins : c'est ce plus petit dénominateur qui portera, au chapitre suivant, la preuve que $\sqrt{2}$ n'est pas rationnel — d'une écriture hypothétique de $\sqrt{2}$, on fabriquerait une écriture à dénominateur plus petit, contredisant la minimalité.
+
+### $\mathbb{Q}$ est archimédien
+
+Dernière propriété, discrète mais promise à un grand avenir : aucun rationnel, si grand soit-il, n'est hors de portée des multiples d'un rationnel strictement positif, si petit soit-il. <Badge niveau="demontre">Pour tous $x, y > 0$ rationnels, il existe $n \in \mathbb{N}$ tel que $nx > y$ ; démonstration dans l'encart.</Badge>
+
+<Encart type="plusloin" titre="Démonstration du caractère archimédien">
+
+Soient $x, y > 0$. Choisissons des représentants à dénominateurs positifs : $x = \frac{a}{b}$, $y = \frac{c}{d}$ avec $b, d \geq 1$. Comme $x > 0$ : $ab \geq 0$ avec $a \neq 0$ (car $x \neq 0$) et $b \geq 1$ ; si $a$ était négatif, $ab$ le serait aussi (compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication par $b > 0$), donc $a \geq 1$. De même $c \geq 1$. Règle de comparaison : pour $b, d > 0$, on a $\frac{a}{b} > \frac{c}{d} \iff ad > bc$, car la différence vaut $\frac{ad - bc}{bd}$, dont le signe est celui de $(ad - bc)\,bd$ avec $bd > 0$. Posons $n := bc + 1 \in \mathbb{N}$. Alors $nx = \frac{na}{b}$, et $nx > y \iff nad > bc$. Or $a \geq 1$ et $d \geq 1$ donnent $ad \geq 1$, puis, par compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication, $nad \geq n = bc + 1 > bc$. Donc $nx > y$. $\square$
+
+</Encart>
+
+Ce fait anodin — en additionnant assez de fois un petit pas, on dépasse n'importe quelle borne — sera un rouage silencieux des limites en partie V : c'est lui qui garantit que les $\frac{1}{n}$ descendent sous tout seuil.
+
+Voici donc $\mathbb{Q}$ : un corps ordonné, dense, archimédien, où l'on divise librement — et tout cela par pure déduction, sans une seule hypothèse nouvelle depuis ZF. La droite rationnelle paraît achevée. Au chapitre suivant, un carré de côté $1$ et sa diagonale prouveront qu'il n'en est rien : la droite est criblée de trous, et il faudra les combler — ce seront les nombres réels.

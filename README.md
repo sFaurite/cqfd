@@ -4,7 +4,7 @@ Portail réunissant **quatre cours déductifs** (« rien n'est utilisé sans êt
 au grand jour, soit une déduction, soit une observation ») :
 
 - **`/physique`** — *De la relativité au Modèle Standard* (36 pages, 15 composants interactifs, 6 vidéos Manim).
-- **`/maths`** — *Les mathématiques depuis les axiomes* (9 pages, 2 composants interactifs, 1 vidéo Manim).
+- **`/maths`** — *Les mathématiques depuis les axiomes* (31 pages, 8 composants interactifs, 5 vidéos Manim).
 - **`/processeurs`** — *Des atomes au système d'exploitation* (35 pages, 16 composants interactifs, 10 vidéos Manim).
 - **`/cosmologie`** — *La cosmologie, des premiers instants au monde actuel* (29 pages, 8 composants interactifs, 6 vidéos Manim).
 

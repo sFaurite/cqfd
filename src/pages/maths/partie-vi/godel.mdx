@@ -1,0 +1,175 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les théorèmes d incomplétude de Gödel"
+chapter: godel
+description: "Arithmétisation de la syntaxe ; lemme diagonal (écho Cantor) ; PREMIER théorème d incomplétude (énoncé précis, esquisse honnête) ; SECOND théorème (Con(T) indémontrable dans T) ; ce que ces théorèmes ne disent PAS ; Goodstein/Paris–Harrington ; lien avec l arrêt de Turing."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Faire des mathématiques *sur* les mathématiques
+
+Depuis vingt-trois chapitres, nous démontrons. Un théorème, c'est <Prereq href="/maths/partie-i/methode-axiomatique">une suite finie d'énoncés</Prereq> menant des axiomes à une conclusion, et nous nous en servons comme d'un outil transparent : on l'emploie, on ne le regarde pas. Ce chapitre opère un **renversement du regard** — la démonstration elle-même devient un **objet mathématique**, qu'on peut compter et coder. Nous allons faire des mathématiques *sur* les mathématiques.
+
+<Hypotheses titre="Le cadre de ce chapitre">
+
+1. **Aucune hypothèse nouvelle.** Tout part de ZF et de ce qui en a déjà été déduit ; l'arithmétique de $\mathbb{N}$ suffira. Rien n'est ajouté — pas même l'axiome du choix.
+2. **Un changement de point de vue**, en revanche, qu'il faut annoncer : les formules et les preuves cessent d'être notre *langage* pour devenir notre *sujet*. Ce n'est pas une hypothèse — c'est une place assise différente.
+
+</Hypotheses>
+
+<Encart type="intuition" titre="Le rêve de Hilbert (années 1920)">
+David Hilbert rêvait d'un socle définitif : un système d'axiomes à la fois **complet** — tout énoncé y serait tranché, démontré ou réfuté, aucune question laissée en suspens — et dont on pourrait **prouver la cohérence** par des moyens élémentaires, incontestables. Les mathématiques se refermeraient sur elles-mêmes, sans faille et sans mystère. En 1931, un logicien de vingt-cinq ans, Kurt Gödel, a montré que ce rêve était **impossible**. Pas difficile : impossible.
+</Encart>
+
+## L'arithmétisation : coder le langage par des nombres
+
+L'idée de génie tient en une phrase : **à chaque symbole, chaque formule, chaque démonstration, associons un entier**. Fixons un code pour chaque signe du langage — disons, pour l'exemple, $c(\texttt{0}) = 1$ et $c(\texttt{=}) = 2$. Une formule est une suite finie de symboles ; codons-la par un produit de **puissances de premiers successifs**, l'exposant du $k$-ième premier étant le code du $k$-ième symbole.
+
+<Encart type="calcul" titre="Coder « 0 = 0 » — puis le décoder">
+
+La chaîne $\texttt{0}\,\texttt{=}\,\texttt{0}$ a pour suite de codes $(1, 2, 1)$. On lui attribue
+
+$$\ulcorner \texttt{0=0} \urcorner \; := \; 2^{1} \cdot 3^{2} \cdot 5^{1} = 2 \cdot 9 \cdot 5 = 90.$$
+
+Réciproquement, partez de $90$ et factorisez : $90 = 2^1 \cdot 3^2 \cdot 5^1$. Les exposants $(1,2,1)$ rendent *exactement* la chaîne de départ, sans ambiguïté. Cette réversibilité repose entièrement sur <Prereq href="/maths/partie-iv/arithmetique">l'unicité de la factorisation en nombres premiers</Prereq> : le théorème fondamental de l'arithmétique devient ici un outil de **logique**. Jolie surprise.
+
+</Encart>
+
+Une démonstration étant une suite *finie* de formules, elle se code de même — un entier encodant la suite des entiers qui encodent ses formules. Tout se numérote, exactement comme <Prereq href="/maths/partie-iii/denombrables">les suites finies se rangent en une file dénombrable</Prereq>. La conséquence est stupéfiante :
+
+<Resultat label="L'arithmétique parle d'elle-même">
+
+La relation « $n$ code une démonstration de la formule codée $m$ » est **arithmétique** : une machine peut la vérifier. On note $\mathrm{Dem}(m)$ l'énoncé « il existe $n$ tel que $n$ code une démonstration de $m$ ».
+
+<Badge niveau="demontre" slot="badge">Construction explicite de Gödel : « être une preuve de » est une relation primitive récursive, exprimable dans l'arithmétique.</Badge>
+
+</Resultat>
+
+## Le lemme diagonal
+
+Une fois le langage capable de parler de ses propres codes, un ressort déjà rencontré deux fois se réarme.
+
+<Encart type="intuition" titre="Le ressort diagonal, troisième apparition">
+Le même geste traverse tout le cours. <Prereq href="/maths/partie-iii/diagonale-cantor">Cantor</Prereq> a construit la diagonale pour **créer** de nouveaux infinis ; Russell l'a retournée pour **détruire** la théorie naïve des ensembles ; Gödel l'emploie pour **limiter** les systèmes formels. Créer, détruire, limiter — trois fois la même idée : un objet qui parle de lui-même se retourne contre la liste qui prétend le contenir.
+</Encart>
+
+<Resultat label="Lemme diagonal (point fixe)">
+
+Pour toute propriété $P(x)$ exprimable dans le système, il existe un énoncé $G$ tel que
+
+$$T \vdash \big( G \iff P(\ulcorner G \urcorner) \big).$$
+
+Autrement dit, $G$ « affirme » que son propre code possède la propriété $P$.
+
+<Badge niveau="demontre" slot="badge">Démontré (Gödel, puis Carnap). La construction est explicite, via une fonction de substitution codée arithmétiquement.</Badge>
+
+</Resultat>
+
+<Encart type="plusloin" titre="Esquisse honnête : la fonction de substitution">
+Le cœur technique est une fonction $\mathrm{sub}(a, b)$ qui, à partir du code $a$ d'une formule à une variable libre et d'un nombre $b$, renvoie le code de la formule obtenue en substituant le *chiffre* de $b$ à la variable. On montre qu'elle est calculable, donc exprimable dans l'arithmétique. On pose alors $D(x) := P\big(\mathrm{sub}(x,x)\big)$, de code $d$, puis $G := D(d)$. Un calcul direct donne $G \iff P\big(\mathrm{sub}(d,d)\big) \iff P(\ulcorner G \urcorner)$. C'est technique, mais parfaitement rigoureux : aucune magie, une substitution qui se mord la queue.
+</Encart>
+
+## Premier théorème d'incomplétude
+
+Appliquons le lemme diagonal à la propriété « ne pas être démontrable », soit $P(x) := \lnot\,\mathrm{Dem}(x)$. On obtient un énoncé $G$ qui affirme : **« Je ne suis pas démontrable. »**
+
+<Resultat label="Premier théorème d'incomplétude (Gödel, 1931)">
+
+Soit $T$ un système **(i)** cohérent, **(ii)** récursivement axiomatisable, **(iii)** assez riche pour l'arithmétique. Alors il existe un énoncé $G$ que $T$ ne peut ni démontrer ni réfuter.
+
+<Badge niveau="demontre" slot="badge">Théorème de 1931, rigoureusement établi. Ce n'est ni une opinion ni une conjecture : c'est un théorème, aussi solide que $2+2=4$.</Badge>
+
+</Resultat>
+
+Les **trois** hypothèses sont indispensables. « Récursivement axiomatisable » veut dire **une machine peut vérifier si un texte donné est un axiome**. Sans elle, l'énoncé devient *faux* : l'ensemble de tous les énoncés vrais de $\mathbb{N}$ est, lui, complet — mais sa liste d'axiomes n'est énumérable par aucun algorithme. Retenez-le : oublier (ii), c'est énoncer une contre-vérité.
+
+<Encart type="calcul" titre="Le raisonnement des deux cas">
+
+$G$ dit « $G$ n'est pas démontrable », c'est-à-dire $G \iff \lnot\,\mathrm{Dem}(\ulcorner G \urcorner)$.
+
+**Cas 1 — supposons $T \vdash G$.** Il existe alors une démonstration de $G$ : un certain $n$ la code, donc $\mathrm{Dem}(\ulcorner G\urcorner)$ est vrai et $T \vdash \mathrm{Dem}(\ulcorner G \urcorner)$. Mais $G$ équivaut à $\lnot\,\mathrm{Dem}(\ulcorner G\urcorner)$, d'où $T \vdash \lnot\,\mathrm{Dem}(\ulcorner G\urcorner)$ également. $T$ démontre une chose *et* son contraire : il est **incohérent**, contre (i). Donc $T \nvdash G$.
+
+**Cas 2 — supposons $T \vdash \lnot G$.** Alors $T \vdash \mathrm{Dem}(\ulcorner G\urcorner)$ : $T$ affirme qu'une preuve de $G$ existe. Or le cas 1 vient d'établir qu'aucune n'existe réellement. Pour en tirer $T \nvdash \lnot G$, il faut un cran de plus que la seule cohérence — l'**ω-cohérence**, ou l'astuce de Rosser (voir ci-dessous).
+
+**Conclusion.** $T$ ne démontre ni $G$ ni $\lnot G$ : l'énoncé $G$ est **indécidable** dans $T$.
+
+$$\boxed{\;T \nvdash G \quad \text{et} \quad T \nvdash \lnot G\;}$$
+
+</Encart>
+
+<Encart type="plusloin" titre="ω-cohérence et l'astuce de Rosser (pour les puristes)">
+La version originale de Gödel suppose $T$ *ω-cohérent* : $T$ ne démontre pas $\exists x\, \varphi(x)$ tout en réfutant $\varphi(0), \varphi(1), \varphi(2), \dots$ un à un. En 1936, Rosser a raffiné $G$ en un énoncé plus rusé (« à toute preuve de moi correspond une preuve plus courte de ma négation »), ramenant l'hypothèse à la **seule cohérence**. L'esquisse principale ci-dessus escamote ce point au cas 2 : nous le signalons plutôt que de le cacher.
+</Encart>
+
+Vient alors la lecture **sémantique**, où chaque mot pèse. Le cas 1 a prouvé que $G$ n'est pas démontrable dans $T$ — or c'est *exactement ce que $G$ affirme*. Donc, dans le **modèle standard** $\mathbb{N}$, $G$ se trouve être… **vrai**.
+
+<Resultat label="Vrai, mais indémontrable">
+
+Il existe un énoncé $G$ **vrai dans $\mathbb{N}$** et pourtant **indémontrable dans $T$**.
+
+<Badge niveau="demontre" slot="badge">« Vrai » est ici sémantique (dans le modèle standard $\mathbb{N}$), « indémontrable » est syntaxique (dans $T$). Les deux qualificatifs sont relatifs : les confondre, c'est perdre le théorème.</Badge>
+
+</Resultat>
+
+## Second théorème : le système ne peut pas se porter lui-même
+
+Le cas 1 ci-dessus, « si $T$ est cohérent alors $T \nvdash G$ », est un raisonnement fini, donc arithmétisable *dans $T$ lui-même* : il y devient l'implication interne $\mathrm{Coh}(T) \Rightarrow G$. Si $T$ démontrait $\mathrm{Coh}(T)$, il démontrerait $G$ — ce que le premier théorème interdit.
+
+<Resultat label="Second théorème d'incomplétude (Gödel, 1931)">
+
+Si $T$ est cohérent (et remplit (ii), (iii)), alors $T$ ne démontre pas l'énoncé arithmétique $\mathrm{Coh}(T)$ affirmant sa propre cohérence — l'énoncé « $\texttt{0=1}$ n'est pas démontrable ».
+
+<Badge niveau="demontre" slot="badge">Obtenu en formalisant la preuve du premier théorème à l'intérieur de $T$ : le « cas 1 » devient lui-même un théorème arithmétique.</Badge>
+
+</Resultat>
+
+Nous tenons enfin, en détail, la <Prereq href="/maths/partie-i/methode-axiomatique">promesse du premier chapitre</Prereq>. ZF est récursivement axiomatisable et contient l'arithmétique : le second théorème s'y applique. **ZF ne démontre pas Con(ZF).** C'est le moment le plus humble du cours, et il faut le dire avec gravité sobre : l'édifice ne peut pas se porter lui-même.
+
+<Resultat label="Ce que cela nous coûte, à nous">
+
+Nous **travaillons dans ZF** par un choix assumé — un siècle sans contradiction, des modèles partiels rassurants — et non par une garantie interne, qui est démontrée impossible.
+
+<Badge niveau="admis" slot="badge">« On travaille dans ZF » est une décision méthodologique adoptée, pas un théorème. En regard, le méta-théorème « ZF ⊬ Con(ZF) », lui, est parfaitement démontré.</Badge>
+
+</Resultat>
+
+## Ce que ces théorèmes ne disent *pas*
+
+Aussi important que les théorèmes eux-mêmes : ce qu'on leur fait dire à tort.
+
+- **Pas « tout est relatif ».** L'immense majorité des énoncés utiles reste tranchée ; l'incomplétude ne frappe que des énoncés soigneusement fabriqués (ou rares et pointus, comme Goodstein plus bas), pas $2+2=4$.
+- **Uniquement les systèmes formels récursivement axiomatisables.** Ces théorèmes ne parlent pas de « la pensée » ni de « la vérité en général ». Les extrapolations de type Lucas–Penrose (« l'esprit humain dépasserait toute machine ») sont **débattues philosophiquement** — nous les mentionnons sans aucun badge, car ce ne sont pas des théorèmes.
+- **Incomplétude n'est pas incohérence.** $T$ n'est pas contradictoire ; il est seulement incapable de tout trancher.
+- **Indécidable dans $T$ n'est pas inconnaissable.** Un tel énoncé peut être parfaitement *connu et prouvé* depuis un système plus fort. L'exemple suit — et il est spectaculaire.
+
+## De vrais monstres : le théorème de Goodstein
+
+<Encart type="intuition" titre="Les suites qui explosent, puis meurent">
+Écrivez un entier en base $2$ « héréditaire » (les exposants aussi en base $2$), puis répétez le geste : **augmentez la base de $1$, retranchez $1$**. Partez de $4 = 2^2$. On monte la base à $3$ : $3^3 = 27$, moins $1$ font $26$. En base $3$, $26 = 2\cdot 3^2 + 2\cdot 3 + 2$ ; base $\to 4$ : $2\cdot 4^2+2\cdot4+2 = 42$, moins $1 = 41$. Puis $60$, puis $83$… La suite $4, 26, 41, 60, 83, \dots$ grimpe, grimpe, atteint un sommet de $3\cdot 2^{402653210} - 1$ — un nombre gigantesque — et pourtant, contre toute intuition, elle **redescend** et **finit à $0$**.
+</Encart>
+
+<Resultat label="Théorème de Goodstein">
+
+Partant de *n'importe quel* entier, la suite de Goodstein finit par atteindre $0$.
+
+<Badge niveau="demontre" slot="badge">Démontré **dans ZF** (Goodstein, 1944) : à la suite d'entiers qui explose on associe une suite d'**ordinaux** qui, elle, décroît *strictement* — et une suite strictement décroissante d'ordinaux ne peut être infinie. La suite d'entiers doit donc mourir.</Badge>
+
+</Resultat>
+
+Et voici le second étage, jumeau de celui du <Prereq href="/maths/partie-iii/hypothese-continu">chapitre sur l'hypothèse du continu</Prereq> : ce même énoncé est **indémontrable dans l'arithmétique de Peano** (Kirby–Paris, 1982). La grille est exactement la même — deux badges, deux niveaux :
+
+<Badge niveau="indecidable">Ni prouvable ni réfutable dans PA (Kirby–Paris, 1982) : la preuve réclame des ordinaux transfinis dont PA ne dispose pas. Exactement le statut de CH dans ZFC, un étage plus bas — mais dans notre cadre ZF, plus riche, il est bel et bien démontré (badge vert ci-dessus). Indécidable *dans PA*, pas dans notre cadre ZF.</Badge>
+
+Le théorème de **Paris–Harrington** (une variante finie du théorème de Ramsey) offre un second exemple naturel du même phénomène. Ces énoncés prouvent, sur pièces, notre quatrième mise en garde : indécidable *dans un système* n'a jamais voulu dire inconnaissable.
+
+<Encart type="plusloin" titre="La même diagonale en informatique : l'arrêt de Turing">
+En 1936, Alan Turing a démontré qu'aucun algorithme ne peut décider, pour tout programme et toute entrée, si le programme s'arrête. La preuve ? Une machine qui s'auto-examine : supposez un décideur d'arrêt $H$, fabriquez le programme $D$ qui « boucle si $H$ dit que $D$ s'arrête, et s'arrête sinon », puis demandez à $H$ ce que fait $D$ sur lui-même. Contradiction — la diagonale, encore. Incomplétude et indécidabilité de l'arrêt sont les deux visages du même geste (clin d'œil aux processeurs qui, ailleurs, exécutent ces programmes).
+</Encart>
+
+L'édifice ne peut pas se porter lui-même — et pourtant il tient, un siècle de pratique en témoigne. Nous avons croisé, trois fois déjà, un axiome que nous n'avons jamais adopté : dans la réunion dénombrable, dans la caractérisation séquentielle, dans l'infini de Dedekind. Au chapitre suivant, il est temps de le regarder en face, avec ses trésors et ses monstres — l'**axiome du choix**.

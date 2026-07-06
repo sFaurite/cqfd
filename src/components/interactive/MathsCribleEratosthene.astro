@@ -1,0 +1,49 @@
+---
+/**
+ * MathsCribleEratosthene — le crible d'Ératosthène sur la grille 2…121, puis la
+ * raréfaction des nombres premiers. Vue 1 : on avance pas à pas — le plus petit
+ * nombre non rayé est premier (théorème), on raye ses multiples (utiles à partir
+ * de p²), et dès que p dépasse √121 = 11, tout survivant est premier. Vue 2 :
+ * l'escalier π(x) jusqu'à 1000 superposé à la courbe lisse x/ln x — les premiers
+ * se raréfient mais suivent une loi (théorème des nombres premiers).
+ */
+---
+
+<div class="iw" data-iw="maths-crible-eratosthene">
+  <div class="iw__head"><span class="tag">Interactif</span> Le crible d’Ératosthène et la raréfaction des premiers</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 13"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label>Cribler</label>
+      <span class="iw__btns">
+        <button type="button" class="iw__btn" data-step>Étape suivante</button>
+        <button type="button" class="iw__btn" data-all>Tout cribler</button>
+        <button type="button" class="iw__btn" data-reset>↺ Recommencer</button>
+      </span>
+    </div>
+    <div class="iw__row">
+      <label>Vue</label>
+      <span class="iw__btns">
+        <button type="button" class="iw__btn active" data-view-grid>Grille 2…121</button>
+        <button type="button" class="iw__btn" data-view-curve>π(x) et x/ln x</button>
+      </span>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><b data-out-step>prochain nombre non rayé : p = 2</b></span>
+    <span class="iw__chip"><span class="k">premiers trouvés</span> <b data-out-count>0</b></span>
+    <span class="iw__chip"><span class="k">au survol</span> <b data-out-hover>—</b></span>
+  </div>
+  <p class="iw__note">
+    À chaque étape, le plus petit nombre <b>non rayé</b> est forcément premier : s’il était composé,
+    un facteur plus petit l’aurait déjà rayé. On raye alors ses multiples — utilement à partir de
+    <b>p²</b> seulement. Le crible est un <em>algorithme dont la correction se démontre</em> : tout
+    composé n ≤ 121 possède un facteur premier ≤ √121 = 11, donc après p = 11 chaque survivant est
+    premier. Basculez sur « π(x) et x/ln x » : l’escalier ralentit — les premiers se raréfient —
+    mais il longe la courbe lisse x/ln x. C’est le théorème des nombres premiers : π(x) ∼ x/ln x.
+  </p>
+</div>
+
+<script>
+  import './MathsCribleEratosthene.client.ts';
+</script>

@@ -1,0 +1,50 @@
+---
+/**
+ * MathsExpComplexe — la spirale des sommes partielles de exp(iθ) dans le plan
+ * complexe. Chaque segment de la ligne brisée est un terme (iθ)^j / j! ; passer
+ * d'un terme au suivant, c'est multiplier par iθ/j : tourner de 90° puis
+ * redimensionner — d'où la spirale, qui s'enroule vers cos θ + i sin θ.
+ * À θ = π, elle atterrit sur −1 : la formule d'Euler comme limite d'une série.
+ */
+---
+
+<div class="iw" data-iw="maths-exp-complexe">
+  <div class="iw__head"><span class="tag">Interactif</span> La spirale de exp(iθ) et e<sup>iπ</sup> = −1</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="mec-theta">angle θ</label>
+      <input id="mec-theta" type="range" min="0" max="1000" step="1" value="500" list="mec-theta-marks" data-theta />
+      <datalist id="mec-theta-marks">
+        <option value="500" label="π"></option>
+      </datalist>
+      <output data-out-theta-s>1,00 π</output>
+    </div>
+    <div class="iw__row">
+      <label for="mec-k">termes k</label>
+      <input id="mec-k" type="range" min="1" max="30" step="1" value="8" data-k />
+      <output data-out-k>8</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-pi>θ = π</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">θ =</span> <b data-out-theta></b></span>
+    <span class="iw__chip"><span class="k">S<sub>k</sub> ≈</span> <b data-out-sk></b></span>
+    <span class="iw__chip"><span class="k">|S<sub>k</sub> − e<sup>iθ</sup>| =</span> <b data-out-err></b></span>
+    <span class="iw__chip" data-euler-chip hidden><b data-out-euler></b></span>
+  </div>
+  <p class="iw__note">
+    Chaque segment est un terme de la série : on passe d’un terme au suivant en <b>multipliant par
+    iθ/j</b> — multiplier par i, c’est <b>tourner de 90°</b> ; le facteur θ/j redimensionne. Voilà
+    pourquoi la ligne brisée spirale, et pourquoi elle finit par se resserrer : dès que j &gt; θ, chaque
+    terme est plus court que le précédent. Augmentez <b>k</b> : le point jaune S<sub>k</sub> s’enroule
+    vers l’anneau vert cos θ + i sin θ, et |S<sub>k</sub> − e<sup>iθ</sup>| fond vers 0. À θ = π, la
+    spirale atterrit sur −1 : <b>la formule d’Euler n’est pas un décret, c’est une série qui converge</b>.
+  </p>
+</div>
+
+<script>
+  import './MathsExpComplexe.client.ts';
+</script>

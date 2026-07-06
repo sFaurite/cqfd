@@ -1,0 +1,41 @@
+---
+/**
+ * MathsEpsilonN — le jeu du ε et du N : la définition de la limite d'une suite
+ * rendue tangible. L'adversaire choisit une marge ε autour de ℓ ; vous devez
+ * exhiber un rang N à partir duquel TOUS les termes restent dans la bande.
+ * Gagner pour TOUT ε, c'est exactement « la suite converge vers ℓ ».
+ */
+---
+
+<div class="iw" data-iw="epsilon-n">
+  <div class="iw__head"><span class="tag">Interactif</span> Le jeu du ε et du N : la définition de la limite</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 8"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__btns">
+      <button class="iw__btn active" type="button" data-suite="A">uₙ = 1 + (−1)ⁿ/n</button>
+      <button class="iw__btn" type="button" data-suite="B">uₙ = 1 + 1/√n</button>
+      <button class="iw__btn" type="button" data-suite="C">uₙ = 1 + (−1)ⁿ/2</button>
+    </div>
+    <div class="iw__row">
+      <label for="en-eps">marge ε</label>
+      <input id="en-eps" type="range" min="0.02" max="0.6" step="0.01" value="0.25" data-eps />
+      <output data-out-eps>0,25</output>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">limite visée</span> <b>ℓ = 1</b></span>
+    <span class="iw__chip"><span class="k">verdict</span> <b data-out-main>—</b></span>
+  </div>
+  <p class="iw__note">
+    L’adversaire choisit la marge <b>ε</b> — la bande bleue autour de ℓ = 1 — et vous devez répondre
+    un rang <b>N</b> à partir duquel <em>tous</em> les termes (verts) restent dans la bande.
+    Resserrez ε : N recule, parfois très loin — pour la suite B et ε = 0,02, N dépasse 2 500 —
+    mais pour A et B il <b>existe toujours</b> : c’est exactement la définition « uₙ → ℓ ».
+    La suite C, elle, ressort éternellement de toute bande plus étroite que 0,5 :
+    aucun N ne convient, elle ne converge pas.
+  </p>
+</div>
+
+<script>
+  import './MathsEpsilonN.client.ts';
+</script>

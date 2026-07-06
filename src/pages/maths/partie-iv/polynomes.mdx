@@ -1,0 +1,184 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les polynômes et leurs racines"
+chapter: polynomes
+description: "Polynôme formel (suite presque nulle) ≠ fonction polynomiale ; degré ; division euclidienne des polynômes ; a racine ssi (X − a) divise P ; au plus deg P racines sur un anneau intègre ; théorème fondamental de l algèbre (esquisse honnête) ; Abel–Ruffini cité."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Un polynôme n'est pas une expression
+
+Le mot « polynôme » évoque $3X^2 - 5X + 1$ : une *expression*, ou une fonction qu'on évalue. Dans notre édifice, ce n'est ni l'un ni l'autre. Un polynôme sera un **objet construit**, aussi concret qu'un couple ou qu'un entier — et cette rigueur va très vite nous offrir une distinction que presque tous les cours passent sous silence.
+
+<Encart type="intuition" titre="Une colonne de casiers numérotés">
+Imaginez une colonne de casiers numérotés $0, 1, 2, \dots$ ; le casier $i$ contient le coefficient de $X^i$. Presque tous sont vides. *Additionner* deux polynômes, c'est additionner casier par casier. *Multiplier*, c'est distribuer : le terme du casier $i$ de l'un, multiplié par celui du casier $j$ de l'autre, atterrit dans le casier $i+j$ — pour remplir le casier $n$ du produit, on ramasse toutes les paires $(i,j)$ telles que $i+j = n$. Quant à la lettre $X$, ce n'est pas une « inconnue » mystérieuse : c'est simplement la colonne qui ne contient qu'un $1$, dans le casier n°1. Un marqueur de position, rien de plus.
+</Encart>
+
+## La définition : une suite de coefficients
+
+Fixons un <Prereq href="/maths/partie-iv/anneaux-corps">anneau commutatif</Prereq> $A$. Un **polynôme à coefficients dans $A$** est une suite $(a_0, a_1, a_2, \dots)$ d'éléments de $A$ **presque nulle** : tous ses termes sont nuls sauf un nombre fini. On note $A[X]$ leur ensemble, muni de deux opérations — pour $a = (a_i)$ et $b = (b_i)$ :
+
+$$ (a + b)_n := a_n + b_n \qquad \text{et} \qquad (a \cdot b)_n := \sum_{i+j=n} a_i b_j = \sum_{k=0}^{n} a_k\, b_{n-k} $$
+
+<Badge niveau="admis">Définitions : nous posons ces formules. La seconde — le *produit de convolution* — encode exactement la règle des casiers.</Badge>
+
+Posons $X := (0, 1, 0, 0, \dots)$. La machinerie tourne toute seule :
+
+<Encart type="calcul" titre="X² = (0,0,1,0,…), ligne à ligne">
+Les termes de $X$ sont $X_1 = 1$ et $X_k = 0$ pour $k \neq 1$. Calculons $(X\cdot X)_n = \sum_{k=0}^n X_k X_{n-k}$ :
+
+$$ (X^2)_0 = X_0 X_0 = 0 \cdot 0 = 0 $$
+
+$$ (X^2)_1 = X_0 X_1 + X_1 X_0 = 0\cdot 1 + 1 \cdot 0 = 0 $$
+
+$$ (X^2)_2 = X_0 X_2 + X_1 X_1 + X_2 X_0 = 0 + 1\cdot 1 + 0 = 1 $$
+
+Pour $n \ge 3$, chaque terme $X_k X_{n-k}$ a l'un de ses indices différent de $1$ (ils somment à $n \ge 3$), donc s'annule. Ainsi :
+
+$$ \boxed{\,X^2 = (0, 0, 1, 0, \dots)\,} $$
+
+</Encart>
+
+Identifions enfin chaque $a \in A$ à la suite $(a, 0, 0, \dots)$, et remarquons que $X^i$ est la suite valant $1$ au casier $i$, $0$ ailleurs. Alors, pour une suite presque nulle s'arrêtant après le rang $n$ :
+
+$$ \sum_{i=0}^{n} a_i X^i = (a_0, a_1, \dots, a_n, 0, 0, \dots) $$
+
+<Badge niveau="demontre">L'écriture familière $a_0 + a_1 X + \dots + a_n X^n$ *est* la suite de ses coefficients — une simple traduction, vérifiée depuis les définitions.</Badge> Nous écrirons désormais les polynômes ainsi, en sachant ce qu'ils sont.
+
+## Le choc : polynôme ≠ fonction
+
+À tout $P = \sum a_i X^i$ on associe sa **fonction** $\widetilde{P} : A \to A$, $x \mapsto \sum a_i x^i$. Sur $\mathbb{R}$ ou $\mathbb{C}$, deux polynômes égaux en tant que fonctions sont égaux tout court — rassurant, mais c'est un *théorème*, et il tombe en défaut sur un corps fini.
+
+Prenons $A = \mathbb{F}_p = \mathbb{Z}/p\mathbb{Z}$ (avec $p$ premier) et $P = X^p - X$. Ses coefficients sont $-1$ au casier $1$, $1$ au casier $p$ : tous deux **non nuls** dans $\mathbb{F}_p$ (car $p \ge 2$), donc $P \neq 0$ *comme polynôme*. Pourtant sa fonction est **identiquement nulle** :
+
+<Encart type="calcul" titre="X^p − X : fonction nulle, polynôme non nul">
+Soit $a \in \mathbb{F}_p$. Si $a \neq 0$, le <Prereq href="/maths/partie-iv/anneaux-corps">petit théorème de Fermat</Prereq> donne $a^{p-1} = 1$, d'où $a^p = a \cdot a^{p-1} = a$. Si $a = 0$, alors $a^p = 0 = a$. Dans les deux cas :
+
+$$ \widetilde{P}(a) = a^p - a = 0 \quad \text{pour tout } a \in \mathbb{F}_p $$
+
+</Encart>
+
+<Badge niveau="demontre">Sur $\mathbb{F}_p$, le polynôme $X^p - X$ n'est pas nul mais sa fonction l'est : identifier polynôme et fonction serait ici une faute. Preuve complète via Fermat.</Badge>
+
+<Encart type="plusloin" titre="Pourquoi la confusion est sans danger sur ℝ et ℂ">
+Sur un corps **infini**, l'application $P \mapsto \widetilde{P}$ est injective. En effet, si $\widetilde{P} = \widetilde{Q}$, le polynôme $P - Q$ s'annule en une infinité de points ; or (corollaire démontré plus bas) un polynôme non nul de degré $n$ a *au plus $n$ racines*. Un polynôme à une infinité de racines est donc nul : $P = Q$. C'est parce que $\mathbb{F}_p$ est *fini* que $X^p - X$ peut mentir.
+</Encart>
+
+## Le degré, et pourquoi l'intégrité compte
+
+Pour $P \neq 0$, le **degré** $\deg P$ est le plus grand $n$ tel que $a_n \neq 0$ ; ce $a_n$ est le **coefficient dominant**. On pose $\deg 0 = -\infty$.
+
+**Théorème.** Si $A$ est <Prereq href="/maths/partie-iv/anneaux-corps">intègre</Prereq> (sans diviseur de zéro), alors $\deg(PQ) = \deg P + \deg Q$. Soit $a_m$ le dominant de $P$ (degré $m$), $b_n$ celui de $Q$ (degré $n$). Le coefficient de $X^{m+n}$ dans $PQ$ est $\sum_{i+j=m+n} a_i b_j$ : tout terme avec $i > m$ a $a_i = 0$, et tout terme avec $i < m$ force $j > n$ donc $b_j = 0$ — seul survit $a_m b_n$. Par intégrité $a_m b_n \neq 0$ ; et les casiers au-delà de $m+n$ sont vides. Donc le dominant de $PQ$ est $a_m b_n$, au degré $m+n$. <Badge niveau="demontre">Le dominant du produit est le produit des dominants — non nul par intégrité.</Badge>
+
+L'hypothèse n'est pas décorative. Dans $\mathbb{Z}/4\mathbb{Z}$, qui possède le diviseur de zéro $2$ :
+
+$$ (2X)(2X) = 4X^2 = 0, \qquad \text{alors que } \deg(2X) + \deg(2X) = 2 $$
+
+Le degré s'effondre dès que les <Prereq href="/maths/partie-iv/anneaux-corps">diviseurs de zéro</Prereq> entrent en scène — écho direct du chapitre précédent.
+
+## La division euclidienne des polynômes
+
+Sur un **corps** $K$, l'algorithme de la potence du collège fonctionne mot pour mot.
+
+<Resultat label="Division euclidienne dans K[X]">
+
+$$ \forall A, \ \forall B \neq 0, \ \exists!\,(Q, R) : \ A = BQ + R \ \text{ avec } \ \deg R < \deg B $$
+
+<Badge niveau="demontre" slot="badge">Existence par récurrence sur le degré, unicité par comparaison des degrés — ci-dessous.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Existence et unicité, ligne à ligne">
+**Existence**, par récurrence sur $\deg A$. Si $\deg A < \deg B$, on prend $Q = 0$, $R = A$. Sinon $\deg A = n \ge m = \deg B$ ; soient $a_n$ le dominant de $A$, $b_m$ celui de $B$. Comme $K$ est un corps, $b_m$ est inversible ; posons
+
+$$ A_1 := A - a_n\, b_m^{-1}\, X^{\,n-m}\, B $$
+
+Le coefficient de $X^n$ y vaut $a_n - a_n b_m^{-1} b_m = 0$ : donc $\deg A_1 < n$. Par hypothèse de récurrence, $A_1 = B Q_1 + R$ avec $\deg R < \deg B$. En reportant :
+
+$$ A = B\,(a_n b_m^{-1} X^{\,n-m} + Q_1) + R $$
+
+**Unicité.** Si $BQ + R = BQ' + R'$ avec $\deg R, \deg R' < \deg B$, alors $B(Q - Q') = R' - R$. Si $Q \neq Q'$, le membre de gauche a un degré $\ge \deg B$ (les degrés s'ajoutent, $K$ étant intègre), le membre de droite un degré $< \deg B$ : impossible. Donc $Q = Q'$, puis $R = R'$.
+</Encart>
+
+<Encart type="plusloin" titre="ℤ et K[X] : le même théorème deux fois">
+
+| Dans $\mathbb{Z}$ | Dans $K[X]$ |
+|---|---|
+| valeur absolue $\lvert n\rvert$ | degré $\deg P$ |
+| <Prereq href="/maths/partie-iv/arithmetique">division euclidienne</Prereq> | division euclidienne (ci-dessus) |
+| pgcd, algorithme d'Euclide | pgcd, algorithme d'Euclide |
+| théorème de Bézout | théorème de Bézout |
+| nombres premiers | polynômes irréductibles |
+| factorisation unique | factorisation unique |
+
+Les deux sont des *anneaux euclidiens* : une seule et même démonstration les régit. L'algèbre tient ses promesses.
+</Encart>
+
+## Racines : le pont entre polynôme et fonction
+
+L'évaluation $P \mapsto \widetilde{P}(a)$ respecte $+$ et $\times$ (immédiat depuis les définitions). Elle relie divisibilité et annulation :
+
+<Encart type="calcul" titre="a est racine de P ⟺ (X − a) divise P">
+Divisons $P$ par $X - a$ (licite : $X - a$ est unitaire, donc la division vaut dans tout anneau commutatif). Comme $\deg(X-a) = 1$, le reste est une constante $r$ :
+
+$$ P = (X - a)\,Q + r $$
+
+Évaluons en $a$, en usant de ce que l'évaluation respecte $+$ et $\times$ :
+
+$$ \widetilde{P}(a) = (a - a)\,\widetilde{Q}(a) + r = 0 + r = r $$
+
+Donc $r = \widetilde{P}(a)$, et $(X - a) \mid P$ (c'est-à-dire $r = 0$) équivaut à $\widetilde{P}(a) = 0$. $\boxed{\,r = P(a)\,}$
+</Encart>
+
+<Resultat label="Au plus deg P racines">
+
+$$ \text{Sur un anneau intègre, un polynôme } P \neq 0 \text{ de degré } n \text{ a au plus } n \text{ racines} $$
+
+<Badge niveau="demontre" slot="badge">Récurrence sur $n$ : une racine $a$ factorise $P = (X-a)Q$ avec $\deg Q = n-1$ ; toute autre racine annule $Q$ (intégrité), qui en a au plus $n-1$.</Badge>
+</Resultat>
+
+Ici encore l'intégrité est vitale. Dans $\mathbb{Z}/8\mathbb{Z}$, le polynôme $X^2 - 1$, de degré $2$, a **quatre** racines :
+
+$$ 1^2 = 1, \quad 3^2 = 9 = 1, \quad 5^2 = 25 = 1, \quad 7^2 = 49 = 1 \pmod 8 $$
+
+soit $1, 3, 5, 7$ — car $\mathbb{Z}/8\mathbb{Z}$ n'est pas intègre ($2 \cdot 4 = 0$), et la preuve casse là : $(b-a)\widetilde{Q}(b) = 0$ n'y force plus $\widetilde{Q}(b) = 0$.
+
+Et voici une dette d'honneur soldée : au chapitre 11, pour prouver que les nombres algébriques sont dénombrables, nous avions **cité par anticipation** ce « au plus $n$ racines ». Il est maintenant démontré : l'anticipation est honorée.
+
+## Le théorème fondamental de l'algèbre
+
+Sur $\mathbb{C}$, la chasse aux racines s'achève triomphalement.
+
+<Resultat label="Théorème fondamental de l'algèbre — factorisation">
+
+$$ \text{Tout } P \in \mathbb{C}[X] \text{ de degré } n \ge 1 \text{ s'écrit } P = c\,(X - z_1)(X - z_2)\cdots(X - z_n) $$
+
+<Badge niveau="demontre" slot="badge">Énoncé au chapitre 9, il fournit une racine $z_1$ ; alors $P = (X - z_1)Q$ et une récurrence scinde $P$ en $n$ facteurs de degré 1. Existence d'une racine esquissée ci-dessous.</Badge>
+</Resultat>
+
+Une racine suffit donc à tout : $\mathbb{C}$ est **algébriquement clos**. Reste à justifier l'existence de cette première racine — le cœur du théorème, <Prereq href="/maths/partie-ii/complexes">énoncé au chapitre 9</Prereq>.
+
+<Encart type="plusloin" titre="L'idée d'Argand (esquisse honnête)">
+Soit $P$ non constant. Quand $\lvert z\rvert \to \infty$, le terme dominant l'emporte et $\lvert P(z)\rvert \to \infty$ ; donc $\lvert P\rvert$ atteint son **minimum global** en un point $z_0$ (une fonction continue atteint ses bornes sur un disque fermé — fait que nous **renvoyons prospectivement à la partie V**, où les bornes atteintes d'une fonction continue seront établies). Affirmons $P(z_0) = 0$. Sinon, écrivons $P(z_0 + h) = P(z_0) + c_k h^k + \cdots$ où $c_k h^k$ est le premier terme non constant. Comme $\mathbb{C}$ possède toutes les racines $k$-ièmes, on choisit la *direction* de $h$ pour que $c_k h^k$ pointe à l'opposé de $P(z_0)$ ; pour $\lvert h\rvert$ petit, $\lvert P(z_0 + h)\rvert < \lvert P(z_0)\rvert$ — ce qui contredit la minimalité. Donc $P(z_0) = 0$. **C'est une esquisse** : les deux points délicats (bornes atteintes en deux variables réelles, contrôle du reste) relèvent de l'analyse et dépassent ce chapitre.
+</Encart>
+
+## Abel–Ruffini : la fin des formules
+
+Résoudre par radicaux, c'est exprimer les racines à partir des coefficients avec $+, -, \times, \div$ et des $\sqrt[k]{\ }$. Jusqu'au degré $4$, on sait faire : la formule du second degré, celle de Cardan (degré 3), celle de Ferrari (degré 4). <Badge niveau="demontre">Formules classiques, valables sur tout corps de caractéristique nulle.</Badge>
+
+Au degré $5$, coup de tonnerre : **il n'existe aucune formule générale par radicaux** (Ruffini, puis Abel, 1824).
+
+<Encart type="plusloin" titre="Galois : quand la symétrie décide">
+À un polynôme, Galois attache le **groupe** de ses racines — les permutations qui préservent toutes leurs relations algébriques (boucle avec le <Prereq href="/maths/partie-iv/groupes">chapitre 14</Prereq> !). Être résoluble par radicaux correspond *exactement* à ce que ce groupe soit *résoluble* (dévissable en une tour de groupes commutatifs). Or le groupe générique du degré $5$ est $S_5$, qui contient $A_5$ : un groupe simple non commutatif — « trop gros » pour être résoluble. La preuve dépasse le cours.
+</Encart>
+
+<Badge niveau="demontre">Théorème d'Abel–Ruffini, démontré (théorie de Galois) — preuve au-delà de ce cours, signalée comme telle.</Badge>
+
+Un contresens à tuer : « pas de formule *générale* » ne signifie **pas** « aucune quintique ne se résout ». L'équation $x^5 = 2$ a pour solution $\sqrt[5]{2}$, tranquillement ; $x^5 - 1 = 0$ aussi. C'est la quintique *générique*, aux coefficients libres, qu'aucune formule par radicaux n'atteint ; certaines équations précises, comme $x^5 - x - 1 = 0$, n'admettent d'ailleurs *aucune* résolution par radicaux.
+
+La partie IV s'achève : nous avons posé les grandes **structures** — groupes, anneaux, corps, polynômes — et vu l'algèbre répéter ses théorèmes de $\mathbb{Z}$ à $K[X]$. Mais toutes nos racines, tout notre théorème fondamental, ont réclamé un mot encore non tenu : *continuité*, *bornes atteintes*, *limite*. Place au **continu** — la partie V ouvre l'analyse.

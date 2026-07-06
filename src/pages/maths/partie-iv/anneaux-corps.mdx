@@ -1,0 +1,163 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Anneaux, corps et arithmétique modulaire"
+chapter: anneaux-corps
+description: "Anneau (commutatif unitaire), corps — définitions officielles ; congruences, ℤ/nℤ construit par quotient, opérations bien définies (démontré) ; diviseurs de zéro ssi n composé ; ℤ/pℤ corps ssi p premier (démontré via Bézout) ; PETIT THÉORÈME DE FERMAT démontré via Lagrange."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Deux fils qui se rejoignent
+
+La partie IV a marché sur deux jambes. D'un côté les **structures** : les groupes, où quelques axiomes suffisent à capturer l'idée de symétrie. De l'autre l'**arithmétique** : division euclidienne, Bézout, nombres premiers. Ce chapitre est le nœud où les deux se rencontrent. Le résultat de cette rencontre est un théorème que Fermat aurait adoré sans pouvoir le nommer — et qu'aujourd'hui la cryptographie fait tourner des milliards de fois par seconde.
+
+## Anneau, corps : les mots officiels
+
+Depuis la partie II, nous additionnons, soustrayons et multiplions dans ℤ, ℚ, ℝ, ℂ sans jamais nommer la structure commune. Nommons-la.
+
+<Encart type="intuition" titre="Trois verbes, pas quatre">
+Un **anneau**, c'est un monde où l'on peut *additionner*, *soustraire* et *multiplier* — mais pas nécessairement *diviser*. ℤ en est le portrait exact : $2 \times 3 = 6$ y vit sans peine, mais $1/2$ n'y existe pas. Un **corps**, lui, autorise le quatrième verbe : on y divise par tout ce qui n'est pas nul. ℚ fut le premier corps que nous ayons croisé.
+</Encart>
+
+**Définition (anneau).** Un anneau est un ensemble $A$ muni de deux opérations $+$ et $\times$ telles que $(A, +)$ est un <Prereq href="/maths/partie-iv/groupes">groupe abélien</Prereq> (neutre noté $0$, tout élément possède un opposé), $\times$ est associative avec un neutre noté $1$, et $\times$ se distribue sur $+$ : $a(b+c) = ab + ac$.
+
+Le mot « anneau » recouvre plusieurs traditions. Nous tranchons une fois pour toutes : dans tout ce cours, **anneau** signifie *commutatif* ($ab = ba$) et *unitaire* (il existe un neutre $1$ pour $\times$), avec $1 \neq 0$.
+
+<Badge niveau="admis">Convention de vocabulaire posée par choix, déclarée une seule fois : nos anneaux sont commutatifs et unitaires.</Badge>
+
+**Définition (corps).** Un corps est un anneau dans lequel tout élément non nul est inversible : pour tout $a \neq 0$, il existe $a^{-1}$ avec $a\,a^{-1} = 1$.
+
+<Badge niveau="admis">Seconde définition officielle du chapitre, posée par choix : comme « anneau », c'est du vocabulaire, non un théorème.</Badge>
+
+Relisons alors la partie II d'un seul regard. ℤ est un anneau mais **pas** un corps : aucun entier $m$ ne vérifie $2m = 1$, donc $2$ n'a pas d'inverse. En revanche <Prereq href="/maths/partie-ii/rationnels">ℚ</Prereq>, <Prereq href="/maths/partie-ii/reels-dedekind">ℝ</Prereq> et <Prereq href="/maths/partie-ii/complexes">ℂ</Prereq> sont des corps — nous l'avions démontré, ensemble après ensemble, sans prononcer le mot. La partie II était de l'algèbre qui s'ignorait.
+
+## Les congruences : le troisième quotient
+
+**Définition.** Pour $n \geq 1$ et $a, b \in ℤ$, on dit que $a$ est congru à $b$ modulo $n$, noté $a \equiv b \pmod{n}$, lorsque $n \mid (a - b)$.
+
+C'est une relation d'équivalence : réflexive car $n \mid 0$ ; symétrique car $n \mid (a-b)$ entraîne $n \mid (b-a)$ ; transitive car si $n \mid (a-b)$ et $n \mid (b-c)$, alors $n$ divise leur somme $(a-c)$.
+
+<Encart type="intuition" titre="L'arithmétique de l'horloge">
+Sur un cadran de $12$ heures, $10 + 5$ ne donne pas $15$ mais $3$ : on est retombé au même endroit. Travailler modulo $n$, c'est exactement cela — enrouler la droite des entiers sur un cercle à $n$ crans. $\mathbb{Z}/n\mathbb{Z}$ est cet anneau circulaire, et l'aiguille ne connaît que $n$ positions.
+</Encart>
+
+L'ensemble des <Prereq href="/maths/partie-i/relations-fonctions">classes d'équivalence</Prereq> est le quotient $\mathbb{Z}/n\mathbb{Z}$. Vous reconnaissez le geste : nous l'avons déjà posé pour <Prereq href="/maths/partie-ii/entiers-relatifs">construire ℤ à partir de ℕ×ℕ</Prereq>, puis ℚ à partir de $ℤ \times ℤ^*$. Voici son **troisième** emploi. ℤ, ℚ et $\mathbb{Z}/n\mathbb{Z}$ forment la trilogie du quotient — et, comme les deux premières fois, il faut vérifier que les opérations descendent proprement aux classes.
+
+<Encart type="calcul" titre="Les opérations sur les classes sont bien définies">
+Posons $[a] + [b] := [a+b]$ et $[a] \times [b] := [ab]$. Ces formules parlent de $a$ et de $b$, mais une classe a plusieurs représentants : il faut s'assurer que le résultat n'en dépend pas. Supposons $[a] = [a']$ et $[b] = [b']$.
+
+Par définition, $n \mid (a - a')$ et $n \mid (b - b')$ : écrivons $a - a' = nk$ et $b - b' = n\ell$ avec $k, \ell \in ℤ$.
+
+**Addition** — on calcule la différence des deux résultats candidats :
+
+$$(a+b) - (a'+b') = (a - a') + (b - b') = nk + n\ell = n(k + \ell).$$
+
+Donc $n \mid (a+b) - (a'+b')$, c'est-à-dire $[a+b] = [a'+b']$.
+
+**Multiplication** — même stratégie, avec un terme intermédiaire ajouté puis retranché :
+
+$$ab - a'b' = ab - a'b + a'b - a'b' = b(a - a') + a'(b - b') = b\,nk + a'\,n\ell = n(bk + a'\ell).$$
+
+Donc $n \mid ab - a'b'$, c'est-à-dire $[ab] = [a'b']$. Les deux opérations passent au quotient. $\boxed{\text{Bien défini.}}$
+</Encart>
+
+Munies de ces opérations, les $n$ classes $[0], [1], \dots, [n-1]$ forment un anneau (commutatif, unitaire) **fini** : neutre $[0]$, unité $[1]$, opposé de $[a]$ égal à $[-a]$. Chaque identité d'anneau se lit sur les représentants dans ℤ, donc se transmet aux classes. <Badge niveau="demontre">Structure d'anneau héritée de ℤ, classe par classe.</Badge>
+
+## Un anneau qui déraille : $\mathbb{Z}/6\mathbb{Z}$
+
+Dans ℤ, un produit de deux entiers non nuls n'est jamais nul — c'est l'<Prereq href="/maths/partie-ii/entiers-relatifs">intégrité</Prereq>, démontrée au chapitre des entiers relatifs. Regardez ce qui se passe dans $\mathbb{Z}/6\mathbb{Z}$ :
+
+$$[2] \times [3] = [6] = [0].$$
+
+Deux éléments non nuls dont le produit est nul : on les appelle des **diviseurs de zéro**. C'est le premier anneau « pathologique » que nous rencontrons, et le phénomène a une cause limpide.
+
+<Encart type="calcul" titre="n composé ⟺ diviseurs de zéro dans $\mathbb{Z}/n\mathbb{Z}$">
+**Sens direct ($n$ composé $\Rightarrow$ diviseurs de zéro).** Soit $n \geq 2$ composé : $n = ab$ avec $1 \lt a \lt n$ et $1 \lt b \lt n$. Comme $0 \lt a \lt n$, la classe $[a]$ n'est pas $[0]$ ; de même $[b] \neq [0]$. Pourtant
+
+$$[a] \times [b] = [ab] = [n] = [0].$$
+
+Donc $[a]$ et $[b]$ sont des diviseurs de zéro.
+
+**Réciproque ($n$ premier $\Rightarrow$ aucun diviseur de zéro).** Écrivons $p := n$, supposé premier, et prenons deux classes avec $[a][b] = [0]$, c'est-à-dire $p \mid ab$. Le <Prereq href="/maths/partie-iv/arithmetique">lemme d'Euclide</Prereq> impose alors $p \mid a$ ou $p \mid b$, soit $[a] = [0]$ ou $[b] = [0]$ : un produit de deux classes non nulles reste non nul. Comme tout entier $n \geq 2$ est premier ou composé, les deux implications se referment en une équivalence. $\boxed{n \text{ composé} \iff \text{diviseurs de zéro}}$
+
+<Badge niveau="demontre">Les deux sens démontrés : le direct par factorisation dans $\mathbb{Z}$, la réciproque par le lemme d'Euclide.</Badge>
+</Encart>
+
+Conséquence directe : **on ne peut plus simplifier**. Dans $\mathbb{Z}/6\mathbb{Z}$,
+
+$$[2] \times [1] = [2] = [8] = [2] \times [4], \quad \text{et pourtant} \quad [1] \neq [4].$$
+
+Le facteur $[2]$ ne se barre pas des deux côtés. La règle « $2x = 2y \Rightarrow x = y$ », si familière dans ℤ, est morte ici. La faute en revient aux diviseurs de zéro — et c'est précisément eux que le prochain théorème va exiler.
+
+## Le théorème central : $\mathbb{Z}/p\mathbb{Z}$ est un corps si et seulement si $p$ est premier
+
+<Resultat label="Corps finis $\mathbb{F}_p$">
+
+$$\mathbb{Z}/n\mathbb{Z} \text{ est un corps} \iff n \text{ est premier.}$$
+
+<Badge niveau="demontre" slot="badge">Les deux sens démontrés ci-dessous, la réciproque via Bézout.</Badge>
+
+</Resultat>
+
+<Encart type="calcul" titre="Preuve des deux sens">
+On suppose $n \geq 2$ (sinon l'anneau est trivial).
+
+**Sens direct ($\mathbb{Z}/n\mathbb{Z}$ corps $\Rightarrow n$ premier), par contraposée.** Supposons $n$ composé. D'après le calcul précédent, il existe $[a] \neq [0]$ et $[b] \neq [0]$ avec $[a][b] = [0]$. Si $[a]$ était inversible d'inverse $[c]$, on multiplierait :
+
+$$[b] = [1]\,[b] = [c][a][b] = [c][0] = [0],$$
+
+ce qui contredit $[b] \neq [0]$. Donc $[a]$ n'est pas inversible, et $\mathbb{Z}/n\mathbb{Z}$ n'est pas un corps. Par contraposée : corps $\Rightarrow$ premier.
+
+**Sens réciproque ($p$ premier $\Rightarrow \mathbb{Z}/p\mathbb{Z}$ corps).** Soit $p$ premier et $[a] \neq [0]$, c'est-à-dire $p \nmid a$. Les seuls diviseurs de $p$ sont $1$ et $p$ ; comme $p \nmid a$, le nombre $p$ n'est pas diviseur commun de $a$ et $p$, donc $\operatorname{pgcd}(a, p) = 1$. Le <Prereq href="/maths/partie-iv/arithmetique">théorème de Bézout</Prereq> fournit alors $u, v \in ℤ$ avec
+
+$$au + pv = 1.$$
+
+Réduisons cette égalité modulo $p$. Comme $[p] = [0]$ :
+
+$$[a][u] + [0][v] = [1], \quad \text{soit} \quad [a][u] = [1].$$
+
+Donc $[u]$ est l'inverse de $[a]$. Toute classe non nulle est inversible : $\mathbb{Z}/p\mathbb{Z}$ est un corps. $\blacksquare$
+</Encart>
+
+Savourez la mécanique du sens réciproque : **Bézout est devenu une machine à inverses.** L'identité $au + pv = 1$ ne dit pas seulement que l'inverse existe — elle vous le tend en main, c'est $[u]$. Nous notons ces corps finis $\mathbb{F}_p$. Ni ℚ, ni ℝ, ni ℂ ne leur ressemblent.
+
+<Encart type="plusloin" titre="Un monde sans analogue : la caractéristique p">
+Dans $\mathbb{F}_p$, additionnez $1$ avec lui-même $p$ fois :
+
+$$\underbrace{[1] + [1] + \dots + [1]}_{p \text{ fois}} = [p] = [0].$$
+
+On dit que $\mathbb{F}_p$ est de **caractéristique $p$**. Rien de tel dans ℚ, ℝ ou ℂ, où empiler des $1$ ne retombe jamais sur $0$ (ces corps sont de caractéristique nulle). C'est un vertige assumé : il existe des corps parfaitement rigoureux où $\underbrace{1 + \dots + 1}_{p} = 0$. On prendra garde à ne parler de $\mathbb{F}_q$ que pour $q$ premier — construire les corps finis à $q$ non premier dépasse ce cours.
+</Encart>
+
+## Le petit théorème de Fermat
+
+<Resultat label="Petit théorème de Fermat">
+
+$$p \text{ premier}, \; p \nmid a \implies a^{p-1} \equiv 1 \pmod{p}.$$
+
+<Badge niveau="demontre" slot="badge">Trois lignes via le théorème de Lagrange dans le groupe des inversibles.</Badge>
+
+</Resultat>
+
+La preuve tient en trois lignes, à condition d'avoir bâti tout ce qui précède. Puisque $\mathbb{F}_p$ est un corps, ses classes non nulles $[1], \dots, [p-1]$ sont toutes inversibles, et leur produit reste non nul (aucun diviseur de zéro) : elles forment un groupe pour $\times$, noté $(\mathbb{Z}/p\mathbb{Z})^*$, d'ordre $p - 1$. Prenons $[a] \neq [0]$. Par le <Prereq href="/maths/partie-iv/groupes">théorème de Lagrange</Prereq>, l'ordre $d$ de l'élément $[a]$ divise l'ordre du groupe, donc divise $p - 1$ : écrivons $p - 1 = d\,m$. Comme $[a]^{d} = [1]$ par définition de l'ordre, il vient $[a]^{p-1} = \left([a]^{d}\right)^{m} = [1]^{m} = [1]$, c'est-à-dire $a^{p-1} \equiv 1 \pmod{p}$. $\blacksquare$
+
+Prenez un instant pour mesurer ce qui vient de se produire. Un théorème d'**arithmétique de 1640** (Fermat), démontré par la **théorie des groupes des années 1830** (Lagrange), à travers un **quotient de 1870** (la construction ensembliste). Trois siècles se donnent la main en trois lignes. *C'est cela, l'édifice* : chaque étage porte les suivants, et une vérité ancienne trouve sa preuve la plus limpide dans un langage qui n'existait pas quand on l'a énoncée.
+
+<Encart type="plusloin" titre="Une preuve directe, sans groupes">
+Fermat n'avait ni groupes ni quotients. Voici l'idée d'une preuve élémentaire : pour $p \nmid a$, multiplier par $[a]$ est une bijection des classes non nulles, donc $[a], [2a], \dots, [(p-1)a]$ sont exactement $[1], \dots, [p-1]$ dans un autre ordre. En multipliant le tout :
+
+$$[a][2a]\cdots[(p-1)a] = [1][2]\cdots[p-1],$$
+
+soit $[a]^{p-1}\,[(p-1)!] = [(p-1)!]$. Comme $p$ ne divise aucun facteur de $(p-1)!$, sa classe est inversible : on simplifie et il reste $[a]^{p-1} = [1]$. Même destination, sans citer Lagrange.
+</Encart>
+
+<Encart type="plusloin" titre="Ces corps finis chiffrent le web">
+L'arithmétique modulaire n'est pas une curiosité de salon. Choisissez deux grands nombres premiers, gardez-les secrets, ne publiez que leur produit : l'exponentiation modulaire permet alors de chiffrer un message que seul le détenteur des deux premiers sait déchiffrer — c'est le principe de RSA. Que le déchiffrement redonne *exactement* le message clair est un théorème, cousin direct du petit théorème de Fermat. <Badge niveau="demontre">La correction mathématique de l'échange (déchiffrer redonne le message) se démontre.</Badge> La **sécurité**, elle, repose sur la difficulté — crue mais non démontrée — de retrouver les deux premiers à partir de leur produit. Nous en restons à ce clin d'œil.
+</Encart>
+
+Nous voici riches en corps : les corps infinis ℚ, ℝ, ℂ hérités de la partie II, et toute une famille de corps finis $\mathbb{F}_p$ nés d'un quotient. Il nous reste un dernier objet algébrique à construire avant de revenir à l'analyse — les polynômes, et avec eux la question qui hante les mathématiques depuis les Babyloniens : celle des racines.

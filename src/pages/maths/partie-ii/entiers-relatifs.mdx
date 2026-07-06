@@ -1,0 +1,168 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les entiers relatifs (ℤ)"
+chapter: entiers-relatifs
+description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale ; ordre total ; plongement de ℕ ; intégrité de ℤ (ab = 0 ⇒ a = 0 ou b = 0)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Une soustraction qui n'existe pas encore
+
+Dans $\mathbb{N}$, l'équation $x + 5 = 3$ n'a aucune solution : il n'existe pas d'entier « $3 - 5$ ». Écrire ce symbole serait d'ailleurs, à ce stade, parfaitement **illégal** — la soustraction n'a jamais été définie, et dans $\mathbb{N}$ elle ne peut pas l'être partout. Notre mission : fabriquer un ensemble où retrancher est *toujours* possible, sans rien admettre de neuf. Fidèles à la promesse du cours, nous n'ajoutons **aucune hypothèse** ; tout se déduit de la construction de $\mathbb{N}$ et de son arithmétique.
+
+<Encart type="intuition" titre="Un entier relatif est une soustraction en attente">
+Voyez le couple $(a, b)$ comme une promesse : « un jour, je vaudrai $a - b$ ». Ainsi $(3, 5)$ promet $-2$, $(5, 3)$ promet $+2$, et $(7, 7)$ promet $0$. Mais plusieurs promesses visent le même nombre : $(3, 5)$, $(0, 2)$ et $(10, 12)$ annoncent toutes « moins deux ». Le génie de la construction est de dire *quand deux promesses coïncident, sans jamais soustraire* : intuitivement $a - b$ et $c - d$ sont égaux exactement quand $a + d = b + c$ — une égalité qui ne contient **que des additions**, la seule opération que $\mathbb{N}$ maîtrise. Toute l'audace du chapitre tient dans ce déplacement.
+</Encart>
+
+## Quels couples disent la même chose ?
+
+Travaillons sur $\mathbb{N} \times \mathbb{N}$ et posons
+
+$$ (a, b) \sim (c, d) \quad :\Longleftrightarrow \quad a + d = b + c. $$
+
+<Badge niveau="admis">Une définition : nous choisissons le sens de $\sim$, en n'employant que l'addition de $\mathbb{N}$, déjà construite.</Badge>
+
+La **réflexivité** est immédiate ($a + b = b + a$ par commutativité) et la **symétrie** aussi : si $a + d = b + c$, alors $c + b = d + a$ par commutativité, c'est-à-dire $(c,d) \sim (a,b)$. La transitivité, elle, réclame l'outil-clé du chapitre précédent.
+
+<Encart type="calcul" titre="Transitivité, ligne à ligne — le rôle de la régularité">
+Supposons $(a,b) \sim (c,d)$ et $(c,d) \sim (e,f)$, soit
+
+$$ \text{(1)}\quad a + d = b + c \qquad \text{et} \qquad \text{(2)}\quad c + f = d + e. $$
+
+Objectif : $a + f = b + e$.
+
+**Étape 1.** Additionnons (1) et (2) membre à membre : $(a + d) + (c + f) = (b + c) + (d + e)$.
+
+**Étape 2.** Réorganisons chaque membre par <Prereq href="/maths/partie-ii/arithmetique-de-n">associativité et commutativité de $+$</Prereq> : le membre gauche devient $(a + f) + (c + d)$, le droit $(b + e) + (c + d)$.
+
+**Étape 3.** On a donc $(a + f) + (c + d) = (b + e) + (c + d)$. Par la <Prereq href="/maths/partie-ii/arithmetique-de-n">régularité de l'addition</Prereq> ($x + k = y + k \Rightarrow x = y$), on simplifie le terme commun $c + d$ :
+
+$$ \boxed{a + f = b + e} $$
+
+C'est exactement $(a,b) \sim (e,f)$. Sans la régularité — qui remplace la soustraction absente — la transitivité s'effondrerait. $\square$ <Badge niveau="demontre">Trois lignes, chacune justifiée par une loi de $+$ démontrée dans $\mathbb{N}$.</Badge>
+</Encart>
+
+## $\mathbb{Z}$, l'ensemble quotient
+
+Puisque $\sim$ est une relation d'équivalence, le <Prereq href="/maths/partie-i/relations-fonctions">théorème de partition</Prereq> découpe $\mathbb{N} \times \mathbb{N}$ en classes disjointes, et l'ensemble quotient existe légitimement. Nous posons
+
+$$ \mathbb{Z} := (\mathbb{N} \times \mathbb{N}) / \sim $$
+
+et notons $[(a,b)]$ la classe du couple $(a,b)$. <Badge niveau="admis">Définition : $\mathbb{Z}$ est ce quotient ; sa légitimité (les classes existent et partitionnent) est, elle, démontrée au chapitre sur les quotients.</Badge>
+
+Géométriquement, la classe de $(a,b)$ rassemble tous les couples $(c,d)$ vérifiant $a + d = b + c$ : les points à coordonnées entières alignés sur la **droite de pente $1$** passant par $(a,b)$. On y avance du même pas dans les deux directions — $(a,b) \sim (a+k,\, b+k)$ pour tout $k \in \mathbb{N}$, car $a + (b+k) = b + (a+k)$ — et l'on atteint *tous* les représentants en repartant de celui qui touche un axe (une composante nulle). Un entier relatif *est* l'une de ces droites de pente $1$ dans le quadrant des entiers.
+
+## L'addition — et le vrai travail
+
+On aimerait poser $[(a,b)] + [(c,d)] := [(a+c,\, b+d)]$. Mais **attention** : cette formule parle de *représentants* $(a,b)$ et $(c,d)$, alors qu'une classe possède une infinité de représentants. Rien ne garantit a priori qu'en choisissant d'autres représentants de la même classe on retombe sur la même classe-résultat. Tant que ce n'est pas prouvé, la « somme » n'est pas une opération sur $\mathbb{Z}$ : c'est le point pédagogique central du chapitre.
+
+<Encart type="calcul" titre="L'addition est bien définie (indépendance des représentants)">
+Supposons $(a,b) \sim (a',b')$ et $(c,d) \sim (c',d')$, c'est-à-dire
+
+$$ \text{(I)}\quad a + b' = b + a' \qquad \text{et} \qquad \text{(II)}\quad c + d' = d + c'. $$
+
+Il faut montrer que les résultats coïncident : $(a+c,\, b+d) \sim (a'+c',\, b'+d')$, soit $(a+c) + (b'+d') = (b+d) + (a'+c')$.
+
+**Étape 1.** Réorganisons le membre gauche par associativité/commutativité : $(a+c) + (b'+d') = (a + b') + (c + d')$.
+
+**Étape 2.** Remplaçons via (I) et (II) : $(a + b') + (c + d') = (b + a') + (d + c')$.
+
+**Étape 3.** Réorganisons à nouveau : $(b + a') + (d + c') = (b+d) + (a'+c')$.
+
+$$ \boxed{(a+c) + (b'+d') = (b+d) + (a'+c')} $$
+
+Les deux résultats sont dans la même classe : la somme ne dépend pas des représentants choisis. $\square$ <Badge niveau="demontre">Aucune soustraction, aucune astuce : seulement les lois de $+$ et les deux hypothèses.</Badge>
+</Encart>
+
+<Resultat label="Addition de ℤ">
+
+$$ [(a,b)] + [(c,d)] := [(a+c,\ b+d)] $$
+
+<Badge niveau="admis" slot="badge">La *définition* est un choix ; sa *légitimité* (indépendance des représentants) vient d'être démontrée ci-dessus.</Badge>
+</Resultat>
+
+Cette addition est **associative** et **commutative** : elles se ramènent en une ligne aux lois correspondantes de $\mathbb{N}$, appliquées coordonnée par coordonnée.
+
+## Zéro, opposé, et la soustraction enfin totale
+
+Le **neutre** est $0_{\mathbb{Z}} := [(0,0)]$ : en effet $[(a,b)] + [(0,0)] = [(a+0,\, b+0)] = [(a,b)]$. Et voici la trouvaille qui justifie tout : l'**opposé**.
+
+<Encart type="calcul" titre="Tout élément a un opposé, et la soustraction devient totale">
+Posons $-[(a,b)] := [(b,a)]$ (on inverse simplement les deux composantes). C'est bien défini : si $(a,b) \sim (a',b')$, alors $a + b' = b + a'$, ce qui est *exactement* la condition $(b,a) \sim (b',a')$. Vérifions que l'on tombe sur zéro :
+
+$$ [(a,b)] + [(b,a)] = [(a+b,\ b+a)] = [(a+b,\ a+b)]. $$
+
+Or $(a+b,\, a+b) \sim (0,0)$, car $(a+b) + 0 = 0 + (a+b)$. Donc $[(a,b)] + \big(-[(a,b)]\big) = [(0,0)] = 0_{\mathbb{Z}}$. $\square$
+
+On peut alors **définir** la soustraction, pour la première fois du cours, comme $x - y := x + (-y)$. Elle a un sens pour *tous* $x, y \in \mathbb{Z}$ :
+
+$$ \boxed{\text{la soustraction est partout définie sur } \mathbb{Z}} $$
+
+Mission accomplie. <Badge niveau="demontre">Existence de l'opposé démontrée ; la soustraction totale en découle immédiatement.</Badge>
+</Encart>
+
+Ainsi $(\mathbb{Z}, +)$ possède une addition associative, un neutre, et un opposé pour chaque élément — une structure que la Partie IV baptisera **groupe**. Nous ne l'utilisons pas encore : simple avant-goût.
+
+## La multiplication : un produit deviné, puis posé
+
+Comment multiplier deux soustractions en attente ? Trichons un instant. Si $(a,b)$ tenait sa promesse $a-b$ et $(c,d)$ la sienne $c-d$, leur produit vaudrait — *calcul purement heuristique, encore illégal* —
+
+$$ (a-b)(c-d) = ac - ad - bc + bd = (ac + bd) - (ad + bc). $$
+
+La part « positive » est $ac + bd$, la part « négative » $ad + bc$. Nous **posons** donc, sans plus jamais soustraire,
+
+$$ [(a,b)] \cdot [(c,d)] := [(ac + bd,\ ad + bc)]. $$
+
+<Badge niveau="admis">Définition : motivée par le calcul heuristique, mais énoncée sans aucune soustraction.</Badge>
+
+<Encart type="plusloin" titre="La multiplication est bien définie">
+On fixe $(c,d)$ et on change $(a,b)$ en $(a',b')$ avec $a + b' = b + a'$ (notons $s$ cette valeur commune). Posons $P = ac+bd$, $Q = ad+bc$ et $P', Q'$ de même pour $(a',b')$. En regroupant les termes en $c$ puis en $d$ :
+
+$$ P + Q' = (a+b')\,c + (b+a')\,d = sc + sd \qquad \text{et} \qquad Q + P' = (b+a')\,c + (a+b')\,d = sc + sd. $$
+
+Donc $P + Q' = Q + P'$, c'est-à-dire $(P,Q) \sim (P',Q')$ : changer le premier facteur ne change pas la classe-résultat. La définition étant symétrique en $(a,b)$ et $(c,d)$ (elle donne un produit commutatif), le même argument vaut pour le second facteur. En composant les deux, le produit ne dépend d'aucun représentant. $\square$ <Badge niveau="demontre">Vérification par regroupement, appuyée sur la seule hypothèse $a+b'=b+a'$.</Badge>
+</Encart>
+
+## Comparer les relatifs, et loger $\mathbb{N}$ dans $\mathbb{Z}$
+
+On ordonne $\mathbb{Z}$ en comparant, là encore, sans soustraire : $[(a,b)] \le [(c,d)] :\Longleftrightarrow a + d \le b + c$, où $\le$ est l'<Prereq href="/maths/partie-ii/arithmetique-de-n">ordre de $\mathbb{N}$</Prereq>. <Badge niveau="admis">Définition de l'ordre, via l'addition et l'ordre de $\mathbb{N}$.</Badge>
+
+<Encart type="plusloin" titre="≤ est un ordre total compatible avec +">
+On vérifie que la condition ne dépend pas des représentants (même technique que pour l'addition, en remplaçant les égalités par des inégalités et en utilisant la compatibilité de $\le$ avec $+$ dans $\mathbb{N}$). La **totalité** vient de celle de $\le$ sur $\mathbb{N}$ appliquée à $a+d$ et $b+c$ ; l'**antisymétrie** et la **transitivité** de même. Enfin la **compatibilité** : si $x \le y$, alors $x + z \le y + z$, par addition terme à terme des inégalités de $\mathbb{N}$. $\square$ <Badge niveau="demontre">Chaque propriété se ramène à l'ordre total de $\mathbb{N}$, déjà démontré.</Badge>
+</Encart>
+
+L'application $\iota : n \mapsto [(n,0)]$ **plonge** $\mathbb{N}$ dans $\mathbb{Z}$. Elle est injective ($[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$) et respecte toute la structure : $[(n,0)] + [(m,0)] = [(n+m,\,0)]$, $[(n,0)] \cdot [(m,0)] = [(nm,\,0)]$, et $[(n,0)] \le [(m,0)] \iff n \le m$. Autrement dit $\iota$ recopie fidèlement $\mathbb{N}$ à l'intérieur de $\mathbb{Z}$. On convient donc d'**identifier** $n$ et $[(n,0)]$, et d'écrire désormais $\mathbb{N} \subseteq \mathbb{Z}$. <Badge niveau="admis">Convention d'identification : un abus commode. Stricto sensu $\mathbb{N}$ et son image ne sont pas le *même* ensemble ; on choisit de les confondre parce que $\iota$ préserve $+$, $\times$ et $\le$.</Badge> Chaque classe admet alors un représentant canonique $[(n,0)]$ (un « positif ») ou $[(0,n)]$ (un « négatif ») : par totalité de $\le$ sur $\mathbb{N}$, soit $b \le a$ et $(a,b) \sim (k,0)$, soit $a \le b$ et $(a,b) \sim (0,k)$.
+
+## L'intégrité de $\mathbb{Z}$
+
+Un dernier théorème, discret mais décisif pour la suite : un produit ne s'annule que si l'un des facteurs s'annule.
+
+<Encart type="plusloin" titre="xy = 0 ⇒ x = 0 ou y = 0, par représentants canoniques">
+**Lemme dans $\mathbb{N}$.** Si $mn = 0$, alors $m = 0$ ou $n = 0$. En effet, si $m = S(m')$ et $n = S(n')$, alors $mn = m \cdot S(n') = mn' + m = mn' + S(m') = S(mn' + m')$, un successeur, donc $\neq 0$ (<Prereq href="/maths/partie-ii/entiers-naturels">axiome de Peano</Prereq>). $\square$
+
+**Théorème.** Écrivons $x$ et $y$ sous forme canonique. On calcule le produit dans chacun des quatre cas :
+
+| $x$ | $y$ | $x \cdot y$ |
+|---|---|---|
+| $[(m,0)]$ | $[(n,0)]$ | $[(mn,\,0)]$ |
+| $[(m,0)]$ | $[(0,n)]$ | $[(0,\,mn)]$ |
+| $[(0,m)]$ | $[(n,0)]$ | $[(0,\,mn)]$ |
+| $[(0,m)]$ | $[(0,n)]$ | $[(mn,\,0)]$ |
+
+Dans les quatre cas, $x \cdot y = 0_{\mathbb{Z}} = [(0,0)]$ équivaut à $mn = 0$ (car $(mn,0) \sim (0,0)$ et $(0,mn) \sim (0,0)$ se lisent tous deux $mn = 0$). Par le lemme, $mn = 0$ force $m = 0$ ou $n = 0$ ; or $m = 0$ signifie $x = 0$ et $n = 0$ signifie $y = 0$. $\square$ <Badge niveau="demontre">Démonstration complète par disjonction sur les représentants canoniques.</Badge>
+</Encart>
+
+<Resultat label="ℤ est intègre">
+
+$$ \forall x, y \in \mathbb{Z}, \quad x \cdot y = 0 \ \Longrightarrow\ x = 0 \ \text{ou}\ y = 0. $$
+
+<Badge niveau="demontre" slot="badge">Démontré ci-dessus. Retenez-le : c'est précisément l'ingrédient qui rendra la construction de $\mathbb{Q}$ possible au chapitre suivant.</Badge>
+</Resultat>
+
+Nous avons donc, par pure déduction depuis $\mathbb{N}$, un ensemble $\mathbb{Z}$ où l'on additionne, multiplie, compare et — enfin — soustrait sans restriction, avec l'intégrité en prime. Reste une opération encore interdite : diviser. Le chapitre suivant reprend exactement le même geste — un couple, une équivalence, un quotient — pour transformer chaque division en attente en un nombre rationnel.

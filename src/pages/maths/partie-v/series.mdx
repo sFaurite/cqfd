@@ -1,0 +1,245 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les séries : sommer l infini"
+chapter: series
+description: "Série = suite des sommes partielles ; série géométrique (somme démontrée) ; 0,999… = 1 démontré ; divergence de la série harmonique (Oresme) ; condition nécessaire uₙ → 0 (insuffisante) ; comparaison ; convergence absolue ; e := Σ 1/n! et e IRRATIONNEL démontré."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Sommer une infinité de termes sans rien inventer
+
+Additionner deux nombres, puis dix, puis un million : la <Prereq href="/maths/partie-ii/arithmetique-de-n">récurrence</Prereq> légitime toute somme finie. Mais additionner une *infinité* de termes — $u_0 + u_1 + u_2 + \cdots$ — semble hors de portée : on ne peut pas effectuer une infinité d'opérations. La beauté de ce chapitre tient en une phrase : **il n'y a rien de nouveau à construire**. Une série n'est pas un objet inédit ; c'est une suite que nous connaissons déjà — et pas un axiome de plus.
+
+<Encart type="intuition" titre="On ne somme jamais l'infini d'un coup">
+On ne somme jamais « tout ». On regarde grandir les **totaux provisoires** : $1$, puis $1+\tfrac12$, puis $1+\tfrac12+\tfrac14$, ... Chacun est une somme *finie*, parfaitement légitime. La question « combien vaut la somme infinie ? » devient : « vers quoi tend cette suite de totaux ? ». Sommer l'infini, c'est prendre une limite — et les limites, nous savons faire.
+</Encart>
+
+À la suite $(u_n)$ on associe ses **sommes partielles** $S_n = \sum_{k=0}^{n} u_k$. La série $\sum u_n$ **converge** vers $S$ lorsque la suite $(S_n)$ converge vers $S$ ; on note alors $\sum_{n=0}^{\infty} u_n = S$. Sinon, elle **diverge**.
+
+<Badge niveau="admis">C'est une définition : « la série converge » ne veut rien dire d'autre que « la suite $(S_n)$ converge ». Tout ce chapitre est un cas particulier du précédent — une pure économie conceptuelle.</Badge>
+
+### 1. La série géométrique
+
+<Encart type="calcul" titre="Somme partielle d'une suite géométrique (télescopage)">
+
+Soit $q \neq 1$ et $S_n = 1 + q + q^2 + \cdots + q^n = \sum_{k=0}^{n} q^k$. Multiplions par $(1-q)$ :
+
+$$(1-q)\,S_n = S_n - q\,S_n = (1 + q + \cdots + q^n) - (q + q^2 + \cdots + q^{n+1}).$$
+
+Tous les termes intermédiaires s'annulent deux à deux (c'est le **télescopage**) ; il reste
+
+$$(1-q)\,S_n = 1 - q^{n+1}.$$
+
+Comme $q \neq 1$, on divise par $1-q$.
+
+<Resultat label="Somme partielle géométrique">
+
+$$\sum_{k=0}^{n} q^k = \frac{1 - q^{n+1}}{1 - q} \qquad (q \neq 1).$$
+
+<Badge niveau="demontre" slot="badge">Identité exacte, valable pour tout $q \neq 1$, obtenue par télescopage.</Badge>
+</Resultat>
+
+</Encart>
+
+Reste à faire tendre $n$ vers l'infini. Tout dépend de $q^{n+1}$ — et pour le contrôler, sans logarithme ni exponentielle (non encore construits !), un seul outil suffit.
+
+<Encart type="rappel" titre="L'inégalité de Bernoulli (par récurrence)">
+
+Pour tout réel $h \geq -1$ et tout $n \in \mathbb{N}$ : $\;(1+h)^n \geq 1 + nh$.
+
+**Initialisation** ($n=0$) : $(1+h)^0 = 1 \geq 1 + 0$. **Hérédité** : supposons $(1+h)^n \geq 1+nh$. Comme $1+h \geq 0$, on multiplie sans changer le sens :
+
+$$(1+h)^{n+1} = (1+h)^n(1+h) \geq (1+nh)(1+h) = 1 + (n+1)h + nh^2 \geq 1 + (n+1)h,$$
+
+car $nh^2 \geq 0$. La <Prereq href="/maths/partie-ii/arithmetique-de-n">récurrence</Prereq> conclut.
+
+</Encart>
+
+Pour $|q| < 1$ avec $q \neq 0$, posons $a = \tfrac{1}{|q|} > 1$, soit $a = 1 + h$ avec $h > 0$. Bernoulli donne $a^n \geq 1 + nh > nh$, d'où
+
+$$0 \leq |q|^n = \frac{1}{a^n} < \frac{1}{nh}.$$
+
+Le majorant $\tfrac{1}{nh}$ tend vers $0$ (c'est $\tfrac1n$ à un facteur près, et $\tfrac1n \to 0$ par la propriété d'Archimède). Le <Prereq href="/maths/partie-v/suites-limites">théorème des gendarmes</Prereq> force alors $|q|^n \to 0$, donc $q^n \to 0$ (immédiat aussi pour $q=0$). En reportant dans la somme partielle, $q^{n+1} \to 0$ et les opérations sur les limites donnent le résultat.
+
+<Resultat label="Série géométrique">
+
+$$\sum_{n=0}^{\infty} q^n = \frac{1}{1-q} \quad (|q| < 1), \qquad \text{et } \sum q^n \text{ diverge si } |q| \geq 1.$$
+
+<Badge niveau="demontre" slot="badge">Démontré via Bernoulli et Archimède, sans log ni exp. Pour $|q|\ge 1$, le terme $q^n$ ne tend pas vers $0$ (voir §3).</Badge>
+</Resultat>
+
+### 2. Le mystère de $0{,}999\ldots$
+
+<Encart type="calcul" titre="0,999… = 1 : une définition honorée, pas un tour de magie">
+
+Qu'*est* $0{,}999\ldots$ ? Par **définition** d'un développement décimal, c'est la série de ses chiffres :
+
+$$0{,}999\ldots = \sum_{n=1}^{\infty} \frac{9}{10^{n}} = 9 \sum_{n=1}^{\infty} \left(\frac{1}{10}\right)^{n}.$$
+
+La série géométrique de raison $\tfrac{1}{10}$, **privée de son terme $n=0$**, vaut $\tfrac{1}{1-1/10} - 1 = \tfrac{10}{9} - 1 = \tfrac{1}{9}$. Donc
+
+$$0{,}999\ldots = 9 \times \frac{1}{9} = 1.$$
+
+<Resultat label="0,999… = 1">
+
+$$0{,}999\ldots = 1.$$
+
+<Badge niveau="demontre" slot="badge">Égalité stricte, démontrée. Aucune astuce : une définition, puis un calcul.</Badge>
+</Resultat>
+
+</Encart>
+
+Le malaise que suscite cette égalité vient d'une confusion : on croit qu'un développement décimal est « autre chose » qu'une série. Il ne l'est pas. Une fois la définition posée, $0{,}999\ldots$ et $1$ sont deux noms du même réel.
+
+### 3. La série harmonique : le contre-exemple canonique
+
+Une condition s'impose d'abord, presque gratuite.
+
+<Encart type="calcul" titre="Condition nécessaire : le terme général doit tendre vers 0">
+
+Si $\sum u_n$ converge vers $S$, alors $S_n \to S$ et aussi $S_{n-1} \to S$. Or
+
+$$u_n = S_n - S_{n-1} \xrightarrow[\;n\to\infty\;]{} S - S = 0.$$
+
+<Badge niveau="demontre" slot="badge">Si $(u_n)$ ne tend pas vers $0$, la série diverge. ATTENTION : la réciproque est FAUSSE — la suite qui suit le prouve.</Badge>
+</Encart>
+
+<Encart type="calcul" titre="Oresme (~1350) : la série harmonique diverge">
+
+Considérons $\sum \tfrac{1}{n}$, dont le terme $\tfrac1n \to 0$. Regroupons les termes en **paquets dyadiques**. Le paquet $j$ (avec $j \geq 1$) va de l'indice $2^{j-1}+1$ à $2^{j}$ : il compte $2^{j-1}$ termes, chacun $\geq \tfrac{1}{2^{j}}$, donc
+
+$$\frac{1}{2^{j-1}+1} + \cdots + \frac{1}{2^{j}} \;\geq\; 2^{j-1}\cdot\frac{1}{2^{j}} = \frac{1}{2}.$$
+
+Concrètement $\tfrac13+\tfrac14 \geq \tfrac14+\tfrac14 = \tfrac12$, puis $\tfrac15+\tfrac16+\tfrac17+\tfrac18 \geq 4\cdot\tfrac18 = \tfrac12$, etc. En empilant $k$ paquets :
+
+$$S_{2^{k}} = 1 + \sum_{j=1}^{k}\Big(\tfrac{1}{2^{j-1}+1} + \cdots + \tfrac{1}{2^{j}}\Big) \;\geq\; 1 + k\cdot\frac12 = 1 + \frac{k}{2}.$$
+
+Comme $1 + \tfrac{k}{2} \to \infty$, la suite croissante $(S_n)$ n'est pas majorée : elle diverge vers $+\infty$.
+
+<Badge niveau="demontre" slot="badge">Démontré par paquets dyadiques (Oresme, ~1350) — six siècles avant les $\varepsilon$.</Badge>
+</Encart>
+
+Voilà le **choc** pédagogique : les termes $\tfrac1n$ tendent vers $0$, et pourtant la somme explose. La condition « $u_n \to 0$ » est donc **nécessaire mais pas suffisante**, et la série harmonique en est le contre-exemple canonique. Sa divergence est d'une lenteur vertigineuse : il faudrait de l'ordre de $10^{43}$ termes pour que la somme dépasse seulement $100$ — un fait qui réclame le logarithme (pas encore construit), que nous ne prouverons donc pas ici. Retenons l'image : la somme grimpe sans fin, mais si lentement qu'aucune intuition finie ne l'atteint.
+
+### 4. Comparer pour conclure
+
+<Encart type="calcul" titre="Théorème de comparaison (l'outil-maître)">
+
+Si $0 \leq u_n \leq v_n$ pour tout $n$ et si $\sum v_n$ converge, alors $\sum u_n$ converge.
+
+Posons $S_n = \sum_{k=0}^{n} u_k$ et $T_n = \sum_{k=0}^{n} v_k$.
+
+- $u_k \geq 0$ rend $(S_n)$ **croissante** ;
+- $u_k \leq v_k$ donne $S_n \leq T_n$ ;
+- $(T_n)$ croît vers $T := \sum v_n$, donc $T_n \leq T$.
+
+Ainsi $S_n \leq T_n \leq T$ : la suite $(S_n)$ est **croissante et majorée** par $T$. Le <Prereq href="/maths/partie-v/suites-limites">théorème de convergence monotone</Prereq> conclut qu'elle converge.
+
+<Badge niveau="demontre" slot="badge">Démontré par convergence monotone des sommes partielles positives.</Badge>
+</Encart>
+
+<Encart type="calcul" titre="La série Σ 1/n² converge">
+
+Pour $n \geq 2$, on a $n^2 \geq n(n-1)$, donc
+
+$$0 \leq \frac{1}{n^{2}} \leq \frac{1}{n(n-1)} = \frac{1}{n-1} - \frac{1}{n}.$$
+
+La série majorante **télescope** : $\sum_{n=2}^{N}\big(\tfrac{1}{n-1}-\tfrac1n\big) = 1 - \tfrac{1}{N} \to 1$, elle converge. Par comparaison, $\sum \tfrac{1}{n^{2}}$ converge (et sa somme est $\leq 2$).
+
+<Badge niveau="demontre" slot="badge">Convergence démontrée par comparaison télescopique.</Badge>
+</Encart>
+
+Combien vaut-elle exactement ? Euler, en 1735, stupéfia l'Europe : la somme est $\tfrac{\pi^{2}}{6}$. Nous savons *qu'*elle converge ; sa valeur est un trésor pour plus tard.
+
+<Badge niveau="demontre">$\sum_{n\ge1} 1/n^{2} = \pi^{2}/6$ (Euler, 1735) : théorème avéré, cité ici hors de portée — nous n'avons encore ni $\pi$ ni les séries trigonométriques pour le prouver.</Badge>
+
+### 5. L'ordre des termes compte : la convergence absolue
+
+<Encart type="plusloin" titre="Convergence absolue ⇒ convergence, et le vertige de Riemann">
+
+$\sum u_n$ est **absolument convergente** si $\sum |u_n|$ converge. Alors $\sum u_n$ converge.
+
+*Preuve (séries réelles).* Posons $u_n^{+} = \max(u_n, 0)$ et $u_n^{-} = \max(-u_n, 0)$. Alors $0 \leq u_n^{+} \leq |u_n|$ et $0 \leq u_n^{-} \leq |u_n|$ ; par comparaison, $\sum u_n^{+}$ et $\sum u_n^{-}$ convergent. Comme $u_n = u_n^{+} - u_n^{-}$, la somme partielle $\sum u_k = \sum u_k^{+} - \sum u_k^{-}$ converge (différence de deux suites convergentes).
+
+*Le vertige (Riemann, 1854).* Si $\sum u_n$ converge **sans** converger absolument — dite *semi-convergente*, comme $\sum \tfrac{(-1)^{n+1}}{n}$ — alors en **réordonnant** ses termes on peut la faire converger vers **n'importe quel réel**, ou diverger. Sommer l'infini n'est donc **pas commutatif** en général.
+
+<Badge niveau="demontre" slot="badge">Les deux énoncés sont des théorèmes. Leçon d'humilité : l'ordre des termes, invisible pour une somme finie, gouverne une somme infinie non absolument convergente.</Badge>
+</Encart>
+
+### 6. Le nombre $e$
+
+Voici un nombre neuf, défini **directement** par une série :
+
+$$e := \sum_{n=0}^{\infty} \frac{1}{n!} = 1 + 1 + \frac{1}{2} + \frac{1}{6} + \frac{1}{24} + \cdots$$
+
+Encore faut-il que cette somme existe.
+
+<Encart type="calcul" titre="e est bien défini : $2 < e < 3$">
+
+Comparons $\tfrac{1}{n!}$ à une géométrique. Montrons par récurrence que $\tfrac{1}{n!} \leq \tfrac{1}{2^{\,n-1}}$ pour $n \geq 1$.
+
+- $n=1$ : $\tfrac{1}{1!} = 1 = \tfrac{1}{2^{0}}$.
+- Hérédité : $\dfrac{1}{(n+1)!} = \dfrac{1}{n+1}\cdot\dfrac{1}{n!} \leq \dfrac{1}{2}\cdot\dfrac{1}{2^{\,n-1}} = \dfrac{1}{2^{\,n}}$, car $n+1 \geq 2$.
+
+Donc $\sum_{n\ge1}\tfrac{1}{n!} \leq \sum_{n\ge1}\tfrac{1}{2^{\,n-1}} = \sum_{m\ge0}\tfrac{1}{2^{\,m}} = 2$ — et même *strictement*, car l'inégalité $\tfrac{1}{n!} \leq \tfrac{1}{2^{\,n-1}}$ devient stricte dès $n=3$ ($\tfrac16 < \tfrac14$). En ajoutant le terme $n=0$ (qui vaut $1$) : $e < 3$. Dans l'autre sens, les deux premiers termes valent déjà $1+1=2$ et tous les suivants sont strictement positifs, donc $e > 2$. Sommes partielles croissantes et majorées : la série converge.
+
+<Resultat label="Le nombre e">
+
+$$e := \sum_{n=0}^{\infty}\frac{1}{n!}, \qquad 2 < e < 3.$$
+
+<Badge niveau="demontre" slot="badge">Convergence démontrée par comparaison géométrique ; nommer cette somme $e$ est une définition.</Badge>
+</Resultat>
+
+</Encart>
+
+<Encart type="calcul" titre="Contrôle du reste : e ≈ 2,71828">
+
+Le reste après le rang $n$ est $R_n = \sum_{k=n+1}^{\infty}\tfrac{1}{k!}$. Pour $k \geq n+1$,
+
+$$k! = (n+1)!\,(n+2)(n+3)\cdots k \geq (n+1)!\,(n+1)^{\,k-n-1},$$
+
+donc $\tfrac{1}{k!} \leq \tfrac{1}{(n+1)!}\cdot\tfrac{1}{(n+1)^{\,k-n-1}}$, l'inégalité étant stricte dès $k \geq n+2$. En sommant cette géométrique de raison $\tfrac{1}{n+1}$ :
+
+$$R_n < \frac{1}{(n+1)!}\cdot\frac{1}{1 - \frac{1}{n+1}} = \frac{1}{(n+1)!}\cdot\frac{n+1}{n} = \frac{1}{n\cdot n!}.$$
+
+Avec $n=7$ : $R_7 < \tfrac{1}{7\cdot 5040} < 3\cdot 10^{-5}$, et $\sum_{k=0}^{7}\tfrac{1}{k!} = 2{,}71825\ldots$, d'où $e = 2{,}71828\ldots$
+
+<Badge niveau="demontre" slot="badge">Encadrement $R_n < \tfrac{1}{n\cdot n!}$ démontré : il livre $e$ avec autant de décimales voulues — et va nous servir à bien plus.</Badge>
+</Encart>
+
+Depuis $\sqrt{2}$, nous n'avions plus prouvé qu'un nombre était irrationnel. Voici la seconde preuve du cours — d'une **autre nature** : là où $\sqrt2$ tombait par un argument arithmétique de parité, $e$ tombe par un argument **analytique**, l'encadrement d'un reste.
+
+<Encart type="calcul" titre="Le bijou : e est irrationnel (Fourier, 1815)">
+
+Par l'absurde, supposons $e = \tfrac{p}{q}$ avec $p, q \in \mathbb{N}^{*}$. Comme $2 < e < 3$, $e$ n'est pas entier, donc $q \geq 2$.
+
+**Étape 1 — un candidat entier.** Multiplions par $q!$ l'écart entre $e$ et sa somme partielle :
+
+$$x := q!\left(e - \sum_{n=0}^{q}\frac{1}{n!}\right) = q!\,e - \sum_{n=0}^{q}\frac{q!}{n!}.$$
+
+**Étape 2 — $x$ est entier.** D'une part $q!\,e = q!\cdot\tfrac{p}{q} = p\,(q-1)! \in \mathbb{Z}$. D'autre part, pour $0 \leq n \leq q$, $\tfrac{q!}{n!} = (n+1)(n+2)\cdots q \in \mathbb{Z}$ (produit d'entiers ; vide, donc égal à $1$, pour $n=q$). Donc $\sum_{n=0}^{q}\tfrac{q!}{n!} \in \mathbb{Z}$, et par différence $x \in \mathbb{Z}$.
+
+**Étape 3 — $x > 0$.** Or $x = q!\sum_{n=q+1}^{\infty}\tfrac{1}{n!} = q!\,R_q$, somme de termes strictement positifs : $x > 0$.
+
+**Étape 4 — $x < 1$.** Le contrôle du reste donne $R_q < \tfrac{1}{q\cdot q!}$, d'où
+
+$$x = q!\,R_q < q!\cdot\frac{1}{q\cdot q!} = \frac{1}{q} \leq \frac{1}{2} < 1.$$
+
+**Conclusion.** $x$ est un entier vérifiant $0 < x < 1$. Mais **aucun entier n'habite entre $0$ et $1$** : contradiction. L'hypothèse $e = p/q$ était absurde.
+
+<Resultat label="Irrationalité de e">
+
+$$e \notin \mathbb{Q}.$$
+
+<Badge niveau="demontre" slot="badge">Démontré (Fourier, 1815) : première irrationalité *analytique* du cours, par encadrement d'un reste — chaque borne calculée, aucune magie.</Badge>
+</Resultat>
+
+</Encart>
+
+Nous savons désormais additionner une infinité de nombres — et nous avons découvert que cet infini garde ses pièges (la commutativité perdue de Riemann) et ses joyaux ($e$ irrationnel). Jusqu'ici, pourtant, nos objets restaient des nombres et des suites. Il est temps de tourner le regard vers les **fonctions** elles-mêmes : que signifie qu'une courbe soit « sans rupture » ? C'est la continuité, et son théorème des valeurs intermédiaires, qui nous attendent au chapitre suivant.

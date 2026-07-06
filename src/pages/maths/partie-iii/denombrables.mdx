@@ -1,0 +1,156 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les ensembles dénombrables"
+chapter: denombrables
+description: "Dénombrable = équipotent à ℕ ; ℤ dénombrable (bijection explicite) ; ℕ×ℕ dénombrable (zigzag, fonction de couplage) ; ℚ dénombrable ; réunion dénombrable (avec l honnêteté ACω) ; les suites FINIES sont dénombrables ; nombres algébriques dénombrables."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import VideoManim from '../../../components/VideoManim.astro';
+
+## Dénombrable : l'infini que l'on peut mettre en file
+
+Au chapitre précédent, nous avons appris à <Prereq href="/maths/partie-iii/equipotence">comparer les tailles sans compter</Prereq> : deux ensembles ont la même taille s'il existe une bijection entre eux. Ce chapitre explore le **premier étage** de l'infini : les ensembles qui ont exactement la taille de $\mathbb{N}$. Et nous allons y faire une découverte troublante : $\mathbb{Z}$, $\mathbb{N} \times \mathbb{N}$, $\mathbb{Q}$ — tous logent à cet étage, alors qu'ils semblent tellement « plus gros ».
+
+<Hypotheses titre="Ce dont ce chapitre a besoin">
+1. Les axiomes ZF et tout ce qui en a déjà été déduit : $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, l'équipotence et le théorème de Cantor–Schröder–Bernstein. **Aucune hypothèse nouvelle** — à une exception près, que nous signalerons clairement le moment venu par un badge bleu « admis » : un théorème « standard » de ce chapitre cache un principe de choix qui **ne se déduit pas** de ZF.
+</Hypotheses>
+
+**Définition.** Un ensemble $E$ est **dénombrable** s'il est équipotent à $\mathbb{N}$, c'est-à-dire s'il existe une bijection $f : \mathbb{N} \to E$. Il est **au plus dénombrable** s'il est fini ou dénombrable. <Badge niveau="admis">Définition : un choix de vocabulaire, rien à démontrer.</Badge>
+
+Cette définition a deux lectures, et il faut garder les deux en tête. Lecture *statique* : $E$ a la même taille que $\mathbb{N}$. Lecture *dynamique* : une bijection $f : \mathbb{N} \to E$ est exactement une **énumération** $E = \{f(0), f(1), f(2), \dots\}$ **sans répétition ni oubli** — chaque élément reçoit un numéro, chaque numéro sert une fois.
+
+<Encart type="intuition" titre="La file d'attente infinie">
+Un ensemble dénombrable, c'est un ensemble dont on peut mettre **tous** les éléments dans une file d'attente : un premier, un deuxième, un troisième… La file ne finit jamais, mais chaque élément, lui, sera servi **au bout d'un temps fini** : l'élément numéro $n$ attend $n$ tours, pas un de plus. Toute la suite du chapitre consiste à inventer des files d'attente astucieuses pour des ensembles qui semblent trop gros pour y tenir.
+</Encart>
+
+## $\mathbb{Z}$ : deux fois plus gros ? Non — juste réordonné
+
+Premier candidat : les <Prereq href="/maths/partie-ii/entiers-relatifs">entiers relatifs</Prereq> $\mathbb{Z}$, qui semblent contenir « deux copies » de $\mathbb{N}$. L'astuce : ne pas essayer d'énumérer $\dots, -2, -1, 0, 1, 2, \dots$ (par où commencer ?), mais **alterner** : $0,\ 1,\ -1,\ 2,\ -2,\ 3,\ -3, \dots$ Chaque entier relatif finit par apparaître, une fois exactement.
+
+<Encart type="calcul" titre="La bijection ℕ → ℤ, vérifiée ligne à ligne">
+
+**Fait préliminaire (parité).** Tout $n \in \mathbb{N}$ s'écrit $n = 2k$ *ou* $n = 2k+1$ avec $k \in \mathbb{N}$, et jamais les deux. *Existence* par <Prereq href="/maths/partie-ii/entiers-naturels">récurrence</Prereq> : $0 = 2 \cdot 0$ ; si $n = 2k$ alors $n+1 = 2k+1$ ; si $n = 2k+1$ alors $n+1 = 2(k+1)$. *Exclusivité* : si $2k = 2k'+1$ avec $k \le k'$, alors $2k \le 2k' \lt 2k'+1 = 2k$, absurde ; et si $k' \lt k$, alors $k'+1 \le k$ donc $2k'+2 \le 2k = 2k'+1$, d'où $2 \le 1$ en retranchant $2k'$ de chaque côté — la <Prereq href="/maths/partie-ii/arithmetique-de-n">compatibilité de l'ordre avec l'addition</Prereq> — absurde aussi.
+
+**Définition de $f$.** Posons, en utilisant le <Prereq href="/maths/partie-ii/entiers-relatifs">plongement de $\mathbb{N}$ dans $\mathbb{Z}$ et l'opposé</Prereq> (construits au chapitre sur $\mathbb{Z}$) :
+
+$$ f(2k) := -k \qquad \text{et} \qquad f(2k+1) := k+1. $$
+
+Le fait préliminaire garantit que $f$ est bien définie sur tout $\mathbb{N}$, sans ambiguïté. Ses premières valeurs : $f(0)=0$, $f(1)=1$, $f(2)=-1$, $f(3)=2$, $f(4)=-2$ — l'alternance annoncée.
+
+**Surjectivité.** Soit $z \in \mathbb{Z}$. Par l'ordre total sur $\mathbb{Z}$, ou bien $z \le 0$, et alors $z = -k$ pour un $k \in \mathbb{N}$, donc $z = f(2k)$ ; ou bien $z \ge 1$, et alors $z = k+1$ avec $k := z - 1 \in \mathbb{N}$, donc $z = f(2k+1)$. Tout $z$ est atteint.
+
+**Injectivité.** Un antécédent pair donne une valeur $-k \le 0$ ; un antécédent impair donne une valeur $k+1 \ge 1$. Deux antécédents de parités différentes donnent donc des valeurs différentes. Restent les cas de même parité : si $-k = -k'$, alors $k = k'$ (l'opposé est injectif dans $\mathbb{Z}$), donc $2k = 2k'$ ; si $k+1 = k'+1$, alors $k = k'$ par régularité, donc $2k+1 = 2k'+1$. Dans tous les cas, les antécédents coïncident.
+
+$$ \boxed{f : \mathbb{N} \to \mathbb{Z} \text{ est une bijection : } \mathbb{Z} \text{ est dénombrable.}} $$
+
+</Encart>
+
+<Resultat label="ℤ est dénombrable">
+
+$$ |\mathbb{Z}| = |\mathbb{N}|. $$
+
+<Badge niveau="demontre" slot="badge">Bijection explicite (l'alternance), injectivité et surjectivité vérifiées cas par cas ci-dessus.</Badge>
+</Resultat>
+
+C'est déjà un choc : l'ensemble qui semblait « deux fois plus gros » a exactement la même taille. À l'infini, doubler ne grossit pas.
+
+## Le zigzag de Cantor : $\mathbb{N} \times \mathbb{N}$ est dénombrable
+
+Montons d'un cran : la **grille** $\mathbb{N} \times \mathbb{N}$, un tableau infini dans les deux directions. Une infinité de lignes ayant chacune une infinité de cases — voilà qui semble « infiniment plus gros » que $\mathbb{N}$. L'idée de génie de Cantor : ne parcourir la grille **ni ligne par ligne** (on n'en finirait jamais une), ni colonne par colonne, mais **anti-diagonale par anti-diagonale**. L'anti-diagonale numéro $k$ regroupe les couples $(m,n)$ avec $m+n = k$ : elle ne contient que $k+1$ points. On les épuise, puis on passe à la suivante.
+
+<VideoManim src="maths-zigzag-rationnels" scene="ZigzagRationnels" titre="Le zigzag de Cantor : énumérer les fractions" legende="Un chemin en zigzag parcourt les anti-diagonales de la grille p/q et numérote toutes les fractions : ℚ est dénombrable." />
+
+La vidéo montre le zigzag directement sur la grille des fractions — nous y venons à la section suivante. Le parcours admet une **formule fermée** : la fonction de couplage de Cantor.
+
+<Resultat label="Fonction de couplage de Cantor">
+
+$$ \pi(m,n) = \frac{(m+n)(m+n+1)}{2} + n \qquad \text{est une bijection } \mathbb{N} \times \mathbb{N} \to \mathbb{N}. $$
+
+<Badge niveau="demontre" slot="badge">Bijectivité démontrée intégralement dans l'encart ci-dessous — comptage des anti-diagonales.</Badge>
+</Resultat>
+
+<Encart type="plusloin" titre="Démonstration complète : π est une bijection">
+
+**Étape 1 — chaque anti-diagonale compte $k+1$ points.** $D_k := \{(m,n) \in \mathbb{N}^2 : m+n = k\} = \{(k,0), (k-1,1), \dots, (0,k)\}$ : la valeur de $n$ parcourt $0, \dots, k$ et détermine $m = k - n$. Soit $k+1$ points exactement.
+
+**Étape 2 — combien de points avant la diagonale $k$ ?** Les diagonales $D_0, \dots, D_{k-1}$ totalisent $1 + 2 + \cdots + k$ points. Par récurrence, cette somme vaut $T_k := \frac{k(k+1)}{2}$ : c'est vrai pour $k=0$ (somme vide, $T_0 = 0$), et si $1 + \cdots + k = \frac{k(k+1)}{2}$, alors $1 + \cdots + (k+1) = \frac{k(k+1)}{2} + (k+1) = \frac{(k+1)(k+2)}{2}$.
+
+**Étape 3 — le numéro du point $(m,n)$.** Parcourons $D_0$, puis $D_1$, etc., chaque diagonale dans l'ordre des $n$ croissants. Le point $(m,n)$, situé sur $D_{m+n}$, est précédé des $T_{m+n}$ points des diagonales antérieures, puis des $n$ points de sa propre diagonale ayant une deuxième coordonnée $\lt n$. Son numéro est donc $T_{m+n} + n = \pi(m,n)$ : la formule *est* le zigzag.
+
+**Étape 4 — surjectivité.** Soit $N \in \mathbb{N}$. L'ensemble $\{j \in \mathbb{N} : T_j \le N\}$ est non vide ($T_0 = 0 \le N$) et inclus dans $\{0, \dots, N\}$ (car $T_j \ge j$) : fini et non vide, il admet un plus grand élément $k$ (conséquence du <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq>). Posons $n := N - T_k \in \mathbb{N}$. Alors $n \le k$ : sinon $n \ge k+1$, donc $N \ge T_k + k + 1 = T_{k+1}$, contredisant la maximalité de $k$. Posons $m := k - n \in \mathbb{N}$ : alors $\pi(m,n) = T_k + n = N$.
+
+**Étape 5 — injectivité.** Si $\pi(m,n) = N$ et $k := m+n$, alors $T_k \le N = T_k + n \le T_k + k \lt T_{k+1}$ : ainsi $k$ est *le* plus grand indice $j$ vérifiant $T_j \le N$ — il est déterminé par $N$ seul. Puis $n = N - T_k$ et $m = k - n$ sont déterminés à leur tour. Deux antécédents de $N$ coïncident donc. $\pi$ est bijective. ∎
+
+</Encart>
+
+**Corollaire.** Si $A$ et $B$ sont dénombrables, $A \times B$ l'est aussi : des bijections $f : \mathbb{N} \to A$ et $g : \mathbb{N} \to B$ donnent la bijection $N \mapsto (f(m), g(n))$, où $(m,n) := \pi^{-1}(N)$ — une <Prereq href="/maths/partie-iii/equipotence">composition de bijections</Prereq>. <Badge niveau="demontre">Composition explicite de bijections déjà établies.</Badge>
+
+## $\mathbb{Q}$ est dénombrable : la densité n'est pas la taille
+
+Voici le scandale du chapitre. Entre deux rationnels, il y a **toujours** un autre rationnel — donc une infinité : $\mathbb{Q}$ est <Prereq href="/maths/partie-ii/rationnels">dense</Prereq>. Et pourtant, il n'y a **pas plus** de rationnels que d'entiers.
+
+<Encart type="calcul" titre="Démonstration : |ℚ| = |ℕ|">
+
+**Étape 1 — injecter $\mathbb{Q}$ dans $\mathbb{Z} \times \mathbb{N}^*$.** Tout rationnel $r$ admet un représentant à dénominateur strictement positif ; parmi ces dénominateurs, le bon ordre de $\mathbb{N}$ en fournit un **plus petit**, $q_r \in \mathbb{N}^*$ — c'est la <Prereq href="/maths/partie-ii/rationnels">forme irréductible</Prereq>. Le numérateur associé $p_r$ est alors unique : si $r = p/q_r = p'/q_r$, la définition de l'équivalence donne $p\,q_r = p'\,q_r$, donc $(p - p')\,q_r = 0$ ; comme $q_r \neq 0$, l'<Prereq href="/maths/partie-ii/entiers-relatifs">intégrité de $\mathbb{Z}$</Prereq> force $p = p'$. L'application $j(r) := (p_r, q_r)$ est **injective** : si $j(r) = j(r') = (p, q)$, alors $r = p/q = r'$.
+
+**Étape 2 — injecter $\mathbb{Z} \times \mathbb{N}^*$ dans $\mathbb{N}$.** Notons $g : \mathbb{Z} \to \mathbb{N}$ la réciproque de la bijection $f$ construite plus haut, et envoyons $(z, q) \mapsto \pi(g(z),\, q - 1)$. C'est une injection : $\pi$ est bijective, $g$ est bijective, et $q \mapsto q-1$ est injective de $\mathbb{N}^*$ dans $\mathbb{N}$.
+
+**Étape 3 — la composée.** La composée de deux injections est injective : nous avons une injection $\mathbb{Q} \to \mathbb{N}$, donc $|\mathbb{Q}| \le |\mathbb{N}|$.
+
+**Étape 4 — l'autre sens.** Le plongement $n \mapsto n$ de $\mathbb{N}$ dans $\mathbb{Q}$ est injectif : $|\mathbb{N}| \le |\mathbb{Q}|$.
+
+**Étape 5 — conclure par Cantor–Schröder–Bernstein.** Deux injections en sens opposés fournissent une bijection, par le théorème de <Prereq href="/maths/partie-iii/equipotence">Cantor–Schröder–Bernstein</Prereq>.
+
+$$ \boxed{|\mathbb{Q}| = |\mathbb{N}| : \mathbb{Q} \text{ est dénombrable.}} $$
+
+</Encart>
+
+<Resultat label="ℚ est dénombrable">
+
+$$ |\mathbb{Q}| = |\mathbb{N}|. $$
+
+<Badge niveau="demontre" slot="badge">Injection via la forme irréductible, retour par le plongement, conclusion par Cantor–Schröder–Bernstein.</Badge>
+</Resultat>
+
+Savourez : sur la droite, les rationnels semblent *partout* et les entiers *clairsemés*. Même taille. La **densité** est une propriété de l'*ordre* — comment les éléments s'intercalent — pas de la *taille*. Deux notions que l'intuition confond, et que l'axiomatique sépare au scalpel.
+
+## Réunion dénombrable : l'hypothèse cachée
+
+Énoncé standard, présent dans tous les manuels : *une réunion dénombrable d'ensembles au plus dénombrables est au plus dénombrable*. La preuve semble couler de source : on écarte les $A_i$ vides, puis, pour chaque $i \in \mathbb{N}$, on **prend** une énumération $f_i : \mathbb{N} \to A_i$ — surjective, quitte à répéter des éléments si $A_i$ est fini —, on pose $F(i,n) := f_i(n)$, et $F \circ \pi^{-1}$ énumère toute la réunion (avec répétitions, qu'on élimine en associant à chaque élément son plus petit numéro — bon ordre, aucun choix ici).
+
+Mais relisez le début : « pour chaque $i$, on **prend** une énumération ». Chaque $A_i$ en admet, oui — mais il faut en *sélectionner* **une par ensemble, une infinité de fois, simultanément, sans aucune règle** pour guider la sélection. Ce pas-là ne se déduit **pas** des axiomes ZF : c'est le **choix dénombrable** ($\mathsf{AC}_\omega$), une forme faible de l'axiome du choix, qui sera discuté en détail au chapitre 25.
+
+<Resultat label="Réunion dénombrable d'ensembles au plus dénombrables (cas général)">
+
+$$ \forall i \in \mathbb{N},\ |A_i| \le |\mathbb{N}| \;\Longrightarrow\; \Big|\bigcup_{i \in \mathbb{N}} A_i\Big| \le |\mathbb{N}|. $$
+
+<Badge niveau="admis" slot="badge">La preuve générale requiert le choix dénombrable (ACω), principe indépendant de ZF — soldé au chapitre sur l'axiome du choix.</Badge>
+</Resultat>
+
+<Encart type="rappel" titre="Quand a-t-on vraiment besoin de choisir ?">
+Distinguons deux situations. **Familles explicitement énumérées** : si une *formule* fournit d'un coup toutes les énumérations — comme pour $\mathbb{Q} = \bigcup_{q \ge 1} \{p/q : p \in \mathbb{Z}\}$, où chaque paquet hérite de l'énumération explicite de $\mathbb{Z}$ — alors aucun choix n'est requis : le résultat est un théorème de ZF pur. <Badge niveau="demontre">Quand les énumérations sont données par une formule, la preuve ci-dessus se déroule dans ZF sans choix.</Badge> **Famille abstraite quelconque** : on sait seulement que chaque $A_i$ *admet* des énumérations, sans en désigner aucune ; il faut alors $\mathsf{AC}_\omega$. C'est la **première fois** dans ce cours qu'un théorème « standard » révèle une hypothèse cachée sous le tapis des manuels — et c'est exactement la raison d'être de ce site : rien sous le tapis.
+</Encart>
+
+Pas de drame : tous les usages de ce chapitre relèvent du cas explicite, donc de ZF pur. Mais la dette est notée, et elle sera soldée.
+
+## Tous les livres du monde
+
+**Théorème.** L'ensemble des **suites finies** d'entiers naturels est dénombrable. *Preuve.* Par récurrence sur la longueur : les suites de longueur $1$ sont en bijection avec $\mathbb{N}$ ; et une bijection $h_k : \mathbb{N}^k \to \mathbb{N}$ en induit une pour $\mathbb{N}^{k+1}$ via $(s, n) \mapsto \pi(h_k(s), n)$. Le théorème de récursion (chapitre 5) construit ainsi **une** suite explicite de bijections $(h_k)$ — aucune décision arbitraire, donc aucun choix. La réunion sur toutes les longueurs est une réunion dénombrable *explicitement énumérée*, et même **sans répétition** : deux suites de longueurs différentes sont distinctes, donc $N \mapsto h_{k+1}^{-1}(n)$, où $(k, n) := \pi^{-1}(N)$, est une bijection de $\mathbb{N}$ sur les suites de longueur au moins $1$ — dans ZF pur. (Inclure la suite vide n'y change rien : décaler l'énumération d'un cran lui fait une place.) <Badge niveau="demontre">Récurrence sur la longueur + réunion explicite sans répétition : pas d'ACω nécessaire.</Badge>
+
+**Corollaire savoureux.** Un texte — ce paragraphe, un roman, une encyclopédie — est une suite finie de caractères pris dans un alphabet fini ; codons chaque caractère par un entier. Tout texte devient une suite finie d'entiers, et des textes distincts donnent des suites distinctes : l'ensemble de **tous les textes possibles** — tous les livres écrits, tous les livres à écrire, toutes les démonstrations futures — s'injecte dans un ensemble dénombrable, donc dans $\mathbb{N}$. Dans l'autre sens, $\mathbb{N}$ s'injecte dans les textes : « a », « aa », « aaa », … sont deux à deux distincts. Deux injections en sens opposés : Cantor–Schröder–Bernstein conclut, l'ensemble des textes est **dénombrable**. <Badge niveau="demontre">Injection explicite dans les suites finies d'entiers, injection réciproque évidente, conclusion par Cantor–Schröder–Bernstein.</Badge> La bibliothèque de Babel tient dans une file d'attente.
+
+## Et les nombres ? Le vertige avant le gouffre
+
+<Encart type="plusloin" titre="Les nombres algébriques sont dénombrables (esquisse honnête)">
+Un réel est **algébrique** s'il annule un polynôme non nul à coefficients entiers — $\sqrt{2}$ (racine de $X^2 - 2$), le nombre d'or, toutes les racines $n$-ièmes… Esquisse : un polynôme à coefficients entiers *est* la suite finie de ses coefficients, et les suites finies d'entiers sont dénombrables (théorème ci-dessus, combiné à la bijection $\mathbb{N} \to \mathbb{Z}$) ; il y a donc une énumération explicite $P_0, P_1, P_2, \dots$ de ces polynômes. Chaque polynôme non nul de degré $d$ possède **au plus $d$ racines réelles** — résultat que nous citons ici **par anticipation** : il sera démontré au chapitre sur les polynômes (chapitre 17), et nous le signalons comme tel plutôt que de l'utiliser en silence. Les racines de chaque $P_i$, en nombre fini, s'énumèrent par ordre croissant (l'ordre total de $\mathbb{R}$ les range sans aucun choix) : les algébriques forment une réunion dénombrable explicitement énumérée d'ensembles finis — au plus dénombrable, dans ZF pur. Et comme chaque entier $n$ est algébrique (racine de $X - n$), $\mathbb{N}$ s'injecte en retour dans les algébriques : Cantor–Schröder–Bernstein conclut, les algébriques sont **dénombrables**. <Badge niveau="demontre">Preuve complète modulo la borne sur le nombre de racines, démontrée au chapitre 17 et citée ici comme anticipation explicite.</Badge>
+</Encart>
+
+Faisons le bilan, et mesurez le vertige. $\mathbb{Z}$ : dénombrable. $\mathbb{N} \times \mathbb{N}$ : dénombrable. $\mathbb{Q}$, pourtant dense : dénombrable. Tous les textes possibles : dénombrables. Les nombres algébriques — presque tous les nombres que vous avez jamais nommés : dénombrables. Tout ce que nous lançons contre $\mathbb{N}$ retombe à sa taille. Une question devient inévitable : **tout** infini est-il dénombrable ? Si $\mathbb{R}$, lui, ne l'était *pas*, alors les algébriques n'y compteraient pour presque rien : « presque tous » les réels seraient transcendants — des nombres qu'aucune équation polynomiale à coefficients entiers n'attrape, et dont nous ne savons presque rien nommer.
+
+Au prochain chapitre, Cantor trace sa diagonale — et la file d'attente, pour la première fois, déborde.

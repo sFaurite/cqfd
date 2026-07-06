@@ -1,0 +1,107 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Synthèse : la carte de l édifice"
+chapter: synthese
+description: "La carte finale : TOUT ce qui a été admis (liste exhaustive) ; les grandes lignes de ce qui a été démontré ; l indécidable ; le conjecturé ; la promesse du site tenue et relue."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le chapitre-miroir
+
+Nous ne démontrerons rien de neuf ici. Ce chapitre est un miroir : il retourne le cours vers lui-même et vérifie, poste par poste, la comptabilité complète de ce que nous avons dépensé. Sa rigueur propre n'est pas dans une preuve, mais dans l'exhaustivité et l'honnêteté du bilan. Quatre colonnes suffisent à ranger vingt-six chapitres de mathématiques : ce que nous avons **admis**, ce que nous avons **démontré**, ce qui est **indécidable**, ce qui reste **conjecturé**.
+
+<Encart type="intuition" titre="Une grille, pas un thermomètre">
+
+Imaginez tout l'édifice projeté sur une grille à quatre cases. À gauche, une pile minuscule : les hypothèses. À côté, un continent : les théorèmes. Puis deux cases plus étranges — l'indécidable et le conjecturé — qu'on confond souvent et qui n'ont rien à voir. La grille n'est pas un thermomètre de certitude qui irait du « sûr » au « douteux ». Ce sont des **statuts logiques** : *admis* est un choix, *démontré* est un gain, *indécidable* est un fait prouvé sur les limites du système, *conjecturé* est une question ouverte. Gardez cette image : nous allons remplir les quatre cases, et vous verrez comme la première est petite.
+
+</Encart>
+
+## Colonne 1 — ce que nous avons admis (et c'est tout)
+
+Voici l'inventaire complet. Rien de plus ne se cache dans le cours ; si vous en trouvez un de plus, le cours a menti.
+
+- **La logique classique et ses règles d'inférence** (connecteurs, quantificateurs, *modus ponens*), posée comme cadre au tout premier chapitre. <Badge niveau="admis"><Prereq href="/maths/partie-i/methode-axiomatique">Chapitre 1</Prereq> — c'est notre langage et notre moteur : adopté, jamais démontré.</Badge>
+- **Les huit axiomes de ZF** : extensionnalité, paire, réunion, ensemble des parties, schéma de séparation, schéma de remplacement, infini, fondation. <Badge niveau="admis"><Prereq href="/maths/partie-i/ensembles-zf">Chapitre 2</Prereq> — les briques de tout l'édifice, posées au grand jour.</Badge>
+- **L'axiome du choix** (AC), neuvième axiome *optionnel*, indépendant de ZF. <Badge niveau="admis"><Prereq href="/maths/partie-vi/axiome-du-choix">Chapitre 25</Prereq> — nous avons vécu vingt-quatre chapitres presque sans lui.</Badge>
+- **Les définitions structurantes** — fonction, relation d'équivalence et quotient, groupe, anneau, corps, intégrale de Riemann… Définir n'est *pas* admettre un fait : c'est **choisir un découpage** du monde. On ne peut le juger vrai ou faux, seulement fécond ou maladroit — et c'est pourquoi une définition porte le statut *admis*. <Badge niveau="admis">Un choix de vocabulaire, adopté, non démontré — ni vrai ni faux en soi.</Badge>
+- **Les baptêmes** : $0 = \varnothing$, $i = (0,1)$, le nombre $e = \sum 1/n!$, le nombre $\pi$ (le double du premier zéro de $\cos$). Nommer un objet déjà construit, c'est encore une convention. <Badge niveau="admis">On baptise ce que la déduction a produit — le nom est libre, l'objet ne l'est pas.</Badge>
+- **Les conventions de notation** : les plongements qui font écrire $\mathbb{N} \subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R} \subseteq \mathbb{C}$ (identifications, pas égalités brutes), et le choix « $1$ n'est pas premier ». <Badge niveau="admis">Décisions d'écriture, prises pour la commodité et la cohérence.</Badge>
+
+C'est **tout**. Une logique, huit axiomes, un neuvième mis à part, et des conventions. Tout le reste du cours — des milliers de lignes — se déduit de cette pile. Mesurez le rapport : c'est là qu'est la spécificité des mathématiques.
+
+## Colonne 2 — ce que nous avons démontré (le théorème-fleuve)
+
+Lisez maintenant la grande chaîne comme s'il s'agissait d'**un seul théorème**, dont chaque chapitre fut un lemme. De l'ensemble vide, l'axiome de l'infini fait jaillir <Prereq href="/maths/partie-ii/entiers-naturels">$\mathbb{N}$ et le principe de récurrence, démontré</Prereq> — non postulé, comme chez Peano, mais *prouvé* à partir de « plus petit ensemble inductif ». Le théorème de récursion légitime alors de <Prereq href="/maths/partie-ii/arithmetique-de-n">définir $+$, $\times$ et l'ordre, et de prouver jusqu'à $2+2=4$</Prereq>. Un quotient construit <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$, ses opposés, son intégrité</Prereq> ; un autre, <Prereq href="/maths/partie-ii/rationnels">$\mathbb{Q}$ où tout non-nul s'inverse</Prereq> ; les coupures de Dedekind comblent les trous et livrent <Prereq href="/maths/partie-ii/reels-dedekind">$\mathbb{R}$ et sa complétude</Prereq> — le fait central de toute l'analyse. Enfin $\mathbb{R}^2$, muni d'une multiplication, **domestique** $i$ : <Prereq href="/maths/partie-ii/complexes">$i^2 = -1$ devient un calcul, plus un mystère</Prereq>.
+
+Sur ce socle, trois étages. Les **infinis étagés** de Cantor : <Prereq href="/maths/partie-iii/equipotence">l'équipotence et Cantor–Schröder–Bernstein</Prereq>, <Prereq href="/maths/partie-iii/denombrables">$\mathbb{Z}$, $\mathbb{N}^2$, $\mathbb{Q}$ dénombrables</Prereq>, puis <Prereq href="/maths/partie-iii/diagonale-cantor">la diagonale : $\mathbb{R}$ est indénombrable, et $|\mathcal{P}(E)| > |E|$ toujours</Prereq>. L'**algèbre** : <Prereq href="/maths/partie-iv/groupes">le théorème de Lagrange</Prereq>, <Prereq href="/maths/partie-iv/arithmetique">Bézout et l'infinité des premiers</Prereq>, <Prereq href="/maths/partie-iv/anneaux-corps">le petit théorème de Fermat, obtenu par Lagrange</Prereq>, <Prereq href="/maths/partie-iv/polynomes">les racines des polynômes formels</Prereq>. Et l'**analyse**, dont la trinité s'appuie chaque fois sur la complétude de $\mathbb{R}$ : <Prereq href="/maths/partie-v/continuite">le théorème des valeurs intermédiaires</Prereq>, <Prereq href="/maths/partie-v/derivation">les accroissements finis</Prereq>, <Prereq href="/maths/partie-v/integrale">le théorème fondamental de l'analyse</Prereq> — sans oublier <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq> et <Prereq href="/maths/partie-v/series">l'irrationalité de $e$</Prereq>. Le fleuve se jette dans une seule ligne, où l'algèbre et l'analyse se rejoignent :
+
+$$e^{i\pi} + 1 = 0$$
+
+démontrée <Prereq href="/maths/partie-v/exponentielle">à partir de la seule série exponentielle</Prereq>. <Badge niveau="demontre">Toute cette chaîne est une déduction pure depuis ZF : aucune hypothèse nouvelle n'y intervient.</Badge>
+
+Voici une quinzaine de jalons, avec l'outil-clé qui les a *payés*.
+
+| Résultat démontré | Chapitre | Ce qu'il a coûté |
+|---|---|---|
+| Principe de récurrence | 4 · $\mathbb{N}$ | axiome de l'infini (plus petit inductif) |
+| $+$, $\times$, et $2+2=4$ | 5 · arithmétique de $\mathbb{N}$ | théorème de récursion |
+| $\mathbb{Z}$, opérations bien définies | 6 · $\mathbb{Z}$ | quotient $(\mathbb{N}^2)/\!\sim$ |
+| Tout rationnel $\neq 0$ inversible | 7 · $\mathbb{Q}$ | quotient $(\mathbb{Z}\times\mathbb{Z}^*)/\!\sim$ |
+| Complétude de $\mathbb{R}$ (borne sup) | 8 · $\mathbb{R}$ | coupures de Dedekind |
+| $\mathbb{C}$ corps, $i^2=-1$ | 9 · $\mathbb{C}$ | multiplication sur $\mathbb{R}^2$ |
+| Cantor–Schröder–Bernstein | 10 · équipotence | comparaison par injections |
+| $\mathbb{Q}$ dénombrable | 11 · dénombrables | fonction de couplage (zigzag) |
+| $\mathbb{R}$ indénombrable | 12 · diagonale | argument diagonal |
+| Théorème de Lagrange | 14 · groupes | classes latérales |
+| Infinité des premiers, TF de l'arithmétique | 15 · arithmétique de $\mathbb{Z}$ | Euclide, Bézout, Gauss |
+| Petit théorème de Fermat | 16 · anneaux & corps | Lagrange dans $(\mathbb{Z}/p\mathbb{Z})^*$ |
+| $e$ irrationnel | 19 · séries | la série $\sum 1/n!$ |
+| Valeurs intermédiaires (TVI) | 20 · continuité | borne supérieure |
+| Accroissements finis | 21 · dérivation | Rolle + extremum intérieur |
+| Théorème fondamental de l'analyse | 22 · intégrale | sommes de Darboux + Heine |
+| $e^{i\pi}+1=0$ | 23 · exponentielle | séries + produit de Cauchy |
+
+Certains théorèmes, nous les avons **cités sans en donner la preuve complète**, parce qu'elle dépasse le cours — et nous l'avons dit à chaque fois, sans bluff : le théorème des nombres premiers, la transcendance de $\pi$ (Lindemann, 1882), Fermat–Wiles, Poincaré–Perelman, Abel–Ruffini, le théorème fondamental de l'algèbre (esquisse honnête au ch. 17), Banach–Tarski (démontré, lui, *dans* ZFC au ch. 25). <Badge niveau="demontre">Tous authentiquement démontrés par leurs auteurs et sans controverse — l'aveu porte sur *nous*, qui n'en donnons pas la preuve, jamais sur leur statut. L'honnêteté n'interdit pas l'horizon ; elle interdit de le faire passer pour acquis.</Badge>
+
+## Colonne 3 — ce qui est indécidable
+
+Trois énoncés portent le badge rouge — et c'est le plus mal compris du cours. **Indécidable n'est pas « on ne sait pas »** : c'est un théorème *sur le système*, qui prouve qu'aucune preuve ni réfutation n'existe en son sein.
+
+- **L'hypothèse du continu** (CH) : aucun ensemble n'a un cardinal strictement compris entre $|\mathbb{N}|$ et $|\mathbb{R}|$. <Badge niveau="indecidable"><Prereq href="/maths/partie-iii/hypothese-continu">Chapitre 13</Prereq> — Gödel (1938) et Cohen (1963) : ni CH ni sa négation ne se démontrent dans ZFC.</Badge>
+- **Le théorème de Goodstein**, vu depuis l'arithmétique de Peano seule. <Badge niveau="indecidable"><Prereq href="/maths/partie-vi/godel">Chapitre 24</Prereq> — indécidable dans PA (Kirby–Paris, 1982), quoique vrai et démontrable dans ZF.</Badge>
+- **La cohérence de ZF**, $\mathrm{Con}(\mathrm{ZF})$, vue depuis ZF. <Badge niveau="indecidable"><Prereq href="/maths/partie-vi/godel">Chapitre 24</Prereq> — non démontrable dans ZF (second théorème de Gödel) ; l'aveu fondateur du cours.</Badge>
+
+<Encart type="plusloin" titre="Trois rouges qui ne sont pas de la même teinte">
+
+Le statut *indécidable* est toujours relatif à un système — mais les trois exemples diffèrent finement. CH est **véritablement neutre** : ZFC admet des modèles où elle est vraie et d'autres où elle est fausse, aucune valeur n'est privilégiée. Goodstein est **vrai** au sens usuel (ZF le prouve, en montant jusqu'à l'ordinal $\varepsilon_0$) mais échappe à PA, trop faible. $\mathrm{Con}(\mathrm{ZF})$, enfin, est indémontrable dans ZF par le second théorème de Gödel ; en la croyant vraie — ce que nous faisons — nous en faisons un énoncé vrai mais hors de portée de toute preuve interne. Trois rouges, une seule leçon : la limite est *démontrée*, elle n'est pas subie.
+
+</Encart>
+
+## Colonne 4 — ce qui reste conjecturé
+
+À ne surtout pas confondre avec la colonne précédente. Une conjecture n'est pas prouvée *indécidable* : c'est une question **ouverte**, qui attend peut-être une preuve, peut-être une réfutation. <Prereq href="/maths/partie-vi/grandes-conjectures">Le front vivant</Prereq> : l'hypothèse de Riemann, la conjecture de Goldbach, celle des nombres premiers jumeaux, la suite de Collatz, et $\mathrm{P}$ contre $\mathrm{NP}$. <Badge niveau="conjecture">Crues vraies par beaucoup, démontrées par personne — et « vérifié très loin » ne prouve rien, comme l'ont rappelé les conjectures d'Euler et de Mertens, réfutées après coup.</Badge>
+
+## La promesse, relue ligne à ligne
+
+Rouvrons le premier chapitre et citons-le mot pour mot :
+
+> Rien ne sera jamais utilisé sans être, soit un axiome posé au grand jour, soit une déduction explicite de ce qui précède. On ne cache aucun ingrédient sous le tapis. Quand on ajoute une hypothèse, on le dit.
+
+Vérifions, sans complaisance.
+
+- **« Rien utilisé sans être posé ou déduit. »** C'est exactement la partition des colonnes 1 et 2 : tout énoncé du cours est, ou bien dans la petite pile des admis, ou bien dans le continent des démontrés. Aucun troisième tiroir.
+- **« Quand on ajoute une hypothèse, on le dit. »** En vingt-sept chapitres, **une seule** hypothèse mathématique a été ajoutée après ZF : l'axiome du choix. Elle l'a été par un <Prereq href="/maths/partie-vi/axiome-du-choix">Tournant explicite</Prereq> — le seul du cours à introduire un axiome nouveau — et jamais en douce.
+- **Les anticipations.** L'intuition géométrique de $\mathbb{C}$ (angles, cercle, rotations) invoquée au chapitre 9 était signalée comme une anticipation, non comme un acquis. Elle fut **soldée** au chapitre 23, où $\cos$, $\sin$ et $\pi$ sont *définis par séries* et la géométrie du cercle enfin déduite.
+- **Les dettes d'$\mathrm{AC}_\omega$.** Le choix dénombrable, honnêtement signalé à chaque emprunt (réunion dénombrable au ch. 11, caractérisation séquentielle de la continuité au ch. 20, notion de Dedekind-infini), a été **soldé** au chapitre 25, qui nomme la dette et la paie.
+
+La promesse tient. Pas parce qu'on l'affirme : parce qu'on peut la vérifier, ligne à ligne.
+
+## Épilogue : certitude et confiance
+
+Les autres cours de ce site admettent à chaque tournant — une mesure, une loi, un modèle confronté au monde. Les mathématiques n'admettent qu'**une fois, au départ**, puis déduisent ; c'est leur privilège, et il a une contrepartie exacte, démontrée au chapitre 24 : l'édifice ne peut pas prouver, de l'intérieur, qu'il ne s'effondrera pas. Il tient pourtant depuis un siècle d'exploration acharnée, sans qu'une seule contradiction ait affleuré. Ce n'est donc pas de la certitude — Gödel nous l'interdit — mais une confiance raisonnée, et savoir distinguer les deux est peut-être le dernier théorème que ce cours vous laisse.

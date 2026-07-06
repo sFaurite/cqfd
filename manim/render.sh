@@ -21,7 +21,8 @@ export PYTHONPATH="$HERE"
 render() {
   local file="$1" scene="$2" name="$3"
   echo "──▶ $name ($scene)"
-  "$VENV/manim" "-$QUALITY" --media_dir "$HERE/media" -o "$name" "$HERE/$file" "$scene"
+  # via « python -m manim » : robuste au déplacement du dépôt (les shebangs du venv figent l'ancien chemin)
+  "$VENV/python" -m manim "-$QUALITY" --media_dir "$HERE/media" -o "$name" "$HERE/$file" "$scene"
   local mp4
   mp4="$(find "$HERE/media/videos" -name "$name.mp4" | head -1)"
   if [ -z "$mp4" ]; then echo "  ✗ MP4 introuvable pour $name"; return 1; fi
@@ -38,6 +39,10 @@ render() {
 # ============================ VOS SCÈNES ============================
 # — cours « maths »
 render build_naturals.py BuildNaturals build-naturals
+render maths_zigzag_rationnels.py ZigzagRationnels maths-zigzag-rationnels
+render maths_diagonale_cantor.py  DiagonaleCantor  maths-diagonale-cantor
+render maths_euclide_premiers.py  EuclidePremiers  maths-euclide-premiers
+render maths_euler_identite.py    EulerIdentite    maths-euler-identite
 # — cours « processeurs » (de l'atome au système d'exploitation)
 render mosfet_switch.py   MosfetSwitch    mosfet-switch
 render energy_bands.py    EnergyBands     energy-bands

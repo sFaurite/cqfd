@@ -1,0 +1,206 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "La dérivée"
+chapter: derivation
+description: "Dérivée = limite du taux d accroissement ; dérivable ⇒ continue ; règles (somme, produit, composée) ; extremum intérieur ⇒ dérivée nulle ; ROLLE ; ACCROISSEMENTS FINIS ; f croissante ssi f′ ≥ 0 ; Weierstrass cité (continue nulle part dérivable)."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## La pente d'un instant
+
+Nous savons désormais parler de <Prereq href="/maths/partie-v/suites-limites">limites</Prereq> et de <Prereq href="/maths/partie-v/continuite">continuité</Prereq>. Une question, vieille de trois siècles, reste pourtant en suspens : à quelle **vitesse** une fonction change-t-elle en un point donné ? Newton la posait en cinématique, Leibniz en géométrie — c'est la même question, et sa réponse tient en un mot : une limite.
+
+<Encart type="intuition" titre="Deux images pour un seul geste">
+**Géométrie.** Prenez deux points de la courbe de $f$, aux abscisses $a$ et $x$. La droite qui les joint — la *sécante* — a pour pente le rapport $\frac{f(x)-f(a)}{x-a}$. Faites glisser $x$ vers $a$ : la sécante pivote et vient se coucher sur la courbe. Sa position limite, c'est la **tangente**, et sa pente mesure l'inclinaison de la courbe *à l'instant* $a$.
+
+**Cinématique.** Si $f(t)$ est la position d'un mobile à l'instant $t$, alors $\frac{f(t)-f(a)}{t-a}$ est sa vitesse *moyenne* entre $a$ et $t$. Rapprochez $t$ de $a$ : la moyenne se resserre sur la **vitesse instantanée**. La dérivée, c'est le compteur de vitesse.
+
+Dans les deux cas, un même objet : un rapport dont on prend la limite.
+</Encart>
+
+Le rapport ci-dessus s'appelle le **taux d'accroissement** de $f$ entre $a$ et $x$. Pour lui donner un sens rigoureux, il faut la limite d'une *fonction* — pas d'une suite.
+
+<Encart type="rappel" titre="La limite d'une fonction (ε-δ), établie au chapitre précédent">
+On écrit $\lim_{x \to a} \varphi(x) = L$ lorsque : pour tout $\varepsilon > 0$, il existe $\delta > 0$ tel que, pour tout $x$ du domaine, $0 < |x - a| < \delta$ implique $|\varphi(x) - L| < \varepsilon$. Autrement dit, on rend $\varphi(x)$ aussi proche que voulu de $L$ en prenant $x$ assez proche de $a$ — *sans jamais poser* $x = a$ (d'où le $0 < |x-a|$). Cette définition, ainsi que les opérations sur les limites, sont posées au chapitre <Prereq href="/maths/partie-v/continuite">continuité</Prereq>.
+</Encart>
+
+**Définition.** $f$ est *dérivable en $a$* si son taux d'accroissement admet une limite finie quand $x \to a$. Cette limite, notée $f'(a)$, est le **nombre dérivé** :
+
+$$ f'(a) := \lim_{x \to a} \frac{f(x) - f(a)}{x - a}. $$
+
+<Badge niveau="admis">C'est une définition : nous choisissons de nommer « dérivée » cette limite. Rien n'est à démontrer ici — tout le reste du chapitre en découlera par pure déduction.</Badge>
+
+<Encart type="calcul" titre="Le prototype : (x²)′ = 2x">
+
+**Étape 1.** Le taux entre $a$ et $x$ vaut $\dfrac{x^2 - a^2}{x - a}$.
+
+**Étape 2.** On factorise le numérateur : $x^2 - a^2 = (x-a)(x+a)$. Pour $x \neq a$, on peut simplifier par $x - a \neq 0$ :
+
+$$ \frac{x^2 - a^2}{x - a} = x + a. $$
+
+**Étape 3.** Par les opérations sur les limites, $\lim_{x \to a}(x + a) = 2a$.
+
+Donc $f'(a) = 2a$, et comme $a$ est quelconque : $\boxed{(x^2)' = 2x}$.
+</Encart>
+
+<Encart type="calcul" titre="La valeur absolue n'est PAS dérivable en 0">
+
+**Étape 1.** Le taux en $0$ vaut $\dfrac{|x| - |0|}{x - 0} = \dfrac{|x|}{x}$.
+
+**Étape 2.** Si $x > 0$, alors $|x| = x$ et le taux vaut $+1$. Si $x < 0$, alors $|x| = -x$ et le taux vaut $-1$.
+
+**Étape 3.** La limite à droite ($+1$) diffère de la limite à gauche ($-1$). Une fonction ne peut avoir deux limites distinctes (unicité de la limite, chapitre précédent) : le taux n'a **pas** de limite en $0$.
+
+$$ \boxed{x \mapsto |x| \text{ est continue partout, mais non dérivable en } 0.} $$
+
+</Encart>
+
+Retenez ce contraste : **dérivable est strictement plus fort que continu**. La valeur absolue le prouve — elle n'a pas de trou, mais elle a un *coin*, et un coin n'a pas de tangente.
+
+## Dérivable entraîne continue
+
+L'implication inverse, elle, est vraie et se démontre en trois lignes.
+
+<Encart type="calcul" titre="Théorème : dérivable en a ⟹ continue en a">
+
+**Étape 1.** Pour $x \neq a$, on écrit l'identité (on multiplie et divise par $x - a$) :
+
+$$ f(x) - f(a) = \frac{f(x) - f(a)}{x - a} \times (x - a). $$
+
+**Étape 2.** Quand $x \to a$, le premier facteur tend vers $f'(a)$ (hypothèse de dérivabilité) et le second vers $0$. Le produit de deux limites étant la limite du produit :
+
+$$ \lim_{x \to a}\bigl(f(x) - f(a)\bigr) = f'(a) \times 0 = 0. $$
+
+**Étape 3.** Donc $\lim_{x \to a} f(x) = f(a)$ : c'est exactement la continuité en $a$. $\blacksquare$
+</Encart>
+
+<Badge niveau="demontre">Démonstration complète ci-dessus. La réciproque est FAUSSE : $x \mapsto |x|$ est continue en $0$ sans y être dérivable.</Badge>
+
+<Encart type="plusloin" titre="Le vertige de Weierstrass : continue partout, dérivable nulle part">
+Notre intuition murmure : « continue = lisse, sauf en quelques coins ». Weierstrass l'a assassinée en 1872. Il existe une fonction $W : \mathbb{R} \to \mathbb{R}$ **continue en tout point et dérivable en aucun** — une courbe faite *intégralement* de coins, rugueuse à toutes les échelles. On l'obtient comme une somme de « dents de scie » de plus en plus fines : à la couche $n$, on empile une sciure d'amplitude $2^{-n}$ mais oscillant $4^n$ fois plus vite. Chaque couche est minuscule et les amplitudes forment une série convergente $\sum 2^{-n}$, d'où la continuité ; mais la pente d'une couche, elle — de l'ordre de $2^{-n}\times 4^n = 2^n$ — *croît* d'une couche à l'autre : en zoomant, on découvre toujours un nouveau zigzag plus raide, et le taux d'accroissement n'a jamais de limite. La construction rigoureuse (par séries de fonctions) dépasse ce cours. <Badge niveau="demontre" slot="badge">Théorème de Weierstrass (1872), rigoureusement démontré ; nous le citons sans donner la preuve, qui requiert des outils postérieurs.</Badge>
+</Encart>
+
+## Les règles du calcul différentiel
+
+**Somme.** Le taux de $f + g$ est la somme des taux : $\frac{(f+g)(x)-(f+g)(a)}{x-a} = \frac{f(x)-f(a)}{x-a} + \frac{g(x)-g(a)}{x-a}$. En passant à la limite, $\boxed{(f+g)' = f' + g'}$. <Badge niveau="demontre">Deux lignes, par linéarité de la limite.</Badge>
+
+<Encart type="calcul" titre="Produit : (fg)′ = f′g + fg′">
+
+**Étape 1 — l'astuce du terme croisé.** Dans $f(x)g(x) - f(a)g(a)$, on **ajoute et retranche** le terme croisé $f(x)g(a)$ (une astuce d'ajout-retranchement que l'on recroise souvent en analyse) :
+
+$$ f(x)g(x) - f(a)g(a) = f(x)\bigl(g(x)-g(a)\bigr) + g(a)\bigl(f(x)-f(a)\bigr). $$
+
+**Étape 2.** On divise par $x - a$ :
+
+$$ \frac{(fg)(x)-(fg)(a)}{x-a} = f(x)\cdot\frac{g(x)-g(a)}{x-a} + g(a)\cdot\frac{f(x)-f(a)}{x-a}. $$
+
+**Étape 3.** On fait $x \to a$. Comme $f$ est dérivable, elle est continue (section précédente), donc $f(x) \to f(a)$. Les deux taux tendent vers $g'(a)$ et $f'(a)$. D'où $f(a)g'(a) + g(a)f'(a)$.
+
+$$ \boxed{(fg)' = f'g + fg'} $$
+
+</Encart>
+
+<Encart type="calcul" titre="Inverse : (1/x)′ = −1/x²">
+
+**Étape 1.** Pour $a \neq 0$ et $x \neq 0$, le taux de $x \mapsto \frac1x$ vaut $\dfrac{\frac1x - \frac1a}{x - a} = \dfrac{\frac{a - x}{xa}}{x-a}$.
+
+**Étape 2.** Comme $a - x = -(x - a)$, on simplifie par $x - a$ : le taux vaut $-\dfrac{1}{xa}$.
+
+**Étape 3.** Quand $x \to a$, ceci tend vers $-\dfrac{1}{a^2}$. Donc $\boxed{\left(\tfrac1x\right)' = -\tfrac{1}{x^2}}$.
+</Encart>
+
+<Encart type="plusloin" titre="Composée (règle de la chaîne) : le trou de la preuve naïve">
+On veut $(g \circ f)'(a) = g'\bigl(f(a)\bigr)\,f'(a)$. La preuve « évidente » écrit $\frac{g(f(x))-g(f(a))}{x-a} = \frac{g(f(x))-g(f(a))}{f(x)-f(a)} \cdot \frac{f(x)-f(a)}{x-a}$. **Trou célèbre** : rien n'interdit à $f(x)-f(a)$ de s'annuler pour des $x$ arbitrairement proches de $a$ — on diviserait alors par zéro.
+
+**Parade propre (la fonction taux auxiliaire).** Posons $b := f(a)$ et définissons $\varphi(y) := \frac{g(y)-g(b)}{y-b}$ pour $y \neq b$, et $\varphi(b) := g'(b)$. Deux faits : (i) $\varphi$ est **continue en $b$**, car sa limite en $b$ est justement $g'(b)$, sa valeur ; (ii) pour *tout* $y$, on a $g(y)-g(b) = \varphi(y)(y-b)$ — y compris en $y = b$, où les deux membres valent $0$. Aucune division. Alors :
+
+$$ \frac{g(f(x))-g(f(a))}{x-a} = \varphi\bigl(f(x)\bigr)\cdot\frac{f(x)-f(a)}{x-a}. $$
+
+Quand $x \to a$ : $f$ dérivable donc continue, d'où $f(x) \to b$ ; $\varphi$ continue en $b$ donne $\varphi(f(x)) \to \varphi(b) = g'(b)$ ; le second facteur tend vers $f'(a)$. Produit : $g'(f(a))\,f'(a)$. <Badge niveau="demontre" slot="badge">Preuve sans division par zéro, valable même si $f$ prend la valeur $f(a)$ près de $a$.</Badge>
+
+**Quotient, en déduction.** Puisque $\frac{f}{g} = f \cdot \bigl(h \circ g\bigr)$ avec $h(y) = \frac1y$, la chaîne donne $\bigl(\tfrac1g\bigr)' = -\tfrac{g'}{g^2}$, puis le produit : $\boxed{\left(\tfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}}$ (là où $g \neq 0$). <Badge niveau="demontre" slot="badge">Assemblage produit + chaîne + inverse, tous démontrés ci-dessus.</Badge>
+</Encart>
+
+## Fermat : un extremum intérieur annule la dérivée
+
+<Encart type="calcul" titre="Théorème de Fermat">
+
+**Hypothèses.** $f$ admet un maximum local en un point $c$ **intérieur** au domaine, et $f$ est dérivable en $c$.
+
+**Étape 1 — côté droit.** Pour $x > c$ proche de $c$ : $f(x) - f(c) \leq 0$ (maximum) et $x - c > 0$, donc le taux est $\leq 0$. Sa limite l'est aussi : $f'(c) \leq 0$.
+
+**Étape 2 — côté gauche.** Pour $x < c$ proche de $c$ : $f(x) - f(c) \leq 0$ et $x - c < 0$, donc le taux est $\geq 0$. Sa limite : $f'(c) \geq 0$.
+
+**Étape 3.** $f$ étant dérivable, ces deux limites unilatérales valent le même $f'(c)$. Coincé entre $\leq 0$ et $\geq 0$ : $\boxed{f'(c) = 0}$. (Le cas d'un minimum est symétrique.)
+</Encart>
+
+Les deux hypothèses sont indispensables. **Sans extremum :** $x \mapsto x^3$ a une dérivée nulle en $0$ (la règle du produit appliquée à $x^3 = x^2 \cdot x$ donne $(x^3)' = 3x^2$) alors que $0$ n'est *ni* max *ni* min — la réciproque de Fermat est donc fausse. **Sans intériorité :** $x \mapsto x$ sur $[0,1]$ atteint son maximum en $x = 1$, mais $f'(1) = 1 \neq 0$ car l'extremum est au **bord**. <Badge niveau="demontre">Théorème démontré ; les contre-exemples montrent que chaque hypothèse est nécessaire.</Badge>
+
+## Le théorème de Rolle
+
+<Resultat label="Théorème de Rolle">
+
+$$ f \text{ continue sur } [a,b],\ \text{dérivable sur } ]a,b[,\ f(a)=f(b) \ \Longrightarrow\ \exists\, c \in \,]a,b[,\ f'(c)=0. $$
+
+<Badge niveau="demontre" slot="badge">Démonstration complète ci-dessous, le cas « max et min au bord » compris.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Preuve de Rolle">
+
+**Étape 1.** $f$ est continue sur le segment $[a,b]$ : par le théorème des <Prereq href="/maths/partie-v/continuite">bornes atteintes</Prereq>, elle y atteint son maximum $M$ et son minimum $m$.
+
+**Étape 2 — premier cas.** Si le maximum *ou* le minimum est atteint en un point $c$ **intérieur** à $]a,b[$, alors $f$ y est dérivable et le théorème de Fermat donne $f'(c) = 0$.
+
+**Étape 3 — second cas (celui qu'on oublie).** Si $M$ **et** $m$ ne sont atteints qu'aux extrémités $a$ et $b$, alors, comme $f(a) = f(b)$, on a $M = m$. Une fonction dont le max égale le min est **constante** sur $[a,b]$ : sa dérivée est nulle partout, et n'importe quel $c \in \,]a,b[$ convient. $\blacksquare$
+</Encart>
+
+Chaque hypothèse est nécessaire — un contre-exemple éclair pour chacune :
+
+| Hypothèse retirée | Contre-exemple sur $[0,1]$ | Verdict |
+|---|---|---|
+| Continuité (au bord) | $f(x)=x$ sur $[0,1[$, $f(1)=0$ | $f(0)=f(1)$, dérivable sur $]0,1[$, mais $f'=1$ partout |
+| Dérivabilité | $f(x)=\bigl\lvert x-\tfrac12\bigr\rvert$ | continue, $f(0)=f(1)$, mais un coin : $f' = \pm 1$ |
+| $f(a)=f(b)$ | $f(x)=x$ | dérivable, mais $f'=1$ ne s'annule jamais |
+
+## Les accroissements finis
+
+En inclinant Rolle, on obtient le théorème le plus utile de tout le calcul différentiel.
+
+<Encart type="calcul" titre="Théorème des accroissements finis (TAF)">
+
+**Énoncé.** $f$ continue sur $[a,b]$ et dérivable sur $]a,b[$ $\Rightarrow$ il existe $c \in \,]a,b[$ tel que $f(b)-f(a) = f'(c)\,(b-a)$.
+
+**Étape 1 — la fonction auxiliaire.** Soit $k := \dfrac{f(b)-f(a)}{b-a}$ la pente moyenne. Posons $g(x) := f(x) - k\,x$. Elle est continue sur $[a,b]$, dérivable sur $]a,b[$.
+
+**Étape 2 — Rolle s'applique.** On calcule $g(b) - g(a) = \bigl(f(b)-f(a)\bigr) - k\,(b-a) = 0$ par définition de $k$. Donc $g(a) = g(b)$, et Rolle donne un $c \in \,]a,b[$ avec $g'(c) = 0$.
+
+**Étape 3.** Or $g'(x) = f'(x) - k$, donc $g'(c) = 0$ signifie $f'(c) = k$, c'est-à-dire
+
+$$ \boxed{f(b) - f(a) = f'(c)\,(b - a).} $$
+
+</Encart>
+
+<Badge niveau="demontre">Démontré via Rolle. Lecture cinématique honnête : sur un trajet, il existe *au moins un instant* où la vitesse instantanée égale exactement la vitesse moyenne.</Badge>
+
+## La récolte
+
+Le TAF paie enfin une dette que tout lycéen contracte dès la Première : le lien entre le **signe de la dérivée** et les **variations**, utilisé mille fois sans jamais être prouvé. Le voici démontré.
+
+<Resultat label="Signe de la dérivée et croissance">
+
+$$ f'\geq 0 \text{ sur un intervalle } I \ \Longrightarrow\ f \text{ croissante sur } I. $$
+
+<Badge niveau="demontre" slot="badge">Deux lignes par le TAF.</Badge>
+</Resultat>
+
+En effet, soient $x < y$ dans $I$. Le TAF sur $[x,y]$ donne $f(y) - f(x) = f'(c)(y - x)$ avec $c \in \,]x,y[$. Comme $f'(c) \geq 0$ et $y - x > 0$, on a $f(y) - f(x) \geq 0$, donc $f(x) \leq f(y)$. (Avec $f' > 0$ strict, l'inégalité devient stricte : $f$ est strictement croissante.)
+
+Le même argument, avec $f' = 0$, donne $f(y) - f(x) = 0$ pour tous $x, y$ : $f$ est **constante**. Mais attention — le résultat vaut **sur un intervalle**. <Badge niveau="demontre">$f' = 0$ sur un *intervalle* $\Rightarrow$ $f$ constante ; par le TAF, qui exige de relier $x$ à $y$ *sans quitter le domaine*.</Badge> Sur une réunion d'intervalles disjoints, c'est faux : la fonction valant $-1$ sur $\,]-\infty,0[\,$ et $+1$ sur $\,]0,+\infty[\,$ a une dérivée partout nulle sans être constante. Le TAF ne peut franchir le trou en $0$ : la finesse est dans le mot *intervalle*.
+
+Dériver, décomposer une variation en pente instantanée : nous savons le faire. Reste le geste inverse — **recoller** une infinité d'accroissements infinitésimaux pour reconstituer la variation totale. Ce geste porte un nom, et c'est le sujet du prochain chapitre : l'intégrale.

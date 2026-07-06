@@ -1,0 +1,135 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "L axiome du choix et ses monstres"
+chapter: axiome-du-choix
+description: "AC énoncé précis ; les dettes du cours soldées (ACω : réunion dénombrable, caractérisation séquentielle, Dedekind-infini) ; équivalents (Zorn, bon ordre, trichotomie) ; Banach–Tarski (démontré DANS ZFC) ; Vitali ; indépendance de ZF ; la position du cours."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+
+## Le neuvième axiome
+
+<Tournant titre="Tournant : pour la première fois, nous ajoutons une hypothèse">
+Depuis le chapitre des axiomes, ce cours a tenu une promesse rare : ne rien poser de neuf. Après ZF, tout — les entiers, les réels, les infinis de Cantor, les groupes, l'analyse — a été *déduit*, sans jamais glisser une hypothèse sous le tapis. Ce chapitre rompt le silence, une seule fois, et solennellement. Nous **ajoutons** un axiome. L'axiome du choix ne se déduit pas de ZF : ce n'est pas un aveu d'ignorance, c'est un fait **démontré** (Gödel 1938 : on ne peut le réfuter ; Cohen 1963 : on ne peut le prouver). Nous l'adoptons, comme le fait la quasi-totalité des mathématiques contemporaines. Le cours a soigneusement marqué d'un badge bleu chaque endroit où il travaillait en coulisse avec une forme de choix. C'est l'heure des comptes : voici exactement ce que cet axiome achète, et ce qu'il coûte.
+</Tournant>
+
+<Resultat label="Axiome du choix (AC) — neuvième axiome">
+
+$$ \text{Pour toute famille } (A_i)_{i \in I} \text{ d'ensembles non vides, il existe une fonction } f \text{ telle que } f(i) \in A_i \text{ pour tout } i \in I. $$
+
+<Badge niveau="admis" slot="badge">Posé par choix, indépendant de ZF (Gödel–Cohen) : ni vrai ni faux en soi. L'admis par excellence.</Badge>
+</Resultat>
+
+Lisez bien ce que cet énoncé promet : une fonction $f$ qui, simultanément, tranche dans chacun des $A_i$ — et **rien ne la définit**. Pour une famille infinie, aucune formule n'est fournie ; on postule que la sélection *existe*, sans recette pour la produire. Voilà pourquoi AC est à la fois d'une évidence désarmante — qui refuserait de choisir un élément dans des ensembles tous non vides ? — et profondément troublant : il affirme l'existence d'un objet qu'il ne montre pas.
+
+<Encart type="intuition" titre="Les chaussures et les chaussettes (image de Russell)">
+Bertrand Russell l'a dit mieux que quiconque. Devant une infinité de paires de **chaussures**, choisir une chaussure par paire ne demande aucun axiome : la règle « prenez la gauche » *est* la fonction, donnée d'un coup pour toutes les paires. Mais devant une infinité de paires de **chaussettes** identiques, où rien ne distingue la gauche de la droite, aucune règle ne s'offre — et sélectionner une chaussette par paire, une infinité de fois d'un seul geste, réclame l'axiome du choix. Toute la subtilité tient dans cette absence de règle.
+</Encart>
+
+Cette image dessine la frontière exacte. Deux situations se passent d'AC, et ce sont elles qui expliquent que 90 % de ce cours n'en ait jamais eu besoin. **Le choix piloté par une règle** : quand une formule explicite désigne l'élément — comme dans <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, où l'on gardait toujours la moitié contenant une infinité de termes — la règle est la fonction, aucun axiome requis. **Le choix fini** : choisir dans un nombre fini d'ensembles est un théorème de ZF.
+
+<Encart type="calcul" titre="Le choix fini est un théorème de ZF">
+**Étape 1 — un seul ensemble.** Dire « $A \neq \emptyset$ » signifie littéralement $\exists x,\ x \in A$. La logique elle-même autorise alors à nommer un tel $x$ (instanciation existentielle). Choisir dans *un* ensemble non vide ne coûte rien.
+
+**Étape 2 — récurrence.** Supposons savoir construire une fonction de choix pour toute famille de $n$ ensembles non vides. Pour $n+1$ ensembles $A_1, \dots, A_{n+1}$ : l'hypothèse de <Prereq href="/maths/partie-ii/entiers-naturels">récurrence</Prereq> fournit une fonction $f$ choisissant dans $A_1, \dots, A_n$ ; l'étape 1 nomme un $x \in A_{n+1}$ ; on prolonge $f$ en posant $f(n+1) := x$.
+
+**Conclusion.** Toute famille *finie* d'ensembles non vides admet une fonction de choix, dans ZF pur, sans nouvel axiome.
+
+$$ \boxed{\text{Le choix fini se démontre ; seul le choix infini sans règle exige AC.}} $$
+
+</Encart>
+
+## Solder les dettes
+
+Le cours a contracté quatre dettes, chacune signalée en son temps. Réglons-les — en précisant, pour chacune, *quelle* force de choix elle réclame. Ces énoncés « tel théorème requiert telle forme » sont eux-mêmes des méta-théorèmes rigoureusement établis (par construction de modèles de ZF), d'où leurs badges verts.
+
+- **Réunion dénombrable d'ensembles au plus dénombrables** (<Prereq href="/maths/partie-iii/denombrables">chapitre 11</Prereq>) : le **choix dénombrable** $\mathsf{AC}_\omega$ suffit — et il le faut vraiment, puisqu'il existe des modèles de ZF où $\mathbb{R}$ lui-même est réunion dénombrable d'ensembles dénombrables. <Badge niveau="demontre">Méta-théorème : ZF seul ne prouve pas ce résultat (modèle de Feferman–Lévy).</Badge>
+- **Réciproque de la caractérisation séquentielle de la continuité** (<Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq>) : « continue séquentiellement $\Rightarrow$ continue en $\varepsilon$-$\delta$ » réclame $\mathsf{AC}_\omega$ (à chaque rang $n$, choisir un point témoin à distance $\lt 1/n$). L'autre sens est du ZF pur. <Badge niveau="demontre">Méta-théorème : cette implication est indémontrable dans ZF seul.</Badge>
+- **Infini $\Leftrightarrow$ Dedekind-infini** (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) : le sens « infini $\Rightarrow$ contient une copie de $\mathbb{N}$ » demande $\mathsf{AC}_\omega$ ; la réciproque est démontrable dans ZF. <Badge niveau="demontre">Méta-théorème : équivalence des deux notions d'infini indémontrable sans choix dénombrable.</Badge>
+- **Trichotomie des cardinaux** (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) : « pour tous $A, B$, on a $|A| \le |B|$ ou $|B| \le |A|$ » requiert l'AC **plein** — et lui est même **équivalent** (Hartogs, 1915). <Badge niveau="demontre">Équivalence méta-théorique établie : comparer tous les cardinaux, c'est déjà tout l'axiome du choix.</Badge>
+
+<Encart type="plusloin" titre="Une hiérarchie de choix : ACω, puis DC, puis AC plein">
+Toutes les formes de choix ne se valent pas. Le **choix dénombrable** $\mathsf{AC}_\omega$ ne sélectionne que dans une famille indexée par $\mathbb{N}$. Le **choix dépendant** DC autorise en plus des choix *successifs*, chacun dépendant du précédent — indispensable pour construire une suite pas à pas. L'AC plein choisit dans une famille de taille quelconque. On a les implications $\text{AC} \Rightarrow \text{DC} \Rightarrow \mathsf{AC}_\omega$, et **aucune ne se renverse** : des modèles de ZF séparent chaque étage. <Badge niveau="demontre">Implications strictes établies par construction de modèles.</Badge>
+</Encart>
+
+## Zorn, le bon ordre, et leur équivalence
+
+L'AC prend, dans la pratique, deux visages plus maniables. Rappelons le vocabulaire des <Prereq href="/maths/partie-i/relations-fonctions">ordres partiels</Prereq> $(P, \le)$ : une **chaîne** est une partie totalement ordonnée ; un **majorant** d'une partie $Q$ est un $m \in P$ vérifiant $x \le m$ pour tout $x \in Q$.
+
+<Resultat label="Lemme de Zorn">
+
+$$ \text{Si toute chaîne de } (P, \le) \text{ admet un majorant, alors } P \text{ possède un élément maximal.} $$
+
+<Badge niveau="demontre" slot="badge">Équivalent à AC dans ZF (esquisse ci-dessous).</Badge>
+</Resultat>
+
+<Resultat label="Théorème du bon ordre (Zermelo, 1904)">
+
+$$ \text{Tout ensemble admet un bon ordre : un ordre total où toute partie non vide a un plus petit élément.} $$
+
+<Badge niveau="demontre" slot="badge">Équivalent à AC dans ZF (esquisse ci-dessous).</Badge>
+</Resultat>
+
+Ce dernier énoncé demande d'assumer un vertige. **Même $\mathbb{R}$ peut être bien ordonné** — il existe une manière de ranger tous les réels de sorte que toute partie non vide ait un plus petit élément. Personne n'a jamais « vu » un tel ordre, et pour cause : on démontre qu'il en existe, mais il est cohérent avec ZFC qu'*aucune formule* n'en définisse jamais un. L'axiome affirme l'existence ; il n'exhibe rien.
+
+<Encart type="plusloin" titre="AC ⟺ Zorn ⟺ bon ordre : le cycle des trois implications">
+Esquisse structurée honnête — les idées, pas l'appareil des ordinaux.
+
+**Bon ordre $\Rightarrow$ AC.** Donnée une famille $(A_i)$ d'ensembles non vides, bien-ordonnons leur réunion. Chaque $A_i$ est une partie non vide, donc possède un *plus petit* élément : poser $f(i) := \min A_i$ définit une fonction de choix. Direction facile, dans ZF.
+
+**AC $\Rightarrow$ Zorn.** La direction exigeante. Partant d'un point de $P$, une fonction de choix désigne à chaque étape un majorant *strict* de la chaîne déjà bâtie, tant qu'il en existe. On empile ainsi une chaîne croissante ; comme $P$ est un ensemble, le procédé **doit** s'arrêter, et il ne peut s'arrêter que sur un élément sans majorant strict — un maximal. Formaliser « à chaque étape » et « doit s'arrêter » **force** le recours aux ordinaux et à la récursion transfinie : c'est ici, précisément, que la preuve dépasse les outils élémentaires du cours. <Badge niveau="demontre">Preuve classique ; nous en donnons l'idée, non l'appareil ordinal.</Badge>
+
+**Zorn $\Rightarrow$ bon ordre.** Considérons l'ensemble des bons ordres portant sur des *parties* de $X$, rangés par « prolongement initial » (l'un étend l'autre en n'ajoutant des éléments qu'*après* tous les précédents). Toute chaîne de tels bons ordres a pour majorant leur réunion, qui est encore un bon ordre : Zorn fournit un élément maximal. S'il ne couvrait pas $X$ entier, on lui ajouterait un élément manquant tout à la fin — contredisant la maximalité. Il bien-ordonne donc $X$.
+
+Le cycle boucle : les trois énoncés sont équivalents dans ZF. <Badge niveau="demontre">Équivalence démontrée ; esquisse fidèle, appareil ordinal assumé comme non détaillé.</Badge>
+</Encart>
+
+Deux usages quotidiens en découlent. **Toute surjection admet une section** : si $g \colon A \to B$ est surjective, choisir pour chaque $b$ un antécédent $f(b) \in g^{-1}(b)$ donne $g \circ f = \mathrm{id}_B$ — les fibres $g^{-1}(b)$ forment une famille d'ensembles non vides, c'est AC déguisé, et c'en est même un équivalent. **Tout espace vectoriel admet une base** : ce cours ne construit pas les espaces vectoriels, aussi restons-nous au seul énoncé — sa preuve applique Zorn à la famille des parties libres. <Badge niveau="demontre">Résultats démontrés via AC/Zorn ; le second est cité au niveau de l'énoncé, faute d'espaces vectoriels construits ici.</Badge>
+
+## Les monstres
+
+L'axiome achète des théorèmes de structure. Il les paie en objets qu'on ne pourra jamais montrer — parce qu'ils naissent d'un choix sans règle. Deux d'entre eux sont restés célèbres.
+
+<Encart type="plusloin" titre="Vitali (1905) : une partie de [0,1] sans longueur">
+Sur $[0,1]$, déclarons $x \sim y$ lorsque $x - y \in \mathbb{Q}$. C'est une relation d'équivalence ($\mathbb{Q}$ est stable par somme et opposé) : le <Prereq href="/maths/partie-i/relations-fonctions">passage au quotient</Prereq> découpe $[0,1]$ en classes disjointes, chacune dense. Le geste roi une dernière fois — puis le pas interdit sans AC : **choisir un représentant dans chaque classe**, formant un ensemble $V$. Aucune règle ne le désigne (les classes sont des copies brouillées de $\mathbb{Q}$) : c'est l'AC nu.
+
+Vient l'explosion. Pour $q \in \mathbb{Q} \cap [-1,1]$, considérons les translatés $V + q$. Ils sont **deux à deux disjoints** (deux représentants distincts ne diffèrent pas d'un rationnel) et leur réunion contient $[0,1]$ tout en restant dans $[-1,2]$. Si une « longueur » $\mu$ existait, invariante par translation et **additive sur les réunions dénombrables disjointes**, on aurait $\mu(V + q) = \mu(V)$ pour tout $q$, donc
+
+$$ \mu\Big(\bigcup_q (V + q)\Big) = \sum_q \mu(V). $$
+
+Cette somme d'une infinité de termes *égaux* vaut $0$ si $\mu(V) = 0$, et $+\infty$ sinon — jamais un nombre entre $1$ et $3$, que l'encadrement $[0,1] \subseteq \bigcup_q (V+q) \subseteq [-1,2]$ imposerait. Contradiction : **aucune longueur additive ne peut mesurer $V$**. Honnêteté : ce cours n'a pas construit de théorie de la mesure ; nous n'affirmons donc rien *sur* $\mu$, nous montrons que l'additivité, *si on l'exigeait*, se briserait sur $V$. <Badge niveau="demontre">Théorème d'existence (Vitali) : sous AC, il existe une partie non mesurable.</Badge>
+</Encart>
+
+Le second monstre pousse le vertige à son comble.
+
+<Resultat label="Théorème de Banach–Tarski (1924)">
+
+$$ \text{Une boule pleine de } \mathbb{R}^3 \text{ se partage en cinq morceaux qui, déplacés par rotations et translations, reforment DEUX boules identiques à l'originale.} $$
+
+<Badge niveau="demontre" slot="badge">Théorème de ZFC, pas un paradoxe logique. Cinq morceaux suffisent — nombre minimal (Robinson, 1947).</Badge>
+</Resultat>
+
+Insistons, car le mot « paradoxe » égare. Ce n'est **pas** une contradiction : rien dans ZFC n'est violé. Les cinq morceaux sont **non mesurables** — cousins de $V$ —, ils n'ont tout simplement pas de volume. Il n'y a donc aucun volume à conserver : le dédoublement ne heurte que notre intuition, qui croyait tout solide doté d'un volume invariant, jamais les axiomes. Un volume qu'on imaginait exister, pour ces pièces-là, n'existe pas.
+
+<Encart type="plusloin" titre="D'où sort le dédoublement : un groupe libre caché dans les rotations">
+Idée imagée, honnête. Prenez deux rotations $a, b$ de l'espace, d'angles bien choisis autour d'axes distincts. Les mots qu'elles engendrent — $a$, $ab$, $ab^{-1}a$, … — ne se simplifient **jamais** : elles forment un groupe **libre** à deux générateurs, un arbre infini sans boucle niché dans le groupe $SO(3)$ des rotations. Or un arbre à deux branches se **dédouble** : classez chaque mot par sa première lettre ; en « poussant » d'un cran (multiplier par $a^{-1}$), le paquet des mots commençant par $a$ se déplie sur *presque tout* l'arbre. Ce dédoublement combinatoire du groupe se transporte — via AC, qui choisit un représentant par orbite de points de la sphère — en un dédoublement géométrique de la boule. <Badge niveau="demontre">Esquisse fidèle du mécanisme ; la construction complète dépasse ce cours.</Badge>
+</Encart>
+
+## Ce qu'AC coûte, ce qu'il achète
+
+Ces monstres ne sont pas des accidents : ce sont les ombres portées d'un axiome qui affirme l'existence sans livrer de recette. Pourrait-on s'en passer ? La question a une réponse définitive, annoncée dès le <Prereq href="/maths/partie-i/ensembles-zf">chapitre des axiomes</Prereq> et bouclée ici : AC est **indépendant** de ZF. Gödel (1938) : si ZF est cohérent, ZF + AC l'est aussi — AC n'est pas *réfutable*. Cohen (1963), par le forcing : si ZF est cohérent, ZF + ¬AC l'est aussi — AC n'est pas *démontrable*. <Badge niveau="demontre">Indépendance établie : Gödel par cohérence relative, Cohen par forcing.</Badge>
+
+<Encart type="plusloin" titre="Et si l'on choisissait autrement ?">
+AC n'est pas la seule route. L'**axiome de détermination** (AD), issu de la théorie des jeux, **contredit** AC — mais rend *tout* ensemble de réels mesurable : sous AD, ni Vitali ni Banach–Tarski. On ne prouve jamais « le bon » système ; on adopte un cadre et on en assume les conséquences. <Badge niveau="admis">D'autres jeux d'axiomes existent, incompatibles avec AC : le choix d'un cadre est un choix, pas un théorème.</Badge>
+</Encart>
+
+La position de ce cours, à découvert. Nous **adoptons** AC, comme la quasi-totalité des mathématiques contemporaines. <Badge niveau="admis">Neuvième axiome, adopté par choix : ni vrai ni faux en soi.</Badge> Mais nous avons tenu parole : chaque usage a été **signalé** — les dettes ci-dessus en sont l'inventaire complet — et nous savons **exactement** ce que l'axiome coûte (des objets non constructifs : Vitali, Banach–Tarski) et ce qu'il achète (Zorn, le bon ordre, les bases, tous les théorèmes de structure qui irriguent l'algèbre et l'analyse). Voilà l'honnêteté axiomatique : non pas fuir les monstres, mais savoir au prix de quel axiome ils entrent, et l'avouer sans détour.
+
+Une asymétrie mérite un dernier mot. L'<Prereq href="/maths/partie-iii/hypothese-continu">hypothèse du continu</Prereq> est elle aussi indépendante de ZFC — pourtant nous l'avons **laissée ouverte**, quand nous **adoptons** AC. Pourquoi ce traitement inégal de deux indécidables ? Parce qu'AC est *fécond* et d'usage *universel* : l'écrasante majorité des mathématiques s'en sert, souvent sans le dire, et son adoption unifie l'édifice. CH ne s'impose par aucun besoin comparable, et la trancher ne rapporte pas la même moisson de théorèmes. Adopter l'un, suspendre l'autre : ce n'est pas de l'inconséquence, c'est peser la fécondité contre la neutralité — un choix de mathématicien, non un théorème.
+
+Nous avons désormais cartographié tout ce que ce cours *admet* et tout ce qu'il *démontre*, jusqu'aux confins de l'indécidable. Reste un dernier territoire, ni démontré, ni admis, ni indécidable : ce que, aujourd'hui, personne ne sait. Les grandes conjectures nous attendent.

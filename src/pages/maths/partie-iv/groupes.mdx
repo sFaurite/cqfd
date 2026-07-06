@@ -1,0 +1,185 @@
+---
+layout: ../../../layouts/LessonLayout.astro
+title: "Les groupes : la symétrie axiomatisée"
+chapter: groupes
+description: "Axiomes de groupe ; unicité du neutre et des inverses (démontré) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; THÉORÈME DE LAGRANGE démontré ; ordre d un élément."
+---
+
+import Encart from '../../../components/Encart.astro';
+import Badge from '../../../components/Badge.astro';
+import Hypotheses from '../../../components/Hypotheses.astro';
+import Resultat from '../../../components/Resultat.astro';
+import Prereq from '../../../components/Prereq.astro';
+import Tournant from '../../../components/Tournant.astro';
+import MathsGroupeSymetries from '../../../components/interactive/MathsGroupeSymetries.astro';
+
+## L'algèbre, ou l'art de ne démontrer qu'une fois
+
+Depuis le début du cours, une même musique revient. Dans $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$, les trois mêmes refrains : l'opération est **associative**, il existe un élément **neutre**, et (dès $\mathbb{Z}$) chaque élément possède un **opposé** ou un **inverse**. Nous les avons redémontrés à chaque étage, à la sueur du front. L'algèbre naît d'un ras-le-bol fécond : et si l'on démontrait ces refrains **une seule fois**, pour une structure abstraite dont $\mathbb{Z}$, $\mathbb{Q}^*$, $\mathbb{R}$… ne seraient que des exemples ? Nommer la structure — le **groupe** —, prouver au niveau abstrait, récolter gratuitement dans chaque cas : voilà le programme de la partie IV.
+
+<Hypotheses titre="Une partie sans la moindre hypothèse nouvelle">
+
+Contrairement aux cours empiriques du site, nous n'ajoutons **rien** ici. Groupe, anneau, corps ne sont pas des axiomes : ce sont des **définitions**, des découpages dans le monde déjà bâti à partir de ZF. Définir « groupe », c'est décider d'appeler d'un seul nom tous les ensembles-munis-d'une-loi qui obéissent à trois règles ; ce n'est **rien admettre de neuf**. Tout ce que nous démontrerons est donc pur théorème de ZF, valable d'un coup dans $\mathbb{Z}$, dans $\mathbb{Q}^*$, dans les symétries d'un triangle et dans tout exemple à venir. Définir, c'est découper — pas admettre.
+
+</Hypotheses>
+
+## Entrée par les symétries
+
+<Encart type="intuition" titre="Un triangle qui revient sur lui-même">
+
+Posez un triangle équilatéral sur une feuille et repérez son contour au crayon. Quels mouvements le soulèvent puis le reposent **exactement sur ce même contour** ? Trois rotations autour du centre (de $0°$, $120°$, $240°$) et trois retournements autour des trois médianes. Six mouvements, pas un de plus. Faites-en un, puis un autre : le résultat est encore l'un des six. *Composer* deux symétries est donc une opération sur cet ensemble à six éléments — c'est le premier groupe que nous allons voir vivre.
+
+</Encart>
+
+Notons ces six transformations $e$ (l'identité, la rotation nulle), $r$ et $r^2$ (les rotations), puis $s$, $sr$, $sr^2$ (les retournements). **Déclarons notre convention une fois pour toutes**, et tenons-la partout : la composée $g \circ h$ se lit *de droite à gauche*, « **d'abord $h$, ensuite $g$** » — exactement la <Prereq href="/maths/partie-i/relations-fonctions">composition des fonctions</Prereq> de la partie I. L'interactif ci-dessous affiche et respecte cette même convention.
+
+<MathsGroupeSymetries />
+
+Manipulez. Réglez « d'abord $g$ » sur $r$ et « ensuite $h$ » sur $s$, puis « Composer » : le triangle subit d'abord $r$, puis $s$, et retombe sur $s\circ r = sr$. Cliquez « Inverser l'ordre » : vous obtenez cette fois $r\circ s = sr^2$. Les deux résultats **diffèrent** :
+
+$$r\circ s = sr^2 \neq sr = s\circ r.$$
+
+L'ordre compte. Ce n'est pas un artefact de dessin, c'est la signature d'une structure *non commutative* — la première que nous rencontrons —, et sa **table de composition** (dite table de Cayley) n'est pas symétrique par rapport à sa diagonale.
+
+## Le groupe, en trois axiomes locaux
+
+**Définition (groupe).** Un *groupe* est un couple $(G, \cdot)$ où $G$ est un ensemble et $\cdot : G \times G \to G$ une **loi de composition interne** (à deux éléments de $G$ elle en associe un troisième, dans $G$), vérifiant :
+
+- **(G1) associativité** : $\forall a,b,c \in G,\ (a\cdot b)\cdot c = a\cdot(b\cdot c)$ ;
+- **(G2) élément neutre** : $\exists e \in G,\ \forall a\in G,\ e\cdot a = a\cdot e = a$ ;
+- **(G3) inverse** : $\forall a\in G,\ \exists a'\in G,\ a\cdot a' = a'\cdot a = e$.
+
+Le groupe est **abélien** (ou commutatif) si de plus $a\cdot b = b\cdot a$ pour tous $a,b$. <Badge niveau="admis">C'est une *définition* : nous choisissons de nommer « groupe » toute structure obéissant à (G1)–(G3). Rien à démontrer — seulement à exploiter.</Badge>
+
+Le groupe $D_3$ des six symétries du triangle satisfait (G1)–(G3) : la composition des fonctions est associative, l'identité $e$ est neutre, chaque symétrie se défait par la symétrie inverse. Mais nous venons de voir $r\circ s\neq s\circ r$ : **abélien n'a rien d'automatique**. Voici un panorama, à relire avec des lunettes neuves.
+
+| Structure | Groupe ? | Raison |
+|---|---|---|
+| $(\mathbb{Z}, +)$ | oui, abélien | neutre $0$, opposé $-n$ |
+| $(\mathbb{N}, +)$ | **non** | aucun opposé : $3$ n'a pas de $-3$ dans $\mathbb{N}$ |
+| $(\mathbb{Q}^*, \times)$ | oui, abélien | neutre $1$, inverse $1/x$ |
+| $(\mathbb{Q}, \times)$ | **non** | $0$ n'a pas d'inverse |
+| $(\mathrm{Bij}(E), \circ)$ | oui | le *groupe symétrique* de $E$ |
+| $(D_3, \circ)$ | oui, **non abélien** | les $6$ symétries du triangle |
+
+La ligne $(\mathbb{N},+)$ est éclairante : ce qui lui manque, c'est exactement l'opposé — l'absence même qui nous força à construire <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$ au chapitre 6</Prereq>. Toute la partie II se relit ainsi : chaque nouvel ensemble de nombres réparait un axiome de groupe manquant. Et $(\mathrm{Bij}(E), \circ)$, les <Prereq href="/maths/partie-i/relations-fonctions">bijections d'un ensemble</Prereq> munies de la composition, est l'exemple-mère : $D_3$ n'en est qu'un morceau, les bijections du triangle qui préservent sa forme.
+
+## Quatre micro-preuves, gratuites pour tous
+
+Voici le dividende de l'abstraction : les quatre théorèmes suivants ne mentionnent que (G1)–(G3), donc valent **simultanément** dans $\mathbb{Z}$, $\mathbb{Q}^*$, $D_3$ et tout groupe futur, sans une ligne de plus.
+
+<Encart type="calcul" titre="Quatre théorèmes démontrés une fois pour toutes">
+
+Soit $(G,\cdot)$ un groupe quelconque ; on écrit $ab$ pour $a\cdot b$.
+
+**1. Le neutre est unique.** Supposons deux neutres $e$ et $e'$. Alors $e = e\,e'$ (car $e'$ est neutre à droite), et $e\,e' = e'$ (car $e$ est neutre à gauche). Donc $e = e'$. $\boxed{\text{un seul neutre}}$
+
+**2. L'inverse est unique.** Soit $a$ ayant deux inverses $b$ et $b'$. Alors
+
+$$b = b\,e = b(a\,b') = (b\,a)\,b' = e\,b' = b'$$
+
+où l'on a utilisé successivement : neutre, définition de $b'$, associativité (G1), définition de $b$, neutre. On note désormais sans ambiguïté cet unique inverse $a^{-1}$. $\boxed{b = b'}$
+
+**3. On peut simplifier.** Si $a\,x = a\,y$, multiplions à gauche par $a^{-1}$ : $a^{-1}(a\,x) = a^{-1}(a\,y)$, puis par (G1) $(a^{-1}a)\,x = (a^{-1}a)\,y$, soit $e\,x = e\,y$, donc $x = y$. $\boxed{a x = a y \Rightarrow x = y}$
+
+**4. L'inverse d'un produit renverse l'ordre.** Calculons $(ab)(b^{-1}a^{-1}) = a(b\,b^{-1})a^{-1} = a\,e\,a^{-1} = a\,a^{-1} = e$, et de même $(b^{-1}a^{-1})(ab) = e$. Par l'unicité (théorème 2), $b^{-1}a^{-1}$ **est** l'inverse de $ab$. $\boxed{(ab)^{-1} = b^{-1}a^{-1}}$
+
+<Badge niveau="demontre">Quatre théorèmes de ZF, déduits des seuls axiomes (G1)–(G3). C'est l'élégance de l'algèbre : une preuve, tous les exemples.</Badge>
+
+</Encart>
+
+## Sous-groupes
+
+**Définition (sous-groupe).** Une partie $H\subseteq G$ est un *sous-groupe* si elle est stable pour la structure : $e\in H$, et pour tous $a,b\in H$ on a $ab\in H$ et $a^{-1}\in H$. Munie de la loi de $G$ restreinte, $H$ est alors elle-même un groupe. <Badge niveau="admis">Définition ; l'associativité, elle, est héritée gratuitement de $G$.</Badge>
+
+Un critère plus économique résume ces trois conditions en une seule.
+
+<Resultat label="Critère du sous-groupe">
+
+$$H \text{ sous-groupe} \iff H \neq \varnothing \ \text{ et }\ \forall a,b\in H,\ ab^{-1}\in H$$
+
+<Badge niveau="demontre" slot="badge">Démontré dans l'encart ci-dessous à partir de la définition.</Badge>
+
+</Resultat>
+
+<Encart type="plusloin" titre="Preuve du critère du sous-groupe">
+
+Le sens direct est immédiat : si $H$ est un sous-groupe, il contient $e$ donc est non vide, et $ab^{-1}\in H$ par stabilité. Réciproquement, supposons $H\neq\varnothing$ et la propriété $(\star)$ : $\forall a,b\in H,\ ab^{-1}\in H$.
+
+1. $H$ contient un élément $x$ ; en appliquant $(\star)$ à $a=b=x$ : $x\,x^{-1} = e\in H$.
+2. *Stabilité par inverse* : pour $a\in H$, comme $e\in H$, $(\star)$ appliquée à $e$ et $a$ donne $e\,a^{-1} = a^{-1}\in H$.
+3. *Stabilité par produit* : pour $a,b\in H$, on vient d'obtenir $b^{-1}\in H$ ; $(\star)$ appliquée à $a$ et $b^{-1}$ donne $a(b^{-1})^{-1} = ab\in H$.
+
+Avec l'associativité héritée de $G$, $H$ vérifie (G1)–(G3) : c'est un groupe. $\boxed{\text{critère établi}}$
+
+</Encart>
+
+Deux exemples serviront de banc d'essai. Dans $D_3$, les trois rotations $\{e, r, r^2\}$ forment un sous-groupe (composer deux rotations donne une rotation ; l'inverse de $r$ est $r^2$), d'ordre $3$. Dans <Prereq href="/maths/partie-ii/entiers-relatifs">$(\mathbb{Z},+)$</Prereq>, les entiers pairs $2\mathbb{Z}$ forment un sous-groupe : $0\in 2\mathbb{Z}$, la somme de deux pairs est paire, l'opposé d'un pair est pair.
+
+## Le théorème de Lagrange
+
+Voici le sommet du chapitre, et une contrainte stupéfiante : dans un groupe fini, la taille d'un sous-groupe ne peut pas être quelconque — elle **divise** la taille du groupe. Pas « inférieure » : *divise*. Le sous-groupe des rotations de $D_3$ a $3$ éléments, et $3$ divise $6$. Coïncidence ? Non — c'est une loi.
+
+Pour un groupe fini $G$, on note $|G|$ son cardinal, appelé son **ordre**.
+
+<Resultat label="Théorème de Lagrange">
+
+$$\text{Dans un groupe fini } G,\quad \text{tout sous-groupe } H \text{ vérifie } \ |H| \ \text{ divise } \ |G|.$$
+
+<Badge niveau="demontre" slot="badge">Preuve complète ci-dessous ; elle referme la boucle avec le théorème de partition de la partie I.</Badge>
+
+</Resultat>
+
+<Encart type="intuition" titre="Le sous-groupe comme gabarit">
+
+$H$ est un patron que l'on décalque à travers $G$ en formant les paquets $aH$. Deux miracles : chaque paquet a **exactement** la taille de $H$, et les paquets **pavent** $G$ sans se chevaucher. Donc $G$ est un empilement de $k$ copies de $H$, et $|G| = k\,|H|$. Toute la preuve consiste à établir ces deux miracles.
+
+</Encart>
+
+<Encart type="calcul" titre="Démonstration du théorème de Lagrange">
+
+$G$ est fini, $H$ un sous-groupe. On écrit $ab$ le produit et $a^{-1}$ l'inverse.
+
+**Étape 1 — une relation d'équivalence.** Posons sur $G$ : $a\sim b$ si et seulement si $a^{-1}b\in H$. Vérifions les trois propriétés.
+
+- *Réflexivité* : $a^{-1}a = e\in H$ (car $H$ est un sous-groupe), donc $a\sim a$.
+- *Symétrie* : si $a^{-1}b\in H$, son inverse $(a^{-1}b)^{-1} = b^{-1}a$ est dans $H$ (stabilité par inverse), donc $b\sim a$.
+- *Transitivité* : si $a^{-1}b\in H$ et $b^{-1}c\in H$, leur produit $(a^{-1}b)(b^{-1}c) = a^{-1}c$ est dans $H$ (stabilité par produit), donc $a\sim c$.
+
+C'est bien une relation d'équivalence.
+
+**Étape 2 — les classes sont les $aH$.** Posons $aH := \{ah : h\in H\}$. La classe de $a$ est $[a] = \{x\in G : a^{-1}x\in H\}$. Or $a^{-1}x\in H$ signifie $a^{-1}x = h$ pour un $h\in H$, c'est-à-dire $x = ah$. Donc $[a] = aH$ exactement.
+
+**Étape 3 — partition.** Par le <Prereq href="/maths/partie-i/relations-fonctions">théorème de partition</Prereq> établi dès la partie I, les classes d'une relation d'équivalence découpent $G$ en morceaux non vides, deux à deux disjoints, qui recouvrent tout. Ici, les $aH$ forment une **partition** de $G$. *(La boucle partie I → partie IV se referme : l'outil forgé pour trier des chaussettes range maintenant les éléments d'un groupe.)*
+
+**Étape 4 — tous les paquets ont la taille de $H$.** Fixons une classe $aH$ et considérons $\varphi : H \to aH,\ h\mapsto ah$. Elle est *surjective* par définition même de $aH$. Elle est *injective* : si $ah = ah'$, la simplification (théorème 3) donne $h = h'$. Donc $\varphi$ est une bijection, et $|aH| = |H|$.
+
+**Étape 5 — compter.** $G$ étant fini, il n'y a qu'un nombre fini de classes ; notons-le $k$ (l'*indice* de $H$). La partition de l'étape 3 découpe $G$ en $k$ morceaux disjoints, chacun de cardinal $|H|$ (étape 4). En additionnant les cardinaux :
+
+$$|G| = \underbrace{|H| + |H| + \dots + |H|}_{k \text{ fois}} = k\,|H|.$$
+
+Donc $|H|$ divise $|G|$. $\boxed{|H| \ \text{ divise } \ |G|}$
+
+<Badge niveau="demontre">Preuve complète : elle ne mobilise que les axiomes de groupe, la simplification (déjà démontrée) et le théorème de partition de la partie I.</Badge>
+
+</Encart>
+
+## Ce que Lagrange offre en cascade
+
+Donnons un sens à l'**ordre d'un élément** $a\in G$ (fini) via ses puissances $a, a^2, a^3, \dots$ (avec $a^1 = a$ et $a^{k+1} = a^k\cdot a$). Cette liste compte une infinité de termes, mais $G$ est fini : par le <Prereq href="/maths/partie-iii/equipotence">lemme des tiroirs</Prereq> (une infinité d'objets dans un nombre fini de cases force une collision), deux puissances coïncident, disons $a^i = a^j$ avec $i < j$ ; en multipliant par $(a^i)^{-1}$, on obtient $a^{\,j-i} = e$ avec $j - i \geq 1$. Il existe donc une plus petite puissance $n\geq 1$ telle que $a^n = e$ (le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> fournit ce plus petit élément). Ce $n$ est l'**ordre de $a$**.
+
+On vérifie alors que $\langle a\rangle := \{e, a, a^2, \dots, a^{n-1}\}$ est un sous-groupe : stable par produit car $a^i a^j = a^{i+j}$ se réduit modulo $n$ grâce à $a^n = e$, stable par inverse car $a^{-1} = a^{n-1}$. Son cardinal est exactement $n$ (les $a^k$ pour $0\leq k < n$ sont distincts, sans quoi une puissance $a^{\,k-k'}=e$ plus petite que $n$ contredirait la minimalité). Ce sous-groupe est *engendré* par $a$.
+
+<Resultat label="L'ordre d'un élément divise l'ordre du groupe">
+
+$$\text{Dans un groupe fini } G,\quad \text{l'ordre de tout élément divise } |G|.$$
+
+<Badge niveau="demontre" slot="badge">Corollaire immédiat de Lagrange appliqué au sous-groupe $\langle a\rangle$.</Badge>
+
+</Resultat>
+
+En effet, l'ordre de $a$ est le cardinal de $\langle a\rangle$, sous-groupe de $G$ ; Lagrange conclut. Un corollaire spectaculaire en découle : si $|G| = p$ est un nombre **premier**, prenons $a\neq e$. L'ordre de $\langle a\rangle$ divise $p$, et comme $a\neq e$ ce sous-groupe a au moins deux éléments : son ordre n'est pas $1$, il vaut donc $p$. Autrement dit $\langle a\rangle = G$ tout entier — **tout élément non neutre engendre le groupe**, qui n'a alors aucun sous-groupe propre non trivial. <Badge niveau="demontre">Les seuls diviseurs de $p$ premier sont $1$ et $p$, et $a\neq e$ exclut $1$.</Badge>
+
+Gardez ce résultat au chaud. Au chapitre 16, $\mathbb{Z}/p\mathbb{Z}$ privé de $0$ sera un groupe à $p-1$ éléments, et Lagrange y donnera — en trois lignes — le **petit théorème de Fermat** : $a^{p-1}\equiv 1 \pmod p$.
+
+Nous avons tenu notre promesse : pas une hypothèse ajoutée, seulement un nom — « groupe » — posé sur une régularité omniprésente, et une moisson de théorèmes valables partout d'un coup. Au chapitre suivant, nous changeons de fil : l'**arithmétique de $\mathbb{Z}$**, la division euclidienne et les nombres premiers. Puis les deux fils, structures et arithmétique, se noueront dans $\mathbb{Z}/n\mathbb{Z}$, où Lagrange et Euclide travailleront main dans la main.

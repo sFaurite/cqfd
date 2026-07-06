@@ -1,0 +1,55 @@
+---
+/**
+ * MathsSommesRiemann — l'intégrale de Riemann par sommes de Darboux. Sur chaque
+ * sous-intervalle d'une subdivision de [a,b], on érige un rectangle de hauteur
+ * inf f (somme inférieure s(n), qui minore l'aire) ou sup f (somme supérieure
+ * S(n), qui la majore). Quand n grandit, s(n) monte, S(n) descend, et les deux
+ * se pincent : l'intégrale EST cette valeur commune — c'est sa définition.
+ */
+---
+
+<div class="iw" data-iw="maths-sommes-riemann">
+  <div class="iw__head"><span class="tag">Interactif</span> L’intégrale de Riemann par sommes de Darboux</div>
+  <div class="iw__canvas-wrap"><canvas style="aspect-ratio: 16 / 9"></canvas></div>
+  <div class="iw__controls cols2">
+    <div class="iw__row">
+      <label for="sr-f">fonction</label>
+      <select id="sr-f" data-f>
+        <option value="x2" selected>x² sur [0, 1]</option>
+        <option value="sin">sin x sur [0, π]</option>
+        <option value="sqrt">√x sur [0, 1]</option>
+        <option value="inv">1/(1+x²) sur [0, 1]</option>
+      </select>
+    </div>
+    <div class="iw__row">
+      <label for="sr-n">sous-intervalles n</label>
+      <input id="sr-n" type="range" min="1" max="200" step="1" value="8" data-n />
+      <output data-out-n>8</output>
+    </div>
+    <div class="iw__btns">
+      <button class="iw__btn" data-mode="inf">Inférieures</button>
+      <button class="iw__btn" data-mode="sup">Supérieures</button>
+      <button class="iw__btn active" data-mode="both">Les deux</button>
+      <button class="iw__btn" data-refine>Raffiner n → 200</button>
+    </div>
+  </div>
+  <div class="iw__readouts">
+    <span class="iw__chip"><span class="k">s(n)</span> <b data-out-lo>0,2734</b></span>
+    <span class="iw__chip"><span class="k">∫ exacte</span> <b data-out-exact>1/3 ≈ 0,3333</b></span>
+    <span class="iw__chip"><span class="k">S(n)</span> <b data-out-hi>0,3984</b></span>
+    <span class="iw__chip"><span class="k">écart S − s</span> <b data-out-gap>0,1250</b></span>
+  </div>
+  <p class="iw__note">
+    Sur chaque sous-intervalle, le rectangle <b>bleu</b> a pour hauteur le <b>vrai inf de f</b>
+    (pour sin x, si π/2 est intérieur, le sup y vaut 1 — pas aux bornes) : l’aire totale
+    <b>s(n)</b> minore l’aire sous la courbe. Le <b>rouge</b> utilise le sup : <b>S(n)</b> la
+    majore. Donc s(n) ≤ ∫ ≤ S(n) pour toute subdivision. Augmentez n (ou cliquez « Raffiner ») :
+    s(n) monte, S(n) descend, l’écart rouge fond. <b>C’est la définition de l’intégrale</b> :
+    ∫ₐᵇ f <em>est</em> la valeur commune du sup des sommes inférieures et de l’inf des sommes
+    supérieures — un nombre pincé entre les deux, pas une simple recette de calcul.
+  </p>
+</div>
+
+<script>
+  import './MathsSommesRiemann.client.ts';
+</script>
