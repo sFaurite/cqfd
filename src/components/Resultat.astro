@@ -35,7 +35,8 @@ const hasBadge = await Astro.slots.has('badge');
     border: 1.5px solid color-mix(in srgb, var(--c-yellow) 55%, var(--c-border));
     border-radius: var(--radius);
     background: color-mix(in srgb, var(--c-yellow) 7%, var(--c-bg-elev));
-    overflow: hidden;
+    /* pas d'overflow:hidden : l'infobulle du badge doit pouvoir sortir du cadre.
+       Les coins arrondis du ruban sont gérés directement (voir .ribbon). */
   }
   .ribbon {
     display: flex;
@@ -50,6 +51,7 @@ const hasBadge = await Astro.slots.has('badge');
     text-transform: uppercase;
     letter-spacing: 0.06em;
     border-bottom: 1px solid color-mix(in srgb, var(--c-yellow) 30%, var(--c-border));
+    border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0;
   }
   /* la casse des maths est significative : on neutralise l'uppercase du ruban */
   .ribbon :global(.katex) {
@@ -62,6 +64,8 @@ const hasBadge = await Astro.slots.has('badge');
   }
   .content {
     padding: 0.3em 1.1em;
+    /* une formule trop large défile au lieu de déborder du cadre */
+    overflow-x: auto;
   }
   .content :global(.katex-display) {
     margin: 0.8em 0;

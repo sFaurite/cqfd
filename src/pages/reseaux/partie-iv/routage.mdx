@@ -23,7 +23,9 @@ Insistons, car c'est le principe fondamental de tout le chapitre : **un routeur 
 
 <Resultat label="Principe du routage saut par saut">
 
-$$\text{décision locale} : \text{adresse destination} \longmapsto \text{prochain saut}$$
+$$
+\text{décision locale} : \text{adresse destination} \longmapsto \text{prochain saut}
+$$
 
 <Badge niveau="norme" slot="badge">Modèle de transfert d'IP : routage sans état, fondé sur la seule adresse de destination (RFC 1812, « Requirements for IP Version 4 Routers »). Un choix de conception, pas une nécessité physique.</Badge>
 </Resultat>
@@ -34,14 +36,18 @@ Ce principe est libérateur. Une adresse <Prereq href="/reseaux/partie-iv/adress
 
 Chaque routeur détient une **table de routage** : une liste de lignes de la forme
 
-$$\text{préfixe (CIDR)} \;\longrightarrow\; \text{prochain saut (et interface de sortie)}$$
+$$
+\text{préfixe (CIDR)} \;\longrightarrow\; \text{prochain saut (et interface de sortie)}
+$$
 
 Le préfixe est exprimé en <Prereq href="/reseaux/partie-iv/sous-reseaux">notation CIDR</Prereq> : `192.168.1.0/24`, `10.0.0.0/8`, etc. Pour décider, le routeur fait, pour chaque ligne, le **ET binaire** entre l'adresse de destination et le masque, et compare au préfixe — exactement le calcul d'appartenance à un sous-réseau déjà établi.
 
 <Encart type="rappel" titre="Le « /n » et son masque (CIDR)">
 Un préfixe `P/n` fixe les `n` bits de poids fort. Son **masque** est fait de `n` bits à 1 suivis de `32 - n` bits à 0. Une adresse `dst` **appartient** au préfixe si
 
-$$\text{dst} \wedge \text{masque} = P$$
+$$
+\text{dst} \wedge \text{masque} = P
+$$
 
 où `∧` est le ET binaire. Plus `n` est grand, plus le bloc est petit : il contient $2^{32-n}$ adresses. Ce calcul a été établi au chapitre <Prereq href="/reseaux/partie-iv/sous-reseaux">Masques et sous-réseaux</Prereq>.
 </Encart>
@@ -58,7 +64,9 @@ Pourquoi « le plus long gagne » ? Intuitivement, un préfixe long décrit un v
 
 <Resultat label="Longest prefix match">
 
-$$\text{route choisie} = \arg\max_{\substack{\text{routes } r \text{ telles que} \\ \text{dst} \in \text{préfixe}(r)}} \; \big(\text{longueur du préfixe de } r\big)$$
+$$
+\text{route choisie} = \arg\max_{\substack{\text{routes } r \text{ telles que} \\ \text{dst} \in \text{préfixe}(r)}} \; \big(\text{longueur du préfixe de } r\big)
+$$
 
 <Badge niveau="norme" slot="badge">Règle de transfert standardisée (RFC 1812). Choix de conception cohérent avec l'agrégation CIDR, pas une loi physique.</Badge>
 </Resultat>
@@ -90,7 +98,9 @@ On teste l'appartenance de `10.2.3.4` à chaque préfixe (ET binaire avec le mas
 
 Quatre routes correspondent ! Le longest prefix match tranche : on garde la plus longue.
 
-$$\max(0,\;8,\;16,\;24) = 24$$
+$$
+\max(0,\;8,\;16,\;24) = 24
+$$
 
 → prochain saut = **R-C**.
 
