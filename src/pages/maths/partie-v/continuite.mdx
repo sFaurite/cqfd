@@ -120,7 +120,7 @@ $$
 
 La seule différence avec la continuité tient dans le $0 \lt |x-a|$, qui **exclut** $x = a$, et dans $\ell$ qui remplace $f(a)$. <Badge niveau="admis">Définition — nous nommons un concept.</Badge>
 
-Lien immédiat, lorsque $a$ est un **point d'accumulation** de $D$ (tout voisinage de $a$ rencontre $D$ ailleurs qu'en $a$ — c'est le cas partout sur un intervalle) : $f$ est continue en $a \in D$ si et seulement si $\displaystyle\lim_{x\to a} f(x) = f(a)$. En un point isolé, $f$ est toujours continue et la limite ne se pose pas.
+Lien immédiat : lorsque $a \in D$ vérifie la condition ci-dessus — être adhérent à $D \setminus \{a\}$, ce qu'on appelle aussi être un **point d'accumulation** de $D$ ; c'est le cas de tout point d'un intervalle non réduit à un point —, $f$ est continue en $a$ si et seulement si $\displaystyle\lim_{x\to a} f(x) = f(a)$ : les deux définitions ne diffèrent que par le cas $x = a$, où $|f(a) - f(a)| \lt \varepsilon$ est automatique. Dans le cas contraire, $a$ est dit **isolé** dans $D$ : un certain intervalle $\left]a-\eta,\, a+\eta\right[$ ne rencontre $D$ qu'en $a$. En un tel point, $f$ est continue d'office (prendre $\delta = \eta$ : seul $x = a$ vérifie l'antécédent, et $|f(a) - f(a)| = 0 \lt \varepsilon$) et la question de la limite ne se pose pas.
 
 <Encart type="calcul" titre="La limite, quand elle existe, est unique">
 
@@ -149,7 +149,7 @@ $$
 
 <Encart type="plusloin" titre="Le quotient : il suffit de traiter 1/g">
 
-Puisque $\dfrac{f}{g} = f \cdot \dfrac1g$, le produit règle tout dès qu'on sait que $\displaystyle\lim_{x\to a}\dfrac1g = \dfrac1{\ell'}$ (pour $\ell' \neq 0$). Prenons $\varepsilon_0 = \tfrac12|\ell'| \gt 0$ dans la définition de $\lim g = \ell'$ : au voisinage épointé de $a$, $|g(x)-\ell'| \lt \tfrac12|\ell'|$, donc $|g(x)| \gt \tfrac12|\ell'| \gt 0$ ($g$ ne s'annule pas et reste minorée). Alors
+Puisque $\dfrac{f}{g} = f \cdot \dfrac1g$, le produit règle tout dès qu'on sait que $\displaystyle\lim_{x\to a}\dfrac1g = \dfrac1{\ell'}$ (pour $\ell' \neq 0$). Prenons $\varepsilon_0 = \tfrac12|\ell'| \gt 0$ dans la définition de $\lim g = \ell'$ : au voisinage épointé de $a$, $|g(x)-\ell'| \lt \tfrac12|\ell'|$, donc $|g(x)| \gt \tfrac12|\ell'| \gt 0$ ($g$ ne s'annule pas et $|g|$ reste minorée). Alors
 
 $$
 \left|\frac1{g(x)} - \frac1{\ell'}\right| = \frac{|g(x)-\ell'|}{|g(x)|\,|\ell'|} \le \frac{2}{|\ell'|^2}\,|g(x)-\ell'|.
@@ -213,7 +213,7 @@ La boucle se boucle : l'irrationalité de $\sqrt2$, prouvée pour *construire* $
 
 **Énoncé.** Une fonction continue sur $[a,b]$ y est bornée et atteint ses bornes.
 
-**Bornée.** Si $f$ n'était pas majorée, pour chaque $n$ il existerait $x_n \in [a,b]$ avec $f(x_n) \gt n$ ($AC_\omega$, une fois de plus). Par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, une sous-suite $x_{n_k} \to \ell \in [a,b]$ ; par le sens direct de la caractérisation séquentielle, $f(x_{n_k}) \to f(\ell)$, donc $(f(x_{n_k}))$ est bornée — mais $f(x_{n_k}) \gt n_k \to +\infty$. Contradiction.
+**Bornée.** Si $f$ n'était pas majorée, pour chaque $n$ il existerait $x_n \in [a,b]$ avec $f(x_n) \gt n$ ($AC_\omega$, une fois de plus). Par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, une sous-suite $x_{n_k} \to \ell \in [a,b]$ ; par le sens direct de la caractérisation séquentielle, $f(x_{n_k}) \to f(\ell)$, donc $(f(x_{n_k}))$, convergente, est bornée par un certain $M$ (<Prereq href="/maths/partie-v/suites-limites">chapitre 18</Prereq>) — mais $f(x_{n_k}) \gt n_k \ge k$ pour tout $k$ (une extraction croît au moins comme son indice : $n_0 \ge 0$ et $n_{k+1} \gt n_k$ donnent $n_k \ge k$ par récurrence), et Archimède fournit un $k \gt M$. Contradiction.
 
 **Atteinte.** Soit $M = \sup f([a,b])$ (existe, $f$ bornée). Pour chaque $n$, choisissons $x_n$ avec $f(x_n) \gt M - \tfrac1n$ ($AC_\omega$). Une sous-suite $x_{n_k} \to \ell \in [a,b]$ donne $f(x_{n_k}) \to f(\ell)$ ; comme $M - \tfrac{1}{n_k} \lt f(x_{n_k}) \le M$, on a $f(\ell) = M$. Le maximum est atteint ; de même pour le minimum.
 
@@ -229,11 +229,13 @@ Ce théorème des bornes est la clé de voûte du **théorème de Rolle**, qui o
 
 Une dernière conséquence, dont l'exponentielle et le logarithme (chapitre 23) feront un usage constant : une fonction continue et **strictement monotone** sur un intervalle est réversible, et sa réciproque est *elle aussi* continue.
 
+Précisons d'abord un mot employé jusqu'ici au cas par cas ($[a,b]$, $\left]a,b\right[$…) : appelons **intervalle** toute partie $I \subseteq \mathbb{R}$ qui contient tout réel compris entre deux de ses éléments — si $u \lt w \lt v$ avec $u, v \in I$, alors $w \in I$. Segments, intervalles ouverts ou semi-ouverts, demi-droites et $\mathbb{R}$ lui-même en relèvent. <Badge niveau="admis">Définition — nous nommons un concept.</Badge>
+
 <Resultat label="Théorème de la bijection">
 
 Soit $f$ **continue** et **strictement croissante** (resp. décroissante) sur un intervalle $I$. Alors $J := f(I)$ est un intervalle, $f : I \to J$ est une **bijection**, et sa réciproque $f^{-1} : J \to I$ est continue et strictement croissante (resp. décroissante).
 
-<Badge niveau="demontre" slot="badge">Injectivité par monotonie, surjectivité sur un intervalle par le TVI, continuité de la réciproque par l'encart ci-dessous.</Badge>
+<Badge niveau="demontre" slot="badge">Injectivité par monotonie ; surjectivité par définition de $J = f(I)$, dont le TVI montre que c'est un intervalle ; continuité de la réciproque par l'encart ci-dessous.</Badge>
 </Resultat>
 
 <Encart type="calcul" titre="Preuve : bijection, puis continuité de la réciproque">
@@ -242,11 +244,15 @@ Traitons le cas strictement croissant (l'autre est identique en renversant les i
 
 **Injective.** Si $x \neq x'$, disons $x \lt x'$, alors $f(x) \lt f(x')$ : $f$ ne prend jamais deux fois la même valeur.
 
-**Image = intervalle, et surjectivité.** Soient $y_1 \lt y \lt y_2$ avec $y_1, y_2 \in J$, disons $y_1 = f(x_1)$, $y_2 = f(x_2)$ (donc $x_1 \lt x_2$ par croissance). La fonction $x \mapsto f(x) - y$ est continue sur $[x_1, x_2]$, négative en $x_1$, positive en $x_2$ : le **TVI** fournit $x \in \left]x_1, x_2\right[$ avec $f(x) = y$. Donc $y \in J$ : $J$ est un intervalle, et $f : I \to J$ est surjective, donc **bijective**.
+**Image = intervalle.** Soient $y_1 \lt y \lt y_2$ avec $y_1, y_2 \in J$, disons $y_1 = f(x_1)$, $y_2 = f(x_2)$ (donc $x_1 \lt x_2$ par croissance). La fonction $x \mapsto f(x) - y$ est continue sur $[x_1, x_2]$, négative en $x_1$, positive en $x_2$ : le **TVI** fournit $x \in \left]x_1, x_2\right[$ avec $f(x) = y$. Donc $y \in J$ : $J$ contient tout réel compris entre deux de ses éléments — c'est un intervalle. Quant à la surjectivité de $f : I \to J$, elle est acquise *par définition* de $J = f(I)$ ; jointe à l'injectivité, elle fait de $f$ une **bijection**. (Le rôle du TVI n'est donc pas la surjectivité, mais la forme d'intervalle de $J$.)
 
 **Réciproque croissante.** Notons $g = f^{-1}$. Si $y \lt y'$ dans $J$ mais $g(y) \ge g(y')$, la croissance de $f$ donnerait $y = f(g(y)) \ge f(g(y')) = y'$, contradiction. Donc $g$ est strictement croissante.
 
-**Réciproque continue.** C'est le cœur. Soit $g$ croissante sur l'intervalle $J$, d'image $g(J) = I$ (un intervalle). Supposons $g$ discontinue en un point $d \in J$ — disons, une rupture à droite : comme $g$ est croissante, $g(d^+) := \inf_{\,y \gt d} g(y)$ existe et vaut $\gt g(d)$, et $d$ n'est pas l'extrémité droite de $J$. Choisissons $u$ avec $g(d) \lt u \lt g(d^+)$. Pour $y \le d$ : $g(y) \le g(d) \lt u$ ; pour $y \gt d$ : $g(y) \ge g(d^+) \gt u$. Aucun $y \in J$ ne vérifie donc $g(y) = u$. Pourtant $u$ est **strictement compris** entre $g(d) \in I$ et $g(y_0) \in I$ (pour un $y_0 \gt d$), donc $u$ devrait appartenir à l'intervalle $I = g(J)$ : contradiction. Le cas d'une rupture à gauche est symétrique. Donc $g = f^{-1}$ est continue. $\quad\blacksquare$
+**Réciproque continue.** C'est le cœur. Soit $g$ croissante sur l'intervalle $J$, d'image $g(J) = I$ (un intervalle), et soit $d \in J$. Si $d$ n'est pas l'extrémité droite de $J$, l'ensemble $\{\, g(y) : y \in J,\ y \gt d \,\}$ est non vide et minoré par $g(d)$ : il possède une **borne inférieure** (<Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8, §4</Prereq>), notée $g(d^+) \ge g(d)$. Symétriquement, $g(d^-) := \sup_{\,y \lt d} g(y) \le g(d)$ si $d$ n'est pas l'extrémité gauche.
+
+*Lemme : si ces quantités, quand elles sont définies, valent toutes $g(d)$, alors $g$ est continue en $d$.* Soit $\varepsilon \gt 0$. Si $g(d^+) = g(d)$, alors $g(d) + \varepsilon$ ne minore pas $\{g(y) : y \gt d\}$ : il existe $y_1 \gt d$ avec $g(y_1) \lt g(d) + \varepsilon$, et la croissance donne $g(d) \le g(y) \lt g(d) + \varepsilon$ pour tout $y \in [d, y_1]$. Symétriquement à gauche, avec un $y_0 \lt d$. Prendre $\delta = \min(y_1 - d,\ d - y_0)$ — ou le seul côté pertinent si $d$ est une extrémité, tout $\delta$ convenant si $J = \{d\}$ — donne $|g(y) - g(d)| \lt \varepsilon$ dès que $y \in J$ et $|y - d| \lt \delta$.
+
+*Par contraposée*, si $g$ est discontinue en $d$, l'une des deux quantités existe et diffère de $g(d)$ — disons $g(d^+) \gt g(d)$, le cas $g(d^-) \lt g(d)$ étant symétrique. Choisissons $u$ avec $g(d) \lt u \lt g(d^+)$. Pour $y \le d$ : $g(y) \le g(d) \lt u$ ; pour $y \gt d$ : $g(y) \ge g(d^+) \gt u$. Aucun $y \in J$ ne vérifie donc $g(y) = u$. Pourtant, pour n'importe quel $y_0 \gt d$ dans $J$ (il en existe : $d$ n'est pas l'extrémité droite), $u$ est **strictement compris** entre $g(d) \in I$ et $g(y_0) \in I$, donc $u$ appartient à $I = g(J)$ — c'est la définition même d'un intervalle : contradiction. Donc $g = f^{-1}$ est continue. $\quad\blacksquare$
 
 </Encart>
 

@@ -39,7 +39,9 @@ $$
 \frac{p^2}{q^2} = 2 \quad\Longrightarrow\quad p^2 = 2\,q^2.
 $$
 
-**Étape 3.** Donc $p^2$ est pair. Or le carré d'un impair est impair : si $p = 2k+1$, alors $p^2 = 4k^2 + 4k + 1$ est impair. Par contraposée, $p^2$ pair force $p$ **pair**. Écrivons $p = 2m$.
+**Lemme de parité.** Tout entier naturel est *pair* (de la forme $2k$) ou *impair* (de la forme $2k+1$), et jamais les deux. — *Dichotomie*, par <Prereq href="/maths/partie-ii/entiers-naturels">récurrence</Prereq> : $0 = 2 \cdot 0$ ; si $n = 2k$, alors $n+1 = 2k+1$ ; si $n = 2k+1$, alors $n+1 = 2(k+1)$. *Exclusivité* : si $2a = 2b+1$, alors ou bien $a \leq b$ et $2a \leq 2b < 2b+1$, ou bien $a \geq b+1$ et $2a \geq 2b+2 > 2b+1$ — contradiction dans les deux cas.
+
+**Étape 3.** Donc $p^2$ est pair. Or le carré d'un impair est impair : si $p = 2k+1$, alors $p^2 = 4k^2 + 4k + 1$ est impair. Par contraposée, $p^2$ pair — donc **non impair**, par l'exclusivité du lemme — force $p$ non impair, donc $p$ **pair**, par la dichotomie du lemme. Écrivons $p = 2m$.
 
 **Étape 4.** Reportons : $(2m)^2 = 2q^2$, soit $4m^2 = 2q^2$, donc
 
@@ -191,6 +193,8 @@ $$
 
 Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{q : q^2 < 2\}$ est non vide et majoré, mais **n'a pas de borne supérieure rationnelle** : sa « limite » serait $\sqrt2$, qui n'existe pas. Le trou, c'était exactement *l'absence de borne sup*. En passant aux coupures, chaque borne sup manquante devient l'objet $U$ — et $\mathbb{R}$ devient le continuum sans faille.
 
+**Et vers le bas ?** Symétriquement, toute partie $\mathcal{E} \subseteq \mathbb{R}$ non vide et **minorée** possède une **borne inférieure** $\inf \mathcal{E}$ — un *plus grand minorant*. Nul besoin de refaire le travail : l'ensemble $\mathcal{M}$ des minorants de $\mathcal{E}$ est non vide (par hypothèse) et majoré (par n'importe quel élément de $\mathcal{E}$), donc admet une borne supérieure $s := \sup \mathcal{M}$. Tout $e \in \mathcal{E}$ majore $\mathcal{M}$, donc $s \le e$ : $s$ est lui-même un minorant de $\mathcal{E}$ ; et tout minorant de $\mathcal{E}$ appartient à $\mathcal{M}$, donc est $\le s$. Ainsi $s = \inf \mathcal{E}$. <Badge niveau="demontre">La borne inférieure, déduite de la borne supérieure sans rien ajouter. L'analyse (partie V) s'en servira autant que de sa jumelle.</Badge>
+
 ### 5. Les opérations : $\mathbb{R}$ est un corps ordonné complet
 
 Une coupure, c'est un point. Encore faut-il pouvoir **calculer** avec — additionner, multiplier, inverser — et retrouver sur ces ombres exactement l'arithmétique de $\mathbb{Q}$. Tout se définit à partir des seules opérations de $\mathbb{Q}$, **sans un axiome de plus**.
@@ -211,6 +215,8 @@ $$
 
 Le **zéro** est la coupure $0^* := \{\, q \in \mathbb{Q} : q < 0 \,\}$, et $A \oplus 0^* = A$ : tout $a + s$ avec $s < 0$ est $< a$, donc dans $A$ ; réciproquement, $A$ étant sans maximum, tout $a \in A$ s'écrit $a = a' + (a - a')$ avec $a' > a$ dans $A$ et $a - a' < 0$ dans $0^*$.
 
+Avant d'aller plus loin, un petit outil qui servira trois fois d'ici la fin du chapitre : le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> s'étend à $\mathbb{Z}$. **Toute partie non vide et majorée de $\mathbb{Z}$ admet un plus grand élément** (et toute partie non vide et minorée, un plus petit) : si $N \in \mathbb{Z}$ majore $S$, l'ensemble $\{\, N - s : s \in S \,\}$ est une partie non vide de $\mathbb{N}$ ; son plus petit élément $N - s_0$, fourni par le bon ordre, fait de $s_0$ le plus grand élément de $S$. Pour le minimum, appliquer ce qui précède à $\{\, -s : s \in S \,\}$. <Badge niveau="demontre">Bon ordre étendu à $\mathbb{Z}$, par translation vers $\mathbb{N}$.</Badge>
+
 **L'opposé.** Pour une coupure $A$, on pose
 
 $$
@@ -223,7 +229,7 @@ C'est la coupure symétrique de $A$ par rapport à $0$, et $A \oplus (\ominus A)
 
 $(\subseteq)$ Soient $a \in A$ et $q \in \ominus A$, disons $-q - r \notin A$ avec $r > 0$. Comme $a \in A$ et $-q - r \notin A$, on a $a < -q - r$, donc $a + q < -r < 0$ : $a + q \in 0^*$.
 
-$(\supseteq)$ Soit $v < 0$ ; posons $w := -v/2 > 0$. Les entiers $n$ tels que $nw \in A$ forment un ensemble non vide (pour $n$ très négatif, $nw$ est sous n'importe quel élément de $A$) et **majoré** (la <Prereq href="/maths/partie-ii/rationnels">propriété d'Archimède</Prereq> de $\mathbb{Q}$ interdit à $nw$ de rester dans $A \neq \mathbb{Q}$) ; par bon ordre il admet un plus grand élément $n$. Posons $a := nw \in A$ et $q := -(n+2)w$. Avec $r := w > 0$ on a $-q - r = (n+1)w \notin A$, donc $q \in \ominus A$ ; et $a + q = nw - (n+2)w = -2w = v$. Donc $v \in A \oplus (\ominus A)$. $\quad\blacksquare$
+$(\supseteq)$ Soit $v < 0$ ; posons $w := -v/2 > 0$. Les entiers $n$ tels que $nw \in A$ forment un ensemble non vide (fixons $a_0 \in A$ avec $a_0 < 0$ — une coupure, non vide et close vers le bas, contient des rationnels négatifs : la <Prereq href="/maths/partie-ii/rationnels">propriété d'Archimède</Prereq> de $\mathbb{Q}$, appliquée à $w > 0$ et $-a_0 > 0$, fournit un entier $N$ avec $Nw > -a_0$, donc $(-N)w < a_0$, et la clôture vers le bas met $(-N)w$ dans $A$) et **majoré** (Archimède, encore, interdit à $nw$ de rester dans $A \neq \mathbb{Q}$) ; par le bon ordre étendu à $\mathbb{Z}$ (ci-dessus), il admet un plus grand élément $n$. Posons $a := nw \in A$ et $q := -(n+2)w$. Avec $r := w > 0$ on a $-q - r = (n+1)w \notin A$, donc $q \in \ominus A$ ; et $a + q = nw - (n+2)w = -2w = v$. Donc $v \in A \oplus (\ominus A)$. $\quad\blacksquare$
 
 </Encart>
 
@@ -243,9 +249,15 @@ A \otimes B := \begin{cases}
 \end{cases}
 $$
 
-Le **un** est $1^* := \{\, q : q < 1 \,\}$ ; pour $A > 0^*$, l'inverse $A^{-1}$ se définit de même sur les rationnels positifs (les $q > 0$ tels que $1/q$ majore $A$ sans en être borne), et $A \otimes A^{-1} = 1^*$.
+Le **un** est $1^* := \{\, q : q < 1 \,\}$ ; pour $A > 0^*$, l'inverse est
 
-<Badge niveau="demontre">Que $A \otimes B$ soit une coupure $\geq 0^*$ dans le cas positif, puis que $(\mathbb{R}, \oplus, \otimes)$ vérifie associativité, commutativité, distributivité et existence des inverses, sont des vérifications **de même nature que pour $\mathbb{Q}$** — mécaniques, sans idée nouvelle. Nous ne les déroulons pas toutes, exactement comme au chapitre des rationnels.</Badge>
+$$
+A^{-1} := \{\, q \in \mathbb{Q} : q \leq 0 \,\} \ \cup\ \{\, q > 0 \ :\ \exists\, r \notin A,\ r < \tfrac1q \,\}
+$$
+
+— les rationnels positifs dont l'inverse $1/q$ majore $A$ *strictement*, c'est-à-dire sans en être le plus petit majorant —, et $A \otimes A^{-1} = 1^*$, par le même argument archimédien de « plus grand $n$ » que pour l'opposé.
+
+<Badge niveau="demontre">Que $A \otimes B$ soit une coupure $\geq 0^*$ dans le cas positif, puis que $(\mathbb{R}, \oplus, \otimes)$ vérifie associativité, commutativité et distributivité, sont des vérifications **de même nature que pour $\mathbb{Q}$** — mécaniques, sans idée nouvelle : nous ne les déroulons pas toutes, exactement comme au chapitre des rationnels. L'existence des inverses, elle, n'est *pas* mécanique — c'est l'argument archimédien de l'encart ci-dessus et son analogue multiplicatif.</Badge>
 
 **Le plongement de $\mathbb{Q}$.** À chaque rationnel $t$ on associe la coupure
 
@@ -276,7 +288,7 @@ Comme $A_{\sqrt2} \geq 0^*$, on a $(A_{\sqrt2})^2 = 0^* \cup \{\, a\,a' : a, a' 
 
 $(\subseteq 2^*)$ Pour $a, a' \geq 0$ avec $a^2 < 2$ et $a'^2 < 2$ : l'inégalité $2\,a\,a' \leq a^2 + a'^2$ (car $(a - a')^2 \geq 0$) donne $a\,a' \leq \tfrac12(a^2 + a'^2) < \tfrac12(2 + 2) = 2$. Les rationnels négatifs sont eux aussi $< 2$. Donc $(A_{\sqrt2})^2 \subseteq 2^*$.
 
-$(\supseteq 2^*)$ Soit $q < 2$. Si $q < 0$, il est dans $0^*$. Si $0 \leq q < 2$, il suffit de trouver un rationnel $a \geq 0$ avec $q < a^2 < 2$ : alors $q < a\cdot a \in (A_{\sqrt2})^2$, donc $q \in (A_{\sqrt2})^2$ (clôture vers le bas). Par Archimède, choisissons un entier $k \geq 1$ avec $\tfrac1k < \tfrac{2 - q}{4}$. Les carrés $\left(\tfrac{m}{k}\right)^2$ valent $0$ pour $m = 0$ (donc $\leq q$) et $4$ pour $m = 2k$ (donc $> q$) ; soit $m$ le **plus grand** entier tel que $\left(\tfrac{m}{k}\right)^2 \leq q$. Alors $\left(\tfrac{m+1}{k}\right)^2 > q$, et comme $\tfrac{m}{k} \leq \sqrt{q} < 2$ on a $2m + 1 \leq 4k$, d'où
+$(\supseteq 2^*)$ Soit $q < 2$. Si $q < 0$, il est dans $0^*$. Si $0 \leq q < 2$, il suffit de trouver un rationnel $a \geq 0$ avec $q < a^2 < 2$ : alors $q < a\cdot a \in (A_{\sqrt2})^2$, donc $q \in (A_{\sqrt2})^2$ (clôture vers le bas). Par Archimède, choisissons un entier $k \geq 1$ avec $\tfrac1k < \tfrac{2 - q}{4}$. Les carrés $\left(\tfrac{m}{k}\right)^2$ valent $0$ pour $m = 0$ (donc $\leq q$) et $4$ pour $m = 2k$ (donc $> q$) ; soit $m$ le **plus grand** entier tel que $\left(\tfrac{m}{k}\right)^2 \leq q$ (ces entiers forment une partie non vide et majorée par $2k$ : bon ordre étendu, §5). Alors $\left(\tfrac{m+1}{k}\right)^2 > q$, et $m < 2k$ — car $\tfrac{m}{k} \geq 2$ donnerait $\left(\tfrac{m}{k}\right)^2 \geq 4 > q$ —, donc $2m + 1 \leq 4k$, d'où
 
 $$
 \left(\tfrac{m+1}{k}\right)^2 = \left(\tfrac{m}{k}\right)^2 + \frac{2m+1}{k^2} \leq q + \frac{4k}{k^2} = q + \frac4k < q + (2 - q) = 2.
@@ -294,9 +306,9 @@ La complétude entraîne, presque gratuitement, deux propriétés dont toute l'a
 
 <Encart type="calcul" titre="ℝ est archimédien, et ℚ y est dense">
 
-**Archimède.** Soient $x > 0^*$ et $y \in \mathbb{R}$. Il existe $n \in \mathbb{N}$ tel que $n\cdot x > y$ (où $n\cdot x = x \oplus \dots \oplus x$). Sinon, $\{\, n\cdot x : n \in \mathbb{N} \,\}$ serait majoré par $y$ ; par la complétude (§4) il aurait une borne supérieure $s$. Mais $s \ominus x < s$ n'est pas un majorant, donc $n\cdot x > s \ominus x$ pour un certain $n$, d'où $(n+1)\cdot x > s$ — contredisant que $s$ majore. $\blacksquare$
+**Archimède.** Soient $x > 0^*$ et $y \in \mathbb{R}$. Il existe $n \in \mathbb{N}$ tel que $n\cdot x > y$ — où $n \cdot x$ est défini par récurrence ($0 \cdot x := 0^*$ et $(n+1)\cdot x := n\cdot x \oplus x$, définition légitimée par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>), et où l'on note désormais $u \ominus v := u \oplus (\ominus v)$. Sinon, $\{\, n\cdot x : n \in \mathbb{N} \,\}$ serait majoré par $y$ ; par la complétude (§4) il aurait une borne supérieure $s$. Mais $s \ominus x < s$ n'est pas un majorant, donc $n\cdot x > s \ominus x$ pour un certain $n$, d'où $(n+1)\cdot x > s$ — ce qui contredit le fait que $s$ majore. $\blacksquare$
 
-**Densité.** Soient $x < y$ dans $\mathbb{R}$. Alors $y \ominus x > 0^*$ ; par Archimède, il existe $n \in \mathbb{N}^*$ avec $n\cdot(y \ominus x) > 1^*$, c'est-à-dire $\tfrac1n < y - x$ (en identifiant les rationnels à leurs coupures). L'ensemble des entiers $m$ tels que $\tfrac{m}{n} > x$ est non vide et minoré (Archimède appliqué à $x$), donc admet un plus petit élément $m$. Alors $\tfrac{m-1}{n} \leq x$, donc $\tfrac{m}{n} \leq x + \tfrac1n < x + (y - x) = y$. Ainsi $x < \tfrac{m}{n} < y$. $\blacksquare$
+**Densité.** Soient $x < y$ dans $\mathbb{R}$. Alors $y \ominus x > 0^*$ ; par Archimède, il existe $n \in \mathbb{N}^*$ avec $n\cdot(y \ominus x) > 1^*$, c'est-à-dire $\tfrac1n < y - x$ (en identifiant les rationnels à leurs coupures). L'ensemble des entiers $m$ tels que $\tfrac{m}{n} > x$ est non vide (Archimède, appliqué au pas $\tfrac1n$ et à la cible $x$) et minoré (Archimède appliqué à la cible $\ominus x$ donne un entier $k$ avec $\tfrac{k}{n} > \ominus x$, soit $-\tfrac{k}{n} < x$ : tout $m$ de l'ensemble vérifie $\tfrac{m}{n} > x > -\tfrac{k}{n}$, donc $m > -k$) ; par le bon ordre étendu à $\mathbb{Z}$ (§5), il admet un plus petit élément $m$. Alors $\tfrac{m-1}{n} \leq x$, donc $\tfrac{m}{n} \leq x + \tfrac1n < x + (y - x) = y$. Ainsi $x < \tfrac{m}{n} < y$. $\blacksquare$
 
 </Encart>
 
