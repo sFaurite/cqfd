@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’axiome du choix et ses monstres"
 chapter: axiome-du-choix
-description: "AC énoncé précis ; les dettes du cours soldées (ACω : réunion dénombrable, caractérisation séquentielle, Dedekind-infini) ; équivalents (Zorn, bon ordre, trichotomie) ; Banach–Tarski (démontré DANS ZFC) ; Vitali ; indépendance de ZF ; la position du cours."
+description: "AC énoncé précis ; les six dettes du cours soldées (ACω : réunion dénombrable, caractérisation séquentielle, bornes atteintes, Heine, Dedekind-infini ; AC plein : trichotomie) ; équivalents (Zorn, bon ordre) ; Banach–Tarski (démontré DANS ZFC) ; Vitali ; indépendance de ZF ; la position du cours."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -46,10 +46,12 @@ $$ \boxed{\text{Le choix fini se démontre ; seul le choix infini sans règle ex
 
 ## Solder les dettes
 
-Le cours a contracté quatre dettes, chacune signalée en son temps. Réglons-les — en précisant, pour chacune, *quelle* force de choix elle réclame. Ces énoncés « tel théorème requiert telle forme » sont eux-mêmes des méta-théorèmes rigoureusement établis (par construction de modèles de ZF), d'où leurs badges verts.
+Le cours a contracté six dettes, chacune signalée en son temps. Réglons-les — en précisant, pour chacune, *quelle* force de choix elle réclame. Ces énoncés « tel théorème requiert telle forme » sont eux-mêmes des méta-théorèmes rigoureusement établis (par construction de modèles de ZF), d'où leurs badges verts.
 
 - **Réunion dénombrable d'ensembles au plus dénombrables** (<Prereq href="/maths/partie-iii/denombrables">chapitre 11</Prereq>) : le **choix dénombrable** $\mathsf{AC}_\omega$ suffit — et il le faut vraiment, puisqu'il existe des modèles de ZF où $\mathbb{R}$ lui-même est réunion dénombrable d'ensembles dénombrables. <Badge niveau="demontre">Méta-théorème : ZF seul ne prouve pas ce résultat (modèle de Feferman–Lévy).</Badge>
 - **Réciproque de la caractérisation séquentielle de la continuité** (<Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq>) : « continue séquentiellement $\Rightarrow$ continue en $\varepsilon$-$\delta$ » réclame $\mathsf{AC}_\omega$ (à chaque rang $n$, choisir un point témoin à distance $\lt 1/n$). L'autre sens est du ZF pur. <Badge niveau="demontre">Méta-théorème : cette implication est indémontrable dans ZF seul.</Badge>
+- **Théorème des bornes atteintes** (<Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq>) : la preuve donnée fabrique des suites de témoins ($f(x_n) \gt n$, puis $f(x_n) \gt M - \tfrac1n$) — deux appels à $\mathsf{AC}_\omega$. Dette d'une autre nature que les précédentes : elle porte sur la *preuve*, pas sur l'énoncé, qui est un théorème de ZF pur (une démonstration par borne supérieure, sans aucune suite, l'établit). <Badge niveau="demontre">Méta-théorème : démontrable dans ZF seul ; $\mathsf{AC}_\omega$ n'y achète que la concision de la voie séquentielle.</Badge>
+- **Théorème de Heine** (<Prereq href="/maths/partie-v/integrale">chapitre 22</Prereq>) : la preuve donnée choisit, pour chaque $n$, un couple témoin $(x_n, y_n)$ — $\mathsf{AC}_\omega$ encore. Même statut que les bornes atteintes : la continuité uniforme sur un segment est démontrable dans ZF pur (argument de borne supérieure), c'est la voie séquentielle qui coûte le choix dénombrable. <Badge niveau="demontre">Méta-théorème : démontrable dans ZF seul ; la dette est celle de la preuve choisie, non de l'énoncé.</Badge>
 - **Infini $\Leftrightarrow$ Dedekind-infini** (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) : le sens « infini $\Rightarrow$ contient une copie de $\mathbb{N}$ » demande $\mathsf{AC}_\omega$ ; la réciproque est démontrable dans ZF. <Badge niveau="demontre">Méta-théorème : équivalence des deux notions d'infini indémontrable sans choix dénombrable.</Badge>
 - **Trichotomie des cardinaux** (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) : « pour tous $A, B$, on a $|A| \le |B|$ ou $|B| \le |A|$ » requiert l'AC **plein** — et lui est même **équivalent** (Hartogs, 1915). <Badge niveau="demontre">Équivalence méta-théorique établie : comparer tous les cardinaux, c'est déjà tout l'axiome du choix.</Badge>
 

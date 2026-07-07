@@ -13,24 +13,24 @@ import Prereq from '../../../components/Prereq.astro';
 import VideoManim from '../../../components/VideoManim.astro';
 import VonNeumannOrdinals from '../../../components/interactive/VonNeumannOrdinals.astro';
 
-Nous avons les ensembles. Nous n’avons pas encore les **nombres**. La question de ce chapitre est
+Nous avons les ensembles. Nous n'avons pas encore les **nombres**. La question de ce chapitre est
 presque provocante : peut-on **fabriquer** les entiers $0, 1, 2, 3, \dots$ avec, pour seule matière
-première, l’**ensemble vide** ? La réponse — oui — est l’une des plus belles idées des fondements.
+première, l'**ensemble vide** ? La réponse — oui — est l'une des plus belles idées des fondements.
 
 <Hypotheses titre="Ce que nous admettons ici (et rien de plus)">
 1. Les <Prereq href="/maths/partie-i/ensembles-zf">axiomes de ZF</Prereq>, déjà posés. En particulier :
-   l’**ensemble vide** $\varnothing$ existe, et l’**axiome de l’infini** garantit l’existence d’un
-   ensemble contenant $\varnothing$ et stable par l’opération « successeur » ci-dessous.
+   l'**ensemble vide** $\varnothing$ existe, et l'**axiome de l'infini** garantit l'existence d'un
+   ensemble contenant $\varnothing$ et stable par l'opération « successeur » ci-dessous.
 2. Aucune nouvelle hypothèse. **Tout, dans ce chapitre, est déduit de ZF** — y compris la récurrence,
-   que beaucoup croient « évidente » et qu’on va pourtant *démontrer*.
+   que beaucoup croient « évidente » et qu'on va pourtant *démontrer*.
 </Hypotheses>
 
-## L’idée : chaque nombre est l’ensemble de ceux d’avant
+## L'idée : chaque nombre est l'ensemble de ceux d'avant
 
 <Encart type="intuition" titre="Compter avec des boîtes vides">
 On veut que « $n$ » soit un objet ayant exactement $n$ éléments — un *étalon* pour la quantité $n$.
-L’idée de von Neumann : prends pour $0$ la boîte **vide** ($\varnothing$, zéro élément). Puis, pour
-passer de $n$ au suivant, **range $n$ lui-même dans une nouvelle boîte avec tout ce qu’il y avait
+L'idée de von Neumann : prends pour $0$ la boîte **vide** ($\varnothing$, zéro élément). Puis, pour
+passer de $n$ au suivant, **range $n$ lui-même dans une nouvelle boîte avec tout ce qu'il y avait
 déjà**. Ainsi $n$ finit par contenir, littéralement, tous les nombres plus petits que lui.
 </Encart>
 
@@ -46,7 +46,7 @@ $$ 0 := \varnothing. $$
 
 $$ S(n) := n \cup \{n\}. $$
 
-C’est-à-dire : on prend tous les éléments de $n$, et on ajoute **un** nouvel élément, qui est $n$
+C'est-à-dire : on prend tous les éléments de $n$, et on ajoute **un** nouvel élément, qui est $n$
 lui-même. Déroulons :
 
 **Étape 1.** $1 := S(0) = 0 \cup \{0\} = \varnothing \cup \{\varnothing\} = \{\varnothing\} = \{0\}.$
@@ -59,7 +59,7 @@ lui-même. Déroulons :
 
 $$ n = \{\,0,\ 1,\ \dots,\ n-1\,\} \quad\text{a exactement } n \text{ éléments.} $$
 
-Le nombre $n$ **est** l’ensemble de ses prédécesseurs. ∎
+Le nombre $n$ **est** l'ensemble de ses prédécesseurs. ∎
 </Encart>
 
 <Resultat label="Les entiers naturels de von Neumann">
@@ -76,24 +76,24 @@ les précédents.
   src="build-naturals"
   scene="BuildNaturals"
   titre="Construire ℕ depuis le vide"
-  legende="Chaque entier est l’ensemble de ses prédécesseurs : 0 = ∅, puis S(n) = n ∪ {n}."
+  legende="Chaque entier est l'ensemble de ses prédécesseurs : 0 = ∅, puis S(n) = n ∪ {n}."
 />
 
 ## ℕ existe, et il est unique
 
-Un ensemble est dit **inductif** s’il contient $0$ et le successeur de chacun de ses éléments.
-L’axiome de l’infini affirme qu’**il en existe au moins un**. On définit alors $\mathbb{N}$ comme le
-**plus petit** d’entre eux (l’intersection de tous les ensembles inductifs).
+Un ensemble est dit **inductif** s'il contient $0$ et le successeur de chacun de ses éléments.
+L'axiome de l'infini affirme qu'**il en existe au moins un**. On définit alors $\mathbb{N}$ comme le
+**plus petit** d'entre eux (l'intersection de tous les ensembles inductifs).
 
 <Encart type="plusloin" titre="Pourquoi cette intersection est licite, et pourquoi elle est « la plus petite »">
-L’axiome de l’infini donne un ensemble inductif $I$. La collection des sous-ensembles inductifs de
+L'axiome de l'infini donne un ensemble inductif $I$. La collection des sous-ensembles inductifs de
 $I$ est non vide, et leur **intersection** $\mathbb{N}$ est encore inductive (elle contient $0$, et
-le successeur d’un élément commun à tous reste commun à tous). Étant incluse dans **tout** ensemble
-inductif, c’est le plus petit. Cette minimalité est exactement ce qui interdit à $\mathbb{N}$ de
-contenir des « intrus » : il ne contient *que* ce qu’on est forcé d’y mettre. <Badge niveau="demontre">Déduit de ZF (infini + compréhension/séparation).</Badge>
+le successeur d'un élément commun à tous reste commun à tous). Étant incluse dans **tout** ensemble
+inductif, c'est le plus petit. Cette minimalité est exactement ce qui interdit à $\mathbb{N}$ de
+contenir des « intrus » : il ne contient *que* ce qu'on est forcé d'y mettre. <Badge niveau="demontre">Déduit de ZF (infini + compréhension/séparation).</Badge>
 </Encart>
 
-## La récurrence n’est pas un axiome : c’est un théorème
+## La récurrence n'est pas un axiome : c'est un théorème
 
 Voici le point qui surprend. Le **raisonnement par récurrence** ne tombe pas du ciel — il **découle**
 de la définition de $\mathbb{N}$ comme plus petit ensemble inductif.
@@ -103,12 +103,12 @@ de la définition de $\mathbb{N}$ comme plus petit ensemble inductif.
 **Énoncé.** Soit $P(n)$ une propriété. Si $P(0)$ est vraie, et si $P(n) \Rightarrow P(S(n))$ pour
 tout $n$, alors $P(n)$ est vraie pour **tout** $n \in \mathbb{N}$.
 
-**Démonstration.** Considérons l’ensemble des entiers qui vérifient $P$ :
+**Démonstration.** Considérons l'ensemble des entiers qui vérifient $P$ :
 
 $$ A := \{\, n \in \mathbb{N} : P(n) \,\}. $$
 
-- L’hypothèse $P(0)$ donne $0 \in A$.
-- L’hypothèse $P(n) \Rightarrow P(S(n))$ dit que si $n \in A$ alors $S(n) \in A$.
+- L'hypothèse $P(0)$ donne $0 \in A$.
+- L'hypothèse $P(n) \Rightarrow P(S(n))$ dit que si $n \in A$ alors $S(n) \in A$.
 
 Donc $A$ **est un ensemble inductif**. Or $\mathbb{N}$ est le *plus petit* ensemble inductif, donc
 $\mathbb{N} \subseteq A$. Comme par ailleurs $A \subseteq \mathbb{N}$, on a $A = \mathbb{N}$ :
@@ -121,9 +121,9 @@ $$ \big(P(0)\ \text{et}\ \forall n\,(P(n)\Rightarrow P(S(n)))\big) \;\Longrighta
 </Resultat>
 
 <Encart type="rappel" titre="Au passage : les axiomes de Peano sont satisfaits">
-Cette construction **vérifie** les axiomes de Peano : $0$ n’est le successeur d’aucun entier
-($\varnothing \neq n \cup \{n\}$), $S$ est injective, et la récurrence vaut. Autrement dit, ce qu’on
-*pose* habituellement comme axiomes de l’arithmétique, on l’a ici **démontré** dans ZF. <Badge niveau="demontre">ℕ de von Neumann est un modèle de l’arithmétique de Peano.</Badge>
+Cette construction **vérifie** les axiomes de Peano : $0$ n'est le successeur d'aucun entier
+($\varnothing \neq n \cup \{n\}$), $S$ est injective, et la récurrence vaut. Autrement dit, ce qu'on
+*pose* habituellement comme axiomes de l'arithmétique, on l'a ici **démontré** dans ZF. <Badge niveau="demontre">ℕ de von Neumann est un modèle de l'arithmétique de Peano.</Badge>
 </Encart>
 
 ## Et après ?

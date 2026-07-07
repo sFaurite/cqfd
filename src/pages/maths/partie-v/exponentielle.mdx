@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’exponentielle, π et la formule d’Euler"
 chapter: exponentielle
-description: "Exp définie par série sur ℂ (convergence absolue partout) ; équation fonctionnelle (produit de Cauchy) ; exp = sa propre dérivée ; ln construit ; cos/sin DÉFINIS par séries ; π DÉFINI (premier zéro de cos) ; e^{iπ} + 1 = 0 DÉMONTRÉ ; la géométrie du cercle retrouvée."
+description: "Exp définie par série sur ℂ (convergence absolue partout) ; équation fonctionnelle (produit de Cauchy) ; exp = sa propre dérivée ; ln construit ; cos/sin DÉFINIS par séries ; π DÉFINI (double du premier zéro positif de cos) ; e^{iπ} + 1 = 0 DÉMONTRÉ ; la géométrie du cercle retrouvée."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -193,7 +193,7 @@ $$ \boxed{\cos 2 = -\tfrac13 - B \le -\tfrac13 \lt 0.} $$
 Le cosinus est continu (combinaison de $e^{i\theta}$ et $e^{-i\theta}$, continues par la majoration de la section 3, valable pour l'argument complexe). Comme $\cos 0=1\gt 0$ et $\cos 2\lt 0$, le <Prereq href="/maths/partie-v/continuite">théorème des valeurs intermédiaires</Prereq> livre un zéro dans $]0,2[$. <Badge niveau="demontre">cos s'annule strictement entre $0$ et $2$.</Badge>
 
 <Encart type="plusloin" titre="Le plus petit zéro positif existe">
-Soit $Z := \{x\gt 0 : \cos x = 0\}$, non vide (ci-dessus) et minoré par $0$. Il possède une borne inférieure $m\ge 0$. Montrons $\cos m = 0$ **sans aucun choix**. Si l'on avait $\cos m\ne 0$, la continuité de $\cos$ fournirait $\delta\gt 0$ tel que $\cos$ ne s'annule pas sur $\left]m-\delta,\, m+\delta\right[$ ; aucun élément de $Z$ n'y figurerait, et comme tout $z\in Z$ vérifie $z\ge m$, on aurait même $z\ge m+\delta$. Alors $m+\delta$ serait un minorant de $Z$ strictement supérieur à $m$ — contredisant que $m$ est le *plus grand* des minorants. Donc $\cos m = 0$. Comme $\cos 0=1\ne 0$, nécessairement $m\gt 0$. Donc $m\in Z$ : c'est le **plus petit zéro positif** de $\cos$. <Badge niveau="demontre">Existence du plus petit zéro par borne inférieure + continuité — sans recourir au choix dénombrable.</Badge>
+Soit $Z := \{x\gt 0 : \cos x = 0\}$, non vide (ci-dessus) et minoré par $0$. Il possède une borne inférieure $m\ge 0$ (<Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8, §4</Prereq>). Montrons $\cos m = 0$ **sans aucun choix**. Si l'on avait $\cos m\ne 0$, la continuité de $\cos$ fournirait $\delta\gt 0$ tel que $\cos$ ne s'annule pas sur $\left]m-\delta,\, m+\delta\right[$ ; aucun élément de $Z$ n'y figurerait, et comme tout $z\in Z$ vérifie $z\ge m$, on aurait même $z\ge m+\delta$. Alors $m+\delta$ serait un minorant de $Z$ strictement supérieur à $m$ — en contradiction avec la définition de $m$, *plus grand* des minorants. Donc $\cos m = 0$. Comme $\cos 0=1\ne 0$, nécessairement $m\gt 0$. Donc $m\in Z$ : c'est le **plus petit zéro positif** de $\cos$. <Badge niveau="demontre">Existence du plus petit zéro par borne inférieure + continuité — sans recourir au choix dénombrable.</Badge>
 </Encart>
 
 Nous posons alors la définition qui fonde toute la trigonométrie :
@@ -228,7 +228,7 @@ $$ e^{i\pi} + 1 = 0. $$
 
 <VideoManim src="maths-euler-identite" scene="EulerIdentite" titre="e^iπ + 1 = 0" legende="Les sommes partielles de exp(iπ) spiralent vers −1 : la plus célèbre formule des mathématiques, démontrée terme à terme." />
 
-Arrêtez-vous. Cinq constantes se donnent rendez-vous : $0$, né comme l'ensemble vide $\varnothing$ ; $1$, son successeur $\{\varnothing\}$ ; $i$, le couple de réels $(0,1)$ ; $e$, la somme d'une série ; $\pi$, le premier zéro d'un cosinus. Cinq objets surgis de quatre régions de l'édifice — les ensembles, l'arithmétique, les complexes, l'analyse — réunis par une seule identité, non pas décrétée mais *démontrée* ligne à ligne. La série de la partie V a rencontré le couple de la partie II.
+Arrêtez-vous. Cinq constantes se donnent rendez-vous : $0$, né comme l'ensemble vide $\varnothing$ ; $1$, son successeur $\{\varnothing\}$ ; $i$, le couple de réels $(0,1)$ ; $e$, la somme d'une série ; $\pi$, le double du premier zéro positif d'un cosinus. Cinq objets surgis de quatre régions de l'édifice — les ensembles, l'arithmétique, les complexes, l'analyse — réunis par une seule identité, non pas décrétée mais *démontrée* ligne à ligne. La série de la partie V a rencontré le couple de la partie II.
 
 <Encart type="plusloin" titre="La dette géométrique du chapitre 9, soldée">
 Le chapitre sur $\mathbb{C}$ *anticipait* la géométrie du cercle (arguments, rotations) sans la fonder. Elle l'est désormais. L'application $\theta\mapsto e^{i\theta}$ envoie $\mathbb{R}$ sur le cercle unité, et cette paramétrisation est **périodique de période $2\pi$** : $e^{2i\pi}=(e^{i\pi})^2=(-1)^2=1$, donc $e^{i(\theta+2\pi)}=e^{i\theta}e^{2i\pi}=e^{i\theta}$. Que ce paramétrage recouvre *tout* le cercle exactement une fois par tour demande encore un argument (surjectivité et injectivité sur $[0,2\pi[$), esquissé mais entièrement fondé sur ce chapitre ; longueur d'arc, aire et angles s'en déduisent. Enfin, $e$ et $\pi$ sont *transcendants* (<Prereq href="/maths/partie-iii/diagonale-cantor">chapitre 12</Prereq>) — racines d'aucun polynôme entier. <Badge niveau="demontre">Transcendance de $e$ (Hermite) et $\pi$ (Lindemann) : théorèmes cités, preuves hors cours.</Badge>

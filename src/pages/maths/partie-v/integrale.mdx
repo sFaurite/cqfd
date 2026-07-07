@@ -23,7 +23,7 @@ Imaginez que vous pavez la région sous la courbe avec de fins rectangles. Vous 
 
 ### 1. Sommes de Darboux et la définition de l'intégrale
 
-Fixons $f : [a,b] \to \mathbb{R}$ **bornée**. Une **subdivision** $\sigma$ de $[a,b]$ est une suite finie $a = x_0 < x_1 < \dots < x_n = b$. Sur chaque morceau $[x_{k-1}, x_k]$, comme $f$ est bornée, l'ensemble $\{f(x) : x \in [x_{k-1},x_k]\}$ est non vide, minoré et majoré : il admet donc une borne inférieure $m_k$ et une borne supérieure $M_k$. Cette existence n'est pas gratuite — c'est exactement la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure de $\mathbb{R}$</Prereq> (dont se déduit, par passage aux opposés, celle de la borne inférieure) qui la garantit.
+Fixons $f : [a,b] \to \mathbb{R}$ **bornée**. Une **subdivision** $\sigma$ de $[a,b]$ est une suite finie $a = x_0 < x_1 < \dots < x_n = b$. Sur chaque morceau $[x_{k-1}, x_k]$, comme $f$ est bornée, l'ensemble $\{f(x) : x \in [x_{k-1},x_k]\}$ est non vide, minoré et majoré : il admet donc une borne inférieure $m_k$ et une borne supérieure $M_k$. Cette existence n'est pas gratuite — c'est exactement la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure de $\mathbb{R}$</Prereq> (dont le chapitre 8, §4 déduit celle de la borne inférieure) qui la garantit.
 
 On forme alors la **somme de Darboux inférieure** et la **somme supérieure** :
 
@@ -101,9 +101,9 @@ $$D(x) = \begin{cases} 1 & \text{si } x \in \mathbb{Q}, \\ 0 & \text{si } x \not
 
 Soit une subdivision $\sigma$ quelconque et un morceau $[x_{k-1}, x_k]$ de largeur **strictement positive**.
 
-**Étape 1 — le sup vaut 1.** Par <Prereq href="/maths/partie-ii/rationnels">densité de $\mathbb{Q}$</Prereq>, l'intervalle ouvert $(x_{k-1}, x_k)$ contient un rationnel $r$, où $D(r) = 1$. Comme $D \le 1$, on a $M_k = \sup D = 1$.
+**Étape 1 — le sup vaut 1.** Par <Prereq href="/maths/partie-ii/reels-dedekind">densité de $\mathbb{Q}$ dans $\mathbb{R}$</Prereq> (chapitre 8, §6), l'intervalle ouvert $\left]x_{k-1}, x_k\right[$ contient un rationnel $r$, où $D(r) = 1$. Comme $D \le 1$, on a $M_k = \sup D = 1$.
 
-**Étape 2 — l'inf vaut 0.** Le nombre $t = r + \frac{\sqrt2}{m}$ est irrationnel (sinon $t = q \in \mathbb{Q}$ donnerait $\sqrt2 = m(q - r) \in \mathbb{Q}$, absurde) et, pour $m$ assez grand, reste dans $(x_{k-1}, x_k)$ : le morceau contient donc un irrationnel $t$, où $D(t) = 0$. Comme $D \ge 0$, on a $m_k = \inf D = 0$.
+**Étape 2 — l'inf vaut 0.** Le nombre $t = r + \frac{\sqrt2}{m}$ est irrationnel (sinon $t = q \in \mathbb{Q}$ donnerait $\sqrt2 = m(q - r) \in \mathbb{Q}$, absurde) et, pour $m$ assez grand, reste dans $\left]x_{k-1}, x_k\right[$ : le morceau contient donc un irrationnel $t$, où $D(t) = 0$. Comme $D \ge 0$, on a $m_k = \inf D = 0$.
 
 **Étape 3 — les sommes ne bougent jamais.** Cela vaut pour *chaque* morceau, donc
 
