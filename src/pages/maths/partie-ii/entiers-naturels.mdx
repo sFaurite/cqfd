@@ -46,8 +46,9 @@ $$ 0 := \varnothing. $$
 
 $$ S(n) := n \cup \{n\}. $$
 
-C'est-à-dire : on prend tous les éléments de $n$, et on ajoute **un** nouvel élément, qui est $n$
-lui-même. Déroulons :
+C'est-à-dire : on prend tous les éléments de $n$, et on y ajoute $n$ lui-même — un élément
+véritablement **nouveau**, car $n \notin n$ : l'axiome de <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq>
+interdit à tout ensemble de s'appartenir. Déroulons :
 
 **Étape 1.** $1 := S(0) = 0 \cup \{0\} = \varnothing \cup \{\varnothing\} = \{\varnothing\} = \{0\}.$
 
@@ -55,16 +56,16 @@ lui-même. Déroulons :
 
 **Étape 3.** $3 := S(2) = 2 \cup \{2\} = \{0,1\} \cup \{2\} = \{0, 1, 2\}.$
 
-**Le motif.** Par construction, à chaque étape on ajoute exactement un élément, donc
+**Les premiers cas suggèrent le motif** : chaque entier est l'ensemble de tous ceux qui le précèdent,
 
-$$ n = \{\,0,\ 1,\ \dots,\ n-1\,\} \quad\text{a exactement } n \text{ éléments.} $$
+$$ n = \{\,0,\ 1,\ \dots,\ n-1\,\}. $$
 
-Le nombre $n$ **est** l'ensemble de ses prédécesseurs. ∎
+Pour les entiers calculés ci-dessus, c'est acquis. La forme générale, elle, demande d'abord de dire ce que « précéder » signifie — ce sera $m \lt n \iff m \in n$, et on y reviendra plus bas. Quant à dire que $n$ « a exactement $n$ éléments » : l'idée deviendra un théorème grâce aux <Prereq href="/maths/partie-i/relations-fonctions">bijections</Prereq> — « avoir $n$ éléments » signifiera « être en bijection avec l'entier $n$ ». L'étalon de la quantité $n$, c'est $n$ lui-même.
 </Encart>
 
 <Resultat label="Les entiers naturels de von Neumann">
 $$ 0 = \varnothing, \qquad S(n) = n \cup \{n\}, \qquad n = \{0, 1, \dots, n-1\}. $$
-<Badge niveau="demontre" slot="badge">Construction standard, entièrement déduite de ZF ; chaque entier est un ensemble explicite.</Badge>
+<Badge niveau="demontre" slot="badge">Les deux premières égalités sont des définitions ; le motif $n = \{0,\dots,n-1\}$ est démontré ci-dessus pour les premiers entiers, et sa forme générale — « $n$ est l'ensemble de ses prédécesseurs », via $m \lt n \iff m \in n$ — s'établit une fois l'ordre construit, au chapitre suivant.</Badge>
 </Resultat>
 
 Manipulez la construction : faites grandir $n$ et voyez chaque entier comme la collection de tous
@@ -82,15 +83,28 @@ les précédents.
 ## ℕ existe, et il est unique
 
 Un ensemble est dit **inductif** s'il contient $0$ et le successeur de chacun de ses éléments.
-L'axiome de l'infini affirme qu'**il en existe au moins un**. On définit alors $\mathbb{N}$ comme le
-**plus petit** d'entre eux (l'intersection de tous les ensembles inductifs).
+L'axiome de l'infini affirme qu'**il en existe au moins un** : appelons-le $I$. On aimerait définir
+$\mathbb{N}$ comme « l'intersection de tous les ensembles inductifs » — mais ZF ne permet pas de
+former la collection de *tous* ces ensembles : elle est trop grosse pour être un ensemble, comme
+l'« ensemble de tout » du <Prereq href="/maths/partie-i/ensembles-zf">paradoxe de Russell</Prereq>.
+On travaille donc *à l'intérieur de $I$* : $\mathbb{N}$ est l'intersection des sous-ensembles
+inductifs de $I$ — et l'encart montre que c'est bien le plus petit ensemble inductif *tout court*,
+indépendant du choix de $I$.
 
 <Encart type="plusloin" titre="Pourquoi cette intersection est licite, et pourquoi elle est « la plus petite »">
-L'axiome de l'infini donne un ensemble inductif $I$. La collection des sous-ensembles inductifs de
-$I$ est non vide, et leur **intersection** $\mathbb{N}$ est encore inductive (elle contient $0$, et
-le successeur d'un élément commun à tous reste commun à tous). Étant incluse dans **tout** ensemble
-inductif, c'est le plus petit. Cette minimalité est exactement ce qui interdit à $\mathbb{N}$ de
-contenir des « intrus » : il ne contient *que* ce qu'on est forcé d'y mettre. <Badge niveau="demontre">Déduit de ZF (infini + compréhension/séparation).</Badge>
+L'axiome de l'infini donne un ensemble inductif $I$. La collection de ses sous-ensembles inductifs,
+$\{X \in \mathcal{P}(I) : X \text{ inductif}\}$, se forme dans ZF (axiome des parties, puis
+séparation) ; elle est non vide, puisque $I$ en fait partie. Leur **intersection** $\mathbb{N}$ est
+encore inductive : elle contient $0$ (commun à tous), et le successeur d'un élément commun à tous
+reste commun à tous. Par définition d'une intersection, $\mathbb{N}$ est inclus dans chaque
+sous-ensemble inductif **de $I$** — mais il faut mieux. **Minimalité tout court** : soit $J$ un
+ensemble inductif *quelconque*. Alors $I \cap J$ est un sous-ensemble inductif de $I$ (il contient
+$0$, présent dans les deux, et le successeur d'un élément des deux reste dans les deux) ; donc
+$\mathbb{N} \subseteq I \cap J \subseteq J$. Ainsi $\mathbb{N}$ est inclus dans **tout** ensemble
+inductif : c'est le plus petit, et la définition **ne dépend pas du choix de $I$** — deux choix
+donneraient deux « plus petits » inclus l'un dans l'autre, donc égaux par extensionnalité. Cette
+minimalité est exactement ce qui interdit à $\mathbb{N}$ de contenir des « intrus » : il ne contient
+*que* ce qu'on est forcé d'y mettre. <Badge niveau="demontre">Déduit de ZF : infini, ensemble des parties, séparation, extensionnalité.</Badge>
 </Encart>
 
 ## La récurrence n'est pas un axiome : c'est un théorème
@@ -100,15 +114,19 @@ de la définition de $\mathbb{N}$ comme plus petit ensemble inductif.
 
 <Encart type="calcul" titre="Démonstration du principe de récurrence">
 
-**Énoncé.** Soit $P(n)$ une propriété. Si $P(0)$ est vraie, et si $P(n) \Rightarrow P(S(n))$ pour
-tout $n$, alors $P(n)$ est vraie pour **tout** $n \in \mathbb{N}$.
+**Énoncé.** Soit $P(n)$ une **formule du langage de ZF**, éventuellement avec paramètres — même
+précaution qu'au <Prereq href="/maths/partie-i/ensembles-zf">chapitre des axiomes</Prereq>. Si $P(0)$
+est vraie, et si $P(n) \Rightarrow P(S(n))$ pour tout $n \in \mathbb{N}$, alors $P(n)$ est vraie pour
+**tout** $n \in \mathbb{N}$.
 
-**Démonstration.** Considérons l'ensemble des entiers qui vérifient $P$ :
+**Démonstration.** Considérons l'ensemble des entiers qui vérifient $P$ — licite par séparation dans
+$\mathbb{N}$, et c'est ici que « $P$ est une formule » sert :
 
 $$ A := \{\, n \in \mathbb{N} : P(n) \,\}. $$
 
 - L'hypothèse $P(0)$ donne $0 \in A$.
-- L'hypothèse $P(n) \Rightarrow P(S(n))$ dit que si $n \in A$ alors $S(n) \in A$.
+- Soit $n \in A$ : alors $n \in \mathbb{N}$ et $P(n)$. Comme $\mathbb{N}$ est inductif,
+  $S(n) \in \mathbb{N}$ ; et l'hypothèse d'hérédité donne $P(S(n))$. Donc $S(n) \in A$.
 
 Donc $A$ **est un ensemble inductif**. Or $\mathbb{N}$ est le *plus petit* ensemble inductif, donc
 $\mathbb{N} \subseteq A$. Comme par ailleurs $A \subseteq \mathbb{N}$, on a $A = \mathbb{N}$ :
@@ -116,15 +134,37 @@ $P(n)$ est vraie pour tout $n$. ∎
 </Encart>
 
 <Resultat label="Principe de récurrence">
-$$ \big(P(0)\ \text{et}\ \forall n\,(P(n)\Rightarrow P(S(n)))\big) \;\Longrightarrow\; \forall n\in\mathbb{N},\ P(n). $$
+$$ \big(P(0)\ \text{et}\ \forall n \in \mathbb{N},\ (P(n)\Rightarrow P(S(n)))\big) \;\Longrightarrow\; \forall n\in\mathbb{N},\ P(n). $$
 <Badge niveau="demontre" slot="badge">Théorème démontré à partir de la minimalité de ℕ — pas un axiome supplémentaire.</Badge>
 </Resultat>
 
-<Encart type="rappel" titre="Au passage : les axiomes de Peano sont satisfaits">
-Cette construction **vérifie** les axiomes de Peano : $0$ n'est le successeur d'aucun entier
-($\varnothing \neq n \cup \{n\}$), $S$ est injective, et la récurrence vaut. Autrement dit, ce qu'on
-*pose* habituellement comme axiomes de l'arithmétique, on l'a ici **démontré** dans ZF. <Badge niveau="demontre">ℕ de von Neumann est un modèle de l'arithmétique de Peano.</Badge>
+<Encart type="rappel" titre="Au passage : les axiomes de Dedekind–Peano sont démontrés">
+Ce qu'on *pose* habituellement comme axiomes des entiers — les axiomes de **Dedekind–Peano** pour le
+zéro et le successeur — est ici **démontré** dans ZF, pièce par pièce.
+
+- **$0$ n'est le successeur d'aucun entier** : $S(n) = n \cup \{n\}$ contient $n$, donc n'est jamais
+  vide — jamais égal à $0 = \varnothing$.
+- **$S$ est injective** : supposons $S(m) = S(n)$ avec $m \neq n$. De $m \in S(m) = n \cup \{n\}$ et
+  $m \neq n$, on tire $m \in n$ ; symétriquement, $n \in m$. Mais $m \in n \in m$ est un **cycle
+  d'appartenance**, interdit par l'axiome de <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq>.
+  Donc $m = n$.
+- **La récurrence** : démontrée ci-dessus.
+
+<Badge niveau="demontre">Trois vérifications complètes dans ZF — la fondation fournit l'injectivité.</Badge>
+
+Une nuance d'honnêteté : l'**arithmétique de Peano** au sens usuel comprend aussi l'addition et la
+multiplication, avec leurs équations — que nous n'avons **pas encore** définies. $(\mathbb{N}, 0, S)$
+en fournit la structure de base ; le chapitre suivant construira $+$ et $\times$ et complétera le
+tableau. <Badge niveau="demontre">$(\mathbb{N}, 0, S)$ satisfait les axiomes de Dedekind–Peano du successeur ; l'arithmétique complète arrive au chapitre suivant.</Badge>
 </Encart>
+
+Un dernier regard sur l'élégance de la construction : l'**ordre** y est déjà là, gratuitement. Sur
+les entiers de von Neumann, « être plus petit » sera tout simplement « appartenir » : $0 \in 1$,
+$0 \in 2$, $1 \in 2$, et plus généralement $m \lt n \iff m \in n$. Le slogan « $n$ est l'ensemble de
+ses prédécesseurs » prendra alors sa forme exacte : $n = \{m \in \mathbb{N} : m \lt n\}$. Annonce,
+pas usage : l'ordre officiel de $\mathbb{N}$ sera construit au
+<Prereq href="/maths/partie-ii/arithmetique-de-n">chapitre suivant</Prereq>, où cette lecture par
+$\in$ est présentée en encart.
 
 ## Et après ?
 
