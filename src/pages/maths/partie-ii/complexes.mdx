@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les nombres complexes (ℂ)"
 chapter: complexes
-description: "ℂ := ℝ² avec multiplication (ac−bd, ad+bc) ; i := (0,1), i² = −1 VÉRIFIÉ ; corps ; conjugué, module, |zw| = |z||w| ; AUCUN ordre total compatible (démontré) ; théorème fondamental de l’algèbre énoncé."
+description: "ℂ := ℝ² avec multiplication (ac−bd, ad+bc) ; i := (0,1), i² = −1 VÉRIFIÉ ; corps (distributivité déroulée en modèle) ; conjugué et ses règles, norme quadratique N(z) sans dette, module, N(zw) = N(z)N(w) ; ℂ n'est pas un corps ordonné (démontré) ; théorème fondamental de l’algèbre en horizon."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -14,7 +14,7 @@ import Tournant from '../../../components/Tournant.astro';
 
 ## Le scandale des « imaginaires »
 
-Au XVIᵉ siècle, en résolvant des équations du troisième degré, Cardan puis Bombelli manipulent des racines carrées de nombres négatifs : leurs calculs « impossibles » donnent des résultats justes. Descartes baptisera ces quantités *imaginaires*, par dérision. Le malaise venait d'un vrai théorème — dans $\mathbb{R}$, aucun carré n'est négatif, nous le démontrerons plus bas. La construction que nous suivons date de Hamilton (1833).
+Au XVIᵉ siècle, en résolvant des équations du troisième degré, Cardan puis Bombelli manipulent des racines carrées de nombres négatifs : leurs calculs « impossibles » donnent des résultats justes. Descartes baptisera ces quantités *imaginaires*, par dérision. Le malaise venait d'un vrai théorème — dans $\mathbb{R}$, aucun carré n'est négatif, nous le démontrerons plus bas. La formalisation par couples de réels que nous suivons est notamment associée à Hamilton (années 1830) ; la lecture géométrique du plan complexe doit aussi à Wessel, Argand et Gauss.
 
 Notre édifice dissout le mystère en une page. Nous n'allons pas supposer qu'il « existe » un nombre de carré $-1$ : nous allons construire un objet parfaitement concret — un couple de réels —, poser deux opérations au grand jour, puis **vérifier en trois lignes** que son carré vaut $-1$. Aucun acte de foi.
 
@@ -59,7 +59,7 @@ $$ i^2 = -1, \qquad \text{où } i := (0,1) $$
 <Badge niveau="demontre" slot="badge">Vérifié en trois lignes depuis la définition du produit : un couple, une table de multiplication, un calcul — rien d'imaginaire. L'écriture $-1$ pour le couple $(-1,0)$ est l'identification établie à la section suivante.</Badge>
 </Resultat>
 
-Un mot de prudence : nous n'écrirons jamais √(−1). Sur les réels positifs, √ désigne *l'unique* racine positive ; or $-1$ possède deux racines carrées dans $\mathbb{C}$ — $i$, mais aussi $-i = (0,-1)$, dont le carré vaut $(-1,0)$ par le même calcul — et, nous le démontrerons plus bas, aucun ordre compatible ne permet d'en préférer une : la « racine principale » n'a pas de sens sans choix arbitraire de branche.
+Un mot de prudence : dans ce cours, nous n'écrirons pas √(−1) — l'analyse complexe sait, bien plus tard, définir des « branches » de racine par conventions explicites, mais rien de tel n'est disponible ici. Sur les réels positifs, √ désigne *l'unique* racine positive ; or $-1$ possède deux racines carrées dans $\mathbb{C}$ — $i$, mais aussi $-i = (0,-1)$, dont le carré vaut $(-1,0)$ par le même calcul — et, nous le démontrerons plus bas, aucun ordre compatible ne permet d'en préférer une : la « racine principale » n'a pas de sens sans choix arbitraire de branche.
 
 ## L'écriture a + bi, reconstruite
 
@@ -75,7 +75,11 @@ $$ a + b\,i = (a,0) + (b,0)\cdot(0,1) = (a,0) + (b\cdot 0 - 0\cdot 1,\ \ b\cdot 
 
 ## Tout non nul s'inverse : ℂ est un corps
 
-Associativité, commutativité, distributivité, neutres $0 := (0,0)$ et $1 := (1,0)$ : chaque vérification est un développement mécanique qui se ramène aux propriétés de corps de $\mathbb{R}$ ; nous ne les détaillons pas toutes — de l'encre, aucune idée — et le disons honnêtement. Le seul point qui mérite une vraie preuve : tout élément non nul admet un inverse.
+Associativité, commutativité, distributivité, neutres $0 := (0,0)$ et $1 := (1,0)$ : chaque vérification est un développement mécanique qui se ramène aux propriétés de corps de $\mathbb{R}$ ; nous en déroulons **une comme modèle** et signalons honnêtement que les autres sont de la même encre. Le seul point qui mérite une vraie preuve : tout élément non nul admet un inverse.
+
+<Encart type="plusloin" titre="Vérification-type : la distributivité">
+Développons les deux membres de $(a,b)\cdot\big((c,d) + (e,f)\big) = (a,b)\cdot(c,d) + (a,b)\cdot(e,f)$. À gauche : $(a,b)\cdot(c+e,\ d+f) = \big(a(c+e) - b(d+f),\ a(d+f) + b(c+e)\big) = (ac + ae - bd - bf,\ ad + af + bc + be)$, par distributivité dans $\mathbb{R}$. À droite : $(ac - bd,\ ad + bc) + (ae - bf,\ af + be) = (ac - bd + ae - bf,\ ad + bc + af + be)$. Les deux couples coïncident composante par composante (commutativité de $+$ dans $\mathbb{R}$), donc sont égaux. $\blacksquare$ Toutes les autres lois se vérifient sur ce modèle exact : développer les deux membres, comparer les coordonnées avec les lois de $\mathbb{R}$.
+</Encart>
 
 <Encart type="calcul" titre="L'inverse de (a,b) ≠ (0,0), ligne à ligne">
 **Lemme préalable, dans $\mathbb{R}$ : si $(a,b) \neq (0,0)$, alors $a^2 + b^2 > 0$.** Soit $x$ un réel. L'ordre de $\mathbb{R}$ étant total, deux cas. Si $x \ge 0$ : la compatibilité du produit avec l'ordre donne $x^2 = x \cdot x \ge 0$. Si $x \le 0$ : en ajoutant $-x$ aux deux membres, $0 \le -x$, donc $(-x)(-x) \ge 0$ ; or $x(-x) + x \cdot x = x(-x + x) = x \cdot 0 = 0$ donne $x(-x) = -x^2$, puis $(-x)(-x) + x(-x) = (-x + x)(-x) = 0$ donne $(-x)(-x) = x^2$. Dans les deux cas, $x^2 \ge 0$. Si de plus $x \neq 0$, alors $x^2 \neq 0$ (sinon, en multipliant $x \cdot x = 0$ par l'inverse de $x$ dans $\mathbb{R}$, il viendrait $x = 0$), donc $x^2 > 0$. Enfin, si $(a,b) \neq (0,0)$, l'une des composantes est non nulle — disons $a$ : alors $a^2 > 0$, $b^2 \ge 0$, et la compatibilité de l'addition donne $a^2 + b^2 \ge a^2 + 0 > 0$. (Même argument si c'est $b$.)
@@ -94,18 +98,22 @@ $$ \boxed{\,(a,b) \cdot w = (1,0) = 1\,} $$
 
 ## Conjugué, module et l'identité de Brahmagupta
 
-Pour $z = (a,b) = a + bi$, posons le **conjugué** $\bar{z} := (a,-b) = a - bi$ (le symétrique de $z$ par rapport à la droite réelle) et le **module** $\lvert z \rvert := \sqrt{a^2 + b^2}$. Cette racine existe : tout réel positif admet une unique racine carrée positive, grâce à la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq> — on prend la borne supérieure des $t \ge 0$ tels que $t^2 \le a^2 + b^2$ ; la vérification complète sera menée pour toutes les racines $n$-ièmes en partie V, petite dette signalée honnêtement.
+Pour $z = (a,b) = a + bi$, posons le **conjugué** $\bar{z} := (a,-b) = a - bi$ (le symétrique de $z$ par rapport à la droite réelle) et la **norme quadratique** $N(z) := a^2 + b^2$ — un réel positif ou nul, entièrement disponible **sans aucune dette**. Le **module**, lui, sera $\lvert z \rvert := \sqrt{N(z)}$ : cette racine existe — tout réel positif admet une unique racine carrée positive, obtenue comme borne supérieure des $t \ge 0$ tels que $t^2 \le N(z)$, grâce à la <Prereq href="/maths/partie-ii/reels-dedekind">complétude</Prereq> — mais la vérification complète (que le carré de cette borne vaut bien $N(z)$) sera menée pour toutes les racines $n$-ièmes en partie V. Petite dette signalée honnêtement : elle pèse sur $\lvert z \rvert$, **pas** sur $N(z)$, et nous formulerons donc les théorèmes de cette section en termes de $N$.
 
 Premier calcul, immédiat :
 
-$$ z\bar{z} = (a,b)\cdot(a,-b) = (a\cdot a - b\cdot(-b),\ \ a\cdot(-b) + b\cdot a) = (a^2 + b^2,\ 0) = \lvert z \rvert^2 $$
+$$ z\bar{z} = (a,b)\cdot(a,-b) = (a\cdot a - b\cdot(-b),\ \ a\cdot(-b) + b\cdot a) = (a^2 + b^2,\ 0) = N(z) $$
 
-Le module est *multiplicatif* — la preuve fait surgir une identité déjà connue de Diophante (IIIᵉ siècle) et systématisée par Brahmagupta (VIIᵉ siècle) :
+— l'identification du couple $(N(z), 0)$ au réel $N(z)$ étant celle du plongement. Le conjugué obéit à quatre règles, chacune un calcul d'une ligne sur les couples : $\overline{z + w} = \bar z + \bar w$, $\overline{z\,w} = \bar z\, \bar w$, $\overline{\bar z} = z$, et $z\bar z = 0 \iff z = 0$ (car $N(z) = a^2 + b^2$ est nul seulement si $a = b = 0$, par le lemme de l'encart « inverse »). <Badge niveau="demontre">Quatre développements directs par la définition du produit et de la somme — le deuxième, le seul non immédiat, se vérifie exactement comme la distributivité-modèle ci-dessus.</Badge> Et l'inverse calculé plus haut se relit avec structure : pour $z \neq 0$,
 
-<Encart type="calcul" titre="|zw| = |z| |w| : l'identité de Brahmagupta–Fibonacci">
-Posons $z = (a,b)$ et $w = (c,d)$. Par définition du produit, $zw = (ac - bd,\ ad + bc)$, donc, par définition du module :
+$$ z^{-1} = \frac{\bar z}{N(z)} \qquad \text{— la formule du lycée } \frac{1}{a+bi} = \frac{a - bi}{a^2+b^2}. $$
 
-$$ \lvert zw \rvert^2 = (ac - bd)^2 + (ad + bc)^2 $$
+La norme est *multiplicative* — la preuve fait surgir une identité déjà connue de Diophante (IIIᵉ siècle) et systématisée par Brahmagupta (VIIᵉ siècle) :
+
+<Encart type="calcul" titre="N(zw) = N(z) N(w) : l'identité de Brahmagupta–Fibonacci">
+Posons $z = (a,b)$ et $w = (c,d)$. Par définition du produit, $zw = (ac - bd,\ ad + bc)$, donc, par définition de la norme :
+
+$$ N(zw) = (ac - bd)^2 + (ad + bc)^2 $$
 
 Développons chaque carré (distributivité dans $\mathbb{R}$) :
 
@@ -113,15 +121,17 @@ $$ (ac - bd)^2 = a^2c^2 - 2abcd + b^2d^2 \qquad \text{et} \qquad (ad + bc)^2 = a
 
 En sommant, les doubles produits se détruisent, puis on factorise :
 
-$$ \lvert zw \rvert^2 = a^2c^2 + b^2d^2 + a^2d^2 + b^2c^2 = a^2(c^2 + d^2) + b^2(c^2 + d^2) = (a^2 + b^2)(c^2 + d^2) $$
+$$ N(zw) = a^2c^2 + b^2d^2 + a^2d^2 + b^2c^2 = a^2(c^2 + d^2) + b^2(c^2 + d^2) = (a^2 + b^2)(c^2 + d^2) = N(z)\,N(w) $$
 
-C'est l'identité de Brahmagupta–Fibonacci : un produit de deux sommes de deux carrés est encore une somme de deux carrés. Le membre de droite vaut $\lvert z \rvert^2 \lvert w \rvert^2$, donc $\lvert zw \rvert^2 = (\lvert z \rvert \lvert w \rvert)^2$. Or deux réels positifs de même carré sont égaux : si $x^2 = y^2$ avec $x \ge 0$ et $y \ge 0$, alors $(x - y)(x + y) = x^2 - y^2 = 0$ ; dans le corps $\mathbb{R}$, un produit nul a un facteur nul (sinon, multiplier par l'inverse du facteur non nul), donc $x = y$, ou bien $x = -y$ — qui, joint à $x \ge 0$ et $y \ge 0$, force $x = y = 0$. Dans tous les cas $x = y$, donc :
+C'est l'identité de Brahmagupta–Fibonacci : un produit de deux sommes de deux carrés est encore une somme de deux carrés.
 
-$$ \boxed{\,\lvert zw \rvert = \lvert z \rvert \, \lvert w \rvert\,} $$
+$$ \boxed{\,N(zw) = N(z)\,N(w)\,} $$
+
+**Corollaire pour le module.** Dès que la racine carrée positive est disponible, $\lvert zw \rvert^2 = N(zw) = N(z)N(w) = (\lvert z \rvert \lvert w \rvert)^2$ ; or deux réels positifs de même carré sont égaux — si $x^2 = y^2$ avec $x, y \ge 0$, alors $(x-y)(x+y) = 0$, et l'intégrité du corps $\mathbb{R}$ force $x = y$ ou $x = -y$, donc $x = y$. D'où $\lvert zw \rvert = \lvert z \rvert\,\lvert w \rvert$.
 
 </Encart>
 
-<Badge niveau="demontre">$z\bar{z} = \lvert z \rvert^2$ et la multiplicativité du module sont démontrés ligne à ligne ci-dessus, sans rien admettre.</Badge>
+<Badge niveau="demontre">$z\bar{z} = N(z)$, les règles du conjugué et $N(zw) = N(z)N(w)$ sont démontrés ligne à ligne, **sans rien admettre**. La version « module », $\lvert zw \rvert = \lvert z \rvert \lvert w \rvert$, en découle modulo la seule dette déclarée : la racine carrée positive, soldée en partie V.</Badge>
 
 ## Le produit fait tourner le plan — une anticipation assumée
 
@@ -141,9 +151,9 @@ $$ (\cos\theta,\ \sin\theta)\cdot(\cos\theta',\ \sin\theta') = (\cos\theta\cos\t
 
 Multiplier deux complexes, c'est multiplier les longueurs et *additionner les angles* : une rotation composée avec une homothétie. <Badge niveau="admis">Anticipation déclarée : cette lecture géométrique s'appuie sur $\cos$ et $\sin$, non encore construits dans le cours ; elle deviendra un théorème après la partie V.</Badge>
 
-## Le prix du miracle : ℂ ne peut pas être ordonné
+## Le prix du miracle : ℂ ne peut pas être un corps ordonné
 
-$\mathbb{R}$ était un corps *ordonné* : son ordre total vérifie (C1) — si $x \le y$ alors $x + z \le y + z$ — et (C2) — si $0 \le x$ et $0 \le y$ alors $0 \le xy$. Peut-on ordonner $\mathbb{C}$ de la même façon ? Non — et ce n'est pas un manque d'imagination, c'est un théorème.
+$\mathbb{R}$ était un corps *ordonné* : son ordre total vérifie (C1) — si $x \le y$ alors $x + z \le y + z$ — et (C2) — si $0 \le x$ et $0 \le y$ alors $0 \le xy$. Peut-on ordonner $\mathbb{C}$ de la même façon ? Précisons la question, car ordonner *l'ensemble* $\mathbb{R}^2$ est facile — l'ordre lexicographique du dictionnaire, par exemple, est total. Ce qui est en jeu, c'est un ordre **compatible avec les opérations**, faisant de $\mathbb{C}$ un corps ordonné. Et là, la réponse est non — pas par manque d'imagination : c'est un théorème.
 
 <Encart type="calcul" titre="Aucun ordre total compatible sur ℂ — démonstration complète">
 Supposons qu'il existe un ordre total $\le$ sur $\mathbb{C}$ vérifiant (C1) et (C2), et cherchons une contradiction.
@@ -167,7 +177,7 @@ $$ \text{Aucun ordre total sur } \mathbb{C} \text{ n'est compatible avec l'addit
 <Badge niveau="demontre" slot="badge">Démontré ligne à ligne ci-dessus : dans un corps totalement ordonné tout carré est positif ; $-1 = i^2$ devrait donc l'être, et l'antisymétrie forcerait $1 = 0$.</Badge>
 </Resultat>
 
-La morale est splendide : nous gagnons des racines — pour tout réel $c \le 0$, le nombre $\sqrt{-c}\,i$ a pour carré $(\sqrt{-c})^2\, i^2 = (-c)(-1) = c$ — mais nous perdons l'ordre : écrire $z \le z'$ entre complexes n'aura jamais de sens compatible avec le calcul. Rien n'est gratuit.
+La morale est splendide : nous gagnons des racines — pour tout réel $c \le 0$, le nombre $\sqrt{-c}\,i$ a pour carré $(\sqrt{-c})^2\, i^2 = (-c)(-1) = c$, où $\sqrt{-c}$ est la racine carrée réelle du positif $-c$, celle de la section sur le module (avec la même petite dette, soldée en partie V) — mais nous perdons l'ordre : on peut toujours ordonner $\mathbb{C}$ par convention artificielle, jamais de façon compatible avec le calcul. Rien n'est gratuit.
 
 ## L'horizon : le théorème fondamental de l'algèbre
 
@@ -177,9 +187,9 @@ Le gain est en réalité bien plus vaste que les racines carrées.
 
 $$ \text{Tout polynôme non constant à coefficients dans } \mathbb{C} \text{ admet au moins une racine dans } \mathbb{C} $$
 
-<Badge niveau="demontre" slot="badge">Théorème rigoureusement établi et consensuel — mais sa preuve exige l'analyse de la partie V : nous ne la donnons pas ici, une esquisse honnête viendra au chapitre des polynômes.</Badge>
+<Badge niveau="demontre" slot="badge">Théorème rigoureusement établi et consensuel — mais **cité ici sans preuve** : elle exige l'analyse de la partie V, et le chapitre des polynômes en donnera une esquisse honnête, présentée comme telle. <a href="https://fr.wikipedia.org/wiki/Théorème_de_d'Alembert-Gauss" target="_blank" rel="noopener">réf. ↗</a></Badge>
 </Resultat>
 
-Autrement dit : l'équation $a_n z^n + \dots + a_1 z + a_0 = 0$ (avec $n \ge 1$ et $a_n \neq 0$) possède toujours une solution complexe. En adjoignant *une seule* racine — celle de $x^2 + 1$ — nous les avons *toutes* obtenues : $\mathbb{C}$ est **algébriquement clos**. Nous *énonçons* ce théorème sans le démontrer : sa preuve exige l'analyse de la partie V, et le chapitre des polynômes — qui définira officiellement la notion même de polynôme — en donnera une esquisse structurée, présentée comme telle.
+Autrement dit : l'équation $a_n z^n + \dots + a_1 z + a_0 = 0$ (avec $n \ge 1$ et $a_n \neq 0$) possède toujours une solution complexe. Ce théorème dira, le moment venu, quelque chose de stupéfiant : en adjoignant *une seule* racine — celle de $x^2 + 1$ — on les aura *toutes* obtenues, $\mathbb{C}$ est **algébriquement clos**. Nous l'*énonçons* comme horizon, sans le démontrer ni l'utiliser : sa preuve exige l'analyse de la partie V, et le chapitre des polynômes — qui définira officiellement la notion même de polynôme — en donnera une esquisse structurée.
 
 Le bilan de la partie II est complet : depuis l'ensemble vide, nous avons bâti $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$ et $\mathbb{C}$, sans jamais ajouter d'hypothèse au-delà de ZF. Nos nombres sont construits ; il reste à les *peser* : ces ensembles sont tous infinis, mais le sont-ils *de la même manière* ? La partie III forge l'outil pour le dire — l'équipotence.
