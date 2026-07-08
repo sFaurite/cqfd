@@ -26,10 +26,49 @@ Voici donc la promesse de ce site, et c'est une promesse modeste mais solide : *
 
 <Hypotheses titre="Hypothèses de départ">
 
-1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les règles d'inférence usuelles — dont le **modus ponens** : de $A$ et de $A \Rightarrow B$, on déduit $B$. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
+1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les **règles d'inférence** usuelles — les seuls « coups légaux » du jeu déductif, **listées une à une dans l'encart ci-dessous**. La plus emblématique est le **modus ponens** : de $A$ et de $A \Rightarrow B$, on déduit $B$. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
 2. **Principe méthodologique.** Les axiomes sont des **points de départ posés**, pas des vérités démontrées. Les juger, c'est juger leur cohérence et leur fécondité, pas leur « évidence ».
 
 </Hypotheses>
+
+<Encart type="rappel" titre="Les règles d'inférence usuelles, une à une" open={true}>
+
+Une **règle d'inférence** est un patron de déduction : si l'on a déjà établi les énoncés « au-dessus de la barre », on a le droit d'écrire celui « au-dessous ». La liste qui suit est notre boîte à outils **complète** : chaque démonstration de ce site, aussi savante soit-elle, n'est qu'un enchaînement fini de ces gestes-là. Le principe d'organisation est simple : chaque connecteur vient avec une règle pour l'**introduire** (comment *prouver* un énoncé de cette forme) et une pour l'**éliminer** (comment *se servir* d'un énoncé de cette forme).
+
+**L'implication $\Rightarrow$**
+
+- **Modus ponens** (élimination) — de $A$ et de $A \Rightarrow B$, on déduit $B$. « Il pleut » et « s'il pleut, le sol est mouillé » donnent « le sol est mouillé ».
+- **Preuve sous hypothèse** (introduction) — si, en **supposant** $A$, on parvient à démontrer $B$, alors on conclut $A \Rightarrow B$ — et l'hypothèse $A$ est refermée : elle n'engage plus la suite. C'est le geste caché derrière chaque preuve qui commence par « supposons que… ».
+
+**La conjonction $\land$**
+
+- **Introduction** — de $A$ et de $B$ (établis séparément), on déduit $A \land B$.
+- **Élimination** — de $A \land B$, on déduit $A$ ; on déduit de même $B$.
+
+**La disjonction $\lor$**
+
+- **Introduction** — de $A$, on déduit $A \lor B$, quel que soit $B$ : affirmer moins précis est toujours permis.
+- **Élimination**, dite **raisonnement par cas** — de $A \lor B$, de $A \Rightarrow C$ et de $B \Rightarrow C$, on déduit $C$ : si les deux chemins mènent à la même conclusion, la conclusion tient sans savoir quel chemin est le bon.
+
+**La négation $\lnot$**
+
+- **Introduction**, dite **réduction à l'absurde** — si supposer $A$ conduit à une contradiction, on conclut $\lnot A$.
+- **Élimination**, dite **principe d'explosion** — d'une contradiction ($A$ et $\lnot A$), on déduit *n'importe quel* énoncé. C'est cette règle qui rend la cohérence si vitale : un système contradictoire démontre tout, donc ne dit plus rien (on y revient plus bas).
+
+**Les quantificateurs $\forall$ et $\exists$**
+
+- **Instanciation** (élimination de $\forall$) — de « pour tout $x$, $P(x)$ », on déduit $P(t)$ pour n'importe quel objet $t$ : ce qui vaut pour tous vaut pour chacun.
+- **Généralisation** (introduction de $\forall$) — si l'on a démontré $P(x)$ pour un $x$ **quelconque**, sur lequel on n'a rien supposé de particulier, on conclut « pour tout $x$, $P(x)$ ». C'est le sens exact du rituel « soit $x$ un entier… » qui ouvre tant de preuves.
+- **Témoin** (introduction de $\exists$) — de $P(t)$ pour un objet explicite $t$, on déduit « il existe $x$ tel que $P(x)$ ».
+- **Élimination de $\exists$** — de « il existe $x$ tel que $P(x)$ », on s'autorise à **nommer** un tel objet (« soit $x_0$ tel que $P(x_0)$ ») et à raisonner avec lui, à condition que la conclusion finale ne mentionne plus $x_0$.
+
+**La règle proprement *classique***
+
+- **Tiers exclu** — pour tout énoncé $A$, on admet $A \lor \lnot A$ ; de façon équivalente, de $\lnot\lnot A$ on déduit $A$ (**élimination de la double négation**). C'est *elle* qui permet à la preuve par l'absurde d'établir des énoncés positifs, et non seulement des négations — et c'est exactement la règle que la logique intuitionniste refuse (voir la preuve par l'absurde, plus bas).
+
+Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, plus le tiers exclu — s'appelle la **déduction naturelle** classique, formalisée par Gerhard Gentzen en 1934. D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : elles autorisent exactement les mêmes déductions. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
+
+</Encart>
 
 ## Le vocabulaire de l'édifice
 
@@ -48,7 +87,7 @@ Pensez aux axiomes comme aux **règles initiales** des échecs : le placement de
 
 ## Qu'est-ce qu'une démonstration ?
 
-Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par une règle d'inférence. Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
+Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par une règle d'inférence — l'une de celles listées dans l'encart du début de chapitre. Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
 
 Plusieurs *formes* de démonstration reviennent sans cesse :
 

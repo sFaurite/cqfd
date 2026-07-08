@@ -40,7 +40,7 @@ export { FIABILITE, type NiveauFiabilite } from './fiability';
 /** Couleurs/emoji des 4 types d'encart dépliable. */
 export const ENCART = {
   calcul: { color: '#58c4dd', emoji: '🧮', label: 'Calcul détaillé', open: false },
-  rappel: { color: '#83c167', emoji: '📐', label: 'Rappel Terminale S', open: false },
+  rappel: { color: '#83c167', emoji: '📐', label: 'Rappel', open: false },
   plusloin: { color: '#c39bd3', emoji: '🔬', label: 'Pour aller plus loin', open: false },
   intuition: { color: '#ffd866', emoji: '💡', label: 'Intuition', open: true },
 } as const;
