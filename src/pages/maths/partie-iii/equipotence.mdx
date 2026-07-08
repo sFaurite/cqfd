@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Comparer les infinis : l’équipotence"
 chapter: equipotence
-description: "Équipotence (bijection) ; hôtel de Hilbert ; ℕ équipotent à des parties strictes de lui-même ; ensembles finis et lemme des tiroirs ; comparaison |A| ≤ |B| par injection ; théorème de Cantor–Schröder–Bernstein."
+description: "Équipotence (bijection) ; hôtel de Hilbert ; ensembles finis et lemme des tiroirs (aucun fini équipotent à une partie stricte) ; Dedekind-infini et le statut indécidable dans ZF de la réciproque ; comparaison par injection ; Cantor–Schröder–Bernstein (preuve récursive formelle) ; trichotomie ⟺ AC, indécidable dans ZF."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -17,7 +17,7 @@ import Tournant from '../../../components/Tournant.astro';
 Nous avons construit, brique après brique, les nombres : $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$. À chaque étage traînait une question tacite : *combien* d'objets ? Pour un ensemble fini, la réponse est un entier. Mais $\mathbb{N}$ et $\mathbb{R}$ sont tous deux infinis — et nous allons découvrir qu'ils n'ont pourtant **pas** la même taille. Comparer les infinis : voilà le programme de toute la partie III, et l'une des plus belles idées de Georg Cantor.
 
 <Hypotheses titre="Ce dont ce chapitre — et toute la partie III — a besoin">
-Rien de neuf. **Aucune hypothèse nouvelle n'est ajoutée** : tout ce qui suit se déduit des seuls axiomes de ZF et de ce que nous en avons déjà tiré ($\mathbb{N}$, les fonctions, les bijections). C'est remarquable — car nous allons établir des faits franchement contre-intuitifs sur l'infini sans jamais rien postuler de plus. La seule exception sera signalée en toutes lettres, par un badge : une forme de l'axiome du choix, dont ce chapitre pose la première pierre.
+Rien de neuf. **Aucune hypothèse nouvelle n'est ajoutée** : tout ce qui suit se déduit des seuls axiomes de ZF et de ce que nous en avons déjà tiré ($\mathbb{N}$, les fonctions, les bijections). C'est remarquable — car nous allons établir des faits franchement contre-intuitifs sur l'infini sans jamais rien postuler de plus. Les seules exceptions — deux énoncés suspendus à l'axiome du choix, que nous n'adoptons pas ici — porteront le badge rouge **« indécidable »**, au sens précis de l'échelle : ni prouvables ni réfutables dans notre cadre ZF.
 </Hypotheses>
 
 Le premier geste de Cantor est un renoncement : pour comparer deux ensembles, **cessons de compter**.
@@ -33,7 +33,7 @@ Apparier « un pour un, sans oubli ni doublon », c'est exactement une **bijecti
 Cette relation a les trois vertus qu'on attend d'une « même taille » : elle est **réflexive** (l'identité $A \to A$ est une bijection), **symétrique** (la <Prereq href="/maths/partie-i/relations-fonctions">réciproque d'une bijection est une bijection</Prereq>) et **transitive** (la <Prereq href="/maths/partie-i/relations-fonctions">composée de deux bijections</Prereq> en est une). <Badge niveau="demontre">Les trois propriétés découlent de résultats déjà établis sur les bijections.</Badge>
 
 <Encart type="plusloin" titre="Pourquoi n'écrivons-nous jamais |A| tout seul ?">
-La notation $|A| = |B|$ est un **raccourci commode** pour « $A$ est équipotent à $B$ » — rien de plus. Nous ne définissons **pas**, dans ce cours, l'objet $|A|$ pris isolément (le *cardinal* de $A$). Le faire proprement — fabriquer un ensemble-témoin canonique par classe d'équipotence — exige la théorie des ordinaux, ou une forme de l'axiome du choix. Nous n'aurons besoin que de la **relation** entre deux ensembles, jamais du cardinal comme objet autonome. Rigueur discrète, mais réelle : nous ne manipulons que ce que nous avons défini.
+La notation $|A| = |B|$ est un **raccourci commode** pour « $A$ est équipotent à $B$ » — rien de plus. Nous ne définissons **pas**, dans ce cours, l'objet $|A|$ pris isolément (le *cardinal* de $A$). Le faire proprement — fabriquer un ensemble-témoin canonique par classe d'équipotence — exigerait une machinerie supplémentaire : les ordinaux et les rangs (l'« astuce de Scott » y parvient dans ZF avec fondation), ou bien, pour représenter chaque cardinal par un *ordinal initial* comme le veut l'usage, l'axiome du choix. Nous n'aurons besoin que de la **relation** entre deux ensembles, jamais du cardinal comme objet autonome. Rigueur discrète, mais réelle : nous ne manipulons que ce que nous avons défini.
 </Encart>
 
 ## L'hôtel de Hilbert : la partie vaut le tout
@@ -44,19 +44,19 @@ Un hôtel a une infinité de chambres numérotées $1, 2, 3, \dots$, toutes occu
 
 Formalisons ce décalage. Notons $\mathbb{N}^* = \mathbb{N} \setminus \{0\}$ l'ensemble des entiers non nuls.
 
-**La bijection en deux lignes.** L'application $\sigma : \mathbb{N} \to \mathbb{N}^*$, $\sigma(n) = n+1$, est une bijection. *Injective* : si $n+1 = m+1$, alors $n = m$ — c'est l'injectivité du successeur, l'un des <Prereq href="/maths/partie-ii/entiers-naturels">axiomes de Peano vérifiés</Prereq>. *Surjective* : tout élément de $\mathbb{N}^*$ est un entier non nul, donc un successeur (le seul entier qui n'en soit pas un est $0$, par construction de $\mathbb{N}$), donc de la forme $n+1 = \sigma(n)$. <Badge niveau="demontre">Injectivité et surjectivité par les propriétés de Peano déjà démontrées.</Badge>
+**La bijection en deux lignes.** L'application $\sigma : \mathbb{N} \to \mathbb{N}^*$, $\sigma(n) = n+1$, est une bijection. *Injective* : si $n+1 = m+1$, alors $n = m$ — c'est l'injectivité du successeur, <Prereq href="/maths/partie-ii/entiers-naturels">démontrée pour les entiers de von Neumann</Prereq>. *Surjective* : tout élément de $\mathbb{N}^*$ est un entier non nul, donc un successeur (le seul entier qui n'en soit pas un est $0$, par construction de $\mathbb{N}$), donc de la forme $n+1 = \sigma(n)$. <Badge niveau="demontre">Injectivité et surjectivité par les propriétés du successeur, démontrées au chapitre 4.</Badge>
 
 Ainsi $|\mathbb{N}| = |\mathbb{N}^*|$ : $\mathbb{N}$ a la même taille qu'une de ses **parties strictes**. Poussons le scandale d'un cran.
 
-**Encore plus fort.** L'application $n \mapsto 2n$ est une bijection de $\mathbb{N}$ sur l'ensemble $2\mathbb{N}$ des entiers pairs. *Injective* : si $n \neq m$, disons $n \lt m$, alors $2n \lt 2m$ par <Prereq href="/maths/partie-ii/arithmetique-de-n">compatibilité de l'ordre avec l'addition</Prereq>, donc $2n = 2m$ force $n = m$. *Surjective* : un entier pair est, par définition, de la forme $2k$. Donc $|\mathbb{N}| = |2\mathbb{N}|$ : il y a **autant** d'entiers que d'entiers pairs, alors qu'« un sur deux » semble manquer. <Badge niveau="demontre">Bijection explicite ; injectivité par compatibilité de l'ordre, surjectivité par définition des pairs.</Badge>
+**Encore plus fort.** L'application $n \mapsto 2n$ est une bijection de $\mathbb{N}$ sur l'ensemble $2\mathbb{N}$ des entiers pairs. *Injective* : l'application est **strictement croissante** — si $n \lt m$, alors $2n = n + n \lt m + m = 2m$, par deux applications de la <Prereq href="/maths/partie-ii/arithmetique-de-n">compatibilité de l'ordre avec l'addition</Prereq> — donc $2n = 2m$ force $n = m$. *Surjective* : un entier pair est, par définition, de la forme $2k$. Donc $|\mathbb{N}| = |2\mathbb{N}|$ : il y a **autant** d'entiers que d'entiers pairs, alors qu'« un sur deux » semble manquer. <Badge niveau="demontre">Bijection explicite ; injectivité par compatibilité de l'ordre, surjectivité par définition des pairs.</Badge>
 
 Galilée l'avait déjà aperçu en 1638 : dans ses *Discorsi*, il remarque que chaque entier possède un carré et chaque carré une unique racine — une bijection $n \leftrightarrow n^2$ — bien que les carrés se raréfient à mesure qu'on avance. Il en concluait, prudent, que « plus grand », « plus petit », « égal » perdent peut-être tout sens pour l'infini. Cantor, deux siècles et demi plus tard, retourne cette paralysie en méthode : pour l'infini, la partie peut égaler le tout, et ce n'est pas une contradiction — c'est la **signature** de l'infini.
 
 ## Le fini, enfin défini
 
-Nous venons d'employer le mot « fini » sans l'avoir défini. Réparons cela — et la construction des <Prereq href="/maths/partie-ii/entiers-naturels">entiers de von Neumann</Prereq> va payer. Rappelons que l'entier $n$ **est** l'ensemble de ses prédécesseurs : $n = \{0, 1, \dots, n-1\}$, un ensemble à exactement $n$ éléments.
+Nous venons d'employer le mot « fini » sans l'avoir défini. Réparons cela — et la construction des <Prereq href="/maths/partie-ii/entiers-naturels">entiers de von Neumann</Prereq> va payer. L'entier $n$ — l'ensemble de ses prédécesseurs, $n = \{0, 1, \dots, n-1\}$ — va servir d'**étalon** : dire qu'un ensemble « a $n$ éléments » *signifiera* être équipotent à lui. (On ne dit pas que $n$ « a $n$ éléments » : c'est précisément la notion qu'on est en train de définir — le cercle est évité en faisant de $n$ la mesure, pas le mesuré.)
 
-**Définition (fini, infini).** Un ensemble $A$ est **fini** s'il existe un entier $n$ tel que $|A| = |n|$ — on dit alors que $A$ a $n$ éléments. Il est **infini** dans le cas contraire. <Badge niveau="admis">Définition : nous fixons le sens de « fini », rien à démontrer.</Badge>
+**Définition (fini, infini).** Un ensemble $A$ est **fini** s'il existe un entier $n$ et une bijection $n \to A$ — en raccourci, $|A| = |n|$ — et l'on dit alors que $A$ a $n$ éléments. Il est **infini** dans le cas contraire. <Badge niveau="admis">Définition : nous fixons le sens de « fini », rien à démontrer.</Badge>
 
 Pour que « $A$ a $n$ éléments » ait un sens, encore faut-il que ce $n$ soit **unique** : deux entiers distincts ne doivent jamais être équipotents. Cela paraît évident — ça ne l'est pas. C'est un théorème, et sa preuve est un bijou de récurrence.
 
@@ -74,7 +74,7 @@ Montrons d'abord, par récurrence sur $n$, l'énoncé $P(n)$ : *il n'existe pas 
 
 **Base $P(0)$.** Ici $n+1 = 1 = \{0\}$ et $n = 0 = \emptyset$. Une fonction de $\{0\}$ vers $\emptyset$ devrait attribuer à $0$ une image dans $\emptyset$ — impossible, l'ensemble vide n'a aucun élément. Il n'existe donc aucune fonction, *a fortiori* aucune injection.
 
-**Hérédité.** Supposons $P(n)$ et démontrons $P(n+1)$. Par l'absurde, soit $f : n+2 \to n+1$ une injection. Rappelons que $n+2 = \{0, \dots, n+1\}$ et $n+1 = \{0, \dots, n\}$. Posons $a := f(n+1)$, l'image du plus grand élément du départ. Soit $\tau : n+1 \to n+1$ la **transposition** échangeant $a$ et $n$ (l'identité si $a = n$) : c'est une bijection. Alors $g := \tau \circ f : n+2 \to n+1$ est injective (composée d'une injection et d'une bijection) et vérifie $g(n+1) = \tau(a) = n$. Pour tout $i \in n+1 = \{0, \dots, n\}$, on a $i \neq n+1$, donc par injectivité $g(i) \neq g(n+1) = n$, c'est-à-dire $g(i) \in (n+1) \setminus \{n\} = n$. La restriction $g|_{n+1} : n+1 \to n$ est donc une injection bien définie — ce que $P(n)$ interdit. Contradiction : $P(n+1)$ est vrai.
+**Hérédité.** Supposons $P(n)$ et démontrons $P(n+1)$. L'idée : ramener toute injection hypothétique de $n+2$ vers $n+1$ à une injection interdite de $n+1$ vers $n$, en « rangeant » d'abord l'image du dernier élément dans la dernière case. Par l'absurde, soit $f : n+2 \to n+1$ une injection. Rappelons que $n+2 = \{0, \dots, n+1\}$ et $n+1 = \{0, \dots, n\}$. Posons $a := f(n+1)$, l'image du plus grand élément du départ. Soit $\tau : n+1 \to n+1$ la **transposition** échangeant $a$ et $n$ (l'identité si $a = n$) : c'est une bijection. Alors $g := \tau \circ f : n+2 \to n+1$ est injective (composée d'une injection et d'une bijection) et vérifie $g(n+1) = \tau(a) = n$. Pour tout $i \in n+1 = \{0, \dots, n\}$, on a $i \neq n+1$, donc par injectivité $g(i) \neq g(n+1) = n$, c'est-à-dire $g(i) \in (n+1) \setminus \{n\} = n$. La restriction $g|_{n+1} : n+1 \to n$ est donc une injection bien définie — ce que $P(n)$ interdit. Contradiction : $P(n+1)$ est vrai.
 
 **Du cas $n+1 \to n$ au cas général.** Soit $m \lt n$, donc $m+1 \le n$, c'est-à-dire $m+1 \subseteq n$ (pour les entiers de von Neumann, $\le$ n'est autre que l'inclusion). Une injection $h : n \to m$ se restreindrait en une injection $h|_{m+1} : m+1 \to m$ — impossible par $P(m)$.
 
@@ -86,7 +86,16 @@ $$ \boxed{m \lt n \ \Rightarrow\ \text{aucune injection de } n \text{ dans } m.}
 
 Et $\mathbb{N}$ lui-même ? **Il est infini.** Car s'il était équipotent à un entier $n$, une injection $\mathbb{N} \to n$ existerait ; or $n+1 \subseteq \mathbb{N}$, et la restriction de cette injection à $n+1$ serait une injection de $n+1$ dans $n$ — de nouveau interdite. Aucun entier ne mesure $\mathbb{N}$. <Badge niveau="demontre">Par le lemme des tiroirs, $\mathbb{N}$ n'est équipotent à aucun entier.</Badge>
 
-Rassemblons maintenant deux fils. L'hôtel de Hilbert montre que $\mathbb{N}$ est équipotent à une de ses parties strictes ; les tiroirs montrent qu'**aucun ensemble fini** ne l'est. Un ensemble équipotent à l'une de ses parties strictes est dit **Dedekind-infini**. Cela suggère une belle caractérisation : *un ensemble est infini si, et seulement si, il est Dedekind-infini*. Un sens est un théorème de ZF — **Dedekind-infini $\Rightarrow$ infini** : un ensemble fini ne peut être équipotent à aucune de ses parties strictes, car s'y réinjecter en oubliant un élément fabriquerait une injection d'un entier dans un entier plus petit. <Badge niveau="demontre">Sens facile, conséquence des tiroirs.</Badge> L'autre sens — **infini $\Rightarrow$ Dedekind-infini**, qui logerait dans *tout* ensemble infini une copie de l'hôtel de Hilbert — est plus subtil : extraire une suite infinie d'éléments distincts demande une infinité de sélections sans règle explicite. Ce pas **ne se déduit pas de ZF** : il réclame une forme de l'axiome du choix (le choix dénombrable), que nous solderons au chapitre sur l'axiome du choix (chapitre 25). <Badge niveau="admis">La réciproque exige le choix dénombrable (ACω) — signalée, jamais bluffée.</Badge>
+Rassemblons maintenant deux fils. L'hôtel de Hilbert montre que $\mathbb{N}$ est équipotent à une de ses parties strictes. À l'opposé :
+
+<Resultat label="Aucun ensemble fini n'est équipotent à une partie stricte de lui-même">
+
+$$ A \text{ fini},\ B \subsetneq A \ \Longrightarrow\ |A| \neq |B|. $$
+
+<Badge niveau="demontre" slot="badge">Démonstration : soient $\beta : A \to n$ une bijection, $\varphi : A \to B$ une bijection hypothétique, et $x \in A \setminus B$. Alors $\psi := \beta \circ \varphi \circ \beta^{-1} : n \to n$ est injective et son image évite $\beta(x)$. En composant avec la transposition de $n$ échangeant $\beta(x)$ et $n-1$, on obtient une injection de $n$ dans $n-1$ — interdite par le lemme des tiroirs. (Le cas $n = 0$ est vide : $\varnothing$ n'a pas de partie stricte.)</Badge>
+</Resultat>
+
+Un ensemble équipotent à l'une de ses parties strictes est dit **Dedekind-infini**. Cela suggère une belle caractérisation : *un ensemble est infini si, et seulement si, il est Dedekind-infini*. Un sens est un théorème de ZF — **Dedekind-infini $\Rightarrow$ infini** : c'est la contraposée exacte du théorème encadré ci-dessus. <Badge niveau="demontre">Conséquence directe des tiroirs.</Badge> L'autre sens — **infini $\Rightarrow$ Dedekind-infini**, qui logerait dans *tout* ensemble infini une copie de l'hôtel de Hilbert — est plus subtil : extraire une suite infinie d'éléments distincts demande une infinité de sélections sans règle explicite. Ce pas **ne se démontre pas dans ZF seul** ; le choix dénombrable AC$_\omega$ *suffit* à l'obtenir (le principe exactement nécessaire est même strictement plus faible, mais il appartient bien à la famille du choix), et nous solderons la question au chapitre sur l'axiome du choix (chapitre 25). <Badge niveau="indecidable">Ni prouvable ni réfutable dans notre cadre ZF : théorème sous AC$_\omega$, indémontrable sans principe de choix (modèles de Cohen). Signalé, jamais bluffé — nous ne l'utiliserons pas sans le dire.</Badge>
 
 ## Comparer sans compter : la relation $\le$
 
@@ -110,17 +119,21 @@ Retenez ce contraste, il structure tout le chapitre : la réciproque de Dedekind
 <Encart type="plusloin" titre="Démonstration de Cantor–Schröder–Bernstein : les deux hôtels">
 **L'image.** Deux hôtels $A$ et $B$. L'injection $f : A \to B$ envoie chaque client de $A$ vers une chambre de $B$ ; l'injection $g : B \to A$ fait l'inverse. Chaque client possède alors une **lignée d'ancêtres** : d'où vient-il ? En remontant $g^{-1}$, puis $f^{-1}$, puis $g^{-1}$… on recule de chambre en chambre. Trois destins : la remontée s'arrête chez un client de $A$ sans antécédent (une **origine-$A$**), s'arrête chez un client de $B$ sans antécédent (une **origine-$B$**), ou ne s'arrête **jamais**. L'idée : servir chaque client selon l'origine de sa lignée.
 
-**Mise en place.** Pour $a \in A$ : si $a \in g[B]$, son unique antécédent (car $g$ est injective) est $g^{-1}(a) \in B$ ; sinon $a$ est une origine-$A$. De même pour $b \in B$ : si $b \in f[A]$, on recule vers $f^{-1}(b)$ ; sinon $b$ est une origine-$B$. Cette remontée, définie pas à pas (théorème de récursion), attribue à chaque élément un **type d'origine** — $\mathcal{A}$, $\mathcal{B}$ ou $\infty$ (lignée sans fin) — et tous les éléments d'une même lignée partagent ce type. D'où une partition :
+**Du récit à la preuve.** L'image guide, le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq> exécute — en suivant les lignées *depuis* les origines-$A$, plutôt qu'en remontant. Posons
 
-$$ A = A_{\mathcal{A}} \cup A_{\mathcal{B}} \cup A_{\infty}, \qquad B = B_{\mathcal{A}} \cup B_{\mathcal{B}} \cup B_{\infty}. $$
+$$ A_0 := A \setminus g[B] \quad (\text{les origines-}A\text{, que personne n'atteint par } g), \qquad A_{n+1} := g\big[f[A_n]\big], $$
 
-**Les trois appariements.**
+définition de proche en proche légitimée par le théorème de récursion, appliqué à $X = \mathcal{P}(A)$, au point de départ $A_0$ et au pas $S \mapsto g[f[S]]$. Posons enfin $A_\star := \bigcup_{n \in \mathbb{N}} A_n$ (axiome de la réunion) — les éléments dont la lignée s'arrête sur une origine-$A$. Définissons :
 
-- $f$ envoie $A_{\mathcal{A}}$ **bijectivement** sur $B_{\mathcal{A}}$ : elle y est injective, et tout $b \in B_{\mathcal{A}}$ a une origine dans $A$, n'est donc pas une origine-$B$, donc $b \in f[A]$ avec antécédent de même type — $b$ est atteint.
-- $f$ envoie de même $A_{\infty}$ bijectivement sur $B_{\infty}$ : un élément de lignée infinie n'est jamais une origine, le même argument s'applique.
-- $g$ envoie $B_{\mathcal{B}}$ bijectivement sur $A_{\mathcal{B}}$ (un $a$ d'origine-$B$ n'est pas une origine-$A$, donc $a \in g[B]$) ; par conséquent $g^{-1}$ envoie $A_{\mathcal{B}}$ bijectivement sur $B_{\mathcal{B}}$.
+$$ h(a) := \begin{cases} f(a) & \text{si } a \in A_\star,\\ g^{-1}(a) & \text{si } a \notin A_\star. \end{cases} $$
 
-**Recollement.** Définissons $h : A \to B$ en posant $h(a) = f(a)$ si $a \in A_{\mathcal{A}} \cup A_{\infty}$, et $h(a) = g^{-1}(a)$ si $a \in A_{\mathcal{B}}$. Ces trois morceaux envoient $A_{\mathcal{A}}, A_{\infty}, A_{\mathcal{B}}$ bijectivement sur $B_{\mathcal{A}}, B_{\infty}, B_{\mathcal{B}}$, qui partitionnent $B$. Donc $h$ est une bijection de $A$ sur $B$. Aucune sélection arbitraire n'est intervenue : tout est déterminé par $f$ et $g$ seuls — pas la moindre trace de choix. ∎
+*$h$ est bien définie.* Si $a \notin A_\star$, alors $a \notin A_0$, donc $a \in g[B]$ ; l'injectivité de $g$ rend l'antécédent $g^{-1}(a)$ unique.
+
+*$h$ est injective.* Elle l'est sur chaque morceau ($f$ et $g^{-1}$ sont injectives) ; reste à exclure une collision entre morceaux, $f(a) = g^{-1}(a')$ avec $a \in A_\star$ et $a' \notin A_\star$. Mais cette égalité donne $a' = g(f(a))$ ; or $a \in A_n$ pour un certain $n$, donc $a' \in A_{n+1} \subseteq A_\star$ — contradiction.
+
+*$h$ est surjective.* Soit $b \in B$. Si $g(b) \notin A_\star$, alors $h(g(b)) = g^{-1}(g(b)) = b$. Si $g(b) \in A_\star$ : comme $g(b) \in g[B]$, on a $g(b) \notin A_0$, donc $g(b) \in A_{n+1} = g[f[A_n]]$ pour un certain $n$ ; l'injectivité de $g$ donne alors $b = f(a)$ pour un $a \in A_n \subseteq A_\star$, et $h(a) = b$.
+
+Donc $h$ est une bijection de $A$ sur $B$. Aucune sélection arbitraire n'est intervenue : tout est fabriqué à partir de $f$, $g$, $\mathbb{N}$, la récursion, la réunion et la séparation — pas la moindre trace de choix. ∎
 </Encart>
 
 ## La comparabilité, elle, se paie
@@ -131,9 +144,9 @@ Il manque une dernière propriété pour que $\le$ soit un **ordre total** : la 
 
 $$ \text{Pour tous ensembles } A, B : \quad |A| \le |B| \ \text{ ou } \ |B| \le |A|. $$
 
-<Badge niveau="admis" slot="badge">**Équivalent à l'axiome du choix** (théorème de Hartogs) : vrai si l'on adopte ce 9ᵉ axiome optionnel, mais **indémontrable dans ZF seul**. À solder au chapitre 25.</Badge>
+<Badge niveau="indecidable" slot="badge">**Équivalente à l'axiome du choix**, donc ni prouvable ni réfutable dans notre cadre ZF. Sous AC, elle est un théorème ; réciproquement, la comparabilité générale, jointe au théorème de Hartogs — lui-même démontrable dans ZF —, entraîne que tout ensemble est bien ordonnable, donc AC. À solder au chapitre 25.</Badge>
 </Resultat>
 
 Voilà le renversement final, et il est spectaculaire. L'**antisymétrie** — Cantor–Schröder–Bernstein — était gratuite, pur produit de ZF. La **comparabilité**, elle, se paie : elle n'est ni un théorème de ZF, ni une évidence, mais *exactement aussi forte* que l'axiome du choix. L'admettre pour tout couple d'ensembles, c'est admettre le choix ; et réciproquement. Nous laissons donc $\le$ dans un état singulier — réflexive, transitive, antisymétrique (à équipotence près), mais dont la totalité est suspendue à un axiome que nous n'avons pas encore adopté. Honnêteté maximale : nous ne prétendrons pas comparer deux ensembles *quelconques* tant que ce choix n'est pas posé.
 
-Ce que nous emportons est déjà considérable : une définition rigoureuse de « même taille » et de « au plus aussi grand », un lemme des tiroirs qui fonde le fini, et Cantor–Schröder–Bernstein qui transmue deux injections en une bijection. L'outillage est prêt. Au chapitre suivant, nous descendons à l'étage le plus bas de l'infini — les ensembles que l'on peut aligner en une seule file, un élément après l'autre : les **dénombrables**.
+Ce que nous emportons est déjà considérable : une définition rigoureuse de « même taille » et de « au plus aussi grand », un lemme des tiroirs qui fonde le fini, et Cantor–Schröder–Bernstein qui transmue deux injections en une bijection. La discipline de toute la partie III est fixée du même coup : nous savons comparer quand nous **construisons** les bijections et les injections — jamais nous ne supposerons qu'elles existent. L'outillage est prêt. Au chapitre suivant, nous descendons à l'étage le plus bas de l'infini — les ensembles que l'on peut aligner en une seule file, un élément après l'autre : les **dénombrables**.
