@@ -148,7 +148,7 @@ Le même mot recouvre deux notions distinctes — d'autant plus troublant que G�
 - La **complétude de la logique** (théorème de complétude, Gödel 1929) : tout énoncé vrai dans *tous* les modèles est dérivable par les règles d'inférence. Elle concerne le *moteur* : nos règles ne laissent échapper aucune conséquence purement logique. C'est elle qu'évoque le badge de la section « La logique d'abord ».
 - La **complétude d'un système d'axiomes** (le point 4 ci-dessus) : tout énoncé du langage y est soit démontrable, soit réfutable. Elle concerne un *jeu d'axiomes donné* — et c'est elle que les théorèmes d'**in**complétude (1931) rendent impossible pour les systèmes assez riches.
 
-Il existe d'ailleurs des théories complètes au second sens — l'arithmétique de **Presburger** (les entiers avec la seule addition), la théorie des **corps réels clos** de Tarski — mais elles sont trop pauvres pour coder leurs propres démonstrations : elles échappent à Gödel précisément parce qu'elles n'ont pas la richesse fatale. <Badge niveau="demontre">Complétude de la logique : Gödel (1929). Complétude et décidabilité : Presburger (1929) pour l'addition seule, Tarski (1948) pour les corps réels clos.</Badge>
+Il existe d'ailleurs des théories complètes au second sens — l'arithmétique de **Presburger** (les entiers avec la seule addition), la théorie des **corps réels clos** de Tarski — mais elles sont trop pauvres pour coder leurs propres démonstrations : elles échappent à Gödel précisément parce qu'elles n'ont pas la richesse fatale. <Badge niveau="demontre">Complétude de la logique : Gödel (1929). Complétude et décidabilité : Presburger (1929) pour l'addition seule, Tarski (1948) pour les corps réels clos. Réf. : <a href="https://fr.wikipedia.org/wiki/Théorème_de_complétude_de_Gödel" target="_blank" rel="noopener">complétude ↗</a> · <a href="https://fr.wikipedia.org/wiki/Arithmétique_de_Presburger" target="_blank" rel="noopener">Presburger ↗</a> · <a href="https://fr.wikipedia.org/wiki/Corps_réel_clos" target="_blank" rel="noopener">corps réels clos ↗</a></Badge>
 
 </Encart>
 
@@ -160,7 +160,7 @@ Ce rêve est mort — non pas pour tout système (des théories modestes sont be
 
 Tout système cohérent, récursivement axiomatisable et assez riche pour l'arithmétique contient un énoncé $G$ ni démontrable ni réfutable.
 
-<Badge niveau="demontre" slot="badge">Démontré par Gödel (1931) sous une hypothèse légèrement plus forte (l'ω-cohérence) ; la forme ci-dessus, sous la seule cohérence, est due à Rosser (1936). Jamais remis en cause.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré par Gödel (1931) sous une hypothèse légèrement plus forte (l'ω-cohérence) ; la forme ci-dessus, sous la seule cohérence, est due à Rosser (1936). Jamais remis en cause. <a href="https://fr.wikipedia.org/wiki/Théorèmes_d'incomplétude_de_Gödel" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
@@ -172,11 +172,11 @@ Autrement dit, dès qu'un système est assez puissant pour parler des entiers av
 
 Un tel système, s'il est cohérent, ne peut pas démontrer sa propre cohérence.
 
-<Badge niveau="demontre" slot="badge">Théorème démontré (1931), obtenu en formalisant la preuve du premier à l'intérieur du système.</Badge>
+<Badge niveau="demontre" slot="badge">Théorème démontré (1931), obtenu en formalisant la preuve du premier à l'intérieur du système. <a href="https://fr.wikipedia.org/wiki/Théorèmes_d'incomplétude_de_Gödel" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
-Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu.</Badge>
+Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu. <a href="https://en.wikipedia.org/wiki/Gentzen's_consistency_proof" target="_blank" rel="noopener">réf. (en) ↗</a></Badge>
 
 <Encart type="intuition" titre="Vrai ne veut pas dire démontrable">
 

@@ -41,7 +41,7 @@ On rencontre souvent CH sous la forme $2^{\aleph_0} = \aleph_1$ : le cardinal de
 L'intuition de Cantor n'était pas gratuite. Toutes les parties infinies « naturelles » de $\mathbb{R}$ que l'on sait décrire tombent proprement d'un côté ou de l'autre. D'un côté, le dénombrable : $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, les nombres <Prereq href="/maths/partie-iii/denombrables">algébriques</Prereq> — tous équipotents à $\mathbb{N}$. De l'autre, le continu : le moindre intervalle $[a,b]$ avec $a \lt b$, l'ensemble des irrationnels, l'ensemble de Cantor triadique — tous équipotents à $\mathbb{R}$. Jamais rien au milieu. Chaque exemple concret que l'on jette dans la balance confirme CH.
 
 <Encart type="plusloin" titre="Un indice historique : Cantor–Bendixson">
-Cantor lui-même avait un argument sérieux pour une classe entière de parties. Le théorème de Cantor–Bendixson affirme que tout fermé de $\mathbb{R}$ se décompose en une partie au plus dénombrable et un ensemble *parfait* (fermé sans point isolé), et que tout ensemble parfait non vide est équipotent à $\mathbb{R}$. Conséquence : tout fermé infini de $\mathbb{R}$ est dénombrable ou équipotent à $\mathbb{R}$ — CH est *vraie* si l'on se restreint aux fermés. <Badge niveau="demontre">Théorème classique, rigoureusement démontré ; sa preuve dépasse ce cours, nous le citons sans le donner.</Badge> Le drame de CH, c'est que ce beau résultat ne s'étend pas à *toutes* les parties de $\mathbb{R}$ — et l'obstacle, on le verra, n'est pas un manque d'ingéniosité.
+Cantor lui-même avait un argument sérieux pour une classe entière de parties. Le théorème de Cantor–Bendixson affirme que tout fermé de $\mathbb{R}$ se décompose en une partie au plus dénombrable et un ensemble *parfait* (fermé sans point isolé), et que tout ensemble parfait non vide est équipotent à $\mathbb{R}$. Conséquence : tout fermé infini de $\mathbb{R}$ est dénombrable ou équipotent à $\mathbb{R}$ — CH est *vraie* si l'on se restreint aux fermés. <Badge niveau="demontre">Théorème classique, rigoureusement démontré ; sa preuve dépasse ce cours, nous le citons sans le donner. <a href="https://fr.wikipedia.org/wiki/Théorème_de_Cantor-Bendixson" target="_blank" rel="noopener">réf. ↗</a></Badge> Le drame de CH, c'est que ce beau résultat ne s'étend pas à *toutes* les parties de $\mathbb{R}$ — et l'obstacle, on le verra, n'est pas un manque d'ingéniosité.
 </Encart>
 
 L'enthousiasme était tel qu'en 1900, David Hilbert plaça la résolution de CH en **tête** de sa liste des vingt-trois problèmes pour le siècle à venir. Problème n°1. On attendait une preuve. On allait recevoir tout autre chose.
@@ -60,7 +60,7 @@ Gödel démontre que dans $L$, l'axiome du choix *et* CH (mieux : GCH) sont vrai
 
 $$ \text{Si } \mathrm{ZF} \text{ est cohérente, alors } \mathrm{ZFC} + \mathrm{CH} \text{ l'est aussi.} $$
 
-<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré. Il parle *de* ZFC ; ce n'est PAS une preuve *dans* ZFC de CH.</Badge>
+<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré. Il parle *de* ZFC ; ce n'est PAS une preuve *dans* ZFC de CH. <a href="https://fr.wikipedia.org/wiki/Univers_constructible" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
@@ -78,7 +78,7 @@ Là où Gödel *rétrécissait* l'univers, Cohen l'*élargit* sur mesure. Le for
 
 $$ \text{Si } \mathrm{ZF} \text{ est cohérente, alors } \mathrm{ZFC} + \neg\mathrm{CH} \text{ l'est aussi.} $$
 
-<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré par forcing. À nouveau : un résultat *sur* ZFC, pas une preuve *dans* ZFC.</Badge>
+<Badge niveau="demontre" slot="badge">Méta-théorème rigoureusement démontré par forcing. À nouveau : un résultat *sur* ZFC, pas une preuve *dans* ZFC. <a href="https://fr.wikipedia.org/wiki/Forcing" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
@@ -111,6 +111,6 @@ La ligne rouge et la ligne jaune se ressemblent de loin — « pas de preuve con
 
 La question survit-elle au verdict ? Ici le cours s'arrête de trancher et se contente de rapporter — la discussion est philosophique, et n'appelle aucun badge de vérité. Deux camps s'opposent. Pour le **réaliste** (Gödel lui-même en tête), l'univers des ensembles existe indépendamment de nos axiomes ; CH y est vraie ou fausse *en fait*, et l'indécidabilité prouve seulement que ZFC est trop pauvre pour le voir — il faut donc chercher de *nouveaux* axiomes, mieux justifiés, qui trancheront. C'est le sens des grands cardinaux et des travaux de Hugh Woodin. Pour le **formaliste**, au contraire, un énoncé n'a de valeur de vérité que *relativement* à un système d'axiomes ; « CH est-elle vraie ? » n'a alors pas plus de sens que « la cinquième symphonie est-elle vraie ? ». On classe, on ne juge pas.
 
-Un fait tempère les espoirs du premier camp : les axiomes de grands cardinaux usuels **ne tranchent pas** CH. Le théorème de Levy–Solovay (1967) montre qu'ils survivent au forcing de Cohen, donc restent muets sur le continu. <Badge niveau="demontre">Résultat de logique rigoureusement établi ; cité, non démontré ici.</Badge> La recherche d'un axiome naturel et décisif reste ouverte — c'est un *programme*, pas un théorème.
+Un fait tempère les espoirs du premier camp : les axiomes de grands cardinaux usuels **ne tranchent pas** CH. Le théorème de Levy–Solovay (1967) montre qu'ils survivent au forcing de Cohen, donc restent muets sur le continu. <Badge niveau="demontre">Résultat de logique rigoureusement établi ; cité, non démontré ici. <a href="https://doi.org/10.1007/BF02771612" target="_blank" rel="noopener">article (1967) ↗</a></Badge> La recherche d'un axiome naturel et décisif reste ouverte — c'est un *programme*, pas un théorème.
 
 Ce cours ne tranchera pas non plus. Fidèle à sa promesse, il *classe* : CH n'est ni un théorème, ni une conjecture, ni un axiome que nous ayons adopté — c'est le premier énoncé mathématique concret dont nous savons, avec certitude, que nos axiomes ne l'atteignent pas. Nous avons compté l'infini, gravi une tour sans sommet, et découvert au passage une porte que ZFC ne peut ni ouvrir ni verrouiller. La partie III s'achève ici, sur ce vertige. La partie IV redescend sur terre : après avoir mesuré les ensembles, nous allons les faire *travailler* — en les munissant d'opérations et en étudiant les **structures** qui en émergent, à commencer par la plus pure d'entre elles, le groupe.

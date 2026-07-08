@@ -47,7 +47,7 @@ Une démonstration étant une suite *finie* de formules, elle se code de même �
 
 La relation « $n$ code une démonstration de la formule codée $m$ » est **arithmétique** : une machine peut la vérifier. On note $\mathrm{Dem}(m)$ l'énoncé « il existe $n$ tel que $n$ code une démonstration de $m$ ».
 
-<Badge niveau="demontre" slot="badge">Construction explicite de Gödel : « être une preuve de » est une relation primitive récursive, exprimable dans l'arithmétique.</Badge>
+<Badge niveau="demontre" slot="badge">Construction explicite de Gödel : « être une preuve de » est une relation primitive récursive, exprimable dans l'arithmétique. Détails : <a href="https://plato.stanford.edu/entries/goedel-incompleteness/" target="_blank" rel="noopener">SEP ↗</a></Badge>
 
 </Resultat>
 
@@ -67,7 +67,7 @@ $$T \vdash \big( G \iff P(\ulcorner G \urcorner) \big).$$
 
 Autrement dit, $G$ « affirme » que son propre code possède la propriété $P$.
 
-<Badge niveau="demontre" slot="badge">Démontré (Gödel, puis Carnap). La construction est explicite, via une fonction de substitution codée arithmétiquement.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré (Gödel, puis Carnap). La construction est explicite, via une fonction de substitution codée arithmétiquement. <a href="https://en.wikipedia.org/wiki/Diagonal_lemma" target="_blank" rel="noopener">réf. (en) ↗</a></Badge>
 
 </Resultat>
 
@@ -83,7 +83,7 @@ Appliquons le lemme diagonal à la propriété « ne pas être démontrable », 
 
 Soit $T$ un système **(i)** cohérent, **(ii)** récursivement axiomatisable, **(iii)** assez riche pour l'arithmétique. Alors il existe un énoncé $G$ que $T$ ne peut ni démontrer ni réfuter.
 
-<Badge niveau="demontre" slot="badge">Théorème de 1931, rigoureusement établi. Ce n'est ni une opinion ni une conjecture : c'est un théorème, aussi solide que $2+2=4$.</Badge>
+<Badge niveau="demontre" slot="badge">Théorème de 1931, rigoureusement établi. Ce n'est ni une opinion ni une conjecture : c'est un théorème, aussi solide que $2+2=4$. Preuve complète : <a href="https://plato.stanford.edu/entries/goedel-incompleteness/" target="_blank" rel="noopener">SEP ↗</a></Badge>
 
 </Resultat>
 
@@ -146,7 +146,7 @@ Aussi important que les théorèmes eux-mêmes : ce qu'on leur fait dire à tort
 - **Pas « tout est relatif ».** L'immense majorité des énoncés utiles reste tranchée ; l'incomplétude ne frappe que des énoncés soigneusement fabriqués (ou rares et pointus, comme Goodstein plus bas), pas $2+2=4$.
 - **Uniquement les systèmes formels récursivement axiomatisables.** Ces théorèmes ne parlent pas de « la pensée » ni de « la vérité en général ». Les extrapolations de type Lucas–Penrose (« l'esprit humain dépasserait toute machine ») sont **débattues philosophiquement** — nous les mentionnons sans aucun badge, car ce ne sont pas des théorèmes.
 - **Incomplétude n'est pas incohérence.** $T$ n'est pas contradictoire ; il est seulement incapable de tout trancher.
-- **Pas « la cohérence est indémontrable dans l'absolu ».** Elle est indémontrable *de l'intérieur*. En s'extrayant vers un système plus vaste, on peut la prouver : Gentzen a démontré dès 1936 la cohérence de l'arithmétique de Peano, au prix d'une récurrence transfinie (jusqu'à l'ordinal $\varepsilon_0$) que Peano ne sait pas justifier lui-même. Mais le gain est une cohérence **relative** : la confiance n'est pas éliminée, elle est déplacée vers le système hôte — qui ne peut pas davantage prouver la sienne. <Badge niveau="demontre">Preuve de Gentzen (1936), classique : $\mathrm{Con(PA)}$ relativement à la récurrence jusqu'à $\varepsilon_0$, pas dans l'absolu.</Badge>
+- **Pas « la cohérence est indémontrable dans l'absolu ».** Elle est indémontrable *de l'intérieur*. En s'extrayant vers un système plus vaste, on peut la prouver : Gentzen a démontré dès 1936 la cohérence de l'arithmétique de Peano, au prix d'une récurrence transfinie (jusqu'à l'ordinal $\varepsilon_0$) que Peano ne sait pas justifier lui-même. Mais le gain est une cohérence **relative** : la confiance n'est pas éliminée, elle est déplacée vers le système hôte — qui ne peut pas davantage prouver la sienne. <Badge niveau="demontre">Preuve de Gentzen (1936), classique : $\mathrm{Con(PA)}$ relativement à la récurrence jusqu'à $\varepsilon_0$, pas dans l'absolu. <a href="https://en.wikipedia.org/wiki/Gentzen's_consistency_proof" target="_blank" rel="noopener">réf. (en) ↗</a></Badge>
 - **Indécidable dans $T$ n'est pas inconnaissable.** Un tel énoncé peut être parfaitement *connu et prouvé* depuis un système plus fort. L'exemple suit — et il est spectaculaire.
 
 ## De vrais monstres : le théorème de Goodstein
@@ -159,7 +159,7 @@ Aussi important que les théorèmes eux-mêmes : ce qu'on leur fait dire à tort
 
 Partant de *n'importe quel* entier, la suite de Goodstein finit par atteindre $0$.
 
-<Badge niveau="demontre" slot="badge">Démontré **dans ZF** (Goodstein, 1944) : à la suite d'entiers qui explose on associe une suite d'**ordinaux** qui, elle, décroît *strictement* — et une suite strictement décroissante d'ordinaux ne peut être infinie. La suite d'entiers doit donc mourir.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré **dans ZF** (Goodstein, 1944) : à la suite d'entiers qui explose on associe une suite d'**ordinaux** qui, elle, décroît *strictement* — et une suite strictement décroissante d'ordinaux ne peut être infinie. La suite d'entiers doit donc mourir. Preuve détaillée : <a href="https://fr.wikipedia.org/wiki/Théorème_de_Goodstein" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 

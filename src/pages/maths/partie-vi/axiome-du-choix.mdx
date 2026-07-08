@@ -88,10 +88,10 @@ Esquisse structurée honnête — les idées, pas l'appareil des ordinaux.
 
 **Zorn $\Rightarrow$ bon ordre.** Considérons l'ensemble des bons ordres portant sur des *parties* de $X$, rangés par « prolongement initial » (l'un étend l'autre en n'ajoutant des éléments qu'*après* tous les précédents). Toute chaîne de tels bons ordres a pour majorant leur réunion, qui est encore un bon ordre : Zorn fournit un élément maximal. S'il ne couvrait pas $X$ entier, on lui ajouterait un élément manquant tout à la fin — contredisant la maximalité. Il bien-ordonne donc $X$.
 
-Le cycle boucle : les trois énoncés sont équivalents dans ZF. <Badge niveau="demontre">Équivalence démontrée ; esquisse fidèle, appareil ordinal assumé comme non détaillé.</Badge>
+Le cycle boucle : les trois énoncés sont équivalents dans ZF. <Badge niveau="demontre">Équivalence démontrée ; esquisse fidèle, appareil ordinal assumé comme non détaillé. <a href="https://fr.wikipedia.org/wiki/Lemme_de_Zorn" target="_blank" rel="noopener">réf. ↗</a></Badge>
 </Encart>
 
-Deux usages quotidiens en découlent. **Toute surjection admet une section** : si $g \colon A \to B$ est surjective, choisir pour chaque $b$ un antécédent $f(b) \in g^{-1}(b)$ donne $g \circ f = \mathrm{id}_B$ — les fibres $g^{-1}(b)$ forment une famille d'ensembles non vides, c'est AC déguisé, et c'en est même un équivalent. **Tout espace vectoriel admet une base** : ce cours ne construit pas les espaces vectoriels, aussi restons-nous au seul énoncé — sa preuve applique Zorn à la famille des parties libres. <Badge niveau="demontre">Résultats démontrés via AC/Zorn ; le second est cité au niveau de l'énoncé, faute d'espaces vectoriels construits ici.</Badge>
+Deux usages quotidiens en découlent. **Toute surjection admet une section** : si $g \colon A \to B$ est surjective, choisir pour chaque $b$ un antécédent $f(b) \in g^{-1}(b)$ donne $g \circ f = \mathrm{id}_B$ — les fibres $g^{-1}(b)$ forment une famille d'ensembles non vides, c'est AC déguisé, et c'en est même un équivalent. **Tout espace vectoriel admet une base** : ce cours ne construit pas les espaces vectoriels, aussi restons-nous au seul énoncé — sa preuve applique Zorn à la famille des parties libres. <Badge niveau="demontre">Résultats démontrés via AC/Zorn ; le second est cité au niveau de l'énoncé, faute d'espaces vectoriels construits ici. <a href="https://fr.wikipedia.org/wiki/Théorème_de_la_base_incomplète" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 ## Les monstres
 
@@ -113,7 +113,7 @@ Le second monstre pousse le vertige à son comble.
 
 $$ \text{Une boule pleine de } \mathbb{R}^3 \text{ se partage en cinq morceaux qui, déplacés par rotations et translations, reforment DEUX boules identiques à l'originale.} $$
 
-<Badge niveau="demontre" slot="badge">Théorème de ZFC, pas un paradoxe logique. Cinq morceaux suffisent — nombre minimal (Robinson, 1947).</Badge>
+<Badge niveau="demontre" slot="badge">Théorème de ZFC, pas un paradoxe logique. Cinq morceaux suffisent — nombre minimal (Robinson, 1947). <a href="https://fr.wikipedia.org/wiki/Paradoxe_de_Banach-Tarski" target="_blank" rel="noopener">réf. ↗</a></Badge>
 </Resultat>
 
 Insistons, car le mot « paradoxe » égare. Ce n'est **pas** une contradiction : rien dans ZFC n'est violé. Les cinq morceaux sont **non mesurables** — cousins de $V$ —, ils n'ont tout simplement pas de volume. Il n'y a donc aucun volume à conserver : le dédoublement ne heurte que notre intuition, qui croyait tout solide doté d'un volume invariant, jamais les axiomes. Un volume qu'on imaginait exister, pour ces pièces-là, n'existe pas.
@@ -124,7 +124,7 @@ Idée imagée, honnête. Prenez deux rotations $a, b$ de l'espace, d'angles bien
 
 ## Ce qu'AC coûte, ce qu'il achète
 
-Ces monstres ne sont pas des accidents : ce sont les ombres portées d'un axiome qui affirme l'existence sans livrer de recette. Pourrait-on s'en passer ? La question a une réponse définitive, annoncée dès le <Prereq href="/maths/partie-i/ensembles-zf">chapitre des axiomes</Prereq> et bouclée ici : AC est **indépendant** de ZF. Gödel (1938) : si ZF est cohérent, ZF + AC l'est aussi — AC n'est pas *réfutable*. Cohen (1963), par le forcing : si ZF est cohérent, ZF + ¬AC l'est aussi — AC n'est pas *démontrable*. <Badge niveau="demontre">Indépendance établie : Gödel par cohérence relative, Cohen par forcing.</Badge>
+Ces monstres ne sont pas des accidents : ce sont les ombres portées d'un axiome qui affirme l'existence sans livrer de recette. Pourrait-on s'en passer ? La question a une réponse définitive, annoncée dès le <Prereq href="/maths/partie-i/ensembles-zf">chapitre des axiomes</Prereq> et bouclée ici : AC est **indépendant** de ZF. Gödel (1938) : si ZF est cohérent, ZF + AC l'est aussi — AC n'est pas *réfutable*. Cohen (1963), par le forcing : si ZF est cohérent, ZF + ¬AC l'est aussi — AC n'est pas *démontrable*. <Badge niveau="demontre">Indépendance établie : Gödel par cohérence relative, Cohen par forcing. <a href="https://fr.wikipedia.org/wiki/Axiome_du_choix" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 <Encart type="plusloin" titre="Et si l'on choisissait autrement ?">
 AC n'est pas la seule route. L'**axiome de détermination** (AD), issu de la théorie des jeux, **contredit** AC — mais rend *tout* ensemble de réels mesurable : sous AD, ni Vitali ni Banach–Tarski. On ne prouve jamais « le bon » système ; on adopte un cadre et on en assume les conséquences. <Badge niveau="admis">D'autres jeux d'axiomes existent, incompatibles avec AC : le choix d'un cadre est un choix, pas un théorème.</Badge>

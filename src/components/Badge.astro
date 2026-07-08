@@ -115,6 +115,22 @@ const hasTip = await Astro.slots.has('default');
     border: 6px solid transparent;
     border-top-color: var(--badge-color);
   }
+  /* pont invisible sous l'infobulle : sans lui, traverser l'écart de 10px
+     vers un lien de l'infobulle fait perdre le :hover et la referme */
+  .tip::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 12px;
+  }
+  .tip-body :global(a) {
+    color: var(--badge-color);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
   .fbadge:hover .tip,
   .fbadge:focus-visible .tip,
   .fbadge:focus-within .tip {
