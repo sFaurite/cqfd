@@ -23,11 +23,11 @@ Et pourtant $\mathbb{Q}$, si dense, si confortable, cache un défaut béant. Ce 
 Imaginez la droite des rationnels comme une règle graduée infiniment fine. Entre deux rationnels, il y en a toujours un autre : on ne voit aucun « blanc ». Et pourtant la règle est **criblée de trous invisibles**. À l'endroit précis où devrait se trouver $\sqrt{2}$, il n'y a... rien. La matière rationnelle s'arrête juste avant, et reprend juste après, sans jamais toucher le point. Notre mission : fabriquer ce point manquant à partir de ce qui l'entoure.
 </Encart>
 
-### 1. $\mathbb{Q}$ est troué : $\sqrt{2}$ n'existe pas dans $\mathbb{Q}$
+### 1. $\mathbb{Q}$ est troué : l'équation $x^2 = 2$ n'a pas de solution rationnelle
 
-L'équation $x^2 = 2$ a une solution géométrique évidente — la diagonale du carré de côté $1$. Mais cette solution n'est aucun rationnel.
+L'équation $x^2 = 2$ a une solution géométrique évidente — la diagonale du carré de côté $1$. Mais cette solution n'est aucun rationnel. (On résume cet énoncé par « $\sqrt 2$ est irrationnel » — prudence, cependant : l'objet $\sqrt 2$ lui-même n'est pas encore construit ; il le sera plus bas, comme coupure.)
 
-<Encart type="calcul" titre="Démonstration : √2 est irrationnel">
+<Encart type="calcul" titre="Démonstration : x² = 2 n'a pas de solution dans ℚ">
 
 Raisonnons **par l'absurde**. Supposons qu'il existe $x \in \mathbb{Q}$ tel que $x^2 = 2$. Comme $0^2 = 0 \neq 2$, un tel $x$ est non nul, et $(-x)^2 = x^2 = 2$ ; quitte à remplacer $x$ par $-x$, nous pouvons donc supposer $x > 0$.
 
@@ -41,6 +41,8 @@ $$
 
 **Lemme de parité.** Tout entier naturel est *pair* (de la forme $2k$) ou *impair* (de la forme $2k+1$), et jamais les deux. — *Dichotomie*, par <Prereq href="/maths/partie-ii/entiers-naturels">récurrence</Prereq> : $0 = 2 \cdot 0$ ; si $n = 2k$, alors $n+1 = 2k+1$ ; si $n = 2k+1$, alors $n+1 = 2(k+1)$. *Exclusivité* : si $2a = 2b+1$, alors ou bien $a \leq b$ et $2a \leq 2b < 2b+1$, ou bien $a \geq b+1$ et $2a \geq 2b+2 > 2b+1$ — contradiction dans les deux cas.
 
+($p$ et $q$, étant $\geq 1$, sont des entiers naturels via l'identification $\mathbb{N} \subseteq \mathbb{Z}$ : le lemme s'applique à eux.)
+
 **Étape 3.** Donc $p^2$ est pair. Or le carré d'un impair est impair : si $p = 2k+1$, alors $p^2 = 4k^2 + 4k + 1$ est impair. Par contraposée, $p^2$ pair — donc **non impair**, par l'exclusivité du lemme — force $p$ non impair, donc $p$ **pair**, par la dichotomie du lemme. Écrivons $p = 2m$.
 
 **Étape 4.** Reportons : $(2m)^2 = 2q^2$, soit $4m^2 = 2q^2$, donc
@@ -51,7 +53,7 @@ $$
 
 **Étape 5.** Par le même argument qu'à l'étape 3, $q$ est **pair**.
 
-**Étape 6.** Ainsi $p = 2m$ et $q = 2r$ avec $m, r \in \mathbb{N}^*$ ; comme $q$ est pair et $q \geq 1$, on a $q \geq 2$, donc $r = q/2 \geq 1$ et $r < q$. Mais alors
+**Étape 6.** Ainsi $p = 2m$, et $q$ pair signifie : il existe $r \in \mathbb{N}$ tel que $q = 2r$. Comme $q \geq 1$, on a $r \neq 0$, donc $r \geq 1$ ; et $q = 2r = r + r$ avec $r > 0$ donne $r < q$. Mais alors
 
 $$
 x = \frac{p}{q} = \frac{2m}{2r} = \frac{m}{r} \qquad (\text{car } 2m \cdot r = 2r \cdot m).
@@ -61,13 +63,13 @@ Voilà une écriture de $x$ à dénominateur $r$ **strictement plus petit** que 
 
 L'hypothèse était absurde.
 
-<Resultat label="Irrationalité de √2">
+<Resultat label="L'équation x² = 2 n'a pas de solution dans ℚ">
 
 $$
 \nexists\, x \in \mathbb{Q},\quad x^2 = 2.
 $$
 
-<Badge niveau="demontre" slot="badge">Démontrée par l'absurde, argument de parité et de minimalité du dénominateur (aucun pgcd requis) — vérité mathématique certaine.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré par l'absurde, arguments de parité et de minimalité du dénominateur (aucun pgcd requis). C'est l'énoncé que l'usage résume en « $\sqrt 2$ est irrationnel ».</Badge>
 </Resultat>
 
 </Encart>
@@ -94,6 +96,8 @@ La condition 2 dit que $A$ est un « demi-axe gauche ». La condition 3 interdit
 
 <Badge niveau="demontre">Objet purement ensembliste : une coupure est un élément de $\mathcal{P}(\mathbb{Q})$, dont l'existence est garantie par l'axiome des parties de ZF. Aucune hypothèse nouvelle.</Badge>
 
+Un petit fait servira sans cesse — nommons-le une fois pour toutes. **Lemme de frontière** : si $A$ est une coupure, $a \in A$ et $r \notin A$, alors $a < r$. En effet, si l'on avait $r \leq a$, la clôture vers le bas mettrait $r$ dans $A$. Tout ce qui est *dedans* est strictement à gauche de tout ce qui est *dehors* : la coupure sépare. <Badge niveau="demontre">Une ligne, directement depuis la clôture vers le bas.</Badge>
+
 ### 3. Définition de $\mathbb{R}$ et le point manquant
 
 On **pose** :
@@ -102,9 +106,9 @@ $$
 \mathbb{R} := \{\, A \subseteq \mathbb{Q} \ :\ A \text{ est une coupure de Dedekind} \,\}.
 $$
 
-C'est tout. $\mathbb{R}$ n'est rien d'autre que l'ensemble des coupures — un sous-ensemble de $\mathcal{P}(\mathbb{Q})$, donc un objet légitime de ZF.
+C'est tout. $\mathbb{R}$ n'est rien d'autre que l'ensemble des coupures — et sa formation est doublement légitime dans ZF : $\mathcal{P}(\mathbb{Q})$ existe par l'axiome des parties, et « être une coupure » est une formule du langage de ZF, donc la **séparation** découpe dans $\mathcal{P}(\mathbb{Q})$ exactement l'ensemble des coupures.
 
-Voyons maintenant comment ce dispositif **comble** le trou de $\sqrt 2$. Considérons :
+Voyons maintenant comment ce dispositif **comble** le trou de $\sqrt 2$. Considérons — formation licite, encore par séparation dans $\mathbb{Q}$ :
 
 $$
 A_{\sqrt 2} := \{\, q \in \mathbb{Q} \ :\ q < 0 \ \text{ou} \ q^2 < 2 \,\}.
@@ -116,7 +120,7 @@ $$
 
 **Close vers le bas.** Soit $q \in A_{\sqrt2}$ et $q' < q$. Si $q' < 0$, c'est gagné. Sinon $0 \le q' < q$, donc $q'^2 < q^2$. Comme $q \in A$ et $q \ge 0$, on a $q^2 < 2$, d'où $q'^2 < 2$ : $q' \in A$.
 
-**Sans plus grand élément.** Soit $q \in A_{\sqrt2}$ avec $q > 0$ (le cas $q \le 0$ est immédiat : on peut toujours monter jusqu'à un petit rationnel strictement positif, lui-même dans $A$). On cherche un rationnel $\varepsilon > 0$ tel que $(q+\varepsilon)^2 < 2$. Développons :
+**Sans plus grand élément.** Réglons d'abord les cas faciles : si $q < 0$, alors $\tfrac q2$ est rationnel et vérifie $q < \tfrac q2 < 0$, donc $\tfrac q2 \in A_{\sqrt2}$ ; si $q = 0$, alors $\tfrac12 \in A_{\sqrt2}$ — car $(\tfrac12)^2 = \tfrac14 < 2$ — et $\tfrac12 > 0$. Soit maintenant $q \in A_{\sqrt2}$ avec $q > 0$. On cherche un rationnel $\varepsilon > 0$ tel que $(q+\varepsilon)^2 < 2$. Développons :
 
 $$
 (q+\varepsilon)^2 = q^2 + \varepsilon\,(2q + \varepsilon).
@@ -162,7 +166,7 @@ $$
 
 C'est naturel : être « plus à gauche » sur la droite, c'est avoir une ombre plus petite. Cet ordre est **total** : de deux coupures distinctes, l'une contient strictement l'autre.
 
-<Badge niveau="demontre">Ordre total déduit de la définition : si $A \not\subseteq B$, soit $q \in A \setminus B$ ; tout $b \in B$ vérifie $b < q$ (sinon $q \le b$ et la clôture vers le bas de $B$ donnerait $q \in B$) ; la clôture vers le bas de $A$ donne alors $B \subseteq A$.</Badge>
+<Badge niveau="demontre">Ordre total déduit de la définition : si $A \not\subseteq B$, soit $q \in A \setminus B$ ; tout $b \in B$ vérifie $b < q$ (lemme de frontière, appliqué à $B$) ; la clôture vers le bas de $A$ donne alors $B \subseteq A$.</Badge>
 
 Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}$.
 
@@ -170,7 +174,7 @@ Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}
 
 **Énoncé.** Toute partie $\mathcal{S} \subseteq \mathbb{R}$ non vide et **majorée** admet une borne supérieure dans $\mathbb{R}$.
 
-**Construction.** Posons $U := \bigcup_{A \in \mathcal S} A \subseteq \mathbb{Q}$ (la réunion des coupures).
+**Construction.** Posons $U := \bigcup_{A \in \mathcal S} A \subseteq \mathbb{Q}$ — la réunion des coupures, qui existe par l'axiome de la réunion, $\mathcal S$ étant un ensemble d'ensembles de rationnels.
 
 **Étape 1 — non triviale.** $\mathcal S \neq \varnothing$ donne un $A_0 \in \mathcal S$ non vide, donc $U \supseteq A_0 \neq \varnothing$. Comme $\mathcal S$ est majorée par une coupure $M$, chaque $A \subseteq M$, donc $U \subseteq M \neq \mathbb{Q}$.
 
@@ -197,7 +201,7 @@ Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{q : q^2 < 2\}$ est n
 
 ### 5. Les opérations : $\mathbb{R}$ est un corps ordonné complet
 
-Une coupure, c'est un point. Encore faut-il pouvoir **calculer** avec — additionner, multiplier, inverser — et retrouver sur ces ombres exactement l'arithmétique de $\mathbb{Q}$. Tout se définit à partir des seules opérations de $\mathbb{Q}$, **sans un axiome de plus**.
+Une coupure, c'est un point. Encore faut-il pouvoir **calculer** avec — additionner, multiplier, inverser — et retrouver sur ces ombres exactement l'arithmétique de $\mathbb{Q}$. Prévenons honnêtement : c'est la partie techniquement la plus lourde de la construction, là où la complétude (§4) en était le cœur conceptuel. L'idée reste simple — définir chaque opération à partir de celle de $\mathbb{Q}$, puis vérifier que le résultat est encore une coupure et que les lois usuelles survivent — et les preuves ne demandent **aucun axiome ni aucune idée nouvelle** : seulement les propriétés déjà démontrées de $\mathbb{Q}$, sa densité, et la définition des coupures. Nous déroulons les points conceptuellement neufs et condensons les vérifications répétitives, en le disant à chaque fois.
 
 **L'addition.** On pose
 
@@ -207,7 +211,7 @@ $$
 
 <Encart type="calcul" titre="A ⊕ B est encore une coupure">
 
-- **Non triviale.** $A, B \neq \varnothing$ donnent $A \oplus B \neq \varnothing$. Choisissons $p \notin A$ et $p' \notin B$ ; pour tout $a \in A$ on a $a < p$ (sinon la clôture vers le bas mettrait $p$ dans $A$), de même $b < p'$, donc $a + b < p + p'$ : ainsi $p + p' \notin A \oplus B$, et $A \oplus B \neq \mathbb{Q}$.
+- **Non triviale.** $A, B \neq \varnothing$ donnent $A \oplus B \neq \varnothing$. Choisissons $p \notin A$ et $p' \notin B$ ; le **lemme de frontière** donne $a < p$ pour tout $a \in A$ et $b < p'$ pour tout $b \in B$, donc $a + b < p + p'$ : ainsi $p + p' \notin A \oplus B$, et $A \oplus B \neq \mathbb{Q}$.
 - **Close vers le bas.** Si $q = a + b \in A \oplus B$ et $q' < q$, écrivons $q' = a + \big(b - (q - q')\big)$ ; le second terme est $< b$, donc dans $B$, et $q' \in A \oplus B$.
 - **Sans maximum.** $A$ n'a pas de maximum : il existe $a' \in A$ avec $a' > a$, d'où $a' + b > a + b$ dans $A \oplus B$. $\quad\blacksquare$
 
@@ -223,7 +227,13 @@ $$
 \ominus A := \{\, q \in \mathbb{Q} \ :\ \exists\, r > 0,\ \ -q - r \notin A \,\}.
 $$
 
-C'est la coupure symétrique de $A$ par rapport à $0$, et $A \oplus (\ominus A) = 0^*$.
+C'est la coupure symétrique de $A$ par rapport à $0$ — encore faut-il vérifier que c'en est une, puis que $A \oplus (\ominus A) = 0^*$.
+
+<Encart type="plusloin" titre="⊖A est bien une coupure">
+
+**Non vide.** Prenons $p \notin A$ ($A \neq \mathbb{Q}$) : le rationnel $q := -p - 1$, avec le témoin $r = 1$, vérifie $-q - r = p \notin A$, donc $q \in \ominus A$. **Pas tout.** Prenons $a \in A$ : alors $-a \notin \ominus A$ — pour tout $r > 0$, on a $-(-a) - r = a - r < a$, donc $a - r \in A$ (clôture vers le bas) : aucun témoin ne convient. **Close vers le bas.** Si $q \in \ominus A$ avec témoin $r$, et $q' < q$ : alors $-q' - r > -q - r$ ; or $-q - r \notin A$, donc $-q' - r \notin A$ non plus (s'il y était, la clôture vers le bas y mettrait $-q - r$) — même témoin $r$, donc $q' \in \ominus A$. **Sans maximum.** Si $q \in \ominus A$ avec témoin $r$, alors $q + \tfrac r2 > q$ appartient encore à $\ominus A$, avec le témoin $\tfrac r2$ : en effet $-(q + \tfrac r2) - \tfrac r2 = -q - r \notin A$. $\blacksquare$
+
+</Encart>
 
 <Encart type="plusloin" titre="A ⊕ (⊖A) = 0* — le seul passage délicat">
 
@@ -255,7 +265,7 @@ $$
 A^{-1} := \{\, q \in \mathbb{Q} : q \leq 0 \,\} \ \cup\ \{\, q > 0 \ :\ \exists\, r \notin A,\ r < \tfrac1q \,\}
 $$
 
-— les rationnels positifs dont l'inverse $1/q$ majore $A$ *strictement*, c'est-à-dire sans en être le plus petit majorant —, et $A \otimes A^{-1} = 1^*$, par le même argument archimédien de « plus grand $n$ » que pour l'opposé.
+— les rationnels positifs dont l'inverse $1/q$ majore $A$ *strictement*, c'est-à-dire sans en être le plus petit majorant —, et $A \otimes A^{-1} = 1^*$, par le même argument archimédien de « plus grand $n$ » que pour l'opposé. Pour les coupures **négatives**, on prolonge par les signes, comme le produit : si $A < 0^*$, on pose $A^{-1} := \ominus\big((\ominus A)^{-1}\big)$. Et $0^*$, lui, n'a pas d'inverse : pour toute coupure $B \geq 0^*$, la définition donne $0^* \otimes B = 0^*$ — aucun $a \in 0^*$ n'est $\geq 0$ — et le cas $B < 0^*$ s'y ramène par les signes ; or $0^* \neq 1^*$.
 
 <Badge niveau="demontre">Que $A \otimes B$ soit une coupure $\geq 0^*$ dans le cas positif, puis que $(\mathbb{R}, \oplus, \otimes)$ vérifie associativité, commutativité et distributivité, sont des vérifications **de même nature que pour $\mathbb{Q}$** — mécaniques, sans idée nouvelle : nous ne les déroulons pas toutes, exactement comme au chapitre des rationnels. L'existence des inverses, elle, n'est *pas* mécanique — c'est l'argument archimédien de l'encart ci-dessus et son analogue multiplicatif.</Badge>
 
@@ -265,13 +275,14 @@ $$
 t^* := \{\, q \in \mathbb{Q} : q < t \,\}.
 $$
 
-C'en est bien une (non vide : $t - 1$ ; majorée : $t \notin t^*$ ; close vers le bas ; sans maximum par densité de $\mathbb{Q}$). L'application $t \mapsto t^*$ est injective et respecte tout :
+C'en est bien une (non vide : $t - 1$ ; majorée : $t \notin t^*$ ; close vers le bas ; sans maximum par densité de $\mathbb{Q}$). Comme aux chapitres précédents, séparons le théorème de la convention.
 
-$$
-(t + u)^* = t^* \oplus u^*, \qquad (t\,u)^* = t^* \otimes u^*, \qquad t \leq u \iff t^* \subseteq u^*.
-$$
+<Resultat label="Plongement de ℚ dans ℝ">
+$$ t \mapsto t^* \ \text{ est injective, et } \quad (t + u)^* = t^* \oplus u^*, \qquad (t\,u)^* = t^* \otimes u^*, \qquad t \leq u \iff t^* \subseteq u^*. $$
+<Badge niveau="demontre" slot="badge">Injectivité et respect de $\leq$ : si $t < u$, la densité de $\mathbb{Q}$ fournit un rationnel entre eux, donc $t^* \subsetneq u^*$. Le respect de $+$ se vérifie par double inclusion (même schéma que $A \oplus 0^* = A$), celui de $\times$ est de la même farine.</Badge>
+</Resultat>
 
-<Badge niveau="demontre">Injectivité et respect de $\leq$ : si $t < u$, la densité de $\mathbb{Q}$ fournit un rationnel entre eux, donc $t^* \subsetneq u^*$. Le respect de $+$ se vérifie par double inclusion (même schéma que $A \oplus 0^* = A$), celui de $\times$ est de la même farine. On **identifie** alors $t$ et $t^*$ : $\mathbb{Q}$ est un sous-corps ordonné de $\mathbb{R}$.</Badge>
+Vient *ensuite* la convention : on **identifie** $t$ et $t^*$, et $\mathbb{Q}$ devient un sous-corps ordonné de $\mathbb{R}$. <Badge niveau="admis">Convention d'identification, adossée au théorème ci-dessus — troisième du genre après $\mathbb{N} \subseteq \mathbb{Z}$ et $\mathbb{Z} \subseteq \mathbb{Q}$.</Badge>
 
 <Resultat label="ℝ est un corps ordonné complet contenant ℚ">
 
@@ -288,7 +299,7 @@ Comme $A_{\sqrt2} \geq 0^*$, on a $(A_{\sqrt2})^2 = 0^* \cup \{\, a\,a' : a, a' 
 
 $(\subseteq 2^*)$ Pour $a, a' \geq 0$ avec $a^2 < 2$ et $a'^2 < 2$ : l'inégalité $2\,a\,a' \leq a^2 + a'^2$ (car $(a - a')^2 \geq 0$) donne $a\,a' \leq \tfrac12(a^2 + a'^2) < \tfrac12(2 + 2) = 2$. Les rationnels négatifs sont eux aussi $< 2$. Donc $(A_{\sqrt2})^2 \subseteq 2^*$.
 
-$(\supseteq 2^*)$ Soit $q < 2$. Si $q < 0$, il est dans $0^*$. Si $0 \leq q < 2$, il suffit de trouver un rationnel $a \geq 0$ avec $q < a^2 < 2$ : alors $q < a\cdot a \in (A_{\sqrt2})^2$, donc $q \in (A_{\sqrt2})^2$ (clôture vers le bas). Par Archimède, choisissons un entier $k \geq 1$ avec $\tfrac1k < \tfrac{2 - q}{4}$. Les carrés $\left(\tfrac{m}{k}\right)^2$ valent $0$ pour $m = 0$ (donc $\leq q$) et $4$ pour $m = 2k$ (donc $> q$) ; soit $m$ le **plus grand** entier tel que $\left(\tfrac{m}{k}\right)^2 \leq q$ (ces entiers forment une partie non vide et majorée par $2k$ : bon ordre étendu, §5). Alors $\left(\tfrac{m+1}{k}\right)^2 > q$, et $m < 2k$ — car $\tfrac{m}{k} \geq 2$ donnerait $\left(\tfrac{m}{k}\right)^2 \geq 4 > q$ —, donc $2m + 1 \leq 4k$, d'où
+$(\supseteq 2^*)$ L'idée d'abord : pour montrer que tout rationnel $q < 2$ appartient au carré de la coupure, il suffit de trouver un rationnel $a$ *encore dans $A_{\sqrt2}$* — donc avec $a^2 < 2$ — mais dont le carré dépasse déjà $q$. Soit donc $q < 2$. Si $q < 0$, il est dans $0^*$. Si $0 \leq q < 2$, il suffit de trouver un rationnel $a \geq 0$ avec $q < a^2 < 2$ : alors $q < a\cdot a \in (A_{\sqrt2})^2$, donc $q \in (A_{\sqrt2})^2$ (clôture vers le bas). Par Archimède, choisissons un entier $k \geq 1$ avec $\tfrac1k < \tfrac{2 - q}{4}$. Les carrés $\left(\tfrac{m}{k}\right)^2$ valent $0$ pour $m = 0$ (donc $\leq q$) et $4$ pour $m = 2k$ (donc $> q$) ; soit $m$ le **plus grand** entier tel que $\left(\tfrac{m}{k}\right)^2 \leq q$ (ces entiers forment une partie non vide et majorée par $2k$ : bon ordre étendu, §5). Alors $\left(\tfrac{m+1}{k}\right)^2 > q$, et $m < 2k$ — car $\tfrac{m}{k} \geq 2$ donnerait $\left(\tfrac{m}{k}\right)^2 \geq 4 > q$ —, donc $2m + 1 \leq 4k$, d'où
 
 $$
 \left(\tfrac{m+1}{k}\right)^2 = \left(\tfrac{m}{k}\right)^2 + \frac{2m+1}{k^2} \leq q + \frac{4k}{k^2} = q + \frac4k < q + (2 - q) = 2.
@@ -329,7 +340,7 @@ $$
 \varnothing \ \rightsquigarrow\ \mathbb{N} \ \rightsquigarrow\ \mathbb{Z} \ \rightsquigarrow\ \mathbb{Q} \ \rightsquigarrow\ \mathbb{R}.
 $$
 
-À aucun moment nous n'avons posé d'axiome supplémentaire : ni les entiers, ni les fractions, ni les coupures n'exigent autre chose que <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>. Contrairement aux sciences expérimentales — voyez les cours de physique de ce hub —, où l'expérience *impose* en cours de route de nouvelles hypothèses, ici tout est **pure déduction** — d'où l'absence de tout « tournant ». Le continuum des réels — base de toute l'analyse — est un théorème, pas un postulat.
+À aucun moment nous n'avons posé d'axiome supplémentaire : ni les entiers, ni les fractions, ni les coupures n'exigent autre chose que <Prereq href="/maths/partie-i/ensembles-zf">ZF</Prereq>. Contrairement aux sciences expérimentales — voyez les cours de physique de ce hub —, où l'expérience *impose* en cours de route de nouvelles hypothèses, ici tout est **pure déduction** — d'où l'absence de tout « tournant ». Dans le cadre ZF adopté au <Prereq href="/maths/partie-i/methode-axiomatique">premier chapitre</Prereq>, l'existence d'un corps ordonné complet contenant $\mathbb{Q}$ — le continuum, base de toute l'analyse — est un **théorème**, pas un nouvel axiome. Relatif à ce cadre, comme tout théorème ; mais construit, pas postulé.
 
 <Badge niveau="demontre">La construction de $\mathbb{R}$ par coupures est standard depuis Dedekind (1872) et entièrement formalisée dans ZF.</Badge>
 
