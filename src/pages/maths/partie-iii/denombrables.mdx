@@ -97,7 +97,7 @@ Voici le scandale du chapitre. Entre deux rationnels, il y a **toujours** un aut
 
 <Encart type="calcul" titre="Démonstration : |ℚ| = |ℕ|">
 
-**Étape 1 — injecter $\mathbb{Q}$ dans $\mathbb{Z} \times \mathbb{N}^*$.** Tout rationnel $r$ admet un représentant à dénominateur strictement positif ; parmi ces dénominateurs, le bon ordre de $\mathbb{N}$ en fournit un **plus petit**, $q_r \in \mathbb{N}^*$ — c'est la <Prereq href="/maths/partie-ii/rationnels">forme irréductible</Prereq>. Le numérateur associé $p_r$ est alors unique : si $r = p/q_r = p'/q_r$, la définition de l'équivalence donne $p\,q_r = p'\,q_r$, donc $(p - p')\,q_r = 0$ ; comme $q_r \neq 0$, l'<Prereq href="/maths/partie-ii/entiers-relatifs">intégrité de $\mathbb{Z}$</Prereq> force $p = p'$. L'application $j(r) := (p_r, q_r)$ est **injective** : si $j(r) = j(r') = (p, q)$, alors $r = p/q = r'$.
+**Étape 1 — injecter $\mathbb{Q}$ dans $\mathbb{Z} \times \mathbb{N}^*$.** Tout rationnel $r$ admet un représentant à dénominateur strictement positif ; parmi ces dénominateurs, le bon ordre de $\mathbb{N}$ en fournit un **plus petit**, $q_r \in \mathbb{N}^*$ — c'est la <Prereq href="/maths/partie-ii/rationnels">forme à dénominateur minimal</Prereq>. Le numérateur associé $p_r$ est alors unique : si $r = p/q_r = p'/q_r$, la définition de l'équivalence donne $p\,q_r = p'\,q_r$, donc $(p - p')\,q_r = 0$ ; comme $q_r \neq 0$, l'<Prereq href="/maths/partie-ii/entiers-relatifs">intégrité de $\mathbb{Z}$</Prereq> force $p = p'$. L'application $j(r) := (p_r, q_r)$ est **injective** : si $j(r) = j(r') = (p, q)$, alors $r = p/q = r'$.
 
 **Étape 2 — injecter $\mathbb{Z} \times \mathbb{N}^*$ dans $\mathbb{N}$.** Notons $g : \mathbb{Z} \to \mathbb{N}$ la réciproque de la bijection $f$ construite plus haut, et envoyons $(z, q) \mapsto \pi(g(z),\, q - 1)$. C'est une injection : $\pi$ est bijective, $g$ est bijective, et $q \mapsto q-1$ est injective de $\mathbb{N}^*$ dans $\mathbb{N}$.
 
@@ -115,7 +115,7 @@ $$ \boxed{|\mathbb{Q}| = |\mathbb{N}| : \mathbb{Q} \text{ est dénombrable.}} $$
 
 $$ |\mathbb{Q}| = |\mathbb{N}|. $$
 
-<Badge niveau="demontre" slot="badge">Injection via la forme irréductible, retour par le plongement, conclusion par Cantor–Schröder–Bernstein.</Badge>
+<Badge niveau="demontre" slot="badge">Injection via la forme à dénominateur minimal, retour par le plongement, conclusion par Cantor–Schröder–Bernstein.</Badge>
 </Resultat>
 
 Savourez : sur la droite, les rationnels semblent *partout* et les entiers *clairsemés*. Même taille. La **densité** est une propriété de l'*ordre* — comment les éléments s'intercalent — pas de la *taille*. Deux notions que l'intuition confond, et que l'axiomatique sépare au scalpel.

@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les nombres rationnels (ℚ)"
 chapter: rationnels
-description: "ℚ = (ℤ × ℤ*)/~ avec (a,b) ~ (c,d) ssi ad = bc ; opérations bien définies ; tout non nul est inversible ; ordre total compatible ; densité ; forme irréductible (existence par bon ordre) ; archimédien."
+description: "ℚ = (ℤ × ℤ*)/~ avec (a,b) ~ (c,d) ssi ad = bc ; régularité multiplicative de ℤ en lemme ; opérations bien définies ; lois de corps ; tout non nul est inversible ; ordre total, lemme de comparaison des fractions ; densité ; forme à dénominateur minimal (bon ordre) ; archimédien."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -21,6 +21,8 @@ Le chapitre précédent nous a légué une méthode. Dans $\mathbb{N}$, la soust
 Voyez le couple $(3, 4)$ comme une promesse : « trois divisé par quatre — un jour ». Plusieurs promesses visent le même résultat : $(1, 2)$, $(2, 4)$, $(3, 6)$ annoncent toutes la même moitié. Comment le dire *sans jamais diviser*, puisque nous ne savons pas encore le faire ? Par les produits croisés : « $a$ divisé par $b$ » et « $c$ divisé par $d$ » devraient coïncider exactement quand $ad = bc$ — une condition qui ne fait intervenir que des multiplications, opération que $\mathbb{Z}$ maîtrise parfaitement. Toute la construction tient dans cette pirouette.
 
 </Encart>
+
+Trois faits sur $\mathbb{Z}$, hérités du chapitre précédent, porteront toute la construction — autant les afficher d'emblée. L'**intégrité** : $xy = 0 \Rightarrow x = 0$ ou $y = 0$, <Prereq href="/maths/partie-ii/entiers-relatifs">démontrée</Prereq>. La **régularité multiplicative** : si $d \neq 0$ et $xd = yd$, alors $x = y$ — car $xd = yd$ donne $(x - y)\,d = 0$ (soustraction et distributivité de $\mathbb{Z}$), et l'intégrité avec $d \neq 0$ force $x - y = 0$. Enfin sa jumelle : si $b \neq 0$ et $d \neq 0$, alors $bd \neq 0$ — contraposée directe de l'intégrité, et c'est elle qui autorisera les dénominateurs produits. <Badge niveau="demontre">Intégrité : chapitre 6. Régularité multiplicative et produit non nul : les deux lignes ci-dessus, à partir de l'intégrité.</Badge>
 
 ### Une équivalence sur les couples
 
@@ -46,7 +48,7 @@ Objectif : $af = be$.
 
 $$\boxed{\sim \text{ est une relation d'équivalence sur } \mathbb{Z} \times \mathbb{Z}^*}$$
 
-Remarquez le rôle décisif du dénominateur *central* $d$ : simplifier par un facteur non nul, c'est exactement la régularité multiplicative de $\mathbb{Z}$, conséquence directe de l'intégrité. Sans elle, tout s'effondrerait.
+Remarquez le rôle décisif du dénominateur *central* $d$ : simplifier par un facteur non nul, c'est exactement la **régularité multiplicative** affichée en tête de chapitre. Sans elle, tout s'effondrerait.
 
 </Encart>
 
@@ -94,7 +96,16 @@ Avec les mêmes hypothèses, il faut $(ac)(b'd') = (a'c')(bd)$. Or $(ac)(b'd') =
 
 </Encart>
 
-Les identités usuelles — associativité, commutativité, distributivité, neutres $0 := \frac{0}{1}$ et $1 := \frac{1}{1}$, opposé $-\frac{a}{b} = \frac{-a}{b}$ (d'où une soustraction totale, $x - y := x + (-y)$) — se vérifient toutes selon le même schéma : représentants, calcul dans $\mathbb{Z}$, produits croisés. <Badge niveau="demontre">Vérifications de la même farine que les encarts ci-dessus, sans idée nouvelle ; nous ne les écrivons pas toutes ici.</Badge> L'application $n \mapsto \frac{n}{1}$ plonge $\mathbb{Z}$ dans $\mathbb{Q}$ en respectant les opérations — et aussi, nous le vérifierons une fois l'ordre défini plus bas, les inégalités : nous identifierons $n$ et $\frac{n}{1}$. Enfin, une observation qui servira plusieurs fois : $\frac{a}{b} = 0$ si et seulement si $a = 0$, car $(a, b) \sim (0, 1)$ signifie $a \times 1 = b \times 0$.
+Les identités usuelles se vérifient toutes selon le même schéma — représentants, calcul dans $\mathbb{Z}$, produits croisés — et méritent leur bloc :
+
+<Resultat label="Lois algébriques de ℚ">
+$$ x + y = y + x, \quad (x+y)+z = x+(y+z), \quad x + 0 = x, \quad x + (-x) = 0, $$
+$$ xy = yx, \quad (xy)z = x(yz), \quad x(y+z) = xy + xz, \quad 1 \cdot x = x, $$
+$$ \text{avec } 0 := \tfrac{0}{1},\quad 1 := \tfrac{1}{1},\quad -\tfrac{a}{b} := \tfrac{-a}{b} \ \text{— d'où une soustraction totale, } x - y := x + (-y). $$
+<Badge niveau="demontre" slot="badge">Chaque identité se démontre en choisissant des représentants, en appliquant les définitions puis les lois de $\mathbb{Z}$ — les deux encarts ci-dessus déroulent le mécanisme complet sur l'addition et la multiplication ; les autres vérifications sont de la même farine, sans idée nouvelle.</Badge>
+</Resultat>
+
+L'application $\iota : z \mapsto \frac{z}{1}$ plonge $\mathbb{Z}$ dans $\mathbb{Q}$ : elle est injective ($\frac{z}{1} = \frac{z'}{1}$ signifie $z \cdot 1 = z' \cdot 1$) et respecte $+$, $\times$, $0$ et $1$ — et aussi l'ordre, nous le vérifierons une fois celui-ci défini plus bas. Nous identifierons donc $z$ et $\frac{z}{1}$, comme nous avions identifié $\mathbb{N}$ à son image dans $\mathbb{Z}$. <Badge niveau="admis">Convention d'identification, adossée à un théorème de plongement — mêmes vérifications qu'au chapitre 6.</Badge> Enfin, une observation qui servira plusieurs fois : $\frac{a}{b} = 0$ si et seulement si $a = 0$, car $(a, b) \sim (0, 1)$ signifie $a \times 1 = b \times 0$.
 
 ### Le premier corps : diviser, enfin
 
@@ -108,17 +119,26 @@ $$\forall x \in \mathbb{Q}, \quad x \neq 0 \implies \exists\, z \in \mathbb{Q}, 
 
 </Resultat>
 
-Un tel inverse est d'ailleurs unique : si $xz = 1$ et $xz' = 1$, alors $z = z \cdot 1 = z\,(xz') = (xz)\,z' = 1 \cdot z' = z'$ par associativité et commutativité. Nous pouvons donc le noter $x^{-1}$ sans ambiguïté, et poser, pour $y \neq 0$ : $\frac{x}{y} := x \cdot y^{-1}$ — notation cohérente avec la barre déjà définie, puisque $\frac{a}{1} \cdot \left(\frac{b}{1}\right)^{-1} = \frac{a}{1} \cdot \frac{1}{b} = \frac{a}{b}$. La promesse fondatrice du chapitre est tenue, la division est totale. Une structure où l'on ajoute, soustrait, multiplie et divise par tout non nul s'appelle un **corps** — $\mathbb{Q}$ est le premier que nous rencontrons. Le mot reste ici informel ; sa définition officielle attendra la partie IV, avec les anneaux.
+Un tel inverse est d'ailleurs unique : si $xz = 1$ et $xz' = 1$, alors $z = z \cdot 1 = z\,(xz') = (xz)\,z' = 1 \cdot z' = z'$ par associativité et commutativité. Nous pouvons donc le noter $x^{-1}$ sans ambiguïté, et poser, pour $y \neq 0$ : $\frac{x}{y} := x \cdot y^{-1}$ — notation cohérente avec la barre déjà définie, puisque $\frac{a}{1} \cdot \left(\frac{b}{1}\right)^{-1} = \frac{a}{1} \cdot \frac{1}{b} = \frac{a}{b}$. La promesse fondatrice du chapitre est tenue : tout rationnel non nul possède un inverse, donc on peut diviser par **tout rationnel non nul** — par zéro, jamais : $0 \cdot z = 0 \neq 1$ pour tout $z$, aucun inverse n'existe. Une structure où l'on ajoute, soustrait, multiplie et divise par tout non nul s'appelle un **corps** — $\mathbb{Q}$ est le premier que nous rencontrons. Le mot reste ici informel ; sa définition officielle attendra la partie IV, avec les anneaux.
 
 ### Ordonner les fractions
 
-Déclarons $\frac{a}{b}$ **positif** lorsque $ab \geq 0$ dans $\mathbb{Z}$. Piège classique : cette phrase parle d'un *représentant* — il faut vérifier que le signe de $ab$ ne dépend pas du couple choisi, sans quoi la définition s'écroule. C'est l'objet de l'encart. Nous posons ensuite $x \leq y$ lorsque $y - x$ est positif, et $x < y$ lorsque de plus $x \neq y$ : on obtient un ordre total, compatible avec l'addition et avec la multiplication par un positif. <Badge niveau="demontre">L'invariance du signe — le seul vrai piège — est démontrée dans l'encart ; les compatibilités restantes sont des vérifications routinières du même type, non détaillées ici.</Badge>
+Déclarons $\frac{a}{b}$ **positif ou nul** lorsque $ab \geq 0$ dans $\mathbb{Z}$ — et **strictement positif** lorsque de plus il est non nul. Piège classique : cette phrase parle d'un *représentant* — il faut vérifier que le signe de $ab$ ne dépend pas du couple choisi, sans quoi la définition s'écroule. C'est l'objet de l'encart. Nous posons ensuite $x \leq y$ lorsque $y - x$ est positif ou nul, et $x < y$ lorsque de plus $x \neq y$ : on obtient un ordre total, compatible avec l'addition et avec la multiplication par un rationnel positif ou nul. <Badge niveau="demontre">L'invariance du signe — le seul vrai piège — est démontrée dans l'encart ; totalité et compatibilités se ramènent à l'ordre de $\mathbb{Z}$, via le lemme de comparaison ci-dessous.</Badge>
 
 <Encart type="plusloin" titre="Le signe ne dépend pas du représentant">
 
 Supposons $(a, b) \sim (a', b')$, c'est-à-dire $ab' = a'b$. Alors $(ab)\,b'^2 = (ab')(bb') = (a'b)(bb') = (a'b')\,b^2$ en réordonnant. Or $b^2 > 0$ et $b'^2 > 0$ (carré d'un non nul, règle des signes dans $\mathbb{Z}$). Supposons $ab \geq 0$ : alors $(a'b')\,b^2 = (ab)\,b'^2 \geq 0$ ; si l'on avait $a'b' < 0$, la compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication par $b^2 > 0$ donnerait $(a'b')\,b^2 < 0$, contradiction. Donc $a'b' \geq 0$, et l'argument est symétrique : la positivité est une propriété de la classe. $\square$
 
 </Encart>
+
+La règle scolaire de comparaison des fractions devient alors un théorème — et c'est elle qui ramènera toutes les vérifications d'ordre à $\mathbb{Z}$ :
+
+<Resultat label="Comparaison à dénominateurs positifs">
+$$ \text{Pour } b > 0 \text{ et } d > 0 : \qquad \frac{a}{b} \leq \frac{c}{d} \iff ad \leq bc, \qquad\quad \frac{a}{b} \lt \frac{c}{d} \iff ad \lt bc. $$
+<Badge niveau="demontre" slot="badge">La différence vaut $\frac{c}{d} - \frac{a}{b} = \frac{bc - ad}{bd}$ (calcul direct sur représentants), avec $bd > 0$ : elle est positive ou nulle si et seulement si $(bc - ad) \cdot bd \geq 0$, c'est-à-dire $bc - ad \geq 0$. La version stricte s'obtient en ajoutant que la différence est nulle si et seulement si son numérateur l'est.</Badge>
+</Resultat>
+
+Au passage, le plongement $\iota : z \mapsto \frac{z}{1}$ respecte bien l'ordre, comme promis plus haut : avec $b = d = 1$, le lemme donne $\frac{z}{1} \leq \frac{z'}{1} \iff z \leq z'$. <Badge niveau="demontre">Cas particulier du lemme de comparaison.</Badge>
 
 ### La densité : plus aucun trou visible
 
@@ -148,11 +168,11 @@ En réappliquant le théorème entre $x$ et $z_1 = \frac{x+y}{2}$, on obtient $z
 
 </Encart>
 
-Aucun rationnel n'a de « successeur » : la droite rationnelle semble pleine, sans le moindre interstice. Retenez cette impression — le prochain chapitre la brisera : une longueur parfaitement concrète, la diagonale du carré de côté $1$, échappe à tous les rationnels.
+Aucun rationnel n'a de « successeur » *au sens de l'ordre* — il n'existe pas de plus petit rationnel strictement au-dessus d'un rationnel donné (le mot ne désigne donc pas ici le successeur $S(n)$ de $\mathbb{N}$, qui lui existe bel et bien) : la droite rationnelle semble pleine, sans le moindre interstice. Retenez cette impression — le prochain chapitre la brisera : une longueur parfaitement concrète, la diagonale du carré de côté $1$, échappe à tous les rationnels.
 
-### La forme irréductible, par le bon ordre
+### La forme à dénominateur minimal, par le bon ordre
 
-Un même rationnel a une infinité d'écritures : $\frac{2}{4} = \frac{3}{6} = \frac{-1}{-2}\,$… Peut-on en choisir une canonique ? Oui : celle de plus petit dénominateur positif. <Badge niveau="demontre">L'existence repose uniquement sur le bon ordre de $\mathbb{N}$ — aucun outil d'arithmétique fine n'est nécessaire.</Badge>
+Un même rationnel a une infinité d'écritures : $\frac{2}{4} = \frac{3}{6} = \frac{-1}{-2}\,$… Peut-on en choisir une canonique ? Oui : celle de plus petit dénominateur positif. On ne l'appellera « forme irréductible » que plus tard, quand le pgcd aura donné un sens précis à « sans diviseur commun » (partie IV) — pour l'instant, le bon ordre suffit, et c'est tout ce dont nous aurons besoin. <Badge niveau="demontre">L'existence repose uniquement sur le bon ordre de $\mathbb{N}$ — aucun outil d'arithmétique fine n'est nécessaire.</Badge>
 
 <Encart type="calcul" titre="Existence d'un plus petit dénominateur">
 
@@ -160,7 +180,7 @@ Soit $x = \frac{a}{b}$ un rationnel.
 
 1. Ramenons-nous à un dénominateur positif : si $b < 0$, alors $(a, b) \sim (-a, -b)$ car $a(-b) = -ab = b(-a)$, et $-b > 0$.
 2. Posons $D := \{\, q \geq 1 : \text{il existe } p \in \mathbb{Z} \text{ tel que } x = p/q \,\}$, vu comme partie de $\mathbb{N}$ via le <Prereq href="/maths/partie-ii/entiers-relatifs">plongement de $\mathbb{N}$ dans $\mathbb{Z}$</Prereq>.
-3. $D$ est non vide : $b$ étant un entier non nul, ou bien $b \geq 1$ et alors $b \in D$ directement (avec $p = a$), ou bien $b \leq -1$ et l'étape 1 fournit $-b \geq 1$ avec $x = (-a)/(-b)$, donc $-b \in D$.
+3. $D$ est non vide : l'ordre de $\mathbb{Z}$ prolongeant celui de $\mathbb{N}$, tout entier non nul est soit $\geq 1$, soit $\leq -1$. Ou bien $b \geq 1$ et alors $b \in D$ directement (avec $p = a$), ou bien $b \leq -1$ et l'étape 1 fournit $-b \geq 1$ avec $x = (-a)/(-b)$, donc $-b \in D$.
 4. Le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> — toute partie non vide de $\mathbb{N}$ a un plus petit élément — fournit le minimum $q_0$ de $D$. Choisissons $p_0$ avec $x = p_0/q_0$.
 5. Ce numérateur est unique pour ce dénominateur : si $p_0/q_0 = p/q_0$, alors $p_0 q_0 = p q_0$ ; comme $q_0 \neq 0$, on simplifie par régularité (conséquence de l'intégrité de $\mathbb{Z}$) : $p = p_0$.
 
@@ -176,7 +196,7 @@ Dernière propriété, discrète mais promise à un grand avenir : aucun rationn
 
 <Encart type="plusloin" titre="Démonstration du caractère archimédien">
 
-Soient $x, y > 0$. Choisissons des représentants à dénominateurs positifs : $x = \frac{a}{b}$, $y = \frac{c}{d}$ avec $b, d \geq 1$. Comme $x > 0$ : $ab \geq 0$ avec $a \neq 0$ (car $x \neq 0$) et $b \geq 1$ ; si $a$ était négatif, $ab$ le serait aussi (compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication par $b > 0$), donc $a \geq 1$. De même $c \geq 1$. Règle de comparaison : pour $b, d > 0$, on a $\frac{a}{b} > \frac{c}{d} \iff ad > bc$, car la différence vaut $\frac{ad - bc}{bd}$, dont le signe est celui de $(ad - bc)\,bd$ avec $bd > 0$. Posons $n := bc + 1 \in \mathbb{N}$. Alors $nx = \frac{na}{b}$, et $nx > y \iff nad > bc$. Or $a \geq 1$ et $d \geq 1$ donnent $ad \geq 1$, puis, par compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication, $nad \geq n = bc + 1 > bc$. Donc $nx > y$. $\square$
+Soient $x, y > 0$. Choisissons des représentants à dénominateurs positifs : $x = \frac{a}{b}$, $y = \frac{c}{d}$ avec $b, d \geq 1$. Comme $x > 0$ : $ab \geq 0$ avec $a \neq 0$ (car $x \neq 0$) et $b \geq 1$ ; si $a$ était négatif, $ab$ le serait aussi (compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication par $b > 0$), donc $a \geq 1$. De même $c \geq 1$. L'idée est grossière mais efficace : par le lemme de comparaison, il suffit de rendre $n\,ad > bc$ — et comme $a \geq 1$ et $d \geq 1$, prendre $n = bc + 1$ suffira. Déroulons : posons $n := bc + 1 \in \mathbb{N}$. Alors $nx = \frac{na}{b}$, et le lemme de comparaison (section sur l'ordre) donne $nx > y \iff nad > bc$. Or $a \geq 1$ et $d \geq 1$ donnent $ad \geq 1$, puis, par compatibilité de l'ordre de $\mathbb{Z}$ avec la multiplication, $nad \geq n = bc + 1 > bc$. Donc $nx > y$. $\square$
 
 </Encart>
 
