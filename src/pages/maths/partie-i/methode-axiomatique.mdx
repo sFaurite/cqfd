@@ -26,10 +26,12 @@ Voici donc la promesse de ce site, et c'est une promesse modeste mais solide : *
 
 <Hypotheses titre="Hypothèses de départ">
 
-1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les **règles d'inférence** usuelles — les seuls « coups légaux » du jeu déductif, détaillées une à une dans la section qui suit. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
+1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$), l'**égalité** $=$ et les **règles d'inférence** usuelles — les seuls « coups légaux » du jeu déductif, détaillées une à une dans la section qui suit. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
 2. **Principe méthodologique.** Les axiomes sont des **points de départ posés**, pas des vérités démontrées. Les juger, c'est juger leur cohérence et leur fécondité, pas leur « évidence ».
 
 </Hypotheses>
+
+Le programme du chapitre, en quatre temps — car on ne construit encore aucun objet mathématique ici, on fixe la **méthode** : d'abord les règles de déduction que l'on accepte (la logique) ; puis le vocabulaire de l'édifice (axiome, définition, théorème) ; puis ce qu'est une démonstration, avec ses grandes stratégies ; enfin — conclusion naturelle du chapitre, et non détour — ce que cette méthode ne pourra jamais garantir (Gödel).
 
 ## La logique d'abord : les règles du jeu déductif
 
@@ -55,20 +57,25 @@ Concrètement, la logique se donne par des **règles d'inférence** : des patron
 **La négation $\lnot$**
 
 - **Introduction**, dite **réduction à l'absurde** — si supposer $A$ conduit à une contradiction, on conclut $\lnot A$.
-- **Élimination**, dite **principe d'explosion** — d'une contradiction ($A$ et $\lnot A$), on déduit *n'importe quel* énoncé. C'est cette règle qui rend la cohérence si vitale : un système contradictoire démontre tout, donc ne dit plus rien (on y revient plus bas).
+- **Élimination**, dite **principe d'explosion** — d'une contradiction ($A$ et $\lnot A$ — les logiciens la notent $\bot$), on déduit *n'importe quel* énoncé. C'est cette règle qui rend la cohérence si vitale : un système contradictoire démontre tout, donc ne dit plus rien (on y revient plus bas).
 
 **Les quantificateurs $\forall$ et $\exists$**
 
 - **Instanciation** (élimination de $\forall$) — de « pour tout $x$, $P(x)$ », on déduit $P(t)$ pour n'importe quel objet $t$ : ce qui vaut pour tous vaut pour chacun.
 - **Généralisation** (introduction de $\forall$) — si l'on a démontré $P(x)$ pour un $x$ **quelconque**, sur lequel on n'a rien supposé de particulier, on conclut « pour tout $x$, $P(x)$ ». C'est le sens exact du rituel « soit $x$ un entier… » qui ouvre tant de preuves.
 - **Témoin** (introduction de $\exists$) — de $P(t)$ pour un objet explicite $t$, on déduit « il existe $x$ tel que $P(x)$ ».
-- **Élimination de $\exists$** — de « il existe $x$ tel que $P(x)$ », on s'autorise à **nommer** un tel objet (« soit $x_0$ tel que $P(x_0)$ ») et à raisonner avec lui, à condition que la conclusion finale ne mentionne plus $x_0$.
+- **Élimination de $\exists$** — de « il existe $x$ tel que $P(x)$ », on s'autorise à **nommer** un tel objet (« soit $x_0$ tel que $P(x_0)$ ») et à raisonner avec lui — à condition de ne rien supposer d'autre sur lui que $P(x_0)$, et que la conclusion finale ne mentionne plus $x_0$.
+
+**L'égalité $=$**
+
+- **Réflexivité** — pour tout objet $x$, on a $x = x$.
+- **Substitution des égaux** (règle de Leibniz) — de $x = y$, on déduit que tout énoncé vrai de $x$ est vrai de $y$ : on peut, n'importe où, remplacer une expression par une expression égale. C'est le geste le plus discret et le plus employé de toutes les mathématiques — chaque ligne de calcul en est une. (La symétrie et la transitivité de $=$ s'en *déduisent* avec la réflexivité : premiers exemples de résultats gagnés plutôt que posés.)
 
 **La règle proprement *classique***
 
 - **Tiers exclu** — pour tout énoncé $A$, on admet $A \lor \lnot A$ ; de façon équivalente, de $\lnot\lnot A$ on déduit $A$ (**élimination de la double négation**). C'est *elle* qui permet à la preuve par l'absurde d'établir des énoncés positifs, et non seulement des négations — et c'est exactement la règle que la logique intuitionniste refuse (voir la preuve par l'absurde, plus bas).
 
-Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, plus le tiers exclu — s'appelle la **déduction naturelle** classique, formalisée par Gerhard Gentzen en 1934. D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : elles autorisent exactement les mêmes déductions. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
+Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, les règles de l'égalité, plus le tiers exclu — s'appelle la **déduction naturelle** classique ; le cadre complet porte le nom de **logique classique du premier ordre avec égalité**, et la présentation par règles est due à Gerhard Gentzen (1934). D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : elles autorisent exactement les mêmes déductions. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
 
 ## Le vocabulaire de l'édifice
 
@@ -127,15 +134,27 @@ L'hypothèse « $\sqrt 2$ est rationnel » mène à une contradiction : elle est
 
 ## Ce qui fait un *bon* système d'axiomes
 
-On ne pose pas des axiomes au hasard. Trois qualités les départagent.
+On ne pose pas des axiomes au hasard. Quatre qualités les départagent.
 
 1. **Cohérence (non-contradiction).** Le système ne doit jamais permettre de démontrer à la fois un énoncé et sa négation. **C'est de loin la plus importante** : un système incohérent démontre *tout* (du faux on déduit n'importe quoi), il ne dit donc plus rien. <Badge niveau="demontre">Qu'un système incohérent démontre tout est un théorème élémentaire de logique (principe d'explosion).</Badge>
-2. **Indépendance.** Aucun axiome ne devrait être démontrable à partir des autres — sinon, ce n'est pas un axiome mais un théorème déguisé. C'est une qualité d'élégance, pas une nécessité. <Badge niveau="demontre">Notion standard ; l'indépendance d'un axiome se prouve par un modèle où il est faux et les autres vrais.</Badge>
-3. **Complétude (idéal).** On aimerait que *tout* énoncé exprimable soit, soit démontrable, soit réfutable. C'est le rêve : aucune question laissée en suspens.
+2. **Fécondité.** Le système doit engendrer des mathématiques riches — c'est le critère annoncé dès l'ouverture de ce chapitre : un système cohérent mais stérile ne dit rien qui vaille la peine. <Badge niveau="admis">Critère méthodologique, pas mathématique : il ne se démontre pas, il se constate à l'usage.</Badge>
+3. **Indépendance.** Aucun axiome ne devrait être démontrable à partir des autres — sinon, ce n'est pas un axiome mais un théorème déguisé. C'est une qualité d'élégance, pas une nécessité. <Badge niveau="demontre">Notion standard ; l'indépendance d'un axiome se prouve par un modèle où il est faux et les autres vrais.</Badge>
+4. **Complétude (idéal).** On aimerait que *tout* énoncé exprimable soit, soit démontrable, soit réfutable. C'est le rêve : aucune question laissée en suspens.
+
+<Encart type="rappel" titre="Attention : deux sens du mot « complétude »">
+
+Le même mot recouvre deux notions distinctes — d'autant plus troublant que Gödel a démontré l'une (1929) et brisé l'autre (1931).
+
+- La **complétude de la logique** (théorème de complétude, Gödel 1929) : tout énoncé vrai dans *tous* les modèles est dérivable par les règles d'inférence. Elle concerne le *moteur* : nos règles ne laissent échapper aucune conséquence purement logique. C'est elle qu'évoque le badge de la section « La logique d'abord ».
+- La **complétude d'un système d'axiomes** (le point 4 ci-dessus) : tout énoncé du langage y est soit démontrable, soit réfutable. Elle concerne un *jeu d'axiomes donné* — et c'est elle que les théorèmes d'**in**complétude (1931) rendent impossible pour les systèmes assez riches.
+
+Il existe d'ailleurs des théories complètes au second sens — l'arithmétique de **Presburger** (les entiers avec la seule addition), la théorie des **corps réels clos** de Tarski — mais elles sont trop pauvres pour coder leurs propres démonstrations : elles échappent à Gödel précisément parce qu'elles n'ont pas la richesse fatale. <Badge niveau="demontre">Complétude de la logique : Gödel (1929). Complétude et décidabilité : Presburger (1929) pour l'addition seule, Tarski (1948) pour les corps réels clos.</Badge>
+
+</Encart>
 
 ## Le grand tournant : Gödel (1931)
 
-Ce rêve est mort. Kurt Gödel a démontré deux théorèmes qui redéfinissent ce que « rigueur » veut dire. Une précision est indispensable pour qu'ils soient **exacts** : ils portent sur les systèmes **récursivement axiomatisables** — ceux dont la liste des axiomes peut être énumérée par un algorithme. C'est le cas de tous les systèmes d'axiomes que l'on utilise réellement.
+Ce rêve est mort — non pas pour tout système (des théories modestes sont bel et bien complètes, l'encart ci-dessus en témoigne), mais pour tout système à la hauteur des mathématiques entières. Kurt Gödel a démontré deux théorèmes qui redéfinissent ce que « rigueur » veut dire. Une précision est indispensable pour qu'ils soient **exacts** : ils portent sur les systèmes **récursivement axiomatisables** — ceux dont la liste des axiomes peut être énumérée par un algorithme. C'est le cas de tous les systèmes d'axiomes que l'on utilise réellement.
 
 <Resultat label="Premier théorème d'incomplétude de Gödel">
 
@@ -147,7 +166,7 @@ Tout système cohérent, récursivement axiomatisable et assez riche pour l'arit
 
 Un tel énoncé $G$ est dit **indécidable** dans le système : ni prouvable, ni réfutable en son sein. De plus, dans l'interprétation **standard** (celle des entiers usuels $\mathbb{N}$), $G$ se trouve être **vrai** — bien qu'indémontrable. <Badge niveau="demontre">« Vrai dans $\mathbb{N}$ » est une affirmation *sémantique* (sur le modèle standard), distincte de « démontrable ».</Badge>
 
-Autrement dit, dès qu'un système est assez puissant pour parler des entiers et de l'addition, il échappe à toute axiomatisation complète. Ajouter $G$ comme nouvel axiome ne sauve rien — le système agrandi, toujours récursivement axiomatisable, en fabrique aussitôt un autre. <Badge niveau="demontre">L'incomplétude est *irréductible* : aucune extension récursive cohérente ne la supprime.</Badge>
+Autrement dit, dès qu'un système est assez puissant pour parler des entiers avec leur addition *et* leur multiplication — de quoi, en pratique, coder ses propres démonstrations —, il échappe à toute axiomatisation complète. (L'addition seule ne suffit pas : c'est l'arithmétique de Presburger de l'encart plus haut, complète mais trop pauvre.) Ajouter $G$ comme nouvel axiome ne sauve rien — le système agrandi, toujours récursivement axiomatisable, en fabrique aussitôt un autre. <Badge niveau="demontre">L'incomplétude est *irréductible* : aucune extension récursive cohérente ne la supprime.</Badge>
 
 <Resultat label="Second théorème d'incomplétude de Gödel">
 
@@ -157,11 +176,11 @@ Un tel système, s'il est cohérent, ne peut pas démontrer sa propre cohérence
 
 </Resultat>
 
-Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut toujours s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu.</Badge>
+Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu.</Badge>
 
-<Encart type="intuition" titre="Vrai n'est pas démontrable">
+<Encart type="intuition" titre="Vrai ne veut pas dire démontrable">
 
-Le cœur du vertige est cette distinction, qu'on confond souvent. **« Vrai »** se rapporte à une signification, à un *modèle* (l'énoncé décrit correctement les entiers $\mathbb{N}$). **« Démontrable »** se rapporte à un système d'axiomes (il existe une chaîne finie de pas qui y mène). Gödel montre que ces deux notions **ne coïncident pas** : dans un système donné, il y a du vrai (au sens du modèle standard) hors de portée de toute preuve. La vérité déborde la démonstration.
+Le cœur du vertige est cette distinction, qu'on confond souvent. **« Vrai »** se rapporte à une signification, à un *modèle* (l'énoncé décrit correctement les entiers $\mathbb{N}$). **« Démontrable »** se rapporte à un système d'axiomes (il existe une chaîne finie de pas qui y mène). Gödel montre que ces deux notions **ne coïncident pas** : dans un système donné, il y a du vrai (au sens du modèle standard) hors de portée de toute preuve *menée dans ce système*. La vérité déborde la démonstration — celle du système considéré, pas la preuve « en soi ».
 
 </Encart>
 
