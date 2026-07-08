@@ -18,7 +18,7 @@ import Tournant from '../../../components/Tournant.astro';
 
 C'est le tout premier chapitre, et il faut être honnête dès la première ligne : **un cours de mathématiques ne démontre pas tout**. On pourrait croire qu'un édifice « rigoureux » consiste à ne rien admettre — à tout justifier, indéfiniment. C'est impossible. Toute justification s'appuie sur quelque chose d'antérieur ; si l'on remontait sans fin, aucune démonstration ne s'arrêterait jamais. Il faut donc des **points de départ** que l'on accepte sans preuve : les **axiomes**.
 
-Mais alors, comment choisir ces points de départ ? On ne les choisit pas parce qu'ils seraient « évidents » ou « vrais en soi » — cette idée a explosé en vol au XX$^\text{e}$ siècle. On les choisit parce qu'ils forment un système **cohérent** (sans contradiction) et **fécond** (il en sort beaucoup de mathématiques utiles). Pire — et c'est le grand vertige de ce chapitre — un théorème de Gödel (1931) montre qu'un système cohérent assez riche **ne peut même pas démontrer sa propre cohérence**.
+Mais alors, comment choisir ces points de départ ? On ne les choisit pas parce qu'ils seraient « évidents » ou « vrais en soi » — cette idée a explosé en vol au XX$^\text{e}$ siècle. Deux exigences les départagent : la **cohérence** (le système ne doit produire aucune contradiction) et la **fécondité** (il doit en sortir beaucoup de mathématiques utiles). Seulement, ces deux critères n'ont pas le même statut. La fécondité se **constate** : un siècle de théorèmes en témoigne. La cohérence, elle, ne peut être qu'**exigée, jamais garantie** — et c'est le grand vertige de ce chapitre : un théorème de Gödel (1931) montre qu'un système cohérent assez riche **ne peut pas démontrer sa propre cohérence**. Le choix des axiomes est donc un **pari raisonné** : on exige la cohérence, mais on ne peut que la parier.
 
 Voici donc la promesse de ce site, et c'est une promesse modeste mais solide : **rien ne sera jamais utilisé sans être, soit un axiome posé au grand jour, soit une déduction explicite de ce qui précède.** On ne cache aucun ingrédient sous le tapis. Quand on ajoute une hypothèse, on le dit.
 
@@ -156,6 +156,8 @@ Un tel système, s'il est cohérent, ne peut pas démontrer sa propre cohérence
 <Badge niveau="demontre" slot="badge">Théorème démontré (1931), obtenu en formalisant la preuve du premier à l'intérieur du système.</Badge>
 
 </Resultat>
+
+Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut toujours s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu.</Badge>
 
 <Encart type="intuition" titre="Vrai n'est pas démontrable">
 
