@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Relations, fonctions et quotients"
 chapter: relations-fonctions
-description: "Relation, fonction, injection/surjection/bijection, composition ; relation d’équivalence, classes, LE THÉORÈME DE PARTITION, ensemble quotient ; ordres partiels et totaux."
+description: "Relation, fonction, images directe et réciproque, injection/surjection/bijection, composition (associative, identités neutres) ; relation d’équivalence, classes, LE THÉORÈME DE PARTITION, ensemble quotient, projection canonique, théorème du « bien défini » ; ordres partiels et totaux."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -14,7 +14,7 @@ import Tournant from '../../../components/Tournant.astro';
 
 ## Relier les objets entre eux
 
-Le chapitre précédent nous a légué un monde fait uniquement d'ensembles — mais aussi de quoi les assembler, notamment le <Prereq href="/maths/partie-i/ensembles-zf">couple de Kuratowski et le produit cartésien $A \times B$</Prereq>. Ce chapitre transforme ce matériau brut en outillage : relations, fonctions, quotients, ordres. Tout le reste du cours — $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, l'analyse entière — reposera dessus. Et fidèles à notre promesse : aucune hypothèse nouvelle ici. Chaque objet est défini dans ZF, chaque affirmation démontrée.
+Le chapitre précédent nous a légué un monde fait uniquement d'ensembles — mais aussi de quoi les assembler, notamment le <Prereq href="/maths/partie-i/ensembles-zf">couple de Kuratowski et le produit cartésien $A \times B$</Prereq>. Ce chapitre transforme ce matériau brut en outillage : relations, fonctions, quotients, ordres. Tout le reste du cours — $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, l'analyse entière — reposera dessus. Et fidèles à notre promesse : aucune hypothèse nouvelle ici — seulement des **définitions** (badge bleu : elles se posent, elles ne s'affirment pas), puis des **démonstrations** à partir de ZF (badge vert).
 
 <Encart type="intuition" titre="Une relation est un tableau, pas une phrase">
 Pensez à une feuille de calcul à deux colonnes : à gauche des personnes, à droite des langues, une ligne par affirmation « telle personne parle telle langue ». Ce tableau **est** la relation. Peu importe la règle qui l'a rempli — peu importe même qu'une règle existe. La relation, c'est la liste exhaustive des lignes, rien d'autre.
@@ -30,13 +30,19 @@ Parmi les relations, certaines ont un comportement remarquable : chaque élémen
 
 **Définition (fonction).** Une *fonction* $f : A \to B$ est une relation $f \subseteq A \times B$ vérifiant : (**totalité**) pour tout $a \in A$, il existe $b \in B$ avec $(a,b) \in f$ ; (**univocité**) si $(a,b) \in f$ et $(a,b') \in f$, alors $b = b'$. L'unique $b$ associé à $a$ se note $f(a)$. <Badge niveau="admis">Définition : totalité et univocité sont les deux exigences que nous posons.</Badge>
 
-Insistons solennellement : une fonction n'est **pas** une formule ni un procédé de calcul. C'est un ensemble de couples. Ce qu'on appelle son « graphe » n'est pas un objet associé à la fonction : il **est** la fonction. Ainsi $f = \{(a,x), (b,x)\}$ est une fonction de $\{a,b\}$ vers $\{x,y\}$ définie par pure énumération, sans aucune formule. Cette liberté a une conséquence vertigineuse : il existe bien plus de fonctions que de formules pour les décrire — les formules, écrites dans un alphabet fini, sont « rares » en un sens que nous rendrons précis et démontrerons au chapitre sur la diagonale de Cantor. C'est une anticipation, pas un acquis : retenez simplement que la définition ensembliste dépasse infiniment l'idée de « recette de calcul ».
+Insistons solennellement : une fonction n'est **pas** une formule ni un procédé de calcul. C'est un ensemble de couples. Ce qu'on appelle son « graphe » n'est pas un objet associé à la fonction : il **est** la fonction. Ainsi $f = \{(a,x), (b,x)\}$ est une fonction définie par pure énumération, sans aucune formule. Une précision honnête, cependant : l'écriture $f : A \to B$ transporte une information que le graphe seul ne fixe pas — le **codomaine** $B$. Ce même $f$ peut se lire comme fonction de $\{a,b\}$ vers $\{x\}$, ou vers $\{x,y\}$ : dans le premier cas tout point d'arrivée est atteint, pas dans le second (c'est la *surjectivité*, définie ci-dessous, et elle dépend du codomaine choisi). Quand nous écrivons $f : A \to B$, le choix de $B$ fait donc partie de la donnée.
+
+Cette liberté d'énumération a une conséquence vertigineuse : il existe bien plus de fonctions que de formules capables de les décrire **sans paramètres** — les formules, écrites dans un alphabet fini, sont « rares » en un sens que nous rendrons précis et démontrerons au chapitre sur la diagonale de Cantor. C'est une anticipation, pas un acquis : retenez simplement que la définition ensembliste dépasse infiniment l'idée de « recette de calcul ».
+
+Deux constructions accompagnent toute fonction $f : A \to B$. Pour $X \subseteq A$, l'**image directe** $f[X] := \{b \in B : \exists x \in X,\ f(x) = b\}$ rassemble les valeurs prises sur $X$ ; pour $Y \subseteq B$, l'**image réciproque** $f^{-1}[Y] := \{a \in A : f(a) \in Y\}$ rassemble les points envoyés dans $Y$. La première s'obtient par séparation dans $B$, la seconde par séparation dans $A$. <Badge niveau="demontre">Deux applications directes du schéma de séparation — aucun axiome nouveau.</Badge>
 
 ## Injections, surjections, bijections
 
 **Définitions.** Une fonction $f : A \to B$ est *injective* si $\forall a, a' \in A,\ f(a) = f(a') \Rightarrow a = a'$ (deux départs distincts, deux arrivées distinctes) ; *surjective* si $\forall b \in B,\ \exists a \in A,\ f(a) = b$ (tout point de $B$ est atteint) ; *bijective* si elle est les deux. <Badge niveau="admis">Trois définitions ; le contenu mathématique viendra des théorèmes qui les relient.</Badge>
 
 La composition est elle aussi un ensemble de couples : pour $f : A \to B$ et $g : B \to C$, on pose $g \circ f := \{(a,c) \in A \times C : \exists b \in B,\ (a,b) \in f \text{ et } (b,c) \in g\}$, et l'on vérifie que $g \circ f$ est une fonction de $A$ vers $C$ : la totalité s'obtient en enchaînant celles de $f$ puis $g$, l'univocité en appliquant celle de $f$ puis celle de $g$. <Badge niveau="demontre">Vérification directe des deux clauses de la définition, comme indiqué.</Badge> Enfin, l'*identité* de $A$ est $\mathrm{id}_A := \{(a,a) : a \in A\}$, la fonction qui ne bouge rien : $\mathrm{id}_A(a) = a$.
+
+Deux vérifications serviront constamment dans toute la suite. La composition est **associative** : pour $f : A \to B$, $g : B \to C$ et $h : C \to D$, on a $h \circ (g \circ f) = (h \circ g) \circ f$ — les deux membres envoient chaque $a$ sur $h(g(f(a)))$. Et les identités sont **neutres** : $\mathrm{id}_B \circ f = f = f \circ \mathrm{id}_A$. Dans chaque cas, les deux fonctions comparées ont même domaine et mêmes valeurs en chaque point : ce sont les mêmes ensembles de couples, par extensionnalité. <Badge niveau="demontre">Vérification point par point, conclue par extensionnalité.</Badge>
 
 Voici le premier théorème structurant du chapitre.
 
@@ -67,17 +73,19 @@ $$ f : A \to B \text{ est bijective} \iff \exists\, g : B \to A,\quad g \circ f 
 $\boxed{f \text{ bijective} \iff f \text{ inversible, et alors } f^{-1} \text{ est unique}}$
 </Encart>
 
-<Encart type="rappel" titre="Attention : deux notations pour un même symbole">
-La *réciproque* $f^{-1} : B \to A$ n'existe que si $f$ est bijective. Mais la notation $f^{-1}(C)$ désigne aussi, pour **toute** fonction $f$ et toute partie $C \subseteq B$, l'*image réciproque* $\{a \in A : f(a) \in C\}$ — un ensemble qui existe toujours, par séparation. La collision de notations est historique et regrettable : le contexte tranche.
+<Encart type="rappel" titre="Attention : relation réciproque, fonction réciproque, image réciproque">
+Trois objets distincts se cachent sous le symbole $f^{-1}$. La **relation réciproque** $\{(b,a) \in B \times A : (a,b) \in f\}$ existe pour *toute* fonction $f$ — c'est celle de l'étape 1 ci-dessus. Mais elle n'est une *fonction* $B \to A$ que si $f$ est bijective : la totalité lui manque quand $f$ n'est pas surjective, l'univocité quand $f$ n'est pas injective. Dans ce cas seulement, on l'appelle la **fonction réciproque** et on la note $f^{-1}$. Enfin l'**image réciproque** $f^{-1}[C]$ d'une partie $C \subseteq B$, définie plus haut, existe pour *toute* fonction — les crochets la distinguent de la fonction réciproque ; la notation à parenthèses $f^{-1}(C)$ est courante ailleurs, et le contexte tranche.
 </Encart>
 
 ## Le geste roi : quotienter
 
 <Encart type="intuition" titre="Trier, c'est quotienter">
-Videz un tiroir de chaussettes et triez-les par couleur. Chaque tas rassemble des chaussettes que vous décidez de ne plus distinguer ; l'ensemble des tas est un nouvel ensemble, plus petit, où « rouge » est devenu un seul objet. La relation « avoir la même couleur », les tas, le sac de tas : voilà relation d'équivalence, classes et quotient. Toute la suite du cours vit dans cette image.
+Videz un tiroir de chaussettes et triez-les par couleur. Chaque tas rassemble des chaussettes que vous décidez de ne plus distinguer ; l'ensemble des tas est un nouvel ensemble — souvent plus petit, surtout **plus grossier** : des objets qu'on distinguait sont désormais regardés comme un seul, et « rouge » est devenu un objet à part entière. La relation « avoir la même couleur », les tas, le sac de tas : voilà relation d'équivalence, classes et quotient. Toute la suite du cours vit dans cette image.
 </Encart>
 
 **Définition (relation d'équivalence).** Une relation $\sim$ sur $A$ (c'est-à-dire $\sim \subseteq A \times A$) est une *relation d'équivalence* si elle est **réflexive** ($\forall a,\ a \sim a$), **symétrique** ($a \sim b \Rightarrow b \sim a$) et **transitive** ($a \sim b$ et $b \sim c \Rightarrow a \sim c$). La *classe* de $a$ est $[a] := \{x \in A : a \sim x\}$, dont l'existence est garantie par séparation dans $A$. <Badge niveau="admis">Définitions : trois propriétés qui capturent « être pareil du point de vue de… ».</Badge>
+
+**Définition (partition).** Une *partition* de $A$ est un ensemble $\mathcal{P} \subseteq \mathcal{P}(A)$ de parties de $A$ vérifiant trois clauses : aucun élément de $\mathcal{P}$ n'est vide ; deux éléments distincts de $\mathcal{P}$ sont disjoints ; la réunion des éléments de $\mathcal{P}$ est $A$. En image : un découpage **sans miettes et sans chevauchement**. <Badge niveau="admis">Définition — le théorème qui suit relie les deux notions.</Badge>
 
 <Resultat label="Théorème de partition">
 
@@ -107,14 +115,31 @@ $\boxed{\text{Les classes d'équivalence forment une partition de } A}$
 Un scrupule de précision : le théorème ne dit pas qu'une relation d'équivalence « est » une partition. Ce sont deux objets différents — un ensemble de couples d'un côté, un ensemble de morceaux de l'autre. Le théorème dit exactement ceci : chaque relation d'équivalence *fabrique* une partition, et cette correspondance est une bijection entre les deux présentations.
 
 <Encart type="plusloin" titre="Le sens retour : d'une partition à une relation">
-Soit $P$ une partition de $A$. Posons $R := \{(x,y) \in A \times A : \exists C \in P,\ x \in C \text{ et } y \in C\}$ (« être dans le même morceau »). Réflexivité : $P$ recouvre $A$, tout $x$ habite un morceau. Symétrie : la définition est symétrique en $x$ et $y$. Transitivité : si $x, y \in C$ et $y, z \in D$, alors $y \in C \cap D$, donc $C = D$ puisque deux morceaux distincts d'une partition sont disjoints — d'où $x, z \in C$. Les classes de $R$ sont exactement les morceaux de $P$ : si $x \in C$, alors $C$ est l'*unique* morceau contenant $x$ (disjonction encore), donc $[x] = \{y : y \in C\} = C$. Enfin, les deux constructions se défont l'une l'autre — partir de $\sim$, fabriquer la partition des classes, puis relire « être dans le même morceau » redonne $\sim$, et réciproquement : c'est la bijection annoncée. Nous venons d'en vérifier l'essentiel ; le reste est un déroulé direct des définitions, que le lecteur scrupuleux complétera.
+Soit $P$ une partition de $A$. Posons $R := \{(x,y) \in A \times A : \exists C \in P,\ x \in C \text{ et } y \in C\}$ (« être dans le même morceau »). Réflexivité : $P$ recouvre $A$, tout $x$ habite un morceau. Symétrie : la définition est symétrique en $x$ et $y$. Transitivité : si $x, y \in C$ et $y, z \in D$, alors $y \in C \cap D$, donc $C = D$ puisque deux morceaux distincts d'une partition sont disjoints — d'où $x, z \in C$. Les classes de $R$ sont exactement les morceaux de $P$ : si $x \in C$, alors $C$ est l'*unique* morceau contenant $x$ (disjonction encore), donc $[x] = \{y : y \in C\} = C$. Enfin, les deux constructions se défont l'une l'autre, et vérifions-le intégralement. **Aller-retour depuis $\sim$** : partons de $\sim$, fabriquons la partition de ses classes, puis relisons « être dans le même morceau ». Cette relation relie $x$ et $y$ si et seulement si $y$ appartient à la classe de $x$ — car par le théorème de partition, l'*unique* morceau contenant $x$ est $[x]$ — c'est-à-dire si et seulement si $x \sim y$ : on retrouve $\sim$ exactement. **Aller-retour depuis $P$** : partons de $P$, fabriquons $R$ comme ci-dessus, puis prenons la partition des classes de $R$ ; or nous venons de montrer que les classes de $R$ sont exactement les morceaux de $P$ — on retrouve $P$ exactement. Les deux allers-retours sont l'identité : c'est la bijection annoncée, intégralement vérifiée.
 </Encart>
+
+Deux outils accompagneront chaque quotient du cours. D'abord la **projection canonique** $\pi : A \to A/\!\sim$, définie par $\pi(a) = [a]$, qui envoie chaque élément sur sa classe. Elle est **surjective** : toute classe du quotient est, par définition, la classe d'au moins un élément de $A$. <Badge niveau="demontre">Fonction légitime (chaque $a$ a une et une seule classe) et surjective par construction du quotient.</Badge> Ensuite, le mécanisme qui permet de *définir* quelque chose sur les classes sans trahir le quotient :
+
+<Resultat label="Définir une fonction sur un quotient (le « bien défini »)">
+
+$$ \text{Si } h : A \to B \text{ vérifie } \big(a \sim a' \Rightarrow h(a) = h(a')\big),\ \text{ alors il existe une unique } \bar h : A/\!\sim\ \to B \text{ telle que } \bar h([a]) = h(a). $$
+
+<Badge niveau="demontre" slot="badge">Démontré ci-dessous. L'hypothèse dit exactement : $h$ ne dépend pas du représentant choisi dans la classe.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Démonstration du « bien défini »">
+**Existence.** Posons $\bar h := \{(C, b) \in (A/\!\sim) \times B : \exists a \in A,\ C = [a] \text{ et } b = h(a)\}$ — formation légitime par séparation dans $(A/\!\sim) \times B$. *Totalité* : toute classe $C$ s'écrit $[a]$ pour un certain $a$, donc $(C, h(a)) \in \bar h$. *Univocité* : supposons $(C, b) \in \bar h$ et $(C, b') \in \bar h$ ; alors $C = [a] = [a']$ avec $b = h(a)$ et $b' = h(a')$. Or $[a] = [a']$ entraîne $a \sim a'$ (en effet $a' \in [a']$ par réflexivité, donc $a' \in [a]$, ce qui est la définition de $a \sim a'$), d'où $h(a) = h(a')$ par hypothèse : $b = b'$. C'est ici, et seulement ici, que l'hypothèse de compatibilité sert — sans elle, $\bar h$ ne serait pas une fonction.
+
+**Unicité.** Si $\bar h_1$ et $\bar h_2$ vérifient toutes deux $\bar h_i([a]) = h(a)$, elles coïncident sur chaque classe (toute classe est un $[a]$) : mêmes valeurs partout, donc même ensemble de couples par extensionnalité. $\blacksquare$
+</Encart>
+
+C'est ce mécanisme — « vérifier que c'est **bien défini** » — qui légitimera plus tard les opérations de $\mathbb{Z}$, de $\mathbb{Q}$ et de $\mathbb{Z}/n\mathbb{Z}$ : chaque fois qu'on définira une addition ou une multiplication sur des classes via leurs représentants, cette vérification sera le passage obligé.
 
 Annonce solennelle, enfin : ce geste — décréter équivalents des objets, puis travailler sur les classes — est l'outil roi du cours. C'est lui qui fabriquera $\mathbb{Z}$ à partir de couples d'entiers naturels, $\mathbb{Q}$ à partir de couples d'entiers, et $\mathbb{Z}/n\mathbb{Z}$ à partir des congruences. Simple programme pour l'instant : nous n'utilisons rien de ces chapitres futurs.
 
 ## Ordonner sans tout comparer
 
-**Définition (ordre).** Une relation $\preceq$ sur $A$ est un *ordre partiel* si elle est **réflexive**, **antisymétrique** ($a \preceq b$ et $b \preceq a \Rightarrow a = b$) et **transitive**. L'ordre est *total* si deux éléments quelconques sont toujours comparables : $\forall a, b,\ a \preceq b$ ou $b \preceq a$. <Badge niveau="admis">Définitions : notez que l'antisymétrie remplace la symétrie — ordonner et identifier sont deux gestes opposés.</Badge>
+**Définition (ordre).** Une relation $\preceq$ sur $A$ est un *ordre partiel* si elle est **réflexive**, **antisymétrique** ($a \preceq b$ et $b \preceq a \Rightarrow a = b$) et **transitive**. L'ordre est *total* si deux éléments quelconques sont toujours comparables : $\forall a, b,\ a \preceq b$ ou $b \preceq a$. <Badge niveau="admis">Définitions : notez que l'antisymétrie remplace la symétrie — ordonner et identifier sont deux gestes opposés.</Badge> Terminologie : cet ordre est parfois dit *large* (ou non strict) ; il existe aussi des ordres *stricts*, notés $\prec$ ou $\lt$, irréflexifs et transitifs. Sauf mention contraire, « ordre » désignera ici l'ordre large.
 
 L'exemple fondamental est l'inclusion $\subseteq$ sur $\mathcal{P}(E)$ : réflexivité et transitivité découlent directement de la définition de $\subseteq$, et l'antisymétrie est exactement le critère de double inclusion issu de l'extensionnalité. <Badge niveau="demontre">Les trois propriétés se vérifient en déroulant la définition de l'inclusion.</Badge> Mais cet ordre n'est *pas* total dès que $E$ a deux éléments distincts $a \neq b$ : ni $\{a\} \subseteq \{b\}$ (car $a \in \{a\}$ mais $a \notin \{b\}$), ni $\{b\} \subseteq \{a\}$. Les singletons $\{a\}$ et $\{b\}$ sont incomparables : chacun regarde l'autre sans pouvoir se ranger avant ou après. Au chapitre 5, nous construirons sur $\mathbb{N}$ un ordre $\leq$ qui, lui, sera total — annonce, là encore, et non usage.
 
