@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’arithmétique de ℕ : addition, multiplication, ordre"
 chapter: arithmetique-de-n
-description: "Théorème de récursion (définir par récurrence est légitime) ; + et × définies ; associativité/commutativité démontrées ; 2+2=4 démontré ; ordre total sur ℕ ; BON ORDRE de ℕ démontré ; régularité (a+c = b+c ⇒ a = b)."
+description: "Théorème de récursion (définir par récurrence est légitime) ; + et × définies ; associativité/commutativité démontrées ; 2+2=4 démontré ; ordre total sur ℕ ; BON ORDRE de ℕ démontré, d'où récurrence forte et descente infinie ; régularité (a+c = b+c ⇒ a = b)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -183,6 +183,29 @@ $$ \forall A \subseteq \mathbb{N},\quad A \neq \varnothing \ \Longrightarrow\ \e
 </Resultat>
 
 Ne sous-estimez pas cet énoncé d'apparence modeste : c'est lui qui fournira la **descente infinie**, la **division euclidienne**, l'existence des **formes irréductibles** des fractions. Chaque fois qu'un mathématicien dira « prenons le plus petit entier tel que… », c'est ce théorème qui signera le chèque.
+
+## Deux armes dérivées : récurrence forte et descente infinie
+
+Le bon ordre paie immédiatement : il livre deux techniques de démonstration annoncées au <Prereq href="/maths/partie-i/methode-axiomatique">chapitre 1</Prereq>, que le reste du cours emploiera sans cesse.
+
+La première renforce la récurrence : dans l'hérédité, au lieu de ne s'appuyer que sur le rang précédent, on s'autorise **tous** les rangs antérieurs. C'est indispensable quand « le cas $n$ » se ramène à des cas plus petits, mais pas nécessairement à $n - 1$ — l'exemple type est la décomposition en facteurs premiers, où $n = ab$ renvoie à deux facteurs quelconques strictement plus petits.
+
+<Encart type="calcul" titre="Démonstration de la récurrence forte">
+
+**Théorème.** Soit $P$ une propriété. Si pour tout $n$, « $P(k)$ pour tout $k \lt n$ » entraîne $P(n)$, alors $P(n)$ vaut pour tout $n$.
+
+**Démonstration** (par l'absurde, via le bon ordre). Supposons qu'un entier au moins ne vérifie pas $P$. L'ensemble $A := \{ n \in \mathbb{N} : \lnot P(n) \}$ (licite par séparation) est alors non vide. Par le **bon ordre**, $A$ possède un plus petit élément $m$. Tout $k \lt m$ est hors de $A$ — sinon $m$ ne serait pas le plus petit — donc vérifie $P(k)$. L'hypothèse du théorème, appliquée à $n = m$, donne alors $P(m)$ : contradiction avec $m \in A$. ∎
+
+Remarquez qu'aucune initialisation séparée n'est requise : pour $n = 0$, la condition « $P(k)$ pour tout $k \lt 0$ » est vide, donc automatiquement satisfaite — l'hypothèse du théorème exige donc déjà $P(0)$ toute seule.
+
+</Encart>
+
+<Resultat label="Principe de récurrence forte">
+$$ \Big[\forall n,\ \big(\forall k \lt n,\ P(k)\big) \Rightarrow P(n)\Big] \ \Longrightarrow\ \forall n,\ P(n). $$
+<Badge niveau="demontre" slot="badge">Conséquence directe du bon ordre, démontrée ci-dessus. Rien de nouveau n'est admis.</Badge>
+</Resultat>
+
+La seconde est la forme contraposée du même superpouvoir : la **descente infinie**, chère à Fermat. Pour montrer qu'**aucun** entier ne vérifie une propriété $Q$, il suffit de montrer que tout entier vérifiant $Q$ en fournirait un **strictement plus petit** vérifiant $Q$ encore. Car s'il existait des entiers vérifiant $Q$, le plus petit d'entre eux (bon ordre) en engendrerait un plus petit — contradiction. Il n'y a pas d'escalier descendant infini dans $\mathbb{N}$. <Badge niveau="demontre">Reformulation directe du bon ordre : l'ensemble des entiers vérifiant $Q$, s'il était non vide, aurait un plus petit élément que la descente contredit.</Badge>
 
 ## Le bilan, et la frontière
 

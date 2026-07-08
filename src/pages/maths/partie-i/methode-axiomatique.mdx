@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "La méthode axiomatique"
 chapter: methode-axiomatique
-description: "Axiomes, définitions, théorèmes, démonstrations — ce qu’on admet et ce qu’on déduit. Et les limites de Gödel."
+description: "Les règles d'inférence de la logique, puis axiomes, définitions, théorèmes, et le panorama des stratégies de démonstration (directe, contraposée, absurde, cas, contre-exemple, récurrence). Et les limites de Gödel."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -26,14 +26,16 @@ Voici donc la promesse de ce site, et c'est une promesse modeste mais solide : *
 
 <Hypotheses titre="Hypothèses de départ">
 
-1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les **règles d'inférence** usuelles — les seuls « coups légaux » du jeu déductif, **listées une à une dans l'encart ci-dessous**. La plus emblématique est le **modus ponens** : de $A$ et de $A \Rightarrow B$, on déduit $B$. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
+1. **La logique classique.** On raisonne avec les connecteurs (« et » $\land$, « ou » $\lor$, « non » $\lnot$, « implique » $\Rightarrow$), les quantificateurs (« pour tout » $\forall$, « il existe » $\exists$) et les **règles d'inférence** usuelles — les seuls « coups légaux » du jeu déductif, détaillées une à une dans la section qui suit. On utilise cette logique **sans la redémontrer** : elle est notre langage et notre moteur de déduction.
 2. **Principe méthodologique.** Les axiomes sont des **points de départ posés**, pas des vérités démontrées. Les juger, c'est juger leur cohérence et leur fécondité, pas leur « évidence ».
 
 </Hypotheses>
 
-<Encart type="rappel" titre="Les règles d'inférence usuelles, une à une" open={true}>
+## La logique d'abord : les règles du jeu déductif
 
-Une **règle d'inférence** est un patron de déduction : si l'on a déjà établi les énoncés « au-dessus de la barre », on a le droit d'écrire celui « au-dessous ». La liste qui suit est notre boîte à outils **complète** : chaque démonstration de ce site, aussi savante soit-elle, n'est qu'un enchaînement fini de ces gestes-là. Le principe d'organisation est simple : chaque connecteur vient avec une règle pour l'**introduire** (comment *prouver* un énoncé de cette forme) et une pour l'**éliminer** (comment *se servir* d'un énoncé de cette forme).
+Avant même de poser le moindre axiome, il faut fixer quelque chose de plus profond : ce que **« déduire » veut dire**. Les axiomes seront nos positions de départ ; la logique, elle, dit quels déplacements sont permis. Elle vient donc *avant* tout le reste — c'est la pierre de fondation sur laquelle les axiomes eux-mêmes reposeront.
+
+Concrètement, la logique se donne par des **règles d'inférence** : des patrons de déduction. Chaque règle dit : « si vous avez déjà établi *ceci*, vous avez le droit d'écrire *cela* ». La liste qui suit est notre boîte à outils **complète** — chaque démonstration de ce site, aussi savante soit-elle, n'est qu'un enchaînement fini de ces gestes-là. Le principe d'organisation est simple : chaque connecteur vient avec une règle pour l'**introduire** (comment *prouver* un énoncé de cette forme) et une pour l'**éliminer** (comment *se servir* d'un énoncé de cette forme).
 
 **L'implication $\Rightarrow$**
 
@@ -68,11 +70,9 @@ Une **règle d'inférence** est un patron de déduction : si l'on a déjà étab
 
 Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, plus le tiers exclu — s'appelle la **déduction naturelle** classique, formalisée par Gerhard Gentzen en 1934. D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : elles autorisent exactement les mêmes déductions. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
 
-</Encart>
-
 ## Le vocabulaire de l'édifice
 
-Avant de construire, fixons les briques. Quatre mots structurent toute mathématique déductive.
+Voilà pour le moteur. Reste à nommer les pièces du jeu : quatre mots structurent toute mathématique déductive.
 
 - **Axiome** — un énoncé **admis sans démonstration**. C'est un choix, posé au départ. Exemple à venir : « deux ensembles ayant les mêmes éléments sont égaux ».
 - **Définition** — une **convention de nommage**. Elle n'affirme rien sur le monde ; elle abrège. Dire « un nombre est *pair* s'il s'écrit $2k$ » ne se démontre pas : c'est un raccourci de langage. Une définition ne peut pas être « fausse », seulement utile ou maladroite.
@@ -87,15 +87,21 @@ Pensez aux axiomes comme aux **règles initiales** des échecs : le placement de
 
 ## Qu'est-ce qu'une démonstration ?
 
-Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par une règle d'inférence — l'une de celles listées dans l'encart du début de chapitre. Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
+Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par l'une des règles d'inférence de la section « La logique d'abord ». Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
 
-Plusieurs *formes* de démonstration reviennent sans cesse :
+En pratique, on n'improvise pas : quelques **grandes stratégies** organisent presque toutes les démonstrations. Les voici, chacune avec son schéma et un exemple minuscule — les mini-exemples empruntent les entiers du lycée, qu'on ne construira rigoureusement qu'en partie II ; ils illustrent la *forme* des raisonnements, rien de plus.
 
-- **Preuve directe** : on part des hypothèses et on enchaîne les implications jusqu'à la conclusion.
-- **Preuve par contraposée** : pour montrer $A \Rightarrow B$, on montre $\lnot B \Rightarrow \lnot A$, qui lui est **logiquement équivalent**. <Badge niveau="demontre">L'équivalence entre $A \Rightarrow B$ et $\lnot B \Rightarrow \lnot A$ est une tautologie de la logique classique.</Badge>
-- **Preuve par l'absurde** : on suppose la négation de ce qu'on veut prouver, et on en déduit une contradiction (un énoncé et sa négation). La contradiction étant interdite, l'hypothèse de départ était fausse. <Badge niveau="demontre">Valide en logique classique ; en logique intuitionniste, l'absurde ne prouve que les négations, pas les énoncés positifs.</Badge>
+**Preuve directe.** Le schéma le plus simple : on part des hypothèses et on enchaîne les implications, modus ponens après modus ponens, jusqu'à la conclusion. *Mini-exemple — « la somme de deux nombres pairs est paire » : si $m = 2a$ et $n = 2b$, alors $m + n = 2(a+b)$, qui est pair.*
 
-Une quatrième arme, la **démonstration par récurrence**, mérite un chapitre à elle seule : on l'introduira rigoureusement plus tard, car elle repose sur une propriété spécifique des entiers naturels.
+**Preuve par contraposée.** Pour montrer $A \Rightarrow B$, on montre $\lnot B \Rightarrow \lnot A$, qui lui est **logiquement équivalent**. Utile quand la négation de la conclusion est plus maniable que l'hypothèse. <Badge niveau="demontre">L'équivalence entre $A \Rightarrow B$ et $\lnot B \Rightarrow \lnot A$ est une tautologie de la logique classique.</Badge> *Mini-exemple — « si $n^2$ est pair, alors $n$ est pair » : par contraposée, on suppose $n$ impair, $n = 2k+1$, et l'on calcule $n^2 = 4k^2 + 4k + 1 = 2(2k^2+2k) + 1$ : impair. C'est exactement le pas utilisé à l'étape 3 de la preuve de l'irrationalité de $\sqrt 2$, dans l'encart ci-dessous.*
+
+**Preuve par l'absurde.** On suppose la négation de ce qu'on veut prouver, et on en déduit une contradiction (un énoncé et sa négation). La contradiction étant interdite, l'hypothèse de départ était fausse. C'est la règle d'introduction de $\lnot$ ; pour conclure un énoncé *positif*, il faut en plus le tiers exclu — les deux sont posés dans la section sur la logique. <Badge niveau="demontre">Valide en logique classique ; en logique intuitionniste, l'absurde ne prouve que les négations, pas les énoncés positifs.</Badge> *Exemple complet : l'irrationalité de $\sqrt 2$, déroulée dans l'encart ci-dessous.*
+
+**Raisonnement par cas.** Pour exploiter un « ou » : de $A \lor B$, si $A$ mène à la conclusion et si $B$ y mène aussi, la conclusion tient — sans qu'on sache lequel des deux cas est réalisé. <Badge niveau="admis">C'est mot pour mot la règle d'élimination de $\lor$ : elle fait partie du cadre logique posé plus haut.</Badge> *Mini-exemple — « $n(n+1)$ est toujours pair » : $n$ est pair ou impair ; s'il est pair, le produit l'est ; s'il est impair, $n+1$ est pair, et le produit l'est encore.*
+
+**Réfutation par contre-exemple.** Pour réfuter un « pour tout », un seul témoin suffit. L'asymétrie est brutale : un million de vérifications ne démontrent pas un $\forall$, mais un unique contre-exemple le tue. <Badge niveau="demontre">Réfuter $\forall x\, P(x)$, c'est démontrer $\exists x\, \lnot P(x)$ : l'équivalence $\lnot \forall x\, P(x) \iff \exists x\, \lnot P(x)$ est une tautologie du calcul des prédicats classique.</Badge> *Mini-exemple — « tout nombre impair $\ge 3$ est premier » : vrai pour $3, 5, 7$… réfuté par $9 = 3 \times 3$. L'histoire en offre de plus spectaculaires : une conjecture d'Euler a tenu deux siècles avant qu'un contre-exemple ne l'abatte (voir <Prereq href="/maths/partie-vi/grandes-conjectures">les grandes conjectures</Prereq>).*
+
+**Démonstration par récurrence.** Pour établir « $P(n)$ pour tout entier $n$ » : on prouve $P(0)$ (*initialisation*), puis que $P(n)$ entraîne $P(n+1)$ (*hérédité*). Elle mérite un traitement à part, car — c'est l'une des surprises de ce cours — elle **ne sera pas admise** : le principe de récurrence est un *théorème*, démontré dans ZF lors de la <Prereq href="/maths/partie-ii/entiers-naturels">construction des entiers naturels</Prereq>. Ses variantes — **récurrence forte** (l'hérédité peut s'appuyer sur *tous* les rangs précédents, pas seulement le dernier) et **descente infinie** — seront démontrées avec le bon ordre de $\mathbb{N}$, au chapitre <Prereq href="/maths/partie-ii/arithmetique-de-n">l'arithmétique de ℕ</Prereq>. <Badge niveau="demontre">Rien à admettre : récurrence, récurrence forte et descente infinie sont des théorèmes, démontrés en partie II.</Badge>
 
 <Encart type="calcul" titre="Une preuve par l'absurde : √2 est irrationnel (esquisse)">
 
@@ -107,7 +113,7 @@ Une quatrième arme, la **démonstration par récurrence**, mérite un chapitre 
 
 $$p^2 = 2\,q^2.$$
 
-**Étape 3 — $p$ est pair.** $p^2$ vaut deux fois un entier, donc $p^2$ est pair, donc $p$ est pair. Écrivons $p = 2k$.
+**Étape 3 — $p$ est pair.** $p^2$ vaut deux fois un entier, donc $p^2$ est pair, donc $p$ est pair — c'est exactement la contraposée déroulée en mini-exemple plus haut. Écrivons $p = 2k$.
 
 **Étape 4 — $q$ est pair aussi.** En reportant : $(2k)^2 = 2q^2$, soit $4k^2 = 2q^2$, donc $q^2 = 2k^2$. Par le même raisonnement, $q$ est pair.
 
