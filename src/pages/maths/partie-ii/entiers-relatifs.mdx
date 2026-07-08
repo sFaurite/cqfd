@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les entiers relatifs (ℤ)"
 chapter: entiers-relatifs
-description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale ; ordre total ; plongement de ℕ ; intégrité de ℤ (ab = 0 ⇒ a = 0 ou b = 0)."
+description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale, x+5=3 résolu ; lois algébriques de ℤ ; ordre total (bien-définition déroulée) ; plongement de ℕ (théorème) puis identification (convention) ; FORME CANONIQUE avec unicité ; intégrité de ℤ."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -54,7 +54,7 @@ Puisque $\sim$ est une relation d'équivalence, le <Prereq href="/maths/partie-i
 
 $$ \mathbb{Z} := (\mathbb{N} \times \mathbb{N}) / \sim $$
 
-et notons $[(a,b)]$ la classe du couple $(a,b)$. <Badge niveau="admis">Définition : $\mathbb{Z}$ est ce quotient ; sa légitimité (les classes existent et partitionnent) est, elle, démontrée au chapitre sur les quotients.</Badge>
+et notons $[(a,b)]$ la classe du couple $(a,b)$. <Badge niveau="admis">Définition : $\mathbb{Z}$ est ce quotient ; sa légitimité (les classes existent et partitionnent) est, elle, démontrée au chapitre sur les quotients.</Badge> Formellement, chaque classe est une partie de $\mathbb{N} \times \mathbb{N}$, donc $\mathbb{Z}$ est un sous-ensemble de $\mathcal{P}(\mathbb{N} \times \mathbb{N})$ : son existence se déduit de l'axiome des parties et de la séparation, exactement comme au <Prereq href="/maths/partie-i/relations-fonctions">chapitre des quotients</Prereq>.
 
 Géométriquement, la classe de $(a,b)$ rassemble tous les couples $(c,d)$ vérifiant $a + d = b + c$ : les points à coordonnées entières alignés sur la **droite de pente $1$** passant par $(a,b)$. On y avance du même pas dans les deux directions — $(a,b) \sim (a+k,\, b+k)$ pour tout $k \in \mathbb{N}$, car $a + (b+k) = b + (a+k)$ — et l'on atteint *tous* les représentants en repartant de celui qui touche un axe (une composante nulle). Un entier relatif *est* l'une de ces droites de pente $1$ dans le quadrant des entiers.
 
@@ -107,6 +107,8 @@ $$ \boxed{\text{la soustraction est partout définie sur } \mathbb{Z}} $$
 Mission accomplie. <Badge niveau="demontre">Existence de l'opposé démontrée ; la soustraction totale en découle immédiatement.</Badge>
 </Encart>
 
+Revenons alors à l'équation qui a ouvert le chapitre : $x + 5 = 3$. Dans $\mathbb{Z}$, elle a désormais une solution — et une seule. En ajoutant $-5$ aux deux membres : $x = 3 + (-5) = [(3,0)] + [(0,5)] = [(3,5)]$. Or $(3,5) \sim (0,2)$, car $3 + 2 = 5 + 0$ : donc $x = [(0,2)]$, le nombre que l'on notera $-2$. L'unicité est automatique — si $x + 5 = 3$, ajouter l'opposé de $5$ des deux côtés *force* $x = 3 - 5$. Mission annoncée, mission accomplie : la soustraction n'est pas qu'une opération de plus, c'est la résolution de **toutes** les équations $x + a = b$. <Badge niveau="demontre">Calcul complet sur représentants ; l'unicité découle de l'existence de l'opposé.</Badge>
+
 Ainsi $(\mathbb{Z}, +)$ possède une addition associative, un neutre, et un opposé pour chaque élément — une structure que la Partie IV baptisera **groupe**. Nous ne l'utilisons pas encore : simple avant-goût.
 
 ## La multiplication : un produit deviné, puis posé
@@ -126,27 +128,64 @@ On fixe $(c,d)$ et on change $(a,b)$ en $(a',b')$ avec $a + b' = b + a'$ (notons
 
 $$ P + Q' = (a+b')\,c + (b+a')\,d = sc + sd \qquad \text{et} \qquad Q + P' = (b+a')\,c + (a+b')\,d = sc + sd. $$
 
-Donc $P + Q' = Q + P'$, c'est-à-dire $(P,Q) \sim (P',Q')$ : changer le premier facteur ne change pas la classe-résultat. La définition étant symétrique en $(a,b)$ et $(c,d)$ (elle donne un produit commutatif), le même argument vaut pour le second facteur. En composant les deux, le produit ne dépend d'aucun représentant. $\square$ <Badge niveau="demontre">Vérification par regroupement, appuyée sur la seule hypothèse $a+b'=b+a'$.</Badge>
+Donc $P + Q' = Q + P'$, c'est-à-dire $(P,Q) \sim (P',Q')$ : changer le premier facteur ne change pas la classe-résultat. La **formule** est symétrique en les deux couples $(a,b)$ et $(c,d)$ — grâce à la commutativité de $+$ et $\times$ dans $\mathbb{N}$ —, donc le même argument vaut pour le second facteur. En composant les deux, le produit ne dépend d'aucun représentant. $\square$ (Une fois la bien-définition acquise, cette même symétrie montre au passage que la multiplication de $\mathbb{Z}$ est commutative.) <Badge niveau="demontre">Vérification par regroupement, appuyée sur la seule hypothèse $a+b'=b+a'$.</Badge>
 </Encart>
+
+<Resultat label="Lois algébriques de ℤ">
+$$ x + y = y + x, \quad (x+y)+z = x+(y+z), \quad x + 0_{\mathbb{Z}} = x, \quad x + (-x) = 0_{\mathbb{Z}}, $$
+$$ xy = yx, \quad (xy)z = x(yz), \quad x(y+z) = xy + xz, \quad 1_{\mathbb{Z}} \cdot x = x \ \text{ où } 1_{\mathbb{Z}} := [(1,0)]. $$
+<Badge niveau="demontre" slot="badge">Chaque identité se vérifie en choisissant des représentants, en appliquant les définitions, puis les lois déjà démontrées de $\mathbb{N}$ — la bien-définition garantit que le choix des représentants n'importe pas. Exemple type, le neutre multiplicatif : $[(a,b)] \cdot [(1,0)] = [(a \cdot 1 + b \cdot 0,\ a \cdot 0 + b \cdot 1)] = [(a,b)]$. La Partie IV baptisera cette structure : anneau commutatif.</Badge>
+</Resultat>
 
 ## Comparer les relatifs, et loger $\mathbb{N}$ dans $\mathbb{Z}$
 
 On ordonne $\mathbb{Z}$ en comparant, là encore, sans soustraire : $[(a,b)] \le [(c,d)] :\Longleftrightarrow a + d \le b + c$, où $\le$ est l'<Prereq href="/maths/partie-ii/arithmetique-de-n">ordre de $\mathbb{N}$</Prereq>. <Badge niveau="admis">Définition de l'ordre, via l'addition et l'ordre de $\mathbb{N}$.</Badge>
 
-<Encart type="plusloin" titre="≤ est un ordre total compatible avec +">
-On vérifie que la condition ne dépend pas des représentants (même technique que pour l'addition, en remplaçant les égalités par des inégalités et en utilisant la compatibilité de $\le$ avec $+$ dans $\mathbb{N}$). La **totalité** vient de celle de $\le$ sur $\mathbb{N}$ appliquée à $a+d$ et $b+c$ ; l'**antisymétrie** et la **transitivité** de même. Enfin la **compatibilité** : si $x \le y$, alors $x + z \le y + z$, par addition terme à terme des inégalités de $\mathbb{N}$. $\square$ <Badge niveau="demontre">Chaque propriété se ramène à l'ordre total de $\mathbb{N}$, déjà démontré.</Badge>
+<Encart type="plusloin" titre="≤ est bien défini, total, compatible avec +">
+**Deux mini-lemmes dans $\mathbb{N}$**, une ligne chacun. *Compatibilité* : si $x \le y$, alors $x + z \le y + z$ — car $x + k = y$ donne $(x + z) + k = y + z$. *Simplification* : si $x + k \le y + k$, alors $x \le y$ — car $(x+k) + j = y + k$ se réécrit $(x+j) + k = y + k$, et la <Prereq href="/maths/partie-ii/arithmetique-de-n">régularité</Prereq> donne $x + j = y$.
+
+**Bien-définition** — le point qui mérite le détail, car on manipule des inégalités et non plus des égalités. Supposons $(a,b) \sim (a',b')$, $(c,d) \sim (c',d')$ et $a + d \le b + c$ ; montrons $a' + d' \le b' + c'$. Les hypothèses s'écrivent $a + b' = b + a'$ et $c + d' = d + c'$. Deux regroupements (associativité, commutativité, puis les hypothèses) :
+
+$$ (a' + d') + (b + d) = (a' + b) + (d' + d) = (a + b') + (d + d') = (a + d) + (b' + d'), $$
+$$ (b' + c') + (b + d) = (b' + b) + (c' + d) = (b + b') + (c + d') = (b + c) + (b' + d'). $$
+
+Par *compatibilité*, $a + d \le b + c$ donne $(a+d) + (b'+d') \le (b+c) + (b'+d')$, c'est-à-dire $(a'+d') + (b+d) \le (b'+c') + (b+d)$ ; par *simplification* du terme commun $b + d$, on conclut $a' + d' \le b' + c'$. $\square$
+
+**Le reste se ramène à $\mathbb{N}$.** La **totalité** vient de celle de $\le$ sur $\mathbb{N}$ appliquée à $a+d$ et $b+c$ ; la réflexivité, l'**antisymétrie** et la **transitivité** s'obtiennent par les mêmes regroupements (la transitivité utilise la simplification). Enfin la **compatibilité avec l'addition de $\mathbb{Z}$** : si $x \le y$, alors $x + z \le y + z$, en appliquant la compatibilité de $\mathbb{N}$ aux représentants. $\square$ <Badge niveau="demontre">La bien-définition — le point subtil — est déroulée ligne à ligne ; chaque autre propriété se ramène à l'ordre total de $\mathbb{N}$, déjà démontré.</Badge>
 </Encart>
 
-L'application $\iota : n \mapsto [(n,0)]$ **plonge** $\mathbb{N}$ dans $\mathbb{Z}$. Elle est injective ($[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$) et respecte toute la structure : $[(n,0)] + [(m,0)] = [(n+m,\,0)]$, $[(n,0)] \cdot [(m,0)] = [(nm,\,0)]$, et $[(n,0)] \le [(m,0)] \iff n \le m$. Autrement dit $\iota$ recopie fidèlement $\mathbb{N}$ à l'intérieur de $\mathbb{Z}$. On convient donc d'**identifier** $n$ et $[(n,0)]$, et d'écrire désormais $\mathbb{N} \subseteq \mathbb{Z}$. <Badge niveau="admis">Convention d'identification : un abus commode. Stricto sensu $\mathbb{N}$ et son image ne sont pas le *même* ensemble ; on choisit de les confondre parce que $\iota$ préserve $+$, $\times$ et $\le$.</Badge> Chaque classe admet alors un représentant canonique $[(n,0)]$ (un « positif ») ou $[(0,n)]$ (un « négatif ») : par totalité de $\le$ sur $\mathbb{N}$, soit $b \le a$ et $(a,b) \sim (k,0)$, soit $a \le b$ et $(a,b) \sim (0,k)$.
+Deux choses distinctes se jouent ensuite — un théorème, puis une convention.
+
+<Resultat label="Plongement de ℕ dans ℤ">
+$$ \iota : \mathbb{N} \to \mathbb{Z},\quad n \mapsto [(n,0)] \quad \text{est injective et préserve } +,\ \times \text{ et } \le. $$
+<Badge niveau="demontre" slot="badge">Injectivité : $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$. Préservation : $[(n,0)] + [(m,0)] = [(n+m,\,0)]$, $[(n,0)] \cdot [(m,0)] = [(nm,\,0)]$, et $[(n,0)] \le [(m,0)] \iff n + 0 \le 0 + m \iff n \le m$.</Badge>
+</Resultat>
+
+Vient *ensuite* la convention : puisque $\iota$ recopie fidèlement $\mathbb{N}$ à l'intérieur de $\mathbb{Z}$, on **identifie** $n$ et $[(n,0)]$, et l'on écrit désormais $\mathbb{N} \subseteq \mathbb{Z}$. <Badge niveau="admis">Convention d'identification : un abus commode. Stricto sensu $\mathbb{N}$ et son image ne sont pas le *même* ensemble ; on choisit de les confondre parce que $\iota$ préserve toute la structure — cela, c'est le théorème ci-dessus, démontré.</Badge>
+
+## La forme canonique : positif, négatif ou nul
+
+Chaque entier relatif se range alors dans exactement une des trois familles — c'est le fondement rigoureux de l'intuition du « signe », et l'outil de la preuve d'intégrité qui suit.
+
+<Resultat label="Forme canonique dans ℤ">
+$$ \forall z \in \mathbb{Z}, \ \text{exactement un des trois cas :}\quad z = 0_{\mathbb{Z}}, \qquad z = [(n,0)],\ n \neq 0 \text{ unique}, \qquad z = [(0,n)],\ n \neq 0 \text{ unique}. $$
+<Badge niveau="demontre" slot="badge">Existence par totalité de l'ordre de $\mathbb{N}$, unicité par régularité — démonstration ci-dessous.</Badge>
+</Resultat>
+
+<Encart type="calcul" titre="Démonstration de la forme canonique">
+**Existence.** Soit $z = [(a,b)]$. Par totalité de $\le$ sur $\mathbb{N}$ : $b \le a$ ou $a \le b$. Si $b \le a$, il existe $n$ avec $b + n = a$, et $(a,b) \sim (n,0)$ — car $a + 0 = b + n$. Si $a \le b$, il existe $n$ avec $a + n = b$, et $(a,b) \sim (0,n)$ — car $a + n = b + 0$. Et si le $n$ obtenu est nul, alors $z = [(0,0)] = 0_{\mathbb{Z}}$.
+
+**Unicité et exclusion mutuelle.** $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$ ; de même $[(0,n)] = [(0,m)]$ donne $n = m$. Enfin $[(n,0)] = [(0,m)]$ signifie $n + m = 0$, ce qui force $n = m = 0$ — si $m$ était un successeur $S(m')$, alors $n + m = S(n + m')$ serait un successeur, donc non nul. Un positif non nul n'est donc jamais un négatif non nul, et seul $0_{\mathbb{Z}}$ se trouve à la frontière. $\square$
+</Encart>
 
 ## L'intégrité de $\mathbb{Z}$
 
 Un dernier théorème, discret mais décisif pour la suite : un produit ne s'annule que si l'un des facteurs s'annule.
 
 <Encart type="plusloin" titre="xy = 0 ⇒ x = 0 ou y = 0, par représentants canoniques">
-**Lemme dans $\mathbb{N}$.** Si $mn = 0$, alors $m = 0$ ou $n = 0$. En effet, si $m = S(m')$ et $n = S(n')$, alors $mn = m \cdot S(n') = mn' + m = mn' + S(m') = S(mn' + m')$, un successeur, donc $\neq 0$ (<Prereq href="/maths/partie-ii/entiers-naturels">axiome de Peano</Prereq>). $\square$
+**Lemme dans $\mathbb{N}$.** Si $mn = 0$, alors $m = 0$ ou $n = 0$. En effet, si $m = S(m')$ et $n = S(n')$, alors $mn = m \cdot S(n') = mn' + m = mn' + S(m') = S(mn' + m')$, un successeur, donc $\neq 0$ — propriété du successeur <Prereq href="/maths/partie-ii/entiers-naturels">démontrée</Prereq> pour les entiers de von Neumann. $\square$
 
-**Théorème.** Écrivons $x$ et $y$ sous forme canonique. On calcule le produit dans chacun des quatre cas :
+**Théorème.** Écrivons $x$ et $y$ sous forme canonique — le théorème de la section précédente nous y autorise. On calcule le produit dans chacun des quatre cas :
 
 | $x$ | $y$ | $x \cdot y$ |
 |---|---|---|
