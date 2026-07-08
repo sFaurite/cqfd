@@ -26,12 +26,12 @@ Et il faut commencer par le plus modeste des gestes : choisir un **langage**.
 
 Imaginez vouloir tout définir. « Un ensemble est une collection d'objets. » Mais qu'est-ce qu'une *collection* ? Et un *objet* ? On tourne en rond. À un moment, il faut s'arrêter et déclarer : voici mes notions **primitives**, je ne les définis pas, je dis seulement comment elles se comportent.
 
-En théorie des ensembles, ces notions sont au nombre de deux :
+En théorie des ensembles, ces notions primitives sont au nombre de deux :
 
-- le mot **ensemble** lui-même ;
-- la relation d'**appartenance**, notée $\in$. L'énoncé $a \in E$ se lit « $a$ est élément de $E$ ».
+- le mot **ensemble** lui-même — techniquement, ce n'est pas un symbole du langage mais son *univers du discours* : nos variables $x$, $y$, $E$, … désignent toutes, et uniquement, des ensembles ;
+- la relation d'**appartenance**, notée $\in$ : l'énoncé $a \in E$ se lit « $a$ est élément de $E$ ». C'est le **seul symbole non logique** du langage — l'égalité $=$, les connecteurs et les quantificateurs sont fournis par la <Prereq href="/maths/partie-i/methode-axiomatique">logique du premier ordre avec égalité</Prereq> posée au chapitre précédent.
 
-C'est tout. Tout objet est un ensemble (même ses éléments sont des ensembles), et la seule chose qu'on sait faire est demander : *est-ce que ceci appartient à cela ?* Les axiomes, ci-dessous, fixent les règles du jeu sur $\in$.
+C'est tout. Tout objet est un ensemble (même ses éléments sont des ensembles), et toute affirmation mathématique devra, au bout du compte, s'écrire avec $\in$, $=$ et la logique. Les axiomes, ci-dessous, fixent les règles du jeu sur $\in$.
 
 <Badge niveau="admis">Que tout se réduise à $\in$ est un choix de modélisation extraordinairement fécond, standard depuis un siècle — mais c'est un choix, pas une vérité imposée.</Badge>
 
@@ -70,7 +70,7 @@ La leçon est limpide : on ne peut **pas** fabriquer un ensemble à partir de n'
 
 ### Les axiomes de Zermelo–Fraenkel (ZF)
 
-Voici le système standard. Je les énonce intuitivement ; leur version logique formelle viendra plus tard si nécessaire.
+Voici le système standard. Je les énonce intuitivement ; leur version logique formelle viendra plus tard si nécessaire. Une précision verrouille tout : quand un axiome parle d'une « propriété » $P$, il faut entendre une **formule du langage de ZF** — écrite avec $\in$, $=$ et la logique, éventuellement avec paramètres — et non une propriété vague du langage courant. C'est ce qui fait de la séparation et du remplacement des *schémas* : une instance d'axiome par formule.
 
 <Hypotheses titre="Hypothèses de départ : les axiomes ZF">
 
@@ -78,22 +78,22 @@ Voici le système standard. Je les énonce intuitivement ; leur version logique 
 2. **Paire.** Pour tous $a$, $b$, il existe un ensemble $\{a, b\}$ dont les éléments sont précisément $a$ et $b$.
 3. **Réunion.** Pour tout ensemble $E$, il existe l'ensemble $\bigcup E$ des éléments des éléments de $E$.
 4. **Ensemble des parties.** Pour tout $E$, il existe $\mathcal{P}(E)$, l'ensemble de tous les sous-ensembles de $E$.
-5. **Séparation (restreinte, schéma).** Pour tout ensemble $E$ et toute propriété $P$, il existe $\{x \in E : P(x)\}$. **Restreinte** à un $E$ donné : c'est elle qui évite Russell. (C'est un *schéma* : une instance par propriété $P$.)
-6. **Infini.** Il existe un ensemble *inductif* (contenant $\varnothing$ et stable par $x \mapsto x \cup \{x\}$). C'est l'axiome qui rendra $\mathbb{N}$ possible.
-7. **Remplacement (schéma).** L'image d'un ensemble par une « fonction » définissable est encore un ensemble.
-8. **Fondation.** Aucun ensemble ne contient de chaîne d'appartenance infinie descendante ; en particulier $x \in x$ est interdit.
+5. **Séparation (restreinte, schéma).** Pour tout ensemble $E$ et toute **formule** $P(x)$ du langage de ZF (éventuellement avec paramètres), il existe $\{x \in E : P(x)\}$. **Restreinte** à un $E$ donné : c'est elle qui évite Russell.
+6. **Infini.** Il existe un ensemble $I$ qui contient un élément sans éléments, et qui, avec chaque $x$, contient aussi $x \cup \{x\}$. Un tel ensemble est dit *inductif* ; c'est l'axiome qui rendra $\mathbb{N}$ possible. (On n'écrit pas « contient $\varnothing$ » : ce symbole n'est pas encore défini — l'existence de l'ensemble vide se *déduira* de cet axiome, juste en dessous.)
+7. **Remplacement (schéma).** Si une formule $F(x, y)$ associe à chaque $x \in E$ un **unique** $y$ — une « fonction » définissable, les fonctions véritables n'existant pas encore —, alors l'ensemble de ces $y$ existe.
+8. **Fondation.** Tout ensemble non vide $A$ possède un élément **minimal pour $\in$** : un $y \in A$ tel que $y \cap A = \varnothing$. Conséquences intuitives : pas de boucle $x \in x$, pas de cycle $x_0 \ni x_1 \ni \cdots \ni x_0$, pas de chaîne d'appartenance infinie descendante.
 
 </Hypotheses>
 
-<Badge niveau="admis">ZF (avec ou sans choix) est le cadre de référence dans lequel se font aujourd'hui presque toutes les mathématiques. Très solidement établi par un siècle de pratique sans contradiction connue — mais sa non-contradiction elle-même ne se démontre pas de l'intérieur (Gödel).</Badge>
+<Badge niveau="admis">ZF — et ZFC, lorsqu'on lui adjoint l'axiome du choix — est le cadre de référence dans lequel se font aujourd'hui presque toutes les mathématiques. Très solidement établi par un siècle de pratique sans contradiction connue — mais sa non-contradiction elle-même ne se démontre pas de l'intérieur (Gödel).</Badge>
 
 ### À part : l'axiome du choix
 
-On adjoint souvent un neuvième axiome, l'**axiome du choix** (AC) : étant donnée une famille d'ensembles non vides, on peut choisir simultanément un élément dans chacun. ZF + AC se note **ZFC**.
+On adjoint souvent un axiome supplémentaire — le neuvième de *notre* liste, le décompte variant selon les présentations —, l'**axiome du choix** (AC) : étant donnée une famille d'ensembles non vides, on peut choisir simultanément un élément dans chacun. ZF + AC se note **ZFC**.
 
 <Encart type="plusloin" titre="AC est indépendant de ZF">
 
-Gödel (1938) a montré qu'on ne peut pas **réfuter** AC à partir de ZF (en construisant un modèle, l'univers constructible $L$, où AC est vrai) ; Cohen (1963), par la méthode du *forcing*, qu'on ne peut pas le **démontrer** non plus. AC est donc strictement **indépendant** de ZF : ajouter AC ou sa négation donne deux théories également cohérentes (si ZF l'est).
+Gödel (1938) a montré qu'on ne peut pas **réfuter** AC à partir de ZF (en construisant un modèle, l'univers constructible $L$, où AC est vrai) ; Cohen (1963), par la méthode du *forcing*, qu'on ne peut pas le **démontrer** non plus. AC est donc strictement **indépendant** de ZF : ajouter AC ou sa négation donne deux théories toutes deux cohérentes **relativement à ZF** — si ZF est cohérente, chacune l'est aussi.
 
 <Badge niveau="demontre">L'indépendance est un théorème démontré (Gödel/Cohen). <a href="https://fr.wikipedia.org/wiki/Axiome_du_choix" target="_blank" rel="noopener">réf. ↗</a></Badge> Quant à l'*adoption* d'AC : <Badge niveau="admis">c'est un **choix** (un axiome supplémentaire), quasi universel car très commode, mais philosophiquement discuté — surtout pour ses conséquences contre-intuitives (Banach–Tarski).</Badge>
 
@@ -142,7 +142,7 @@ $$
 (a, b) := \{\, \{a\},\ \{a, b\} \,\}
 $$
 
-L'idée géniale : le « premier » $a$ est marqué deux fois (il est dans les deux blocs), le « second » $b$ une seule. L'asymétrie est encodée dans la structure même.
+L'idée géniale, lorsque $a \neq b$ : le « premier » $a$ est marqué deux fois (il est dans les deux blocs), le « second » $b$ une seule — l'asymétrie est encodée dans la structure même. Lorsque $a = b$, les deux blocs se confondent ($(a, a) = \{\{a\}\}$) : l'image mentale s'efface, mais la propriété caractéristique, elle, tient toujours — l'encart ci-dessous traite précisément ce cas.
 
 <Encart type="plusloin" titre="Pourquoi (a,b) encode vraiment l'ordre">
 
@@ -164,8 +164,8 @@ Pensez au couple comme à une boîte à deux compartiments fermés. L'ensemble $
 
 </Encart>
 
-De là, le **produit cartésien** $A \times B = \{(a, b) : a \in A,\ b \in B\}$ s'obtient par séparation à l'intérieur d'un $\mathcal{P}(\mathcal{P}(A \cup B))$ bien choisi — tout existe déjà grâce aux axiomes 2, 3, 4 et 5. <Badge niveau="demontre">Construction standard, légitimée par les axiomes posés.</Badge>
+De là, le **produit cartésien** $A \times B = \{(a, b) : a \in A,\ b \in B\}$ s'obtient par séparation à l'intérieur de $\mathcal{P}(\mathcal{P}(A \cup B))$. Pourquoi cet ensemble-là ? Suivez les emboîtements : si $a \in A$ et $b \in B$, alors $\{a\}$ et $\{a, b\}$ sont des **parties** de $A \cup B$, donc des **éléments** de $\mathcal{P}(A \cup B)$ ; le couple $(a, b) = \{\{a\}, \{a, b\}\}$ est ainsi une partie de $\mathcal{P}(A \cup B)$, c'est-à-dire un élément de $\mathcal{P}(\mathcal{P}(A \cup B))$. Tous les couples y vivent déjà — grâce aux axiomes 2, 3 et 4 — et il ne reste qu'à découper par séparation. <Badge niveau="demontre">Construction complète : chaque étage d'emboîtement est justifié par un axiome posé.</Badge>
 
 ### Ce qui vient ensuite
 
-Nous avons un sol : $\varnothing$, les paires, les couples, les produits. Mais tout cela reste *fini*. L'axiome d'**Infini**, dont nous ne nous sommes servis jusqu'ici que pour disposer d'un ensemble quelconque, va maintenant livrer tout son potentiel : il nous offre le premier objet véritablement riche des mathématiques. C'est avec lui que, dans le prochain chapitre, nous construirons $\mathbb{N}$ à partir du vide.
+Nous avons un sol : $\varnothing$, les paires, les couples, les produits — les briques élémentaires. Le prochain chapitre les organise en **relations** et en **fonctions**, les flèches des mathématiques. Puis l'axiome d'**Infini**, dont nous ne nous sommes servis jusqu'ici que pour disposer d'un ensemble quelconque, livrera tout son potentiel : c'est avec lui que nous construirons $\mathbb{N}$ à partir du vide.
