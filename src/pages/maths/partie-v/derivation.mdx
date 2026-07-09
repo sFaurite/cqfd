@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "La dérivée"
 chapter: derivation
-description: "Dérivée = limite du taux d’accroissement ; dérivable ⇒ continue ; règles (somme, produit, composée, réciproque) ; extremum intérieur ⇒ dérivée nulle ; ROLLE ; ACCROISSEMENTS FINIS ; f croissante ssi f′ ≥ 0 ; Weierstrass cité (continue nulle part dérivable)."
+description: "Dérivée = limite du taux d’accroissement ; dérivable ⇒ continue ; dérivées de base (constante, identité) établies ; Fermat sans limites unilatérales ; règles (somme, produit, composée, réciproque) ; extremum intérieur ⇒ dérivée nulle ; ROLLE ; ACCROISSEMENTS FINIS ; f croissante ssi f′ ≥ 0 ; Weierstrass cité (continue nulle part dérivable)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -55,7 +55,7 @@ Donc $f'(a) = 2a$, et comme $a$ est quelconque : $\boxed{(x^2)' = 2x}$.
 
 **Étape 2.** Si $x > 0$, alors $|x| = x$ et le taux vaut $+1$. Si $x < 0$, alors $|x| = -x$ et le taux vaut $-1$.
 
-**Étape 3.** La limite à droite ($+1$) diffère de la limite à gauche ($-1$). Une fonction ne peut avoir deux limites distinctes (unicité de la limite, chapitre précédent) : le taux n'a **pas** de limite en $0$.
+**Étape 3.** Supposons que le taux ait une limite $L$ en $0$, et prenons l'exigence $\varepsilon = \tfrac12$ : un $\delta$ existerait tel que $0 \lt |x| \lt \delta$ donne $|\text{taux}(x) - L| \lt \tfrac12$. Or tout voisinage épointé de $0$ contient des $x \gt 0$ (taux $= +1$, d'où $|1 - L| \lt \tfrac12$) **et** des $x \lt 0$ (taux $= -1$, d'où $|{-1} - L| \lt \tfrac12$). L'inégalité triangulaire donnerait $2 = |1 - (-1)| \le |1 - L| + |L + 1| \lt 1$ : absurde — le même patron que la divergence de $(-1)^n$ au chapitre 18. Le taux n'a **pas** de limite en $0$.
 
 $$ \boxed{x \mapsto |x| \text{ est continue partout, mais non dérivable en } 0.} $$
 
@@ -127,6 +127,8 @@ Quand $x \to a$ : $f$ dérivable donc continue, d'où $f(x) \to b$ ; $\varphi$ c
 **Quotient, en déduction.** Puisque $\frac{f}{g} = f \cdot \bigl(h \circ g\bigr)$ avec $h(y) = \frac1y$, la chaîne donne $\bigl(\tfrac1g\bigr)' = -\tfrac{g'}{g^2}$, puis le produit : $\boxed{\left(\tfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}}$ (là où $g \neq 0$). <Badge niveau="demontre" slot="badge">Assemblage produit + chaîne + inverse, tous démontrés ci-dessus.</Badge>
 </Encart>
 
+Deux dérivées de base, si évidentes qu'on oublie de les établir — alors que tout le chapitre s'appuie dessus (le contre-exemple $x^3$ ci-dessous, la fonction auxiliaire des accroissements finis). Une **constante** a un taux identiquement nul, donc une dérivée nulle. L'**identité** $x \mapsto x$ a un taux identiquement égal à $1$ — $\tfrac{x - a}{x - a} = 1$ pour $x \neq a$ —, donc une dérivée égale à $1$. Par la règle du produit, $(kx)' = k \cdot 1 + 0 \cdot x = k$. <Badge niveau="demontre">Taux constants, limites immédiates.</Badge>
+
 <Encart type="calcul" titre="Dérivée d'une fonction réciproque : (f⁻¹)′ = 1/(f′∘f⁻¹)">
 
 Cette règle est le ressort du logarithme (chapitre 23) : elle dérive une réciproque *sans en connaître de formule*.
@@ -155,13 +157,15 @@ $$
 
 <Encart type="calcul" titre="Théorème de Fermat">
 
-**Hypothèses.** $f$ admet un maximum local en un point $c$ **intérieur** au domaine, et $f$ est dérivable en $c$.
+**Hypothèses.** $f$ admet un **maximum local** en un point $c$ **intérieur** au domaine — c'est-à-dire : il existe $\eta \gt 0$ tel que $f(x) \leq f(c)$ pour tout $x$ du domaine avec $|x - c| \lt \eta$, et $\left]c - \eta,\, c + \eta\right[$ est contenu dans le domaine — et $f$ est dérivable en $c$.
 
-**Étape 1 — côté droit.** Pour $x > c$ proche de $c$ : $f(x) - f(c) \leq 0$ (maximum) et $x - c > 0$, donc le taux est $\leq 0$. Sa limite l'est aussi : $f'(c) \leq 0$.
+**Le geste.** Fixons $\varepsilon \gt 0$. La dérivabilité fournit $\delta \gt 0$ (que l'on peut prendre $\leq \eta$) tel que $0 \lt |x - c| \lt \delta$ donne $\left|\tfrac{f(x)-f(c)}{x-c} - f'(c)\right| \lt \varepsilon$.
 
-**Étape 2 — côté gauche.** Pour $x < c$ proche de $c$ : $f(x) - f(c) \leq 0$ et $x - c < 0$, donc le taux est $\geq 0$. Sa limite : $f'(c) \geq 0$.
+**Étape 1 — côté droit.** Prenons un $x$ avec $c \lt x \lt c + \delta$ (il en existe, $c$ est intérieur) : $f(x) - f(c) \leq 0$ et $x - c \gt 0$, donc le taux est $\leq 0$, et $f'(c) \lt \text{taux} + \varepsilon \leq \varepsilon$.
 
-**Étape 3.** $f$ étant dérivable, ces deux limites unilatérales valent le même $f'(c)$. Coincé entre $\leq 0$ et $\geq 0$ : $\boxed{f'(c) = 0}$. (Le cas d'un minimum est symétrique.)
+**Étape 2 — côté gauche.** Prenons un $x$ avec $c - \delta \lt x \lt c$ : $f(x) - f(c) \leq 0$ et $x - c \lt 0$, donc le taux est $\geq 0$, et $f'(c) \gt \text{taux} - \varepsilon \geq -\varepsilon$.
+
+**Étape 3.** Ainsi $-\varepsilon \lt f'(c) \lt \varepsilon$ pour **tout** $\varepsilon \gt 0$ : $\boxed{f'(c) = 0}$. (Le cas d'un minimum est symétrique. Notez qu'aucune « limite unilatérale » — notion que ce cours n'a pas définie — n'a été nécessaire : deux points bien choisis par exigence $\varepsilon$ suffisent.)
 </Encart>
 
 Les deux hypothèses sont indispensables. **Sans extremum :** $x \mapsto x^3$ a une dérivée nulle en $0$ (la règle du produit appliquée à $x^3 = x^2 \cdot x$ donne $(x^3)' = 3x^2$) alors que $0$ n'est *ni* max *ni* min — la réciproque de Fermat est donc fausse. **Sans intériorité :** $x \mapsto x$ sur $[0,1]$ atteint son maximum en $x = 1$, mais $f'(1) = 1 \neq 0$ car l'extremum est au **bord**. <Badge niveau="demontre">Théorème démontré ; les contre-exemples montrent que chaque hypothèse est nécessaire.</Badge>
@@ -181,7 +185,7 @@ $$ f \text{ continue sur } [a,b],\ \text{dérivable sur } ]a,b[,\ f(a)=f(b) \ \L
 
 **Étape 2 — premier cas.** Si le maximum *ou* le minimum est atteint en un point $c$ **intérieur** à $]a,b[$, alors $f$ y est dérivable et le théorème de Fermat donne $f'(c) = 0$.
 
-**Étape 3 — second cas (celui qu'on oublie).** Si $M$ **et** $m$ ne sont atteints qu'aux extrémités $a$ et $b$, alors, comme $f(a) = f(b)$, on a $M = m$. Une fonction dont le max égale le min est **constante** sur $[a,b]$ : sa dérivée est nulle partout, et n'importe quel $c \in \,]a,b[$ convient. $\blacksquare$
+**Étape 3 — second cas (celui qu'on oublie).** Si $M$ **et** $m$ ne sont atteints qu'aux extrémités $a$ et $b$, alors, comme $f(a) = f(b)$, on a $M = m$. Une fonction dont le max égale le min est **constante** sur $[a,b]$ ($m \leq f(x) \leq M = m$ partout) : son taux d'accroissement est identiquement nul, sa dérivée aussi, et n'importe quel $c \in \,]a,b[$ convient. $\blacksquare$
 </Encart>
 
 Chaque hypothèse est nécessaire — un contre-exemple éclair pour chacune :
