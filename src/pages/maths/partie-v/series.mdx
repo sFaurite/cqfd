@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les séries : sommer l’infini"
 chapter: series
-description: "Série = suite des sommes partielles ; série géométrique (somme démontrée) ; 0,999… = 1 démontré ; divergence de la série harmonique (Oresme) ; condition nécessaire uₙ → 0 (insuffisante) ; comparaison ; convergence absolue ; e := Σ 1/n! et e IRRATIONNEL démontré."
+description: "Série = suite des sommes partielles ; multiplicativité de la valeur absolue ; série géométrique (somme démontrée) ; 0,999… = 1 démontré ; divergence de la série harmonique (Oresme) ; condition nécessaire uₙ → 0 (insuffisante) ; comparaison ; convergence absolue ; e := Σ 1/n! et e IRRATIONNEL démontré."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -20,7 +20,7 @@ Additionner deux nombres, puis dix, puis un million : la <Prereq href="/maths/pa
 On ne somme jamais « tout ». On regarde grandir les **totaux provisoires** : $1$, puis $1+\tfrac12$, puis $1+\tfrac12+\tfrac14$, ... Chacun est une somme *finie*, parfaitement légitime. La question « combien vaut la somme infinie ? » devient : « vers quoi tend cette suite de totaux ? ». Sommer l'infini, c'est prendre une limite — et les limites, nous savons faire.
 </Encart>
 
-À la suite $(u_n)$ on associe ses **sommes partielles** $S_n = \sum_{k=0}^{n} u_k$. La série $\sum u_n$ **converge** vers $S$ lorsque la suite $(S_n)$ converge vers $S$ ; on note alors $\sum_{n=0}^{\infty} u_n = S$. Sinon, elle **diverge**.
+À la suite $(u_n)$ on associe ses **sommes partielles** $S_n = \sum_{k=0}^{n} u_k$ — la somme finie étant, comme toujours, définie de proche en proche par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq> ($S_0 = u_0$, $S_{n+1} = S_n + u_{n+1}$). La série $\sum u_n$ **converge** vers $S$ lorsque la suite $(S_n)$ converge vers $S$ ; on note alors $\sum_{n=0}^{\infty} u_n = S$. Sinon, elle **diverge**.
 
 <Badge niveau="admis">C'est une définition : « la série converge » ne veut rien dire d'autre que « la suite $(S_n)$ converge ». Tout ce chapitre est un cas particulier du précédent — une pure économie conceptuelle.</Badge>
 
@@ -61,7 +61,7 @@ car $nh^2 \geq 0$. La <Prereq href="/maths/partie-ii/arithmetique-de-n">récurre
 
 </Encart>
 
-Pour $|q| < 1$ avec $q \neq 0$, posons $a = \tfrac{1}{|q|} > 1$, soit $a = 1 + h$ avec $h > 0$. Bernoulli donne $a^n \geq 1 + nh > nh$, d'où
+Un fait de plus sur la <Prereq href="/maths/partie-v/suites-limites">valeur absolue</Prereq>, à ajouter aux trois du chapitre précédent : elle est **multiplicative**, $|xy| = |x|\,|y|$ — quatre cas de signes, chacun réglé par la règle des signes — d'où $|q^n| = |q|^n$ par récurrence. Pour $|q| < 1$ avec $q \neq 0$, posons alors $a = \tfrac{1}{|q|} > 1$, soit $a = 1 + h$ avec $h > 0$. Bernoulli donne $a^n \geq 1 + nh > nh$, d'où
 
 $$0 \leq |q|^n = \frac{1}{a^n} < \frac{1}{nh}.$$
 
@@ -71,14 +71,14 @@ Le majorant $\tfrac{1}{nh}$ tend vers $0$ (c'est $\tfrac1n$ à un facteur près,
 
 $$\sum_{n=0}^{\infty} q^n = \frac{1}{1-q} \quad (|q| < 1), \qquad \text{et } \sum q^n \text{ diverge si } |q| \geq 1.$$
 
-<Badge niveau="demontre" slot="badge">Démontré via Bernoulli et Archimède, sans log ni exp. Pour $|q|\ge 1$, le terme $q^n$ ne tend pas vers $0$ (voir §3).</Badge>
+<Badge niveau="demontre" slot="badge">Démontré via Bernoulli et Archimède, sans log ni exp. Pour $|q|\ge 1$ : $|q^n| = |q|^n \geq 1$ par récurrence (produit de facteurs $\geq 1$), donc $q^n$ ne tend pas vers $0$, et la condition nécessaire du §3 fait diverger la série.</Badge>
 </Resultat>
 
 ### 2. Le mystère de $0{,}999\ldots$
 
 <Encart type="calcul" titre="0,999… = 1 : une définition honorée, pas un tour de magie">
 
-Qu'*est* $0{,}999\ldots$ ? Par **définition** d'un développement décimal, c'est la série de ses chiffres :
+Qu'*est* $0{,}999\ldots$ ? Le cours n'a encore jamais dit ce que signifie une écriture décimale infinie — **posons-le ici** : un développement décimal *est* la série de ses chiffres. <Badge niveau="admis">Définition, posée à l'instant : sans elle, l'écriture $0{,}999\ldots$ ne désigne rien.</Badge> Donc :
 
 $$0{,}999\ldots = \sum_{n=1}^{\infty} \frac{9}{10^{n}} = 9 \sum_{n=1}^{\infty} \left(\frac{1}{10}\right)^{n}.$$
 
@@ -120,7 +120,7 @@ Concrètement $\tfrac13+\tfrac14 \geq \tfrac14+\tfrac14 = \tfrac12$, puis $\tfra
 
 $$S_{2^{k}} = 1 + \sum_{j=1}^{k}\Big(\tfrac{1}{2^{j-1}+1} + \cdots + \tfrac{1}{2^{j}}\Big) \;\geq\; 1 + k\cdot\frac12 = 1 + \frac{k}{2}.$$
 
-Comme $1 + \tfrac{k}{2} \to \infty$, la suite croissante $(S_n)$ n'est pas majorée : elle diverge vers $+\infty$.
+La suite croissante $(S_n)$ n'est donc **pas majorée** : pour tout $M$, l'<Prereq href="/maths/partie-v/suites-limites">archimédien</Prereq> fournit un $k$ avec $1 + \tfrac{k}{2} > M$. Or toute suite convergente est bornée (chapitre 18) : $(S_n)$ ne converge pas. On dit qu'elle *diverge vers $+\infty$* — locution imagée que nous n'aurons pas besoin de formaliser ici.
 
 <Badge niveau="demontre" slot="badge">Démontré par paquets dyadiques (Oresme, ~1350) — six siècles avant les $\varepsilon$.</Badge>
 </Encart>
@@ -137,7 +137,7 @@ Posons $S_n = \sum_{k=0}^{n} u_k$ et $T_n = \sum_{k=0}^{n} v_k$.
 
 - $u_k \geq 0$ rend $(S_n)$ **croissante** ;
 - $u_k \leq v_k$ donne $S_n \leq T_n$ ;
-- $(T_n)$ croît vers $T := \sum v_n$, donc $T_n \leq T$.
+- $(T_n)$ croît vers $T := \sum v_n$, et le théorème de convergence monotone dit précisément que $T$ est le **sup** des $T_n$ : donc $T_n \leq T$.
 
 Ainsi $S_n \leq T_n \leq T$ : la suite $(S_n)$ est **croissante et majorée** par $T$. Le <Prereq href="/maths/partie-v/suites-limites">théorème de convergence monotone</Prereq> conclut qu'elle converge.
 
@@ -150,7 +150,7 @@ Pour $n \geq 2$, on a $n^2 \geq n(n-1)$, donc
 
 $$0 \leq \frac{1}{n^{2}} \leq \frac{1}{n(n-1)} = \frac{1}{n-1} - \frac{1}{n}.$$
 
-La série majorante **télescope** : $\sum_{n=2}^{N}\big(\tfrac{1}{n-1}-\tfrac1n\big) = 1 - \tfrac{1}{N} \to 1$, elle converge. Par comparaison, $\sum \tfrac{1}{n^{2}}$ converge (et sa somme est $\leq 2$).
+La série majorante **télescope** : $\sum_{n=2}^{N}\big(\tfrac{1}{n-1}-\tfrac1n\big) = 1 - \tfrac{1}{N} \to 1$, elle converge. Par comparaison — appliquée aux séries démarrées au rang $2$ : ôter un nombre fini de termes de tête ne fait que translater les sommes partielles d'une constante, sans changer la nature —, $\sum \tfrac{1}{n^{2}}$ converge, et sa somme est $\leq 1 + 1 = 2$.
 
 <Badge niveau="demontre" slot="badge">Convergence démontrée par comparaison télescopique.</Badge>
 </Encart>
@@ -169,7 +169,7 @@ $\sum u_n$ est **absolument convergente** si $\sum |u_n|$ converge. Alors $\sum 
 
 *Le vertige (Riemann, 1854).* Si $\sum u_n$ converge **sans** converger absolument — dite *semi-convergente*, comme $\sum \tfrac{(-1)^{n+1}}{n}$ — alors en **réordonnant** ses termes on peut la faire converger vers **n'importe quel réel**, ou diverger. Sommer l'infini n'est donc **pas commutatif** en général.
 
-<Badge niveau="demontre" slot="badge">Les deux énoncés sont des théorèmes. Leçon d'humilité : l'ordre des termes, invisible pour une somme finie, gouverne une somme infinie non absolument convergente.</Badge>
+<Badge niveau="demontre" slot="badge">Le premier énoncé est démontré ci-dessus ; le théorème de réarrangement de Riemann, lui, est **cité sans preuve**, hors du parcours. <a href="https://fr.wikipedia.org/wiki/Théorème_de_réarrangement_de_Riemann" target="_blank" rel="noopener">réf. ↗</a> Leçon d'humilité : l'ordre des termes, invisible pour une somme finie, gouverne une somme infinie non absolument convergente.</Badge>
 </Encart>
 
 ### 6. Le nombre $e$
@@ -187,7 +187,7 @@ Comparons $\tfrac{1}{n!}$ à une géométrique. Montrons par récurrence que $\t
 - $n=1$ : $\tfrac{1}{1!} = 1 = \tfrac{1}{2^{0}}$.
 - Hérédité : $\dfrac{1}{(n+1)!} = \dfrac{1}{n+1}\cdot\dfrac{1}{n!} \leq \dfrac{1}{2}\cdot\dfrac{1}{2^{\,n-1}} = \dfrac{1}{2^{\,n}}$, car $n+1 \geq 2$.
 
-Donc $\sum_{n\ge1}\tfrac{1}{n!} \leq \sum_{n\ge1}\tfrac{1}{2^{\,n-1}} = \sum_{m\ge0}\tfrac{1}{2^{\,m}} = 2$ — et même *strictement*, car l'inégalité $\tfrac{1}{n!} \leq \tfrac{1}{2^{\,n-1}}$ devient stricte dès $n=3$ ($\tfrac16 < \tfrac14$). En ajoutant le terme $n=0$ (qui vaut $1$) : $e < 3$. Dans l'autre sens, les deux premiers termes valent déjà $1+1=2$ et tous les suivants sont strictement positifs, donc $e > 2$. Sommes partielles croissantes et majorées : la série converge.
+Donc $\sum_{n\ge1}\tfrac{1}{n!} \leq \sum_{n\ge1}\tfrac{1}{2^{\,n-1}} = \sum_{m\ge0}\tfrac{1}{2^{\,m}} = 2$ — et même *strictement*. Attention à l'argument : « l'inégalité devient stricte dès $n = 3$ » ne suffirait pas, car le strict **ne passe pas à la limite** (chapitre 18). Mais un **écart fixe**, si : le terme $n = 3$ accuse le déficit $\tfrac14 - \tfrac16 = \tfrac1{12}$, donc chaque somme partielle (dès le rang $3$) reste $\leq 2 - \tfrac1{12}$, et la limite aussi : $\sum_{n\ge1}\tfrac{1}{n!} \leq 2 - \tfrac{1}{12} < 2$. En ajoutant le terme $n=0$ (qui vaut $1$) : $e < 3$. Dans l'autre sens, la somme d'une série à termes positifs majore chacune de ses sommes partielles (c'est leur sup) : $e \geq S_2 = 1 + 1 + \tfrac12 = \tfrac52 > 2$. Sommes partielles croissantes et majorées : la série converge.
 
 <Resultat label="Le nombre e">
 
@@ -204,9 +204,11 @@ Le reste après le rang $n$ est $R_n = \sum_{k=n+1}^{\infty}\tfrac{1}{k!}$. Pour
 
 $$k! = (n+1)!\,(n+2)(n+3)\cdots k \geq (n+1)!\,(n+1)^{\,k-n-1},$$
 
-donc $\tfrac{1}{k!} \leq \tfrac{1}{(n+1)!}\cdot\tfrac{1}{(n+1)^{\,k-n-1}}$, l'inégalité étant stricte dès $k \geq n+2$. En sommant cette géométrique de raison $\tfrac{1}{n+1}$ :
+donc $\tfrac{1}{k!} \leq \tfrac{1}{(n+1)!}\cdot\tfrac{1}{(n+1)^{\,k-n-1}}$. En sommant cette géométrique de raison $\tfrac{1}{n+1}$ :
 
-$$R_n < \frac{1}{(n+1)!}\cdot\frac{1}{1 - \frac{1}{n+1}} = \frac{1}{(n+1)!}\cdot\frac{n+1}{n} = \frac{1}{n\cdot n!}.$$
+$$R_n \leq \frac{1}{(n+1)!}\cdot\frac{1}{1 - \frac{1}{n+1}} = \frac{1}{(n+1)!}\cdot\frac{n+1}{n} = \frac{1}{n\cdot n!},$$
+
+et l'inégalité est **stricte** — non parce que les termes $k \geq n+2$ sont strictement plus petits (le strict ne passe pas à la limite, chapitre 18), mais parce que le terme $k = n+2$ accuse un **déficit fixe**, qui manque à toutes les sommes partielles, donc à la limite : $R_n < \tfrac{1}{n \cdot n!}$.
 
 Avec $n=7$ : $R_7 < \tfrac{1}{7\cdot 5040} < 3\cdot 10^{-5}$, et $\sum_{k=0}^{7}\tfrac{1}{k!} = 2{,}71825\ldots$, d'où $e = 2{,}71828\ldots$
 
@@ -225,7 +227,7 @@ $$x := q!\left(e - \sum_{n=0}^{q}\frac{1}{n!}\right) = q!\,e - \sum_{n=0}^{q}\fr
 
 **Étape 2 — $x$ est entier.** D'une part $q!\,e = q!\cdot\tfrac{p}{q} = p\,(q-1)! \in \mathbb{Z}$. D'autre part, pour $0 \leq n \leq q$, $\tfrac{q!}{n!} = (n+1)(n+2)\cdots q \in \mathbb{Z}$ (produit d'entiers ; vide, donc égal à $1$, pour $n=q$). Donc $\sum_{n=0}^{q}\tfrac{q!}{n!} \in \mathbb{Z}$, et par différence $x \in \mathbb{Z}$.
 
-**Étape 3 — $x > 0$.** Or $x = q!\sum_{n=q+1}^{\infty}\tfrac{1}{n!} = q!\,R_q$, somme de termes strictement positifs : $x > 0$.
+**Étape 3 — $x > 0$.** Or $x = q!\sum_{n=q+1}^{\infty}\tfrac{1}{n!} = q!\,R_q$ ; la somme d'une série à termes positifs majore chacune de ses sommes partielles, dont la première, $\tfrac{1}{(q+1)!} > 0$ : donc $x > 0$.
 
 **Étape 4 — $x < 1$.** Le contrôle du reste donne $R_q < \tfrac{1}{q\cdot q!}$, d'où
 
