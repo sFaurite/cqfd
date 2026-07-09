@@ -22,7 +22,7 @@ Dès 1874, Georg Cantor avait établi qu'aucune liste n'épuise $\mathbb{R}$ ; e
 
 ## Le laboratoire idéal : les suites de 0 et de 1
 
-Plutôt que d'attaquer $\mathbb{R}$ de front, travaillons d'abord dans le cadre le plus épuré possible. Notons $2^{\mathbb{N}}$ l'ensemble des suites infinies de 0 et de 1, c'est-à-dire l'ensemble des fonctions $s \colon \mathbb{N} \to \{0,1\}$. Chaque élément est un objet parfaitement concret, du type $0110100010\ldots$
+Plutôt que d'attaquer $\mathbb{R}$ de front, travaillons d'abord dans le cadre le plus épuré possible. Notons $\{0,1\}^{\mathbb{N}}$ l'ensemble des suites infinies de 0 et de 1, c'est-à-dire l'ensemble des fonctions $s \colon \mathbb{N} \to \{0,1\}$. Chaque élément est un objet parfaitement concret, du type $0110100010\ldots$ (On abrège souvent cette notation en $2^{\mathbb{N}}$ — à ne pas confondre avec $2\mathbb{N}$, les entiers pairs du chapitre 10 : nous garderons la version explicite.)
 
 <Encart type="intuition" titre="Saboter la diagonale">
 Imaginez qu'on prétende avoir dressé la liste complète de ces suites, écrites en tableau, une par ligne. Descendez le long de la diagonale — premier chiffre de la première ligne, deuxième chiffre de la deuxième, etc. — et *inversez chaque chiffre rencontré*. La suite ainsi fabriquée ne peut être **aucune** ligne du tableau : elle contredit la ligne $n$ précisément à la colonne $n$. Quelle que soit la liste, cette machine lui fabrique un absent. Voilà tout l'argument.
@@ -30,26 +30,26 @@ Imaginez qu'on prétende avoir dressé la liste complète de ces suites, écrite
 
 <Resultat label="Théorème (Cantor, 1891)">
 
-$$ 2^{\mathbb{N}} \text{ n'est pas dénombrable.} $$
+$$ \{0,1\}^{\mathbb{N}} \text{ n'est pas dénombrable.} $$
 
 <Badge niveau="demontre" slot="badge">Démonstration complète ci-dessous : quatre étapes, aucune échappatoire.</Badge>
 
 </Resultat>
 
 <Encart type="calcul" titre="L'argument diagonal, ligne à ligne">
-**Étape 1 — supposons le contraire.** Si $2^{\mathbb{N}}$ était dénombrable, il existerait une <Prereq href="/maths/partie-iii/denombrables">énumération</Prereq> $s_0, s_1, s_2, \ldots$ l'épuisant, c'est-à-dire une surjection $n \mapsto s_n$ de $\mathbb{N}$ sur $2^{\mathbb{N}}$ (la bijection fournie par la dénombrabilité est en particulier surjective — et seule la surjectivité servira).
+**Étape 1 — supposons le contraire.** Si $\{0,1\}^{\mathbb{N}}$ était dénombrable, il existerait une <Prereq href="/maths/partie-iii/denombrables">énumération</Prereq> $s_0, s_1, s_2, \ldots$ l'épuisant, c'est-à-dire une surjection $n \mapsto s_n$ de $\mathbb{N}$ sur $\{0,1\}^{\mathbb{N}}$ (la bijection fournie par la dénombrabilité est en particulier surjective — et seule la surjectivité servira).
 
 **Étape 2 — la suite diagonale.** Définissons $d \colon \mathbb{N} \to \{0,1\}$ par
 
 $$ d(n) := 1 - s_n(n). $$
 
-Cette définition est légitime : $s_n(n) \in \{0,1\}$, donc $1 - s_n(n) \in \{0,1\}$, et $d$ est donnée par une formule explicite — aucun recours à une forme de choix. Ainsi $d \in 2^{\mathbb{N}}$.
+Cette définition est légitime : $s_n(n) \in \{0,1\}$, donc $1 - s_n(n) \in \{0,1\}$, et $d$ est donnée par une formule explicite — aucun recours à une forme de choix. Formellement, le graphe de $d$ est l'ensemble des couples $(n, \varepsilon) \in \mathbb{N} \times \{0,1\}$ tels que $\varepsilon = 1 - s_n(n)$ : il existe par <Prereq href="/maths/partie-i/ensembles-zf">séparation</Prereq>, et c'est une fonction. Ainsi $d \in \{0,1\}^{\mathbb{N}}$.
 
 **Étape 3 — $d$ échappe à toute la liste.** Fixons $n \in \mathbb{N}$ quelconque. Si $s_n(n) = 0$, alors $d(n) = 1$ ; si $s_n(n) = 1$, alors $d(n) = 0$. Dans les deux cas $d(n) \neq s_n(n)$ : les suites $d$ et $s_n$ diffèrent au rang $n$, donc $d \neq s_n$.
 
-**Étape 4 — contradiction.** L'étape 3 vaut pour *tout* $n$ : la suite $d$ appartient à $2^{\mathbb{N}}$ mais ne figure nulle part dans l'énumération, qui n'était donc pas surjective. Contradiction.
+**Étape 4 — contradiction.** L'étape 3 vaut pour *tout* $n$ : la suite $d$ appartient à $\{0,1\}^{\mathbb{N}}$ mais ne figure nulle part dans l'énumération, qui n'était donc pas surjective. Contradiction.
 
-$$ \boxed{2^{\mathbb{N}} \text{ n'est pas dénombrable.}} $$
+$$ \boxed{\{0,1\}^{\mathbb{N}} \text{ n'est pas dénombrable.}} $$
 
 </Encart>
 
@@ -67,24 +67,24 @@ Il reste à transporter le résultat vers les réels. L'idée : chaque suite de 
 Pour $q \neq 1$, on a $(1-q)(1 + q + \cdots + q^p) = 1 - q^{p+1}$ : en développant, tous les termes se télescopent sauf les deux extrêmes. D'où $1 + q + \cdots + q^p = \frac{1 - q^{p+1}}{1 - q}$. En particulier, pour $m > n$ : $\sum_{k=n+1}^{m} 2 \cdot 3^{-(k+1)} = 2 \cdot 3^{-(n+2)}\left(1 + 3^{-1} + \cdots + 3^{-(m-n-1)}\right) = 2 \cdot 3^{-(n+2)} \cdot \frac{1 - 3^{-(m-n)}}{1 - \frac{1}{3}} = 3^{-(n+1)}\left(1 - 3^{n-m}\right)$, somme qui reste donc strictement inférieure à $3^{-(n+1)}$.
 </Encart>
 
-<Encart type="calcul" titre="Une injection de $2^{\mathbb{N}}$ dans $\mathbb{R}$">
-**Étape 1 — définition.** Pour $s \in 2^{\mathbb{N}}$, posons $T_n(s) := \sum_{k=0}^{n} 2\,s(k)\,3^{-(k+1)}$. Ces sommes croissent avec $n$ (on ajoute des termes positifs ou nuls) et sont majorées par $1$ : par la somme géométrique ci-dessus, $T_n(s) \leq \sum_{k=0}^{n} 2 \cdot 3^{-(k+1)} = \frac{2}{3} \cdot \frac{1 - 3^{-(n+1)}}{1 - \frac{1}{3}} = 1 - 3^{-(n+1)} \lt 1$. Par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, on peut poser $J(s) := \sup_n T_n(s)$, qui appartient à $[0,1]$.
+<Encart type="calcul" titre="Une injection de $\{0,1\}^{\mathbb{N}}$ dans $\mathbb{R}$">
+**Étape 1 — définition.** Pour $s \in \{0,1\}^{\mathbb{N}}$, posons $T_n(s) := \sum_{k=0}^{n} 2\,s(k)\,3^{-(k+1)}$. Ces sommes croissent avec $n$ (on ajoute des termes positifs ou nuls) et sont majorées par $1$ : par la somme géométrique ci-dessus, $T_n(s) \leq \sum_{k=0}^{n} 2 \cdot 3^{-(k+1)} = \frac{2}{3} \cdot \frac{1 - 3^{-(n+1)}}{1 - \frac{1}{3}} = 1 - 3^{-(n+1)} \lt 1$. Par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, on peut poser $J(s) := \sup_n T_n(s)$, qui appartient à $[0,1]$.
 
-**Étape 2 — injectivité.** Soient $s \neq t$ et $n$ le plus petit rang où elles diffèrent — il existe par le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq>. Quitte à échanger les rôles, $s(n) = 1$ et $t(n) = 0$. Notons $C := \sum_{k \lt n} 2\,s(k)\,3^{-(k+1)}$ la partie commune (les deux suites coïncident avant $n$). D'une part $J(s) \geq T_n(s) = C + 2 \cdot 3^{-(n+1)}$. D'autre part, pour tout $m > n$, $T_m(t) = C + \sum_{k=n+1}^{m} 2\,t(k)\,3^{-(k+1)} \leq C + 3^{-(n+1)}\left(1 - 3^{n-m}\right) \lt C + 3^{-(n+1)}$ ; et pour $m \leq n$, la croissance des sommes donne $T_m(t) \leq T_{n+1}(t) \lt C + 3^{-(n+1)}$. Le réel $C + 3^{-(n+1)}$ majore donc toutes les $T_m(t)$, d'où $J(t) \leq C + 3^{-(n+1)}$ — la borne supérieure est le plus petit des majorants. Ainsi
+**Étape 2 — injectivité.** L'idée en une phrase : le premier chiffre où les deux suites diffèrent crée un écart que *tous* les chiffres suivants réunis ne peuvent pas combler — c'est exactement ce que les chiffres 0 et 2 en base 3 achètent. Soient $s \neq t$ et $n$ le plus petit rang où elles diffèrent — il existe par le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq>. Quitte à échanger les rôles, $s(n) = 1$ et $t(n) = 0$. Notons $C := \sum_{k \lt n} 2\,s(k)\,3^{-(k+1)}$ la partie commune (les deux suites coïncident avant $n$). D'une part $J(s) \geq T_n(s) = C + 2 \cdot 3^{-(n+1)}$. D'autre part, pour tout $m > n$, $T_m(t) = C + \sum_{k=n+1}^{m} 2\,t(k)\,3^{-(k+1)} \leq C + 3^{-(n+1)}\left(1 - 3^{n-m}\right) \lt C + 3^{-(n+1)}$ ; et pour $m \leq n$, la croissance des sommes donne $T_m(t) \leq T_{n+1}(t) \lt C + 3^{-(n+1)}$. Le réel $C + 3^{-(n+1)}$ majore donc toutes les $T_m(t)$, d'où $J(t) \leq C + 3^{-(n+1)}$ — la borne supérieure est le plus petit des majorants. Ainsi
 
 $$ J(s) - J(t) \geq \left(C + 2 \cdot 3^{-(n+1)}\right) - \left(C + 3^{-(n+1)}\right) = 3^{-(n+1)} > 0. $$
 
-Donc $J(s) \neq J(t)$ : $\boxed{J \text{ est une injection de } 2^{\mathbb{N}} \text{ dans } \mathbb{R}.}$
+Donc $J(s) \neq J(t)$ : $\boxed{J \text{ est une injection de } \{0,1\}^{\mathbb{N}} \text{ dans } \mathbb{R}.}$
 
 </Encart>
 
-Concluons. Si $\mathbb{R}$ était dénombrable, il existerait une injection de $\mathbb{R}$ dans $\mathbb{N}$ ; composée avec $J$, elle donnerait $|2^{\mathbb{N}}| \leq |\mathbb{N}|$. Or $|\mathbb{N}| \leq |2^{\mathbb{N}}|$ aussi ($n \mapsto$ la suite valant 1 en $n$ et 0 ailleurs est injective). Par le théorème de <Prereq href="/maths/partie-iii/equipotence">Cantor–Schröder–Bernstein</Prereq>, $2^{\mathbb{N}}$ serait équipotent à $\mathbb{N}$, donc dénombrable — contradiction frontale avec l'argument diagonal. Même $[0,1[$ y passe : $J$ prend ses valeurs dans $[0,1]$, donc le même raisonnement montre que $[0,1]$ n'est pas dénombrable ; et si $[0,1[$ l'était, $[0,1] = [0,1[ \cup \{1\}$ le serait aussi — insérer un élément en tête de liste est un tour de l'hôtel de Hilbert du chapitre 10.
+Concluons. Si $\mathbb{R}$ était dénombrable, il existerait une injection de $\mathbb{R}$ dans $\mathbb{N}$ ; composée avec $J$, elle donnerait $|\{0,1\}^{\mathbb{N}}| \leq |\mathbb{N}|$. Or $|\mathbb{N}| \leq |\{0,1\}^{\mathbb{N}}|$ aussi ($n \mapsto$ la suite valant 1 en $n$ et 0 ailleurs est injective). Par le théorème de <Prereq href="/maths/partie-iii/equipotence">Cantor–Schröder–Bernstein</Prereq>, $\{0,1\}^{\mathbb{N}}$ serait équipotent à $\mathbb{N}$, donc dénombrable — contradiction frontale avec l'argument diagonal. Même $[0,1[$ y passe : $J$ prend ses valeurs dans $[0,1]$, donc le même raisonnement montre que $[0,1]$ n'est pas dénombrable ; et si $[0,1[$ l'était, $[0,1] = [0,1[ \cup \{1\}$ le serait aussi — insérer un élément en tête de liste est un tour de l'hôtel de Hilbert du chapitre 10.
 
 <Resultat label="Théorème : $\mathbb{R}$ est indénombrable">
 
 $$ \mathbb{R} \text{ n'est pas dénombrable — aucune liste } r_0, r_1, r_2, \ldots \text{ ne l'épuise.} $$
 
-<Badge niveau="demontre" slot="badge">Démontré par transfert : $2^{\mathbb{N}}$ s'injecte dans $\mathbb{R}$ et n'est pas dénombrable.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré par transfert : $\{0,1\}^{\mathbb{N}}$ s'injecte dans $\mathbb{R}$ et n'est pas dénombrable.</Badge>
 
 </Resultat>
 
@@ -93,13 +93,13 @@ $$ \mathbb{R} \text{ n'est pas dénombrable — aucune liste } r_0, r_1, r_2, \l
 Pourquoi ce détour par la base 3, au lieu d'appliquer la diagonale directement aux écritures binaires ou décimales des réels ? Parce qu'un réel peut posséder *deux* écritures distinctes — et une preuve qui l'ignore est **fausse**.
 
 <Encart type="calcul" titre="Deux écritures, un seul réel : $0{,}0111\ldots_2 = 0{,}1000\ldots_2$">
-Le réel codé par $0{,}0111\ldots$ en base 2 est, par définition des développements, la borne supérieure des sommes partielles $\sum_{k=2}^{n} 2^{-k}$. Par la somme géométrique finie, $\sum_{k=2}^{n} 2^{-k} = \frac{1}{4} \cdot \frac{1 - 2^{-(n-1)}}{1 - \frac{1}{2}} = \frac{1}{2} - 2^{-n}$. Chaque somme est donc strictement inférieure à $\frac{1}{2}$ — et aucun réel $x \lt \frac{1}{2}$ ne les majore toutes. En effet, $2^n \geq n+1$ (récurrence immédiate), donc $2^{-n} \leq \frac{1}{n+1}$ ; or $\mathbb{N}$ n'est pas majoré dans $\mathbb{R}$ — sinon, par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, il aurait une borne supérieure $\sigma$, un entier $n$ dépasserait $\sigma - 1$ (qui, plus petit que $\sigma$, n'est plus un majorant), et $n + 1 > \sigma$ contredirait que $\sigma$ majore $\mathbb{N}$. Il existe donc $n$ tel que $n + 1 > \frac{1}{\frac{1}{2} - x}$, d'où $2^{-n} \leq \frac{1}{n+1} \lt \frac{1}{2} - x$, c'est-à-dire $\frac{1}{2} - 2^{-n} > x$ : la somme partielle de rang $n$ dépasse $x$. La borne supérieure vaut donc exactement $\frac{1}{2}$, c'est-à-dire $0{,}1000\ldots_2$.
+L'essentiel en une ligne : les sommes partielles valent $\frac12 - 2^{-n}$ — toutes strictement sous $\frac12$, mais s'en approchant d'aussi près qu'on veut : leur borne supérieure est $\frac12$, c'est-à-dire $0{,}1000\ldots_2$. Le détail, maintenant. Le réel codé par $0{,}0111\ldots$ en base 2 est, par définition des développements, la borne supérieure des sommes partielles $\sum_{k=2}^{n} 2^{-k}$. Par la somme géométrique finie, $\sum_{k=2}^{n} 2^{-k} = \frac{1}{4} \cdot \frac{1 - 2^{-(n-1)}}{1 - \frac{1}{2}} = \frac{1}{2} - 2^{-n}$. Chaque somme est donc strictement inférieure à $\frac{1}{2}$ — et aucun réel $x \lt \frac{1}{2}$ ne les majore toutes. En effet, $2^n \geq n+1$ (récurrence immédiate), donc $2^{-n} \leq \frac{1}{n+1}$ ; or $\mathbb{N}$ n'est pas majoré dans $\mathbb{R}$ — sinon, par la <Prereq href="/maths/partie-ii/reels-dedekind">propriété de la borne supérieure</Prereq>, il aurait une borne supérieure $\sigma$, un entier $n$ dépasserait $\sigma - 1$ (qui, plus petit que $\sigma$, n'est plus un majorant), et $n + 1 > \sigma$ contredirait que $\sigma$ majore $\mathbb{N}$. Il existe donc $n$ tel que $n + 1 > \frac{1}{\frac{1}{2} - x}$, d'où $2^{-n} \leq \frac{1}{n+1} \lt \frac{1}{2} - x$, c'est-à-dire $\frac{1}{2} - 2^{-n} > x$ : la somme partielle de rang $n$ dépasse $x$. La borne supérieure vaut donc exactement $\frac{1}{2}$, c'est-à-dire $0{,}1000\ldots_2$.
 
 $$ \boxed{0{,}0111\ldots_2 = 0{,}1000\ldots_2 = \tfrac{1}{2}} $$
 
 </Encart>
 
-Voyez le trou dans la preuve naïve : la diagonale fabrique une nouvelle *écriture*, pas forcément un nouveau *réel*. Si la liste contient $\frac{1}{2}$ sous la forme $0{,}1000\ldots$ et que la suite diagonale se trouve être $0{,}0111\ldots$, l'« intrus » figurait déjà dans la liste : la contradiction s'évapore. Deux parades classiques la restaurent. La nôtre : raisonner dans $2^{\mathbb{N}}$, où il n'y a *que* des suites, puis injecter dans $\mathbb{R}$ en base 3 avec les seuls chiffres 0 et 2 — l'injectivité de $J$ tient à des inégalités strictes, sans jamais parler d'écritures. L'autre : diagonaliser en base 10 en remplaçant chaque chiffre diagonal par 4 s'il vaut 5, et par 5 sinon ; le réel construit, n'ayant que des 4 et des 5, n'a ni queue de 0 ni queue de 9, donc une écriture unique, et différer d'un chiffre force alors des réels distincts. <Badge niveau="demontre">La version blindée (via $2^{\mathbb{N}}$ et la base 3) est intégralement démontrée ci-dessus ; c'est elle que le cours adopte.</Badge>
+Voyez le trou dans la preuve naïve : la diagonale fabrique une nouvelle *écriture*, pas forcément un nouveau *réel*. Si la liste contient $\frac{1}{2}$ sous la forme $0{,}1000\ldots$ et que la suite diagonale se trouve être $0{,}0111\ldots$, l'« intrus » figurait déjà dans la liste : la contradiction s'évapore. Deux parades classiques la restaurent. La nôtre : raisonner dans $\{0,1\}^{\mathbb{N}}$, où il n'y a *que* des suites, puis injecter dans $\mathbb{R}$ en base 3 avec les seuls chiffres 0 et 2 — l'injectivité de $J$ tient à des inégalités strictes, sans jamais parler d'écritures. L'autre : diagonaliser en base 10 en remplaçant chaque chiffre diagonal par 4 s'il vaut 5, et par 5 sinon ; le réel construit, n'ayant que des 4 et des 5, n'a ni queue de 0 ni queue de 9, donc une écriture unique, et différer d'un chiffre force alors des réels distincts. <Badge niveau="demontre">La version blindée (via $\{0,1\}^{\mathbb{N}}$ et la base 3) est intégralement démontrée ci-dessus ; c'est elle que le cours adopte.</Badge>
 
 ## Le théorème de Cantor : aucun ensemble n'épuise ses parties
 
@@ -130,7 +130,7 @@ $$ \boxed{\text{Aucune } f \colon E \to \mathcal{P}(E) \text{ n'est surjective.}
 
 </Encart>
 
-Reconnaissez-vous le ressort ? C'est exactement celui du <Prereq href="/maths/partie-i/ensembles-zf">paradoxe de Russell</Prereq> : « les $x$ qui ne s'appartiennent pas ». Chez Frege, ce mouvement logique détruisait la théorie entière ; ici, discipliné par le schéma de séparation, le *même* mouvement produit un théorème. La différence entre une catastrophe et un théorème, c'est le cadre axiomatique qui l'accueille — peu de pages illustrent mieux la valeur de ZF. Ajoutons que $x \mapsto \{x\}$ injecte toujours $E$ dans $\mathcal{P}(E)$, d'où $|E| \leq |\mathcal{P}(E)|$ ; et l'équipotence est exclue, car une bijection de $E$ sur $\mathcal{P}(E)$ serait en particulier une surjection, que le théorème interdit. Bilan : $|E| \lt |\mathcal{P}(E)|$ strictement. <Badge niveau="demontre">Conséquence directe du théorème de Cantor et de la comparaison par injection du chapitre 10.</Badge>
+Reconnaissez-vous le ressort ? C'est exactement celui du <Prereq href="/maths/partie-i/ensembles-zf">paradoxe de Russell</Prereq> : « les $x$ qui ne s'appartiennent pas ». Chez Frege, ce mouvement logique détruisait la théorie entière ; ici, discipliné par le schéma de séparation, le *même* mouvement produit un théorème. La différence entre une catastrophe et un théorème, c'est le cadre axiomatique qui l'accueille — peu de pages illustrent mieux la valeur de ZF. Ajoutons que $x \mapsto \{x\}$ injecte toujours $E$ dans $\mathcal{P}(E)$, d'où $|E| \leq |\mathcal{P}(E)|$ ; et l'équipotence est exclue, car une bijection de $E$ sur $\mathcal{P}(E)$ serait en particulier une surjection, que le théorème interdit. Bilan : $|E| \lt |\mathcal{P}(E)|$ strictement — où cette notation, toujours relationnelle et jamais un objet « cardinal », signifie exactement : une injection existe dans un sens, aucune bijection n'existe. <Badge niveau="demontre">Conséquence directe du théorème de Cantor et de la comparaison par injection du chapitre 10.</Badge>
 
 ## Une tour d'infinis sans sommet
 
@@ -138,23 +138,23 @@ Il suffit maintenant d'itérer :
 
 $$ |\mathbb{N}| \lt |\mathcal{P}(\mathbb{N})| \lt |\mathcal{P}(\mathcal{P}(\mathbb{N}))| \lt |\mathcal{P}(\mathcal{P}(\mathcal{P}(\mathbb{N})))| \lt \cdots $$
 
-Une chaîne strictement croissante d'infinis, sans plus grand élément : il n'existe pas de « plus grand infini ». <Badge niveau="demontre">Chaque inégalité est une application du théorème de Cantor.</Badge> Au passage, une ligne règle une vieille question : il n'existe pas d'ensemble de tous les ensembles — s'il existait un tel $U$, toute partie de $U$ serait un élément de $U$, donc $\mathcal{P}(U)$ s'injecterait dans $U$ par l'identité, d'où $|\mathcal{P}(U)| \leq |U|$ ; combinée à $|U| \leq |\mathcal{P}(U)|$, cette inégalité donnerait, par Cantor–Schröder–Bernstein, l'équipotence de $U$ et $\mathcal{P}(U)$ — que le théorème de Cantor vient d'exclure. Russell, encore, devenu théorème. <Badge niveau="demontre">Une ligne à partir du théorème de Cantor et de Cantor–Schröder–Bernstein.</Badge>
+Une chaîne strictement croissante d'infinis, sans plus grand élément. Et l'argument est plus fort encore que cette chaîne : pour **tout** ensemble $E$ — qu'il y figure ou non —, $\mathcal{P}(E)$ le dépasse strictement. Aucune taille d'ensemble ne peut donc être maximale : il n'existe pas de « plus grand infini ». <Badge niveau="demontre">Chaque inégalité de la chaîne, et l'énoncé général, sont des applications directes du théorème de Cantor.</Badge> Au passage, une ligne règle une vieille question : il n'existe pas d'ensemble de tous les ensembles — s'il existait un tel $U$, toute partie de $U$ serait un élément de $U$, donc $\mathcal{P}(U)$ s'injecterait dans $U$ par l'identité, d'où $|\mathcal{P}(U)| \leq |U|$ ; combinée à $|U| \leq |\mathcal{P}(U)|$, cette inégalité donnerait, par Cantor–Schröder–Bernstein, l'équipotence de $U$ et $\mathcal{P}(U)$ — que le théorème de Cantor vient d'exclure. Russell, encore, devenu théorème. <Badge niveau="demontre">Une ligne à partir du théorème de Cantor et de Cantor–Schröder–Bernstein.</Badge>
 
 Et où se loge $\mathbb{R}$ dans cette tour ? Au premier étage, exactement.
 
 <Encart type="plusloin" titre="$|\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$ : la boucle est bouclée">
-Esquisse honnête — l'assemblage est donné, les vérifications de détail sont techniques mais sans surprise. D'abord, $\mathcal{P}(\mathbb{N})$ et $2^{\mathbb{N}}$ sont équipotents : associer à chaque partie $A \subseteq \mathbb{N}$ sa fonction indicatrice (1 sur $A$, 0 ailleurs) est une bijection. Ensuite, deux injections en sens opposés. Dans un sens : $2^{\mathbb{N}}$ s'injecte dans $\mathbb{R}$ — c'est notre $J$ en base 3. Dans l'autre : un réel *est* une <Prereq href="/maths/partie-ii/reels-dedekind">coupure de Dedekind</Prereq>, c'est-à-dire, littéralement, une partie de $\mathbb{Q}$ — l'injection de $\mathbb{R}$ dans $\mathcal{P}(\mathbb{Q})$ est l'identité ! Comme $\mathbb{Q}$ est <Prereq href="/maths/partie-iii/denombrables">dénombrable</Prereq>, une bijection $\mathbb{Q} \to \mathbb{N}$ transporte les parties de $\mathbb{Q}$ sur les parties de $\mathbb{N}$, d'où $|\mathcal{P}(\mathbb{Q})| = |\mathcal{P}(\mathbb{N})|$. Cantor–Schröder–Bernstein conclut : $|\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$. Savourez la boucle : c'est la *définition* de $\mathbb{R}$ par coupures, posée au chapitre 8, qui rend la seconde injection triviale. <Badge niveau="demontre">Résultat démontré ; seuls les détails de recollement, techniques, sont laissés de côté ici.</Badge>
+L'assemblage complet — chaque vérification tient en une ligne. D'abord, $\mathcal{P}(\mathbb{N})$ et $\{0,1\}^{\mathbb{N}}$ sont équipotents : associer à chaque partie $A \subseteq \mathbb{N}$ sa fonction indicatrice (1 sur $A$, 0 ailleurs) est une bijection — injective car deux parties distinctes diffèrent en un point où leurs indicatrices diffèrent, surjective car toute suite $s$ est l'indicatrice de $\{n : s(n) = 1\}$ (séparation). Ensuite, deux injections en sens opposés. Dans un sens : $\{0,1\}^{\mathbb{N}}$ s'injecte dans $\mathbb{R}$ — c'est notre $J$ en base 3. Dans l'autre : un réel *est* une <Prereq href="/maths/partie-ii/reels-dedekind">coupure de Dedekind</Prereq>, c'est-à-dire, littéralement, une partie de $\mathbb{Q}$ — l'injection de $\mathbb{R}$ dans $\mathcal{P}(\mathbb{Q})$ est l'identité ! Comme $\mathbb{Q}$ est <Prereq href="/maths/partie-iii/denombrables">dénombrable</Prereq>, toute bijection $\varphi : \mathbb{Q} \to \mathbb{N}$ transporte les parties : $A \mapsto \varphi[A]$ est une bijection de $\mathcal{P}(\mathbb{Q})$ sur $\mathcal{P}(\mathbb{N})$, de réciproque $B \mapsto \varphi^{-1}[B]$. D'où $|\mathcal{P}(\mathbb{Q})| = |\mathcal{P}(\mathbb{N})|$. Cantor–Schröder–Bernstein conclut : $|\mathbb{R}| = |\mathcal{P}(\mathbb{N})|$. Savourez la boucle : c'est la *définition* de $\mathbb{R}$ par coupures, posée au chapitre 8, qui rend la seconde injection triviale. <Badge niveau="demontre">Démontré — l'assemblage est complet, chaque brique citée ou vérifiée sur place.</Badge>
 </Encart>
 
 ## Exister sans se montrer : les nombres transcendants
 
-Un réel est *algébrique* s'il est racine d'un polynôme non nul à coefficients entiers, *transcendant* sinon. <Badge niveau="admis">Définition : nous posons un vocabulaire, il n'y a rien à démontrer.</Badge> Nous avons démontré que les algébriques forment un ensemble <Prereq href="/maths/partie-iii/denombrables">dénombrable</Prereq> ; or $\mathbb{R}$ ne l'est pas. Mieux : si l'ensemble des transcendants était fini ou dénombrable, $\mathbb{R}$ — réunion des algébriques et des transcendants — serait réunion de deux ensembles au plus dénombrables, donc dénombrable (deux énumérations à choisir : un choix fini, aucun axiome du choix requis) — contradiction.
+Un réel est *algébrique* s'il est racine d'un polynôme non nul à coefficients entiers, *transcendant* sinon. <Badge niveau="admis">Définition : nous posons un vocabulaire, il n'y a rien à démontrer.</Badge> Nous avons établi au chapitre précédent que les algébriques forment un ensemble <Prereq href="/maths/partie-iii/denombrables">dénombrable</Prereq> — modulo l'ingrédient différé qui y est signalé, la borne sur le nombre de racines, soldée au chapitre 17 ; or $\mathbb{R}$ ne l'est pas. Mieux : si l'ensemble des transcendants était fini ou dénombrable, $\mathbb{R}$ — réunion des algébriques et des transcendants — serait réunion de deux ensembles au plus dénombrables, donc dénombrable (deux énumérations à choisir : un choix fini, aucun axiome du choix requis) — contradiction.
 
 <Resultat label="Théorème (Cantor, 1874)">
 
 $$ \text{Les nombres transcendants existent, et forment une partie indénombrable de } \mathbb{R}. $$
 
-<Badge niveau="demontre" slot="badge">Prouvé par pur comptage d'infinis, sans exhiber un seul nombre transcendant.</Badge>
+<Badge niveau="demontre" slot="badge">Prouvé par pur comptage d'infinis, sans exhiber un seul nombre transcendant — et modulo le même ingrédient différé que la dénombrabilité des algébriques (borne sur les racines, chapitre 17).</Badge>
 
 </Resultat>
 
