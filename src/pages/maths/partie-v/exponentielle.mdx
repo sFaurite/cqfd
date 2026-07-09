@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’exponentielle, π et la formule d’Euler"
 chapter: exponentielle
-description: "Exp définie par série sur ℂ (convergence absolue partout) ; équation fonctionnelle (produit de Cauchy) ; exp = sa propre dérivée ; ln construit ; cos/sin DÉFINIS par séries ; π DÉFINI (double du premier zéro positif de cos) ; e^{iπ} + 1 = 0 DÉMONTRÉ ; la géométrie du cercle retrouvée."
+description: "Analyse complexe minimale (convergence dans ℂ définie, inégalité triangulaire complexe DÉMONTRÉE, transport des ch. 18-19) ; exp définie par série sur ℂ (convergence absolue partout) ; équation fonctionnelle (produit de Cauchy) ; exp = sa propre dérivée ; ln construit ; cos/sin DÉFINIS par séries ; π DÉFINI (double du premier zéro positif de cos) ; e^{iπ} + 1 = 0 DÉMONTRÉ ; la géométrie du cercle retrouvée."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -27,6 +27,20 @@ Posons la définition, valable sur $\mathbb{C}$ tout entier.
 $$ \exp(z) := \sum_{n=0}^{\infty} \frac{z^n}{n!} \quad (z \in \mathbb{C}). $$
 
 <Badge niveau="admis">Définition : nous choisissons cette série comme point de départ. Reste à prouver qu'elle a un sens.</Badge>
+
+Un préalable que l'honnêteté impose : « converger » n'a été défini, aux chapitres 18 et 19, que pour du **réel** — et ce chapitre va sommer, dériver et faire tendre dans $\mathbb{C}$. Étendons, à peu de frais mais explicitement.
+
+<Encart type="calcul" titre="L'analyse complexe minimale : trois définitions, un lemme, un transport">
+
+**Convergence dans $\mathbb{C}$.** On pose : $z_n \to z$ signifie $|z_n - z| \to 0$ — une suite *réelle*, celle du chapitre 18 — où $|\cdot|$ est le <Prereq href="/maths/partie-ii/complexes">module du chapitre 9</Prereq>, pleinement fondé depuis que le chapitre 20 a construit la racine carrée. Idem pour les fonctions d'une variable réelle à valeurs complexes : limites, continuité et dérivées se définissent par le même module.
+
+**Le lemme manquant : l'inégalité triangulaire complexe.** $|z + w| \le |z| + |w|$ — jamais démontrée jusqu'ici, et toutes les majorations de ce chapitre en dépendent. Au carré : $N(z+w) = (z+w)\overline{(z+w)} = N(z) + N(w) + 2\,\mathrm{Re}(z\bar w)$, en développant avec les <Prereq href="/maths/partie-ii/complexes">règles du conjugué</Prereq> ($\mathrm{Re}\,u$ désigne la première coordonnée, et $u + \bar u = 2\,\mathrm{Re}\,u$). Or $\mathrm{Re}\,u \le |u|$, car $N(u) \ge (\mathrm{Re}\,u)^2$ ; et $|z \bar w| = |z||w|$ par multiplicativité (chapitre 9). Donc $N(z+w) \le |z|^2 + 2|z||w| + |w|^2 = (|z|+|w|)^2$, et la stricte croissance de $x \mapsto x^2$ sur les positifs (<Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq>) compare les valeurs. $\square$
+
+**L'équivalence coordonnée par coordonnée.** $z_n \to z$ si et seulement si $\mathrm{Re}\,z_n \to \mathrm{Re}\,z$ *et* $\mathrm{Im}\,z_n \to \mathrm{Im}\,z$ : dans un sens, $|\mathrm{Re}\,w| \le |w|$ et $|\mathrm{Im}\,w| \le |w|$ (les carrés se comparent) ; dans l'autre, $|w| \le |\mathrm{Re}\,w| + |\mathrm{Im}\,w|$ par la triangulaire appliquée à $w = \mathrm{Re}\,w + i\,\mathrm{Im}\,w$, avec $|i| = 1$.
+
+**Le transport.** Relisez les preuves des chapitres 18 et 19 : de la valeur absolue, elles n'utilisaient que trois choses — positivité, multiplicativité, inégalité triangulaire. Les trois valent pour le module : opérations sur les limites, unicité, convergence absolue, comparaison, produit de suites… tout se transporte à $\mathbb{C}$, mot pour mot. <Badge niveau="demontre">Transport intégral, justifié par l'inventaire des propriétés réellement utilisées — pas par un geste de la main.</Badge>
+
+</Encart>
 
 <Encart type="calcul" titre="La série converge absolument, pour tout $z$">
 **Étape 1 — ce qu'il faut montrer.** Une série de termes complexes converge dès que la série des modules converge (<Prereq href="/maths/partie-v/series">convergence absolue</Prereq> : parties réelle et imaginaire sont alors deux séries réelles dominées par $|w_n|$, donc convergentes). Il suffit de majorer $\sum |z^n/n!| = \sum |z|^n/n!$, à termes réels positifs.
@@ -141,8 +155,10 @@ $$ \cos\theta := \sum_{n\ge 0} (-1)^n\frac{\theta^{2n}}{(2n)!}, \qquad \sin\thet
 
 <Badge niveau="admis">Définitions : deux séries absolument convergentes partout (même majoration géométrique), réelles pour $\theta$ réel.</Badge>
 
+Un mini-lemme, utilisé deux fois dans ce chapitre : **une sous-suite d'une suite convergente converge vers la même limite**. Si $u_n \to \ell$ et $(n_k)$ est strictement croissante, alors $n_k \ge k$ (récurrence immédiate, déjà servie au chapitre 20) : le rang $N$ répondant au défi $\varepsilon$ est dépassé dès que $k \ge N$, et $|u_{n_k} - \ell| \lt \varepsilon$. <Badge niveau="demontre">Deux lignes ; valable dans $\mathbb{R}$ comme dans $\mathbb{C}$.</Badge>
+
 <Encart type="calcul" titre="La « formule d'Euler » est une définition dépliée">
-**Étape 1 — regrouper par paires.** Les sommes partielles de rang impair $\sum_{n=0}^{2N+1}(i\theta)^n/n!$ forment une sous-suite, donc convergent aussi vers $\exp(i\theta)$. Groupons les termes consécutifs deux par deux ; avec $i^{2m}=(-1)^m$ et $i^{2m+1}=i(-1)^m$ :
+**Étape 1 — regrouper par paires.** Les sommes partielles de rang impair $\sum_{n=0}^{2N+1}(i\theta)^n/n!$ forment une sous-suite, donc convergent aussi vers $\exp(i\theta)$ — le mini-lemme ci-dessus. Groupons les termes consécutifs deux par deux ; avec $i^{2m}=(-1)^m$ et $i^{2m+1}=i(-1)^m$ :
 
 $$ \sum_{n=0}^{2N+1}\frac{(i\theta)^n}{n!} = \sum_{m=0}^{N}\Big(\frac{(-1)^m\theta^{2m}}{(2m)!} + i\,\frac{(-1)^m\theta^{2m+1}}{(2m+1)!}\Big). $$
 
@@ -184,7 +200,7 @@ Nous n'avons jamais défini $\pi$. Le moment est venu — non en mesurant un cer
 
 $$ \cos 2 = \big(1 - 2 + \tfrac23\big) - \big(u_3 - u_4 + u_5 - u_6 + \cdots\big) = -\tfrac13 - B. $$
 
-La série $B := u_3 - u_4 + u_5 - \cdots$ a ses termes décroissants ; ses sommes partielles paires $(u_3-u_4)+(u_5-u_6)+\cdots$ forment une sous-suite convergente à paquets $\ge 0$, donc $B\ge 0$. D'où
+La série $B := u_3 - u_4 + u_5 - \cdots$ a ses termes décroissants ; ses sommes partielles paires $(u_3-u_4)+(u_5-u_6)+\cdots$ forment une sous-suite (qui converge vers $B$, mini-lemme de la section précédente) faite de paquets $\ge 0$ : chacune est $\ge 0$, et le <Prereq href="/maths/partie-v/suites-limites">passage à la limite dans les inégalités</Prereq> donne $B\ge 0$. D'où
 
 $$ \boxed{\cos 2 = -\tfrac13 - B \le -\tfrac13 \lt 0.} $$
 
@@ -200,7 +216,7 @@ Nous posons alors la définition qui fonde toute la trigonométrie :
 
 $$ \pi := 2m, \quad \text{où } m \text{ est le plus petit zéro positif de } \cos. $$
 
-<Badge niveau="admis">Baptême : nous nommons $\pi$ ce nombre. Son existence, elle, est démontrée.</Badge> Autrement dit $\pi/2$ est, *par définition*, le premier zéro de $\cos$ : $\cos(\pi/2)=0$. Les mêmes séries, poussées assez loin avec contrôle du reste, donnent $\pi\approx 3{,}14159$. <Badge niveau="demontre">Valeur approchée calculable par les séries alternées.</Badge> Insistons : ici le cercle vient *après* $\pi$. Le lycée pose $\pi$ par le cercle, puis en déduit $\cos$ ; nous faisons l'inverse. Rien n'est importé.
+<Badge niveau="admis">Baptême : nous nommons $\pi$ ce nombre. Son existence, elle, est démontrée.</Badge> Autrement dit $\pi/2$ est, *par définition*, le premier zéro de $\cos$ : $\cos(\pi/2)=0$. Les mêmes séries, poussées assez loin, donnent $\pi\approx 3{,}14159$. <Badge niveau="demontre">Calculable *en principe* avec les seuls outils du cours : encadrer $\cos$ par ses sommes partielles (série alternée à reste contrôlé), puis resserrer le zéro par dichotomie via le TVI. Nous ne déroulons pas ce calcul — l'affirmation porte sur la méthode, entièrement fondée, pas sur des décimales vérifiées ici.</Badge> Insistons : ici le cercle vient *après* $\pi$. Le lycée pose $\pi$ par le cercle, puis en déduit $\cos$ ; nous faisons l'inverse. Rien n'est importé.
 
 Reste à fixer $\sin(\pi/2)$. De $\cos^2+\sin^2=1$ et $\cos(\pi/2)=0$ vient $\sin^2(\pi/2)=1$, donc $\sin(\pi/2)=\pm 1$. Le signe :
 
