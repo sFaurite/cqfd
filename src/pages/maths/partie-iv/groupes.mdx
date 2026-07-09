@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les groupes : la symétrie axiomatisée"
 chapter: groupes
-description: "Axiomes de groupe ; unicité du neutre et des inverses (démontrée) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément."
+description: "Axiomes de groupe ; unicité du neutre et des inverses (démontrée) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; lemmes de comptage fini démontrés ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément (loi des exposants, sans division euclidienne)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -57,9 +57,9 @@ Le groupe $D_3$ des six symétries du triangle satisfait (G1)–(G3) : la compos
 |---|---|---|
 | $(\mathbb{Z}, +)$ | oui, abélien | neutre $0$, opposé $-n$ |
 | $(\mathbb{N}, +)$ | **non** | les éléments non nuls n'ont pas d'opposé : $3$ n'a pas de $-3$ dans $\mathbb{N}$ |
-| $(\mathbb{Q}^*, \times)$ | oui, abélien | neutre $1$, inverse $1/x$ |
+| $(\mathbb{Q}^*, \times)$ | oui, abélien | loi interne (un produit de non-nuls est non nul, par intégrité), neutre $1$, inverse $1/x$ |
 | $(\mathbb{Q}, \times)$ | **non** | $0$ n'a pas d'inverse |
-| $(\mathrm{Bij}(E), \circ)$ | oui | le *groupe symétrique* de $E$ |
+| $(\mathrm{Bij}(E), \circ)$ | oui | loi interne car la composée de deux bijections est une bijection (chapitre 3) : le *groupe symétrique* de $E$ |
 | $(D_3, \circ)$ | oui, **non abélien** | les $6$ symétries du triangle |
 
 La ligne $(\mathbb{N},+)$ est éclairante : ce qui lui manque, c'est exactement l'opposé — l'absence même qui nous força à construire <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$ au chapitre 6</Prereq>. Toute la partie II se relit ainsi : chaque nouvel ensemble de nombres réparait un axiome de groupe manquant. Et $(\mathrm{Bij}(E), \circ)$, les <Prereq href="/maths/partie-i/relations-fonctions">bijections d'un ensemble</Prereq> munies de la composition, est l'exemple-mère : $D_3$ n'en est qu'un morceau, les bijections du triangle qui préservent sa forme.
@@ -120,7 +120,7 @@ Deux exemples serviront de banc d'essai. Dans $D_3$, les trois rotations $\{e, r
 
 Voici le sommet du chapitre, et une contrainte stupéfiante : dans un groupe fini, la taille d'un sous-groupe ne peut pas être quelconque — elle **divise** la taille du groupe. Pas « inférieure » : *divise*. Le sous-groupe des rotations de $D_3$ a $3$ éléments, et $3$ divise $6$. Coïncidence ? Non — c'est une loi.
 
-Pour un groupe fini $G$, on note $|G|$ son cardinal, appelé son **ordre**.
+Deux mots de vocabulaire, d'abord — et leur droit d'exister. Pour $G$ fini, l'entier $n$ auquel $G$ est équipotent est **unique** (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) : on peut donc le noter $|G|$ et l'appeler l'**ordre** de $G$. C'est le seul cadre — le fini — où ce cours s'autorise le symbole $|G|$ isolé, précisément parce que l'unicité en fait un objet bien défini. Et « $m$ **divise** $n$ » signifie : il existe $k \in \mathbb{N}$ tel que $n = km$ — simple vocabulaire sur la <Prereq href="/maths/partie-ii/arithmetique-de-n">multiplication du chapitre 5</Prereq> ; la *théorie* de la divisibilité, elle, attend le chapitre suivant.
 
 <Resultat label="Théorème de Lagrange">
 
@@ -133,6 +133,20 @@ $$\text{Dans un groupe fini } G,\quad \text{tout sous-groupe } H \text{ vérifie
 <Encart type="intuition" titre="Le sous-groupe comme gabarit">
 
 $H$ est un patron que l'on décalque à travers $G$ en formant les paquets $aH$. Deux miracles : chaque paquet a **exactement** la taille de $H$, et les paquets **pavent** $G$ sans se chevaucher. Donc $G$ est un empilement de $k$ copies de $H$, et $|G| = k\,|H|$. Toute la preuve consiste à établir ces deux miracles.
+
+</Encart>
+
+<Encart type="plusloin" titre="Deux lemmes de comptage, démontrés plutôt que murmurés">
+
+L'étape finale de Lagrange — « additionner les cardinaux » — repose sur deux faits de combinatoire finie que ce cours n'a encore jamais établis. Prouvons-les.
+
+**Lemme 0 — toute partie d'un ensemble fini est finie.** Il suffit de le voir pour les parties d'un entier $n$, par récurrence : les parties de $0 = \varnothing$ se réduisent à $\varnothing$, finie. Soit $A \subseteq n+1$ : ou bien $A \subseteq n$, finie par hypothèse ; ou bien $n \in A$, et $A = (A \cap n) \cup \{n\}$ avec $A \cap n$ finie, disons équipotente à $m$ — prolonger cette bijection en envoyant $m$ sur $n$ donne $A$ équipotente à $m + 1$. $\square$
+
+**Lemme A — l'image surjective d'un fini est finie.** Soient $E$ fini et $f : E \to F$ surjective. Transportons par une bijection $E \simeq n$ : chaque $y \in F$ a une fibre non vide dans $n$, dont le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre</Prereq> donne le plus petit élément — aucun choix. L'application « $y \mapsto$ plus petit antécédent » est injective (deux $y$ distincts ont des fibres disjointes) : $F$ est équipotente à une partie de $n$, finie par le lemme 0. $\square$
+
+**Lemme B — additivité des cardinaux.** Si $A$ et $B$ sont finis et **disjoints**, alors $|A \cup B| = |A| + |B|$. Preuve : soient $\alpha : m \to A$ et $\beta : p \to B$ des bijections ; définissons $\gamma : m + p \to A \cup B$ par $\gamma(i) := \alpha(i)$ si $i \lt m$, et $\gamma(m + j) := \beta(j)$ pour $j \lt p$ (tout $i$ avec $m \le i \lt m+p$ s'écrit ainsi, de façon unique par régularité). Surjective par construction, injective parce que $A$ et $B$ sont disjoints et que $\alpha, \beta$ le sont. $\square$ Par récurrence immédiate, une réunion de $k$ ensembles finis deux à deux disjoints, tous de cardinal $c$, a pour cardinal $k \cdot c$.
+
+<Badge niveau="demontre">Trois récurrences élémentaires — le prix exact pour que « compter » soit un théorème et non un geste.</Badge>
 
 </Encart>
 
@@ -154,7 +168,7 @@ C'est bien une relation d'équivalence.
 
 **Étape 4 — tous les paquets ont la taille de $H$.** Fixons une classe $aH$ et considérons $\varphi : H \to aH,\ h\mapsto ah$. Elle est *surjective* par définition même de $aH$. Elle est *injective* : si $ah = ah'$, la simplification (théorème 3) donne $h = h'$. Donc $\varphi$ est une bijection, et $|aH| = |H|$.
 
-**Étape 5 — compter.** $G$ étant fini, il n'y a qu'un nombre fini de classes ; notons-le $k$ (l'*indice* de $H$). La partition de l'étape 3 découpe $G$ en $k$ morceaux disjoints, chacun de cardinal $|H|$ (étape 4). En additionnant les cardinaux :
+**Étape 5 — compter.** L'ensemble des classes est l'image de $G$ par la <Prereq href="/maths/partie-i/relations-fonctions">projection canonique</Prereq> $\pi : a \mapsto [a]$, surjective : par le **lemme A** de l'encart précédent, il est fini. Notons $k$ son cardinal (l'*indice* de $H$). La partition de l'étape 3 découpe $G$ en $k$ morceaux disjoints, chacun de cardinal $|H|$ (étape 4) : le **lemme B**, itéré par récurrence, additionne les cardinaux :
 
 $$|G| = \underbrace{|H| + |H| + \dots + |H|}_{k \text{ fois}} = k\,|H|.$$
 
@@ -166,9 +180,11 @@ Donc $|H|$ divise $|G|$. $\boxed{|H| \ \text{ divise } \ |G|}$
 
 ## Ce que Lagrange offre en cascade
 
-Donnons un sens à l'**ordre d'un élément** $a\in G$ (fini) via ses puissances $a, a^2, a^3, \dots$ (avec $a^1 = a$ et $a^{k+1} = a^k\cdot a$). Cette liste compte une infinité de termes, mais $G$ est fini : par le <Prereq href="/maths/partie-iii/equipotence">lemme des tiroirs</Prereq> (une infinité d'objets dans un nombre fini de cases force une collision), deux puissances coïncident, disons $a^i = a^j$ avec $i < j$ ; en multipliant par $(a^i)^{-1}$, on obtient $a^{\,j-i} = e$ avec $j - i \geq 1$. Il existe donc une plus petite puissance $n\geq 1$ telle que $a^n = e$ (le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> fournit ce plus petit élément). Ce $n$ est l'**ordre de $a$**.
+Donnons un sens à l'**ordre d'un élément** $a\in G$ (fini) via ses puissances : $a^0 := e$ et $a^{k+1} := a^k\cdot a$ — définition de proche en proche légitimée, comme toujours, par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>. Un mini-lemme servira trois fois : la **loi des exposants**, $a^{i+j} = a^i\,a^j$, par récurrence sur $j$ — pour $j = 0$, $a^{i+0} = a^i = a^i\,e$ ; et si $a^{i+j} = a^i a^j$, alors $a^{i+(j+1)} = a^{(i+j)+1} = a^{i+j}\,a = (a^i a^j)\,a = a^i\,a^{j+1}$ par associativité. <Badge niveau="demontre">Récurrence d'une ligne sur les axiomes de groupe.</Badge>
 
-On vérifie alors que $\langle a\rangle := \{e, a, a^2, \dots, a^{n-1}\}$ est un sous-groupe : stable par produit car $a^i a^j = a^{i+j}$ se réduit modulo $n$ grâce à $a^n = e$, stable par inverse car $a^{-1} = a^{n-1}$. Son cardinal est exactement $n$ (les $a^k$ pour $0\leq k < n$ sont distincts, sans quoi une puissance $a^{\,k-k'}=e$ plus petite que $n$ contredirait la minimalité). Ce sous-groupe est *engendré* par $a$.
+La liste $a^1, a^2, a^3, \dots$ compte une infinité de termes, mais $G$ est fini : si toutes ces puissances étaient distinctes, $k \mapsto a^k$ injecterait $\mathbb{N}$ dans $G$, et sa restriction à l'entier $|G|+1$ donnerait, en transportant par une bijection $G \simeq |G|$, une injection de $|G|+1$ dans $|G|$ — interdite par le <Prereq href="/maths/partie-iii/equipotence">lemme des tiroirs</Prereq>. Deux puissances coïncident donc, disons $a^i = a^j$ avec $i < j$ ; la loi des exposants écrit $a^j = a^i\,a^{\,j-i}$, et la simplification (théorème 3) donne $a^{\,j-i} = e$ avec $j - i \geq 1$. Il existe donc une plus petite puissance $n\geq 1$ telle que $a^n = e$ (le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> fournit ce plus petit élément). Ce $n$ est l'**ordre de $a$**.
+
+On vérifie alors que $\langle a\rangle := \{a^0 = e,\ a,\ a^2,\ \dots,\ a^{n-1}\}$ est un sous-groupe — et **sans division euclidienne**, qui n'arrive qu'au chapitre suivant. *Stabilité par produit* : pour $0 \le i, j \lt n$, si $i + j \lt n$, alors $a^i a^j = a^{i+j} \in \langle a\rangle$ directement ; sinon $n \le i + j \lt 2n$, et la loi des exposants donne $a^{i+j} = a^{(i+j-n)+n} = a^{\,i+j-n}\,a^n = a^{\,i+j-n}$, avec $0 \le i+j-n \lt n$. *Stabilité par inverse* : pour $0 \lt k \lt n$, $a^k\,a^{\,n-k} = a^n = e$, donc $(a^k)^{-1} = a^{\,n-k}$ par l'unicité de l'inverse (théorème 2) ; et $e^{-1} = e$. *Cardinal* : les $a^k$ pour $0\leq k < n$ sont distincts — si $a^k = a^{k'}$ avec $k' \lt k$, la loi des exposants et la simplification donneraient $a^{\,k-k'} = e$ avec $1 \le k - k' \lt n$, contredisant la minimalité de $n$. Son cardinal est donc exactement $n$. Ce sous-groupe est *engendré* par $a$.
 
 <Resultat label="L'ordre d'un élément divise l'ordre du groupe">
 
@@ -178,7 +194,7 @@ $$\text{Dans un groupe fini } G,\quad \text{l'ordre de tout élément divise } |
 
 </Resultat>
 
-En effet, l'ordre de $a$ est le cardinal de $\langle a\rangle$, sous-groupe de $G$ ; Lagrange conclut. Un corollaire spectaculaire en découle : si $|G| = p$ est un nombre **premier**, prenons $a\neq e$. L'ordre de $\langle a\rangle$ divise $p$, et comme $a\neq e$ ce sous-groupe a au moins deux éléments : son ordre n'est pas $1$, il vaut donc $p$. Autrement dit $\langle a\rangle = G$ tout entier — **tout élément non neutre engendre le groupe**, qui n'a alors aucun sous-groupe propre non trivial. <Badge niveau="demontre">Les seuls diviseurs de $p$ premier sont $1$ et $p$, et $a\neq e$ exclut $1$.</Badge>
+En effet, l'ordre de $a$ est le cardinal de $\langle a\rangle$, sous-groupe de $G$ ; Lagrange conclut. Un corollaire spectaculaire en découle : si $|G| = p$ est un nombre **premier** — au sens élémentaire, seul utilisé ici : $p \geq 2$ et ses seuls diviseurs dans $\mathbb{N}$ sont $1$ et $p$ ; leur théorie arrive au chapitre suivant —, prenons $a\neq e$. L'ordre de $\langle a\rangle$ divise $p$, et comme $a\neq e$ ce sous-groupe a au moins deux éléments : son ordre n'est pas $1$, il vaut donc $p$. Autrement dit $\langle a\rangle = G$ tout entier — **tout élément non neutre engendre le groupe**, qui n'a alors aucun sous-groupe propre non trivial. <Badge niveau="demontre">Les seuls diviseurs de $p$ premier sont $1$ et $p$, et $a\neq e$ exclut $1$.</Badge>
 
 Gardez ce résultat au chaud. Au chapitre 16, $\mathbb{Z}/p\mathbb{Z}$ privé de $0$ sera un groupe à $p-1$ éléments, et Lagrange y donnera — en trois lignes — le **petit théorème de Fermat** : $a^{p-1}\equiv 1 \pmod p$.
 
