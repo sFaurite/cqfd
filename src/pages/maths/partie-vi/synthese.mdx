@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Synthèse : la carte de l’édifice"
 chapter: synthese
-description: "La carte finale : TOUT ce qui a été admis (liste exhaustive) ; les grandes lignes de ce qui a été démontré ; l’indécidable ; le conjecturé ; la promesse du site tenue et relue."
+description: "La carte finale : TOUT ce qui a été admis (liste exhaustive) ; les grandes lignes de ce qui a été démontré ; les SEPT indécidables (trois limites de système, quatre énoncés suspendus au choix) ; le conjecturé — dont Con(ZF), au double statut ; les dettes d’énoncé vs de méthode ; la promesse du site tenue et relue."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -26,12 +26,12 @@ Imaginez tout l'édifice projeté sur une grille à quatre cases. À gauche, une
 
 Voici l'inventaire complet. Rien de plus ne se cache dans le cours ; si vous en trouvez un de plus, le cours a menti.
 
-- **La logique classique et ses règles d'inférence** (connecteurs, quantificateurs, *modus ponens*), posée comme cadre au tout premier chapitre. <Badge niveau="admis"><Prereq href="/maths/partie-i/methode-axiomatique">Chapitre 1</Prereq> — c'est notre langage et notre moteur : adopté, jamais démontré.</Badge>
+- **La logique classique et ses règles d'inférence** (connecteurs, quantificateurs, et les règles listées une à une — du *modus ponens* à l'élimination de $\exists$, celle-là même qui fonde le « choix fini » du chapitre 25), posée comme cadre au tout premier chapitre. <Badge niveau="admis"><Prereq href="/maths/partie-i/methode-axiomatique">Chapitre 1</Prereq> — c'est notre langage et notre moteur : adopté, jamais démontré.</Badge>
 - **Les huit axiomes de ZF** : extensionnalité, paire, réunion, ensemble des parties, schéma de séparation, schéma de remplacement, infini, fondation. <Badge niveau="admis"><Prereq href="/maths/partie-i/ensembles-zf">Chapitre 2</Prereq> — les briques de tout l'édifice, posées au grand jour.</Badge>
 - **L'axiome du choix** (AC), neuvième axiome *optionnel*, indépendant de ZF. <Badge niveau="admis"><Prereq href="/maths/partie-vi/axiome-du-choix">Chapitre 25</Prereq> — nous avons vécu vingt-quatre chapitres presque sans lui.</Badge>
 - **Les définitions structurantes** — fonction, relation d'équivalence et quotient, groupe, anneau, corps, intégrale de Riemann… Définir n'est *pas* admettre un fait : c'est **choisir un découpage** du monde. On ne peut le juger vrai ou faux, seulement fécond ou maladroit — et c'est pourquoi une définition porte le statut *admis*. <Badge niveau="admis">Un choix de vocabulaire, adopté, non démontré — ni vrai ni faux en soi.</Badge>
 - **Les baptêmes** : $0 = \varnothing$, $i = (0,1)$, le nombre $e = \sum 1/n!$, le nombre $\pi$ (le double du premier zéro de $\cos$). Nommer un objet déjà construit, c'est encore une convention. <Badge niveau="admis">On baptise ce que la déduction a produit — le nom est libre, l'objet ne l'est pas.</Badge>
-- **Les conventions de notation** : les plongements qui font écrire $\mathbb{N} \subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R} \subseteq \mathbb{C}$ (identifications, pas égalités brutes), et le choix « $1$ n'est pas premier ». <Badge niveau="admis">Décisions d'écriture, prises pour la commodité et la cohérence.</Badge>
+- **Les conventions de notation** : les plongements qui font écrire $\mathbb{N} \subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R} \subseteq \mathbb{C}$ (identifications, pas égalités brutes), le choix « $1$ n'est pas premier », et l'orientation de l'intégrale ($\int_x^y := -\int_y^x$ quand les bornes se croisent, posée au chapitre 22). <Badge niveau="admis">Décisions d'écriture, prises pour la commodité et la cohérence.</Badge>
 
 C'est **tout**. Une logique, huit axiomes, un neuvième mis à part, et des conventions. Tout le reste du cours — des milliers de lignes — se déduit de cette pile. Mesurez le rapport : c'est là qu'est la spécificité des mathématiques.
 
@@ -43,7 +43,7 @@ Sur ce socle, trois étages. Les **infinis étagés** de Cantor : <Prereq href="
 
 $$e^{i\pi} + 1 = 0$$
 
-démontrée <Prereq href="/maths/partie-v/exponentielle">à partir de la seule série exponentielle</Prereq>. <Badge niveau="demontre">Toute cette chaîne est une déduction pure depuis ZF : aucune hypothèse nouvelle n'y intervient.</Badge>
+démontrée <Prereq href="/maths/partie-v/exponentielle">à partir de la seule série exponentielle</Prereq>. <Badge niveau="demontre">Toute cette chaîne est une déduction depuis ZF : aucune hypothèse nouvelle n'y intervient. Un scrupule, pesé au chapitre 25 : deux preuves de la partie V (bornes atteintes, Heine) empruntent la voie du choix dénombrable là où des preuves dans ZF seul existent — dette de *méthode*, jamais d'*énoncé* : chaque théorème de la chaîne est un théorème de ZF.</Badge>
 
 Voici une quinzaine de jalons, avec l'outil-clé qui les a *payés*.
 
@@ -67,25 +67,38 @@ Voici une quinzaine de jalons, avec l'outil-clé qui les a *payés*.
 | Théorème fondamental de l'analyse | 22 · intégrale | sommes de Darboux + Heine |
 | $e^{i\pi}+1=0$ | 23 · exponentielle | séries + produit de Cauchy |
 
-Certains théorèmes, nous les avons **cités sans en donner la preuve complète**, parce qu'elle dépasse le cours — et nous l'avons dit à chaque fois, sans bluff : le théorème des nombres premiers, la transcendance de $\pi$ (Lindemann, 1882), Fermat–Wiles, Poincaré–Perelman, Abel–Ruffini, le théorème fondamental de l'algèbre (esquisse honnête au ch. 17), Banach–Tarski (démontré, lui, *dans* ZFC au ch. 25). <Badge niveau="demontre">Tous authentiquement démontrés par leurs auteurs et sans controverse — l'aveu porte sur *nous*, qui n'en donnons pas la preuve, jamais sur leur statut. L'honnêteté n'interdit pas l'horizon ; elle interdit de le faire passer pour acquis.</Badge>
+Certains théorèmes, nous les avons **cités sans en donner la preuve complète**, parce qu'elle dépasse le cours — et nous l'avons dit à chaque fois, sans bluff : le théorème des nombres premiers, la transcendance de $\pi$ (Lindemann, 1882), Fermat–Wiles, Poincaré–Perelman, Abel–Ruffini, le théorème fondamental de l'algèbre (esquisse honnête au ch. 17), Banach–Tarski (démontré, lui, *dans* ZFC au ch. 25), Goodstein côté ZF, Gentzen, Turing, Zhang–Maynard, le prolongement de la fonction $\zeta$… C'est le <Prereq href="/maths/methodologie">contrat du badge vert</Prereq>, posé dans la méthodologie : chaque badge dit **où vit la preuve** — déroulée sur la page, routinière sur un modèle nommé, ou dans la littérature, avec sa référence. <Badge niveau="demontre">Tous authentiquement démontrés par leurs auteurs et sans controverse — l'aveu porte sur *nous*, qui n'en donnons pas la preuve, jamais sur leur statut. L'honnêteté n'interdit pas l'horizon ; elle interdit de le faire passer pour acquis.</Badge>
 
 ## Colonne 3 — ce qui est indécidable
 
-Trois énoncés portent le badge rouge — et c'est le plus mal compris du cours. **Indécidable n'est pas « on ne sait pas »** : c'est un théorème *sur le système*, qui prouve qu'aucune preuve ni réfutation n'existe en son sein.
+**Sept** énoncés portent le badge rouge — et c'est le statut le plus mal compris du cours. **Indécidable n'est pas « on ne sait pas »** : c'est un théorème *sur le système*, qui prouve qu'aucune preuve ni réfutation n'existe en son sein.
+
+Trois tiennent aux limites des systèmes eux-mêmes :
 
 - **L'hypothèse du continu** (CH) : aucun ensemble n'a un cardinal strictement compris entre $|\mathbb{N}|$ et $|\mathbb{R}|$. <Badge niveau="indecidable"><Prereq href="/maths/partie-iii/hypothese-continu">Chapitre 13</Prereq> — Gödel (1938) et Cohen (1963) : ni CH ni sa négation ne se démontrent dans ZFC.</Badge>
 - **Le théorème de Goodstein**, vu depuis l'arithmétique de Peano seule. <Badge niveau="indecidable"><Prereq href="/maths/partie-vi/godel">Chapitre 24</Prereq> — indécidable dans PA (Kirby–Paris, 1982), quoique vrai et démontrable dans ZF.</Badge>
-- **La cohérence de ZF**, $\mathrm{Con}(\mathrm{ZF})$, vue depuis ZF. <Badge niveau="indecidable"><Prereq href="/maths/partie-vi/godel">Chapitre 24</Prereq> — non démontrable dans ZF (second théorème de Gödel) ; l'aveu fondateur du cours.</Badge>
+- **La cohérence de ZF**, $\mathrm{Con}(\mathrm{ZF})$, vue depuis ZF. <Badge niveau="indecidable"><Prereq href="/maths/partie-vi/godel">Chapitre 24</Prereq> — non démontrable dans ZF (second théorème de Gödel), ni réfutable moyennant l'hypothèse de correction affichée au chapitre 24 ; l'aveu fondateur du cours.</Badge>
 
-<Encart type="plusloin" titre="Trois rouges qui ne sont pas de la même teinte">
+Et quatre sont **suspendus à l'axiome du choix** — ni prouvables ni réfutables dans ZF seul, théorèmes dès qu'on adopte AC (ou une forme faible) :
 
-Le statut *indécidable* est toujours relatif à un système — mais les trois exemples diffèrent finement. CH est **véritablement neutre** : ZFC admet des modèles où elle est vraie et d'autres où elle est fausse, aucune valeur n'est privilégiée. Goodstein est **vrai** au sens usuel (ZF le prouve, en montant jusqu'à l'ordinal $\varepsilon_0$) mais échappe à PA, trop faible. $\mathrm{Con}(\mathrm{ZF})$, enfin, est indémontrable dans ZF par le second théorème de Gödel ; en la croyant vraie — ce que nous faisons — nous en faisons un énoncé vrai mais hors de portée de toute preuve interne. Trois rouges, une seule leçon : la limite est *démontrée*, elle n'est pas subie.
+- **La trichotomie des cardinaux** — deux ensembles quelconques sont toujours comparables. <Badge niveau="indecidable"><Prereq href="/maths/partie-iii/equipotence">Chapitre 10</Prereq> — équivalente à AC tout entier.</Badge>
+- **Infini $\Rightarrow$ Dedekind-infini** — tout ensemble infini contient une copie de $\mathbb{N}$. <Badge niveau="indecidable"><Prereq href="/maths/partie-iii/equipotence">Chapitre 10</Prereq> — $\mathsf{AC}_\omega$ y suffit.</Badge>
+- **Une réunion dénombrable de dénombrables est dénombrable.** <Badge niveau="indecidable"><Prereq href="/maths/partie-iii/denombrables">Chapitre 11</Prereq> — le théorème « standard » qui cache un choix.</Badge>
+- **La réciproque de la caractérisation séquentielle** de la continuité. <Badge niveau="indecidable"><Prereq href="/maths/partie-v/continuite">Chapitre 20</Prereq> — le sens direct, lui, est un théorème de ZF.</Badge>
+
+Ces quatre-là ont été nommés, pesés et **soldés** au <Prereq href="/maths/partie-vi/axiome-du-choix">chapitre 25</Prereq>, la chambre de compensation du cours.
+
+<Encart type="plusloin" titre="Des rouges qui ne sont pas de la même teinte">
+
+Le statut *indécidable* est toujours relatif à un système — mais les sept exemples diffèrent finement. CH est **véritablement neutre** : ZFC admet des modèles où elle est vraie et d'autres où elle est fausse, aucune valeur n'est privilégiée. Goodstein est **vrai** au sens usuel (ZF le prouve, en montant jusqu'à l'ordinal $\varepsilon_0$) mais échappe à PA, trop faible. $\mathrm{Con}(\mathrm{ZF})$ est indémontrable dans ZF par le second théorème de Gödel ; en la croyant vraie — ce que nous faisons — nous en faisons un énoncé vrai mais hors de portée de toute preuve interne. Les quatre rouges du choix, enfin, relèvent d'un autre motif encore : à ZF il ne manque pas de la *force*, il manque un *axiome* — ajoutez AC, et tous quatre virent au vert. CH, elle, reste rouge même dans ZFC : c'est la neutralité la plus profonde. Sept rouges, une seule leçon : la limite est *démontrée*, elle n'est pas subie.
 
 </Encart>
 
 ## Colonne 4 — ce qui reste conjecturé
 
 À ne surtout pas confondre avec la colonne précédente. Une conjecture n'est pas prouvée *indécidable* : c'est une question **ouverte**, qui attend peut-être une preuve, peut-être une réfutation. <Prereq href="/maths/partie-vi/grandes-conjectures">Le front vivant</Prereq> : l'hypothèse de Riemann, la conjecture de Goldbach, celle des nombres premiers jumeaux, la suite de Collatz, et $\mathrm{P}$ contre $\mathrm{NP}$. <Badge niveau="conjecture">Crues vraies par beaucoup, démontrées par personne — et « vérifié très loin » ne prouve rien, comme l'ont rappelé les conjectures d'Euler et de Mertens, réfutées après coup.</Badge>
+
+Un énoncé, enfin, siège dans **deux colonnes à la fois** : la cohérence de ZF. Vue de l'intérieur, elle est rouge — indémontrable dans ZF, colonne 3. Vue du dehors, elle est jaune : nous la *croyons* vraie, personne ne l'a établie depuis un point d'appui incontestable, et le chapitre 24 a montré qu'aucune preuve interne ne viendra jamais la blanchir. <Badge niveau="conjecture">Le pari fondateur : un siècle sans contradiction plaide pour elle, mais plaider n'est pas démontrer.</Badge>
 
 ## La promesse, relue ligne à ligne
 
@@ -98,7 +111,7 @@ Vérifions, sans complaisance.
 - **« Rien utilisé sans être posé ou déduit. »** C'est exactement la partition des colonnes 1 et 2 : tout énoncé du cours est, ou bien dans la petite pile des admis, ou bien dans le continent des démontrés. Aucun troisième tiroir.
 - **« Quand on ajoute une hypothèse, on le dit. »** En vingt-sept chapitres, **une seule** hypothèse mathématique a été ajoutée après ZF : l'axiome du choix. Elle l'a été par un <Prereq href="/maths/partie-vi/axiome-du-choix">Tournant explicite</Prereq> — le seul du cours à introduire un axiome nouveau — et jamais en douce.
 - **Les anticipations.** L'intuition géométrique de $\mathbb{C}$ (angles, cercle, rotations) invoquée au chapitre 9 était signalée comme une anticipation, non comme un acquis. Elle fut **soldée** au chapitre 23, où $\cos$, $\sin$ et $\pi$ sont *définis par séries* et la géométrie du cercle enfin déduite.
-- **Les dettes d'$\mathrm{AC}_\omega$.** Le choix dénombrable, honnêtement signalé à chaque emprunt (réunion dénombrable au ch. 11, caractérisation séquentielle de la continuité et bornes atteintes au ch. 20, théorème de Heine au ch. 22, notion de Dedekind-infini au ch. 10), a été **soldé** au chapitre 25, qui nomme chaque dette et la paie.
+- **Les dettes de choix.** Six emprunts, honnêtement signalés à chaque fois, de deux natures distinctes : les dettes d'*énoncé* — badge rouge, l'énoncé lui-même échappe à ZF (Dedekind-infini au ch. 10, réunion dénombrable au ch. 11, réciproque séquentielle au ch. 20, et la trichotomie du ch. 10, qui réclame AC tout entier) — et les dettes de *méthode* — le théorème est de ZF, mais notre preuve a préféré la voie du choix (bornes atteintes au ch. 20, Heine au ch. 22). Toutes ont été **soldées** au chapitre 25, qui nomme chaque dette et la paie.
 
 La promesse tient. Pas parce qu'on l'affirme : parce qu'on peut la vérifier, ligne à ligne.
 
