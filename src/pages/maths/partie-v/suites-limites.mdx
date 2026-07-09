@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Suites et limites"
 chapter: suites-limites
-description: "Définition ε/N de la convergence ; unicité de la limite ; opérations sur les limites ; gendarmes ; THÉORÈME DE CONVERGENCE MONOTONE (via borne sup) ; suites adjacentes ; Bolzano–Weierstrass."
+description: "Définition ε/N de la convergence ; valeur absolue sur ℝ définie ; unicité de la limite ; opérations sur les limites ; gendarmes et passage à la limite dans les inégalités ; THÉORÈME DE CONVERGENCE MONOTONE (via borne sup) ; suites adjacentes ; Bolzano–Weierstrass."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -37,7 +37,9 @@ Traitons-la avec cérémonie : c'est l'une des définitions les plus importantes
 
 <MathsEpsilonN />
 
-Resserrez $\varepsilon$ : le rang $N$ recule, parfois très loin — mais tant qu'il **existe toujours**, la suite converge. Le défi, en symboles :
+Resserrez $\varepsilon$ : le rang $N$ recule, parfois très loin — mais tant qu'il **existe toujours**, la suite converge.
+
+Un symbole avant les symboles : pour $x$ réel, posons $|x| := x$ si $x \geq 0$, $-x$ sinon — le même geste qu'au <Prereq href="/maths/partie-iv/arithmetique">chapitre 15</Prereq> pour $\mathbb{Z}$, licite car l'ordre de $\mathbb{R}$ est total. Trois faits d'usage constant, chacun par examen des deux cas : $|x| \geq 0$ avec égalité seulement pour $x = 0$ ; $|-x| = |x|$ ; et l'équivalence $|x| \leq c \iff -c \leq x \leq c$ (de même en strict), d'où en particulier $-|x| \leq x \leq |x|$. <Badge niveau="demontre">Définition par totalité de l'ordre, propriétés par disjonction de cas.</Badge> Le défi, en symboles :
 
 <Resultat label="Convergence d'une suite (définition ε–N)">
 
@@ -62,7 +64,7 @@ Soit la suite $u_n = \dfrac{1}{n}$ pour $n \ge 1$. Montrons $u_n \to 0$.
 
 **Étape 2.** Par l'**archimédianité** rappelée ci-dessus, il existe $N \in \mathbb{N}$ avec $N > 1/\varepsilon$, donc $\dfrac{1}{N} < \varepsilon$. *C'est notre délai — et il dépend de $\varepsilon$, comme il se doit.*
 
-**Étape 3.** Soit $n \ge N$. Alors $\dfrac{1}{n} \le \dfrac{1}{N}$ (la fonction inverse décroît sur les positifs).
+**Étape 3.** Soit $n \ge N$. Alors $\dfrac{1}{n} \le \dfrac{1}{N}$ — l'inverse d'un entier $\geq 1$ est un réel strictement positif (si $\tfrac1n \leq 0$, multiplier par $n$ donnerait $1 \leq 0$), et multiplier $N \leq n$ par le positif $\tfrac{1}{nN}$ renverse la comparaison.
 
 **Étape 4.** Donc
 
@@ -83,7 +85,7 @@ $$ \frac{1}{n} \xrightarrow[\,n \to \infty\,]{} 0. $$
 
 <Encart type="calcul" titre="Contre-exemple : (−1)ⁿ ne converge pas">
 
-Supposons, **par l'absurde**, que $u_n = (-1)^n \to \ell$ pour un certain $\ell$.
+La suite $u_n = (-1)^n$ — celle qui vaut $1$ aux rangs pairs et $-1$ aux rangs impairs, la <Prereq href="/maths/partie-ii/reels-dedekind">parité</Prereq> tranchant chaque rang — alterne sans fin. Supposons, **par l'absurde**, qu'elle tende vers un certain $\ell$.
 
 **Étape 1.** Prenons l'exigence précise $\varepsilon = \tfrac{1}{2}$. Par définition, il existe $N$ tel que $|(-1)^n - \ell| < \tfrac12$ pour tout $n \ge N$.
 
@@ -135,7 +137,7 @@ $$ |\ell - \ell'| = |(\ell - u_n) + (u_n - \ell')| \le |\ell - u_n| + |u_n - \el
 
 </Encart>
 
-Autre conséquence : **toute suite convergente est bornée.** Si $u_n \to \ell$, prenons $\varepsilon = 1$ : il existe $N$ tel que $|u_n| < |\ell| + 1$ pour $n \ge N$. Les termes $u_0, \dots, u_{N-1}$ étant en nombre fini, $M = \max(|u_0|, \dots, |u_{N-1}|,\ |\ell| + 1)$ majore tous les $|u_n|$.
+Autre conséquence : **toute suite convergente est bornée.** Si $u_n \to \ell$, prenons $\varepsilon = 1$ : il existe $N$ tel que, pour $n \ge N$, $|u_n| = |(u_n - \ell) + \ell| \le |u_n - \ell| + |\ell| < |\ell| + 1$ (inégalité triangulaire, ci-dessous). Les termes $u_0, \dots, u_{N-1}$ étant en nombre fini, $M = \max(|u_0|, \dots, |u_{N-1}|,\ |\ell| + 1)$ — un maximum de liste finie existe, par récurrence sur sa longueur — majore tous les $|u_n|$.
 
 <Badge niveau="demontre">Convergente ⟹ bornée. La réciproque est fausse : $(-1)^n$ est bornée sans converger.</Badge>
 
@@ -175,7 +177,7 @@ $$ u_n v_n - \ell \ell' = u_n (v_n - \ell') + \ell'(u_n - \ell). $$
 
 Comme $u_n \to \ell$, la suite $(u_n)$ est bornée (§3) ; le premier terme est « bornée × tend vers 0 », donc $\to 0$ ; le second aussi. Par la règle de la somme, $u_n v_n \to \ell \ell'$.
 
-**Quotient.** Comme $\dfrac{u_n}{v_n} = u_n \cdot \dfrac{1}{v_n}$, il suffit de traiter $\dfrac{1}{v_n} \to \dfrac{1}{\ell'}$ pour $\ell' \neq 0$. Or $v_n \to \ell' \neq 0$ donne, à partir d'un rang, $|v_n| > \tfrac{|\ell'|}{2}$ (prendre $\varepsilon = \tfrac{|\ell'|}{2}$), donc
+**Quotient.** Comme $\dfrac{u_n}{v_n} = u_n \cdot \dfrac{1}{v_n}$, il suffit de traiter $\dfrac{1}{v_n} \to \dfrac{1}{\ell'}$ pour $\ell' \neq 0$. Or $v_n \to \ell' \neq 0$ donne, à partir d'un rang, $|v_n| > \tfrac{|\ell'|}{2}$ — prendre $\varepsilon = \tfrac{|\ell'|}{2}$, puis $|\ell'| \leq |v_n| + |\ell' - v_n| < |v_n| + \tfrac{|\ell'|}{2}$ par l'inégalité triangulaire —, donc
 
 $$ \left| \frac{1}{v_n} - \frac{1}{\ell'} \right| = \frac{|\ell' - v_n|}{|v_n|\,|\ell'|} \le \frac{2}{|\ell'|^2}\,|v_n - \ell'| \longrightarrow 0. $$
 
@@ -206,6 +208,8 @@ d'où $|u_n - \ell| < \varepsilon$.
 </Encart>
 
 *Application.* La suite $\dfrac{(-1)^n}{n}$ est encadrée par $-\dfrac{1}{n} \le \dfrac{(-1)^n}{n} \le \dfrac{1}{n}$ ; les deux bornes tendent vers $0$, donc $\dfrac{(-1)^n}{n} \to 0$ — sans avoir à distinguer termes pairs et impairs.
+
+Un cousin des gendarmes servira trois fois d'ici la fin du chapitre : le **passage à la limite dans les inégalités**. Si $u_n \geq c$ pour tout $n$ et $u_n \to \ell$, alors $\ell \geq c$ — sinon $\varepsilon := c - \ell > 0$ serait une exigence légitime, et un $u_n$ vérifierait $u_n < \ell + \varepsilon = c$, contredisant l'hypothèse. (Notez que le *strict* ne passe pas : $\tfrac1n > 0$ pour tout $n$, et pourtant la limite vaut $0$.) <Badge niveau="demontre">Deux lignes par l'absurde ; la version majorée, $u_n \leq c \Rightarrow \ell \leq c$, est symétrique.</Badge>
 
 ### 6. Le théorème du chapitre : la convergence monotone
 
@@ -246,7 +250,9 @@ Chaque $x_n$ est un rationnel (somme, produit, quotient de rationnels). Premiers
 
 $$ x_0 = 1,\quad x_1 = \frac{3}{2},\quad x_2 = \frac{17}{12},\quad x_3 = \frac{577}{408}. $$
 
-**Étape 1 — identité-clé.** Un calcul direct donne, pour tout $n$ :
+**Étape 0 — la suite est bien définie, et strictement positive.** Le point que l'on oublie toujours : la récurrence divise par $x_n$, ce qui exige $x_n \neq 0$. Par récurrence : $x_0 = 1 > 0$ ; et si $x_n > 0$, alors $\tfrac{2}{x_n} > 0$, et $x_{n+1}$, moitié d'une somme de deux positifs, est $> 0$. Chaque division de la suite est donc licite.
+
+**Étape 1 — identité-clé.** Un calcul direct (licite : $x_n > 0$) donne, pour tout $n$ :
 
 $$ x_{n+1}^2 - 2 = \frac{(x_n^2 - 2)^2}{4\,x_n^2} \ \ge 0. $$
 
@@ -258,9 +264,9 @@ $$ x_n - x_{n+1} = x_n - \frac{1}{2}\left(x_n + \frac{2}{x_n}\right) = \frac{x_n
 
 Ainsi $(x_n)_{n \ge 1}$ est **strictement décroissante** et **minorée** (par $0$). Un candidat parfait pour le théorème... version décroissante-minorée.
 
-**Étape 3 — dans $\mathbb{R}$, elle converge.** Décroissante et minorée, elle tend vers une limite $\ell$. Par passage à la limite dans la récurrence (opérations du §4), $\ell = \tfrac12(\ell + 2/\ell)$, soit $\ell^2 = 2$, donc $\ell = \sqrt{2}$.
+**Étape 3 — dans $\mathbb{R}$, elle converge.** Décroissante et minorée, elle tend vers une limite $\ell$. Avant de diviser par $\ell$, assurons-nous qu'il n'est pas nul : pour $n \geq 1$, $x_n \geq 1$ — car $x_n > 0$, et $x_n < 1$ donnerait $x_n^2 < 1 < 2$, contredisant l'étape 1 — donc $\ell \geq 1 > 0$ par **passage à la limite dans les inégalités** (§5). La suite décalée $(x_{n+1})$ tend vers le même $\ell$ (même définition, rang décalé d'un cran) ; les opérations du §4, quotient compris puisque $\ell \neq 0$, transforment alors la récurrence en $\ell = \tfrac12(\ell + 2/\ell)$, soit $\ell^2 = 2$. Comme $\ell > 0$, c'est **la** racine du <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> : deux positifs de même carré sont égaux (chapitre 9), donc $\ell = \sqrt 2$.
 
-**Étape 4 — dans $\mathbb{Q}$, elle ne converge PAS.** Une limite rationnelle $\ell$ vérifierait de même $\ell^2 = 2$ ; or <Prereq href="/maths/partie-ii/reels-dedekind">$\sqrt{2} \notin \mathbb{Q}$</Prereq>. L'ensemble $\{x_n : n \ge 1\}$ est minoré mais n'a **aucune borne inférieure dans $\mathbb{Q}$** (elle vaudrait $\sqrt2$).
+**Étape 4 — dans $\mathbb{Q}$, elle ne converge PAS.** Une limite rationnelle $\ell$ vérifierait de même $\ell^2 = 2$ ; or <Prereq href="/maths/partie-ii/reels-dedekind">$\sqrt{2} \notin \mathbb{Q}$</Prereq>. Et l'ensemble $\{x_n : n \ge 1\}$, minoré, n'a **aucun plus grand minorant dans $\mathbb{Q}$** : chaque $x_n$ dépasse $\sqrt2$ (de $x_n^2 > 2$ et $x_n > 0$ : $x_n \leq \sqrt2$ donnerait $x_n^2 \leq 2$), donc tout minorant rationnel $m$ vérifie $m \leq \sqrt2$, donc $m < \sqrt2$ ($\sqrt2$ est irrationnel) — et la <Prereq href="/maths/partie-ii/reels-dedekind">densité de $\mathbb{Q}$ dans $\mathbb{R}$</Prereq> intercale un rationnel $m < m' < \sqrt2$, minorant encore et plus grand. Pas de plus grand minorant : l'infimum manque à l'appel.
 
 $$ \boxed{\ \ell = \sqrt{2} \notin \mathbb{Q}\ } $$
 
@@ -272,7 +278,7 @@ Dans $\mathbb{Q}$, le théorème de convergence monotone est donc **FAUX** : voi
 
 ### 7. Suites adjacentes et Bolzano–Weierstrass
 
-Deux suites $(u_n)$, $(v_n)$ sont **adjacentes** si $(u_n)$ croît, $(v_n)$ décroît, et $v_n - u_n \to 0$. Elles convergent alors vers une **même** limite : $(v_n - u_n)$ décroît vers $0$ donc reste $\ge 0$, d'où $u_n \le v_n \le v_0$ ; $(u_n)$ croissante majorée tend vers $\ell$, $(v_n)$ décroissante minorée vers $\ell'$, et $v_n - u_n \to \ell' - \ell = 0$ force $\ell = \ell'$.
+Deux suites $(u_n)$, $(v_n)$ sont **adjacentes** si $(u_n)$ croît, $(v_n)$ décroît, et $v_n - u_n \to 0$. Elles convergent alors vers une **même** limite : $(v_n - u_n)$ décroît, et si un terme $v_N - u_N$ était $< 0$, tous les suivants le resteraient et le passage à la limite (§5) donnerait une limite $\leq v_N - u_N < 0$, pas $0$ — donc $v_n - u_n \ge 0$, d'où $u_n \le v_n \le v_0$ ; $(u_n)$ croissante majorée tend vers $\ell$, $(v_n)$ décroissante minorée vers $\ell'$, et $v_n - u_n \to \ell' - \ell$ (opérations du §4) $= 0$ force $\ell = \ell'$.
 
 <Badge niveau="demontre">Démontré via la convergence monotone. Deux mâchoires qui se referment sur un unique réel.</Badge>
 
@@ -289,13 +295,13 @@ $$ (u_n)\ \text{bornée} \quad\Longrightarrow\quad (u_n)\ \text{admet une sous-s
 
 Soit $u_n \in [a, b]$ pour tout $n$.
 
-**Dichotomie.** L'intervalle $I_0 = [a,b]$ contient $u_n$ pour une **infinité** d'indices (tous). Coupons-le en deux moitiés. L'une au moins contient encore $u_n$ pour une infinité d'indices. **Règle explicite et déterministe :** on prend la **moitié gauche si elle contient une infinité d'indices, sinon la moitié droite.** On obtient $I_1 \subseteq I_0$, de longueur $\tfrac{b-a}{2}$, contenant une infinité de termes. On itère : $I_k$ de longueur $\tfrac{b-a}{2^k}$, chacun contenant une infinité d'indices.
+**Dichotomie.** L'intervalle $I_0 = [a,b]$ contient $u_n$ pour une **infinité** d'indices (tous). Coupons-le en deux moitiés. L'une au moins contient encore $u_n$ pour une infinité d'indices — si les deux n'en portaient qu'un nombre fini, leur réunion $I_k$ aussi, par l'<Prereq href="/maths/partie-iv/groupes">additivité des cardinaux finis</Prereq> du chapitre 14 : exclu. **Règle explicite et déterministe :** on prend la **moitié gauche si elle contient une infinité d'indices, sinon la moitié droite.** On obtient $I_1 \subseteq I_0$, de longueur $\tfrac{b-a}{2}$, contenant une infinité de termes. On itère : $I_k$ de longueur $\tfrac{b-a}{2^k}$, chacun contenant une infinité d'indices.
 
 **Point d'honnêteté.** Le choix de la moitié est *dicté par une règle unique*, pas cueilli au hasard : nul besoin de l'axiome du choix. Cette finesse — nous l'annonçons pour le chapitre à venir sur ce fameux axiome — distingue une sélection *réglée* d'une sélection *arbitraire*.
 
-**Extraction.** Prenons $n_0$ avec $u_{n_0} \in I_0$, puis $n_1 > n_0$ avec $u_{n_1} \in I_1$ (possible : $I_1$ contient une infinité d'indices), et de proche en proche $n_{k+1} > n_k$ avec $u_{n_{k+1}} \in I_{k+1}$ — en prenant à chaque fois le plus petit indice convenable, donc sans arbitraire.
+**Extraction.** Prenons $n_0$ avec $u_{n_0} \in I_0$, puis $n_1 > n_0$ avec $u_{n_1} \in I_1$ (possible : $I_1$ contient une infinité d'indices), et de proche en proche $n_{k+1} > n_k$ avec $u_{n_{k+1}} \in I_{k+1}$ — en prenant à chaque fois le **plus petit** indice convenable (bon ordre de $\mathbb{N}$), donc sans arbitraire ; et c'est le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>, une fois encore, qui légitime la construction de proche en proche.
 
-**Convergence.** Les extrémités gauches $(a_k)$ croissent, les droites $(b_k)$ décroissent, et $b_k - a_k = \tfrac{b-a}{2^k} \to 0$ : suites **adjacentes**, de limite commune $\ell$. Comme $u_{n_k} \in I_k$ et $\ell \in I_k$, on a $|u_{n_k} - \ell| \le \tfrac{b-a}{2^k} \to 0$. La sous-suite $(u_{n_k})$ converge vers $\ell$. $\quad\blacksquare$
+**Convergence.** Les extrémités gauches $(a_k)$ croissent, les droites $(b_k)$ décroissent, et $b_k - a_k = \tfrac{b-a}{2^k} \to 0$ — car $2^k \geq k+1$ (récurrence immédiate, déjà servie au chapitre 12), donc $0 \leq \tfrac{b-a}{2^k} \leq \tfrac{b-a}{k+1}$, et les gendarmes concluent. Suites **adjacentes**, donc, de limite commune $\ell$ ; et $\ell \in I_k$ pour chaque $k$, par passage à la limite dans les inégalités ($a_j \geq a_k$ et $b_j \leq b_k$ pour $j \geq k$). Comme $u_{n_k} \in I_k$ aussi, $|u_{n_k} - \ell| \le \tfrac{b-a}{2^k} \to 0$. La sous-suite $(u_{n_k})$ converge vers $\ell$. $\quad\blacksquare$
 
 <Badge niveau="demontre">Preuve complète, déterministe. Bolzano–Weierstrass sans choix.</Badge>
 
