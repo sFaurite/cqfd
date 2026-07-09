@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les théorèmes d’incomplétude de Gödel"
 chapter: godel
-description: "Arithmétisation de la syntaxe ; lemme diagonal (écho Cantor) ; PREMIER théorème d’incomplétude (énoncé précis, esquisse honnête) ; SECOND théorème (Con(T) indémontrable dans T) ; ce que ces théorèmes ne disent PAS ; Goodstein/Paris–Harrington ; lien avec l’arrêt de Turing."
+description: "Arithmétisation de la syntaxe ; lemme diagonal (écho Cantor) ; PREMIER théorème d’incomplétude (énoncé précis, esquisse honnête, hypothèse de correction affichée pour « vrai mais indémontrable ») ; SECOND théorème (Con(T) indémontrable dans T, conditions de dérivabilité signalées) ; ce que ces théorèmes ne disent PAS ; Goodstein/Paris–Harrington ; lien avec l’arrêt de Turing."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -87,7 +87,7 @@ Soit $T$ un système **(i)** cohérent, **(ii)** récursivement axiomatisable, *
 
 </Resultat>
 
-Les **trois** hypothèses sont indispensables. « Récursivement axiomatisable » veut dire **une machine peut vérifier si un texte donné est un axiome**. Sans elle, l'énoncé devient *faux* : l'ensemble de tous les énoncés vrais de $\mathbb{N}$ est, lui, complet — mais sa liste d'axiomes n'est énumérable par aucun algorithme. Retenez-le : oublier (ii), c'est énoncer une contre-vérité.
+Les **trois** hypothèses sont indispensables. « Récursivement axiomatisable » veut dire **une machine peut vérifier si un texte donné est un axiome**. Sans elle, l'énoncé devient *faux* : l'ensemble de tous les énoncés vrais de $\mathbb{N}$ est, lui, complet — mais sa liste d'axiomes n'est énumérable par aucun algorithme. Retenez-le : oublier (ii), c'est énoncer une contre-vérité. (Que cette liste-là échappe à tout algorithme est d'ailleurs une conséquence du théorème *lui-même* : si l'arithmétique vraie était récursivement axiomatisable, cohérente et complète, le théorème s'appliquerait à elle et la rendrait incomplète — boucle fermée.)
 
 <Encart type="calcul" titre="Le raisonnement des deux cas">
 
@@ -107,19 +107,19 @@ $$\boxed{\;T \nvdash G \quad \text{et} \quad T \nvdash \lnot G\;}$$
 La version originale de Gödel suppose $T$ *ω-cohérent* : $T$ ne démontre pas $\exists x\, \varphi(x)$ tout en réfutant $\varphi(0), \varphi(1), \varphi(2), \dots$ un à un. En 1936, Rosser a raffiné $G$ en un énoncé plus rusé (« à toute preuve de moi correspond une preuve plus courte de ma négation »), ramenant l'hypothèse à la **seule cohérence**. L'esquisse principale ci-dessus escamote ce point au cas 2 : nous le signalons plutôt que de le cacher.
 </Encart>
 
-Vient alors la lecture **sémantique**, où chaque mot pèse. Le cas 1 a prouvé que $G$ n'est pas démontrable dans $T$ — or c'est *exactement ce que $G$ affirme*. Donc, dans le **modèle standard** $\mathbb{N}$, $G$ se trouve être… **vrai**.
+Vient alors la lecture **sémantique**, où chaque mot pèse — et où une hypothèse discrète doit être avouée. Le cas 1 a prouvé que $G$ n'est pas démontrable dans $T$ : aucun entier ne code de preuve de $G$, donc $\mathrm{Dem}(\ulcorner G\urcorner)$ est **faux dans $\mathbb{N}$** (la relation de codage, mécanique, s'y évalue sans ambiguïté). Pour en conclure que $G$ lui-même est *vrai* dans $\mathbb{N}$, il faut lire l'équivalence $G \iff \lnot\mathrm{Dem}(\ulcorner G\urcorner)$ **dans $\mathbb{N}$** — ce qui suppose que les théorèmes de $T$ y soient vrais, autrement dit que $T$ soit **correct** vis-à-vis du modèle standard. C'est le cas des systèmes usuels (les axiomes arithmétiques de PA, ou de ZF, sont vrais dans $\mathbb{N}$) ; sans cette hypothèse de correction, on garde l'indémontrabilité, mais plus la vérité.
 
 <Resultat label="Vrai, mais indémontrable">
 
-Il existe un énoncé $G$ **vrai dans $\mathbb{N}$** et pourtant **indémontrable dans $T$**.
+Si les axiomes de $T$ sont vrais dans $\mathbb{N}$, il existe un énoncé $G$ **vrai dans $\mathbb{N}$** et pourtant **indémontrable dans $T$**.
 
-<Badge niveau="demontre" slot="badge">« Vrai » est ici sémantique (dans le modèle standard $\mathbb{N}$), « indémontrable » est syntaxique (dans $T$). Les deux qualificatifs sont relatifs : les confondre, c'est perdre le théorème.</Badge>
+<Badge niveau="demontre" slot="badge">« Vrai » est ici sémantique (dans le modèle standard $\mathbb{N}$), « indémontrable » est syntaxique (dans $T$) — et l'hypothèse de **correction** de $T$, souvent tue, est affichée dans l'énoncé. Les confondre ou l'omettre, c'est perdre le théorème.</Badge>
 
 </Resultat>
 
 ## Second théorème : le système ne peut pas se porter lui-même
 
-Le cas 1 ci-dessus, « si $T$ est cohérent alors $T \nvdash G$ », est un raisonnement fini, donc arithmétisable *dans $T$ lui-même* : il y devient l'implication interne $\mathrm{Coh}(T) \Rightarrow G$. Si $T$ démontrait $\mathrm{Coh}(T)$, il démontrerait $G$ — ce que le premier théorème interdit.
+Le cas 1 ci-dessus, « si $T$ est cohérent alors $T \nvdash G$ », est un raisonnement fini, arithmétisable *dans $T$ lui-même* : il y devient l'implication interne $\mathrm{Coh}(T) \Rightarrow G$. Ce « donc » cache le vrai travail du second théorème : la formalisation exige que $\mathrm{Dem}$ vérifie trois propriétés internes — les **conditions de dérivabilité** de Hilbert–Bernays–Löb (par exemple : si $T \vdash \varphi$, alors $T \vdash \mathrm{Dem}(\ulcorner\varphi\urcorner)$) —, vérifiées pour les systèmes usuels au prix d'un travail technique considérable, que nous citons sans le dérouler. Une fois ce travail fait : si $T$ démontrait $\mathrm{Coh}(T)$, il démontrerait $G$ — ce que le premier théorème interdit.
 
 <Resultat label="Second théorème d'incomplétude (Gödel, 1931)">
 
@@ -159,18 +159,18 @@ Aussi important que les théorèmes eux-mêmes : ce qu'on leur fait dire à tort
 
 Partant de *n'importe quel* entier, la suite de Goodstein finit par atteindre $0$.
 
-<Badge niveau="demontre" slot="badge">Démontré **dans ZF** (Goodstein, 1944) : à la suite d'entiers qui explose on associe une suite d'**ordinaux** qui, elle, décroît *strictement* — et une suite strictement décroissante d'ordinaux ne peut être infinie. La suite d'entiers doit donc mourir. Preuve détaillée : <a href="https://fr.wikipedia.org/wiki/Théorème_de_Goodstein" target="_blank" rel="noopener">réf. ↗</a></Badge>
+<Badge niveau="demontre" slot="badge">Théorème de ZF (Goodstein, 1944), **cité avec son mécanisme** : à la suite d'entiers qui explose on associe une suite d'**ordinaux** qui, elle, décroît *strictement* — et une suite strictement décroissante d'ordinaux ne peut être infinie. Honnêteté : les ordinaux transfinis et leur bonne fondation ne sont **pas** construits dans ce cours (le chapitre 10 l'avait annoncé) — l'idée est donnée, la preuve vit hors parcours. <a href="https://fr.wikipedia.org/wiki/Théorème_de_Goodstein" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
 Et voici le second étage, jumeau de celui du <Prereq href="/maths/partie-iii/hypothese-continu">chapitre sur l'hypothèse du continu</Prereq> : ce même énoncé est **indémontrable dans l'arithmétique de Peano** (Kirby–Paris, 1982). La grille est exactement la même — deux badges, deux niveaux :
 
-<Badge niveau="indecidable">Ni prouvable ni réfutable dans PA (Kirby–Paris, 1982) : la preuve réclame des ordinaux transfinis dont PA ne dispose pas. Exactement le statut de CH dans ZFC, un étage plus bas — mais dans notre cadre ZF, plus riche, il est bel et bien démontré (badge vert ci-dessus). Indécidable *dans PA*, pas dans notre cadre ZF.</Badge>
+<Badge niveau="indecidable">Ni prouvable ni réfutable dans PA (Kirby–Paris, 1982) : la preuve réclame des ordinaux transfinis dont PA ne dispose pas. Exactement le statut de CH dans ZFC, un étage plus bas — mais dans ZF, plus riche, il est un théorème (mécanisme cité ci-dessus, preuve hors parcours). Indécidable *dans PA*, pas dans ZF.</Badge>
 
 Le théorème de **Paris–Harrington** (une variante finie du théorème de Ramsey) offre un second exemple naturel du même phénomène. Ces énoncés prouvent, sur pièces, notre quatrième mise en garde : indécidable *dans un système* n'a jamais voulu dire inconnaissable.
 
 <Encart type="plusloin" titre="La même diagonale en informatique : l'arrêt de Turing">
-En 1936, Alan Turing a démontré qu'aucun algorithme ne peut décider, pour tout programme et toute entrée, si le programme s'arrête. La preuve ? Une machine qui s'auto-examine : supposez un décideur d'arrêt $H$, fabriquez le programme $D$ qui « boucle si $H$ dit que $D$ s'arrête, et s'arrête sinon », puis demandez à $H$ ce que fait $D$ sur lui-même. Contradiction — la diagonale, encore. Incomplétude et indécidabilité de l'arrêt sont les deux visages du même geste (clin d'œil aux processeurs qui, ailleurs, exécutent ces programmes).
+En 1936, Alan Turing a démontré qu'aucun algorithme ne peut décider, pour tout programme et toute entrée, si le programme s'arrête. La preuve ? Une machine qui s'auto-examine : supposez un décideur d'arrêt $H$, fabriquez le programme $D$ qui « boucle si $H$ dit que $D$ s'arrête, et s'arrête sinon », puis demandez à $H$ ce que fait $D$ sur lui-même. Contradiction — la diagonale, encore. Incomplétude et indécidabilité de l'arrêt sont les deux visages du même geste (clin d'œil aux processeurs qui, ailleurs, exécutent ces programmes). <Badge niveau="demontre">Théorème de Turing (1936) : l'argument diagonal est donné en entier dans son principe ; sa formalisation (la définition précise des machines) dépasse ce cours. <a href="https://fr.wikipedia.org/wiki/Problème_de_l%27arrêt" target="_blank" rel="noopener">réf. ↗</a></Badge>
 </Encart>
 
 L'édifice ne peut pas se porter lui-même — et pourtant il tient, un siècle de pratique en témoigne. Nous avons croisé, trois fois déjà, un axiome que nous n'avons jamais adopté : dans la réunion dénombrable, dans la caractérisation séquentielle, dans l'infini de Dedekind. Au chapitre suivant, il est temps de le regarder en face, avec ses trésors et ses monstres — l'**axiome du choix**.
