@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’arithmétique de ℤ : division et nombres premiers"
 chapter: arithmetique
-description: "Division euclidienne (existence + unicité) ; pgcd, algorithme d’Euclide ; théorème de Bézout ; lemme d’Euclide/Gauss ; INFINITÉ DES PREMIERS (Euclide) ; théorème fondamental de l’arithmétique (existence + unicité) ; conjectures ouvertes (Goldbach, jumeaux) vs théorème des nombres premiers."
+description: "Division euclidienne (existence + unicité, valeur absolue définie) ; linéarité et borne des diviseurs démontrées ; pgcd (existence par le bon ordre étendu), algorithme d’Euclide (terminaison par descente infinie) ; théorème de Bézout ; lemme d’Euclide/Gauss ; INFINITÉ DES PREMIERS (Euclide) ; théorème fondamental de l’arithmétique (existence + unicité) ; conjectures ouvertes (Goldbach, jumeaux) vs théorème des nombres premiers."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -34,15 +34,17 @@ Intuitivement, diviser $17$ par $5$, c'est « ranger $17$ objets par paquets de 
 
 **Théorème.** Pour tout $a \in \mathbb{Z}$ et tout $b \in \mathbb{N}^*$, il existe un unique couple $(q, r)$ avec $a = bq + r$ et $0 \le r < b$.
 
+**Deux préliminaires d'une ligne.** La **valeur absolue** : posons $|z| := z$ si $z \geq 0$, et $-z$ sinon — licite, l'ordre de $\mathbb{Z}$ est total ; c'est un entier $\geq 0$, nul seulement si $z = 0$. La **règle des signes minimale** : le produit de deux entiers $\geq 0$ est $\geq 0$ — par <Prereq href="/maths/partie-ii/entiers-relatifs">représentants canoniques</Prereq>, $[(m,0)] \cdot [(n,0)] = [(mn,\,0)] \geq 0$ — et en particulier tout carré est $\geq 0$, car $[(0,n)]^2 = [(n^2,\,0)]$ aussi.
+
 **Existence.** Posons $E = \{\, a - bq : q \in \mathbb{Z} \,\} \cap \mathbb{N}$ : les valeurs $a - bq$ qui sont $\ge 0$.
 
-**Étape 1 — $E$ est non vide.** Prenons $q = -|a|$. Alors $a - bq = a + b|a| \ge a + |a| \ge 0$, car $b \ge 1$. Cet élément est dans $E$.
+**Étape 1 — $E$ est non vide.** Prenons $q = -|a|$. Alors $a - bq = a + b|a|$ ; or $b|a| - |a| = (b-1)|a| \geq 0$ (produit de positifs, $b \geq 1$), donc $a + b|a| \geq a + |a|$, qui vaut $2a \geq 0$ si $a \geq 0$ et $a - a = 0$ sinon. Cet élément est dans $E$.
 
 **Étape 2 — le plus petit reste.** $E$ est une partie non vide de $\mathbb{N}$ : par le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> (**premier service**), $E$ a un plus petit élément $r = a - bq$. Par construction $r \ge 0$.
 
 **Étape 3 — $r < b$.** Si l'on avait $r \ge b$, alors $r - b = a - b(q+1)$ serait encore $\ge 0$, donc dans $E$, et **strictement plus petit** que $r$ : cela contredirait la minimalité de $r$. Donc $0 \le r < b$.
 
-**Unicité.** Supposons $a = bq + r = bq' + r'$ avec $0 \le r, r' < b$. En soustrayant : $b(q - q') = r' - r$, donc $b\,|q - q'| = |r' - r|$. Mais $r, r' \in [0, b)$ imposent $|r' - r| < b$. Ainsi $b\,|q - q'| < b$, d'où $|q - q'| < 1$ ; comme $q - q'$ est entier, $q = q'$, puis $r = r'$. $\blacksquare$
+**Unicité.** Supposons $a = bq + r = bq' + r'$ avec $0 \le r, r' < b$. En soustrayant : $b(q - q') = r' - r$. Si $q \neq q'$, l'ordre total tranche — disons $q > q'$, donc $q - q' \geq 1$, et $b(q - q') \geq b$, car $b(q - q') - b = b(q - q' - 1) \geq 0$ (produit de positifs). Mais $r' - r \leq r' < b$ puisque $r \geq 0$ : contradiction. Le cas $q < q'$ est symétrique (échanger les rôles des deux écritures). Donc $q = q'$, puis $r = r'$ par régularité de l'addition. $\blacksquare$
 
 </Encart>
 
@@ -56,19 +58,21 @@ $$ \forall a \in \mathbb{Z},\ \forall b \in \mathbb{N}^*,\ \exists!\,(q,r) \in \
 
 ## Diviseurs, pgcd et l'algorithme d'Euclide
 
-On dit que $b$ **divise** $a$, noté $b \mid a$, s'il existe $k \in \mathbb{Z}$ tel que $a = bk$. Pour $a, b$ non tous deux nuls, l'ensemble de leurs diviseurs communs est non vide (il contient $1$) et borné, donc admet un plus grand élément : le **pgcd** $\mathrm{pgcd}(a,b)$. Reste à savoir le calculer — et c'est là qu'intervient une observation d'une simplicité redoutable.
+On dit que $b$ **divise** $a$, noté $b \mid a$, s'il existe $k \in \mathbb{Z}$ tel que $a = bk$. Deux munitions d'une ligne, qui serviront sans relâche. **Linéarité** : si $d \mid a$ et $d \mid b$, alors $d \mid au + bv$ pour tous $u, v \in \mathbb{Z}$ — car $a = dk$ et $b = dl$ donnent $au + bv = d(ku + lv)$. **Borne des diviseurs** : si $d \mid a$ avec $a \neq 0$, alors $d \leq |a|$ — pour $d \leq 0$, c'est clair ($|a| \geq 1$) ; pour $d > 0$, l'égalité $a = dk$ donne, au signe de $k$ près, $|a| = dm$ avec $m \geq 1$ (un $m \leq 0$ rendrait $dm \leq 0 < |a|$), d'où $d \leq dm = |a|$, car $d(m-1) \geq 0$. <Badge niveau="demontre">Deux vérifications directes sur les lois de $\mathbb{Z}$ et la règle des signes de l'encart précédent.</Badge>
+
+Pour $a, b$ non tous deux nuls, l'ensemble de leurs diviseurs communs est alors non vide (il contient $1$) et **majoré** — par $|a|$ ou $|b|$, celui qui est non nul, grâce à la borne des diviseurs. Or toute partie non vide et majorée de $\mathbb{Z}$ admet un plus grand élément : c'est le <Prereq href="/maths/partie-ii/reels-dedekind">bon ordre étendu à $\mathbb{Z}$</Prereq>, démontré au chapitre 8. D'où l'existence du **pgcd** $\mathrm{pgcd}(a,b)$. Reste à savoir le calculer — et c'est là qu'intervient une observation d'une simplicité redoutable.
 
 <Encart type="calcul" titre="Le cœur de l'algorithme : pgcd(a, b) = pgcd(b, r)">
 
 **Lemme.** Si $a = bq + r$, alors $a$ et $b$ ont **exactement** les mêmes diviseurs communs que $b$ et $r$ — donc $\mathrm{pgcd}(a,b) = \mathrm{pgcd}(b,r)$.
 
-**Sens direct.** Si $d \mid a$ et $d \mid b$, alors $d \mid a - bq = r$ : donc $d$ divise $b$ et $r$.
+**Sens direct.** Si $d \mid a$ et $d \mid b$, alors $d \mid a - bq = r$ (linéarité, avec $u = 1$ et $v = -q$) : donc $d$ divise $b$ et $r$.
 
-**Sens réciproque.** Si $d \mid b$ et $d \mid r$, alors $d \mid bq + r = a$ : donc $d$ divise $a$ et $b$.
+**Sens réciproque.** Si $d \mid b$ et $d \mid r$, alors $d \mid bq + r = a$ (linéarité encore) : donc $d$ divise $a$ et $b$.
 
 Les deux paires ont les mêmes diviseurs communs, donc le même plus grand. $\blacksquare$
 
-**Terminaison.** En itérant, les restes forment une suite $b > r_1 > r_2 > \cdots \ge 0$ **strictement décroissante** dans $\mathbb{N}$ : par le bon ordre (**deuxième service**), elle ne peut décroître indéfiniment et atteint $0$. Le dernier reste non nul est le pgcd, car $\mathrm{pgcd}(x, 0) = x$.
+**Terminaison.** En itérant, les restes forment une suite $b > r_1 > r_2 > \cdots \ge 0$ **strictement décroissante** dans $\mathbb{N}$ : c'est très exactement la <Prereq href="/maths/partie-ii/arithmetique-de-n">descente infinie</Prereq> (**deuxième service** du bon ordre, dont elle découle) qui interdit qu'elle se poursuive sans fin — un reste finit par être nul. Le dernier reste non nul est le pgcd, car $\mathrm{pgcd}(x, 0) = x$ pour $x > 0$ : tout entier divise $0$ ($0 = d \cdot 0$), donc les diviseurs communs de $(x, 0)$ sont exactement les diviseurs de $x$ — dont le plus grand est $x$ lui-même, la borne des diviseurs étant atteinte par $x \mid x$.
 
 </Encart>
 
@@ -84,7 +88,7 @@ Le dernier reste non nul est $18$ : $\mathrm{pgcd}(252, 198) = 18$. Quatre divis
 
 **Théorème.** Pour $a, b \in \mathbb{Z}$ non tous deux nuls, il existe $u, v \in \mathbb{Z}$ tels que $au + bv = \mathrm{pgcd}(a,b)$.
 
-**Étape 1.** Posons $I = \{\, au + bv : u, v \in \mathbb{Z} \,\}$ et $I^+ = I \cap \mathbb{N}^*$. L'élément $a\cdot a + b\cdot b = a^2 + b^2$ est $> 0$ (car $a, b$ non tous deux nuls) et dans $I^+$ : celui-ci est non vide.
+**Étape 1.** Posons $I = \{\, au + bv : u, v \in \mathbb{Z} \,\}$ et $I^+ = I \cap \mathbb{N}^*$. L'élément $a\cdot a + b\cdot b = a^2 + b^2$ est $> 0$ : les carrés sont $\geq 0$ (règle des signes minimale, encart de la division), leur somme aussi, et elle n'est nulle que si $a^2 = b^2 = 0$, c'est-à-dire $a = b = 0$ par <Prereq href="/maths/partie-ii/entiers-relatifs">intégrité</Prereq> — exclu. Cet élément est dans $I^+$, qui est donc non vide.
 
 **Étape 2 — le plus petit combiné.** Par le bon ordre (**troisième service !**), $I^+$ a un plus petit élément $d = au_0 + bv_0 > 0$.
 
@@ -92,7 +96,7 @@ Le dernier reste non nul est $18$ : $\mathrm{pgcd}(252, 198) = 18$. Quatre divis
 
 **Étape 4 — $d \mid b$.** Le même calcul avec $b$ donne $d \mid b$. Ainsi $d$ est un diviseur commun de $a$ et $b$.
 
-**Étape 5 — $d$ est le plus grand.** Soit $c$ un diviseur commun quelconque. Alors $c \mid au_0 + bv_0 = d$, donc $c \le d$. Le diviseur commun $d$ domine tous les autres : $d = \mathrm{pgcd}(a,b)$. $\blacksquare$
+**Étape 5 — $d$ est le plus grand.** Soit $c$ un diviseur commun quelconque. Alors $c \mid au_0 + bv_0 = d$ (linéarité), donc $c \le d$ (borne des diviseurs, $d$ étant $> 0$). Le diviseur commun $d$ domine tous les autres : $d = \mathrm{pgcd}(a,b)$. $\blacksquare$
 
 </Encart>
 
@@ -120,7 +124,7 @@ Un entier $p \ge 2$ est **premier** si ses seuls diviseurs positifs sont $1$ et 
 
 **Étape 3 — on multiplie par $b$.** $\ pub + avb = b$, autrement dit $b = p\,(ub) + (ab)\,v$.
 
-**Étape 4 — conclusion.** $p$ divise $p(ub)$ (évident) et $p$ divise $ab$ (hypothèse), donc $p \mid (ab)v$. $p$ divise la somme des deux : $p \mid b$. $\blacksquare$
+**Étape 4 — conclusion.** $p$ divise $p(ub)$ (évident) et $p$ divise $ab$ (hypothèse), donc $p \mid (ab)v$ ; par **linéarité**, $p$ divise la somme des deux : $p \mid b$. $\blacksquare$
 
 </Encart>
 
@@ -132,7 +136,7 @@ Un entier $p \ge 2$ est **premier** si ses seuls diviseurs positifs sont $1$ et 
 
 <Encart type="calcul" titre="Il y a une infinité de nombres premiers (Euclide)">
 
-**Lemme préalable.** Tout entier $n \ge 2$ admet un diviseur premier : par le bon ordre, le plus petit diviseur $> 1$ de $n$ existe, et il est premier (s'il avait lui-même un diviseur propre $>1$, celui-ci diviserait $n$ et serait plus petit — contradiction avec la minimalité).
+**Lemme préalable.** Tout entier $n \ge 2$ admet un diviseur premier. L'ensemble des diviseurs de $n$ qui dépassent $1$ est non vide — $n$, qui est $\geq 2$, s'y trouve — donc le bon ordre lui donne un plus petit élément $p$. Ce $p$ est premier : s'il avait un diviseur $e$ avec $1 < e < p$, la **transitivité** de la divisibilité ($e \mid p$ et $p \mid n$ s'écrivent $p = ek$ et $n = pl$, d'où $n = e(kl)$) ferait de $e$ un diviseur de $n$ dépassant $1$ et plus petit que $p$ — contradiction avec la minimalité.
 
 **Démonstration** (par l'absurde). Supposons les premiers en nombre **fini** : $p_1, p_2, \dots, p_k$. Posons
 
@@ -158,13 +162,13 @@ $30031$ n'est pas premier : mais $59$ et $509$, ses facteurs, ne figurent bel et
 
 Les premiers sont les **briques multiplicatives** des entiers — et chaque entier se bâtit d'une seule façon.
 
-**Existence.** Tout $n \ge 2$ est un produit de premiers. Par <Prereq href="/maths/partie-ii/arithmetique-de-n">récurrence forte</Prereq> (démontrée avec le bon ordre de $\mathbb{N}$) : soit $n$ est premier (produit d'un seul facteur), soit $n = ab$ avec $1 < a, b < n$ ; par hypothèse de récurrence, $a$ et $b$ sont des produits de premiers, donc $n$ aussi. <Badge niveau="demontre">Existence par récurrence forte — un théorème, pas un principe admis.</Badge>
+**Existence.** Tout $n \ge 2$ est un produit de premiers. Par <Prereq href="/maths/partie-ii/arithmetique-de-n">récurrence forte</Prereq> (démontrée avec le bon ordre de $\mathbb{N}$) : soit $n$ est premier (produit d'un seul facteur), soit il a un diviseur $a$ avec $1 < a < n$, et le cofacteur $b$ de l'écriture $n = ab$ vérifie lui aussi $1 < b < n$ — $b = 1$ donnerait $n = a$, et $b \geq n$ donnerait $n = ab \geq 2n > n$. Par hypothèse de récurrence, $a$ et $b$ sont des produits de premiers, donc $n$ aussi. <Badge niveau="demontre">Existence par récurrence forte — un théorème, pas un principe admis.</Badge>
 
 **Unicité.** La décomposition est unique **à l'ordre des facteurs près**.
 
 <Encart type="plusloin" titre="Unicité de la factorisation : l'esquisse honnête">
 
-Supposons $p_1 \cdots p_r = q_1 \cdots q_s$, deux produits de premiers. Alors $p_1$ divise le membre de droite ; par le **lemme d'Euclide** (étendu par récurrence à un produit de plusieurs facteurs), $p_1$ divise l'un des $q_j$. Mais $q_j$ est premier : ses seuls diviseurs $>1$ sont lui-même, donc $p_1 = q_j$. On simplifie ce facteur des deux côtés et l'on recommence. De proche en proche, les deux listes coïncident (à l'ordre près). C'est le lemme d'Euclide, et lui seul, qui fait l'unicité : voilà pourquoi il était le vrai héros du chapitre. $\blacksquare$
+Supposons $p_1 \cdots p_r = q_1 \cdots q_s$, deux produits de premiers. Alors $p_1$ divise le membre de droite ; par le **lemme d'Euclide** (étendu par récurrence à un produit de plusieurs facteurs), $p_1$ divise l'un des $q_j$. Mais $q_j$ est premier : ses seuls diviseurs $>1$ sont lui-même, donc $p_1 = q_j$. On simplifie ce facteur des deux côtés — la <Prereq href="/maths/partie-ii/rationnels">régularité multiplicative</Prereq>, affichée en tête du chapitre 7, l'autorise puisque $p_1 \neq 0$ — et l'on recommence. De proche en proche, les deux listes coïncident (à l'ordre près). C'est le lemme d'Euclide, et lui seul, qui fait l'unicité : voilà pourquoi il était le vrai héros du chapitre. $\blacksquare$
 
 </Encart>
 
