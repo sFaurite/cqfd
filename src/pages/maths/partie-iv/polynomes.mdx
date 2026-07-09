@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les polynômes et leurs racines"
 chapter: polynomes
-description: "Polynôme formel (suite presque nulle) ≠ fonction polynomiale ; degré ; division euclidienne des polynômes ; a racine ssi (X − a) divise P ; au plus deg P racines sur un anneau intègre ; théorème fondamental de l’algèbre (esquisse honnête) ; Abel–Ruffini cité."
+description: "Polynôme formel (suite presque nulle) ≠ fonction polynomiale ; degré ; tout corps est intègre ; division euclidienne des polynômes (récurrence forte, valable pour diviseur unitaire dans tout anneau) ; a racine ssi (X − a) divise P ; AU PLUS deg P RACINES démontré (la dette des ch. 11-12 soldée) ; théorème fondamental de l’algèbre (factorisation démontrée, racine en esquisse) ; Abel–Ruffini cité."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -82,6 +82,8 @@ $$ (2X)(2X) = 4X^2 = 0, \qquad \text{alors que } \deg(2X) + \deg(2X) = 2 $$
 
 Le degré s'effondre dès que les <Prereq href="/maths/partie-iv/anneaux-corps">diviseurs de zéro</Prereq> entrent en scène — écho direct du chapitre précédent.
 
+Un mot avant d'exploiter tout cela sur un corps : **tout corps est intègre**. Si $ab = 0$ avec $a \neq 0$, multiplier par $a^{-1}$ donne $b = 0$ — une ligne, qui autorise à appliquer le théorème du degré à $K[X]$ chaque fois que $K$ est un corps, et qui servira deux fois ci-dessous. <Badge niveau="demontre">Une ligne depuis la définition d'un corps.</Badge>
+
 ## La division euclidienne des polynômes
 
 Sur un **corps** $K$, l'algorithme de la potence du collège fonctionne mot pour mot.
@@ -94,7 +96,7 @@ $$ \forall A, \ \forall B \neq 0, \ \exists!\,(Q, R) : \ A = BQ + R \ \text{ ave
 </Resultat>
 
 <Encart type="calcul" titre="Existence et unicité, ligne à ligne">
-**Existence**, par récurrence sur $\deg A$. Si $\deg A < \deg B$, on prend $Q = 0$, $R = A$. Sinon $\deg A = n \ge m = \deg B$ ; soient $a_n$ le dominant de $A$, $b_m$ celui de $B$. Comme $K$ est un corps, $b_m$ est inversible ; posons
+**Existence**, par <Prereq href="/maths/partie-ii/arithmetique-de-n">récurrence **forte**</Prereq> sur $\deg A$ — forte, car le degré peut chuter de plus d'un cran à chaque étape. Si $\deg A < \deg B$, on prend $Q = 0$, $R = A$. Sinon $\deg A = n \ge m = \deg B$ ; soient $a_n$ le dominant de $A$, $b_m$ celui de $B$. Comme $K$ est un corps, $b_m$ est inversible ; posons
 
 $$ A_1 := A - a_n\, b_m^{-1}\, X^{\,n-m}\, B $$
 
@@ -121,10 +123,10 @@ Les deux sont des *anneaux euclidiens* : une seule et même démonstration les r
 
 ## Racines : le pont entre polynôme et fonction
 
-L'évaluation $P \mapsto \widetilde{P}(a)$ respecte $+$ et $\times$ (immédiat depuis les définitions). Elle relie divisibilité et annulation :
+L'évaluation $P \mapsto \widetilde{P}(a)$ respecte $+$ et $\times$. Pour $+$, c'est immédiat (les coefficients s'ajoutent casier par casier). Pour $\times$, c'est un réarrangement de sommes finies — développer $\big(\sum_i a_i x^i\big)\big(\sum_j b_j x^j\big)$ par distributivité et regrouper les termes selon $i + j = n$ redonne exactement le produit de convolution — routinier au sens du contrat des badges, mais pas « immédiat » : de l'encre, aucune idée. <Badge niveau="demontre">Vérification par distributivité et commutativité de $A$, calquée sur la définition du produit.</Badge> Elle relie divisibilité et annulation :
 
 <Encart type="calcul" titre="a est racine de P ⟺ (X − a) divise P">
-Divisons $P$ par $X - a$ (licite : $X - a$ est unitaire, donc la division vaut dans tout anneau commutatif). Comme $\deg(X-a) = 1$, le reste est une constante $r$ :
+Divisons $P$ par $X - a$. Ce geste est licite dans **tout anneau commutatif**, pas seulement sur un corps — relisez la preuve de la division euclidienne : l'existence n'a utilisé qu'une chose, l'inversibilité du coefficient dominant de $B$ ; or celui de $X - a$ vaut $1$, inversible partout. Et l'unicité n'exigeait que la non-nullité du produit des dominants — acquise dès que l'un des deux vaut $1$, sans hypothèse d'intégrité. Comme $\deg(X-a) = 1$, le reste est une constante $r$ :
 
 $$ P = (X - a)\,Q + r $$
 
@@ -139,8 +141,16 @@ Donc $r = \widetilde{P}(a)$, et $(X - a) \mid P$ (c'est-à-dire $r = 0$) équiva
 
 $$ \text{Sur un anneau intègre, un polynôme } P \neq 0 \text{ de degré } n \text{ a au plus } n \text{ racines} $$
 
-<Badge niveau="demontre" slot="badge">Récurrence sur $n$ : une racine $a$ factorise $P = (X-a)Q$ avec $\deg Q = n-1$ ; toute autre racine annule $Q$ (intégrité), qui en a au plus $n-1$.</Badge>
+<Badge niveau="demontre" slot="badge">Le théorème que deux chapitres attendaient — démonstration déroulée ci-dessous, récurrence sur le degré.</Badge>
 </Resultat>
+
+<Encart type="calcul" titre="Démonstration : au plus n racines, par récurrence sur n">
+
+**Initialisation ($n = 0$).** $P$ est une constante $c \neq 0$ : sa fonction vaut $c$ partout, aucune racine — au plus $0$, comme annoncé.
+
+**Hérédité.** Soit $P$ de degré $n + 1$. Si $P$ n'a aucune racine, c'est fini. Sinon, soit $a$ une racine : par le théorème précédent, $P = (X - a)\,Q$, et le théorème du degré (l'anneau est intègre) donne $n + 1 = 1 + \deg Q$, soit $\deg Q = n$. Soit maintenant $b$ une racine de $P$ **autre** que $a$ : en évaluant — l'évaluation respecte $\times$ —, $0 = \widetilde{P}(b) = (b - a)\,\widetilde{Q}(b)$, avec $b - a \neq 0$ ; l'**intégrité** force $\widetilde{Q}(b) = 0$ : $b$ est racine de $Q$. Ainsi toute racine de $P$ est $a$ ou une racine de $Q$ ; or $Q$, de degré $n$ et non nul, en a au plus $n$ par hypothèse de récurrence. Total : au plus $n + 1$. $\blacksquare$
+
+</Encart>
 
 Ici encore l'intégrité est vitale. Dans $\mathbb{Z}/8\mathbb{Z}$, le polynôme $X^2 - 1$, de degré $2$, a **quatre** racines :
 
@@ -158,7 +168,7 @@ Sur $\mathbb{C}$, la chasse aux racines s'achève triomphalement.
 
 $$ \text{Tout } P \in \mathbb{C}[X] \text{ de degré } n \ge 1 \text{ s'écrit } P = c\,(X - z_1)(X - z_2)\cdots(X - z_n) $$
 
-<Badge niveau="demontre" slot="badge">Énoncé au chapitre 9, il fournit une racine $z_1$ ; alors $P = (X - z_1)Q$ et une récurrence scinde $P$ en $n$ facteurs de degré 1. Existence d'une racine esquissée ci-dessous.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré **modulo un ingrédient différé** : la *factorisation* à partir d'une racine est établie ici (racine ⟺ facteur, degré, récurrence — $\mathbb{C}$ est intègre, comme tout corps) ; l'*existence* de la première racine, le cœur <Prereq href="/maths/partie-ii/complexes">énoncé au chapitre 9</Prereq>, est esquissée ci-dessous et sa pièce manquante (bornes atteintes) sera soldée en partie V.</Badge>
 </Resultat>
 
 Une racine suffit donc à tout : $\mathbb{C}$ est **algébriquement clos**. Reste à justifier l'existence de cette première racine — le cœur du théorème, <Prereq href="/maths/partie-ii/complexes">énoncé au chapitre 9</Prereq>.
@@ -169,7 +179,7 @@ Soit $P$ non constant. Quand $\lvert z\rvert \to \infty$, le terme dominant l'em
 
 ## Abel–Ruffini : la fin des formules
 
-Résoudre par radicaux, c'est exprimer les racines à partir des coefficients avec $+, -, \times, \div$ et des $\sqrt[k]{\ }$. Jusqu'au degré $4$, on sait faire : la formule du second degré, celle de Cardan (degré 3), celle de Ferrari (degré 4). <Badge niveau="demontre">Formules classiques, valables sur tout corps de caractéristique nulle.</Badge>
+Résoudre par radicaux, c'est exprimer les racines à partir des coefficients avec $+, -, \times, \div$ et des $\sqrt[k]{\ }$. Jusqu'au degré $4$, on sait faire : la formule du second degré, celle de Cardan (degré 3), celle de Ferrari (degré 4). <Badge niveau="demontre">Formules classiques, valables sur tout corps de caractéristique nulle — citées ici sans démonstration, hors du parcours. <a href="https://fr.wikipedia.org/wiki/Méthode_de_Cardan" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 Au degré $5$, coup de tonnerre : **il n'existe aucune formule générale par radicaux** (Ruffini, puis Abel, 1824).
 
