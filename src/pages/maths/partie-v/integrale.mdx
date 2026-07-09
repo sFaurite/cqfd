@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’intégrale de Riemann"
 chapter: integrale
-description: "Sommes de Darboux, intégrabilité ; ∫x dx calculé À LA MAIN par sommes ; Dirichlet non intégrable ; continue ⇒ intégrable (via Heine) ; linéarité, Chasles, positivité ; THÉORÈME FONDAMENTAL DE L’ANALYSE démontré."
+description: "Sommes de Darboux, intégrabilité ; ∫x dx calculé À LA MAIN par sommes ; Dirichlet non intégrable ; continue ⇒ intégrable (via Heine) ; linéarité, Chasles, positivité ; conventions (constante, bornes renversées) posées ; THÉORÈME FONDAMENTAL DE L’ANALYSE démontré en ε-δ direct."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -81,7 +81,7 @@ $$s(f,\sigma_n) = \frac{(n-1)n}{2n^2} = \frac{n-1}{2n}, \qquad S(f,\sigma_n) = \
 
 $$\frac{n-1}{2n} = s(f,\sigma_n) \ \le\ \underline{I} \ \le\ \overline{I} \ \le\ S(f,\sigma_n) = \frac{n+1}{2n}.$$
 
-**Étape 6 — passage à la limite.** Quand $n \to \infty$, $\dfrac{n-1}{2n} \to \dfrac12$ et $\dfrac{n+1}{2n} \to \dfrac12$. Les deux bords convergent vers $\tfrac12$ ; par le théorème des gendarmes, $\underline{I}$ et $\overline{I}$, coincés entre eux, valent tous deux $\tfrac12$. En particulier $\underline{I} = \overline{I}$ : $f$ est intégrable.
+**Étape 6 — passage à la limite.** Quand $n \to \infty$, $\dfrac{n-1}{2n} \to \dfrac12$ et $\dfrac{n+1}{2n} \to \dfrac12$. Le nombre **fixe** $\underline{I}$ est coincé entre les deux : le <Prereq href="/maths/partie-v/suites-limites">passage à la limite dans les inégalités</Prereq> (chapitre 18), appliqué de chaque côté, donne $\tfrac12 \le \underline{I} \le \tfrac12$ — de même pour $\overline{I}$. Tous deux valent $\tfrac12$. En particulier $\underline{I} = \overline{I}$ : $f$ est intégrable.
 
 <Resultat label="Aire sous y = x">
 
@@ -103,7 +103,7 @@ Soit une subdivision $\sigma$ quelconque et un morceau $[x_{k-1}, x_k]$ de large
 
 **Étape 1 — le sup vaut 1.** Par <Prereq href="/maths/partie-ii/reels-dedekind">densité de $\mathbb{Q}$ dans $\mathbb{R}$</Prereq> (chapitre 8, §6), l'intervalle ouvert $\left]x_{k-1}, x_k\right[$ contient un rationnel $r$, où $D(r) = 1$. Comme $D \le 1$, on a $M_k = \sup D = 1$.
 
-**Étape 2 — l'inf vaut 0.** Le nombre $t = r + \frac{\sqrt2}{m}$ est irrationnel (sinon $t = q \in \mathbb{Q}$ donnerait $\sqrt2 = m(q - r) \in \mathbb{Q}$, absurde) et, pour $m$ assez grand, reste dans $\left]x_{k-1}, x_k\right[$ : le morceau contient donc un irrationnel $t$, où $D(t) = 0$. Comme $D \ge 0$, on a $m_k = \inf D = 0$.
+**Étape 2 — l'inf vaut 0.** L'intervalle ouvert contient aussi un **irrationnel** $t$ — c'est la densité des irrationnels, <Prereq href="/maths/partie-v/continuite">démontrée au chapitre 20</Prereq> par translation de $\sqrt2$ — où $D(t) = 0$. Comme $D \ge 0$, on a $m_k = \inf D = 0$.
 
 **Étape 3 — les sommes ne bougent jamais.** Cela vaut pour *chaque* morceau, donc
 
@@ -140,7 +140,7 @@ $$|x_n - y_n| < \frac1n \qquad\text{et}\qquad |f(x_n) - f(y_n)| \ge \varepsilon.
 
 La suite $(x_n)$ vit dans le segment borné $[a,b]$ : par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, elle admet une sous-suite $(x_{\varphi(n)})$ convergeant vers un $\ell \in [a,b]$. Comme $|x_{\varphi(n)} - y_{\varphi(n)}| < \tfrac{1}{\varphi(n)} \to 0$, la sous-suite $(y_{\varphi(n)})$ converge vers le **même** $\ell$. Par continuité de $f$ en $\ell$, $f(x_{\varphi(n)}) \to f(\ell)$ et $f(y_{\varphi(n)}) \to f(\ell)$, donc $|f(x_{\varphi(n)}) - f(y_{\varphi(n)})| \to 0$ — ce qui contredit $\ge \varepsilon$. $\quad\blacksquare$
 
-**Honnêteté.** Fabriquer la suite $(x_n, y_n)$ suppose de *choisir*, pour chaque $n$, un couple témoin : c'est un usage du choix dénombrable $\mathrm{AC}_\omega$, la dette que ce cours assume et soldera au chapitre sur l'axiome du choix.
+**Honnêteté.** Fabriquer la suite $(x_n, y_n)$ suppose de *choisir*, pour chaque $n$, un couple témoin : c'est un usage du choix dénombrable $\mathrm{AC}_\omega$. Précisons le statut, comme pour les bornes atteintes du <Prereq href="/maths/partie-v/continuite">chapitre 20</Prereq> : le théorème de Heine *lui-même* est un théorème de ZF — des preuves sans choix existent, qui désignent des témoins rationnels canoniques — ; c'est **cette preuve-ci**, la plus lisible, qui paie $\mathrm{AC}_\omega$. Dette de méthode, pas de théorème, soldée au chapitre 25.
 </Encart>
 
 <Badge niveau="demontre">Heine démontré par l'absurde via Bolzano–Weierstrass.</Badge>
@@ -173,6 +173,8 @@ Pour toutes fonctions intégrables sur $[a,b]$, la définition livre sans peine 
 - **Linéarité** : $\displaystyle\int_a^b (\alpha f + \beta g) = \alpha\!\int_a^b f + \beta\!\int_a^b g$ ;
 - **Relation de Chasles** : pour $a \le c \le b$, $\displaystyle\int_a^b f = \int_a^c f + \int_c^b f$ (une subdivision de $[a,b]$ passant par $c$ scinde chaque somme).
 
+<Badge niveau="demontre">Vérifications par sommes de Darboux, un cran moins immédiates qu'on ne le dit : l'inf d'une somme *majore* la somme des infs (d'où un jeu d'ε sur les raffinements pour la linéarité), et un facteur $\alpha < 0$ **échange** inf et sup. Routinières au sens du contrat — le mécanisme est celui du lemme de la tenaille, aucune idée neuve — mais pas gratuites.</Badge>
+
 La propriété qui servira au sommet est la **positivité**, que nous détaillons.
 
 <Encart type="calcul" titre="Positivité, croissance, et |∫f| ≤ ∫|f|">
@@ -200,17 +202,21 @@ Notez $F(x)$ l'aire accumulée de $a$ jusqu'à $x$. Faites avancer $x$ d'un chev
 
 Soit $f$ **continue** sur $[a,b]$ (donc intégrable, §4) et $F(x) = \displaystyle\int_a^x f$.
 
-**Étape 1 — le taux d'accroissement.** Pour $h \ne 0$ tel que $x + h \in [a,b]$, la relation de Chasles donne
+**Étape 0 — deux conventions à poser.** D'abord, l'intégrale d'une **constante** $c$ sur $[u,v]$ vaut $c\,(v-u)$ : toutes les sommes de Darboux valent exactement cela ($m_k = M_k = c$). Ensuite, pour $h < 0$, l'écriture $\int_x^{x+h} f$ n'a pas encore de sens — les bornes sont renversées ; **posons** $\int_x^{x+h} f := -\int_{x+h}^{x} f$. Avec cette convention, la relation de Chasles (appliquée sur $[a, x+h] \subseteq [a, x]$ quand $h < 0$) donne dans **tous** les cas $F(x+h) - F(x) = \int_x^{x+h} f$. <Badge niveau="admis">Convention d'orientation, posée à l'instant ; l'intégrale de la constante, elle, est un calcul.</Badge>
+
+**Étape 1 — le taux d'accroissement.** Pour $h \ne 0$ tel que $x + h \in [a,b]$ :
 
 $$\frac{F(x+h) - F(x)}{h} = \frac{1}{h}\int_x^{x+h} f.$$
 
-**Étape 2 — encadrer par les bornes atteintes.** Sur le segment $J_h$ d'extrémités $x$ et $x+h$, $f$ continue **atteint** son minimum $m_h$ et son maximum $M_h$ (<Prereq href="/maths/partie-v/continuite">bornes atteintes</Prereq>). Par croissance de l'intégrale appliquée aux constantes $m_h \le f \le M_h$, le taux ci-dessus est encadré — dans les deux cas $h > 0$ et $h < 0$, le signe de $h$ et celui de l'intégrale se compensent :
+**Étape 2 — encadrer par les bornes atteintes.** Sur le segment $J_h$ d'extrémités $x$ et $x+h$, $f$ continue **atteint** son minimum $m_h$ et son maximum $M_h$ (<Prereq href="/maths/partie-v/continuite">bornes atteintes</Prereq>). Par croissance de l'intégrale appliquée aux constantes $m_h \le f \le M_h$ sur $J_h$, puis division par $|h|$ — pour $h < 0$, le renversement des bornes et le signe de $h$ se compensent exactement, grâce à la convention de l'étape 0 :
 
 $$m_h \ \le\ \frac{F(x+h) - F(x)}{h} \ \le\ M_h.$$
 
-**Étape 3 — les gendarmes.** Quand $h \to 0$, le segment $J_h$ se contracte sur $\{x\}$. La continuité de $f$ en $x$ force $m_h \to f(x)$ et $M_h \to f(x)$ (le min et le max sont atteints en des points qui tendent vers $x$). Le taux, coincé entre deux quantités qui tendent vers $f(x)$, y tend aussi :
+**Étape 3 — conclure en ε-δ direct.** Fixons $\varepsilon > 0$. La continuité de $f$ en $x$ fournit $\delta > 0$ tel que $|y - x| < \delta \implies |f(y) - f(x)| < \varepsilon$. Prenons $0 < |h| < \delta$ : tout point de $J_h$ est à distance $< \delta$ de $x$ — en particulier les points où $f$ atteint $m_h$ et $M_h$ —, donc $f(x) - \varepsilon < m_h$ et $M_h < f(x) + \varepsilon$. L'encadrement de l'étape 2 devient $\left|\tfrac{F(x+h)-F(x)}{h} - f(x)\right| < \varepsilon$ : c'est, mot pour mot, la définition de
 
 $$F'(x) = \lim_{h \to 0} \frac{F(x+h) - F(x)}{h} = f(x).$$
+
+(Aucun « théorème des gendarmes pour les fonctions » n'a été nécessaire — le cours ne l'a établi que pour les suites : l'argument ε-δ direct suffit, comme pour Fermat au chapitre précédent.)
 
 <Resultat label="Théorème fondamental de l'analyse">
 
