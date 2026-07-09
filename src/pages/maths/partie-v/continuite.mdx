@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "La continuité et les valeurs intermédiaires"
 chapter: continuite
-description: "Limite d’une fonction, continuité ε-δ ; caractérisation séquentielle (avec l’honnêteté ACω sur un sens) ; opérations ; THÉORÈME DES VALEURS INTERMÉDIAIRES démontré via borne sup ; contre-exemple sur ℚ ; bornes atteintes ; racines n-ièmes construites ; théorème de la bijection (réciproque continue)."
+description: "Limite d’une fonction, continuité ε-δ ; caractérisation séquentielle (sens réciproque indécidable dans ZF seul, badge rouge) ; partie entière construite ; opérations ; THÉORÈME DES VALEURS INTERMÉDIAIRES démontré via borne sup ; contre-exemple sur ℚ ; bornes atteintes ; racines n-ièmes construites ; théorème de la bijection (réciproque continue)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -42,7 +42,7 @@ $$ \boxed{\ \forall a \in \mathbb{R},\ x \mapsto x^2 \text{ est continue en } a.
 
 </Encart>
 
-Le $\delta$ dépend de $\varepsilon$ *et* de $a$ (le facteur $2|a|+1$) : c'est normal, et parfaitement rigoureux. À l'opposé, un saut se repère à un $\varepsilon$ que nul $\delta$ ne bat. La **partie entière** $x \mapsto \lfloor x \rfloor$ en fournit l'exemple type : en un entier $n$, $\lfloor n \rfloor = n$, mais pour $x$ un peu inférieur à $n$, $\lfloor x \rfloor = n-1$. Prenez $\varepsilon = \tfrac12$ : quel que soit $\delta$, le point $x = n - \tfrac12\min(\delta,1)$ vérifie $|x-n| \lt \delta$ et pourtant $|\lfloor x\rfloor - n| = 1 \gt \tfrac12$. Discontinue en chaque entier. <Badge niveau="demontre">Discontinuité prouvée par un $\varepsilon$ imbattable.</Badge>
+Le $\delta$ dépend de $\varepsilon$ *et* de $a$ (le facteur $2|a|+1$) : c'est normal, et parfaitement rigoureux. À l'opposé, un saut se repère à un $\varepsilon$ que nul $\delta$ ne bat. La **partie entière** $x \mapsto \lfloor x \rfloor$ en fournit l'exemple type — construisons-la d'abord, car elle n'existe pas gratuitement : $\lfloor x \rfloor$ est le *plus grand* entier $\leq x$, et ce plus grand élément existe parce que l'ensemble des entiers $\leq x$ est non vide (l'<Prereq href="/maths/partie-v/suites-limites">archimédien</Prereq>, appliqué à $-x$, fournit un entier $n > -x$, donc $-n \leq x$) et majoré par $x$, donc admet un plus grand élément par le <Prereq href="/maths/partie-ii/reels-dedekind">bon ordre étendu à $\mathbb{Z}$</Prereq>. Cela posé : en un entier $n$, $\lfloor n \rfloor = n$, mais pour $x$ un peu inférieur à $n$, $\lfloor x \rfloor = n-1$. Prenez $\varepsilon = \tfrac12$ : quel que soit $\delta$, le point $x = n - \tfrac12\min(\delta,1)$ vérifie $|x-n| \lt \delta$ et pourtant $|\lfloor x\rfloor - n| = 1 \gt \tfrac12$. Discontinue en chaque entier. <Badge niveau="demontre">Discontinuité prouvée par un $\varepsilon$ imbattable.</Badge>
 
 ### La fonction qui tue l'image du crayon
 
@@ -70,7 +70,7 @@ Le langage $\varepsilon$-$\delta$ se traduit dans celui des suites — un pont v
 
 $$ f \text{ continue en } a \iff \text{pour toute suite } x_n \to a,\ f(x_n) \to f(a). $$
 
-<Badge niveau="demontre" slot="badge">Les deux sens sont démontrés ci-dessous — mais avec un statut de choix différent, honnêtement signalé.</Badge>
+<Badge niveau="demontre" slot="badge">Le sens direct est un théorème de ZF pur ; le sens réciproque exige le choix dénombrable — les deux preuves suivent, et le badge du réciproque porte, comme aux chapitres 10 et 11, le rouge de son vrai statut.</Badge>
 
 </Resultat>
 
@@ -90,7 +90,7 @@ $$ f \text{ continue en } a \iff \text{pour toute suite } x_n \to a,\ f(x_n) \to
 
 Par contraposée : si $f$ n'est pas continue en $a$, construisons une suite $x_n \to a$ avec $f(x_n) \not\to f(a)$. La négation de la continuité fournit un $\varepsilon \gt 0$ tel que, **pour tout** $\delta \gt 0$, il existe un $x$ avec $|x-a| \lt \delta$ et $|f(x)-f(a)| \ge \varepsilon$. Pour chaque $n$, appliquons-le à $\delta = \tfrac1n$ : l'ensemble $A_n = \{x : |x-a| \lt \tfrac1n \text{ et } |f(x)-f(a)| \ge \varepsilon\}$ est non vide. Il faut alors **choisir** un $x_n \in A_n$, *pour chaque $n$ à la fois* — une infinité de choix simultanés. Ce geste est précisément l'**axiome du choix dénombrable ($AC_\omega$)**, invisible mais bien présent. On obtient $x_n \to a$ (car $|x_n - a| \lt \tfrac1n$) tandis que $|f(x_n)-f(a)| \ge \varepsilon$, donc $f(x_n) \not\to f(a)$.
 
-C'est la **troisième dette de choix dénombrable** du cours, après l'infini de Dedekind (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) et la réunion dénombrable du <Prereq href="/maths/partie-iii/denombrables">chapitre 11</Prereq> ; toutes seront soldées au <Prereq href="/maths/partie-vi/axiome-du-choix">chapitre 25</Prereq>. Le site tient sa promesse : rien n'entre en scène sans être annoncé. <Badge niveau="demontre">Démontré dans $\text{ZF} + AC_\omega$ ; le recours au choix est signalé, non caché.</Badge>
+C'est la **troisième dette de choix dénombrable** du cours, après l'infini de Dedekind (<Prereq href="/maths/partie-iii/equipotence">chapitre 10</Prereq>) et la réunion dénombrable du <Prereq href="/maths/partie-iii/denombrables">chapitre 11</Prereq> ; toutes seront soldées au <Prereq href="/maths/partie-vi/axiome-du-choix">chapitre 25</Prereq>. Le site tient sa promesse : rien n'entre en scène sans être annoncé. <Badge niveau="indecidable">Comme aux chapitres 10 et 11 : ce sens n'est ni prouvable ni réfutable dans notre cadre ZF seul (des modèles sans choix exhibent des fonctions séquentiellement continues mais discontinues) ; AC$_\omega$ le démontre. Rien n'est adopté — dette signalée, soldée au chapitre 25 ; et la suite du cours ne s'appuiera que sur le sens direct, celui de ZF pur.</Badge>
 
 </Encart>
 
@@ -207,7 +207,7 @@ La boucle se boucle : l'irrationalité de $\sqrt2$, prouvée pour *construire* $
 
 ## Deux récoltes : les racines et les bornes
 
-**Toute racine $n$-ième existe.** Soient $y \ge 0$ et $n \ge 1$. Si $y = 0$, alors $0^n = 0 = y$ : la racine est $0$. Supposons donc $y \gt 0$. Posons $f(x) = x^n - y$ sur $[0, b]$ avec $b = \max(1, y)$. Alors $f$ est continue, $f(0) = -y \lt 0$ et $f(b) = b^n - y \ge b - y \ge 0$ (car $b \ge 1 \Rightarrow b^n \ge b$, et $b \ge y$). Si $f(b) = 0$, alors $b^n = y$ ; sinon $f(b) \gt 0$ et le TVI donne $c \in \left]0,b\right[$ avec $c^n = y$. L'**unicité** vient de la stricte croissance de $x \mapsto x^n$ sur $\left[0,\infty\right[$ (si $0 \le x \lt x'$ alors $x^n \lt x'^n$). <Badge niveau="demontre">Existence par TVI, unicité par monotonie.</Badge> La « racine » du module $|z| = \sqrt{a^2+b^2}$, employée au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>, est ainsi **enfin fondée** en toute généralité.
+**Toute racine $n$-ième existe.** Soient $y \ge 0$ et $n \ge 1$. Si $y = 0$, alors $0^n = 0 = y$ : la racine est $0$. Supposons donc $y \gt 0$. Posons $f(x) = x^n - y$ sur $[0, b]$ avec $b = \max(1, y)$. Alors $f$ est continue, $f(0) = -y \lt 0$ et $f(b) = b^n - y \ge b - y \ge 0$ — car $b \ge y$, et $b^n \ge b$ par récurrence : $b^{k+1} = b^k \cdot b \geq b \cdot 1 = b$, chaque facteur étant $\geq 1$. Si $f(b) = 0$, alors $b^n = y$ ; sinon $f(b) \gt 0$ et le TVI donne $c \in \left]0,b\right[$ avec $c^n = y$. L'**unicité** vient de la stricte croissance de $x \mapsto x^n$ sur $\left[0,\infty\right[$, elle-même par récurrence sur $n$ : pour $0 \le x \lt x'$, le cas $n = 1$ est l'hypothèse, et si $x^n \lt x'^n$, alors $x^{n+1} = x \cdot x^n \leq x \cdot x'^n \lt x' \cdot x'^n = x'^{n+1}$ — la première comparaison par $x^n \le x'^n$ et $x \geq 0$, la seconde stricte par $x'^n \gt 0$. <Badge niveau="demontre">Existence par TVI, unicité par stricte croissance — les deux récurrences déroulées.</Badge> La « racine » du module $|z| = \sqrt{a^2+b^2}$, employée au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>, est ainsi **enfin fondée** en toute généralité.
 
 <Encart type="plusloin" titre="Bornes atteintes — via Bolzano–Weierstrass">
 
@@ -215,7 +215,7 @@ La boucle se boucle : l'irrationalité de $\sqrt2$, prouvée pour *construire* $
 
 **Bornée.** Si $f$ n'était pas majorée, pour chaque $n$ il existerait $x_n \in [a,b]$ avec $f(x_n) \gt n$ ($AC_\omega$, une fois de plus). Par <Prereq href="/maths/partie-v/suites-limites">Bolzano–Weierstrass</Prereq>, une sous-suite $x_{n_k} \to \ell \in [a,b]$ ; par le sens direct de la caractérisation séquentielle, $f(x_{n_k}) \to f(\ell)$, donc $(f(x_{n_k}))$, convergente, est bornée par un certain $M$ (<Prereq href="/maths/partie-v/suites-limites">chapitre 18</Prereq>) — mais $f(x_{n_k}) \gt n_k \ge k$ pour tout $k$ (une extraction croît au moins comme son indice : $n_0 \ge 0$ et $n_{k+1} \gt n_k$ donnent $n_k \ge k$ par récurrence), et Archimède fournit un $k \gt M$. Contradiction.
 
-**Atteinte.** Soit $M = \sup f([a,b])$ (existe, $f$ bornée). Pour chaque $n$, choisissons $x_n$ avec $f(x_n) \gt M - \tfrac1n$ ($AC_\omega$). Une sous-suite $x_{n_k} \to \ell \in [a,b]$ donne $f(x_{n_k}) \to f(\ell)$ ; comme $M - \tfrac{1}{n_k} \lt f(x_{n_k}) \le M$, on a $f(\ell) = M$. Le maximum est atteint ; de même pour le minimum.
+**Atteinte.** Soit $M = \sup f([a,b])$ (existe, $f$ bornée). Pour chaque $n$, choisissons $x_n$ avec $f(x_n) \gt M - \tfrac1n$ ($AC_\omega$). Une sous-suite $x_{n_k} \to \ell \in [a,b]$ donne $f(x_{n_k}) \to f(\ell)$ ; comme $M - \tfrac{1}{n_k} \lt f(x_{n_k}) \le M$ avec $M - \tfrac{1}{n_k} \to M$ ($n_k \geq k$), les <Prereq href="/maths/partie-v/suites-limites">gendarmes</Prereq> donnent $f(x_{n_k}) \to M$, et l'unicité de la limite identifie $f(\ell) = M$. Le maximum est atteint ; de même pour le minimum.
 
 $$ \boxed{\ f \text{ continue sur } [a,b] \text{ atteint son max et son min.}\ } $$
 
