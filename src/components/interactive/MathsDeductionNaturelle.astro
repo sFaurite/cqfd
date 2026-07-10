@@ -25,33 +25,37 @@
   <div class="ndj__status" data-status></div>
 
   <div class="ndj__rules">
-    <div class="ndj__grp">
+    <div class="ndj__grp ndj__grp--hyp">
       <span class="ndj__grplabel">hypothèses</span>
-      <button class="iw__btn" data-r-supposer title="Ouvrir une hypothèse locale">supposons…</button>
-      <button class="iw__btn" data-r-impintro title="Refermer l’hypothèse : conclure A ⇒ B">⇒ conclure <small>(décharge)</small></button>
-      <button class="iw__btn" data-r-notintro title="Refermer par l’absurde : de ⊥ sous hypothèse A, conclure ¬A">¬ absurde <small>(décharge)</small></button>
+      <span class="ndj__btnrow">
+      <button class="iw__btn" data-r-supposer title="Ouvrir une hypothèse locale"><span class="sym">▹</span>supposons…</button>
+      <button class="iw__btn" data-r-impintro title="Refermer l’hypothèse : conclure A ⇒ B"><span class="sym">⇒</span>conclure <small>décharge</small></button>
+      <button class="iw__btn" data-r-notintro title="Refermer par l’absurde : de ⊥ sous hypothèse A, conclure ¬A"><span class="sym">¬</span>absurde <small>décharge</small></button></span>
     </div>
-    <div class="ndj__grp">
+    <div class="ndj__grp ndj__grp--conn">
       <span class="ndj__grplabel">connecteurs</span>
-      <button class="iw__btn" data-r-mp title="De A et A ⇒ B, déduire B">modus ponens</button>
-      <button class="iw__btn" data-r-andintro title="De A et B, déduire A ∧ B">∧ intro</button>
-      <button class="iw__btn" data-r-andelima title="De A ∧ B, garder la moitié gauche">∧ élim g.</button>
-      <button class="iw__btn" data-r-andelimb title="De A ∧ B, garder la moitié droite">∧ élim d.</button>
-      <button class="iw__btn" data-r-orintro title="De A, déduire A ∨ B (ou B ∨ A)">∨ intro…</button>
-      <button class="iw__btn" data-r-orelim title="De A ∨ B, A ⇒ C et B ⇒ C, déduire C">cas (∨ élim)</button>
+      <span class="ndj__btnrow">
+      <button class="iw__btn" data-r-mp title="De A et A ⇒ B, déduire B"><span class="sym">⇒</span>modus ponens</button>
+      <button class="iw__btn" data-r-andintro title="De A et B, déduire A ∧ B"><span class="sym">∧</span>intro</button>
+      <button class="iw__btn" data-r-andelima title="De A ∧ B, garder la moitié gauche"><span class="sym">∧</span>élim g.</button>
+      <button class="iw__btn" data-r-andelimb title="De A ∧ B, garder la moitié droite"><span class="sym">∧</span>élim d.</button>
+      <button class="iw__btn" data-r-orintro title="De A, déduire A ∨ B (ou B ∨ A)"><span class="sym">∨</span>intro…</button>
+      <button class="iw__btn" data-r-orelim title="De A ∨ B, A ⇒ C et B ⇒ C, déduire C"><span class="sym">∨</span>cas</button></span>
     </div>
-    <div class="ndj__grp">
+    <div class="ndj__grp ndj__grp--neg">
       <span class="ndj__grplabel">négation &amp; classique</span>
-      <button class="iw__btn" data-r-notelim title="De A et ¬A, déduire ⊥">contradiction</button>
-      <button class="iw__btn" data-r-explosion title="De ⊥, déduire n’importe quoi">explosion…</button>
-      <button class="iw__btn" data-r-tiers title="Poser A ∨ ¬A pour toute formule A">tiers exclu…</button>
-      <button class="iw__btn" data-r-dne title="De ¬¬A, déduire A (forme équivalente du tiers exclu)">¬¬ élim</button>
+      <span class="ndj__btnrow">
+      <button class="iw__btn" data-r-notelim title="De A et ¬A, déduire ⊥"><span class="sym">⊥</span>contradiction</button>
+      <button class="iw__btn" data-r-explosion title="De ⊥, déduire n’importe quoi"><span class="sym">⊥</span>explosion…</button>
+      <button class="iw__btn" data-r-tiers title="Poser A ∨ ¬A pour toute formule A"><span class="sym">∨¬</span>tiers exclu…</button>
+      <button class="iw__btn" data-r-dne title="De ¬¬A, déduire A (forme équivalente du tiers exclu)"><span class="sym">¬¬</span>élim</button></span>
     </div>
-    <div class="ndj__grp">
+    <div class="ndj__grp ndj__grp--meta">
       <span class="ndj__grplabel">preuve</span>
-      <button class="iw__btn" data-undo>annuler</button>
-      <button class="iw__btn" data-reset>recommencer</button>
-      <button class="iw__btn" data-r-demo title="La solution jouée pas à pas, avec une explication à chaque étape">corrigé pas à pas</button>
+      <span class="ndj__btnrow">
+      <button class="iw__btn" data-undo>↶ annuler</button>
+      <button class="iw__btn" data-reset>⟲ recommencer</button>
+      <button class="iw__btn ndj__corrbtn" data-r-demo title="La solution jouée pas à pas, avec une explication à chaque étape">▶ corrigé pas à pas</button>
       <button class="iw__btn" data-demo-prev hidden title="Revenir d’un pas en arrière (sans rejouer)">← étape précédente</button>
       <button class="iw__btn ndj__demobtn" data-demo-next hidden>étape suivante →</button>
       <button class="iw__btn" data-demo-replay hidden title="Revenir d’un pas et rejouer la dernière étape">↺ rejouer l’étape</button>
@@ -62,7 +66,7 @@
           <option value="1.8">rapide</option>
         </select>
       </label>
-      <button class="iw__btn" data-demo-quit hidden>quitter le corrigé</button>
+      <button class="iw__btn ndj__quitbtn" data-demo-quit hidden>✕ quitter le corrigé</button></span>
     </div>
   </div>
 
@@ -156,12 +160,12 @@
   .ndj__line.is-fresh { outline: 1px dashed var(--c-blue); }
   .ndj__line.is-demo-click { animation: ndjClick 0.5s ease; }
   @keyframes ndjClick {
-    0% { background: var(--c-blue); color: #071019; transform: translateX(3px); }
+    0% { background: color-mix(in srgb, var(--c-blue) 45%, var(--c-surface)); transform: translateX(3px); }
     100% { background: var(--c-surface-2); transform: translateX(0); }
   }
   .iw__btn.is-demo-press {
     outline: 2px solid var(--c-blue) !important;
-    box-shadow: 0 0 0 5px rgba(88, 196, 221, 0.25);
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--c-blue) 25%, transparent);
     transform: scale(0.94);
     transition: transform 0.12s ease;
     opacity: 1 !important;
@@ -173,10 +177,61 @@
     border: 1px solid var(--c-border); border-radius: 6px; padding: 0.25rem 0.4rem; font-size: 0.82rem;
   }
   .ndj__score { margin-left: 0.6rem; }
-  .ndj__rules { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 1rem 0.75rem; }
-  .ndj__grp { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
-  .ndj__grplabel { color: var(--c-muted); font-size: 0.75rem; min-width: 8.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
-  .ndj__grp .iw__btn small { opacity: 0.7; font-size: 0.72em; }
+  .ndj__rules { display: flex; flex-direction: column; gap: 0.45rem; margin: 0.6rem 1rem 0.75rem; }
+  .ndj__grp { --grp: var(--c-muted); display: flex; align-items: first baseline; gap: 0.35rem; }
+  .ndj__btnrow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; flex: 1; }
+  .ndj__grp--hyp { --grp: var(--c-yellow); }
+  .ndj__grp--conn { --grp: var(--c-blue); }
+  .ndj__grp--neg { --grp: var(--c-purple); }
+  .ndj__grplabel {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--c-muted); font-size: 0.72rem; min-width: 8.5rem;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .ndj__grplabel::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--grp); flex: none;
+  }
+  .ndj__grp--meta .ndj__grplabel::before { background: transparent; border: 1px solid var(--c-muted); }
+  /* Les boutons de RÈGLE : teintés par famille, glyphe en couleur */
+  .ndj__grp--hyp .iw__btn, .ndj__grp--conn .iw__btn, .ndj__grp--neg .iw__btn {
+    display: inline-flex; align-items: baseline; gap: 0.4em;
+    background: color-mix(in srgb, var(--grp) 8%, var(--c-bg-elev));
+    border: 1px solid color-mix(in srgb, var(--grp) 32%, var(--c-border));
+    border-radius: 999px;
+  }
+  .ndj__grp--hyp .iw__btn:hover, .ndj__grp--conn .iw__btn:hover, .ndj__grp--neg .iw__btn:hover {
+    border-color: var(--grp);
+    background: color-mix(in srgb, var(--grp) 16%, var(--c-bg-elev));
+  }
+  .ndj__grp .iw__btn .sym {
+    font-family: var(--font-mono); font-weight: 700; font-size: 0.95em;
+    color: var(--grp); flex: none;
+  }
+  .ndj__grp .iw__btn small {
+    font-size: 0.68em; font-weight: 600; letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--grp) 75%, var(--c-text));
+    background: color-mix(in srgb, var(--grp) 14%, transparent);
+    border-radius: 999px; padding: 0.1em 0.5em; align-self: center;
+  }
+  /* Les MÉTA-actions : boutons fantômes, en retrait */
+  .ndj__grp--meta .iw__btn {
+    background: transparent; border-color: transparent;
+    color: var(--c-muted); font-weight: 500;
+  }
+  .ndj__grp--meta .iw__btn:hover { border-color: var(--c-border); color: var(--c-text); background: var(--c-surface); }
+  .ndj__corrbtn { color: var(--c-blue) !important; border-color: color-mix(in srgb, var(--c-blue) 40%, transparent) !important; font-weight: 600 !important; }
+  .ndj__corrbtn:hover { background: color-mix(in srgb, var(--c-blue) 12%, transparent) !important; }
+  /* Les contrôles du corrigé : « suivante » en bouton principal plein */
+  .ndj__demobtn {
+    background: var(--c-blue) !important; color: var(--c-bg-elev) !important;
+    border-color: var(--c-blue) !important; font-weight: 700 !important;
+  }
+  .ndj__demobtn:hover { filter: brightness(1.1); }
+  .ndj__demobtn:disabled { opacity: 0.45; }
+  .ndj__quitbtn:hover { color: var(--c-red) !important; border-color: color-mix(in srgb, var(--c-red) 45%, transparent) !important; }
+  .ndj__rules .iw__btn:disabled { opacity: 0.45; cursor: default; }
+  .ndj__rules .iw__btn:disabled:hover { border-color: color-mix(in srgb, var(--grp) 32%, var(--c-border)); background: color-mix(in srgb, var(--grp) 8%, var(--c-bg-elev)); }
   .ndj [hidden], .ndj__inputrow[hidden] { display: none !important; }
   .ndj__inputrow {
     display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;

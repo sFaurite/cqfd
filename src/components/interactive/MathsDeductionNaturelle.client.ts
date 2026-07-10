@@ -662,6 +662,8 @@ function render(msg?: string, isError = false): void {
   const quitBtn = root.querySelector<HTMLButtonElement>('[data-demo-quit]');
   const replayBtn = root.querySelector<HTMLButtonElement>('[data-demo-replay]');
   const speedWrap = root.querySelector<HTMLElement>('[data-demo-speedwrap]');
+  const demoBtn = root.querySelector<HTMLButtonElement>('[data-r-demo]');
+  if (demoBtn) demoBtn.hidden = !!demo;
   if (nextBtn) { nextBtn.hidden = !demo || demo.idx >= ex.corrige.length; nextBtn.disabled = demoAnimating; }
   if (prevBtn) { prevBtn.hidden = !demo; if (demo) prevBtn.disabled = demoAnimating || demo.idx === 0; }
   if (quitBtn) quitBtn.hidden = !demo;
