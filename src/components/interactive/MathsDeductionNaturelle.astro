@@ -1,0 +1,166 @@
+---
+/**
+ * MathsDeductionNaturelle — le jeu de la déduction naturelle. Sept exercices
+ * gradués où le lecteur construit ses preuves avec exactement les règles du
+ * chapitre 1 : hypothèses locales (ouvertes puis déchargées), introduction et
+ * élimination de chaque connecteur, contradiction, explosion, tiers exclu.
+ * Le vérificateur tient en TypeScript pur : chaque pas est validé, le but est
+ * atteint quand la formule vit au niveau 0, toutes hypothèses refermées.
+ */
+---
+
+<div class="iw ndj" data-iw="deduction-naturelle">
+  <div class="iw__head"><span class="tag">Interactif</span> Le jeu de la déduction : construisez vos preuves</div>
+
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for="ndj-ex">exercice</label>
+      <select id="ndj-ex" data-ex></select>
+    </div>
+  </div>
+
+  <div class="ndj__goal" data-goal></div>
+  <ol class="ndj__proof" data-proof></ol>
+  <div class="ndj__status" data-status></div>
+
+  <div class="ndj__rules">
+    <div class="ndj__grp">
+      <span class="ndj__grplabel">hypothèses</span>
+      <button class="iw__btn" data-r-supposer title="Ouvrir une hypothèse locale">supposons…</button>
+      <button class="iw__btn" data-r-impintro title="Refermer l’hypothèse : conclure A ⇒ B">⇒ conclure <small>(décharge)</small></button>
+      <button class="iw__btn" data-r-notintro title="Refermer par l’absurde : de ⊥ sous hypothèse A, conclure ¬A">¬ absurde <small>(décharge)</small></button>
+    </div>
+    <div class="ndj__grp">
+      <span class="ndj__grplabel">connecteurs</span>
+      <button class="iw__btn" data-r-mp title="De A et A ⇒ B, déduire B">modus ponens</button>
+      <button class="iw__btn" data-r-andintro title="De A et B, déduire A ∧ B">∧ intro</button>
+      <button class="iw__btn" data-r-andelima title="De A ∧ B, garder la moitié gauche">∧ élim g.</button>
+      <button class="iw__btn" data-r-andelimb title="De A ∧ B, garder la moitié droite">∧ élim d.</button>
+      <button class="iw__btn" data-r-orintro title="De A, déduire A ∨ B (ou B ∨ A)">∨ intro…</button>
+      <button class="iw__btn" data-r-orelim title="De A ∨ B, A ⇒ C et B ⇒ C, déduire C">cas (∨ élim)</button>
+    </div>
+    <div class="ndj__grp">
+      <span class="ndj__grplabel">négation &amp; classique</span>
+      <button class="iw__btn" data-r-notelim title="De A et ¬A, déduire ⊥">contradiction</button>
+      <button class="iw__btn" data-r-explosion title="De ⊥, déduire n’importe quoi">explosion…</button>
+      <button class="iw__btn" data-r-tiers title="Poser A ∨ ¬A pour toute formule A">tiers exclu…</button>
+      <button class="iw__btn" data-r-dne title="De ¬¬A, déduire A (forme équivalente du tiers exclu)">¬¬ élim</button>
+    </div>
+    <div class="ndj__grp">
+      <span class="ndj__grplabel">preuve</span>
+      <button class="iw__btn" data-undo>annuler</button>
+      <button class="iw__btn" data-reset>recommencer</button>
+    </div>
+  </div>
+
+  <div class="ndj__inputrow" data-inputrow hidden>
+    <span data-inputlabel></span>
+    <input type="text" data-input spellcheck="false" autocomplete="off" placeholder="ex. : non A ou (B => C)" aria-label="formule" />
+    <span class="ndj__pal">
+      <button class="iw__btn" data-sym="¬" aria-label="insérer non">¬</button>
+      <button class="iw__btn" data-sym="∧" aria-label="insérer et">∧</button>
+      <button class="iw__btn" data-sym="∨" aria-label="insérer ou">∨</button>
+      <button class="iw__btn" data-sym="⇒" aria-label="insérer implique">⇒</button>
+      <button class="iw__btn" data-sym="⊥" aria-label="insérer absurde">⊥</button>
+    </span>
+    <button class="iw__btn" data-inputok>OK</button>
+    <button class="iw__btn" data-orside="right" hidden title="La ligne sélectionnée à gauche du ∨">X ∨ t</button>
+    <button class="iw__btn" data-orside="left" hidden title="La ligne sélectionnée à droite du ∨">t ∨ X</button>
+    <button class="iw__btn" data-inputcancel>annuler</button>
+  </div>
+
+  <p class="iw__note">
+    Mode d’emploi : <b>cliquez une ou plusieurs lignes</b> pour les citer, puis appliquez une règle —
+    ce sont exactement celles de la section « La logique d’abord », rien de plus. Les hypothèses
+    s’ouvrent avec « supposons… » (la preuve s’indente) et doivent être <b>refermées</b> par
+    « ⇒ conclure » ou « ¬ absurde » : le but n’est atteint que revenu au niveau zéro, toutes
+    hypothèses déchargées — c’est la définition même de la démonstration donnée plus haut.
+    L’exercice 3 vous fera sentir pourquoi le « ou » a besoin de ses <i>deux</i> introductions.
+  </p>
+</div>
+
+<style is:global>
+  .ndj__goal {
+    margin: 0.75rem 1rem 0.25rem;
+    padding: 0.55rem 0.8rem;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+  }
+  .ndj__turnstile { color: var(--c-yellow); font-weight: 700; margin: 0 0.35rem; }
+  .ndj__but { color: var(--c-green); font-weight: 600; }
+  .ndj__prem { color: var(--c-text); }
+  .ndj__proof {
+    list-style: none;
+    margin: 0.5rem 1rem;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+  }
+  .ndj__line {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.22rem 0.5rem 0.22rem calc(0.5rem + var(--d, 0) * 1.4rem);
+    border-left: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+  }
+  .ndj__line::before {
+    content: '';
+    position: absolute;
+    left: 0.25rem;
+    top: 0;
+    bottom: 0;
+    width: calc(var(--d, 0) * 1.4rem);
+    background:
+      repeating-linear-gradient(to right, transparent 0, transparent 1.15rem, var(--c-border) 1.15rem, var(--c-border) calc(1.15rem + 2px), transparent calc(1.15rem + 2px), transparent 1.4rem);
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  .ndj__line:hover { background: var(--c-surface); }
+  .ndj__line.is-sel { background: var(--c-surface-2); outline: 1px solid var(--c-blue); }
+  .ndj__line.is-hyp .ndj__f::before { content: '▹ '; color: var(--c-yellow); }
+  .ndj__line.is-closed { opacity: 0.45; cursor: default; }
+  .ndj__no { color: var(--c-muted); min-width: 1.4rem; text-align: right; font-size: 0.8rem; }
+  .ndj__f { flex: 0 1 auto; }
+  .ndj__just { margin-left: auto; color: var(--c-muted); font-size: 0.78rem; font-family: var(--font-sans); white-space: nowrap; }
+  .ndj__status {
+    margin: 0.35rem 1rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    color: var(--c-muted);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+  }
+  .ndj__status.is-err { color: var(--c-red); border-color: var(--c-red); }
+  .ndj__status.is-done { color: var(--c-green); border-color: var(--c-green); font-size: 0.95rem; }
+  .ndj__rules { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 1rem 0.75rem; }
+  .ndj__grp { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+  .ndj__grplabel { color: var(--c-muted); font-size: 0.75rem; min-width: 8.5rem; text-transform: uppercase; letter-spacing: 0.04em; }
+  .ndj__grp .iw__btn small { opacity: 0.7; font-size: 0.72em; }
+  .ndj [hidden], .ndj__inputrow[hidden] { display: none !important; }
+  .ndj__inputrow {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+    margin: 0 1rem 0.75rem; padding: 0.5rem 0.8rem;
+    background: var(--c-surface-2); border: 1px solid var(--c-blue); border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+  }
+  .ndj__inputrow input {
+    flex: 1 1 12rem;
+    background: var(--c-bg-elev); color: var(--c-text);
+    border: 1px solid var(--c-border); border-radius: 6px;
+    padding: 0.35rem 0.5rem; font-family: var(--font-mono); font-size: 0.92rem;
+  }
+  .ndj__pal { display: inline-flex; gap: 0.2rem; }
+  .ndj__pal .iw__btn { padding: 0.2rem 0.5rem; font-family: var(--font-mono); }
+  .ndj__next { margin-left: 0.6rem; }
+</style>
+
+<script>
+  import './MathsDeductionNaturelle.client.ts';
+</script>

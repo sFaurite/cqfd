@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import MathsDeductionNaturelle from '../../../components/interactive/MathsDeductionNaturelle.astro';
 
 ## Pourquoi commencer par poser des règles du jeu
 
@@ -131,6 +132,12 @@ L'hypothèse « $\sqrt 2$ est rationnel » mène à une contradiction : elle est
 <Badge niveau="demontre">Théorème démontré (déjà connu des Grecs). Ici c'est une *esquisse* illustrative : elle mobilise les entiers, la divisibilité et l'existence d'une fraction « réduite », qu'on ne construira qu'après avoir posé ZF. La preuve **du cours**, elle, vit au <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> : même absurde, mêmes parités, mais fondée sur la forme à *dénominateur minimal* démontrée au chapitre 7 — sans pgcd.</Badge>
 
 </Encart>
+
+## À vous : le jeu de la déduction
+
+Les règles sont posées, les stratégies nommées, un exemple est déroulé — il ne manque que vos mains. L'atelier ci-dessous vous fait **construire vos propres preuves**, pas à pas, avec exactement la boîte à outils de ce chapitre : chaque bouton est l'une des règles de la section « La logique d'abord », ni plus ni moins. Vous y vivrez de l'intérieur la définition de la démonstration donnée plus haut — ouvrir une hypothèse, la voir s'indenter, la **refermer** —, et l'exercice 3 vous fera toucher du doigt un détail que ce chapitre a appris à ses dépens : le « ou » a besoin de ses *deux* introductions.
+
+<MathsDeductionNaturelle />
 
 ## Ce qui fait un *bon* système d'axiomes
 
