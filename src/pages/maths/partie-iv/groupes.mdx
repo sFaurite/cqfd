@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les groupes : la symétrie axiomatisée"
 chapter: groupes
-description: "Axiomes de groupe ; unicité du neutre et des inverses (démontrée) ; groupes de symétries, D₃ non abélien ; sous-groupes ; classes latérales ; lemmes de comptage fini démontrés ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément (loi des exposants, sans division euclidienne)."
+description: "Axiomes de groupe (portée du quantificateur de e soignée) ; D₃ modélisé par les six bijections de {1,2,3} ; six micro-théorèmes (dont e⁻¹=e et double inversion) ; sous-groupes ; classes latérales (nommées) ; lemmes de comptage fini démontrés ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément et sous-groupe engendré (minimalité démontrée, sans division euclidienne) ; D₃ plus petit groupe non abélien (démontré)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -15,11 +15,11 @@ import MathsGroupeSymetries from '../../../components/interactive/MathsGroupeSym
 
 ## L'algèbre, ou l'art de ne démontrer qu'une fois
 
-Depuis le début du cours, une même musique revient. Dans $\mathbb{N}$, $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$, les trois mêmes refrains : l'opération est **associative**, il existe un élément **neutre**, et (dès $\mathbb{Z}$) chaque élément possède un **opposé** ou un **inverse**. Nous les avons redémontrés à chaque étage, à la sueur du front. L'algèbre naît d'un ras-le-bol fécond : et si l'on démontrait ces refrains **une seule fois**, pour une structure abstraite dont $\mathbb{Z}$, $\mathbb{Q}^*$, $\mathbb{R}$… ne seraient que des exemples ? Nommer la structure — le **groupe** —, prouver au niveau abstrait, récolter gratuitement dans chaque cas : voilà le programme de la partie IV.
+Depuis le début du cours, une même musique revient. Pour l'addition de $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, $\mathbb{C}$ comme pour la multiplication de $\mathbb{Q}^*$, $\mathbb{R}^*$, $\mathbb{C}^*$, les trois mêmes refrains : la loi est **associative**, il existe un élément **neutre** ($0$ pour l'une, $1$ pour l'autre), et chaque élément possède un **opposé** — ou, côté multiplicatif, un **inverse**. Nous les avons redémontrés à chaque étage, à la sueur du front. L'algèbre naît d'un ras-le-bol fécond : et si l'on démontrait ces refrains **une seule fois**, pour une structure abstraite dont $\mathbb{Z}$, $\mathbb{Q}^*$, $\mathbb{R}$… ne seraient que des exemples ? Nommer la structure — le **groupe** —, prouver au niveau abstrait, récolter gratuitement dans chaque cas : voilà le programme de la partie IV.
 
 <Hypotheses titre="Une partie sans la moindre hypothèse nouvelle">
 
-Contrairement aux cours empiriques du site, nous n'ajoutons **rien** ici. Groupe, anneau, corps ne sont pas des axiomes : ce sont des **définitions**, des découpages dans le monde déjà bâti à partir de ZF. Définir « groupe », c'est décider d'appeler d'un seul nom tous les ensembles-munis-d'une-loi qui obéissent à trois règles ; ce n'est **rien admettre de neuf**. Tout ce que nous démontrerons est donc pur théorème de ZF, valable d'un coup dans $\mathbb{Z}$, dans $\mathbb{Q}^*$, dans les symétries d'un triangle et dans tout exemple à venir. Définir, c'est découper — pas admettre.
+Contrairement aux cours empiriques du site, nous n'ajoutons **rien** ici. Groupe, anneau, corps ne sont pas des axiomes : ce sont des **définitions**, des découpages dans le monde déjà bâti à partir de ZF. Définir « groupe », c'est décider d'appeler d'un seul nom tous les ensembles-munis-d'une-loi qui obéissent à trois règles ; ce n'est **rien admettre de neuf**. Tout ce que nous démontrerons est donc pur théorème de ZF, valable d'un coup dans $\mathbb{Z}$, dans $\mathbb{Q}^*$, dans les symétries d'un triangle et dans tout exemple à venir. Définir, c'est découper : on n'y admet aucun **fait**, seulement un **vocabulaire** — et c'est en ce sens précis que l'échelle range les définitions sous le badge « admis » : posées au grand jour, ni vraies ni fausses, jamais démontrées.
 
 </Hypotheses>
 
@@ -41,13 +41,30 @@ $$r\circ s = sr^2 \neq sr = s\circ r.$$
 
 L'ordre compte. Ce n'est pas un artefact de dessin, c'est la signature d'une structure *non commutative* — la première que nous rencontrons —, et sa **table de composition** (dite table de Cayley) n'est pas symétrique par rapport à sa diagonale.
 
+<Encart type="calcul" titre="Le modèle formel : six bijections de trois sommets">
+
+L'image du triangle est une intuition ; l'objet mathématique, lui, vit déjà dans notre monde ZF. Posons $X = \{1, 2, 3\}$ (les sommets) et prenons pour $D_3$ l'ensemble $\mathrm{Bij}(X)$ des bijections de $X$, muni de la <Prereq href="/maths/partie-i/relations-fonctions">composition du chapitre 3</Prereq> — qui fournit d'un coup l'associativité, l'identité et les réciproques. Nos deux gestes de base deviennent deux bijections précises :
+
+$$r : 1\mapsto 2,\ 2\mapsto 3,\ 3\mapsto 1 \qquad\qquad s : 1\mapsto 1,\ 2\mapsto 3,\ 3\mapsto 2.$$
+
+Les six éléments, par leurs tables de valeurs $(\sigma(1),\sigma(2),\sigma(3))$ : $e=(1,2,3)$, $r=(2,3,1)$, $r^2=(3,1,2)$, $s=(1,3,2)$, $sr=(3,2,1)$, $sr^2=(2,1,3)$ — six triplets deux à deux distincts, et il n'y en a pas d'autre : une bijection de $X$ se décide en choisissant $\sigma(1)$ (trois possibilités) puis $\sigma(2)$ (deux restantes), la troisième valeur étant forcée, et les six triplets injectifs sont exactement ceux listés. Quant à la non-commutativité, elle devient un calcul d'une ligne :
+
+$$(r\circ s)(1) = r(1) = 2 \qquad\text{tandis que}\qquad (s\circ r)(1) = s(2) = 3,$$
+
+donc $r\circ s \neq s\circ r$. <Badge niveau="demontre">Le « groupe du triangle » est officiellement l'ensemble des six bijections de $\{1,2,3\}$ ; l'inégalité se lit sur les valeurs en $1$. L'animation illustre, la bijection démontre.</Badge>
+
+</Encart>
+
 ## Le groupe, en trois axiomes locaux
 
 **Définition (groupe).** Un *groupe* est un couple $(G, \cdot)$ où $G$ est un ensemble et $\cdot : G \times G \to G$ une **loi de composition interne** (à deux éléments de $G$ elle en associe un troisième, dans $G$), vérifiant :
 
 - **(G1) associativité** : $\forall a,b,c \in G,\ (a\cdot b)\cdot c = a\cdot(b\cdot c)$ ;
-- **(G2) élément neutre** : $\exists e \in G,\ \forall a\in G,\ e\cdot a = a\cdot e = a$ ;
-- **(G3) inverse** : $\forall a\in G,\ \exists a'\in G,\ a\cdot a' = a'\cdot a = e$.
+- il existe $e \in G$ vérifiant *à la fois* :
+  - **(G2) neutre** : $\forall a\in G,\ e\cdot a = a\cdot e = a$ ;
+  - **(G3) inverses** : $\forall a\in G,\ \exists a'\in G,\ a\cdot a' = a'\cdot a = e$.
+
+La portée du quantificateur compte : $e$ est posé *une fois*, et (G3) parle de *ce* $e$-là. Énoncer (G3) séparément laisserait le symbole $e$ orphelin — une variable libre que rien ne désigne.
 
 Le groupe est **abélien** (ou commutatif) si de plus $a\cdot b = b\cdot a$ pour tous $a,b$. <Badge niveau="admis">C'est une *définition* : nous choisissons de nommer « groupe » toute structure obéissant à (G1)–(G3). Rien à démontrer — seulement à exploiter.</Badge>
 
@@ -57,18 +74,18 @@ Le groupe $D_3$ des six symétries du triangle satisfait (G1)–(G3) : la compos
 |---|---|---|
 | $(\mathbb{Z}, +)$ | oui, abélien | neutre $0$, opposé $-n$ |
 | $(\mathbb{N}, +)$ | **non** | les éléments non nuls n'ont pas d'opposé : $3$ n'a pas de $-3$ dans $\mathbb{N}$ |
-| $(\mathbb{Q}^*, \times)$ | oui, abélien | loi interne (un produit de non-nuls est non nul, par intégrité), neutre $1$, inverse $1/x$ |
+| $(\mathbb{Q}^*, \times)$ | oui, abélien | loi interne : un produit de non-nuls a ses numérateurs non nuls, donc un numérateur produit non nul par l'intégrité de $\mathbb{Z}$ (chapitres 6–7) ; neutre $1$, inverse $1/x$ |
 | $(\mathbb{Q}, \times)$ | **non** | $0$ n'a pas d'inverse |
 | $(\mathrm{Bij}(E), \circ)$ | oui | loi interne car la composée de deux bijections est une bijection (chapitre 3) : le *groupe symétrique* de $E$ |
 | $(D_3, \circ)$ | oui, **non abélien** | les $6$ symétries du triangle |
 
-La ligne $(\mathbb{N},+)$ est éclairante : ce qui lui manque, c'est exactement l'opposé — l'absence même qui nous força à construire <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$ au chapitre 6</Prereq>. Toute la partie II se relit ainsi : chaque nouvel ensemble de nombres réparait un axiome de groupe manquant. Et $(\mathrm{Bij}(E), \circ)$, les <Prereq href="/maths/partie-i/relations-fonctions">bijections d'un ensemble</Prereq> munies de la composition, est l'exemple-mère : $D_3$ n'en est qu'un morceau, les bijections du triangle qui préservent sa forme.
+La ligne $(\mathbb{N},+)$ est éclairante : ce qui lui manque, c'est exactement l'opposé — l'absence même qui nous força à construire <Prereq href="/maths/partie-ii/entiers-relatifs">$\mathbb{Z}$ au chapitre 6</Prereq>. Le début de la partie II se relit ainsi : $\mathbb{Z}$ répare l'absence d'opposés de $(\mathbb{N},+)$, puis $\mathbb{Q}$ donne un inverse à chaque entier non nul. Les étages suivants répondaient à d'autres manques — la complétude pour $\mathbb{R}$, une racine à $x^2+1$ pour $\mathbb{C}$ — que les axiomes de groupe ne voient pas. Et $(\mathrm{Bij}(E), \circ)$, les <Prereq href="/maths/partie-i/relations-fonctions">bijections d'un ensemble</Prereq> munies de la composition, est l'exemple-mère : $D_3$ n'en est qu'un morceau, les bijections du triangle qui préservent sa forme.
 
-## Quatre micro-preuves, gratuites pour tous
+## Six micro-preuves, gratuites pour tous
 
-Voici le dividende de l'abstraction : les quatre théorèmes suivants ne mentionnent que (G1)–(G3), donc valent **simultanément** dans $\mathbb{Z}$, $\mathbb{Q}^*$, $D_3$ et tout groupe futur, sans une ligne de plus.
+Voici le dividende de l'abstraction : les six théorèmes suivants ne mentionnent que (G1)–(G3), donc valent **simultanément** dans $\mathbb{Z}$, $\mathbb{Q}^*$, $D_3$ et tout groupe futur, sans une ligne de plus.
 
-<Encart type="calcul" titre="Quatre théorèmes démontrés une fois pour toutes">
+<Encart type="calcul" titre="Six théorèmes démontrés une fois pour toutes">
 
 Soit $(G,\cdot)$ un groupe quelconque ; on écrit $ab$ pour $a\cdot b$.
 
@@ -84,7 +101,11 @@ où l'on a utilisé successivement : neutre, définition de $b'$, associativité
 
 **4. L'inverse d'un produit renverse l'ordre.** Calculons $(ab)(b^{-1}a^{-1}) = a(b\,b^{-1})a^{-1} = a\,e\,a^{-1} = a\,a^{-1} = e$, et de même $(b^{-1}a^{-1})(ab) = e$. Par l'unicité (théorème 2), $b^{-1}a^{-1}$ **est** l'inverse de $ab$. $\boxed{(ab)^{-1} = b^{-1}a^{-1}}$
 
-<Badge niveau="demontre">Quatre théorèmes de ZF, déduits des seuls axiomes (G1)–(G3). C'est l'élégance de l'algèbre : une preuve, tous les exemples.</Badge>
+**5. Le neutre est son propre inverse.** $e\,e = e$ dit que $e$ est un inverse — des deux côtés — de $e$ ; par l'unicité (théorème 2), $e^{-1} = e$. $\boxed{e^{-1} = e}$
+
+**6. Inverser deux fois ramène au départ.** $a\,a^{-1} = a^{-1}a = e$ dit que $a$ est un inverse — des deux côtés — de $a^{-1}$ ; par l'unicité (théorème 2), $(a^{-1})^{-1} = a$. $\boxed{(a^{-1})^{-1} = a}$
+
+<Badge niveau="demontre">Six théorèmes de ZF, déduits des seuls axiomes (G1)–(G3). C'est l'élégance de l'algèbre : une preuve, tous les exemples. Les deux derniers ont l'air de politesses — ils serviront, et nous les citerons quand ils servent.</Badge>
 
 </Encart>
 
@@ -108,7 +129,7 @@ Le sens direct est immédiat : si $H$ est un sous-groupe, il contient $e$ donc e
 
 1. $H$ contient un élément $x$ ; en appliquant $(\star)$ à $a=b=x$ : $x\,x^{-1} = e\in H$.
 2. *Stabilité par inverse* : pour $a\in H$, comme $e\in H$, $(\star)$ appliquée à $e$ et $a$ donne $e\,a^{-1} = a^{-1}\in H$.
-3. *Stabilité par produit* : pour $a,b\in H$, on vient d'obtenir $b^{-1}\in H$ ; $(\star)$ appliquée à $a$ et $b^{-1}$ donne $a(b^{-1})^{-1} = ab\in H$.
+3. *Stabilité par produit* : pour $a,b\in H$, on vient d'obtenir $b^{-1}\in H$ ; $(\star)$ appliquée à $a$ et $b^{-1}$ donne $a(b^{-1})^{-1} = ab\in H$ (double inversion, théorème 6).
 
 Avec l'associativité héritée de $G$, $H$ vérifie (G1)–(G3) : c'est un groupe. $\boxed{\text{critère établi}}$
 
@@ -144,7 +165,7 @@ L'étape finale de Lagrange — « additionner les cardinaux » — repose sur d
 
 **Lemme A — l'image surjective d'un fini est finie.** Soient $E$ fini et $f : E \to F$ surjective. Transportons par une bijection $E \simeq n$ : chaque $y \in F$ a une fibre non vide dans $n$, dont le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre</Prereq> donne le plus petit élément — aucun choix. L'application « $y \mapsto$ plus petit antécédent » est injective (deux $y$ distincts ont des fibres disjointes) : $F$ est équipotente à une partie de $n$, finie par le lemme 0. $\square$
 
-**Lemme B — additivité des cardinaux.** Si $A$ et $B$ sont finis et **disjoints**, alors $|A \cup B| = |A| + |B|$. Preuve : soient $\alpha : m \to A$ et $\beta : p \to B$ des bijections ; définissons $\gamma : m + p \to A \cup B$ par $\gamma(i) := \alpha(i)$ si $i \lt m$, et $\gamma(m + j) := \beta(j)$ pour $j \lt p$ (tout $i$ avec $m \le i \lt m+p$ s'écrit ainsi, de façon unique par régularité). Surjective par construction, injective parce que $A$ et $B$ sont disjoints et que $\alpha, \beta$ le sont. $\square$ Par récurrence immédiate, une réunion de $k$ ensembles finis deux à deux disjoints, tous de cardinal $c$, a pour cardinal $k \cdot c$.
+**Lemme B — additivité des cardinaux.** Si $A$ et $B$ sont finis et **disjoints**, alors $|A \cup B| = |A| + |B|$. Preuve : soient $\alpha : m \to A$ et $\beta : p \to B$ des bijections ; définissons $\gamma : m + p \to A \cup B$ par $\gamma(i) := \alpha(i)$ si $i \lt m$, et $\gamma(m + j) := \beta(j)$ pour $j \lt p$. Tout $i$ avec $m \le i \lt m+p$ s'écrit bien ainsi : $m \le i$ fournit $j$ tel que $i = m + j$ (définition de l'ordre), $i \lt m + p$ donne alors $j \lt p$ en simplifiant $m$, et ce $j$ est unique par <Prereq href="/maths/partie-ii/arithmetique-de-n">régularité de l'addition</Prereq>. Surjective par construction, injective parce que $A$ et $B$ sont disjoints et que $\alpha, \beta$ le sont. $\square$ Par récurrence immédiate, une réunion de $k$ ensembles finis deux à deux disjoints, tous de cardinal $c$, a pour cardinal $k \cdot c$.
 
 <Badge niveau="demontre">Trois récurrences élémentaires — le prix exact pour que « compter » soit un théorème et non un geste.</Badge>
 
@@ -157,12 +178,12 @@ $G$ est fini, $H$ un sous-groupe. On écrit $ab$ le produit et $a^{-1}$ l'invers
 **Étape 1 — une relation d'équivalence.** Posons sur $G$ : $a\sim b$ si et seulement si $a^{-1}b\in H$. Vérifions les trois propriétés.
 
 - *Réflexivité* : $a^{-1}a = e\in H$ (car $H$ est un sous-groupe), donc $a\sim a$.
-- *Symétrie* : si $a^{-1}b\in H$, son inverse $(a^{-1}b)^{-1} = b^{-1}a$ est dans $H$ (stabilité par inverse), donc $b\sim a$.
+- *Symétrie* : si $a^{-1}b\in H$, son inverse $(a^{-1}b)^{-1} = b^{-1}(a^{-1})^{-1} = b^{-1}a$ (théorèmes 4 puis 6) est dans $H$ (stabilité par inverse), donc $b\sim a$.
 - *Transitivité* : si $a^{-1}b\in H$ et $b^{-1}c\in H$, leur produit $(a^{-1}b)(b^{-1}c) = a^{-1}c$ est dans $H$ (stabilité par produit), donc $a\sim c$.
 
 C'est bien une relation d'équivalence.
 
-**Étape 2 — les classes sont les $aH$.** Posons $aH := \{ah : h\in H\}$. La classe de $a$ est $[a] = \{x\in G : a^{-1}x\in H\}$. Or $a^{-1}x\in H$ signifie $a^{-1}x = h$ pour un $h\in H$, c'est-à-dire $x = ah$. Donc $[a] = aH$ exactement.
+**Étape 2 — les classes sont les $aH$.** Posons $aH := \{ah : h\in H\}$ — cet ensemble s'appelle la **classe latérale à gauche** de $H$ portée par $a$ (« à gauche » car $a$ multiplie à gauche ; dans un groupe non abélien, $aH$ et $Ha$ peuvent différer). La classe de $a$ est $[a] = \{x\in G : a^{-1}x\in H\}$, et l'égalité $[a] = aH$ se calcule dans les deux sens. Si $a^{-1}x = h \in H$, alors $x = e\,x = (a\,a^{-1})\,x = a\,(a^{-1}x) = ah \in aH$. Réciproquement, si $x = ah$ avec $h\in H$, alors $a^{-1}x = a^{-1}(ah) = (a^{-1}a)\,h = e\,h = h \in H$. Donc $[a] = aH$ exactement.
 
 **Étape 3 — partition.** Par le <Prereq href="/maths/partie-i/relations-fonctions">théorème de partition</Prereq> établi dès la partie I, les classes d'une relation d'équivalence découpent $G$ en morceaux non vides, deux à deux disjoints, qui recouvrent tout. Ici, les $aH$ forment une **partition** de $G$. *(La boucle partie I → partie IV se referme : l'outil forgé pour trier des chaussettes range maintenant les éléments d'un groupe.)*
 
@@ -174,7 +195,7 @@ $$|G| = \underbrace{|H| + |H| + \dots + |H|}_{k \text{ fois}} = k\,|H|.$$
 
 Donc $|H|$ divise $|G|$. $\boxed{|H| \ \text{ divise } \ |G|}$
 
-<Badge niveau="demontre">Preuve complète : elle ne mobilise que les axiomes de groupe, la simplification (déjà démontrée) et le théorème de partition de la partie I.</Badge>
+<Badge niveau="demontre">Preuve complète, et voici sa facture exacte : les axiomes de groupe et leurs six premières conséquences, le théorème de partition et la projection canonique du chapitre 3, et les trois lemmes de comptage fini de l'encart précédent — rien d'autre.</Badge>
 
 </Encart>
 
@@ -182,9 +203,9 @@ Donc $|H|$ divise $|G|$. $\boxed{|H| \ \text{ divise } \ |G|}$
 
 Donnons un sens à l'**ordre d'un élément** $a\in G$ (fini) via ses puissances : $a^0 := e$ et $a^{k+1} := a^k\cdot a$ — définition de proche en proche légitimée, comme toujours, par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>. Un mini-lemme servira trois fois : la **loi des exposants**, $a^{i+j} = a^i\,a^j$, par récurrence sur $j$ — pour $j = 0$, $a^{i+0} = a^i = a^i\,e$ ; et si $a^{i+j} = a^i a^j$, alors $a^{i+(j+1)} = a^{(i+j)+1} = a^{i+j}\,a = (a^i a^j)\,a = a^i\,a^{j+1}$ par associativité. <Badge niveau="demontre">Récurrence d'une ligne sur les axiomes de groupe.</Badge>
 
-La liste $a^1, a^2, a^3, \dots$ compte une infinité de termes, mais $G$ est fini : si toutes ces puissances étaient distinctes, $k \mapsto a^k$ injecterait $\mathbb{N}$ dans $G$, et sa restriction à l'entier $|G|+1$ donnerait, en transportant par une bijection $G \simeq |G|$, une injection de $|G|+1$ dans $|G|$ — interdite par le <Prereq href="/maths/partie-iii/equipotence">lemme des tiroirs</Prereq>. Deux puissances coïncident donc, disons $a^i = a^j$ avec $i < j$ ; la loi des exposants écrit $a^j = a^i\,a^{\,j-i}$, et la simplification (théorème 3) donne $a^{\,j-i} = e$ avec $j - i \geq 1$. Il existe donc une plus petite puissance $n\geq 1$ telle que $a^n = e$ (le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> fournit ce plus petit élément). Ce $n$ est l'**ordre de $a$**.
+Considérons les $|G|+1$ puissances $a^0, a^1, \dots, a^{|G|}$ : toutes vivent dans $G$, qui n'a que $|G|$ éléments. Si elles étaient deux à deux distinctes, $k \mapsto a^k$ donnerait, en transportant par une bijection $G \simeq |G|$, une injection de $|G|+1$ dans $|G|$ — interdite par le <Prereq href="/maths/partie-iii/equipotence">lemme des tiroirs</Prereq>. Deux d'entre elles coïncident donc, disons $a^i = a^j$ avec $i < j \le |G|$ ; la loi des exposants écrit $a^j = a^i\,a^{\,j-i}$, et la simplification (théorème 3) donne $a^{\,j-i} = e$ avec $j - i \geq 1$. Il existe donc une plus petite puissance $n\geq 1$ telle que $a^n = e$ (le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> fournit ce plus petit élément). Ce $n$ est l'**ordre de $a$**.
 
-On vérifie alors que $\langle a\rangle := \{a^0 = e,\ a,\ a^2,\ \dots,\ a^{n-1}\}$ est un sous-groupe — et **sans division euclidienne**, qui n'arrive qu'au chapitre suivant. *Stabilité par produit* : pour $0 \le i, j \lt n$, si $i + j \lt n$, alors $a^i a^j = a^{i+j} \in \langle a\rangle$ directement ; sinon $n \le i + j \lt 2n$, et la loi des exposants donne $a^{i+j} = a^{(i+j-n)+n} = a^{\,i+j-n}\,a^n = a^{\,i+j-n}$, avec $0 \le i+j-n \lt n$. *Stabilité par inverse* : pour $0 \lt k \lt n$, $a^k\,a^{\,n-k} = a^n = e$, donc $(a^k)^{-1} = a^{\,n-k}$ par l'unicité de l'inverse (théorème 2) ; et $e^{-1} = e$. *Cardinal* : les $a^k$ pour $0\leq k < n$ sont distincts — si $a^k = a^{k'}$ avec $k' \lt k$, la loi des exposants et la simplification donneraient $a^{\,k-k'} = e$ avec $1 \le k - k' \lt n$, contredisant la minimalité de $n$. Son cardinal est donc exactement $n$. Ce sous-groupe est *engendré* par $a$.
+On vérifie alors que $\langle a\rangle := \{a^0 = e,\ a,\ a^2,\ \dots,\ a^{n-1}\}$ est un sous-groupe — et **sans division euclidienne**, qui n'arrive qu'au chapitre suivant. *Stabilité par produit* : pour $0 \le i, j \lt n$, si $i + j \lt n$, alors $a^i a^j = a^{i+j} \in \langle a\rangle$ directement ; sinon $n \le i + j \lt 2n$, et la loi des exposants donne $a^{i+j} = a^{(i+j-n)+n} = a^{\,i+j-n}\,a^n = a^{\,i+j-n}$, avec $0 \le i+j-n \lt n$. *Stabilité par inverse* : pour $0 \lt k \lt n$, la loi des exposants donne $a^k\,a^{\,n-k} = a^n = e$ **et** $a^{\,n-k}\,a^k = a^n = e$ — un inverse des deux côtés, comme l'exige la définition — donc $(a^k)^{-1} = a^{\,n-k}$ par l'unicité de l'inverse (théorème 2) ; et $e^{-1} = e$ (théorème 5). *Cardinal* : les $a^k$ pour $0\leq k < n$ sont distincts — si $a^k = a^{k'}$ avec $k' \lt k$, la loi des exposants et la simplification donneraient $a^{\,k-k'} = e$ avec $1 \le k - k' \lt n$, contredisant la minimalité de $n$. Son cardinal est donc exactement $n$. Enfin, la *minimalité* : tout sous-groupe $H$ contenant $a$ contient $e = a^0$ et, de proche en proche (si $a^k \in H$, alors $a^{k+1} = a^k\,a \in H$ par stabilité), toutes les puissances de $a$ — donc $\langle a\rangle \subseteq H$. Le sous-groupe $\langle a\rangle$ est ainsi le **plus petit** sous-groupe contenant $a$ : on dit qu'il est *engendré* par $a$.
 
 <Resultat label="L'ordre d'un élément divise l'ordre du groupe">
 
@@ -194,8 +215,24 @@ $$\text{Dans un groupe fini } G,\quad \text{l'ordre de tout élément divise } |
 
 </Resultat>
 
-En effet, l'ordre de $a$ est le cardinal de $\langle a\rangle$, sous-groupe de $G$ ; Lagrange conclut. Un corollaire spectaculaire en découle : si $|G| = p$ est un nombre **premier** — au sens élémentaire, seul utilisé ici : $p \geq 2$ et ses seuls diviseurs dans $\mathbb{N}$ sont $1$ et $p$ ; leur théorie arrive au chapitre suivant —, prenons $a\neq e$. L'ordre de $\langle a\rangle$ divise $p$, et comme $a\neq e$ ce sous-groupe a au moins deux éléments : son ordre n'est pas $1$, il vaut donc $p$. Autrement dit $\langle a\rangle = G$ tout entier — **tout élément non neutre engendre le groupe**, qui n'a alors aucun sous-groupe propre non trivial. <Badge niveau="demontre">Les seuls diviseurs de $p$ premier sont $1$ et $p$, et $a\neq e$ exclut $1$.</Badge>
+En effet, l'ordre de $a$ est le cardinal de $\langle a\rangle$, sous-groupe de $G$ ; Lagrange conclut. Un corollaire spectaculaire en découle : si $|G| = p$ est un nombre **premier** — au sens élémentaire, seul utilisé ici : $p \geq 2$ et ses seuls diviseurs dans $\mathbb{N}$ sont $1$ et $p$ ; leur théorie arrive au chapitre suivant —, prenons $a\neq e$. L'ordre de $\langle a\rangle$ divise $p$, et comme $a\neq e$ ce sous-groupe a au moins deux éléments : son ordre n'est pas $1$, il vaut donc $p$. Autrement dit $\langle a\rangle = G$ tout entier — **tout élément non neutre engendre le groupe**. Et il n'a aucun sous-groupe propre non trivial : si un sous-groupe $H$ contient un $a \neq e$, la minimalité de $\langle a\rangle$ donne $G = \langle a\rangle \subseteq H$, donc $H = G$. <Badge niveau="demontre">Les seuls diviseurs de $p$ premier sont $1$ et $p$, $a\neq e$ exclut $1$, et la minimalité du sous-groupe engendré fait le reste.</Badge>
 
 Gardez ce résultat au chaud. Au chapitre 16, $\mathbb{Z}/p\mathbb{Z}$ privé de $0$ sera un groupe à $p-1$ éléments, et Lagrange y donnera — en trois lignes — le **petit théorème de Fermat** : $a^{p-1}\equiv 1 \pmod p$.
 
-Nous avons tenu notre promesse : pas une hypothèse ajoutée, seulement un nom — « groupe » — posé sur une régularité omniprésente, et une moisson de théorèmes valables partout d'un coup. Au chapitre suivant, nous changeons de fil : l'**arithmétique de $\mathbb{Z}$**, la division euclidienne et les nombres premiers. Puis les deux fils, structures et arithmétique, se noueront dans $\mathbb{Z}/n\mathbb{Z}$, où Lagrange et Euclide travailleront main dans la main.
+<Encart type="plusloin" titre="D₃ est le plus petit groupe non abélien — promesse tenue">
+
+L'interactif du début l'annonçait ; nous avons désormais tous les outils pour le démontrer. Soit $G$ un groupe d'ordre au plus $5$ : montrons qu'il est **abélien**.
+
+D'abord un fait général : un groupe **cyclique** — engendré par un seul élément, $G = \langle a\rangle$ — est abélien, car la loi des exposants fait commuter les puissances : $a^i\,a^j = a^{i+j} = a^{j+i} = a^j\,a^i$ (l'addition de $\mathbb{N}$ est <Prereq href="/maths/partie-ii/arithmetique-de-n">commutative</Prereq>).
+
+- $|G| = 1$ : $G = \{e\}$, abélien sans discussion.
+- $|G| \in \{2, 3, 5\}$ : l'ordre est premier, donc tout élément non neutre engendre $G$ (démontré ci-dessus) — cyclique, donc abélien.
+- $|G| = 4$ : l'ordre de chaque élément divise $4$ (corollaire ci-dessus) : c'est $1$, $2$ ou $4$. *Premier cas* : un élément $a$ est d'ordre $4$. Alors $\langle a\rangle \subseteq G$ a le même cardinal $4$ que $G$ ; s'il manquait un élément $x$, le lemme B donnerait $|G| \ge |\langle a\rangle| + 1 = 5$ — donc $\langle a\rangle = G$, cyclique, abélien. *Second cas* : tout élément non neutre est d'ordre $2$. Alors $x\,x = e$ pour **tout** $x \in G$ (y compris $e$), c'est-à-dire $x^{-1} = x$ par l'unicité de l'inverse. Pour $x, y \in G$ :
+$$x\,y = (x\,y)^{-1} = y^{-1}\,x^{-1} = y\,x$$
+(théorème 4 au milieu) — abélien encore.
+
+Tout groupe de moins de six éléments est donc abélien ; et $D_3$, d'ordre $6$, ne l'est pas — $r\circ s \neq s\circ r$, calculé sur les sommets au début du chapitre. Aucun groupe non abélien n'existe en dessous de six éléments : le triangle est le premier endroit des mathématiques où l'ordre des gestes se met à compter. <Badge niveau="demontre">Démontré avec les seuls outils du chapitre : Lagrange, l'ordre d'un élément, la loi des exposants, les six micro-théorèmes et le lemme B.</Badge>
+
+</Encart>
+
+Nous avons tenu notre promesse : pas un axiome ajouté, seulement un nom — « groupe » — posé sur une régularité omniprésente, et une moisson de théorèmes valables partout d'un coup. Au chapitre suivant, nous changeons de fil : l'**arithmétique de $\mathbb{Z}$**, la division euclidienne et les nombres premiers. Puis les deux fils, structures et arithmétique, se noueront dans $\mathbb{Z}/n\mathbb{Z}$, où Lagrange et Euclide travailleront main dans la main.
