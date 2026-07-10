@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les entiers naturels (ℕ)"
 chapter: entiers-naturels
-description: "La construction de von Neumann : 0 = ∅, S(n) = n ∪ {n}, et le principe de récurrence démontré — sans rien admettre de plus que ZF."
+description: "La construction de von Neumann : 0 = ∅, S(n) = n ∪ {n} (paire + réunion) ; n ∉ n et l’absence de cycle DÉMONTRÉS depuis la fondation ; ℕ = intersection construite par séparation (pas de « classe trop grosse » affirmée) ; récurrence = théorème ensembliste + schéma ; S : ℕ → ℕ construite comme graphe ; les CINQ propriétés de Dedekind–Peano ; n ⊆ ℕ et le motif des prédécesseurs démontrés en fin de chapitre."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -21,8 +21,9 @@ première, l'**ensemble vide** ? La réponse — oui — est l'une des plus bell
 1. Les <Prereq href="/maths/partie-i/ensembles-zf">axiomes de ZF</Prereq>, déjà posés. En particulier :
    l'**ensemble vide** $\varnothing$ existe, et l'**axiome de l'infini** garantit l'existence d'un
    ensemble contenant $\varnothing$ et stable par l'opération « successeur » ci-dessous.
-2. Aucune nouvelle hypothèse. **Tout, dans ce chapitre, est déduit de ZF** — y compris la récurrence,
-   que beaucoup croient « évidente » et qu'on va pourtant *démontrer*.
+2. Aucune nouvelle hypothèse. **Toute affirmation mathématique de ce chapitre est déduite de ZF**
+   (les définitions, elles, se posent) — y compris la récurrence, que beaucoup croient « évidente »
+   et qu'on va pourtant *démontrer*.
 </Hypotheses>
 
 ## L'idée : chaque nombre est l'ensemble de ceux d'avant
@@ -46,9 +47,14 @@ $$ 0 := \varnothing. $$
 
 $$ S(n) := n \cup \{n\}. $$
 
-C'est-à-dire : on prend tous les éléments de $n$, et on y ajoute $n$ lui-même — un élément
-véritablement **nouveau**, car $n \notin n$ : l'axiome de <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq>
-interdit à tout ensemble de s'appartenir. Déroulons :
+C'est-à-dire : on prend tous les éléments de $n$, et on y ajoute $n$ lui-même — l'existence de
+$n \cup \{n\}$ tient aux axiomes de la **paire** (pour $\{n\}$) et de la **réunion**. Et cet élément
+est véritablement **nouveau**, car $n \notin n$. Le chapitre 2 l'annonçait comme conséquence
+intuitive de la <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq> ; puisque nous nous en
+servons, démontrons-le : supposons $n \in n$, et appliquons la fondation à l'ensemble non vide
+$\{n\}$. Son unique élément est $n$ — or $n \cap \{n\}$ contient $n$ (puisque $n \in n$ et
+$n \in \{n\}$), donc n'est pas vide : aucun élément de $\{n\}$ n'est minimal pour $\in$,
+contradiction. Déroulons :
 
 **Étape 1.** $1 := S(0) = 0 \cup \{0\} = \varnothing \cup \{\varnothing\} = \{\varnothing\} = \{0\}.$
 
@@ -56,16 +62,12 @@ interdit à tout ensemble de s'appartenir. Déroulons :
 
 **Étape 3.** $3 := S(2) = 2 \cup \{2\} = \{0,1\} \cup \{2\} = \{0, 1, 2\}.$
 
-**Les premiers cas suggèrent le motif** : chaque entier est l'ensemble de tous ceux qui le précèdent,
-
-$$ n = \{\,0,\ 1,\ \dots,\ n-1\,\}. $$
-
-Pour les entiers calculés ci-dessus, c'est acquis. La forme générale, elle, demande d'abord de dire ce que « précéder » signifie — ce sera $m \lt n \iff m \in n$, et on y reviendra plus bas. Quant à dire que $n$ « a exactement $n$ éléments » : l'idée deviendra un théorème grâce aux <Prereq href="/maths/partie-i/relations-fonctions">bijections</Prereq> — « avoir $n$ éléments » signifiera « être en bijection avec l'entier $n$ ». L'étalon de la quantité $n$, c'est $n$ lui-même.
+**Les premiers cas suggèrent le motif** : chaque entier est l'ensemble de tous ceux qui le précèdent — en lecture familière, « $n = \{0, 1, \dots, n-1\}$ ». Prudence sur cette écriture : les pointillés ne sont pas une formule de ZF, et « $n - 1$ » n'a *aucun sens* à ce stade — aucune soustraction n'existe. C'est une façon de lire les trois calculs ci-dessus, pas un énoncé. La forme exacte du motif sera **démontrée en fin de chapitre**, une fois la récurrence acquise : chaque entier est un ensemble d'entiers, et $n = \{m \in \mathbb{N} : m \in n\}$. Sa lecture *ordonnée* attendra que « précéder » soit défini — ce sera $m \lt n \iff m \in n$, au chapitre suivant. Quant à dire que $n$ « a exactement $n$ éléments » : l'idée deviendra un théorème au chapitre 10, grâce aux <Prereq href="/maths/partie-i/relations-fonctions">bijections</Prereq> — « avoir $n$ éléments » signifiera « être en bijection avec l'entier $n$ ». L'étalon de la quantité $n$, c'est $n$ lui-même.
 </Encart>
 
 <Resultat label="Les entiers naturels de von Neumann">
-$$ 0 = \varnothing, \qquad S(n) = n \cup \{n\}, \qquad n = \{0, 1, \dots, n-1\}. $$
-<Badge niveau="demontre" slot="badge">Les deux premières égalités sont des définitions ; le motif $n = \{0,\dots,n-1\}$ est démontré ci-dessus pour les premiers entiers, et sa forme générale — « $n$ est l'ensemble de ses prédécesseurs », via $m \lt n \iff m \in n$ — s'établit une fois l'ordre construit, au chapitre suivant.</Badge>
+$$ 0 := \varnothing, \qquad S(n) := n \cup \{n\}. $$
+<Badge niveau="admis" slot="badge">Deux **définitions** — posées, non démontrées ; leur existence tient aux axiomes de la paire et de la réunion. Le « motif des prédécesseurs » qu'elles engendrent, lui, se démontre : $n = \{m \in \mathbb{N} : m \in n\}$ en fin de chapitre, et sa lecture ordonnée $n = \{m \in \mathbb{N} : m \lt n\}$ au chapitre suivant.</Badge>
 </Resultat>
 
 Manipulez la construction : faites grandir $n$ et voyez chaque entier comme la collection de tous
@@ -84,37 +86,56 @@ les précédents.
 
 Un ensemble est dit **inductif** s'il contient $0$ et le successeur de chacun de ses éléments.
 L'axiome de l'infini affirme qu'**il en existe au moins un** : appelons-le $I$. On aimerait définir
-$\mathbb{N}$ comme « l'intersection de tous les ensembles inductifs » — mais ZF ne permet pas de
-former la collection de *tous* ces ensembles : elle est trop grosse pour être un ensemble, comme
-l'« ensemble de tout » du <Prereq href="/maths/partie-i/ensembles-zf">paradoxe de Russell</Prereq>.
+$\mathbb{N}$ comme « l'intersection de tous les ensembles inductifs » — mais rien, dans ZF,
+n'autorise à former $\{X : X \text{ inductif}\}$ : la compréhension sans ensemble ambiant n'existe
+pas, c'est la leçon du <Prereq href="/maths/partie-i/ensembles-zf">paradoxe de Russell</Prereq>, et
+la séparation exige de découper *dans* un ensemble déjà donné.
 On travaille donc *à l'intérieur de $I$* : $\mathbb{N}$ est l'intersection des sous-ensembles
 inductifs de $I$ — et l'encart montre que c'est bien le plus petit ensemble inductif *tout court*,
 indépendant du choix de $I$.
 
 <Encart type="plusloin" titre="Pourquoi cette intersection est licite, et pourquoi elle est « la plus petite »">
 L'axiome de l'infini donne un ensemble inductif $I$. La collection de ses sous-ensembles inductifs,
-$\{X \in \mathcal{P}(I) : X \text{ inductif}\}$, se forme dans ZF (axiome des parties, puis
-séparation) ; elle est non vide, puisque $I$ en fait partie. Leur **intersection** $\mathbb{N}$ est
+$\mathcal{C}_I := \{X \in \mathcal{P}(I) : X \text{ inductif}\}$, se forme dans ZF (axiome des
+parties, puis séparation) ; elle est non vide, puisque $I$ en fait partie. Leur **intersection**
+n'est pas un geste primitif de ZF : on la *construit*, par une seconde séparation, dans $I$ cette
+fois — $\mathbb{N} := \{x \in I : \forall X \in \mathcal{C}_I,\ x \in X\}$. Elle est
 encore inductive : elle contient $0$ (commun à tous), et le successeur d'un élément commun à tous
-reste commun à tous. Par définition d'une intersection, $\mathbb{N}$ est inclus dans chaque
+reste commun à tous. Par construction, $\mathbb{N}$ est inclus dans chaque
 sous-ensemble inductif **de $I$** — mais il faut mieux. **Minimalité tout court** : soit $J$ un
-ensemble inductif *quelconque*. Alors $I \cap J$ est un sous-ensemble inductif de $I$ (il contient
+ensemble inductif *quelconque*. Alors $I \cap J := \{x \in I : x \in J\}$ — séparation dans $I$,
+encore — est un sous-ensemble inductif de $I$ (il contient
 $0$, présent dans les deux, et le successeur d'un élément des deux reste dans les deux) ; donc
 $\mathbb{N} \subseteq I \cap J \subseteq J$. Ainsi $\mathbb{N}$ est inclus dans **tout** ensemble
 inductif : c'est le plus petit, et la définition **ne dépend pas du choix de $I$** — deux choix
 donneraient deux « plus petits » inclus l'un dans l'autre, donc égaux par extensionnalité. Cette
 minimalité est exactement ce qui interdit à $\mathbb{N}$ de contenir des « intrus » : il ne contient
-*que* ce qu'on est forcé d'y mettre. <Badge niveau="demontre">Déduit de ZF : infini, ensemble des parties, séparation, extensionnalité.</Badge>
+*que* ce qu'on est forcé d'y mettre. <Badge niveau="demontre">Déduit de ZF, facture complète : paire et réunion (pour le successeur), infini (pour $I$), ensemble des parties et séparation (pour la famille et son intersection), extensionnalité (pour l'unicité et l'indépendance du choix de $I$).</Badge>
 </Encart>
 
-## La récurrence n'est pas un axiome : c'est un théorème
+Un mot de charpente, que le <Prereq href="/maths/partie-i/relations-fonctions">chapitre 3</Prereq> nous oblige à dire : une fonction est un ensemble de couples, et notre $S(n) := n \cup \{n\}$ n'en est pas encore une — c'est une *opération* applicable à tout ensemble, et aucune fonction ensembliste n'a pour domaine « tous les ensembles ». Maintenant que $\mathbb{N}$ existe, la véritable **fonction successeur** se construit : $S := \{(n, m) \in \mathbb{N} \times \mathbb{N} : m = n \cup \{n\}\}$, par séparation dans $\mathbb{N} \times \mathbb{N}$ — totale parce que $\mathbb{N}$ est inductif, univoque par extensionnalité. C'est elle, désormais, la $S$ de la structure $(\mathbb{N}, 0, S)$. <Badge niveau="demontre">Graphe formé par séparation, totalité et univocité vérifiées — la fonction au sens plein du chapitre 3.</Badge>
+
+## Dans ZF, la récurrence n'est pas un axiome : c'est un théorème
 
 Voici le point qui surprend. Le **raisonnement par récurrence** ne tombe pas du ciel — il **découle**
-de la définition de $\mathbb{N}$ comme plus petit ensemble inductif.
+de la définition de $\mathbb{N}$ comme plus petit ensemble inductif. Le « dans ZF » du titre n'est
+pas une coquetterie : le statut d'un énoncé dépend du cadre, et c'est toute la leçon — l'arithmétique
+de Peano du premier ordre *pose* la récurrence comme schéma d'axiomes, les présentations à la
+Dedekind du second ordre l'érigent en axiome ; ici, elle se *démontre*.
 
 <Encart type="calcul" titre="Démonstration du principe de récurrence">
 
-**Énoncé.** Soit $P(n)$ une **formule du langage de ZF**, éventuellement avec paramètres — même
+**Le théorème, en une phrase ensembliste.** La minimalité de $\mathbb{N}$ dit exactement ceci — et
+c'est *un* théorème de ZF, un seul :
+
+$$ \forall A \subseteq \mathbb{N},\quad \big(0 \in A \ \text{et}\ \forall n \in A,\ S(n) \in A\big) \Longrightarrow A = \mathbb{N}. $$
+
+**Sa version en formules — un schéma.** L'énoncé familier de la récurrence parle d'une *propriété*
+$P$. Or on ne quantifie pas sur les formules dans le langage de ZF : ce qui suit est donc un
+**schéma** — une instance par formule, comme pour la séparation au chapitre 2, toutes démontrées
+d'un même geste.
+
+**Énoncé (du schéma).** Soit $P(n)$ une **formule du langage de ZF**, éventuellement avec paramètres — même
 précaution qu'au <Prereq href="/maths/partie-i/ensembles-zf">chapitre des axiomes</Prereq>. Si $P(0)$
 est vraie, et si $P(n) \Rightarrow P(S(n))$ pour tout $n \in \mathbb{N}$, alors $P(n)$ est vraie pour
 **tout** $n \in \mathbb{N}$.
@@ -130,41 +151,54 @@ $$ A := \{\, n \in \mathbb{N} : P(n) \,\}. $$
 
 Donc $A$ **est un ensemble inductif**. Or $\mathbb{N}$ est le *plus petit* ensemble inductif, donc
 $\mathbb{N} \subseteq A$. Comme par ailleurs $A \subseteq \mathbb{N}$, on a $A = \mathbb{N}$ :
-$P(n)$ est vraie pour tout $n$. ∎
+$P(n)$ est vraie pour tout $n$. ∎ Chaque instance du schéma se déduit ainsi, via la séparation, du
+théorème ensembliste unique.
 </Encart>
 
 <Resultat label="Principe de récurrence">
 $$ \big(P(0)\ \text{et}\ \forall n \in \mathbb{N},\ (P(n)\Rightarrow P(S(n)))\big) \;\Longrightarrow\; \forall n\in\mathbb{N},\ P(n). $$
-<Badge niveau="demontre" slot="badge">Théorème démontré à partir de la minimalité de ℕ — pas un axiome supplémentaire.</Badge>
+<Badge niveau="demontre" slot="badge">Théorème (version ensembliste) et schéma (version en formules, une instance par $P$), démontrés à partir de la minimalité de ℕ — pas un axiome supplémentaire.</Badge>
 </Resultat>
 
 <Encart type="rappel" titre="Au passage : les axiomes de Dedekind–Peano sont démontrés">
 Ce qu'on *pose* habituellement comme axiomes des entiers — les axiomes de **Dedekind–Peano** pour le
 zéro et le successeur — est ici **démontré** dans ZF, pièce par pièce.
 
+- **$0$ est un entier, et le successeur d'un entier est un entier** : c'est la définition même de
+  $\mathbb{N}$, ensemble inductif — deux propriétés si discrètes qu'on oublie de les compter.
 - **$0$ n'est le successeur d'aucun entier** : $S(n) = n \cup \{n\}$ contient $n$, donc n'est jamais
   vide — jamais égal à $0 = \varnothing$.
 - **$S$ est injective** : supposons $S(m) = S(n)$ avec $m \neq n$. De $m \in S(m) = n \cup \{n\}$ et
   $m \neq n$, on tire $m \in n$ ; symétriquement, $n \in m$. Mais $m \in n \in m$ est un **cycle
-  d'appartenance**, interdit par l'axiome de <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq>.
-  Donc $m = n$.
+  d'appartenance**, et la <Prereq href="/maths/partie-i/ensembles-zf">fondation</Prereq> l'interdit —
+  démontrons-le, comme pour $n \notin n$ plus haut : appliquons-la à la paire $\{m, n\}$. Si son
+  élément minimal était $m$, alors $n \in m \cap \{m, n\}$ le contredirait ; si c'était $n$, alors
+  $m \in n \cap \{m, n\}$. Aucun élément n'est minimal : contradiction. Donc $m = n$.
 - **La récurrence** : démontrée ci-dessus.
 
-<Badge niveau="demontre">Trois vérifications complètes dans ZF — la fondation fournit l'injectivité.</Badge>
+<Badge niveau="demontre">Cinq propriétés — les deux appartenances, le non-successeur, l'injectivité, la récurrence — toutes vérifiées dans ZF ; la fondation fournit l'injectivité, cycle démontré.</Badge>
 
 Une nuance d'honnêteté : l'**arithmétique de Peano** au sens usuel comprend aussi l'addition et la
 multiplication, avec leurs équations — que nous n'avons **pas encore** définies. $(\mathbb{N}, 0, S)$
 en fournit la structure de base ; le chapitre suivant construira $+$ et $\times$ et complétera le
-tableau. <Badge niveau="demontre">$(\mathbb{N}, 0, S)$ satisfait les axiomes de Dedekind–Peano du successeur ; l'arithmétique complète arrive au chapitre suivant.</Badge>
+tableau. <Badge niveau="demontre">$(\mathbb{N}, 0, S)$ satisfait les axiomes de Dedekind–Peano du successeur ; l'arithmétique de Peano du premier ordre ajoutera le langage de $+$ et $\times$ et leurs équations récursives — chapitre suivant.</Badge>
 </Encart>
+
+Première récolte de la récurrence — le motif promis en début de chapitre : **tout entier est un
+ensemble d'entiers**. Par récurrence : $0 = \varnothing \subseteq \mathbb{N}$ ; et si
+$n \subseteq \mathbb{N}$ avec $n \in \mathbb{N}$, alors $S(n) = n \cup \{n\} \subseteq \mathbb{N}$.
+Donc $\forall n \in \mathbb{N},\ n \subseteq \mathbb{N}$ — et l'égalité
+$n = \{m \in \mathbb{N} : m \in n\}$ en découle : le motif des prédécesseurs, démontré, sans
+pointillés ni soustraction. <Badge niveau="demontre">Première application du principe de
+récurrence — le chapitre s'en sert avant de le quitter.</Badge>
 
 Un dernier regard sur l'élégance de la construction : l'**ordre** y est déjà là, gratuitement. Sur
 les entiers de von Neumann, « être plus petit » sera tout simplement « appartenir » : $0 \in 1$,
-$0 \in 2$, $1 \in 2$, et plus généralement $m \lt n \iff m \in n$. Le slogan « $n$ est l'ensemble de
-ses prédécesseurs » prendra alors sa forme exacte : $n = \{m \in \mathbb{N} : m \lt n\}$. Annonce,
+$0 \in 2$, $1 \in 2$, et plus généralement $m \lt n \iff m \in n$. L'égalité ci-dessus se relira
+alors $n = \{m \in \mathbb{N} : m \lt n\}$. Annonce,
 pas usage : l'ordre officiel de $\mathbb{N}$ sera construit au
 <Prereq href="/maths/partie-ii/arithmetique-de-n">chapitre suivant</Prereq>, où cette lecture par
-$\in$ est présentée en encart.
+$\in$ est présentée en encart (équivalences citées, non déroulées).
 
 ## Et après ?
 
