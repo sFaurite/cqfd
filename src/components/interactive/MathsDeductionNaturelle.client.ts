@@ -546,14 +546,29 @@ async function demoNext(): Promise<void> {
   render(head);
 }
 
-/** Revient à l'état d'avant la dernière étape et la rejoue, animation comprise. */
-function demoReplay(): void {
-  if (!demo || demoAnimating || demo.idx === 0) return;
+/** Rembobine l'état d'une étape (sans la rejouer). Renvoie true si le retour a eu lieu. */
+function demoRewind(): boolean {
+  if (!demo || demoAnimating || demo.idx === 0) return false;
   const snap = demoSnapshots[demo.idx - 1];
-  if (!snap) return;
+  if (!snap) return false;
   const st = JSON.parse(snap) as { lines: Line[]; open: number[] };
   lines = st.lines; open = st.open; done = false; sel = []; pending = null;
   demo.idx -= 1;
+  return true;
+}
+
+/** « étape précédente » : revient d'un pas et raconte où l'on en est. */
+function demoPrev(): void {
+  if (!demo || !demoRewind()) return;
+  const steps = EXOS[exIdx].corrige;
+  render(demo.idx === 0
+    ? 'Retour au départ du corrigé. « étape suivante » rejoue le premier geste.'
+    : `Retour à l’étape ${demo.idx}/${steps.length} — ${steps[demo.idx - 1].expl}`);
+}
+
+/** Revient à l'état d'avant la dernière étape et la rejoue, animation comprise. */
+function demoReplay(): void {
+  if (!demo || !demoRewind()) return;
   void demoNext();
 }
 
@@ -643,10 +658,12 @@ function render(msg?: string, isError = false): void {
     else b.disabled = done && !b.hasAttribute('data-reset') && !b.hasAttribute('data-r-demo');
   });
   const nextBtn = root.querySelector<HTMLButtonElement>('[data-demo-next]');
+  const prevBtn = root.querySelector<HTMLButtonElement>('[data-demo-prev]');
   const quitBtn = root.querySelector<HTMLButtonElement>('[data-demo-quit]');
   const replayBtn = root.querySelector<HTMLButtonElement>('[data-demo-replay]');
   const speedWrap = root.querySelector<HTMLElement>('[data-demo-speedwrap]');
-  if (nextBtn) { nextBtn.hidden = !demo; if (demo) nextBtn.disabled = demo.idx >= ex.corrige.length || demoAnimating; }
+  if (nextBtn) { nextBtn.hidden = !demo || demo.idx >= ex.corrige.length; nextBtn.disabled = demoAnimating; }
+  if (prevBtn) { prevBtn.hidden = !demo; if (demo) prevBtn.disabled = demoAnimating || demo.idx === 0; }
   if (quitBtn) quitBtn.hidden = !demo;
   if (replayBtn) { replayBtn.hidden = !demo; if (demo) replayBtn.disabled = demoAnimating || demo.idx === 0; }
   if (speedWrap) speedWrap.hidden = !demo;
@@ -717,6 +734,7 @@ function bind(): void {
   on('[data-r-demo]', () => startDemo());
   on('[data-demo-next]', () => demoNext());
   on('[data-demo-quit]', () => quitDemo());
+  on('[data-demo-prev]', () => demoPrev());
   on('[data-demo-replay]', () => demoReplay());
   const speedSel = root.querySelector<HTMLSelectElement>('[data-demo-speed]');
   speedSel?.addEventListener('change', () => { demoSpeed = parseFloat(speedSel.value) || 1; });
