@@ -5,6 +5,8 @@
  * hypothèse, absurde), introduction/élimination de chaque connecteur,
  * contradiction, explosion, tiers exclu. Vérification instantanée, en pur
  * TypeScript — aucun moteur externe.
+ * Progression sauvegardée par exercice (localStorage), compteur de réussites,
+ * et mode corrigé pas à pas avec explication à chaque étape.
  */
 
 export {};
@@ -126,50 +128,102 @@ function parseFormula(src: string): F | string {
 
 const A = atom('A'), B = atom('B'), C = atom('C');
 
-type Ex = { titre: string; premisses: F[]; but: F; aide: string };
+/** Une étape de corrigé : sélection, règle, formule éventuelle, et l'explication. */
+type Step = {
+  sel?: number[];
+  rule: 'mp' | 'andintro' | 'andelima' | 'andelimb' | 'orelim' | 'notelim' | 'impintro' | 'notintro' | 'supposer' | 'orintro' | 'explosion' | 'tiers' | 'dne';
+  f?: string;
+  side?: 'left' | 'right';
+  expl: string;
+};
+
+type Ex = { titre: string; premisses: F[]; but: F; aide: string; corrige: Step[] };
 
 const EXOS: Ex[] = [
   {
     titre: '1. Échauffement — le modus ponens',
     premisses: [A, imp(A, B)], but: B,
     aide: 'Sélectionnez les deux prémisses (cliquez-les), puis « modus ponens ».',
+    corrige: [
+      { sel: [0, 1], rule: 'mp', expl: 'Les deux prémisses ont exactement la forme du modus ponens : de A (ligne 1) et de A ⇒ B (ligne 2), la règle d’élimination de ⇒ livre B. Un seul pas, et le but est atteint au niveau zéro.' },
+    ],
   },
   {
     titre: '2. Commutativité du ∧',
     premisses: [et(A, B)], but: et(B, A),
     aide: 'Extrayez chaque moitié (élimination de ∧), puis recollez-les dans l’autre ordre.',
+    corrige: [
+      { sel: [0], rule: 'andelimb', expl: 'L’élimination de ∧ permet de garder une moitié : de A ∧ B, on extrait la moitié droite, B. (On commence par elle : c’est elle qui devra être à gauche à l’arrivée.)' },
+      { sel: [0], rule: 'andelima', expl: 'Même règle, autre moitié : de A ∧ B on extrait A. Les deux morceaux sont maintenant des lignes indépendantes — l’ordre du ∧ d’origine est oublié.' },
+      { sel: [1, 2], rule: 'andintro', expl: 'L’introduction de ∧ recolle deux lignes établies, dans l’ordre où on les cite : B (ligne 2) puis A (ligne 3) donnent B ∧ A. CQFD — la commutativité du ∧ n’est pas un axiome, c’est trois applications de règles.' },
+    ],
   },
   {
     titre: '3. Commutativité du ∨ — celle qui exige les deux introductions',
     premisses: [ou(A, B)], but: ou(B, A),
     aide: 'Supposez A, concluez B ∨ A, refermez (⇒) ; même chose depuis B ; terminez par le raisonnement par cas.',
+    corrige: [
+      { rule: 'supposer', f: 'A', expl: 'On ne sait pas lequel de A ou B est vrai : il faut traiter les deux cas. Premier cas — supposons A. La preuve s’indente : cette hypothèse devra être refermée.' },
+      { sel: [1], rule: 'orintro', f: 'B', side: 'left', expl: 'De A, l’introduction de ∨ donne B ∨ A — en plaçant A à droite. C’est ici que la *seconde* version de la règle est indispensable : avec la seule version « de A, déduire A ∨ B », impossible de mettre A du bon côté.' },
+      { rule: 'impintro', expl: 'On referme l’hypothèse : la preuve sous hypothèse conclut A ⇒ B ∨ A et décharge A. Remarquez l’indentation qui se grise : ces lignes ne sont plus citables.' },
+      { rule: 'supposer', f: 'B', expl: 'Second cas — supposons B, même plan de bataille.' },
+      { sel: [4], rule: 'orintro', f: 'A', side: 'right', expl: 'De B, l’introduction de ∨ (première version, cette fois) donne B ∨ A — B reste à gauche.' },
+      { rule: 'impintro', expl: 'On referme : B ⇒ B ∨ A. Nous voici armés des deux implications qu’exige le raisonnement par cas.' },
+      { sel: [0, 3, 6], rule: 'orelim', expl: 'Le raisonnement par cas (élimination de ∨) : de A ∨ B, de A ⇒ B ∨ A et de B ⇒ B ∨ A, on conclut B ∨ A — sans jamais savoir lequel des deux cas est le vrai. CQFD.' },
+    ],
   },
   {
     titre: '4. Transitivité de ⇒',
     premisses: [imp(A, B), imp(B, C)], but: imp(A, C),
     aide: 'Supposez A, enchaînez deux modus ponens, refermez l’hypothèse.',
+    corrige: [
+      { rule: 'supposer', f: 'A', expl: 'Pour prouver une implication A ⇒ C, le geste canonique : supposer A et viser C.' },
+      { sel: [2, 0], rule: 'mp', expl: 'Premier maillon : A (l’hypothèse) et A ⇒ B (prémisse 1) donnent B par modus ponens.' },
+      { sel: [3, 1], rule: 'mp', expl: 'Second maillon : B et B ⇒ C (prémisse 2) donnent C. La chaîne est complète — sous hypothèse.' },
+      { rule: 'impintro', expl: 'On referme : la preuve sous hypothèse conclut A ⇒ C et décharge A. Le théorème ne dépend plus d’aucune hypothèse locale — c’est la définition même de la démonstration du chapitre.' },
+    ],
   },
   {
     titre: '5. La contraposée',
     premisses: [imp(A, B)], but: imp(neg(B), neg(A)),
     aide: 'Supposez ¬B ; puis, à l’intérieur, supposez A et fabriquez la contradiction — deux décharges successives.',
+    corrige: [
+      { rule: 'supposer', f: 'non B', expl: 'Le but est ¬B ⇒ ¬A : on suppose donc ¬B, et l’on vise ¬A.' },
+      { rule: 'supposer', f: 'A', expl: 'Pour prouver ¬A, la réduction à l’absurde : on suppose A — deuxième hypothèse imbriquée, l’indentation le montre — et l’on cherche la contradiction.' },
+      { sel: [2, 0], rule: 'mp', expl: 'A et la prémisse A ⇒ B donnent B… qui va heurter de front notre première hypothèse.' },
+      { sel: [3, 1], rule: 'notelim', expl: 'B (ligne 4) et ¬B (ligne 2) : contradiction — la règle produit ⊥.' },
+      { rule: 'notintro', expl: 'La réduction à l’absurde referme l’hypothèse A : supposer A mène à ⊥, donc ¬A. Première décharge.' },
+      { rule: 'impintro', expl: 'La preuve sous hypothèse referme ¬B : on conclut ¬B ⇒ ¬A. Seconde décharge, niveau zéro — la contraposée est un théorème, pas un réflexe.' },
+    ],
   },
   {
     titre: '6. La double négation (sens facile)',
     premisses: [A], but: neg(neg(A)),
     aide: 'Supposez ¬A : la contradiction avec la prémisse est immédiate ; refermez par l’absurde.',
+    corrige: [
+      { rule: 'supposer', f: 'non A', expl: 'Pour prouver ¬¬A, on suppose son contraire intérieur : ¬A. (Notez qu’on ne suppose pas ¬¬¬A — on vise l’introduction de ¬ sur ¬A.)' },
+      { sel: [0, 1], rule: 'notelim', expl: 'La prémisse A et l’hypothèse ¬A se contredisent : ⊥, immédiatement.' },
+      { rule: 'notintro', expl: 'Supposer ¬A mène à l’absurde, donc ¬¬A — sans tiers exclu : ce sens de la double négation est valide même en logique intuitionniste, comme le signale le chapitre. CQFD.' },
+    ],
   },
   {
     titre: '7. Le boss : la non-contradiction, sans aucune prémisse',
     premisses: [], but: neg(et(A, neg(A))),
     aide: 'Supposez A ∧ ¬A, séparez les deux moitiés, produisez ⊥, refermez par l’absurde.',
+    corrige: [
+      { rule: 'supposer', f: 'A et non A', expl: 'Aucune prémisse : tout doit sortir des règles seules. On suppose l’énoncé fautif, A ∧ ¬A, pour le réduire à l’absurde.' },
+      { sel: [0], rule: 'andelima', expl: 'L’élimination de ∧ en extrait la moitié gauche : A.' },
+      { sel: [0], rule: 'andelimb', expl: 'Et la moitié droite : ¬A. La contradiction est maintenant à découvert, en deux lignes séparées.' },
+      { sel: [1, 2], rule: 'notelim', expl: 'A et ¬A : ⊥.' },
+      { rule: 'notintro', expl: 'La décharge conclut ¬(A ∧ ¬A) au niveau zéro, à partir de rien : le principe de non-contradiction est un théorème de la logique seule. Vous avez terminé les sept exercices !' },
+    ],
   },
 ];
 
 /* --------------------------------- état ---------------------------------- */
 
 type Line = { f: F; depth: number; just: string; hyp: boolean; closed: boolean };
-type Pending = null | { kind: 'supposer' | 'orIntro' | 'explosion' | 'tiers'; ref?: number };
+type Pending = null | { kind: 'supposer' | 'orIntro' | 'explosion' | 'tiers' };
 
 let exIdx = 0;
 let lines: Line[] = [];
@@ -178,6 +232,40 @@ let sel: number[] = [];
 let done = false;
 let pending: Pending = null;
 let history: string[] = [];
+let demo: { idx: number } | null = null;
+
+/* ------------------------- persistance & réussites ------------------------ */
+
+const LS_KEY = 'cqfd-ndj-v1';
+
+type SavedEx = { lines: Line[]; open: number[]; done: boolean };
+type Saved = { solved: number[]; ex: Record<string, SavedEx> };
+
+function loadSaved(): Saved {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) return JSON.parse(raw) as Saved;
+  } catch { /* stockage indisponible : on joue sans mémoire */ }
+  return { solved: [], ex: {} };
+}
+let saved: Saved = loadSaved();
+
+function persist(): void {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(saved)); } catch { /* tant pis */ }
+}
+
+function saveCurrent(): void {
+  if (demo) return; // le corrigé ne remplace pas votre brouillon
+  saved.ex[String(exIdx)] = { lines, open, done };
+  persist();
+}
+
+function markSolved(): void {
+  if (demo) return; // le corrigé instruit, il ne compte pas comme une réussite
+  if (!saved.solved.includes(exIdx)) { saved.solved.push(exIdx); persist(); }
+}
+
+/* --------------------------------- moteur -------------------------------- */
 
 function snapshot(): void {
   history.push(JSON.stringify({ lines, open, done }));
@@ -188,24 +276,37 @@ function undo(): void {
   if (!prev) return;
   const st = JSON.parse(prev);
   lines = st.lines; open = st.open; done = st.done; sel = []; pending = null;
+  saveCurrent();
   render('un pas en arrière.');
 }
 
-function loadEx(i: number): void {
-  exIdx = i;
-  const ex = EXOS[i];
-  lines = ex.premisses.map((f) => ({ f, depth: 0, just: 'prémisse', hyp: false, closed: false }));
+function freshState(i: number): void {
+  lines = EXOS[i].premisses.map((f) => ({ f, depth: 0, just: 'prémisse', hyp: false, closed: false }));
   open = []; sel = []; done = false; pending = null; history = [];
-  render(ex.aide);
+}
+
+function loadEx(i: number, opts?: { fresh?: boolean }): void {
+  exIdx = i;
+  demo = null;
+  const keep = !opts?.fresh && saved.ex[String(i)];
+  if (keep) {
+    const st = saved.ex[String(i)];
+    lines = st.lines.map((l) => ({ ...l }));
+    open = [...st.open]; done = st.done;
+    sel = []; pending = null; history = [];
+  } else {
+    freshState(i);
+  }
+  const exSel = root?.querySelector<HTMLSelectElement>('[data-ex]');
+  if (exSel) exSel.value = String(i);
+  render(keep && lines.length > EXOS[i].premisses.length ? 'Votre brouillon est resté tel que vous l’aviez laissé.' : EXOS[i].aide);
 }
 
 function addLine(f: F, just: string): void {
   lines.push({ f, depth: open.length, just, hyp: false, closed: false });
   const ex = EXOS[exIdx];
-  if (open.length === 0 && eq(f, ex.but)) done = true;
+  if (open.length === 0 && eq(f, ex.but)) { done = true; markSolved(); }
 }
-
-/* --------------------------------- règles -------------------------------- */
 
 const num = (i: number) => String(i + 1);
 
@@ -325,6 +426,51 @@ function ruleDne(): string | null {
   return null;
 }
 
+/* ------------------------------ mode corrigé ------------------------------ */
+
+function runStep(step: Step): string | null {
+  sel = step.sel ? [...step.sel] : [];
+  const parse = (): F | string => parseFormula(step.f ?? '');
+  switch (step.rule) {
+    case 'supposer': { const f = parse(); return typeof f === 'string' ? f : ruleSupposer(f); }
+    case 'orintro': { const f = parse(); return typeof f === 'string' ? f : ruleOrIntro(f, step.side ?? 'right'); }
+    case 'explosion': { const f = parse(); return typeof f === 'string' ? f : ruleExplosion(f); }
+    case 'tiers': { const f = parse(); return typeof f === 'string' ? f : ruleTiers(f); }
+    case 'impintro': return ruleImpIntro();
+    case 'notintro': return ruleNotIntro();
+    case 'mp': return ruleModusPonens();
+    case 'andintro': return ruleAndIntro();
+    case 'andelima': return ruleAndElim('a');
+    case 'andelimb': return ruleAndElim('b');
+    case 'orelim': return ruleOrElim();
+    case 'notelim': return ruleNotElim();
+    case 'dne': return ruleDne();
+  }
+}
+
+function startDemo(): void {
+  freshState(exIdx);
+  demo = { idx: 0 };
+  render(`Corrigé pas à pas — ${EXOS[exIdx].corrige.length} étapes. Cliquez « étape suivante » ; chaque pas est joué et expliqué. (Le corrigé ne compte pas comme une réussite : refaites-le ensuite à la main !)`);
+}
+
+function demoNext(): void {
+  if (!demo) return;
+  const steps = EXOS[exIdx].corrige;
+  if (demo.idx >= steps.length) return;
+  const step = steps[demo.idx];
+  demo.idx += 1;
+  const e = runStep(step);
+  sel = [];
+  if (e) { render(`(bug du corrigé : ${e})`, true); return; }
+  render(`Étape ${demo.idx}/${steps.length} — ${step.expl}`);
+}
+
+function quitDemo(): void {
+  demo = null;
+  loadEx(exIdx);
+}
+
 /* ---------------------------------- DOM ----------------------------------- */
 
 const root = document.querySelector<HTMLElement>('[data-iw="deduction-naturelle"]');
@@ -341,10 +487,11 @@ function render(msg?: string, isError = false): void {
   ol.innerHTML = '';
   lines.forEach((l, i) => {
     const li = document.createElement('li');
-    li.className = 'ndj__line' + (l.closed ? ' is-closed' : '') + (l.hyp ? ' is-hyp' : '') + (sel.includes(i) ? ' is-sel' : '');
+    li.className = 'ndj__line' + (l.closed ? ' is-closed' : '') + (l.hyp ? ' is-hyp' : '') + (sel.includes(i) ? ' is-sel' : '')
+      + (demo && i === lines.length - 1 && !l.closed ? ' is-fresh' : '');
     li.style.setProperty('--d', String(l.depth));
     li.innerHTML = `<span class="ndj__no">${i + 1}</span><span class="ndj__f">${show(l.f)}</span><span class="ndj__just">${l.just}</span>`;
-    if (!l.closed && !done) {
+    if (!l.closed && !done && !demo) {
       li.tabIndex = 0;
       li.addEventListener('click', () => {
         const p = sel.indexOf(i);
@@ -357,11 +504,15 @@ function render(msg?: string, isError = false): void {
   });
 
   const status = root.querySelector<HTMLElement>('[data-status]')!;
-  if (done) {
+  if (done && !demo) {
     status.className = 'ndj__status is-done';
     status.innerHTML = `✓ <b>CQFD</b> — ${show(ex.but)} est démontré, toutes les hypothèses refermées.` +
       (exIdx < EXOS.length - 1 ? ' <button class="iw__btn ndj__next" data-next>exercice suivant →</button>' : ' Vous avez terminé les sept exercices !');
     status.querySelector('[data-next]')?.addEventListener('click', () => loadEx(exIdx + 1));
+  } else if (demo) {
+    const finished = demo.idx >= ex.corrige.length;
+    status.className = 'ndj__status is-demo';
+    status.textContent = (msg ?? '') + (finished ? ' — Corrigé terminé. « quitter le corrigé » vous rend la main pour le refaire vous-même.' : '');
   } else {
     status.className = 'ndj__status' + (isError ? ' is-err' : '');
     status.textContent = msg ?? ex.aide;
@@ -381,14 +532,34 @@ function render(msg?: string, isError = false): void {
     root.querySelector<HTMLInputElement>('[data-input]')!.focus();
   }
 
-  root.querySelectorAll<HTMLButtonElement>('.ndj__rules button').forEach((b) => { b.disabled = done; });
+  // score + menu déroulant décoré
+  const score = root.querySelector<HTMLElement>('[data-score]');
+  if (score) score.textContent = `${saved.solved.length}/${EXOS.length}`;
+  const exSel = root.querySelector<HTMLSelectElement>('[data-ex]');
+  if (exSel) {
+    [...exSel.options].forEach((o, i) => {
+      o.textContent = (saved.solved.includes(i) ? '✓ ' : '') + EXOS[i].titre;
+    });
+  }
+
+  // boutons : gel pendant le corrigé et après la victoire
+  root.querySelectorAll<HTMLButtonElement>('.ndj__rules button').forEach((b) => {
+    const isDemoCtl = b.hasAttribute('data-demo-next') || b.hasAttribute('data-demo-quit') || b.hasAttribute('data-r-demo');
+    if (demo) b.disabled = !isDemoCtl || b.hasAttribute('data-r-demo');
+    else b.disabled = done && !b.hasAttribute('data-reset') && !b.hasAttribute('data-r-demo');
+  });
+  const nextBtn = root.querySelector<HTMLButtonElement>('[data-demo-next]');
+  const quitBtn = root.querySelector<HTMLButtonElement>('[data-demo-quit]');
+  if (nextBtn) { nextBtn.hidden = !demo; if (demo) nextBtn.disabled = demo.idx >= ex.corrige.length; }
+  if (quitBtn) quitBtn.hidden = !demo;
+
+  saveCurrent();
 }
 
-function apply(err: string | null, before?: () => void): void {
+function apply(err: string | null): void {
   if (err) { render(err, true); return; }
   sel = [];
   render(done ? undefined : 'Et maintenant ?');
-  void before;
 }
 
 function withFormula(kind: NonNullable<Pending>['kind']): void {
@@ -428,23 +599,26 @@ function bind(): void {
   exSel.addEventListener('change', () => loadEx(Number(exSel.value)));
 
   const on = (selr: string, fn: () => void) => root.querySelector<HTMLElement>(selr)?.addEventListener('click', fn);
-  const guarded = (rule: () => string | null) => () => { if (done) return; pending = null; snapshot(); const e = rule(); if (e) history.pop(); apply(e); };
+  const guarded = (rule: () => string | null) => () => { if (done || demo) return; pending = null; snapshot(); const e = rule(); if (e) history.pop(); apply(e); };
 
-  on('[data-r-supposer]', () => { if (!done) withFormula('supposer'); });
+  on('[data-r-supposer]', () => { if (!done && !demo) withFormula('supposer'); });
   on('[data-r-impintro]', guarded(ruleImpIntro));
   on('[data-r-notintro]', guarded(ruleNotIntro));
   on('[data-r-mp]', guarded(ruleModusPonens));
   on('[data-r-andintro]', guarded(ruleAndIntro));
   on('[data-r-andelima]', guarded(() => ruleAndElim('a')));
   on('[data-r-andelimb]', guarded(() => ruleAndElim('b')));
-  on('[data-r-orintro]', () => { if (!done) withFormula('orIntro'); });
+  on('[data-r-orintro]', () => { if (!done && !demo) withFormula('orIntro'); });
   on('[data-r-orelim]', guarded(ruleOrElim));
   on('[data-r-notelim]', guarded(ruleNotElim));
-  on('[data-r-explosion]', () => { if (!done) withFormula('explosion'); });
-  on('[data-r-tiers]', () => { if (!done) withFormula('tiers'); });
+  on('[data-r-explosion]', () => { if (!done && !demo) withFormula('explosion'); });
+  on('[data-r-tiers]', () => { if (!done && !demo) withFormula('tiers'); });
   on('[data-r-dne]', guarded(ruleDne));
-  on('[data-undo]', undo);
-  on('[data-reset]', () => loadEx(exIdx));
+  on('[data-undo]', () => { if (!demo) undo(); });
+  on('[data-reset]', () => { delete saved.ex[String(exIdx)]; persist(); loadEx(exIdx, { fresh: true }); });
+  on('[data-r-demo]', () => startDemo());
+  on('[data-demo-next]', () => demoNext());
+  on('[data-demo-quit]', () => quitDemo());
   on('[data-inputok]', () => submitFormula());
   on('[data-inputcancel]', () => { pending = null; render(); });
   root.querySelector<HTMLElement>('[data-orside="right"]')?.addEventListener('click', () => submitFormula('right'));
