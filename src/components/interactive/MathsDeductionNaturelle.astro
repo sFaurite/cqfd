@@ -53,6 +53,14 @@
       <button class="iw__btn" data-reset>recommencer</button>
       <button class="iw__btn" data-r-demo title="La solution jouée pas à pas, avec une explication à chaque étape">corrigé pas à pas</button>
       <button class="iw__btn ndj__demobtn" data-demo-next hidden>étape suivante →</button>
+      <button class="iw__btn" data-demo-replay hidden title="Revenir d’un pas et rejouer la dernière étape">↺ rejouer l’étape</button>
+      <label class="ndj__speedwrap" data-demo-speedwrap hidden>vitesse
+        <select data-demo-speed aria-label="vitesse du corrigé">
+          <option value="0.55">lente</option>
+          <option value="1" selected>normale</option>
+          <option value="1.8">rapide</option>
+        </select>
+      </label>
       <button class="iw__btn" data-demo-quit hidden>quitter le corrigé</button>
     </div>
   </div>
@@ -158,6 +166,11 @@
     opacity: 1 !important;
   }
   .ndj__demobtn { border-color: var(--c-blue); }
+  .ndj__speedwrap { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--c-muted); font-size: 0.78rem; }
+  .ndj__speedwrap select {
+    background: var(--c-bg-elev); color: var(--c-text);
+    border: 1px solid var(--c-border); border-radius: 6px; padding: 0.25rem 0.4rem; font-size: 0.82rem;
+  }
   .ndj__score { margin-left: 0.6rem; }
   .ndj__rules { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 1rem 0.75rem; }
   .ndj__grp { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }

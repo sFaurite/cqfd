@@ -235,8 +235,12 @@ let history: string[] = [];
 let demo: { idx: number } | null = null;
 let demoAnimating = false;
 let demoToken = 0;
+let demoSpeed = 1;
+let demoSnapshots: string[] = [];
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+/** Pause du corrigé, modulée par le réglage de vitesse. */
+const dsleep = (ms: number) => sleep(ms / demoSpeed);
 
 const RULE_BTN: Record<Step['rule'], string> = {
   mp: '[data-r-mp]', andintro: '[data-r-andintro]', andelima: '[data-r-andelima]',
@@ -464,9 +468,10 @@ function runStep(step: Step): string | null {
 function startDemo(): void {
   demoToken++;
   demoAnimating = false;
+  demoSnapshots = [];
   freshState(exIdx);
   demo = { idx: 0 };
-  render(`Corrigé pas à pas — ${EXOS[exIdx].corrige.length} étapes. Cliquez « étape suivante » : chaque pas est mimé (sélections, clic de règle, saisie) puis expliqué. (Le corrigé ne compte pas comme une réussite : refaites-le ensuite à la main !)`);
+  render(`Corrigé pas à pas — ${EXOS[exIdx].corrige.length} étapes. Cliquez « étape suivante » : chaque pas est mimé (sélections, clic de règle, saisie) puis expliqué. Réglez la vitesse à votre main, et « rejouer l’étape » repasse le dernier geste. (Le corrigé ne compte pas comme une réussite !)`);
 }
 
 /** Mime l'appui sur un bouton : halo + enfoncement, le temps d'un regard. */
@@ -475,7 +480,7 @@ async function pressButton(selector: string, token: number): Promise<void> {
   if (!b) return;
   b.classList.add('is-demo-press');
   b.scrollIntoView({ block: 'nearest' });
-  await sleep(550);
+  await dsleep(700);
   b.classList.remove('is-demo-press');
   if (token !== demoToken) return;
 }
@@ -493,6 +498,7 @@ async function demoNext(): Promise<void> {
   const steps = EXOS[exIdx].corrige;
   if (demo.idx >= steps.length) return;
   const step = steps[demo.idx];
+  demoSnapshots[demo.idx] = JSON.stringify({ lines, open });
   demo.idx += 1;
   const token = ++demoToken;
   demoAnimating = true;
@@ -502,14 +508,14 @@ async function demoNext(): Promise<void> {
   // 1. les sélections de lignes, une à une
   sel = [];
   for (const i of step.sel ?? []) {
-    await sleep(500);
+    await dsleep(700);
     if (token !== demoToken) return;
     sel.push(i);
     pulseLine(i, head);
   }
 
   // 2. le clic sur le bouton de règle
-  await sleep(450);
+  await dsleep(600);
   if (token !== demoToken) return;
   await pressButton(RULE_BTN[step.rule], token);
   if (token !== demoToken) return;
@@ -521,11 +527,11 @@ async function demoNext(): Promise<void> {
     const input = root.querySelector<HTMLInputElement>('[data-input]')!;
     input.value = '';
     for (const ch of step.f) {
-      await sleep(55);
+      await dsleep(85);
       if (token !== demoToken) return;
       input.value += ch;
     }
-    await sleep(350);
+    await dsleep(500);
     if (token !== demoToken) return;
     await pressButton(step.rule === 'orintro' ? `[data-orside="${step.side ?? 'right'}"]` : '[data-inputok]', token);
     if (token !== demoToken) return;
@@ -538,6 +544,17 @@ async function demoNext(): Promise<void> {
   demoAnimating = false;
   if (e) { render(`(bug du corrigé : ${e})`, true); return; }
   render(head);
+}
+
+/** Revient à l'état d'avant la dernière étape et la rejoue, animation comprise. */
+function demoReplay(): void {
+  if (!demo || demoAnimating || demo.idx === 0) return;
+  const snap = demoSnapshots[demo.idx - 1];
+  if (!snap) return;
+  const st = JSON.parse(snap) as { lines: Line[]; open: number[] };
+  lines = st.lines; open = st.open; done = false; sel = []; pending = null;
+  demo.idx -= 1;
+  void demoNext();
 }
 
 function quitDemo(): void {
@@ -627,8 +644,12 @@ function render(msg?: string, isError = false): void {
   });
   const nextBtn = root.querySelector<HTMLButtonElement>('[data-demo-next]');
   const quitBtn = root.querySelector<HTMLButtonElement>('[data-demo-quit]');
+  const replayBtn = root.querySelector<HTMLButtonElement>('[data-demo-replay]');
+  const speedWrap = root.querySelector<HTMLElement>('[data-demo-speedwrap]');
   if (nextBtn) { nextBtn.hidden = !demo; if (demo) nextBtn.disabled = demo.idx >= ex.corrige.length || demoAnimating; }
   if (quitBtn) quitBtn.hidden = !demo;
+  if (replayBtn) { replayBtn.hidden = !demo; if (demo) replayBtn.disabled = demoAnimating || demo.idx === 0; }
+  if (speedWrap) speedWrap.hidden = !demo;
 
   saveCurrent();
 }
@@ -696,6 +717,9 @@ function bind(): void {
   on('[data-r-demo]', () => startDemo());
   on('[data-demo-next]', () => demoNext());
   on('[data-demo-quit]', () => quitDemo());
+  on('[data-demo-replay]', () => demoReplay());
+  const speedSel = root.querySelector<HTMLSelectElement>('[data-demo-speed]');
+  speedSel?.addEventListener('change', () => { demoSpeed = parseFloat(speedSel.value) || 1; });
   on('[data-inputok]', () => submitFormula());
   on('[data-inputcancel]', () => { pending = null; render(); });
   root.querySelector<HTMLElement>('[data-orside="right"]')?.addEventListener('click', () => submitFormula('right'));
