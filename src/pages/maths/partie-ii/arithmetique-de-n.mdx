@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "L’arithmétique de ℕ : addition, multiplication, ordre"
 chapter: arithmetique-de-n
-description: "Théorème de récursion (définir par récurrence est légitime) ; + et × définies ; associativité/commutativité démontrées ; 2+2=4 démontré ; ordre total sur ℕ ; BON ORDRE de ℕ démontré, d'où récurrence forte et descente infinie ; régularité (a+c = b+c ⇒ a = b)."
+description: "Théorème de récursion (intersection construite par séparation) ; + et × formées UNIFORMÉMENT (formules RecAdd/RecMult — pas de famille f_m non formée) ; 2+2=4 démontré (+ atelier interactif) ; ≤ et < construits comme ensembles de couples ; ordre total et BON ORDRE démontrés (factures exactes des badges) ; ≤ ⟺ ⊆ et < ⟺ ∈ DÉMONTRÉS (la dette du ch. 4 soldée) ; récurrence forte et descente = schémas ; régularité."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -42,7 +42,7 @@ $$ \text{Pour tout ensemble } X,\ \forall a \in X,\ \forall h : X \to X,\quad \e
 Pourquoi tant de solennité ? Parce que « définir par récurrence » **n'est pas gratuit**. Poser deux équations ne garantit ni qu'une fonction les satisfait, ni qu'une seule le fait. Le théorème de récursion transforme un réflexe en un droit. (Il en existe une version plus générale, où l'étape dépend aussi du rang : $f(S(n)) = H(n, f(n))$. Elle se ramène à la nôtre en faisant évoluer le couple $(n, f(n))$ au lieu de la seule valeur — remarque pour plus tard, sans usage immédiat.)
 
 <Encart type="plusloin" titre="La preuve — avec le point délicat déroulé">
-**Existence.** Appelons *bonne* une relation $R \subseteq \mathbb{N} \times X$ qui contient le couple $(0, a)$ et qui, dès qu'elle contient $(n, x)$, contient aussi $(S(n), h(x))$. Il en existe au moins une : $\mathbb{N} \times X$ tout entier. Et les bonnes relations forment un **ensemble** — ce sont certains éléments de $\mathcal{P}(\mathbb{N} \times X)$, sélectionnés par séparation — de sorte que leur **intersection** $f$ est une intersection licite dans ZF, pas une collection vague. Cette intersection est encore bonne (même argument que pour la minimalité de $\mathbb{N}$).
+**Existence.** Appelons *bonne* une relation $R \subseteq \mathbb{N} \times X$ qui contient le couple $(0, a)$ et qui, dès qu'elle contient $(n, x)$, contient aussi $(S(n), h(x))$. Il en existe au moins une : $\mathbb{N} \times X$ tout entier. Et les bonnes relations forment un **ensemble**, $\mathcal{G} := \{R \in \mathcal{P}(\mathbb{N} \times X) : R \text{ bonne}\}$ — axiome des parties, puis séparation. Leur **intersection** se *construit* alors, comme celle qui a défini $\mathbb{N}$ : $f := \{z \in \mathbb{N} \times X : \forall R \in \mathcal{G},\ z \in R\}$, une séparation dans $\mathbb{N} \times X$ — pas une opération laissée implicite. Cette intersection est encore bonne (même argument que pour la minimalité de $\mathbb{N}$).
 
 Reste le point délicat : $f$ est **fonctionnelle**. Attention, l'argument naïf « si un rang avait deux images, on retirerait un couple en restant bon » ne suffit pas tel quel — retirer un couple pourrait casser la clôture s'il était *forcé* par un couple antérieur. On procède donc par récurrence sur $n$, en identifiant à chaque rang qui force quoi.
 
@@ -51,15 +51,15 @@ Reste le point délicat : $f$ est **fonctionnelle**. Attention, l'argument naïf
 *Rang $S(n)$.* Supposons que $n$ ait pour unique image $x$. Comme $f$ est bonne, $(S(n), h(x)) \in f$. Supposons $(S(n), y) \in f$ avec $y \neq h(x)$. Alors $f \setminus \{(S(n), y)\}$ est encore bonne : le seul couple capable de forcer un couple de rang $S(n)$ est de rang $n$ — par **injectivité de $S$** — donc c'est $(n, x)$, et il force précisément $(S(n), h(x))$, pas $(S(n), y)$. Contradiction avec la minimalité : l'image de $S(n)$ est uniquement $h(x)$. Par récurrence, $f$ est totale (elle est bonne, donc atteint chaque rang) et univoque : c'est une fonction.
 
 **Unicité.** Si $f$ et $g$ satisfont les deux équations, on montre $f(n) = g(n)$ par récurrence : $f(0) = a = g(0)$ ; et si $f(n) = g(n)$, alors $f(S(n)) = h(f(n)) = h(g(n)) = g(S(n))$. ∎
-<Badge niveau="demontre">Chaque ingrédient est établi : séparation (chapitre 2), $S(n) \neq 0$ et injectivité de $S$ (chapitre 4), récurrence (chapitre 4). L'écriture entièrement formelle n'ajouterait que de la notation.</Badge>
+<Badge niveau="demontre">Chaque ingrédient est établi : produit cartésien, ensemble des parties et séparation (chapitre 2), $S(n) \neq 0$ et injectivité de $S$ (chapitre 4), récurrence (chapitre 4). L'écriture entièrement formelle n'ajouterait que de la notation.</Badge>
 </Encart>
 
 ## L'addition — et le théorème 2 + 2 = 4
 
-Fixons $m \in \mathbb{N}$ et appliquons le théorème de récursion avec $X = \mathbb{N}$, $a = m$ et $h = S$ : il existe une **unique** fonction « ajouter à $m$ », notons-la $f_m : \mathbb{N} \to \mathbb{N}$, et posons $m + n := f_m(n)$. L'opération **binaire** $+$ est alors elle-même un objet légitime de ZF : la relation $\{((m,n),\, p) : p = f_m(n)\}$ se forme par séparation dans $(\mathbb{N} \times \mathbb{N}) \times \mathbb{N}$, et l'unicité de chaque $f_m$ la rend fonctionnelle. (Même assemblage, sans le redire, pour la multiplication plus bas.)
+Fixons $m \in \mathbb{N}$ et appliquons le théorème de récursion avec $X = \mathbb{N}$, $a = m$ et $h = S$ — la fonction successeur *construite comme graphe* au <Prereq href="/maths/partie-ii/entiers-naturels">chapitre précédent</Prereq>, sans quoi « $h = S$ » n'aurait pas de sens : il existe une **unique** fonction « ajouter à $m$ ». L'opération **binaire** $+$ demande un scrupule de plus : ces fonctions « ajouter à $m$ » varient avec $m$, et une séparation n'accepte en paramètres que des ensembles *fixés* — pas une famille de noms. On s'en passe grâce à une formule **uniforme** : notons $\mathrm{RecAdd}(m, F)$ la formule « $F : \mathbb{N} \to \mathbb{N}$, $F(0) = m$, et $\forall r \in \mathbb{N},\ F(S(r)) = S(F(r))$ », et posons $+ := \{((m,n),\, p) \in (\mathbb{N} \times \mathbb{N}) \times \mathbb{N} : \exists F,\ \mathrm{RecAdd}(m, F) \text{ et } F(n) = p\}$ — une séparation légitime, dont le théorème de récursion (existence *et* unicité de $F$ pour chaque $m$) garantit la totalité et l'univocité. On note $m + n$ sa valeur. (Même assemblage pour la multiplication plus bas, avec la formule $\mathrm{RecMult}(m, F)$ : « $F(0) = 0$ et $\forall r,\ F(S(r)) = F(r) + m$ ».)
 
 <Resultat label="Définition de l'addition">
-$$ m + 0 := m, \qquad m + S(n) := S(m + n). $$
+$$ \forall m, n \in \mathbb{N} : \qquad m + 0 := m, \qquad m + S(n) := S(m + n). $$
 <Badge niveau="admis" slot="badge">Une définition est un choix, pas une vérité. Mais son bien-fondé — l'existence et l'unicité de l'opération — est garanti par le théorème de récursion, lui démontré.</Badge>
 </Resultat>
 
@@ -123,9 +123,9 @@ Retenez ce théorème : c'est **lui** qui rendra possible la construction de $\m
 
 ## La multiplication
 
-Même machine : à $m$ fixé, le théorème de récursion (avec $a = 0$ et $h : x \mapsto x + m$) légitime la définition
+Même machine : à $m$ fixé, le théorème de récursion s'applique avec $a = 0$ et $h = h_m := \{(x, p) \in \mathbb{N} \times \mathbb{N} : p = x + m\}$ — car « $x \mapsto x + m$ » doit, lui aussi, être un ensemble de couples : celui-ci se forme par séparation, et sa fonctionnalité découle de celle de $+$. L'opération binaire s'assemble alors uniformément, via la formule $\mathrm{RecMult}$ donnée plus haut, et la définition est légitimée :
 
-$$ m \times 0 := 0, \qquad m \times S(n) := m \times n + m. $$
+$$ \forall m, n \in \mathbb{N} : \qquad m \times 0 := 0, \qquad m \times S(n) := m \times n + m. $$
 
 <Badge niveau="admis">Définition posée ; sa légitimité est, elle, démontrée par le théorème de récursion.</Badge> Multiplier $m$ par $n$, c'est partir de $0$ et ajouter $m$, $n$ fois — dit *proprement*, sans points de suspension.
 
@@ -145,9 +145,9 @@ Comment dire que $2$ est plus petit que $5$ ? Pas avec $5 - 2$ : la soustraction
 
 $$ m \le n \quad :\Longleftrightarrow \quad \exists k \in \mathbb{N},\ m + k = n. $$
 
-<Badge niveau="admis">Une définition : nous choisissons le sens du symbole $\le$ — uniquement avec l'addition, déjà construite.</Badge>
+<Badge niveau="admis">Une définition : nous choisissons le sens du symbole $\le$ — uniquement avec l'addition, déjà construite. Et fidèle au chapitre 3, la *relation* elle-même est un ensemble de couples : $\le\ := \{(m, n) \in \mathbb{N} \times \mathbb{N} : \exists k \in \mathbb{N},\ m + k = n\}$, par séparation.</Badge>
 
-On pose aussi l'**ordre strict** : $m \lt n \,:\!\iff\, m \le n$ et $m \neq n$ — de façon équivalente (par régularité), $\exists k \neq 0,\ m + k = n$. Il servira dès la récurrence forte, plus bas. <Badge niveau="admis">Définition, dérivée de celle de $\le$.</Badge>
+On pose aussi l'**ordre strict** : $m \lt n \,:\!\iff\, m \le n$ et $m \neq n$ (comme ensemble : $\lt\ := \{(m,n) \in\ \le\ : m \neq n\}$, séparation encore). De façon équivalente, $m \lt n \iff \exists k \neq 0,\ m + k = n$ — sens direct : le témoin $k$ de $m \le n$ ne peut être $0$, sinon $m = m + 0 = n$ ; sens retour : si $m + k = n$ avec $k \neq 0$ et pourtant $m = n$, alors $m + k = m + 0$, d'où — **commutativité puis régularité**, dans cet ordre, car la régularité simplifie à droite — $k = 0$, contradiction. Il servira dès la récurrence forte, plus bas. <Badge niveau="admis">Définition, dérivée de celle de $\le$ ; l'équivalence est démontrée sur place.</Badge>
 
 La **réflexivité** est immédiate ($m + 0 = m$) et la **transitivité** aussi : si $m + k = n$ et $n + l = p$, alors $m + (k + l) = (m + k) + l = n + l = p$ par associativité. Les deux propriétés restantes demandent plus de soin.
 
@@ -175,16 +175,26 @@ La **réflexivité** est immédiate ($m + 0 = m$) et la **transitivité** aussi 
 
 <Resultat label="≤ est un ordre total sur ℕ">
 $$ \le \ \text{est réflexive, transitive, antisymétrique, et}\ \forall m, n \in \mathbb{N} :\ m \le n \ \text{ou}\ n \le m. $$
-<Badge niveau="demontre" slot="badge">Les quatre propriétés sont démontrées ci-dessus à partir des seules définitions de $+$ et de $\le$.</Badge>
+<Badge niveau="demontre" slot="badge">Les quatre propriétés sont démontrées ci-dessus — facture exacte : réflexivité et transitivité par la définition et l'associativité de $+$ ; antisymétrie par commutativité, régularité et les propriétés du successeur ; totalité par le petit lemme « zéro ou successeur » et le lemme B.</Badge>
 </Resultat>
 
-<Encart type="plusloin" titre="L'élégance von Neumann : ≤, c'est ⊆">
-Sur les entiers de von Neumann, on démontre (récurrences soignées) que $m \le n \iff m \subseteq n$ et que $m \lt n \iff m \in n$. L'ordre n'est pas une structure plaquée sur les entiers : puisque chaque entier *est* l'ensemble de ses prédécesseurs, comparer deux entiers, c'est littéralement tester une inclusion — écho direct de la construction du chapitre précédent. <Badge niveau="demontre">Équivalences démontrables dans ZF ; nous ne les utiliserons pas, mais elles montrent que la construction « pense » déjà l'ordre.</Badge>
+<Encart type="plusloin" titre="L'élégance von Neumann : ≤, c'est ⊆ — démontré">
+Sur les entiers de von Neumann, $m \le n \iff m \subseteq n$ et $m \lt n \iff m \in n$ : l'ordre n'est pas une structure plaquée sur les entiers — comparer, c'est littéralement tester une inclusion. Le chapitre 4 a promis ces équivalences ; les voici, en quatre récurrences et deux ponts.
+
+**Lemme 1 — chaque entier est transitif** : pour $n \in \mathbb{N}$, tout *élément* de $n$ est aussi une *partie* de $n$. Récurrence : pour $0$, rien à vérifier. Si $n$ est transitif, soit $x \in S(n) = n \cup \{n\}$ : ou bien $x \in n$, et alors $x \subseteq n \subseteq S(n)$ ; ou bien $x = n$, et $n \subseteq S(n)$. ∎
+
+**Lemme 2 — l'addition fait grossir** : $\forall m, k \in \mathbb{N},\ m \subseteq m + k$. Récurrence sur $k$ : $m + 0 = m$ ; et si $m \subseteq m + k$, alors $m + S(k) = S(m + k) = (m + k) \cup \{m + k\} \supseteq m + k \supseteq m$. ∎
+
+**$m \le n \iff m \subseteq n$.** Sens direct : si $m + k = n$, le lemme 2 conclut. Sens retour : soit $m \subseteq n$ ; par **totalité**, $m \le n$ ou $n \le m$ — et dans le second cas, le sens direct donne $n \subseteq m$, donc $m = n$ par double inclusion, et $m \le n$ quand même. ∎
+
+**Deux ponts pour l'ordre strict.** D'une part $m \lt n \iff S(m) \le n$ : si $m + k = n$ avec $k \neq 0$, alors $k = S(k')$ (petit lemme) et $n = m + S(k') = S(m + k') = S(m) + k'$ (définition de $+$, puis lemme B) ; réciproquement, $S(m) + k' = n$ se relit $m + S(k') = n$ avec $S(k') \neq 0$. D'autre part $m \in n \iff S(m) \subseteq n$ : si $S(m) \subseteq n$, alors $m \in S(m) \subseteq n$ ; si $m \in n$, alors $\{m\} \subseteq n$ et $m \subseteq n$ (lemme 1), donc $S(m) = m \cup \{m\} \subseteq n$. En enchaînant : $m \lt n \iff S(m) \le n \iff S(m) \subseteq n \iff m \in n$. ∎
+
+Et la promesse du chapitre 4 est **soldée** : de $n = \{m \in \mathbb{N} : m \in n\}$ (démontré là-bas) et de $m \in n \iff m \lt n$, on tire $n = \{m \in \mathbb{N} : m \lt n\}$ — chaque entier est l'ensemble de ses prédécesseurs, au sens de l'ordre officiel. <Badge niveau="demontre">Quatre récurrences, deux ponts, et les acquis du chapitre — la dette du chapitre 4 est payée ici, preuves déroulées.</Badge>
 </Encart>
 
 ## Le bon ordre : le superpouvoir de ℕ
 
-Voici maintenant le théorème le plus puissant du chapitre — celui qui distingue $\mathbb{N}$ des ensembles ordonnés familiers qui viendront ensuite : $\mathbb{Z}$, $\mathbb{Q}$, $\mathbb{R}$, munis de leur ordre usuel, ne l'auront pas. L'idée de la preuve en une phrase : si $A$ n'avait pas de plus petit élément, *tout* entier deviendrait un minorant de $A$ — mais alors le successeur d'un élément de $A$ minorerait cet élément lui-même, ce qui est impossible.
+Voici maintenant le théorème le plus puissant du chapitre — celui qui distingue $\mathbb{N}$ des ensembles ordonnés familiers qui viendront ensuite : nous constaterons, à leur construction, que $\mathbb{Z}$, $\mathbb{Q}$ et $\mathbb{R}$, munis de leur ordre usuel, ne l'ont pas — annonce, pas théorème. L'idée de la preuve en une phrase : si $A$ n'avait pas de plus petit élément, *tout* entier deviendrait un minorant de $A$ — mais alors le successeur d'un élément de $A$ minorerait cet élément lui-même, ce qui est impossible.
 
 <Encart type="calcul" titre="Toute partie non vide de ℕ a un plus petit élément">
 **Théorème.** Si $A \subseteq \mathbb{N}$ et $A \neq \varnothing$, alors il existe $m \in A$ tel que $m \le a$ pour tout $a \in A$.
@@ -206,7 +216,7 @@ Voici maintenant le théorème le plus puissant du chapitre — celui qui distin
 
 <Resultat label="ℕ est bien ordonné">
 $$ \forall A \subseteq \mathbb{N},\quad A \neq \varnothing \ \Longrightarrow\ \exists m \in A,\ \forall a \in A,\ m \le a. $$
-<Badge niveau="demontre" slot="badge">Démontré ligne à ligne ci-dessus, sans autre ingrédient que la récurrence et les lois de l'addition.</Badge>
+<Badge niveau="demontre" slot="badge">Démontré ligne à ligne ci-dessus — facture exacte : la récurrence, les lois de l'addition, la régularité, l'antisymétrie de $\le$, le petit lemme « zéro ou successeur », le lemme B, et « $0$ n'est pas un successeur » (chapitre 4, donc la fondation en amont).</Badge>
 </Resultat>
 
 Ne sous-estimez pas cet énoncé d'apparence modeste : c'est lui qui fournira la **descente infinie**, la **division euclidienne**, l'existence des **formes à dénominateur minimal** des fractions. Chaque fois qu'un mathématicien dira « prenons le plus petit entier tel que… », c'est ce théorème qui signera le chèque.
@@ -215,24 +225,24 @@ Ne sous-estimez pas cet énoncé d'apparence modeste : c'est lui qui fournira la
 
 Le bon ordre paie immédiatement : il livre deux techniques de démonstration annoncées au <Prereq href="/maths/partie-i/methode-axiomatique">chapitre 1</Prereq>, que le reste du cours emploiera sans cesse.
 
-La première renforce la récurrence : dans l'hérédité, au lieu de ne s'appuyer que sur le rang précédent, on s'autorise **tous** les rangs antérieurs. C'est indispensable quand « le cas $n$ » se ramène à des cas plus petits, mais pas nécessairement à $n - 1$ — l'exemple type est la décomposition en facteurs premiers, où $n = ab$ renvoie à deux facteurs quelconques strictement plus petits.
+La première renforce la récurrence : dans l'hérédité, au lieu de ne s'appuyer que sur le rang précédent, on s'autorise **tous** les rangs antérieurs. C'est indispensable quand « le cas $n$ » se ramène à des cas plus petits, mais pas nécessairement au prédécesseur immédiat — l'exemple type est la décomposition en facteurs premiers, où $n = ab$ renvoie à deux facteurs quelconques strictement plus petits.
 
 <Encart type="calcul" titre="Démonstration de la récurrence forte">
 
-**Théorème.** Soit $P(n)$ une formule du langage de ZF, éventuellement avec paramètres — même précaution que pour la récurrence simple. Si pour tout $n \in \mathbb{N}$, « $P(k)$ pour tout $k \lt n$ » entraîne $P(n)$, alors $P(n)$ vaut pour tout $n \in \mathbb{N}$.
+**Schéma de récurrence forte** — un schéma, comme la récurrence simple : une instance par formule. Soit $P(n)$ une formule du langage de ZF, éventuellement avec paramètres. Si pour tout $n \in \mathbb{N}$, « $P(k)$ pour tout $k \lt n$ » entraîne $P(n)$, alors $P(n)$ vaut pour tout $n \in \mathbb{N}$.
 
 **Démonstration** (par l'absurde, via le bon ordre). Supposons qu'un entier au moins ne vérifie pas $P$. L'ensemble $A := \{ n \in \mathbb{N} : \lnot P(n) \}$ (licite par séparation) est alors non vide. Par le **bon ordre**, $A$ possède un plus petit élément $m$. Tout $k \lt m$ est hors de $A$ — sinon $m$ ne serait pas le plus petit — donc vérifie $P(k)$. L'hypothèse du théorème, appliquée à $n = m$, donne alors $P(m)$ : contradiction avec $m \in A$. ∎
 
-Remarquez qu'aucune initialisation séparée n'est requise : pour $n = 0$, la condition « $P(k)$ pour tout $k \lt 0$ » est vide, donc automatiquement satisfaite — l'hypothèse du théorème exige donc déjà $P(0)$ toute seule.
+Remarquez qu'aucune initialisation séparée n'est requise : pour $n = 0$, la condition « $P(k)$ pour tout $k \lt 0$ » est vide — et pour cause, *aucun* entier n'est strictement inférieur à $0$ : $0 \le k$ pour tout $k$ (lemme A), donc $k \lt 0$ donnerait $k \le 0$ et $0 \le k$, d'où $k = 0$ par antisymétrie, contredisant $k \neq 0$. L'hypothèse du théorème exige donc déjà $P(0)$ toute seule.
 
 </Encart>
 
 <Resultat label="Principe de récurrence forte">
 $$ \Big[\forall n \in \mathbb{N},\ \big(\forall k \in \mathbb{N},\ k \lt n \Rightarrow P(k)\big) \Rightarrow P(n)\Big] \ \Longrightarrow\ \forall n \in \mathbb{N},\ P(n). $$
-<Badge niveau="demontre" slot="badge">Conséquence directe du bon ordre, démontrée ci-dessus. Rien de nouveau n'est admis.</Badge>
+<Badge niveau="demontre" slot="badge">Schéma (une instance par formule $P$), conséquence directe du bon ordre, démontré ci-dessus. Rien de nouveau n'est admis.</Badge>
 </Resultat>
 
-La seconde est la forme contraposée du même superpouvoir : la **descente infinie**, chère à Fermat. Pour montrer qu'**aucun** entier ne vérifie une propriété $Q$, il suffit de montrer que tout entier vérifiant $Q$ en fournirait un **strictement plus petit** vérifiant $Q$ encore. Car s'il existait des entiers vérifiant $Q$, le plus petit d'entre eux (bon ordre) en engendrerait un plus petit — contradiction. Il n'y a pas d'escalier descendant infini dans $\mathbb{N}$. En clair, pour $Q(n)$ une formule du langage de ZF :
+La seconde est la forme contraposée du même superpouvoir : la **descente infinie**, chère à Fermat. Pour montrer qu'**aucun** entier ne vérifie une propriété $Q$, il suffit de montrer que tout entier vérifiant $Q$ en fournirait un **strictement plus petit** vérifiant $Q$ encore. Car s'il existait des entiers vérifiant $Q$, le plus petit d'entre eux (bon ordre) en engendrerait un plus petit — contradiction. Il n'y a pas d'escalier descendant infini dans $\mathbb{N}$. En clair — schéma encore, une instance par formule $Q(n)$ du langage de ZF :
 
 $$ \Big[\forall n \in \mathbb{N},\ Q(n) \Rightarrow \exists m \in \mathbb{N},\ m \lt n \ \text{et}\ Q(m)\Big] \ \Longrightarrow\ \forall n \in \mathbb{N},\ \lnot Q(n). $$
 
@@ -240,4 +250,4 @@ $$ \Big[\forall n \in \mathbb{N},\ Q(n) \Rightarrow \exists m \in \mathbb{N},\ m
 
 ## Le bilan, et la frontière
 
-Nous savons désormais calculer : $+$ et $\times$ avec leurs lois, un ordre total, le bon ordre — et le théorème $2 + 2 = 4$, démontré depuis $\varnothing$. Mais une équation aussi simple que $x + 5 = 3$ n'a **aucune** solution dans $\mathbb{N}$ : il manque les nombres négatifs. Le chapitre suivant les construit par un quotient audacieux — et c'est la régularité démontrée ici qui rendra l'opération possible.
+Nous savons désormais calculer : $+$ et $\times$ avec leurs lois, un ordre total, le bon ordre — et le théorème $2 + 2 = 4$, démontré depuis $\varnothing$. Mais une équation aussi simple que $x + 5 = 3$ n'a **aucune** solution dans $\mathbb{N}$ — et ce n'est pas une évidence, c'est un théorème d'une ligne : une solution donnerait $5 \le 3$ (commutativité), or $3 + 2 = 5$ donne $3 \le 5$, et l'antisymétrie forcerait $3 = 5$, c'est-à-dire $3 + 0 = 3 + 2$ — d'où $0 = 2 = S(1)$ par commutativité et régularité, alors que $0$ n'est pas un successeur. Il manque les nombres négatifs. Le chapitre suivant les construit par un quotient audacieux — et c'est la régularité démontrée ici qui rendra l'opération possible.
