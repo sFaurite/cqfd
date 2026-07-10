@@ -29,6 +29,7 @@ export const PARTIES: Partie[] = [
     chapitres: [
       { slug: 'comment-lire', path: '/comment-lire', num: 0, titre: 'Comment lire ce site', court: 'Comment lire ce site', accroche: 'Les encarts dépliables, l’indicateur de fiabilité, la promesse exacte.' },
       { slug: 'methodologie', path: '/methodologie', num: 0, titre: 'Méthodologie : les niveaux de fiabilité', court: 'Méthodologie', accroche: 'Ce que veut dire « démontré », « admis », « conjecturé », « indécidable ».' },
+      { slug: 'exercices', path: '/exercices', num: 0, titre: 'Les ateliers : à vous de démontrer', court: 'Les ateliers (À vous)', accroche: 'Le récapitulatif des ateliers interactifs : déduction naturelle, calcul équationnel, Lean.' },
     ],
   },
   {

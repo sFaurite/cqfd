@@ -1,0 +1,56 @@
+---
+layout: ../../layouts/LessonLayout.astro
+title: "Les ateliers : à vous de démontrer"
+chapter: exercices
+description: "Le récapitulatif des ateliers interactifs du cours — jeu de la déduction naturelle (ch. 1), calcul équationnel de ℕ (ch. 5) et des groupes (ch. 14), exercices Lean en ligne — avec leur mode d’emploi commun."
+---
+
+import Encart from '../../components/Encart.astro';
+import Badge from '../../components/Badge.astro';
+import Prereq from '../../components/Prereq.astro';
+
+## Lire, puis faire
+
+Ce cours démontre tout — mais lire une preuve et la *construire* sont deux gestes différents. Les **ateliers** disséminés dans les chapitres vous mettent la craie en main : chacun ne connaît que les règles posées dans son chapitre, vérifie chaque pas instantanément, et ne déclare « CQFD » que lorsque la preuve est complète au sens strict du cours. Cette page les récapitule.
+
+<Encart type="intuition" titre="Le mode d'emploi commun">
+Chaque atelier propose des **exercices gradués** (du modus ponens au « boss »), un **corrigé pas à pas** — la solution jouée geste par geste, avec une explication à chaque étape, une vitesse réglable et la navigation avant/arrière — et une **progression sauvegardée** dans votre navigateur : vos brouillons et vos réussites vous attendent d'une visite à l'autre. Le corrigé instruit mais ne compte pas comme une réussite : refaites-le à la main !
+</Encart>
+
+## Atelier 1 — Le jeu de la déduction naturelle
+
+**Au <Prereq href="/maths/partie-i/methode-axiomatique">chapitre 1</Prereq>**, section « À vous : le jeu de la déduction ». Vous construisez des preuves à partir des seules **règles d'inférence** du chapitre — hypothèses locales qui s'ouvrent et se referment, introduction et élimination de chaque connecteur, tiers exclu. Sept exercices :
+
+1. le modus ponens (échauffement) ;
+2. la commutativité du ∧ ;
+3. la commutativité du ∨ — celle qui exige les *deux* introductions ;
+4. la transitivité de ⇒ ;
+5. la contraposée ;
+6. la double négation (le sens valide même en logique intuitionniste) ;
+7. **le boss** : ¬(A ∧ ¬A), sans aucune prémisse — la non-contradiction, théorème de la logique seule.
+
+## Atelier 2 — Le calcul équationnel : démontrez 2 + 2 = 4
+
+**Au <Prereq href="/maths/partie-ii/arithmetique-de-n">chapitre 5</Prereq>**, section « À vous : calculez comme ZF ». Vous transformez une expression en cliquant un sous-terme puis une **équation du chapitre** (les deux de l'addition, les deux de la multiplication, les définitions des chiffres), lisible dans les deux sens. Quatre exercices :
+
+1. 1 + 1 = 2 (échauffement) ;
+2. **le monument** : 2 + 2 = 4, le corrigé calqué sur l'encart du chapitre ;
+3. 1 × 1 = 1 ;
+4. **le boss** : 2 × 2 = 4 — où vous vivrez le piège $0 + m$ (la définition ne réduit que $m + 0$ !) et où *votre* théorème 2 + 2 = 4 devient un outil.
+
+## Atelier 3 — Le calcul équationnel des groupes
+
+**Au <Prereq href="/maths/partie-iv/groupes">chapitre 14</Prereq>**, section « À vous, sans quitter la page ». Cinq équations seulement — les axiomes (G1), (G2), (G3) des groupes — et les bijoux du chapitre à redémontrer par pur calcul :
+
+1. a·(a⁻¹·b) = b (échauffement) ;
+2. e⁻¹ = e (théorème 5 du chapitre) ;
+3. (a⁻¹)⁻¹ = a (théorème 6 — avec le geste créatif : déplier un $e$ en $x^{-1} \cdot x$ pour un $x$ de votre choix) ;
+4. **le boss** : b⁻¹·a⁻¹ = (a·b)⁻¹, en neuf gestes dont deux créatifs.
+
+## Hors les murs — les exercices Lean
+
+**Au <Prereq href="/maths/partie-iv/groupes">chapitre 14</Prereq> toujours**, l'encart « Le certificat machine » propose trois théorèmes à trous dans l'**assistant de preuve Lean 4** (éditeur officiel en ligne, un clic) : $e^{-1} = e$, $(a^{-1})^{-1} = a$, et la simplification à droite. Même mathématique, autre vérificateur — celui-là est utilisé par la recherche, et c'est lui qui revérifie les preuves du chapitre 14 à chaque modification du site. <Badge niveau="demontre">Les trois solutions ont été compilées avant publication : aucun exercice insoluble.</Badge>
+
+## Et la suite ?
+
+Les ateliers s'étendront au fil des retours : d'autres chapitres s'y prêtent (la division euclidienne, les congruences…). Si un exercice vous résiste ou qu'une règle vous semble manquer, c'est une information précieuse — le cours est fait pour être *pratiqué*.
