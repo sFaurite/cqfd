@@ -599,7 +599,9 @@ function render(msg?: string, isError = false): void {
     li.className = 'ndj__line' + (l.closed ? ' is-closed' : '') + (l.hyp ? ' is-hyp' : '') + (sel.includes(i) ? ' is-sel' : '')
       + (demo && i === lines.length - 1 && !l.closed ? ' is-fresh' : '');
     li.style.setProperty('--d', String(l.depth));
-    li.innerHTML = `<span class="ndj__no">${i + 1}</span><span class="ndj__f">${show(l.f)}</span><span class="ndj__just">${l.just}</span>`;
+    const selPos = sel.indexOf(i);
+    const ord = selPos >= 0 ? `<span class="ndj__ord" title="ordre de sélection — il compte, p. ex. pour « ∧ intro »">${selPos + 1}</span>` : '';
+    li.innerHTML = `<span class="ndj__no">${i + 1}</span>${ord}<span class="ndj__f">${show(l.f)}</span><span class="ndj__just">${l.just}</span>`;
     if (!l.closed && !done && !demo) {
       li.tabIndex = 0;
       li.addEventListener('click', () => {

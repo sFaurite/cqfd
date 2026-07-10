@@ -87,7 +87,9 @@
   </div>
 
   <p class="iw__note">
-    Mode d’emploi : <b>cliquez une ou plusieurs lignes</b> pour les citer, puis appliquez une règle —
+    Mode d’emploi : <b>cliquez une ou plusieurs lignes</b> pour les citer — chacune affiche son
+    <b>ordre de sélection</b> (pastille bleue), qui compte : « ∧ intro » colle les deux moitiés dans
+    l’ordre de vos clics, et re-cliquer une ligne la retire. Puis appliquez une règle —
     ce sont exactement celles de la section « La logique d’abord », rien de plus. Les hypothèses
     s’ouvrent avec « supposons… » (la preuve s’indente) et doivent être <b>refermées</b> par
     « ⇒ conclure » ou « ¬ absurde » : le but n’est atteint que revenu au niveau zéro, toutes
@@ -143,6 +145,15 @@
   .ndj__line.is-hyp .ndj__f::before { content: '▹ '; color: var(--c-yellow); }
   .ndj__line.is-closed { opacity: 0.45; cursor: default; }
   .ndj__no { color: var(--c-muted); min-width: 1.4rem; text-align: right; font-size: 0.8rem; }
+  .ndj__ord {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 1.15rem; height: 1.15rem; border-radius: 50%;
+    background: var(--c-blue); color: var(--c-bg-elev);
+    font-size: 0.7rem; font-weight: 700; font-family: var(--font-sans);
+    align-self: center;
+    animation: ndjOrdPop 0.18s ease;
+  }
+  @keyframes ndjOrdPop { 0% { transform: scale(0.4); } 100% { transform: scale(1); } }
   .ndj__f { flex: 0 1 auto; }
   .ndj__just { margin-left: auto; color: var(--c-muted); font-size: 0.78rem; font-family: var(--font-sans); white-space: nowrap; }
   .ndj__status {
