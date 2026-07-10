@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import MathsCalculEquationnel from '../../../components/interactive/MathsCalculEquationnel.astro';
 
 ## Qu'est-ce que 2 + 2 ?
 
@@ -81,6 +82,12 @@ $$ \boxed{2 + 2 = 4} $$
 
 Chaque étape cite une définition ; aucune n'invoque l'évidence. ∎ <Badge niveau="demontre">Oui, $2+2=4$ est un théorème de ZF — sans doute le plus célèbre de ceux qu'on ne songe jamais à énoncer.</Badge>
 </Encart>
+
+## À vous : calculez comme ZF
+
+Vous venez de *lire* la preuve — refaites-la de vos mains. L'atelier ci-dessous ne connaît que les équations posées dans ce chapitre : les deux de l'addition, les deux de la multiplication, et les définitions des chiffres. Cliquez un sous-terme, appliquez une équation — dans un sens ou dans l'autre —, et transformez $2+2$ en $4$ pas à pas. Le dernier exercice vous fera découvrir un piège instructif : la définition ne réduit que $m + 0$, jamais $0 + m$…
+
+<MathsCalculEquationnel jeu="peano" titre="Le calcul équationnel : démontrez 2 + 2 = 4" />
 
 ## Les lois du calcul
 

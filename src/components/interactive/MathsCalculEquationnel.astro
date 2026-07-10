@@ -1,0 +1,159 @@
+---
+/**
+ * MathsCalculEquationnel — le jeu du calcul équationnel. Le lecteur transforme
+ * une expression en cliquant un sous-terme puis une règle de réécriture (les
+ * équations du chapitre), dans un sens ou dans l'autre. Deux jeux : « peano »
+ * (chapitre 5 — démontrer 2+2=4 soi-même) et « groupe » (chapitre 14).
+ * Corrigé pas à pas animé, vitesse, navigation, progression sauvegardée.
+ */
+interface Props { jeu: 'peano' | 'groupe'; titre: string }
+const { jeu, titre } = Astro.props;
+---
+
+<div class="iw ceq" data-iw="calcul-equationnel" data-jeu={jeu}>
+  <div class="iw__head"><span class="tag">Interactif</span> {titre}</div>
+
+  <div class="iw__controls">
+    <div class="iw__row">
+      <label for={`ceq-ex-${jeu}`}>exercice</label>
+      <select id={`ceq-ex-${jeu}`} data-ex></select>
+      <span class="iw__chip ceq__score"><span class="k">réussis</span> <b data-score>0/4</b></span>
+    </div>
+  </div>
+
+  <div class="ceq__goal" data-goal></div>
+  <div class="ceq__chain" data-chain></div>
+  <div class="ceq__status" data-status></div>
+
+  <div class="ceq__rules">
+    <div class="ceq__grp ceq__grp--regles">
+      <span class="ceq__grplabel">règles</span>
+      <span class="ceq__btnrow" data-rules></span>
+    </div>
+    <div class="ceq__grp ceq__grp--meta">
+      <span class="ceq__grplabel">preuve</span>
+      <span class="ceq__btnrow">
+        <button class="iw__btn" data-undo>↶ annuler</button>
+        <button class="iw__btn" data-reset>⟲ recommencer</button>
+        <button class="iw__btn ceq__corrbtn" data-r-demo title="La solution jouée pas à pas, avec une explication à chaque étape">▶ corrigé pas à pas</button>
+        <button class="iw__btn" data-demo-prev hidden title="Revenir d’un pas en arrière (sans rejouer)">← étape précédente</button>
+        <button class="iw__btn ceq__demobtn" data-demo-next hidden>étape suivante →</button>
+        <button class="iw__btn" data-demo-replay hidden title="Revenir d’un pas et rejouer la dernière étape">↺ rejouer l’étape</button>
+        <label class="ceq__speedwrap" data-demo-speedwrap hidden>vitesse
+          <select data-demo-speed aria-label="vitesse du corrigé">
+            <option value="0.55">lente</option>
+            <option value="1" selected>normale</option>
+            <option value="1.8">rapide</option>
+          </select>
+        </label>
+        <button class="iw__btn ceq__quitbtn" data-demo-quit hidden>✕ quitter le corrigé</button>
+      </span>
+    </div>
+  </div>
+
+  <div class="ceq__dirrow" data-dirrow hidden>
+    <span>Dans quel sens ?</span>
+    <button class="iw__btn" data-dir="lr"></button>
+    <button class="iw__btn" data-dir="rl"></button>
+  </div>
+
+  <div class="ceq__inputrow" data-inputrow hidden>
+    <span data-inputlabel>Terme à substituer :</span>
+    <input type="text" data-input spellcheck="false" autocomplete="off" placeholder={jeu === 'peano' ? 'ex. : S(0), 2+1' : "ex. : a, a*b, a' (pour a⁻¹)"} aria-label="terme" />
+    <button class="iw__btn" data-inputok>OK</button>
+    <button class="iw__btn" data-inputcancel>annuler</button>
+  </div>
+
+  <p class="iw__note">
+    Mode d’emploi : <b>cliquez un sous-terme</b> de la dernière ligne (re-cliquez-le pour élargir la
+    sélection à son parent), puis <b>une règle</b> — chaque règle est une équation du chapitre, et
+    elle se lit <b>dans les deux sens</b> : quand les deux s’appliquent, le jeu vous demande lequel,
+    et quand un sens fait apparaître une inconnue, c’est à vous de la choisir — le seul geste
+    créatif du calcul, tout le reste est forcé.
+  </p>
+</div>
+
+<style is:global>
+  .ceq [hidden] { display: none !important; }
+  .ceq__goal {
+    margin: 0.75rem 1rem 0.25rem; padding: 0.55rem 0.8rem;
+    background: var(--c-surface); border: 1px solid var(--c-border);
+    border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 0.92rem;
+  }
+  .ceq__lbl { color: var(--c-muted); font-family: var(--font-sans); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 0.3rem; }
+  .ceq__but { color: var(--c-green); }
+  .ceq__chain { margin: 0.5rem 1rem; font-family: var(--font-mono); font-size: 0.98rem; overflow-x: auto; }
+  .ceq__line { display: flex; align-items: baseline; gap: 0.55rem; padding: 0.18rem 0.4rem; border-radius: 6px; white-space: nowrap; }
+  .ceq__line:not(.ceq__cur) { opacity: 0.55; }
+  .ceq__cur { background: var(--c-surface); }
+  .ceq__eq { color: var(--c-yellow); font-weight: 700; min-width: 1ch; }
+  .ceq__just { margin-left: auto; color: var(--c-muted); font-size: 0.75rem; font-family: var(--font-sans); padding-left: 1rem; }
+  .ceq__t { border-radius: 4px; padding: 0.05em 0.06em; }
+  .ceq__cur .ceq__t { cursor: pointer; }
+  .ceq__cur .ceq__t:hover { background: color-mix(in srgb, var(--c-blue) 14%, transparent); }
+  .ceq__t.is-sel { background: color-mix(in srgb, var(--c-blue) 28%, transparent) !important; outline: 1px solid var(--c-blue); }
+  .ceq__status {
+    margin: 0.35rem 1rem; padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm); font-size: 0.88rem;
+    color: var(--c-muted); background: var(--c-surface); border: 1px solid var(--c-border);
+  }
+  .ceq__status.is-err { color: var(--c-red); border-color: var(--c-red); }
+  .ceq__status.is-done { color: var(--c-green); border-color: var(--c-green); font-size: 0.95rem; }
+  .ceq__status.is-demo { color: var(--c-text); border-color: var(--c-blue); background: var(--c-surface-2); }
+  .ceq__rules { display: flex; flex-direction: column; gap: 0.45rem; margin: 0.6rem 1rem 0.75rem; }
+  .ceq__grp { --grp: var(--c-muted); display: flex; align-items: first baseline; gap: 0.35rem; }
+  .ceq__grp--regles { --grp: var(--c-teal); }
+  .ceq__btnrow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; flex: 1; }
+  .ceq__grplabel {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    color: var(--c-muted); font-size: 0.72rem; min-width: 5.5rem;
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .ceq__grplabel::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--grp); flex: none; }
+  .ceq__grp--meta .ceq__grplabel::before { background: transparent; border: 1px solid var(--c-muted); }
+  .ceq__grp--regles .iw__btn {
+    display: inline-flex; align-items: baseline; gap: 0.45em;
+    background: color-mix(in srgb, var(--grp) 8%, var(--c-bg-elev));
+    border: 1px solid color-mix(in srgb, var(--grp) 32%, var(--c-border));
+    border-radius: 999px;
+  }
+  .ceq__grp--regles .iw__btn:hover { border-color: var(--grp); background: color-mix(in srgb, var(--grp) 16%, var(--c-bg-elev)); }
+  .ceq__grp--regles .iw__btn .sym { font-family: var(--font-mono); font-weight: 700; font-size: 0.92em; color: var(--grp); }
+  .ceq__grp--meta .iw__btn { background: transparent; border-color: transparent; color: var(--c-muted); font-weight: 500; }
+  .ceq__grp--meta .iw__btn:hover { border-color: var(--c-border); color: var(--c-text); background: var(--c-surface); }
+  .ceq__corrbtn { color: var(--c-blue) !important; border-color: color-mix(in srgb, var(--c-blue) 40%, transparent) !important; font-weight: 600 !important; }
+  .ceq__corrbtn:hover { background: color-mix(in srgb, var(--c-blue) 12%, transparent) !important; }
+  .ceq__demobtn { background: var(--c-blue) !important; color: var(--c-bg-elev) !important; border-color: var(--c-blue) !important; font-weight: 700 !important; }
+  .ceq__demobtn:hover { filter: brightness(1.1); }
+  .ceq__quitbtn:hover { color: var(--c-red) !important; border-color: color-mix(in srgb, var(--c-red) 45%, transparent) !important; }
+  .ceq__rules .iw__btn:disabled { opacity: 0.45; cursor: default; }
+  .ceq .iw__btn.is-demo-press {
+    outline: 2px solid var(--c-blue) !important;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--c-blue) 25%, transparent);
+    transform: scale(0.94);
+    transition: transform 0.12s ease;
+    opacity: 1 !important;
+  }
+  .ceq__dirrow, .ceq__inputrow {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem;
+    margin: 0 1rem 0.75rem; padding: 0.5rem 0.8rem;
+    background: var(--c-surface-2); border: 1px solid var(--c-blue); border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+  }
+  .ceq__dirrow .iw__btn { font-family: var(--font-mono); }
+  .ceq__inputrow input {
+    flex: 1 1 10rem; background: var(--c-bg-elev); color: var(--c-text);
+    border: 1px solid var(--c-border); border-radius: 6px;
+    padding: 0.35rem 0.5rem; font-family: var(--font-mono); font-size: 0.92rem;
+  }
+  .ceq__speedwrap { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--c-muted); font-size: 0.78rem; }
+  .ceq__speedwrap select {
+    background: var(--c-bg-elev); color: var(--c-text);
+    border: 1px solid var(--c-border); border-radius: 6px; padding: 0.25rem 0.4rem; font-size: 0.82rem;
+  }
+  .ceq__score { margin-left: 0.6rem; }
+</style>
+
+<script>
+  import './MathsCalculEquationnel.client.ts';
+</script>

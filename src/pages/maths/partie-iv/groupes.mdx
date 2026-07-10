@@ -12,6 +12,7 @@ import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
 import MathsGroupeSymetries from '../../../components/interactive/MathsGroupeSymetries.astro';
+import MathsCalculEquationnel from '../../../components/interactive/MathsCalculEquationnel.astro';
 
 ## L'algèbre, ou l'art de ne démontrer qu'une fois
 
@@ -246,5 +247,11 @@ Ce cours cite deux grandes preuves vérifiées par ordinateur — les quatre cou
 - <a href="https://live.lean-lang.org/#url=https%3A%2F%2Fraw.githubusercontent.com%2FsFaurite%2Fcqfd%2Fmain%2Flean%2Fexercices%2FExo3_SimplificationDroite.lean" target="_blank" rel="noopener">Exercice 3 ↗</a> — la simplification *à droite* : celle que ce chapitre n'a jamais eu besoin de poser — à vous de montrer qu'il n'y perdait rien.
 
 </Encart>
+
+## À vous, sans quitter la page : le calcul équationnel
+
+Vous préférez rester dans le confort de la maison ? L'atelier ci-dessous ne connaît que les **cinq équations des axiomes** — (G1), les deux faces de (G2), les deux faces de (G3) — et vous fait redémontrer les bijoux du chapitre par pur calcul : $e^{-1} = e$, $(a^{-1})^{-1} = a$, et jusqu'au théorème 4, $(a \cdot b)^{-1} = b^{-1} \cdot a^{-1}$. Vous y verrez une chose que les preuves rédigées cachent : dans un calcul de groupe, il n'y a que **deux gestes créatifs** possibles — faire apparaître un $e$, puis le déplier en $x^{-1} \cdot x$ pour un $x$ *de votre choix* — tout le reste est forcé. Trois voies, un théorème : la preuve par unicité du chapitre, le certificat Lean, et vos mains.
+
+<MathsCalculEquationnel jeu="groupe" titre="Le calcul équationnel : les axiomes suffisent" />
 
 Nous avons tenu notre promesse : pas un axiome ajouté, seulement un nom — « groupe » — posé sur une régularité omniprésente, et une moisson de théorèmes valables partout d'un coup. Au chapitre suivant, nous changeons de fil : l'**arithmétique de $\mathbb{Z}$**, la division euclidienne et les nombres premiers. Puis les deux fils, structures et arithmétique, se noueront dans $\mathbb{Z}/n\mathbb{Z}$, où Lagrange et Euclide travailleront main dans la main.
