@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les entiers relatifs (ℤ)"
 chapter: entiers-relatifs
-description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale, x+5=3 résolu ; lois algébriques de ℤ ; ordre total (bien-définition déroulée) ; plongement de ℕ (théorème) puis identification (convention) ; FORME CANONIQUE avec unicité ; intégrité de ℤ."
+description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale, x+5=3 résolu ; lois algébriques de ℤ ; ATELIER interactif (calcul des promesses : la règle des signes démontrée) ; ordre total (bien-définition déroulée) ; plongement de ℕ (théorème) puis identification (convention) ; FORME CANONIQUE avec unicité ; intégrité de ℤ."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import MathsCalculEquationnel from '../../../components/interactive/MathsCalculEquationnel.astro';
 
 ## Une soustraction qui n'existe pas encore
 
@@ -136,6 +137,12 @@ $$ x + y = y + x, \quad (x+y)+z = x+(y+z), \quad x + 0_{\mathbb{Z}} = x, \quad x
 $$ xy = yx, \quad (xy)z = x(yz), \quad x(y+z) = xy + xz, \quad 1_{\mathbb{Z}} \cdot x = x \ \text{ où } 1_{\mathbb{Z}} := [(1,0)]. $$
 <Badge niveau="demontre" slot="badge">Chaque identité se vérifie en choisissant des représentants, en appliquant les définitions, puis les lois déjà démontrées de $\mathbb{N}$ — la bien-définition garantit que le choix des représentants n'importe pas. Exemple type, le neutre multiplicatif : $[(a,b)] \cdot [(1,0)] = [(a \cdot 1 + b \cdot 0,\ a \cdot 0 + b \cdot 1)] = [(a,b)]$. La Partie IV baptisera cette structure : anneau commutatif.</Badge>
 </Resultat>
+
+## À vous : le calcul des promesses
+
+Vous venez de lire les définitions — calculez avec, de vos mains. L'atelier ci-dessous ne connaît que les règles posées dans ce chapitre : la définition de l'addition, celle du produit (sans jamais soustraire !), le changement de représentant sur la droite de pente $1$, et le calcul dans $\mathbb{N}$ hérité du chapitre 5. Vous y résoudrez l'équation interdite $x + 5 = 3$ — le calcul même du chapitre — et, en boss, vous démontrerez la « règle des signes » du collège : $(-1) \cdot (-1) = +1$ n'est pas un décret, c'est un théorème qui tombe de la définition du produit.
+
+<MathsCalculEquationnel jeu="relatif" titre="Le calcul équationnel : la règle des signes, démontrée" />
 
 ## Comparer les relatifs, et loger $\mathbb{N}$ dans $\mathbb{Z}$
 

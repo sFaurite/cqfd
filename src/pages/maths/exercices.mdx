@@ -2,7 +2,7 @@
 layout: ../../layouts/LessonLayout.astro
 title: "Les ateliers : à vous de démontrer"
 chapter: exercices
-description: "Le récapitulatif des ateliers interactifs du cours — jeu de la déduction naturelle (ch. 1), calcul équationnel de ℕ (ch. 5) et des groupes (ch. 14), exercices Lean en ligne — avec leur mode d’emploi commun."
+description: "Le récapitulatif des ateliers interactifs du cours — jeu de la déduction naturelle (ch. 1), calcul équationnel de ℕ (ch. 5), de ℤ (ch. 6), de ℂ (ch. 9), des groupes (ch. 14) et de ℤ/nℤ (ch. 16), exercices Lean en ligne — avec leur mode d’emploi commun."
 ---
 
 import Encart from '../../components/Encart.astro';
@@ -38,7 +38,26 @@ Chaque atelier propose des **exercices gradués** (du modus ponens au « boss »
 3. 1 × 1 = 1 ;
 4. **le boss** : 2 × 2 = 4 — où vous vivrez le piège $0 + m$ (la définition ne réduit que $m + 0$ !) et où *votre* théorème 2 + 2 = 4 devient un outil.
 
-## Atelier 3 — Le calcul équationnel des groupes
+## Atelier 3 — Le calcul des promesses : la règle des signes
+
+**Au <Prereq href="/maths/partie-ii/entiers-relatifs">chapitre 6</Prereq>**, section « À vous : le calcul des promesses ». Les règles : les définitions de l'addition et du produit de $\mathbb{Z}$ sur les couples (posées *sans jamais soustraire*), le changement de représentant sur la droite de pente $1$, et le calcul dans $\mathbb{N}$. Quatre exercices :
+
+1. (−2) + (+2) = 0 (échauffement) ;
+2. l'équation interdite $x + 5 = 3$, résolue — le calcul même du chapitre ;
+3. (−2)·(+3) = −6 ;
+4. **le boss** : (−1)·(−1) = +1 — la « règle des signes » du collège, *démontrée* et non décrétée.
+
+## Atelier 4 — Le calcul des couples : i² = −1
+
+**Au <Prereq href="/maths/partie-ii/complexes">chapitre 9</Prereq>**, section « À vous : le calcul des couples ». Les règles : les deux définitions posées du chapitre — addition composante à composante, produit $(a,b)\cdot(c,d) = (ac-bd,\ ad+bc)$ — et le calcul dans $\mathbb{R}$. On reste en couples, comme la construction l'exige. Cinq exercices :
+
+1. additionner deux couples (échauffement) ;
+2. **le moment de vérité** : $i^2 = -1$, l'encart central du chapitre refait de vos mains ;
+3. l'écriture du lycée reconstruite : $3 + 2i = (3, 2)$ ;
+4. deux quarts de tour : $i \cdot (i \cdot z) = -z$, le demi-tour vécu ;
+5. **le boss** : $z\bar{z} = N(z)$ — l'arme du conjugué, la partie imaginaire s'annulant sous vos yeux.
+
+## Atelier 5 — Le calcul équationnel des groupes
 
 **Au <Prereq href="/maths/partie-iv/groupes">chapitre 14</Prereq>**, section « À vous, sans quitter la page ». Cinq équations seulement — les axiomes (G1), (G2), (G3) des groupes — et les bijoux du chapitre à redémontrer par pur calcul :
 
@@ -47,10 +66,20 @@ Chaque atelier propose des **exercices gradués** (du modus ponens au « boss »
 3. (a⁻¹)⁻¹ = a (théorème 6 — avec le geste créatif : déplier un $e$ en $x^{-1} \cdot x$ pour un $x$ de votre choix) ;
 4. **le boss** : b⁻¹·a⁻¹ = (a·b)⁻¹, en neuf gestes dont deux créatifs.
 
+## Atelier 6 — L'horloge en main : ℤ/nℤ jusqu'à Fermat
+
+**Au <Prereq href="/maths/partie-iv/anneaux-corps">chapitre 16</Prereq>**, section « À vous : l'horloge en main ». Les règles : les opérations sur les classes ($[a]+[b] = [a+b]$, $[a] \times [b] = [ab]$, bien définies — démontré), la réduction par division euclidienne, le calcul dans $\mathbb{Z}$. Cinq exercices :
+
+1. l'horloge : $[10] + [5] = [3]$ dans $\mathbb{Z}/12\mathbb{Z}$ (échauffement) ;
+2. le déraillement : $[2] \times [3] = [0]$ dans $\mathbb{Z}/6\mathbb{Z}$ — fabriquez des diviseurs de zéro ;
+3. la simplification est morte : $[2] \times [4] = [2]$, et pourtant $[4] \neq [1]$ ;
+4. Bézout, machine à inverses : $[3] \times [5] = [1]$ dans $\mathbb{Z}/7\mathbb{Z}$ ;
+5. **le boss** : Fermat vécu — $[3]^4 = [1]$ dans $\mathbb{Z}/5\mathbb{Z}$, l'aiguille retombant où Lagrange l'avait promis.
+
 ## Hors les murs — les exercices Lean
 
 **Au <Prereq href="/maths/partie-iv/groupes">chapitre 14</Prereq> toujours**, l'encart « Le certificat machine » propose trois théorèmes à trous dans l'**assistant de preuve Lean 4** (éditeur officiel en ligne, un clic) : $e^{-1} = e$, $(a^{-1})^{-1} = a$, et la simplification à droite. Même mathématique, autre vérificateur — celui-là est utilisé par la recherche, et c'est lui qui revérifie les preuves du chapitre 14 à chaque modification du site. <Badge niveau="demontre">Les trois solutions ont été compilées avant publication : aucun exercice insoluble.</Badge>
 
 ## Et la suite ?
 
-Les ateliers s'étendront au fil des retours : d'autres chapitres s'y prêtent (la division euclidienne, les congruences…). Si un exercice vous résiste ou qu'une règle vous semble manquer, c'est une information précieuse — le cours est fait pour être *pratiqué*.
+Les ateliers s'étendront au fil des retours : d'autres chapitres s'y prêtent (les rationnels, les polynômes, la division euclidienne elle-même…). Si un exercice vous résiste ou qu'une règle vous semble manquer, c'est une information précieuse — le cours est fait pour être *pratiqué*.

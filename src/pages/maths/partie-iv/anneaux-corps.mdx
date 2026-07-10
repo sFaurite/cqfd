@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Anneaux, corps et arithmétique modulaire"
 chapter: anneaux-corps
-description: "Anneau (commutatif unitaire), corps — définitions officielles ; congruences, ℤ/nℤ construit par quotient, opérations bien définies (démontré), EXACTEMENT n classes (démontré) ; diviseurs de zéro ssi n composé ; ℤ/pℤ corps ssi p premier (démontré via Bézout) ; PETIT THÉORÈME DE FERMAT démontré via Lagrange."
+description: "Anneau (commutatif unitaire), corps — définitions officielles ; congruences, ℤ/nℤ construit par quotient, opérations bien définies (démontré), EXACTEMENT n classes (démontré) ; diviseurs de zéro ssi n composé ; ℤ/pℤ corps ssi p premier (démontré via Bézout) ; PETIT THÉORÈME DE FERMAT démontré via Lagrange ; ATELIER interactif (l'horloge, diviseurs de zéro, Bézout machine à inverses, Fermat vécu)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import MathsCalculEquationnel from '../../../components/interactive/MathsCalculEquationnel.astro';
 
 ## Deux fils qui se rejoignent
 
@@ -161,5 +162,11 @@ soit $[a]^{p-1}\,[(p-1)!] = [(p-1)!]$. Comme $p$ ne divise aucun facteur de $(p-
 <Encart type="plusloin" titre="Ces corps finis chiffrent le web">
 L'arithmétique modulaire n'est pas une curiosité de salon. Choisissez deux grands nombres premiers, gardez-les secrets, ne publiez que leur produit : l'exponentiation modulaire permet alors de chiffrer un message que seul le détenteur des deux premiers sait déchiffrer — c'est le principe de RSA. Que le déchiffrement redonne *exactement* le message clair est un théorème, cousin direct du petit théorème de Fermat. <Badge niveau="demontre">La correction mathématique de l'échange (déchiffrer redonne le message) est un théorème — cité ici sans preuve, hors du parcours du cours. <a href="https://fr.wikipedia.org/wiki/Chiffrement_RSA" target="_blank" rel="noopener">réf. ↗</a></Badge> La **sécurité**, elle, repose sur la difficulté — crue mais non démontrée — de retrouver les deux premiers à partir de leur produit. Nous en restons à ce clin d'œil.
 </Encart>
+
+## À vous : l'horloge en main
+
+Tout ce chapitre calcule dans $\mathbb{Z}/n\mathbb{Z}$ — à votre tour. L'atelier ci-dessous ne connaît que les opérations sur les classes, $[a] + [b] = [a+b]$ et $[a] \times [b] = [ab]$ — légitimes parce que leur bien-définition est *démontrée* plus haut —, la réduction par division euclidienne du chapitre précédent, et le calcul dans $\mathbb{Z}$. Vous y ferez tourner l'horloge, fabriquerez un diviseur de zéro de vos mains, constaterez la mort de la simplification, vérifierez un inverse que Bézout vous tend — et, en boss, vous *vivrez* le petit théorème de Fermat : $[3]^4 = [1]$ dans $\mathbb{Z}/5\mathbb{Z}$, l'aiguille retombant exactement où Lagrange l'avait promis.
+
+<MathsCalculEquationnel jeu="modulo" titre="Le calcul équationnel : l'arithmétique qui tourne en rond" />
 
 Nous voici riches en corps : les corps infinis ℚ, ℝ, ℂ hérités de la partie II, et toute une famille de corps finis $\mathbb{F}_p$ nés d'un quotient. Il nous reste un dernier objet algébrique à construire avant de revenir à l'analyse — les polynômes, et avec eux la question qui hante les mathématiques depuis les Babyloniens : celle des racines.

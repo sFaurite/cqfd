@@ -2,12 +2,21 @@
 /**
  * MathsCalculEquationnel — le jeu du calcul équationnel. Le lecteur transforme
  * une expression en cliquant un sous-terme puis une règle de réécriture (les
- * équations du chapitre), dans un sens ou dans l'autre. Deux jeux : « peano »
- * (chapitre 5 — démontrer 2+2=4 soi-même) et « groupe » (chapitre 14).
- * Corrigé pas à pas animé, vitesse, navigation, progression sauvegardée.
+ * équations du chapitre), dans un sens ou dans l'autre. Cinq jeux : « peano »
+ * (ch. 5 — démontrer 2+2=4 soi-même), « relatif » (ch. 6 — la règle des
+ * signes), « complexe » (ch. 9 — i² = −1), « groupe » (ch. 14) et « modulo »
+ * (ch. 16 — l'horloge, jusqu'à Fermat). Corrigé pas à pas animé, vitesse,
+ * navigation, progression sauvegardée.
  */
-interface Props { jeu: 'peano' | 'groupe'; titre: string }
+interface Props { jeu: 'peano' | 'groupe' | 'relatif' | 'complexe' | 'modulo'; titre: string }
 const { jeu, titre } = Astro.props;
+const placeholders: Record<string, string> = {
+  peano: 'ex. : S(0), 2+1',
+  groupe: "ex. : a, a*b, a' (pour a⁻¹)",
+  relatif: 'ex. : [(0,1)]',
+  complexe: 'ex. : (0,1)',
+  modulo: 'ex. : [3]',
+};
 ---
 
 <div class="iw ceq" data-iw="calcul-equationnel" data-jeu={jeu}>
@@ -59,7 +68,7 @@ const { jeu, titre } = Astro.props;
 
   <div class="ceq__inputrow" data-inputrow hidden>
     <span data-inputlabel>Terme à substituer :</span>
-    <input type="text" data-input spellcheck="false" autocomplete="off" placeholder={jeu === 'peano' ? 'ex. : S(0), 2+1' : "ex. : a, a*b, a' (pour a⁻¹)"} aria-label="terme" />
+    <input type="text" data-input spellcheck="false" autocomplete="off" placeholder={placeholders[jeu]} aria-label="terme" />
     <button class="iw__btn" data-inputok>OK</button>
     <button class="iw__btn" data-inputcancel>annuler</button>
   </div>

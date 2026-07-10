@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les nombres complexes (ℂ)"
 chapter: complexes
-description: "ℂ := ℝ² avec multiplication (ac−bd, ad+bc) ; i := (0,1), i² = −1 VÉRIFIÉ ; corps (distributivité déroulée en modèle) ; conjugué et ses règles, norme quadratique N(z) sans dette, module, N(zw) = N(z)N(w) ; ℂ n'est pas un corps ordonné (démontré) ; théorème fondamental de l’algèbre en horizon."
+description: "ℂ := ℝ² avec multiplication (ac−bd, ad+bc) ; i := (0,1), i² = −1 VÉRIFIÉ ; corps (distributivité déroulée en modèle) ; conjugué et ses règles, norme quadratique N(z) sans dette, module, N(zw) = N(z)N(w) ; ATELIER interactif (i² = −1 de vos mains, quart de tour, z·z̄ = N(z)) ; ℂ n'est pas un corps ordonné (démontré) ; théorème fondamental de l’algèbre en horizon."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -11,6 +11,7 @@ import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
 import Tournant from '../../../components/Tournant.astro';
+import MathsCalculEquationnel from '../../../components/interactive/MathsCalculEquationnel.astro';
 
 ## Le scandale des « imaginaires »
 
@@ -150,6 +151,12 @@ Plus généralement, admettons un instant la trigonométrie du lycée. Tout $z \
 $$ (\cos\theta,\ \sin\theta)\cdot(\cos\theta',\ \sin\theta') = (\cos\theta\cos\theta' - \sin\theta\sin\theta',\ \ \cos\theta\sin\theta' + \sin\theta\cos\theta') = (\cos(\theta + \theta'),\ \sin(\theta + \theta')) $$
 
 Multiplier deux complexes, c'est multiplier les longueurs et *additionner les angles* : une rotation composée avec une homothétie. <Badge niveau="admis">Anticipation déclarée : cette lecture géométrique s'appuie sur $\cos$ et $\sin$, non encore construits dans le cours ; elle deviendra un théorème après la partie V.</Badge>
+
+## À vous : le calcul des couples
+
+Tous les calculs de ce chapitre tiennent en deux définitions et une compétence : l'addition composante à composante, le produit $(a,b)\cdot(c,d) = (ac - bd,\ ad + bc)$, et le calcul dans $\mathbb{R}$ hérité du chapitre 8. L'atelier ci-dessous ne connaît qu'eux — et l'on y reste en couples, comme la construction l'exige : le but s'écrit $(-1, 0)$, et c'est le plongement qui l'appelle $-1$. Vous y referez le moment de vérité $i^2 = -1$, l'écriture $a + bi$ reconstruite, les deux quarts de tour qui font un demi-tour, et — en boss — l'arme du conjugué, $z\bar{z} = N(z)$ : la partie imaginaire s'annule sous vos yeux.
+
+<MathsCalculEquationnel jeu="complexe" titre="Le calcul équationnel : i² = −1, de vos mains" />
 
 ## Le prix du miracle : ℂ ne peut pas être un corps ordonné
 

@@ -2,9 +2,14 @@
  * MathsCalculEquationnel — le jeu du calcul équationnel.
  * Le lecteur transforme une expression en une autre en appliquant des règles
  * de réécriture (les équations mêmes du chapitre) au sous-terme de son choix,
- * dans un sens ou dans l'autre. Deux jeux de règles : « peano » (chapitre 5 —
- * démontrer 2+2=4 soi-même) et « groupe » (chapitre 14 — les bijoux du
- * certificat Lean, par pur calcul). Même ADN que le jeu de la déduction :
+ * dans un sens ou dans l'autre. Cinq jeux de règles : « peano » (chapitre 5 —
+ * démontrer 2+2=4 soi-même), « relatif » (chapitre 6 — les promesses, la règle
+ * des signes), « complexe » (chapitre 9 — i² = −1 par les couples), « groupe »
+ * (chapitre 14 — les bijoux du certificat Lean, par pur calcul) et « modulo »
+ * (chapitre 16 — l'arithmétique de l'horloge, jusqu'à Fermat). Certaines
+ * règles sont des « règles de calcul » (champ eval) : elles évaluent un
+ * sous-terme fermé — un calcul dans ℕ, ℤ ou ℝ, hérité des chapitres amont —
+ * au lieu de filtrer un motif. Même ADN que le jeu de la déduction :
  * vérificateur TypeScript pur, corrigé pas à pas animé, vitesse, navigation,
  * progression sauvegardée.
  */
@@ -62,7 +67,10 @@ function replaceAt(x: T, path: number[], sub: T): T {
 
 /* ------------------------------ configurations ---------------------------- */
 
-type Rule = { id: string; nom: string; lhs: T; rhs: T };
+/** Une règle est soit une équation (lhs = rhs, motifs à variables), soit une
+ *  « règle de calcul » (eval) : elle évalue un sous-terme fermé, dans un seul
+ *  sens — le calcul dans ℕ, ℤ ou ℝ que le chapitre hérite des chapitres amont. */
+type Rule = { id: string; nom: string; lhs?: T; rhs?: T; eval?: (x: T) => T | null };
 type Step = { path: number[]; rule: string; dir?: 'lr' | 'rl'; input?: string; expl: string };
 type Ex = { titre: string; depart: T; but: T; regles: string[]; aide: string; corrige: Step[] };
 type Config = {
@@ -296,9 +304,314 @@ const EXOS_GROUPE: Ex[] = [
   },
 ];
 
+/* ---- outillage commun des jeux « nombres » (relatif, complexe, modulo) ---- */
+
+const NUM = /^-?\d+$/;
+const num = (n: number): T => t(String(n));
+/** Couple (a,b) — les complexes du chapitre 9. */
+const cpl = (x: T, y: T): T => t('cpl', x, y);
+/** Classe d'un couple [(a,b)] — les relatifs du chapitre 6. */
+const zc = (x: T, y: T): T => t('zc', x, y);
+/** Classe [a] — les congruences du chapitre 16. */
+const cl = (x: T): T => t('cl', x);
+const plus = (x: T, y: T): T => t('+', x, y);
+const moins = (x: T, y: T): T => t('−', x, y);
+const fois = (x: T, y: T): T => t('·', x, y);
+const modfois = (x: T, y: T): T => t('×', x, y);
+
+/** Évalue une opération dont les deux arguments sont des nombres écrits. */
+function evalArith(x: T): T | null {
+  if (x.a.length !== 2 || !NUM.test(x.a[0].f) || !NUM.test(x.a[1].f)) return null;
+  const a = Number(x.a[0].f), b = Number(x.a[1].f);
+  if (x.f === '+') return num(a + b);
+  if (x.f === '−') return num(a - b);
+  if (x.f === '·' || x.f === '×') return num(a * b);
+  return null;
+}
+
+/** Réduction modulo n d'une classe [k] : le représentant de la division euclidienne. */
+const redMod = (n: number) => (x: T): T | null => {
+  if (x.f !== 'cl' || !NUM.test(x.a[0].f)) return null;
+  const k = Number(x.a[0].f);
+  if (k >= 0 && k < n) return null;
+  return cl(num(((k % n) + n) % n));
+};
+
+/** Affichage commun : couples, classes, +, −, · (prioritaire), × (espacé). */
+function showStd(x: T, prec = 0): string {
+  const wrap = (lvl: number, s: string) => (lvl < prec ? `(${s})` : s);
+  if (x.f === 'cpl') return `(${showStd(x.a[0])}, ${showStd(x.a[1])})`;
+  if (x.f === 'zc') return `[(${showStd(x.a[0])}, ${showStd(x.a[1])})]`;
+  if (x.f === 'cl') return `[${showStd(x.a[0])}]`;
+  if (x.f === '+') return wrap(1, `${showStd(x.a[0], 1)} + ${showStd(x.a[1], 2)}`);
+  if (x.f === '−') return wrap(1, `${showStd(x.a[0], 1)} − ${showStd(x.a[1], 2)}`);
+  if (x.f === '·') return wrap(2, `${showStd(x.a[0], 2)}·${showStd(x.a[1], 3)}`);
+  if (x.f === '×') return wrap(2, `${showStd(x.a[0], 2)} × ${showStd(x.a[1], 3)}`);
+  if (/^-\d/.test(x.f)) { const m = x.f.replace('-', '−'); return prec > 0 ? `(${m})` : m; }
+  return x.f;
+}
+
+/** Parseurs minimaux (aucune règle de ces jeux ne fait apparaître d'inconnue,
+ *  mais le moteur exige de savoir lire un terme saisi). */
+function parseNombres(src: string): T | string {
+  const s = src.replace(/\s+/g, '').replace(/−/g, '-');
+  let m = s.match(/^\[\((-?\d+),(-?\d+)\)\]$/);
+  if (m) return zc(t(m[1]), t(m[2]));
+  m = s.match(/^\((-?\d+),(-?\d+)\)$/);
+  if (m) return cpl(t(m[1]), t(m[2]));
+  m = s.match(/^\[(-?\d+)\]$/);
+  if (m) return cl(t(m[1]));
+  if (NUM.test(s)) return t(s);
+  return 'attendu : un nombre, un couple (a,b), une classe [a] ou [(a,b)]';
+}
+
+/* ---- Relatif (chapitre 6) : les promesses ---- */
+
+const REGLES_RELATIF: Rule[] = [
+  { id: 'zadd', nom: '[(a,b)] + [(c,d)] = [(a+c, b+d)] — la définition de l’addition (bien définie : démontré au chapitre)', lhs: plus(zc(v('a'), v('b')), zc(v('c'), v('d'))), rhs: zc(plus(v('a'), v('c')), plus(v('b'), v('d'))) },
+  { id: 'zmul', nom: '[(a,b)]·[(c,d)] = [(ac+bd, ad+bc)] — la définition du produit, posée sans soustraire', lhs: fois(zc(v('a'), v('b')), zc(v('c'), v('d'))), rhs: zc(plus(fois(v('a'), v('c')), fois(v('b'), v('d'))), plus(fois(v('a'), v('d')), fois(v('b'), v('c')))) },
+  {
+    id: 'zrep', nom: '[(a+k, b+k)] = [(a,b)] — même promesse : a + (b+k) = b + (a+k), les deux couples sont sur la même droite de pente 1',
+    eval: (x) => {
+      if (x.f !== 'zc' || !NUM.test(x.a[0].f) || !NUM.test(x.a[1].f)) return null;
+      const a = Number(x.a[0].f), b = Number(x.a[1].f), k = Math.min(a, b);
+      return k > 0 ? zc(num(a - k), num(b - k)) : null;
+    },
+  },
+  { id: 'calcn', nom: 'calcul dans ℕ — l’arithmétique du chapitre 5, sur les composantes', eval: evalArith },
+];
+
+const EXOS_RELATIF: Ex[] = [
+  {
+    titre: '1. Échauffement : (−2) + (+2) = 0',
+    depart: plus(zc(num(0), num(2)), zc(num(2), num(0))), but: zc(num(0), num(0)),
+    regles: ['zadd', 'calcn', 'zrep'],
+    aide: 'Appliquez la définition de l’addition, calculez les composantes dans ℕ, puis reconnaissez la promesse « zéro ».',
+    corrige: [
+      { path: [], rule: 'zadd', expl: 'La définition de l’addition travaille composante à composante : [(0,2)] + [(2,0)] devient [(0+2, 2+0)]. Aucune soustraction nulle part — c’est tout le génie de la construction.' },
+      { path: [0], rule: 'calcn', expl: 'Chaque composante est un calcul dans ℕ, déjà maîtrisé au chapitre 5 : 0 + 2 = 2.' },
+      { path: [1], rule: 'calcn', expl: 'Et 2 + 0 = 2. Nous voici devant [(2,2)] — la promesse « 2 − 2 ».' },
+      { path: [], rule: 'zrep', expl: 'Or (2,2) et (0,0) sont la MÊME promesse : 2 + 0 = 2 + 0, ils sont sur la même droite de pente 1. C’est le neutre 0 de ℤ : (−2) + (+2) = 0, démontré sur les couples. ∎' },
+    ],
+  },
+  {
+    titre: '2. L’équation interdite : x + 5 = 3, résolue',
+    depart: plus(zc(num(3), num(0)), zc(num(0), num(5))), but: zc(num(0), num(2)),
+    regles: ['zadd', 'calcn', 'zrep'],
+    aide: 'x = 3 + (−5) : le calcul même du chapitre. Additionnez, calculez, puis réduisez le représentant.',
+    corrige: [
+      { path: [], rule: 'zadd', expl: 'Dans ℕ, x + 5 = 3 n’avait aucune solution. Dans ℤ, on calcule x = 3 + (−5), c’est-à-dire [(3,0)] + [(0,5)] : la définition donne [(3+0, 0+5)].' },
+      { path: [0], rule: 'calcn', expl: '3 + 0 = 3, dans ℕ.' },
+      { path: [1], rule: 'calcn', expl: '0 + 5 = 5. La solution est la promesse [(3,5)] — « 3 − 5 », en attente.' },
+      { path: [], rule: 'zrep', expl: 'Et (3,5) ~ (0,2), car 3 + 2 = 5 + 0 : même droite de pente 1. La solution est [(0,2)], le nombre que l’on note −2. L’équation qui ouvrait le chapitre est résolue — de vos mains. ∎' },
+    ],
+  },
+  {
+    titre: '3. Moins par plus : (−2)·(+3) = −6',
+    depart: fois(zc(num(0), num(2)), zc(num(3), num(0))), but: zc(num(0), num(6)),
+    regles: ['zmul', 'calcn', 'zrep'],
+    aide: 'La définition du produit fabrique quatre produits dans ℕ ; calculez-les tous, l’addition finit le travail.',
+    corrige: [
+      { path: [], rule: 'zmul', expl: 'La définition du produit — posée sans jamais soustraire — donne [(ac+bd, ad+bc)] : la part « positive » 0·3 + 2·0, la part « négative » 0·0 + 2·3.' },
+      { path: [0, 0], rule: 'calcn', expl: '0·3 = 0 : calcul dans ℕ.' },
+      { path: [0, 1], rule: 'calcn', expl: '2·0 = 0.' },
+      { path: [0], rule: 'calcn', expl: '0 + 0 = 0 : la part positive est vide.' },
+      { path: [1, 0], rule: 'calcn', expl: '0·0 = 0.' },
+      { path: [1, 1], rule: 'calcn', expl: '2·3 = 6.' },
+      { path: [1], rule: 'calcn', expl: '0 + 6 = 6 : toute la masse est du côté négatif. [(0,6)], c’est la promesse « 0 − 6 » : le nombre −6. ∎' },
+    ],
+  },
+  {
+    titre: '4. Le boss : (−1)·(−1) = +1 — la règle des signes, démontrée',
+    depart: fois(zc(num(0), num(1)), zc(num(0), num(1))), but: zc(num(1), num(0)),
+    regles: ['zmul', 'calcn', 'zrep'],
+    aide: '« Moins par moins donne plus » n’est pas un décret : appliquez la définition du produit et regardez le +1 naître du calcul.',
+    corrige: [
+      { path: [], rule: 'zmul', expl: 'Le moment de vérité. −1, c’est la promesse [(0,1)]. La définition du produit donne [(0·0 + 1·1, 0·1 + 1·0)] — et remarquez : b·d = 1·1 atterrit dans la part POSITIVE. Tout est déjà joué.' },
+      { path: [0, 0], rule: 'calcn', expl: '0·0 = 0.' },
+      { path: [0, 1], rule: 'calcn', expl: '1·1 = 1 — le produit des deux « dettes » compte positivement.' },
+      { path: [0], rule: 'calcn', expl: '0 + 1 = 1 : la part positive vaut 1.' },
+      { path: [1, 0], rule: 'calcn', expl: '0·1 = 0.' },
+      { path: [1, 1], rule: 'calcn', expl: '1·0 = 0.' },
+      { path: [1], rule: 'calcn', expl: '0 + 0 = 0 : la part négative est vide. Reste [(1,0)] : le nombre +1. La « règle des signes » du collège est un THÉORÈME — elle découle de la définition du produit, elle-même choisie pour prolonger la distributivité. Rien n’a été décrété. ∎' },
+    ],
+  },
+];
+
+/* ---- Complexe (chapitre 9) : les couples ---- */
+
+const REGLES_COMPLEXE: Rule[] = [
+  { id: 'cadd', nom: '(a,b) + (c,d) = (a+c, b+d) — la définition posée de l’addition', lhs: plus(cpl(v('a'), v('b')), cpl(v('c'), v('d'))), rhs: cpl(plus(v('a'), v('c')), plus(v('b'), v('d'))) },
+  { id: 'cmul', nom: '(a,b)·(c,d) = (ac−bd, ad+bc) — la définition posée du produit', lhs: fois(cpl(v('a'), v('b')), cpl(v('c'), v('d'))), rhs: cpl(moins(fois(v('a'), v('c')), fois(v('b'), v('d'))), plus(fois(v('a'), v('d')), fois(v('b'), v('c')))) },
+  { id: 'calcr', nom: 'calcul dans ℝ — chaque composante se calcule dans ℝ (chapitre 8)', eval: evalArith },
+];
+
+const EXOS_COMPLEXE: Ex[] = [
+  {
+    titre: '1. Échauffement : additionner deux couples',
+    depart: plus(cpl(num(2), num(1)), cpl(num(1), num(3))), but: cpl(num(3), num(4)),
+    regles: ['cadd', 'calcr'],
+    aide: 'La définition de l’addition, puis deux calculs dans ℝ.',
+    corrige: [
+      { path: [], rule: 'cadd', expl: 'L’addition va de soi : composante à composante, comme des déplacements qu’on enchaîne dans le plan.' },
+      { path: [0], rule: 'calcr', expl: 'Chaque composante se calcule dans ℝ, le corps bâti au chapitre 8 : 2 + 1 = 3.' },
+      { path: [1], rule: 'calcr', expl: 'Et 1 + 3 = 4. Le couple (3, 4) : additionner des nombres plans, c’est additionner des flèches. ∎' },
+    ],
+  },
+  {
+    titre: '2. Le moment de vérité : i² = −1',
+    depart: fois(cpl(num(0), num(1)), cpl(num(0), num(1))), but: cpl(num(-1), num(0)),
+    regles: ['cmul', 'calcr'],
+    aide: 'i := (0,1). Appliquez la définition du produit, puis calculez chaque morceau — c’est l’encart central du chapitre, de vos mains.',
+    corrige: [
+      { path: [], rule: 'cmul', expl: 'Le calcul qui dissout trois siècles de malaise. La définition du produit, avec a = 0, b = 1, c = 0, d = 1 : (0·0 − 1·1, 0·1 + 1·0). Aucun acte de foi — une table de multiplication.' },
+      { path: [0, 0], rule: 'calcr', expl: '0·0 = 0, dans ℝ.' },
+      { path: [0, 1], rule: 'calcr', expl: '1·1 = 1.' },
+      { path: [0], rule: 'calcr', expl: '0 − 1 = −1 : la première composante. Le voilà, le « −1 impossible ».' },
+      { path: [1, 0], rule: 'calcr', expl: '0·1 = 0.' },
+      { path: [1, 1], rule: 'calcr', expl: '1·0 = 0.' },
+      { path: [1], rule: 'calcr', expl: '0 + 0 = 0. Résultat : (−1, 0) — le couple que le plongement identifie au réel −1. Vous venez de démontrer i² = −1 : un couple, deux définitions, six calculs. Rien d’imaginaire. ∎' },
+    ],
+  },
+  {
+    titre: '3. L’écriture du lycée, reconstruite : 3 + 2i = (3, 2)',
+    depart: plus(cpl(num(3), num(0)), fois(cpl(num(2), num(0)), cpl(num(0), num(1)))), but: cpl(num(3), num(2)),
+    regles: ['cadd', 'cmul', 'calcr'],
+    aide: 'D’abord le produit 2·i (la multiplication avant l’addition), puis la somme.',
+    corrige: [
+      { path: [1], rule: 'cmul', expl: 'On calcule d’abord (2,0)·(0,1) — le réel 2 fois le nombre i. La définition du produit donne (2·0 − 0·1, 2·1 + 0·0).' },
+      { path: [1, 0, 0], rule: 'calcr', expl: '2·0 = 0.' },
+      { path: [1, 0, 1], rule: 'calcr', expl: '0·1 = 0.' },
+      { path: [1, 0], rule: 'calcr', expl: '0 − 0 = 0.' },
+      { path: [1, 1, 0], rule: 'calcr', expl: '2·1 = 2.' },
+      { path: [1, 1, 1], rule: 'calcr', expl: '0·0 = 0.' },
+      { path: [1, 1], rule: 'calcr', expl: '2 + 0 = 2. Donc 2i = (0, 2) : le réel 2, hissé sur l’axe vertical.' },
+      { path: [], rule: 'cadd', expl: 'Reste l’addition : (3,0) + (0,2), composante à composante.' },
+      { path: [0], rule: 'calcr', expl: '3 + 0 = 3.' },
+      { path: [1], rule: 'calcr', expl: '0 + 2 = 2. L’écriture a + bi n’a rien de mystérieux : la somme 3 + 2i EST le couple (3, 2). ∎' },
+    ],
+  },
+  {
+    titre: '4. Deux quarts de tour : i·(i·z) = −z',
+    depart: fois(cpl(num(0), num(1)), fois(cpl(num(0), num(1)), cpl(num(2), num(1)))), but: cpl(num(-2), num(-1)),
+    regles: ['cmul', 'calcr'],
+    aide: 'Multipliez z = (2,1) par i, puis le résultat encore par i : chaque produit est un quart de tour, et deux quarts de tour font un demi-tour.',
+    corrige: [
+      { path: [1], rule: 'cmul', expl: 'Premier quart de tour : (0,1)·(2,1), par la définition du produit — (0·2 − 1·1, 0·1 + 1·2).' },
+      { path: [1, 0, 0], rule: 'calcr', expl: '0·2 = 0.' },
+      { path: [1, 0, 1], rule: 'calcr', expl: '1·1 = 1.' },
+      { path: [1, 0], rule: 'calcr', expl: '0 − 1 = −1.' },
+      { path: [1, 1, 0], rule: 'calcr', expl: '0·1 = 0.' },
+      { path: [1, 1, 1], rule: 'calcr', expl: '1·2 = 2.' },
+      { path: [1, 1], rule: 'calcr', expl: '0 + 2 = 2. Donc i·(2,1) = (−1, 2) : le point a tourné d’un quart de tour autour de l’origine — (a,b) est devenu (−b,a).' },
+      { path: [], rule: 'cmul', expl: 'Second quart de tour : i·(−1,2) — (0·(−1) − 1·2, 0·2 + 1·(−1)).' },
+      { path: [0, 0], rule: 'calcr', expl: '0·(−1) = 0.' },
+      { path: [0, 1], rule: 'calcr', expl: '1·2 = 2.' },
+      { path: [0], rule: 'calcr', expl: '0 − 2 = −2.' },
+      { path: [1, 0], rule: 'calcr', expl: '0·2 = 0.' },
+      { path: [1, 1], rule: 'calcr', expl: '1·(−1) = −1.' },
+      { path: [1], rule: 'calcr', expl: '0 + (−1) = −1. Bilan : (2,1) → (−1,2) → (−2,−1). Deux quarts de tour font un demi-tour : multiplier par i² = −1, c’est retourner le plan. L’image d’ouverture du chapitre est un calcul. ∎' },
+    ],
+  },
+  {
+    titre: '5. Le boss : z·z̄ = N(z) — l’arme du conjugué',
+    depart: fois(cpl(num(3), num(2)), cpl(num(3), num(-2))), but: cpl(num(13), num(0)),
+    regles: ['cmul', 'calcr'],
+    aide: 'z = (3,2), z̄ = (3,−2). Déroulez le produit : la partie imaginaire va s’annuler sous vos yeux, et 13 = 3² + 2².',
+    corrige: [
+      { path: [], rule: 'cmul', expl: 'Le conjugué z̄ = (3,−2) est le symétrique de z par rapport à la droite réelle. La définition du produit donne (3·3 − 2·(−2), 3·(−2) + 2·3).' },
+      { path: [0, 0], rule: 'calcr', expl: '3·3 = 9 — le a² de N(z).' },
+      { path: [0, 1], rule: 'calcr', expl: '2·(−2) = −4.' },
+      { path: [0], rule: 'calcr', expl: '9 − (−4) = 13 : soustraire −4, c’est ajouter 4 — le signe du conjugué transforme ac − bd en a² + b². Voilà pourquoi 13 = 3² + 2² = N(z).' },
+      { path: [1, 0], rule: 'calcr', expl: '3·(−2) = −6.' },
+      { path: [1, 1], rule: 'calcr', expl: '2·3 = 6.' },
+      { path: [1], rule: 'calcr', expl: '−6 + 6 = 0 : la partie imaginaire s’annule EXACTEMENT — ad + bc devient −ab + ba. Résultat : (13, 0), le réel N(z). C’est cette annulation qui fournit l’inverse : z⁻¹ = z̄/N(z), la formule du lycée. ∎' },
+    ],
+  },
+];
+
+/* ---- Modulo (chapitre 16) : l'horloge ---- */
+
+const REGLES_MODULO: Rule[] = [
+  { id: 'madd', nom: '[a] + [b] = [a+b] — l’addition des classes, bien définie (démontré au chapitre)', lhs: plus(cl(v('a')), cl(v('b'))), rhs: cl(plus(v('a'), v('b'))) },
+  { id: 'mmul', nom: '[a] × [b] = [ab] — la multiplication des classes, bien définie (démontré au chapitre)', lhs: modfois(cl(v('a')), cl(v('b'))), rhs: cl(modfois(v('a'), v('b'))) },
+  { id: 'calcz', nom: 'calcul dans ℤ — l’arithmétique du chapitre 6, sur les représentants', eval: evalArith },
+  { id: 'red12', nom: '[a] = [r] (mod 12) — division euclidienne par 12 : a = 12q + r, 0 ≤ r < 12 (ch. 15)', eval: redMod(12) },
+  { id: 'red6', nom: '[a] = [r] (mod 6) — division euclidienne par 6 : a = 6q + r, 0 ≤ r < 6 (ch. 15)', eval: redMod(6) },
+  { id: 'red7', nom: '[a] = [r] (mod 7) — division euclidienne par 7 : a = 7q + r, 0 ≤ r < 7 (ch. 15)', eval: redMod(7) },
+  { id: 'red5', nom: '[a] = [r] (mod 5) — division euclidienne par 5 : a = 5q + r, 0 ≤ r < 5 (ch. 15)', eval: redMod(5) },
+];
+
+const EXOS_MODULO: Ex[] = [
+  {
+    titre: '1. L’horloge : [10] + [5] = [3] dans ℤ/12ℤ',
+    depart: plus(cl(num(10)), cl(num(5))), but: cl(num(3)),
+    regles: ['madd', 'calcz', 'red12'],
+    aide: 'Additionnez les classes, calculez dans ℤ, puis laissez la division euclidienne ramener l’aiguille sur le cadran.',
+    corrige: [
+      { path: [], rule: 'madd', expl: 'L’addition des classes se calcule sur les représentants : [10] + [5] = [10 + 5]. C’est légitime parce que le chapitre a DÉMONTRÉ qu’elle est bien définie — le résultat ne dépend pas des représentants choisis.' },
+      { path: [0], rule: 'calcz', expl: 'Dans ℤ : 10 + 5 = 15.' },
+      { path: [], rule: 'red12', expl: 'Mais sur un cadran de 12 heures, 15 heures c’est 3 heures : la division euclidienne écrit 15 = 12·1 + 3, donc [15] = [3]. L’aiguille est retombée — c’est toute l’arithmétique de l’horloge. ∎' },
+    ],
+  },
+  {
+    titre: '2. Le déraillement : [2] × [3] = [0] dans ℤ/6ℤ',
+    depart: modfois(cl(num(2)), cl(num(3))), but: cl(num(0)),
+    regles: ['mmul', 'calcz', 'red6'],
+    aide: 'Multipliez, calculez, réduisez : deux classes non nulles dont le produit est nul.',
+    corrige: [
+      { path: [], rule: 'mmul', expl: 'La multiplication des classes, elle aussi bien définie : [2] × [3] = [2 × 3].' },
+      { path: [0], rule: 'calcz', expl: 'Dans ℤ : 2 × 3 = 6.' },
+      { path: [], rule: 'red6', expl: 'Et modulo 6 : [6] = [0], car 6 = 6·1 + 0. Contemplez le désastre : [2] ≠ [0], [3] ≠ [0], et pourtant [2]×[3] = [0]. L’intégrité de ℤ — un produit de non-nuls n’est jamais nul — est MORTE dans ℤ/6ℤ. Vous venez de fabriquer des diviseurs de zéro. ∎' },
+    ],
+  },
+  {
+    titre: '3. La simplification est morte : [2] × [4] = [2] dans ℤ/6ℤ',
+    depart: modfois(cl(num(2)), cl(num(4))), but: cl(num(2)),
+    regles: ['mmul', 'calcz', 'red6'],
+    aide: 'Calculez [2]×[4] — et méditez : [2]×[1] = [2] aussi, et pourtant [4] ≠ [1].',
+    corrige: [
+      { path: [], rule: 'mmul', expl: '[2] × [4] = [2 × 4], par la multiplication des classes.' },
+      { path: [0], rule: 'calcz', expl: 'Dans ℤ : 2 × 4 = 8.' },
+      { path: [], rule: 'red6', expl: '8 = 6·1 + 2, donc [8] = [2]. Or [2] × [1] = [2] aussi… et [4] ≠ [1] ! La règle « 2x = 2y ⟹ x = y », si familière dans ℤ, est morte ici : le facteur [2] ne se simplifie pas. La faute aux diviseurs de zéro de l’exercice 2 — et c’est eux que le théorème central va exiler. ∎' },
+    ],
+  },
+  {
+    titre: '4. Bézout, machine à inverses : [3] × [5] = [1] dans ℤ/7ℤ',
+    depart: modfois(cl(num(3)), cl(num(5))), but: cl(num(1)),
+    regles: ['mmul', 'calcz', 'red7'],
+    aide: '7 est premier : Bézout garantit un inverse à [3]. Le voici — vérifiez qu’il fait le travail.',
+    corrige: [
+      { path: [], rule: 'mmul', expl: '7 est premier, donc ℤ/7ℤ est un CORPS : toute classe non nulle a un inverse. D’où sort [5] ? De Bézout : 3·5 + 7·(−2) = 1, donc [3]·[5] = [1] modulo 7. Vérifions-le par calcul : [3] × [5] = [3 × 5].' },
+      { path: [0], rule: 'calcz', expl: 'Dans ℤ : 3 × 5 = 15.' },
+      { path: [], rule: 'red7', expl: '15 = 7·2 + 1, donc [15] = [1]. C’est fait : [5] est l’inverse de [3]. « Bézout est devenu une machine à inverses » — l’identité au + pv = 1 ne dit pas seulement que l’inverse existe, elle vous le tend en main. ∎' },
+    ],
+  },
+  {
+    titre: '5. Le boss : Fermat vécu — [3]⁴ = [1] dans ℤ/5ℤ',
+    depart: modfois(modfois(modfois(cl(num(3)), cl(num(3))), cl(num(3))), cl(num(3))), but: cl(num(1)),
+    regles: ['mmul', 'calcz', 'red5'],
+    aide: 'Le petit théorème de Fermat annonce a^(p−1) ≡ 1. Multipliez de gauche à droite en réduisant à chaque tour, et regardez l’aiguille tourner : [4], [2], [1].',
+    corrige: [
+      { path: [0, 0], rule: 'mmul', expl: 'Le petit théorème de Fermat promet [3]⁴ = [1] dans ℤ/5ℤ — vérifions-le pied à pied. D’abord [3] × [3] = [3 × 3].' },
+      { path: [0, 0, 0], rule: 'calcz', expl: '3 × 3 = 9.' },
+      { path: [0, 0], rule: 'red5', expl: '9 = 5·1 + 4 : [3]² = [4]. Premier tour de cadran.' },
+      { path: [0], rule: 'mmul', expl: 'Puis [4] × [3] = [4 × 3].' },
+      { path: [0, 0], rule: 'calcz', expl: '4 × 3 = 12.' },
+      { path: [0], rule: 'red5', expl: '12 = 5·2 + 2 : [3]³ = [2]. L’aiguille tourne — [3], [4], [2]… sans jamais retomber sur [0] : 5 est premier, pas de diviseurs de zéro.' },
+      { path: [], rule: 'mmul', expl: 'Enfin [2] × [3] = [2 × 3].' },
+      { path: [0], rule: 'calcz', expl: '2 × 3 = 6.' },
+      { path: [], rule: 'red5', expl: '6 = 5·1 + 1 : [3]⁴ = [1]. ∎ — Fermat (1640), démontré au chapitre par Lagrange (1770) dans le groupe des inversibles d’ordre p − 1 = 4 : l’ordre de [3] divise 4, donc [3]⁴ = [1]. Vous venez de VIVRE ce que le théorème garantit d’avance — pour tout p premier et tout a non divisible par p.' },
+    ],
+  },
+];
+
 const CONFIGS: Record<string, Config> = {
   peano: { cle: 'cqfd-ceq-peano-v1', regles: REGLES_PEANO, exos: EXOS_PEANO, show: showPeano, parse: parsePeano },
   groupe: { cle: 'cqfd-ceq-groupe-v1', regles: REGLES_GROUPE, exos: EXOS_GROUPE, show: showGroupe, parse: parseGroupe },
+  relatif: { cle: 'cqfd-ceq-relatif-v1', regles: REGLES_RELATIF, exos: EXOS_RELATIF, show: showStd, parse: parseNombres },
+  complexe: { cle: 'cqfd-ceq-complexe-v1', regles: REGLES_COMPLEXE, exos: EXOS_COMPLEXE, show: showStd, parse: parseNombres },
+  modulo: { cle: 'cqfd-ceq-modulo-v1', regles: REGLES_MODULO, exos: EXOS_MODULO, show: showStd, parse: parseNombres },
 };
 
 /* --------------------------------- moteur --------------------------------- */
@@ -362,8 +675,18 @@ function init(root: HTMLElement): void {
   /** Applique une règle au chemin donné. Renvoie une erreur, ou null. */
   function applyRule(rule: Rule, path: number[], dir: 'lr' | 'rl', inputTerm: T | null): string | null {
     const sub = getAt(cur(), path);
-    const pat = dir === 'lr' ? rule.lhs : rule.rhs;
-    const out = dir === 'lr' ? rule.rhs : rule.lhs;
+    if (rule.eval) {
+      const res = rule.eval(sub);
+      if (res === null) return `« ${rule.nom.split('—')[0].trim()} » ne s’applique pas au sous-terme sélectionné.`;
+      const nouveau = replaceAt(cur(), path, res);
+      snapshot();
+      chaine = [...chaine, { term: nouveau, regle: rule.nom.split('—')[0].trim() }];
+      selPath = null;
+      if (eq(nouveau, cfg.exos[exIdx].but)) { done = true; markSolved(); }
+      return null;
+    }
+    const pat = (dir === 'lr' ? rule.lhs : rule.rhs)!;
+    const out = (dir === 'lr' ? rule.rhs : rule.lhs)!;
     const sigma: Sub = {};
     if (!match(pat, sub, sigma)) return `Le motif « ${cfg.show(pat).replace(/\$/g, '')} » ne correspond pas au sous-terme sélectionné.`;
     const missing = [...varsOf(out)].filter((x) => !(x in sigma));
@@ -385,8 +708,8 @@ function init(root: HTMLElement): void {
     if (done || demo) return;
     if (selPath === null) { render('Sélectionnez d’abord un sous-terme (cliquez dans l’expression courante).', true); return; }
     const sub = getAt(cur(), selPath);
-    const mLR = match(rule.lhs, sub, {});
-    const mRL = match(rule.rhs, sub, {});
+    const mLR = rule.eval ? rule.eval(sub) !== null : match(rule.lhs!, sub, {});
+    const mRL = rule.eval ? false : match(rule.rhs!, sub, {});
     if (!mLR && !mRL) { render(`« ${rule.nom.split('—')[0].trim()} » ne s’applique pas ici, dans aucun sens.`, true); return; }
     if (mLR && mRL) { pending = { rule, path: selPath, needDir: true, needVar: null }; render('Cette règle s’applique dans les deux sens : lequel ?'); return; }
     const dir: 'lr' | 'rl' = mLR ? 'lr' : 'rl';
@@ -428,7 +751,7 @@ function init(root: HTMLElement): void {
     let dir = step.dir;
     if (!dir) {
       const sub = getAt(cur(), step.path);
-      dir = match(rule.lhs, sub, {}) ? 'lr' : 'rl';
+      dir = rule.eval || match(rule.lhs!, sub, {}) ? 'lr' : 'rl';
     }
     const inputTerm = step.input ? (cfg.parse(step.input) as T) : null;
     return applyRule(rule, step.path, dir, inputTerm);
@@ -477,7 +800,7 @@ function init(root: HTMLElement): void {
     // 3. sens éventuel
     const rule = cfg.regles.find((r) => r.id === step.rule)!;
     const sub = getAt(cur(), step.path);
-    const both = match(rule.lhs, sub, {}) && match(rule.rhs, sub, {});
+    const both = !rule.eval && match(rule.lhs!, sub, {}) && match(rule.rhs!, sub, {});
     if (both) {
       pending = { rule, path: step.path, needDir: true, needVar: null };
       render(head);
@@ -544,15 +867,25 @@ function init(root: HTMLElement): void {
       if (parens) S_(')');
     };
     if (x.f === 'S') { S_('S('); span.appendChild(renderTerm(x.a[0], [...path, 0], interactive)); S_(')'); }
-    else if (x.f === '+' || x.f === '×' || x.f === '·') {
-      const prec = (f: string) => (f === '×' ? 2 : f === '+' ? 1 : 1);
-      const needL = (c: T) => (c.f === '+' || c.f === '×' || c.f === '·') && prec(c.f) < prec(x.f);
-      const needR = (c: T) => (c.f === '+' || c.f === '×' || c.f === '·') && prec(c.f) <= prec(x.f);
+    else if (x.f === 'cpl' || x.f === 'zc') {
+      S_(x.f === 'zc' ? '[(' : '(');
+      span.appendChild(renderTerm(x.a[0], [...path, 0], interactive));
+      S_(', ');
+      span.appendChild(renderTerm(x.a[1], [...path, 1], interactive));
+      S_(x.f === 'zc' ? ')]' : ')');
+    }
+    else if (x.f === 'cl') { S_('['); span.appendChild(renderTerm(x.a[0], [...path, 0], interactive)); S_(']'); }
+    else if (x.f === '+' || x.f === '−' || x.f === '×' || x.f === '·') {
+      const prec = (f: string) => (f === '×' || f === '·' ? 2 : 1);
+      const isOp = (c: T) => c.f === '+' || c.f === '−' || c.f === '×' || c.f === '·';
+      const neg = (c: T) => /^-\d/.test(c.f);
+      const needL = (c: T) => (isOp(c) && prec(c.f) < prec(x.f)) || neg(c);
+      const needR = (c: T) => (isOp(c) && prec(c.f) <= prec(x.f)) || neg(c);
       kid(0, needL(x.a[0]));
       S_(x.f === '·' ? '·' : ` ${x.f} `);
       kid(1, needR(x.a[1]));
     } else if (x.f === '⁻¹') { kid(0, x.a[0].a.length > 0); S_('⁻¹'); }
-    else S_(x.f);
+    else S_(x.f.replace('-', '−'));
     if (interactive) {
       span.addEventListener('click', (ev) => {
         ev.stopPropagation();
@@ -618,8 +951,8 @@ function init(root: HTMLElement): void {
     dirRow.hidden = !(pending && pending.needDir);
     if (pending?.needDir) {
       const r = pending.rule;
-      root.querySelector<HTMLElement>('[data-dir="lr"]')!.textContent = `${cfg.show(r.lhs).replace(/\$/g, '')} → ${cfg.show(r.rhs).replace(/\$/g, '')}`;
-      root.querySelector<HTMLElement>('[data-dir="rl"]')!.textContent = `${cfg.show(r.rhs).replace(/\$/g, '')} → ${cfg.show(r.lhs).replace(/\$/g, '')}`;
+      root.querySelector<HTMLElement>('[data-dir="lr"]')!.textContent = `${cfg.show(r.lhs!).replace(/\$/g, '')} → ${cfg.show(r.rhs!).replace(/\$/g, '')}`;
+      root.querySelector<HTMLElement>('[data-dir="rl"]')!.textContent = `${cfg.show(r.rhs!).replace(/\$/g, '')} → ${cfg.show(r.lhs!).replace(/\$/g, '')}`;
     }
     const inputRow = root.querySelector<HTMLElement>('[data-inputrow]')!;
     inputRow.hidden = !(pending && pending.needVar);
