@@ -1,0 +1,21 @@
+name: Certificat Lean
+
+on:
+  push:
+    branches: [main]
+    paths: ['lean/**']
+  pull_request:
+    paths: ['lean/**']
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer elan
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Vérifier les preuves (lake build)
+        working-directory: lean
+        run: lake build

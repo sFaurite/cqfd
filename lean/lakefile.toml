@@ -1,0 +1,5 @@
+name = "cqfd"
+defaultTargets = ["Cqfd"]
+
+[[lean_lib]]
+name = "Cqfd"

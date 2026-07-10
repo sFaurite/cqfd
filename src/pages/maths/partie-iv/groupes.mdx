@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les groupes : la symétrie axiomatisée"
 chapter: groupes
-description: "Axiomes de groupe (portée du quantificateur de e soignée) ; D₃ modélisé par les six bijections de {1,2,3} ; six micro-théorèmes (dont e⁻¹=e et double inversion) ; sous-groupes ; classes latérales (nommées) ; lemmes de comptage fini démontrés ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément et sous-groupe engendré (minimalité démontrée, sans division euclidienne) ; D₃ plus petit groupe non abélien (démontré)."
+description: "Axiomes de groupe (portée du quantificateur de e soignée) ; D₃ modélisé par les six bijections de {1,2,3} ; six micro-théorèmes (dont e⁻¹=e et double inversion) ; sous-groupes ; classes latérales (nommées) ; lemmes de comptage fini démontrés ; THÉORÈME DE LAGRANGE démontré ; ordre d’un élément et sous-groupe engendré (minimalité démontrée, sans division euclidienne) ; D₃ plus petit groupe non abélien (démontré) ; certificat Lean 4 (définition, six théorèmes, critère) + trois exercices à trous dans l’éditeur en ligne."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -232,6 +232,18 @@ $$x\,y = (x\,y)^{-1} = y^{-1}\,x^{-1} = y\,x$$
 (théorème 4 au milieu) — abélien encore.
 
 Tout groupe de moins de six éléments est donc abélien ; et $D_3$, d'ordre $6$, ne l'est pas — $r\circ s \neq s\circ r$, calculé sur les sommets au début du chapitre. Aucun groupe non abélien n'existe en dessous de six éléments : le triangle est le premier endroit des mathématiques où l'ordre des gestes se met à compter. <Badge niveau="demontre">Démontré avec les seuls outils du chapitre : Lagrange, l'ordre d'un élément, la loi des exposants, les six micro-théorèmes et le lemme B.</Badge>
+
+</Encart>
+
+<Encart type="plusloin" titre="Le certificat machine : ce chapitre est vérifié en Lean">
+
+Ce cours cite deux grandes preuves vérifiées par ordinateur — les quatre couleurs dans Coq, l'indépendance de CH dans Lean. Ce chapitre-ci va plus loin : son cœur déductif est **lui-même formalisé** dans l'assistant de preuve Lean 4 — la définition du groupe (portée du quantificateur de $e$ comprise), les **six micro-théorèmes** et le **critère du sous-groupe**, chacun avec la preuve du chapitre, pas une autre. Le compilateur revérifie chaque pas à chaque modification du dépôt. <Badge niveau="demontre">Preuves vérifiées mécaniquement : <a href="https://github.com/sFaurite/cqfd/blob/main/lean/Cqfd/Groupes.lean" target="_blank" rel="noopener">le fichier Lean ↗</a>. Honnêteté fondationnelle : Lean repose sur la théorie des types, pas sur ZF — la confiance est *déplacée* vers un autre socle (et le noyau de Lean), pas éliminée. Le neutre et l'inverse y sont des données plutôt que des $\exists$ : légitime, précisément parce que les théorèmes 1 et 2 en démontrent l'unicité.</Badge>
+
+**À vous.** Trois théorèmes du chapitre vous attendent dans l'éditeur Lean en ligne, énoncés avec un trou (`sorry`) à remplacer par votre preuve — la vérification est instantanée :
+
+- <a href="https://live.lean-lang.org/#url=https%3A%2F%2Fraw.githubusercontent.com%2FsFaurite%2Fcqfd%2Fmain%2Flean%2Fexercices%2FExo1_InverseDuNeutre.lean" target="_blank" rel="noopener">Exercice 1 ↗</a> — $e^{-1} = e$ (théorème 5, une ligne).
+- <a href="https://live.lean-lang.org/#url=https%3A%2F%2Fraw.githubusercontent.com%2FsFaurite%2Fcqfd%2Fmain%2Flean%2Fexercices%2FExo2_DoubleInversion.lean" target="_blank" rel="noopener">Exercice 2 ↗</a> — $(a^{-1})^{-1} = a$ (théorème 6, une ligne aussi).
+- <a href="https://live.lean-lang.org/#url=https%3A%2F%2Fraw.githubusercontent.com%2FsFaurite%2Fcqfd%2Fmain%2Flean%2Fexercices%2FExo3_SimplificationDroite.lean" target="_blank" rel="noopener">Exercice 3 ↗</a> — la simplification *à droite* : celle que ce chapitre n'a jamais eu besoin de poser — à vous de montrer qu'il n'y perdait rien.
 
 </Encart>
 
