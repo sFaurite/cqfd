@@ -37,7 +37,7 @@ Le programme du chapitre, en quatre temps — car on ne construit encore aucun o
 
 Avant même de poser le moindre axiome, il faut fixer quelque chose de plus profond : ce que **« déduire » veut dire**. Les axiomes seront nos positions de départ ; la logique, elle, dit quels déplacements sont permis. Elle vient donc *avant* tout le reste — c'est la pierre de fondation sur laquelle les axiomes eux-mêmes reposeront.
 
-Concrètement, la logique se donne par des **règles d'inférence** : des patrons de déduction. Chaque règle dit : « si vous avez déjà établi *ceci*, vous avez le droit d'écrire *cela* ». La liste qui suit est notre boîte à outils **complète** — chaque démonstration de ce site, aussi savante soit-elle, n'est qu'un enchaînement fini de ces gestes-là. Le principe d'organisation est simple : chaque connecteur vient avec une règle pour l'**introduire** (comment *prouver* un énoncé de cette forme) et une pour l'**éliminer** (comment *se servir* d'un énoncé de cette forme).
+Concrètement, la logique se donne par des **règles d'inférence** : des patrons de déduction. Chaque règle dit : « si vous avez déjà établi *ceci*, vous avez le droit d'écrire *cela* ». La liste qui suit est notre boîte à outils **complète**, au sens précis suivant : chaque démonstration de ce site, aussi savante soit-elle, n'est qu'un enchaînement fini de ces gestes-là. (Leur mise en forme intégralement formelle — portée des hypothèses, conditions sur les variables — est le métier des traités de logique ; nous signalons ces conditions chaque fois qu'elles jouent.) Le principe d'organisation est simple : chaque connecteur vient avec une règle pour l'**introduire** (comment *prouver* un énoncé de cette forme) et une pour l'**éliminer** (comment *se servir* d'un énoncé de cette forme).
 
 **L'implication $\Rightarrow$**
 
@@ -51,7 +51,7 @@ Concrètement, la logique se donne par des **règles d'inférence** : des patron
 
 **La disjonction $\lor$**
 
-- **Introduction** — de $A$, on déduit $A \lor B$, quel que soit $B$ : affirmer moins précis est toujours permis.
+- **Introduction** — de $A$, on déduit $A \lor B$ ; de $B$, on déduit de même $A \lor B$ : affirmer moins précis est toujours permis, par l'un ou l'autre côté. (Les deux versions sont nécessaires : la commutativité du « ou » n'est pas posée, elle se *déduira* — précisément d'elles.)
 - **Élimination**, dite **raisonnement par cas** — de $A \lor B$, de $A \Rightarrow C$ et de $B \Rightarrow C$, on déduit $C$ : si les deux chemins mènent à la même conclusion, la conclusion tient sans savoir quel chemin est le bon.
 
 **La négation $\lnot$**
@@ -61,8 +61,8 @@ Concrètement, la logique se donne par des **règles d'inférence** : des patron
 
 **Les quantificateurs $\forall$ et $\exists$**
 
-- **Instanciation** (élimination de $\forall$) — de « pour tout $x$, $P(x)$ », on déduit $P(t)$ pour n'importe quel objet $t$ : ce qui vaut pour tous vaut pour chacun.
-- **Généralisation** (introduction de $\forall$) — si l'on a démontré $P(x)$ pour un $x$ **quelconque**, sur lequel on n'a rien supposé de particulier, on conclut « pour tout $x$, $P(x)$ ». C'est le sens exact du rituel « soit $x$ un entier… » qui ouvre tant de preuves.
+- **Instanciation** (élimination de $\forall$) — de « pour tout $x$, $P(x)$ », on déduit $P(t)$ pour n'importe quel **terme** $t$ — une expression du langage désignant un objet : ce qui vaut pour tous vaut pour chacun. (Condition tacite, ici comme dans la substitution des égaux : le remplacement ne doit pas faire « capturer » une variable de $t$ par un quantificateur de $P$ — nous le signalerons si le cas se présente.)
+- **Généralisation** (introduction de $\forall$) — si l'on a démontré $P(x)$ pour un $x$ **quelconque**, sur lequel on n'a rien supposé de particulier (en particulier, $x$ ne figure dans aucune hypothèse encore ouverte), on conclut « pour tout $x$, $P(x)$ ». C'est le sens du rituel « soit $x$… » qui ouvre tant de preuves — et quand on écrit « soit $x$ *un entier* », on généralise en réalité sur une implication : « pour tout $x$, si $x$ est un entier, alors $P(x)$ », l'appartenance jouant le rôle d'hypothèse locale.
 - **Témoin** (introduction de $\exists$) — de $P(t)$ pour un objet explicite $t$, on déduit « il existe $x$ tel que $P(x)$ ».
 - **Élimination de $\exists$** — de « il existe $x$ tel que $P(x)$ », on s'autorise à **nommer** un tel objet (« soit $x_0$ tel que $P(x_0)$ ») et à raisonner avec lui — à condition de ne rien supposer d'autre sur lui que $P(x_0)$, et que la conclusion finale ne mentionne plus $x_0$.
 
@@ -75,14 +75,14 @@ Concrètement, la logique se donne par des **règles d'inférence** : des patron
 
 - **Tiers exclu** — pour tout énoncé $A$, on admet $A \lor \lnot A$ ; de façon équivalente, de $\lnot\lnot A$ on déduit $A$ (**élimination de la double négation**). C'est *elle* qui permet à la preuve par l'absurde d'établir des énoncés positifs, et non seulement des négations — et c'est exactement la règle que la logique intuitionniste refuse (voir la preuve par l'absurde, plus bas).
 
-Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, les règles de l'égalité, plus le tiers exclu — s'appelle la **déduction naturelle** classique ; le cadre complet porte le nom de **logique classique du premier ordre avec égalité**, et la présentation par règles est due à Gerhard Gentzen (1934). D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : elles autorisent exactement les mêmes déductions. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
+Ce système — introduction et élimination pour chaque connecteur et chaque quantificateur, les règles de l'égalité, plus le tiers exclu — s'appelle la **déduction naturelle** classique ; le cadre complet porte le nom de **logique classique du premier ordre avec égalité**, et la présentation par règles est due à Gerhard Gentzen (1934). D'autres présentations existent (systèmes « à la Hilbert », calcul des séquents) : pour un même langage, elles autorisent exactement les mêmes déductions, à traduction près. <Badge niveau="admis">Ces règles sont notre **cadre**, posé et non démontré : elles *définissent* ce que « déduire » signifie dans tout ce site. On peut démontrer des propriétés *de* ce système (sa cohérence, sa complétude — Gödel, 1929), mais seulement de l'extérieur, en utilisant… de la logique.</Badge>
 
 ## Le vocabulaire de l'édifice
 
 Voilà pour le moteur. Reste à nommer les pièces du jeu : quatre mots structurent toute mathématique déductive.
 
 - **Axiome** — un énoncé **admis sans démonstration**. C'est un choix, posé au départ. Exemple à venir : « deux ensembles ayant les mêmes éléments sont égaux ».
-- **Définition** — une **convention de nommage**. Elle n'affirme rien sur le monde ; elle abrège. Dire « un nombre est *pair* s'il s'écrit $2k$ » ne se démontre pas : c'est un raccourci de langage. Une définition ne peut pas être « fausse », seulement utile ou maladroite.
+- **Définition** — une **convention de nommage**. Elle n'affirme rien sur le monde ; elle abrège. Dire « un nombre est *pair* s'il s'écrit $2k$ » ne se démontre pas : c'est un raccourci de langage. Une définition ne peut pas être « fausse », seulement utile ou maladroite. Une obligation l'accompagne pourtant : quand elle nomme *un objet* (« l'unique $x$ tel que… ») ou *une opération*, l'existence, l'unicité ou le caractère **bien défini** doivent avoir été démontrés *avant* — ce sera un refrain du cours, du théorème de récursion aux opérations sur les quotients.
 - **Théorème** — un énoncé **démontré** à partir des axiomes et des résultats déjà établis. C'est le seul type d'énoncé qui « se gagne ».
 - **Lemme** et **corollaire** — des théorèmes, mais étiquetés par leur rôle : un *lemme* est un résultat technique, marche d'escalier vers un théorème plus important ; un *corollaire* est une conséquence quasi immédiate d'un théorème qu'on vient d'établir.
 
@@ -94,7 +94,7 @@ Pensez aux axiomes comme aux **règles initiales** des échecs : le placement de
 
 ## Qu'est-ce qu'une démonstration ?
 
-Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit obtenu des précédents par l'une des règles d'inférence de la section « La logique d'abord ». Le dernier énoncé de la suite est le théorème. Rien de magique : une chaîne de pas, chacun justifié.
+Une **démonstration** est une **suite finie d'énoncés**, où chacun est soit un axiome, soit un résultat déjà établi, soit une **hypothèse locale** ouverte le temps d'un raisonnement — le fameux « supposons $A$ » —, soit obtenu des précédents par l'une des règles d'inférence de la section « La logique d'abord ». Les hypothèses locales ne restent pas ouvertes : les règles qui les appellent les **referment** — la preuve sous hypothèse conclut $A \Rightarrow B$ et décharge $A$ ; l'absurde, le raisonnement par cas et l'élimination de $\exists$ referment les leurs de même. Le dernier énoncé de la suite est le théorème, et il ne dépend d'aucune hypothèse restée ouverte : seulement des axiomes et des hypothèses annoncées dans son propre énoncé. Rien de magique : une chaîne de pas, chacun justifié.
 
 En pratique, on n'improvise pas : quelques **grandes stratégies** organisent presque toutes les démonstrations. Les voici, chacune avec son schéma et un exemple minuscule — les mini-exemples empruntent les entiers du lycée, qu'on ne construira rigoureusement qu'en partie II ; ils illustrent la *forme* des raisonnements, rien de plus.
 
@@ -102,7 +102,7 @@ En pratique, on n'improvise pas : quelques **grandes stratégies** organisent pr
 
 **Preuve par contraposée.** Pour montrer $A \Rightarrow B$, on montre $\lnot B \Rightarrow \lnot A$, qui lui est **logiquement équivalent**. Utile quand la négation de la conclusion est plus maniable que l'hypothèse. <Badge niveau="demontre">L'équivalence entre $A \Rightarrow B$ et $\lnot B \Rightarrow \lnot A$ est une tautologie de la logique classique.</Badge> *Mini-exemple — « si $n^2$ est pair, alors $n$ est pair » : par contraposée, on suppose $n$ impair, $n = 2k+1$, et l'on calcule $n^2 = 4k^2 + 4k + 1 = 2(2k^2+2k) + 1$ : impair. C'est exactement le pas utilisé à l'étape 3 de la preuve de l'irrationalité de $\sqrt 2$, dans l'encart ci-dessous.*
 
-**Preuve par l'absurde.** On suppose la négation de ce qu'on veut prouver, et on en déduit une contradiction (un énoncé et sa négation). La contradiction étant interdite, l'hypothèse de départ était fausse. C'est la règle d'introduction de $\lnot$ ; pour conclure un énoncé *positif*, il faut en plus le tiers exclu — les deux sont posés dans la section sur la logique. <Badge niveau="demontre">Valide en logique classique ; en logique intuitionniste, l'absurde ne prouve que les négations, pas les énoncés positifs.</Badge> *Exemple complet : l'irrationalité de $\sqrt 2$, déroulée dans l'encart ci-dessous.*
+**Preuve par l'absurde.** On suppose la négation de ce qu'on veut prouver, et on en déduit une contradiction (un énoncé et sa négation) : cela démontre la *négation* de l'hypothèse supposée — c'est la règle d'introduction de $\lnot$. Pour conclure un énoncé *positif* $A$, on a alors établi $\lnot\lnot A$, et il faut en plus l'élimination de la double négation, c'est-à-dire le tiers exclu — les deux sont posés dans la section sur la logique. <Badge niveau="demontre">Valide en logique classique ; en logique intuitionniste, l'absurde ne prouve que les négations, pas les énoncés positifs.</Badge> *Exemple complet : l'irrationalité de $\sqrt 2$, déroulée dans l'encart ci-dessous.*
 
 **Raisonnement par cas.** Pour exploiter un « ou » : de $A \lor B$, si $A$ mène à la conclusion et si $B$ y mène aussi, la conclusion tient — sans qu'on sache lequel des deux cas est réalisé. <Badge niveau="admis">C'est mot pour mot la règle d'élimination de $\lor$ : elle fait partie du cadre logique posé plus haut.</Badge> *Mini-exemple — « $n(n+1)$ est toujours pair » : $n$ est pair ou impair ; s'il est pair, le produit l'est ; s'il est impair, $n+1$ est pair, et le produit l'est encore.*
 
@@ -128,7 +128,7 @@ $$p^2 = 2\,q^2.$$
 
 L'hypothèse « $\sqrt 2$ est rationnel » mène à une contradiction : elle est donc fausse. $\boxed{\sqrt 2 \notin \mathbb{Q}}$
 
-<Badge niveau="demontre">Théorème démontré (déjà connu des Grecs). Ici c'est une *esquisse* illustrative : elle mobilise les entiers et la divisibilité, qu'on ne construira rigoureusement qu'après avoir posé ZF.</Badge>
+<Badge niveau="demontre">Théorème démontré (déjà connu des Grecs). Ici c'est une *esquisse* illustrative : elle mobilise les entiers, la divisibilité et l'existence d'une fraction « réduite », qu'on ne construira qu'après avoir posé ZF. La preuve **du cours**, elle, vit au <Prereq href="/maths/partie-ii/reels-dedekind">chapitre 8</Prereq> : même absurde, mêmes parités, mais fondée sur la forme à *dénominateur minimal* démontrée au chapitre 7 — sans pgcd.</Badge>
 
 </Encart>
 
@@ -138,7 +138,7 @@ On ne pose pas des axiomes au hasard. Quatre qualités les départagent.
 
 1. **Cohérence (non-contradiction).** Le système ne doit jamais permettre de démontrer à la fois un énoncé et sa négation. **C'est de loin la plus importante** : un système incohérent démontre *tout* (du faux on déduit n'importe quoi), il ne dit donc plus rien. <Badge niveau="demontre">Qu'un système incohérent démontre tout est un théorème élémentaire de logique (principe d'explosion).</Badge>
 2. **Fécondité.** Le système doit engendrer des mathématiques riches — c'est le critère annoncé dès l'ouverture de ce chapitre : un système cohérent mais stérile ne dit rien qui vaille la peine. <Badge niveau="admis">Critère méthodologique, pas mathématique : il ne se démontre pas, il se constate à l'usage.</Badge>
-3. **Indépendance.** Aucun axiome ne devrait être démontrable à partir des autres — sinon, ce n'est pas un axiome mais un théorème déguisé. C'est une qualité d'élégance, pas une nécessité. <Badge niveau="demontre">Notion standard ; l'indépendance d'un axiome se prouve par un modèle où il est faux et les autres vrais.</Badge>
+3. **Indépendance.** Aucun axiome ne devrait être démontrable à partir des autres — sinon il est **redondant** : toujours un axiome de la présentation choisie, mais aussi un théorème des autres. C'est une qualité d'élégance, pas une nécessité. <Badge niveau="demontre">Méta-théorème cité : un modèle où cet axiome est faux et les autres vrais prouve qu'aucune dérivation ne l'atteint — via le théorème de **correction** de la logique (tout énoncé dérivable est vrai dans tout modèle des hypothèses). <a href="https://fr.wikipedia.org/wiki/Correction_(logique)" target="_blank" rel="noopener">réf. ↗</a></Badge>
 4. **Complétude (idéal).** On aimerait que *tout* énoncé exprimable soit, soit démontrable, soit réfutable. C'est le rêve : aucune question laissée en suspens.
 
 <Encart type="rappel" titre="Attention : deux sens du mot « complétude »">
@@ -154,19 +154,19 @@ Il existe d'ailleurs des théories complètes au second sens — l'arithmétique
 
 ## Le grand tournant : Gödel (1931)
 
-Ce rêve est mort — non pas pour tout système (des théories modestes sont bel et bien complètes, l'encart ci-dessus en témoigne), mais pour tout système à la hauteur des mathématiques entières. Kurt Gödel a démontré deux théorèmes qui redéfinissent ce que « rigueur » veut dire. Une précision est indispensable pour qu'ils soient **exacts** : ils portent sur les systèmes **récursivement axiomatisables** — ceux dont la liste des axiomes peut être énumérée par un algorithme. C'est le cas de tous les systèmes d'axiomes que l'on utilise réellement.
+Ce rêve est mort — non pas pour tout système (des théories modestes sont bel et bien complètes, l'encart ci-dessus en témoigne), mais pour tout système à la hauteur des mathématiques entières. Kurt Gödel a démontré deux théorèmes qui redéfinissent ce que « rigueur » veut dire. Une précision est indispensable pour qu'ils soient **exacts** : ils portent sur les systèmes **récursivement axiomatisables** — ceux dont la liste des axiomes peut être énumérée par un algorithme. C'est le cas de tous les systèmes qui nous concerneront — l'arithmétique de Peano, ZF, ZFC.
 
 <Resultat label="Premier théorème d'incomplétude de Gödel">
 
 Tout système cohérent, récursivement axiomatisable et assez riche pour l'arithmétique contient un énoncé $G$ ni démontrable ni réfutable.
 
-<Badge niveau="demontre" slot="badge">Démontré par Gödel (1931) sous une hypothèse légèrement plus forte (l'ω-cohérence) ; la forme ci-dessus, sous la seule cohérence, est due à Rosser (1936). Jamais remis en cause. <a href="https://fr.wikipedia.org/wiki/Théorèmes_d'incomplétude_de_Gödel" target="_blank" rel="noopener">réf. ↗</a></Badge>
+<Badge niveau="demontre" slot="badge">Démontré par Gödel (1931) sous une hypothèse légèrement plus forte (l'ω-cohérence) ; la forme ci-dessus, sous la seule cohérence, est due à Rosser (1936). <a href="https://fr.wikipedia.org/wiki/Théorèmes_d'incomplétude_de_Gödel" target="_blank" rel="noopener">réf. ↗</a></Badge>
 
 </Resultat>
 
-Un tel énoncé $G$ est dit **indécidable** dans le système : ni prouvable, ni réfutable en son sein. De plus, dans l'interprétation **standard** (celle des entiers usuels $\mathbb{N}$), $G$ se trouve être **vrai** — bien qu'indémontrable. <Badge niveau="demontre">« Vrai dans $\mathbb{N}$ » est une affirmation *sémantique* (sur le modèle standard), distincte de « démontrable ».</Badge>
+Un tel énoncé $G$ est dit **indécidable** dans le système : ni prouvable, ni réfutable en son sein. De plus, l'énoncé $G$ **que la construction fabrique** se trouve être **vrai** dans l'interprétation **standard** (celle des entiers usuels $\mathbb{N}$) — bien qu'indémontrable, si le système est cohérent. Gare au raccourci inverse : sa négation $\lnot G$ est tout aussi indécidable, et *fausse* dans $\mathbb{N}$ — l'indécidabilité ne fait pas la vérité. <Badge niveau="demontre">« Vrai dans $\mathbb{N}$ » est une affirmation *sémantique* (sur le modèle standard), distincte de « démontrable » — et elle concerne le témoin $G$ construit, pas tout énoncé indécidable.</Badge>
 
-Autrement dit, dès qu'un système est assez puissant pour parler des entiers avec leur addition *et* leur multiplication — de quoi, en pratique, coder ses propres démonstrations —, il échappe à toute axiomatisation complète. (L'addition seule ne suffit pas : c'est l'arithmétique de Presburger de l'encart plus haut, complète mais trop pauvre.) Ajouter $G$ comme nouvel axiome ne sauve rien — le système agrandi, toujours récursivement axiomatisable, en fabrique aussitôt un autre. <Badge niveau="demontre">L'incomplétude est *irréductible* : aucune extension récursive cohérente ne la supprime.</Badge>
+Autrement dit, dès qu'un système représente assez d'arithmétique des entiers — l'addition *et* la multiplication, de quoi coder ses propres formules et démonstrations —, il échappe à toute axiomatisation complète. (L'addition seule ne suffit pas : c'est l'arithmétique de Presburger de l'encart plus haut, complète mais trop pauvre.) Ajouter $G$ comme nouvel axiome ne sauve rien — le système agrandi, toujours récursivement axiomatisable, en fabrique aussitôt un autre. <Badge niveau="demontre">L'incomplétude est *irréductible* : aucune extension récursive cohérente ne la supprime.</Badge>
 
 <Resultat label="Second théorème d'incomplétude de Gödel">
 
@@ -176,7 +176,7 @@ Un tel système, s'il est cohérent, ne peut pas démontrer sa propre cohérence
 
 </Resultat>
 
-Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, par le même théorème, ne peut pas davantage prouver la sienne. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu. <a href="https://en.wikipedia.org/wiki/Gentzen's_consistency_proof" target="_blank" rel="noopener">réf. (en) ↗</a></Badge>
+Précision importante : la cohérence n'est pas indémontrable *dans l'absolu* — elle l'est **de l'intérieur**. On peut s'extraire et la prouver depuis un système **plus vaste** : Gentzen a ainsi démontré en 1936 la cohérence de l'arithmétique de Peano, en s'autorisant une récurrence transfinie qui dépasse ce que Peano sait faire. Mais le bénéfice est celui d'une **cohérence relative** : la confiance n'est pas éliminée, elle est *déplacée* vers le système hôte — qui, s'il est à son tour cohérent, récursivement axiomatisable et assez riche, ne peut pas davantage prouver la sienne, par le même théorème. La régression est sans fin ; à un moment, il faut parier. <Badge niveau="demontre">Preuve de Gentzen (1936), classique et vérifiée ; elle établit Coh(PA) *relativement à* la récurrence jusqu'à l'ordinal ε₀, pas dans l'absolu. <a href="https://en.wikipedia.org/wiki/Gentzen's_consistency_proof" target="_blank" rel="noopener">réf. (en) ↗</a></Badge>
 
 <Encart type="intuition" titre="Vrai ne veut pas dire démontrable">
 
