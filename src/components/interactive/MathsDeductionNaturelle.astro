@@ -145,6 +145,18 @@
   .ndj__status.is-done { color: var(--c-green); border-color: var(--c-green); font-size: 0.95rem; }
   .ndj__status.is-demo { color: var(--c-text); border-color: var(--c-blue); background: var(--c-surface-2); }
   .ndj__line.is-fresh { outline: 1px dashed var(--c-blue); }
+  .ndj__line.is-demo-click { animation: ndjClick 0.5s ease; }
+  @keyframes ndjClick {
+    0% { background: var(--c-blue); color: #071019; transform: translateX(3px); }
+    100% { background: var(--c-surface-2); transform: translateX(0); }
+  }
+  .iw__btn.is-demo-press {
+    outline: 2px solid var(--c-blue) !important;
+    box-shadow: 0 0 0 5px rgba(88, 196, 221, 0.25);
+    transform: scale(0.94);
+    transition: transform 0.12s ease;
+    opacity: 1 !important;
+  }
   .ndj__demobtn { border-color: var(--c-blue); }
   .ndj__score { margin-left: 0.6rem; }
   .ndj__rules { display: flex; flex-direction: column; gap: 0.3rem; margin: 0.5rem 1rem 0.75rem; }

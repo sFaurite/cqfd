@@ -233,6 +233,17 @@ let done = false;
 let pending: Pending = null;
 let history: string[] = [];
 let demo: { idx: number } | null = null;
+let demoAnimating = false;
+let demoToken = 0;
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
+const RULE_BTN: Record<Step['rule'], string> = {
+  mp: '[data-r-mp]', andintro: '[data-r-andintro]', andelima: '[data-r-andelima]',
+  andelimb: '[data-r-andelimb]', orelim: '[data-r-orelim]', notelim: '[data-r-notelim]',
+  impintro: '[data-r-impintro]', notintro: '[data-r-notintro]', supposer: '[data-r-supposer]',
+  orintro: '[data-r-orintro]', explosion: '[data-r-explosion]', tiers: '[data-r-tiers]', dne: '[data-r-dne]',
+};
 
 /* ------------------------- persistance & réussites ------------------------ */
 
@@ -287,6 +298,8 @@ function freshState(i: number): void {
 
 function loadEx(i: number, opts?: { fresh?: boolean }): void {
   exIdx = i;
+  demoToken++;
+  demoAnimating = false;
   demo = null;
   const keep = !opts?.fresh && saved.ex[String(i)];
   if (keep) {
@@ -449,24 +462,88 @@ function runStep(step: Step): string | null {
 }
 
 function startDemo(): void {
+  demoToken++;
+  demoAnimating = false;
   freshState(exIdx);
   demo = { idx: 0 };
-  render(`Corrigé pas à pas — ${EXOS[exIdx].corrige.length} étapes. Cliquez « étape suivante » ; chaque pas est joué et expliqué. (Le corrigé ne compte pas comme une réussite : refaites-le ensuite à la main !)`);
+  render(`Corrigé pas à pas — ${EXOS[exIdx].corrige.length} étapes. Cliquez « étape suivante » : chaque pas est mimé (sélections, clic de règle, saisie) puis expliqué. (Le corrigé ne compte pas comme une réussite : refaites-le ensuite à la main !)`);
 }
 
-function demoNext(): void {
-  if (!demo) return;
+/** Mime l'appui sur un bouton : halo + enfoncement, le temps d'un regard. */
+async function pressButton(selector: string, token: number): Promise<void> {
+  const b = root?.querySelector<HTMLElement>(selector);
+  if (!b) return;
+  b.classList.add('is-demo-press');
+  b.scrollIntoView({ block: 'nearest' });
+  await sleep(550);
+  b.classList.remove('is-demo-press');
+  if (token !== demoToken) return;
+}
+
+/** Mime le clic sur une ligne : pulsation au moment où elle rejoint la sélection. */
+function pulseLine(i: number, statusMsg: string): void {
+  render(statusMsg);
+  const li = root?.querySelectorAll<HTMLElement>('.ndj__line')[i];
+  li?.classList.add('is-demo-click');
+  li?.scrollIntoView({ block: 'nearest' });
+}
+
+async function demoNext(): Promise<void> {
+  if (!root || !demo || demoAnimating) return;
   const steps = EXOS[exIdx].corrige;
   if (demo.idx >= steps.length) return;
   const step = steps[demo.idx];
   demo.idx += 1;
+  const token = ++demoToken;
+  demoAnimating = true;
+  const head = `Étape ${demo.idx}/${steps.length} — ${step.expl}`;
+  render(head);
+
+  // 1. les sélections de lignes, une à une
+  sel = [];
+  for (const i of step.sel ?? []) {
+    await sleep(500);
+    if (token !== demoToken) return;
+    sel.push(i);
+    pulseLine(i, head);
+  }
+
+  // 2. le clic sur le bouton de règle
+  await sleep(450);
+  if (token !== demoToken) return;
+  await pressButton(RULE_BTN[step.rule], token);
+  if (token !== demoToken) return;
+
+  // 3. la saisie éventuelle : la barre s'ouvre, la formule se tape, OK (ou le côté du ∨)
+  if (step.f !== undefined) {
+    pending = { kind: step.rule === 'orintro' ? 'orIntro' : step.rule === 'explosion' ? 'explosion' : step.rule === 'tiers' ? 'tiers' : 'supposer' };
+    render(head);
+    const input = root.querySelector<HTMLInputElement>('[data-input]')!;
+    input.value = '';
+    for (const ch of step.f) {
+      await sleep(55);
+      if (token !== demoToken) return;
+      input.value += ch;
+    }
+    await sleep(350);
+    if (token !== demoToken) return;
+    await pressButton(step.rule === 'orintro' ? `[data-orside="${step.side ?? 'right'}"]` : '[data-inputok]', token);
+    if (token !== demoToken) return;
+    pending = null;
+  }
+
+  // 4. la règle s'applique pour de vrai
   const e = runStep(step);
   sel = [];
+  demoAnimating = false;
   if (e) { render(`(bug du corrigé : ${e})`, true); return; }
-  render(`Étape ${demo.idx}/${steps.length} — ${step.expl}`);
+  render(head);
 }
 
 function quitDemo(): void {
+  demoToken++;
+  demoAnimating = false;
+  pending = null;
   demo = null;
   loadEx(exIdx);
 }
@@ -529,7 +606,7 @@ function render(msg?: string, isError = false): void {
       'Formule A du tiers exclu (A ∨ ¬A) :';
     root.querySelectorAll<HTMLElement>('[data-orside]').forEach((b) => { b.hidden = pending!.kind !== 'orIntro'; });
     root.querySelector<HTMLElement>('[data-inputok]')!.hidden = pending.kind === 'orIntro';
-    root.querySelector<HTMLInputElement>('[data-input]')!.focus();
+    if (!demo) root.querySelector<HTMLInputElement>('[data-input]')!.focus();
   }
 
   // score + menu déroulant décoré
@@ -550,7 +627,7 @@ function render(msg?: string, isError = false): void {
   });
   const nextBtn = root.querySelector<HTMLButtonElement>('[data-demo-next]');
   const quitBtn = root.querySelector<HTMLButtonElement>('[data-demo-quit]');
-  if (nextBtn) { nextBtn.hidden = !demo; if (demo) nextBtn.disabled = demo.idx >= ex.corrige.length; }
+  if (nextBtn) { nextBtn.hidden = !demo; if (demo) nextBtn.disabled = demo.idx >= ex.corrige.length || demoAnimating; }
   if (quitBtn) quitBtn.hidden = !demo;
 
   saveCurrent();
