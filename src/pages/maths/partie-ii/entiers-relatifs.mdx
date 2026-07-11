@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les entiers relatifs (ℤ)"
 chapter: entiers-relatifs
-description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c, la relation FORMÉE par séparation ; opérations BIEN DÉFINIES (démontré) et graphes construits (charpente du ch. 3, Add_ℤ en modèle) ; opposé, soustraction totale, x+5=3 transporté honnêtement puis résolu ; lois algébriques de ℤ, 1_ℤ ≠ 0_ℤ démontré ; ATELIER interactif (calcul des promesses : la règle des signes démontrée) ; ordre total (bien-définition déroulée) ; plongement de ℕ (fonction construite, théorème) puis identification (convention) ; FORME CANONIQUE (∃! quantifiés, exclusion démontrée) ; intégrité de ℤ (cas nuls cadrés) ; ORDRE × MULTIPLICATION soldé (règle des signes, compatibilité et simplification par un positif, z²>0, z>0⟹z≥1) — le paquet qui porte l'ordre de ℚ."
+description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c, la relation FORMÉE par séparation ; opérations BIEN DÉFINIES (démontré) et graphes construits (charpente du ch. 3, Add_ℤ en modèle) ; opposé, soustraction totale, x+5=3 transporté honnêtement puis résolu ; lois algébriques de ℤ, 1_ℤ ≠ 0_ℤ démontré ; ATELIER interactif (calcul des promesses : la règle des signes démontrée) ; ordre total (bien-définition déroulée) ; plongement de ℕ (fonction construite, théorème) puis identification (convention) ; FORME CANONIQUE (∃! quantifiés, exclusion démontrée) ; intégrité de ℤ (cas nuls cadrés)."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -229,30 +229,4 @@ $$ \forall x, y \in \mathbb{Z}, \quad x \cdot y = 0 \ \Longrightarrow\ x = 0 \ \
 <Badge niveau="demontre" slot="badge">Démontré ci-dessus. Retenez-le : c'est précisément l'ingrédient qui rendra la construction de $\mathbb{Q}$ possible au chapitre suivant.</Badge>
 </Resultat>
 
-## L'ordre rencontre la multiplication
-
-L'ordre de $\mathbb{Z}$ a été vérifié compatible avec l'*addition* ; mais le chapitre suivant, pour ordonner les fractions, aura besoin de sa conduite face à la **multiplication** — règle des signes comprise. Les formes canoniques rendent ces vérifications presque gratuites : soldons-les ici, une fois pour toutes.
-
-<Resultat label="Ordre et multiplication dans ℤ">
-$$ \text{(i)}\ x, y \geq 0 \Rightarrow xy \geq 0, \quad\text{et}\quad x, y > 0 \Rightarrow xy > 0 \qquad \text{(ii)}\ x \leq y \text{ et } z \geq 0 \Rightarrow xz \leq yz \quad \text{(strict si } x < y \text{ et } z > 0\text{)} $$
-$$ \text{(iii)}\ xz \leq yz \text{ et } z > 0 \Rightarrow x \leq y \qquad \text{(iv)}\ z \neq 0 \Rightarrow z^2 > 0 \qquad \text{(v)}\ z > 0 \Rightarrow z \geq 1 $$
-<Badge niveau="demontre" slot="badge">Cinq vérifications par formes canoniques, déroulées dans l'encart — le lemme « $mn = 0 \Rightarrow m = 0$ ou $n = 0$ » de l'intégrité y ressert.</Badge>
-</Resultat>
-
-<Encart type="calcul" titre="Démonstration : l'ordre et la multiplication, par formes canoniques">
-**Deux miettes d'algèbre d'abord**, conséquences des lois démontrées plus haut : $0 \cdot z = 0$ — car $0 \cdot z = (0 + 0)\,z = 0 \cdot z + 0 \cdot z$, et l'on ajoute l'opposé de $0 \cdot z$ — puis $(-x)\,z = -(xz)$ — car $(-x)\,z + xz = \big((-x) + x\big)\,z = 0 \cdot z = 0$.
-
-**Point de départ : $0_{\mathbb{Z}} \leq z$ si et seulement si $z = [(m,0)]$ pour un $m \in \mathbb{N}$.** Par définition de l'ordre, $[(0,0)] \leq [(a,b)]$ signifie $0 + b \leq 0 + a$, c'est-à-dire $b \leq a$ ; l'existence de la forme canonique fournit alors exactement $z = [(m,0)]$ (le témoin $m$ vérifie $b + m = a$). Réciproquement, $[(0,0)] \leq [(m,0)]$ se lit $0 \leq m$ : toujours vrai. Et $z > 0$ équivaut à $z = [(m,0)]$ avec $m \neq 0$.
-
-**(i)** Si $x = [(m,0)]$ et $y = [(n,0)]$, la table de la preuve d'intégrité donne $xy = [(mn,\,0)] \geq 0$. Si de plus $m \neq 0$ et $n \neq 0$, le lemme de l'intégrité donne $mn \neq 0$ : $xy > 0$. C'est la **règle des signes**, versant positif — les trois autres versants s'en déduisent par $(-x)\,z = -(xz)$.
-
-**(ii)** De $x \leq y$, la compatibilité additive donne $0 \leq y - x$ ; avec $0 \leq z$, le point (i) donne $0 \leq (y - x)\,z = yz - xz$ (distributivité et miettes ci-dessus), et l'on ajoute $xz$ : $xz \leq yz$. Version stricte : (i) strict donne $0 < (y-x)\,z$, donc $xz \neq yz$.
-
-**(iii)** Par contraposée : si $x \leq y$ est faux, la totalité de l'ordre donne $y < x$, et (ii) strict donne $yz < xz$ — ce qui interdit $xz \leq yz$ (antisymétrie).
-
-**(iv)** Si $z \neq 0$, la forme canonique écrit $z = [(n,0)]$ ou $z = [(0,n)]$ avec $n \neq 0$ ; la table donne $z^2 = [(n^2,\,0)]$ **dans les deux cas**, et $n^2 \neq 0$ par le lemme : $z^2 > 0$. Un carré non nul est strictement positif — voilà pourquoi « moins par moins donne plus » n'était pas une convention.
-
-**(v)** Si $z > 0$, alors $z = [(n,0)]$ avec $n \neq 0$ ; dans $\mathbb{N}$, $n \neq 0$ est un successeur $S(m) = m + 1$, donc $1 \leq n$ (témoin $m$, commutativité) ; le plongement préservant l'ordre, $1_{\mathbb{Z}} = [(1,0)] \leq [(n,0)] = z$. En particulier, **tout entier non nul est $\geq 1$ ou $\leq -1$** : si $z < 0$, alors $-z > 0$ donne $-z \geq 1$, et l'on ajoute $z - 1$ aux deux membres. $\square$
-</Encart>
-
-Nous avons donc, par pure déduction depuis $\mathbb{N}$, un ensemble $\mathbb{Z}$ où l'on additionne, multiplie, compare et — enfin — soustrait sans restriction, avec en prime l'intégrité et un ordre qui s'entend avec la multiplication. Reste une opération encore interdite : diviser. Le chapitre suivant reprend exactement le même geste — un couple, une équivalence, un quotient — pour transformer chaque division en attente en un nombre rationnel.
+Nous avons donc, par pure déduction depuis $\mathbb{N}$, un ensemble $\mathbb{Z}$ où l'on additionne, multiplie, compare et — enfin — soustrait sans restriction, avec l'intégrité en prime. Reste une opération encore interdite : diviser. Le chapitre suivant reprend exactement le même geste — un couple, une équivalence, un quotient — pour transformer chaque division en attente en un nombre rationnel.
