@@ -2,7 +2,7 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les entiers relatifs (ℤ)"
 chapter: entiers-relatifs
-description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c, la relation FORMÉE par séparation ; opérations BIEN DÉFINIES (démontré) et graphes construits (charpente du ch. 3, Add_ℤ en modèle) ; opposé, soustraction totale, x+5=3 transporté honnêtement puis résolu ; lois algébriques de ℤ, 1_ℤ ≠ 0_ℤ démontré ; ATELIER interactif (calcul des promesses : la règle des signes démontrée) ; ordre total (bien-définition déroulée) ; plongement de ℕ (fonction construite, théorème) puis identification (convention) ; FORME CANONIQUE (∃! quantifiés, exclusion démontrée) ; intégrité de ℤ (cas nuls cadrés)."
+description: "ℤ = (ℕ×ℕ)/~ avec (a,b) ~ (c,d) ssi a+d = b+c ; opérations BIEN DÉFINIES (démontré) ; opposé, soustraction totale, x+5=3 résolu ; lois algébriques de ℤ ; ATELIER interactif (calcul des promesses : la règle des signes démontrée) ; ordre total (bien-définition déroulée) ; plongement de ℕ (théorème) puis identification (convention) ; FORME CANONIQUE avec unicité ; intégrité de ℤ."
 ---
 
 import Encart from '../../../components/Encart.astro';
@@ -15,7 +15,7 @@ import MathsCalculEquationnel from '../../../components/interactive/MathsCalculE
 
 ## Une soustraction qui n'existe pas encore
 
-Dans $\mathbb{N}$, l'équation $x + 5 = 3$ n'a aucune solution — ce n'est pas une évidence, c'est le théorème d'une ligne qui clôt le <Prereq href="/maths/partie-ii/arithmetique-de-n">chapitre précédent</Prereq>. Il n'existe donc pas d'entier « $3 - 5$ », et écrire ce symbole serait d'ailleurs, à ce stade, parfaitement **illégal** — la soustraction n'a jamais été définie, et dans $\mathbb{N}$ elle ne peut pas l'être partout. Notre mission : fabriquer un ensemble où retrancher est *toujours* possible, sans rien admettre de neuf. Fidèles à la promesse du cours, nous n'ajoutons **aucune hypothèse** ; tout se déduit de la construction de $\mathbb{N}$ et de son arithmétique.
+Dans $\mathbb{N}$, l'équation $x + 5 = 3$ n'a aucune solution : il n'existe pas d'entier « $3 - 5$ ». Écrire ce symbole serait d'ailleurs, à ce stade, parfaitement **illégal** — la soustraction n'a jamais été définie, et dans $\mathbb{N}$ elle ne peut pas l'être partout. Notre mission : fabriquer un ensemble où retrancher est *toujours* possible, sans rien admettre de neuf. Fidèles à la promesse du cours, nous n'ajoutons **aucune hypothèse** ; tout se déduit de la construction de $\mathbb{N}$ et de son arithmétique.
 
 <Encart type="intuition" titre="Un entier relatif est une soustraction en attente">
 Voyez le couple $(a, b)$ comme une promesse : « un jour, je vaudrai $a - b$ ». Ainsi $(3, 5)$ promet $-2$, $(5, 3)$ promet $+2$, et $(7, 7)$ promet $0$. Mais plusieurs promesses visent le même nombre : $(3, 5)$, $(0, 2)$ et $(10, 12)$ annoncent toutes « moins deux ». Le génie de la construction est de dire *quand deux promesses coïncident, sans jamais soustraire* : intuitivement $a - b$ et $c - d$ sont égaux exactement quand $a + d = b + c$ — une égalité qui ne contient **que des additions**, la seule opération que $\mathbb{N}$ maîtrise. Toute l'audace du chapitre tient dans ce déplacement.
@@ -28,12 +28,6 @@ Travaillons sur $\mathbb{N} \times \mathbb{N}$ et posons
 $$ (a, b) \sim (c, d) \quad :\Longleftrightarrow \quad a + d = b + c. $$
 
 <Badge niveau="admis">Une définition : nous choisissons le sens de $\sim$, en n'employant que l'addition de $\mathbb{N}$, déjà construite.</Badge>
-
-Et le <Prereq href="/maths/partie-i/relations-fonctions">chapitre 3</Prereq> nous oblige à un mot de charpente : une relation **est** un ensemble de couples, pas une condition écrite en français. Le nôtre existe :
-
-$$ {\sim} \;:=\; \left\{ \bigl((a,b),(c,d)\bigr) \in (\mathbb{N} \times \mathbb{N})^2 \;:\; a + d = b + c \right\}, $$
-
-formé par **séparation** dans $(\mathbb{N} \times \mathbb{N}) \times (\mathbb{N} \times \mathbb{N})$. <Badge niveau="demontre">Formation légitime : une application directe du schéma de séparation, comme pour la fonction successeur au chapitre 4.</Badge> C'est à cet ensemble que s'appliquent les trois vérifications qui suivent.
 
 La **réflexivité** est immédiate ($a + b = b + a$ par commutativité) et la **symétrie** aussi : si $a + d = b + c$, alors $c + b = d + a$ par commutativité, c'est-à-dire $(c,d) \sim (a,b)$. La transitivité, elle, réclame l'outil-clé du chapitre précédent.
 
@@ -63,11 +57,11 @@ $$ \mathbb{Z} := (\mathbb{N} \times \mathbb{N}) / \sim $$
 
 et notons $[(a,b)]$ la classe du couple $(a,b)$. <Badge niveau="admis">Définition : $\mathbb{Z}$ est ce quotient ; sa légitimité (les classes existent et partitionnent) est, elle, démontrée au chapitre sur les quotients.</Badge> Formellement, chaque classe est une partie de $\mathbb{N} \times \mathbb{N}$, donc $\mathbb{Z}$ est un sous-ensemble de $\mathcal{P}(\mathbb{N} \times \mathbb{N})$ : son existence se déduit de l'axiome des parties et de la séparation, exactement comme au <Prereq href="/maths/partie-i/relations-fonctions">chapitre des quotients</Prereq>.
 
-Géométriquement, la classe de $(a,b)$ rassemble tous les couples $(c,d)$ vérifiant $a + d = b + c$ : les points à coordonnées entières alignés sur la **droite de pente $1$** passant par $(a,b)$. On y avance du même pas dans les deux directions — $(a,b) \sim (a+k,\, b+k)$ pour tout $k \in \mathbb{N}$, car $a + (b+k) = b + (a+k)$ — et l'on atteint *tous* les représentants en repartant de celui qui touche un axe (une composante nulle). Que chaque classe possède bien un tel représentant est une **annonce**, pas encore un acquis : c'est la *forme canonique*, démontrée plus bas dans ce chapitre — pour l'instant, gardez l'image. Un entier relatif *est* l'une de ces droites de pente $1$ dans le quadrant des entiers.
+Géométriquement, la classe de $(a,b)$ rassemble tous les couples $(c,d)$ vérifiant $a + d = b + c$ : les points à coordonnées entières alignés sur la **droite de pente $1$** passant par $(a,b)$. On y avance du même pas dans les deux directions — $(a,b) \sim (a+k,\, b+k)$ pour tout $k \in \mathbb{N}$, car $a + (b+k) = b + (a+k)$ — et l'on atteint *tous* les représentants en repartant de celui qui touche un axe (une composante nulle). Un entier relatif *est* l'une de ces droites de pente $1$ dans le quadrant des entiers.
 
 ## L'addition — et le vrai travail
 
-On aimerait poser $[(a,b)] + [(c,d)] := [(a+c,\, b+d)]$. Mais **attention** : cette formule parle de *représentants* $(a,b)$ et $(c,d)$, alors qu'une classe possède une infinité de représentants. Rien ne garantit a priori qu'en choisissant d'autres représentants de la même classe on retombe sur la même classe-résultat. Tant que ce n'est pas prouvé, la « somme » n'est pas une opération sur $\mathbb{Z}$ : c'est le point pédagogique central du chapitre — et la première application du <Prereq href="/maths/partie-i/relations-fonctions">théorème du « bien défini »</Prereq> : il suffit de vérifier la compatibilité avec $\sim$, ce que fait l'encart. Une nuance de charpente, pour être exact : le théorème du chapitre 3 est énoncé pour une fonction d'*une* variable, et notre addition en prend deux — l'encart « Un mot de charpente » ci-dessous forme donc son graphe directement, la compatibilité restant l'ingrédient décisif.
+On aimerait poser $[(a,b)] + [(c,d)] := [(a+c,\, b+d)]$. Mais **attention** : cette formule parle de *représentants* $(a,b)$ et $(c,d)$, alors qu'une classe possède une infinité de représentants. Rien ne garantit a priori qu'en choisissant d'autres représentants de la même classe on retombe sur la même classe-résultat. Tant que ce n'est pas prouvé, la « somme » n'est pas une opération sur $\mathbb{Z}$ : c'est le point pédagogique central du chapitre — et la première application du <Prereq href="/maths/partie-i/relations-fonctions">théorème du « bien défini »</Prereq> : il suffit de vérifier la compatibilité avec $\sim$, ce que fait l'encart.
 
 <Encart type="calcul" titre="L'addition est bien définie (indépendance des représentants)">
 Supposons $(a,b) \sim (a',b')$ et $(c,d) \sim (c',d')$, c'est-à-dire
@@ -94,16 +88,6 @@ $$ [(a,b)] + [(c,d)] := [(a+c,\ b+d)] $$
 <Badge niveau="admis" slot="badge">La *définition* est un choix ; sa *légitimité* (indépendance des représentants) vient d'être démontrée ci-dessus.</Badge>
 </Resultat>
 
-<Encart type="plusloin" titre="Un mot de charpente : les opérations sont des ensembles">
-Le <Prereq href="/maths/partie-i/relations-fonctions">chapitre 3</Prereq> l'exige — une fonction est un graphe — et le <Prereq href="/maths/partie-ii/entiers-naturels">chapitre 4</Prereq> a payé ce dû pour le successeur. Payons-le pour l'addition, les autres suivront le même moule. Posons
-
-$$ \operatorname{Add}_{\mathbb{Z}} := \left\{ \bigl((x,y),z\bigr) \in (\mathbb{Z} \times \mathbb{Z}) \times \mathbb{Z} \;:\; \exists a, b, c, d \in \mathbb{N},\ x = [(a,b)] \text{ et } y = [(c,d)] \text{ et } z = [(a+c,\ b+d)] \right\} $$
-
-— formation légitime par **séparation** dans $(\mathbb{Z} \times \mathbb{Z}) \times \mathbb{Z}$. *Totalité* : toute paire de classes possède des représentants, donc une valeur. *Univocité* : deux choix de représentants donnent la même classe-résultat — c'est très exactement l'indépendance démontrée ci-dessus, et c'est ici qu'elle sert. Le théorème du « bien défini » du chapitre 3, énoncé pour une variable, se transpose ainsi à deux : même séparation, même rôle décisif de la compatibilité.
-
-Sur ce moule exact se forment l'**opposé** $\{(x,y) \in \mathbb{Z} \times \mathbb{Z} : \exists a, b \in \mathbb{N},\ x = [(a,b)] \text{ et } y = [(b,a)]\}$, la **multiplication**, l'**ordre** $\le$ de la section suivante et le **plongement** $\iota$ de la fin du chapitre — nous ne le redirons pas à chaque fois, et le même mot de charpente vaudra pour les deux quotients à venir du cours, $\mathbb{Q}$ et $\mathbb{Z}/n\mathbb{Z}$. La soustraction $x - y := x + (-y)$, elle, sera la **composition** de deux fonctions désormais réellement formées — pas une prescription symbolique. <Badge niveau="demontre">Graphes formés par séparation ; totalité par existence de représentants ; univocité par les bien-définitions démontrées dans ce chapitre.</Badge>
-</Encart>
-
 Cette addition est **associative** et **commutative** : ces deux propriétés se ramènent en une ligne aux lois correspondantes de $\mathbb{N}$, appliquées coordonnée par coordonnée.
 
 ## Zéro, opposé, et la soustraction enfin totale
@@ -124,7 +108,7 @@ $$ \boxed{\text{la soustraction est partout définie sur } \mathbb{Z}} $$
 Mission accomplie. <Badge niveau="demontre">Existence de l'opposé démontrée ; la soustraction totale en découle immédiatement.</Badge>
 </Encart>
 
-Revenons alors à l'équation qui a ouvert le chapitre : $x + 5 = 3$. Une précision d'honnêteté avant de calculer : ses coefficients $3$ et $5$ vivent dans $\mathbb{N}$, et c'est la fin du chapitre qui justifiera de les lire tels quels dans $\mathbb{Z}$ — en attendant, transportons l'équation explicitement : $x + [(5,0)] = [(3,0)]$. Elle a désormais une solution — et une seule. En ajoutant l'opposé $[(0,5)]$ aux deux membres : $x = [(3,0)] + [(0,5)] = [(3,5)]$. Or $(3,5) \sim (0,2)$, car $3 + 2 = 5 + 0$ : donc $x = [(0,2)]$, le nombre que l'on notera $-2$. L'unicité est automatique — ajouter l'opposé de $[(5,0)]$ des deux côtés *force* cette valeur. Mission annoncée, mission accomplie : la soustraction n'est pas qu'une opération de plus, c'est la résolution de **toutes** les équations $x + a = b$. <Badge niveau="demontre">Calcul complet sur représentants ; l'unicité découle de l'existence de l'opposé. L'écriture familière « $x + 5 = 3$ dans $\mathbb{Z}$ » deviendra licite avec le plongement et la convention d'identification, plus bas.</Badge>
+Revenons alors à l'équation qui a ouvert le chapitre : $x + 5 = 3$. Dans $\mathbb{Z}$, elle a désormais une solution — et une seule. En ajoutant $-5$ aux deux membres : $x = 3 + (-5) = [(3,0)] + [(0,5)] = [(3,5)]$. Or $(3,5) \sim (0,2)$, car $3 + 2 = 5 + 0$ : donc $x = [(0,2)]$, le nombre que l'on notera $-2$. L'unicité est automatique — si $x + 5 = 3$, ajouter l'opposé de $5$ des deux côtés *force* $x = 3 - 5$. Mission annoncée, mission accomplie : la soustraction n'est pas qu'une opération de plus, c'est la résolution de **toutes** les équations $x + a = b$. <Badge niveau="demontre">Calcul complet sur représentants ; l'unicité découle de l'existence de l'opposé.</Badge>
 
 Ainsi $(\mathbb{Z}, +)$ possède une addition associative, un neutre, et un opposé pour chaque élément — une structure que la Partie IV baptisera **groupe**. Nous ne l'utilisons pas encore : simple avant-goût.
 
@@ -145,7 +129,7 @@ On fixe $(c,d)$ et on change $(a,b)$ en $(a',b')$ avec $a + b' = b + a'$ (notons
 
 $$ P + Q' = (a+b')\,c + (b+a')\,d = sc + sd \qquad \text{et} \qquad Q + P' = (b+a')\,c + (a+b')\,d = sc + sd. $$
 
-Donc $P + Q' = Q + P'$, c'est-à-dire $(P,Q) \sim (P',Q')$ : changer le premier facteur ne change pas la classe-résultat. La **formule** est symétrique en les deux couples $(a,b)$ et $(c,d)$ — grâce à la commutativité de $+$ et $\times$ dans $\mathbb{N}$ —, donc le même argument vaut pour le second facteur. En composant les deux, le produit ne dépend d'aucun représentant. $\square$ (Une fois la bien-définition acquise, cette même symétrie montre au passage que la multiplication de $\mathbb{Z}$ est commutative.) <Badge niveau="demontre">Vérification par développement et regroupement — distributivité, associativité et commutativité de $+$ et $\times$, toutes démontrées dans $\mathbb{N}$ — plus l'hypothèse $a+b'=b+a'$.</Badge>
+Donc $P + Q' = Q + P'$, c'est-à-dire $(P,Q) \sim (P',Q')$ : changer le premier facteur ne change pas la classe-résultat. La **formule** est symétrique en les deux couples $(a,b)$ et $(c,d)$ — grâce à la commutativité de $+$ et $\times$ dans $\mathbb{N}$ —, donc le même argument vaut pour le second facteur. En composant les deux, le produit ne dépend d'aucun représentant. $\square$ (Une fois la bien-définition acquise, cette même symétrie montre au passage que la multiplication de $\mathbb{Z}$ est commutative.) <Badge niveau="demontre">Vérification par regroupement, appuyée sur la seule hypothèse $a+b'=b+a'$.</Badge>
 </Encart>
 
 <Resultat label="Lois algébriques de ℤ">
@@ -153,8 +137,6 @@ $$ x + y = y + x, \quad (x+y)+z = x+(y+z), \quad x + 0_{\mathbb{Z}} = x, \quad x
 $$ xy = yx, \quad (xy)z = x(yz), \quad x(y+z) = xy + xz, \quad 1_{\mathbb{Z}} \cdot x = x \ \text{ où } 1_{\mathbb{Z}} := [(1,0)]. $$
 <Badge niveau="demontre" slot="badge">Chaque identité se vérifie en choisissant des représentants, en appliquant les définitions, puis les lois déjà démontrées de $\mathbb{N}$ — la bien-définition garantit que le choix des représentants n'importe pas. Exemple type, le neutre multiplicatif : $[(a,b)] \cdot [(1,0)] = [(a \cdot 1 + b \cdot 0,\ a \cdot 0 + b \cdot 1)] = [(a,b)]$. La Partie IV baptisera cette structure : anneau commutatif.</Badge>
 </Resultat>
-
-Un dernier point, minuscule et indispensable : la partie IV exigera d'un anneau que $1 \neq 0$. C'est bien le cas ici — $1_{\mathbb{Z}} \neq 0_{\mathbb{Z}}$, car $[(1,0)] = [(0,0)]$ signifierait, par définition de $\sim$, $1 + 0 = 0 + 0$, c'est-à-dire $1 = 0$ ; or $1 = S(0)$ est un successeur, et <Prereq href="/maths/partie-ii/entiers-naturels">$0$ n'est le successeur d'aucun entier</Prereq>. $\mathbb{Z}$ a donc exactement la structure que la partie IV baptisera **anneau commutatif** — unitaire, et non trivial. <Badge niveau="demontre">Une ligne : la définition de $\sim$, puis « $0$ n'est pas un successeur » du chapitre 4.</Badge>
 
 ## À vous : le calcul des promesses
 
@@ -183,7 +165,7 @@ Deux choses distinctes se jouent ensuite — un théorème, puis une convention.
 
 <Resultat label="Plongement de ℕ dans ℤ">
 $$ \iota : \mathbb{N} \to \mathbb{Z},\quad n \mapsto [(n,0)] \quad \text{est injective et préserve } +,\ \times \text{ et } \le. $$
-<Badge niveau="demontre" slot="badge">D'abord $\iota$ *est* une fonction : son graphe $\{(n, z) \in \mathbb{N} \times \mathbb{Z} : z = [(n,0)]\}$ se forme par séparation — le moule de l'encart de charpente —, total et univoque puisque chaque $n$ a une classe et une seule. Injectivité : $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$. Préservation : $[(n,0)] + [(m,0)] = [(n+m,\,0)]$, $[(n,0)] \cdot [(m,0)] = [(nm,\,0)]$, et $[(n,0)] \le [(m,0)] \iff n + 0 \le 0 + m \iff n \le m$.</Badge>
+<Badge niveau="demontre" slot="badge">Injectivité : $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$. Préservation : $[(n,0)] + [(m,0)] = [(n+m,\,0)]$, $[(n,0)] \cdot [(m,0)] = [(nm,\,0)]$, et $[(n,0)] \le [(m,0)] \iff n + 0 \le 0 + m \iff n \le m$.</Badge>
 </Resultat>
 
 Vient *ensuite* la convention : puisque $\iota$ recopie fidèlement $\mathbb{N}$ à l'intérieur de $\mathbb{Z}$, on **identifie** $n$ et $[(n,0)]$, et l'on écrit désormais $\mathbb{N} \subseteq \mathbb{Z}$. <Badge niveau="admis">Convention d'identification : un abus commode. Stricto sensu $\mathbb{N}$ et son image ne sont pas le *même* ensemble ; on choisit de les confondre parce que $\iota$ préserve toute la structure — cela, c'est le théorème ci-dessus, démontré.</Badge>
@@ -193,14 +175,14 @@ Vient *ensuite* la convention : puisque $\iota$ recopie fidèlement $\mathbb{N}$
 Chaque entier relatif se range alors dans exactement une des trois familles — c'est le fondement rigoureux de l'intuition du « signe », et l'outil de la preuve d'intégrité qui suit.
 
 <Resultat label="Forme canonique dans ℤ">
-$$ \forall z \in \mathbb{Z}, \ \text{exactement l'une des trois propositions :}\quad z = 0_{\mathbb{Z}}, \qquad \exists!\, n \in \mathbb{N} \setminus \{0\},\ z = [(n,0)], \qquad \exists!\, n \in \mathbb{N} \setminus \{0\},\ z = [(0,n)]. $$
-<Badge niveau="demontre" slot="badge">Existence par totalité de l'ordre de $\mathbb{N}$ ; unicité dans chaque forme par la définition même de $\sim$ ; exclusion mutuelle car une somme de naturels n'est nulle que si ses deux termes le sont — démonstration ci-dessous.</Badge>
+$$ \forall z \in \mathbb{Z}, \ \text{exactement un des trois cas :}\quad z = 0_{\mathbb{Z}}, \qquad z = [(n,0)],\ n \neq 0 \text{ unique}, \qquad z = [(0,n)],\ n \neq 0 \text{ unique}. $$
+<Badge niveau="demontre" slot="badge">Existence par totalité de l'ordre de $\mathbb{N}$, unicité par régularité — démonstration ci-dessous.</Badge>
 </Resultat>
 
 <Encart type="calcul" titre="Démonstration de la forme canonique">
 **Existence.** Soit $z = [(a,b)]$. Par totalité de $\le$ sur $\mathbb{N}$ : $b \le a$ ou $a \le b$. Si $b \le a$, il existe $n$ avec $b + n = a$, et $(a,b) \sim (n,0)$ — car $a + 0 = b + n$. Si $a \le b$, il existe $n$ avec $a + n = b$, et $(a,b) \sim (0,n)$ — car $a + n = b + 0$. Et si le $n$ obtenu est nul, alors $z = [(0,0)] = 0_{\mathbb{Z}}$.
 
-**Unicité et exclusion mutuelle.** $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$ — par la première équation de $+$ et le lemme $0 + m = m$ du <Prereq href="/maths/partie-ii/arithmetique-de-n">chapitre 5</Prereq>, sans même invoquer la régularité ; de même $[(0,n)] = [(0,m)]$ donne $n = m$. Enfin $[(n,0)] = [(0,m)]$ signifie $n + m = 0$, ce qui force $n = m = 0$ — si $m$ était un successeur $S(m')$, alors $n + m = S(n + m')$ serait un successeur, donc non nul. Un positif non nul n'est donc jamais un négatif non nul, et seul $0_{\mathbb{Z}}$ se trouve à la frontière. $\square$
+**Unicité et exclusion mutuelle.** $[(n,0)] = [(m,0)]$ signifie $n + 0 = 0 + m$, donc $n = m$ ; de même $[(0,n)] = [(0,m)]$ donne $n = m$. Enfin $[(n,0)] = [(0,m)]$ signifie $n + m = 0$, ce qui force $n = m = 0$ — si $m$ était un successeur $S(m')$, alors $n + m = S(n + m')$ serait un successeur, donc non nul. Un positif non nul n'est donc jamais un négatif non nul, et seul $0_{\mathbb{Z}}$ se trouve à la frontière. $\square$
 </Encart>
 
 ## L'intégrité de $\mathbb{Z}$
@@ -210,7 +192,7 @@ Un dernier théorème, discret mais décisif pour la suite : un produit ne s'ann
 <Encart type="plusloin" titre="xy = 0 ⇒ x = 0 ou y = 0, par représentants canoniques">
 **Lemme dans $\mathbb{N}$.** Si $mn = 0$, alors $m = 0$ ou $n = 0$. En effet, si $m = S(m')$ et $n = S(n')$, alors $mn = m \cdot S(n') = mn' + m = mn' + S(m') = S(mn' + m')$, un successeur, donc $\neq 0$ — propriété du successeur <Prereq href="/maths/partie-ii/entiers-naturels">démontrée</Prereq> pour les entiers de von Neumann. $\square$
 
-**Théorème.** Si $x = 0_{\mathbb{Z}}$ ou $y = 0_{\mathbb{Z}}$, la conclusion est acquise d'emblée. Supposons donc $x \neq 0_{\mathbb{Z}}$ et $y \neq 0_{\mathbb{Z}}$ : la forme canonique de la section précédente fournit alors des naturels **non nuls** $m$ et $n$ tels que $x$ soit $[(m,0)]$ ou $[(0,m)]$, et $y$ soit $[(n,0)]$ ou $[(0,n)]$ — quatre cas, et cette fois la disjonction est intégralement cadrée. On calcule le produit dans chacun :
+**Théorème.** Écrivons $x$ et $y$ sous forme canonique — le théorème de la section précédente nous y autorise. On calcule le produit dans chacun des quatre cas :
 
 | $x$ | $y$ | $x \cdot y$ |
 |---|---|---|
@@ -219,7 +201,7 @@ Un dernier théorème, discret mais décisif pour la suite : un produit ne s'ann
 | $[(0,m)]$ | $[(n,0)]$ | $[(0,\,mn)]$ |
 | $[(0,m)]$ | $[(0,n)]$ | $[(mn,\,0)]$ |
 
-Dans les quatre cas, $x \cdot y = 0_{\mathbb{Z}} = [(0,0)]$ équivaudrait à $mn = 0$ (car $(mn,0) \sim (0,0)$ et $(0,mn) \sim (0,0)$ se lisent tous deux $mn = 0$) ; par le lemme, il viendrait $m = 0$ ou $n = 0$ — exclu, puisque $m$ et $n$ sont non nuls. Donc $x \cdot y \neq 0_{\mathbb{Z}}$ : un produit de deux non-nuls n'est jamais nul, ce qui est exactement l'énoncé, lu par contraposée. $\square$ <Badge niveau="demontre">Démonstration complète : cas nuls réglés d'emblée, puis disjonction sur les quatre formes canoniques non nulles.</Badge>
+Dans les quatre cas, $x \cdot y = 0_{\mathbb{Z}} = [(0,0)]$ équivaut à $mn = 0$ (car $(mn,0) \sim (0,0)$ et $(0,mn) \sim (0,0)$ se lisent tous deux $mn = 0$). Par le lemme, $mn = 0$ force $m = 0$ ou $n = 0$ ; or $m = 0$ signifie $x = 0$ et $n = 0$ signifie $y = 0$. $\square$ <Badge niveau="demontre">Démonstration complète par disjonction sur les représentants canoniques.</Badge>
 </Encart>
 
 <Resultat label="ℤ est intègre">
