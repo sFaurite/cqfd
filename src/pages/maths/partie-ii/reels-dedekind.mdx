@@ -2,15 +2,13 @@
 layout: ../../../layouts/LessonLayout.astro
 title: "Les nombres réels (coupures de Dedekind)"
 chapter: reels-dedekind
-description: "Combler les trous de ℚ : une coupure définit un réel. x²=2 sans solution rationnelle (parité gagée : discrétion de ℕ, régularité pour le facteur 2) ; coupures (existence par les exemples, pas par la définition) ; ℝ par séparation dans P(ℚ) ; ordre total, COMPLÉTUDE par réunion, borne inf ; opérations en formes séparées, produit positif VÉRIFIÉ coupure, opposé ET INVERSE démontrés (argument archimédien multiplicatif déroulé), raccords de signes par micro-lemmes de ⊖, 0* ≠ 1* ; graphes formés (charpente) ; plongement t↦t* (graphe, produit par cas de signes) ; (A_√2)² = 2 ; archimédien (S_x par séparation dans ℝ) et densité de ℚ dans ℝ ; réf. Landau pour l'exhaustif."
+description: "Combler les trous de ℚ : une coupure définit un réel. x²=2 sans solution rationnelle (parité gagée : discrétion de ℕ, régularité pour le facteur 2) ; coupures (badge BLEU de définition, existence par les exemples) ; ℝ par séparation dans P(ℚ) ; majorant/borne sup DÉFINIS + unicité du sup ; ordre total, COMPLÉTUDE par réunion (clause majorant dite), borne inf ; absence de borne sup rationnelle DÉMONTRÉE (miroir en δ) ; opérations en formes séparées, produit positif VÉRIFIÉ coupure, opposé ET INVERSE démontrés (produit exact t = a·(t/a), sans clôture), raccords de signes par micro-lemmes de ⊖, 0* ≠ 1* ; graphes formés (charpente, pas de récursion sans fonction) ; garde d'informalité corps/sous-corps ; plongement t↦t* (graphe, produit par cas de signes) ; (A_√2)² = 2 ; archimédien (S_x par séparation dans ℝ) et densité (ponts n·t* = (nt)* explicités) ; réf. Landau pour l'exhaustif."
 ---
 
 import Encart from '../../../components/Encart.astro';
 import Badge from '../../../components/Badge.astro';
-import Hypotheses from '../../../components/Hypotheses.astro';
 import Resultat from '../../../components/Resultat.astro';
 import Prereq from '../../../components/Prereq.astro';
-import Tournant from '../../../components/Tournant.astro';
 import DedekindCut from '../../../components/interactive/DedekindCut.astro';
 
 ## Le dernier pas : combler les trous de ℚ
@@ -61,7 +59,7 @@ $$
 
 Voilà une écriture de $x$ à dénominateur $r$ **strictement plus petit** que $q$ — ce qui contredit la minimalité de $q$.
 
-L'hypothèse était absurde.
+L'hypothèse mène à une contradiction : elle est donc fausse.
 
 <Resultat label="L'équation x² = 2 n'a pas de solution dans ℚ">
 
@@ -80,7 +78,7 @@ Le trou est donc réel. Il nous faut une procédure générale pour le combler �
 
 L'idée géniale de Dedekind (1872) : **pour désigner un point de la droite, il suffit de dire tout ce qui est strictement à sa gauche.** Un nombre n'a pas besoin d'« exister » au préalable ; il *est* l'ombre qu'il projette sur les rationnels.
 
-<Encart type="rappel" titre="Définition (c'est une définition dans ZF — rien n'est admis)">
+<Encart type="rappel" titre="Définition (c'est une définition dans ZF — aucun axiome nouveau)">
 
 Une **coupure de Dedekind** est un sous-ensemble $A \subseteq \mathbb{Q}$ vérifiant :
 
@@ -94,9 +92,9 @@ Insistons : ceci est une **définition**, pas une hypothèse. On ne *postule* ri
 
 La condition 2 dit que $A$ est un « demi-axe gauche ». La condition 3 interdit à $A$ de s'arrêter *sur* un rationnel — sinon ce rationnel serait son maximum. Une coupure désigne donc soit un rationnel « par en dessous », soit un point que $\mathbb{Q}$ n'atteint pas.
 
-<Badge niveau="demontre">Définition purement ensembliste, formulée dans $\mathcal{P}(\mathbb{Q})$ (axiome des parties). L'existence de coupures est établie par les exemples qui suivent — pas par la définition elle-même. Aucune hypothèse nouvelle.</Badge>
+<Badge niveau="admis">Définition — du bleu, comme toute définition du cours : on nomme un certain type d'éléments de $\mathcal{P}(\mathbb{Q})$, l'ensemble ambiant que fournit l'axiome des parties. Rien de neuf n'est postulé ; l'existence de coupures effectives, elle, sera *démontrée* par les exemples qui suivent.</Badge>
 
-Un petit fait servira sans cesse — nommons-le une fois pour toutes. **Lemme de frontière** : si $A$ est une coupure, $a \in A$ et $r \notin A$, alors $a < r$. En effet, si l'on avait $r \leq a$, la clôture vers le bas mettrait $r$ dans $A$. Tout ce qui est *dedans* est strictement à gauche de tout ce qui est *dehors* : la coupure sépare. <Badge niveau="demontre">Une ligne, directement depuis la clôture vers le bas.</Badge>
+Un petit fait servira sans cesse — nommons-le une fois pour toutes. **Lemme de frontière** : si $A$ est une coupure, $a \in A$ et $r \notin A$, alors $a < r$. En effet, si l'on avait $r \leq a$ : ou bien $r = a \in A$ directement, ou bien $r < a$ et la clôture vers le bas met $r$ dans $A$ — contradiction dans les deux cas. Tout ce qui est *dedans* est strictement à gauche de tout ce qui est *dehors* : la coupure sépare. <Badge niveau="demontre">Une ligne, directement depuis la clôture vers le bas.</Badge>
 
 ### 3. Définition de $\mathbb{R}$ et le point manquant
 
@@ -106,7 +104,7 @@ $$
 \mathbb{R} := \{\, A \subseteq \mathbb{Q} \ :\ A \text{ est une coupure de Dedekind} \,\}.
 $$
 
-C'est tout. $\mathbb{R}$ n'est rien d'autre que l'ensemble des coupures — et sa formation est doublement légitime dans ZF : $\mathcal{P}(\mathbb{Q})$ existe par l'axiome des parties, et « être une coupure » est une formule du langage de ZF, donc la **séparation** découpe dans $\mathcal{P}(\mathbb{Q})$ exactement l'ensemble des coupures.
+C'est tout. $\mathbb{R}$ n'est rien d'autre que l'ensemble des coupures — et sa formation est doublement légitime dans ZF : $\mathcal{P}(\mathbb{Q})$ existe par l'axiome des parties, et « être une coupure » est une formule du langage de ZF, donc la **séparation** découpe dans $\mathcal{P}(\mathbb{Q})$ exactement l'ensemble des coupures. <Badge niveau="admis">Définition : $\mathbb{R}$ *est* cet ensemble — posée par choix, comme $\mathbb{Z}$ et $\mathbb{Q}$ aux chapitres 6 et 7 ; sa formation, elle, vient d'être justifiée.</Badge>
 
 Voyons maintenant comment ce dispositif **comble** le trou de $\sqrt 2$. Considérons — formation licite, encore par séparation dans $\mathbb{Q}$ :
 
@@ -118,7 +116,7 @@ Le sous-indice $\sqrt2$ n'est qu'une **étiquette prospective** : le membre de d
 
 <Encart type="plusloin" titre="Vérification : A_√2 est bien une coupure SANS maximum">
 
-**Non triviale.** $-1 \in A_{\sqrt2}$ (car $-1 < 0$), donc $A \neq \varnothing$. Et $2 \notin A_{\sqrt2}$ (car $2 \geq 0$ et $2^2 = 4 \geq 2$), donc $A \neq \mathbb{Q}$.
+Notons $A := A_{\sqrt2}$, le temps de cet encart. **Non triviale.** $-1 \in A$ (car $-1 < 0$), donc $A \neq \varnothing$. Et $2 \notin A$ (car $2 \geq 0$ et $2^2 = 4 \geq 2$), donc $A \neq \mathbb{Q}$.
 
 **Close vers le bas.** Soit $q \in A_{\sqrt2}$ et $q' < q$. Si $q' < 0$, c'est gagné. Sinon $0 \le q' < q$, donc $q'^2 < q^2$. Comme $q \in A$ et $q \ge 0$, on a $q^2 < 2$, d'où $q'^2 < 2$ : $q' \in A$.
 
@@ -170,7 +168,7 @@ C'est naturel : être « plus à gauche » sur la droite, c'est avoir une ombre 
 
 <Badge niveau="demontre">Ordre total déduit de la définition : si $A \not\subseteq B$, soit $q \in A \setminus B$ ; tout $b \in B$ vérifie $b < q$ (lemme de frontière, appliqué à $B$) ; la clôture vers le bas de $A$ donne alors $B \subseteq A$.</Badge>
 
-Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}$.
+Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}$. Deux mots de vocabulaire d'abord, car ils n'ont encore jamais été posés dans ce cours : une coupure $M$ **majore** une partie $\mathcal{S} \subseteq \mathbb{R}$ si $A \leq M$ pour tout $A \in \mathcal{S}$, et $\mathcal{S}$ est **majorée** s'il existe un tel **majorant**. Une **borne supérieure** de $\mathcal{S}$ est un majorant plus petit que tous les autres — et il ne peut y en avoir qu'une : deux bornes supérieures se majorent mutuellement, et l'antisymétrie de $\subseteq$ les identifie. C'est cette unicité qui légitime la *notation* $\sup \mathcal{S}$. <Badge niveau="admis">Trois définitions — les mêmes mots serviront, mutatis mutandis, pour les parties de $\mathbb{Q}$, de $\mathbb{Z}$ ou de $\mathbb{N}$ ; l'unicité, elle, est le micro-théorème d'antisymétrie qui précède.</Badge>
 
 <Encart type="calcul" titre="Théorème : ℝ est complet (borne sup)">
 
@@ -184,7 +182,7 @@ Vient alors **la** propriété — celle qui manquait cruellement à $\mathbb{Q}
 
 **Étape 3 — sans maximum.** Si $q \in U$, alors $q \in A$ pour un $A$ sans maximum : il existe $q'' \in A \subseteq U$ avec $q'' > q$.
 
-Donc $U$ est **une coupure**. C'est le plus petit majorant (tout majorant contient chaque $A$, donc contient $U$).
+Donc $U$ est **une coupure** — et c'est un **majorant** de $\mathcal{S}$ : chaque $A \in \mathcal{S}$ est inclus dans la réunion, par définition même de celle-ci. C'est enfin le **plus petit** : tout majorant contient chaque $A$, donc contient $U$.
 
 <Resultat label="Complétude de ℝ">
 
@@ -197,7 +195,7 @@ $$
 
 </Encart>
 
-Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{q : q^2 < 2\}$ est non vide et majoré, mais **n'a pas de borne supérieure rationnelle** : sa « limite » serait $\sqrt2$, qui n'existe pas. Le trou, c'était exactement *l'absence de borne sup*. En passant aux coupures, chaque borne sup manquante devient l'objet $U$ — et $\mathbb{R}$ devient le continuum sans faille.
+Pourquoi est-ce décisif ? Dans $\mathbb{Q}$, l'ensemble $\{\, q \in \mathbb{Q} : q^2 < 2 \,\}$ est non vide et majoré, mais **n'a pas de borne supérieure rationnelle** — et ce n'est pas une image, c'est un théorème, en miroir de la vérification de la section 3. Un majorant rationnel $s$ vérifie $s \geq 1 > 0$ (car $1$ est dans l'ensemble) et $s^2 \geq 2$ — sinon $s$ appartiendrait lui-même à l'ensemble, et l'argument en $\varepsilon$ de la section 3 y fournirait un élément plus grand que lui. L'égalité $s^2 = 2$ étant exclue par la section 1, reste $s^2 > 2$. Mais alors $\delta := \tfrac{s^2 - 2}{2s} > 0$ donne $s - \delta = \tfrac{s^2 + 2}{2s} > 0$ et $(s - \delta)^2 = s^2 - (s^2 - 2) + \delta^2 > 2$ : tout $q$ de l'ensemble vérifie $q < s - \delta$ (clair si $q \leq 0$ ; et si $q > 0$, $q \geq s - \delta$ donnerait $q^2 > 2$) — voilà un majorant *strictement plus petit* que $s$. Aucun majorant rationnel n'est donc le plus petit : pas de borne supérieure. Le trou, c'était exactement *l'absence de borne sup*. En passant aux coupures, chaque borne sup manquante devient l'objet $U$ — et $\mathbb{R}$ devient le continuum sans faille.
 
 **Et vers le bas ?** Symétriquement, toute partie $\mathcal{E} \subseteq \mathbb{R}$ non vide et **minorée** possède une **borne inférieure** $\inf \mathcal{E}$ — un *plus grand minorant*. Nul besoin de refaire le travail : l'ensemble $\mathcal{M}$ des minorants de $\mathcal{E}$ — formé par séparation dans $\mathbb{R}$ — est non vide (par hypothèse) et majoré (par n'importe quel élément de $\mathcal{E}$), donc admet une borne supérieure $s := \sup \mathcal{M}$. Tout $e \in \mathcal{E}$ majore $\mathcal{M}$, donc $s \le e$ : $s$ est lui-même un minorant de $\mathcal{E}$ ; et tout minorant de $\mathcal{E}$ appartient à $\mathcal{M}$, donc est $\le s$. Ainsi $s = \inf \mathcal{E}$. <Badge niveau="demontre">La borne inférieure, déduite de la borne supérieure sans rien ajouter. L'analyse (partie V) s'en servira autant que de sa jumelle.</Badge>
 
@@ -223,7 +221,7 @@ $$
 
 Le **zéro** est la coupure $0^* := \{\, q \in \mathbb{Q} : q < 0 \,\}$, et $A \oplus 0^* = A$ : tout $a + s$ avec $s < 0$ est $< a$, donc dans $A$ ; réciproquement, $A$ étant sans maximum, tout $a \in A$ s'écrit $a = a' + (a - a')$ avec $a' > a$ dans $A$ et $a - a' < 0$ dans $0^*$.
 
-Avant d'aller plus loin, un petit outil qui servira trois fois d'ici la fin du chapitre : le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> s'étend à $\mathbb{Z}$. **Toute partie non vide et majorée de $\mathbb{Z}$ admet un plus grand élément** (et toute partie non vide et minorée, un plus petit). Soit $N \in \mathbb{Z}$ un majorant de $S$ : formons $D := \{\, n \in \mathbb{N} : \exists\, s \in S,\ n = N - s \,\}$, par séparation dans $\mathbb{N}$ — chaque différence y a bien sa place, car $s \leq N$ donne $N - s \geq 0$, et la <Prereq href="/maths/partie-ii/entiers-relatifs">forme canonique</Prereq> loge tout entier $\geq 0$ dans l'image de $\mathbb{N}$. $D$ est non vide ($S$ l'est) ; son plus petit élément, fourni par le bon ordre, s'écrit $N - s_0$ pour un $s_0 \in S$, et pour tout $s \in S$, $N - s_0 \leq N - s$ donne $s \leq s_0$ (compatibilité additive) : $s_0$ est le plus grand élément de $S$. Pour le minimum, appliquer ce qui précède à $\{\, z \in \mathbb{Z} : -z \in S \,\}$. <Badge niveau="demontre">Bon ordre étendu à $\mathbb{Z}$, par translation vers $\mathbb{N}$ — l'ensemble des différences formé par séparation.</Badge>
+Avant d'aller plus loin, un petit outil qui servira quatre fois d'ici la fin du chapitre : le <Prereq href="/maths/partie-ii/arithmetique-de-n">bon ordre de $\mathbb{N}$</Prereq> s'étend à $\mathbb{Z}$. **Toute partie non vide et majorée de $\mathbb{Z}$ admet un plus grand élément** (et toute partie non vide et minorée, un plus petit). Soit $N \in \mathbb{Z}$ un majorant de $S$ : formons $D := \{\, n \in \mathbb{N} : \exists\, s \in S,\ n = N - s \,\}$, par séparation dans $\mathbb{N}$ — chaque différence y a bien sa place, car $s \leq N$ donne $N - s \geq 0$, et la <Prereq href="/maths/partie-ii/entiers-relatifs">forme canonique</Prereq> loge tout entier $\geq 0$ dans l'image de $\mathbb{N}$. $D$ est non vide ($S$ l'est) ; son plus petit élément, fourni par le bon ordre, s'écrit $N - s_0$ pour un $s_0 \in S$, et pour tout $s \in S$, $N - s_0 \leq N - s$ donne $s \leq s_0$ (compatibilité additive) : $s_0$ est le plus grand élément de $S$. Pour le minimum, appliquer ce qui précède à $\{\, z \in \mathbb{Z} : -z \in S \,\}$. <Badge niveau="demontre">Bon ordre étendu à $\mathbb{Z}$, par translation vers $\mathbb{N}$ — l'ensemble des différences formé par séparation.</Badge>
 
 **L'opposé.** Pour une coupure $A$, on pose
 
@@ -239,7 +237,7 @@ C'est la coupure symétrique de $A$ par rapport à $0$ — encore faut-il vérif
 
 </Encart>
 
-<Encart type="plusloin" titre="A ⊕ (⊖A) = 0* — le seul passage délicat">
+<Encart type="plusloin" titre="A ⊕ (⊖A) = 0* — le premier passage délicat">
 
 $(\subseteq)$ Soient $a \in A$ et $q \in \ominus A$, disons $-q - r \notin A$ avec $r > 0$. Comme $a \in A$ et $-q - r \notin A$, on a $a < -q - r$, donc $a + q < -r < 0$ : $a + q \in 0^*$.
 
@@ -277,7 +275,7 @@ $$
 
 Ces raccords de signes tiennent grâce à trois micro-lemmes, tous issus des lois de $\oplus$ : **(a)** l'opposé est *unique* — si $A \oplus B = A \oplus B' = 0^*$, alors $B = B \oplus (A \oplus B') = (B \oplus A) \oplus B' = B'$ par associativité, commutativité et neutre — donc $\ominus(\ominus A) = A$, les deux étant opposés de $\ominus A$ ; **(b)** $\ominus 0^* = 0^*$, par calcul direct sur la définition de $\ominus$ (pour $q < 0$, le témoin $r := -\tfrac q2 > 0$ donne $-q - r = -\tfrac q2 \geq 0$, donc $\notin 0^*$ ; et aucun $q \geq 0$ ne convient, car $-q - r < 0$ y est toujours) ; **(c)** $\ominus$ échange les deux côtés de $0^*$. Si $A < 0^*$, alors $\ominus A > 0^*$ : prenons $v \in 0^* \setminus A$ ; pour tout $q < 0$, le témoin $r := -q - v > 0$ donne $-q - r = v \notin A$, donc $0^* \subseteq \ominus A$, et l'égalité est exclue par (a) et (b). Réciproquement, si $A > 0^*$, alors $\ominus A < 0^*$ : la définition de $\oplus$ est monotone en chaque argument ($X \subseteq Y$ donne $C \oplus X \subseteq C \oplus Y$, directement sur les sommes), donc $0^* = A \oplus (\ominus A) \supseteq 0^* \oplus (\ominus A) = \ominus A$, et l'égalité est exclue de même. <Badge niveau="demontre">Trois micro-lemmes d'une ligne chacun, déroulés ci-dessus — c'est exactement l'algèbre qui portait la règle des signes de $\mathbb{Z}$.</Badge>
 
-Le **un** est $1^* := \{\, q : q < 1 \,\}$ ; pour $A > 0^*$, l'inverse est
+Le **un** est $1^* := \{\, q \in \mathbb{Q} : q < 1 \,\}$ ; pour $A > 0^*$, l'inverse est
 
 $$
 A^{-1} := \{\, q \in \mathbb{Q} : q \leq 0 \,\} \ \cup\ \{\, q > 0 \ :\ \exists\, r \notin A,\ r < \tfrac1q \,\}
@@ -301,13 +299,13 @@ Un fait préalable, deux lignes : **si $A > 0^*$, alors $0 \in A$, et tout $r \n
 
 $(\subseteq)$ Un élément du produit est soit dans $0^*$ (donc $< 1$), soit de la forme $a\,b$ avec $a \in A$, $b \in A^{-1}$, $a, b \geq 0$. Si $b = 0$ : le produit vaut $0 < 1$. Si $b > 0$ : son témoin $r \notin A$ vérifie $r < \tfrac1b$, et le lemme de frontière donne $a < r < \tfrac1b$, d'où $a\,b < 1$ (multiplication par $b > 0$). Tout est dans $1^*$.
 
-$(\supseteq)$ Soit $t < 1$. Si $t < 0$ : il est dans $0^*$. Si $t = 0$ : $0 = 0 \cdot 0$ avec $0 \in A$ (fait préalable) et $0 \in A^{-1}$. Reste $0 < t < 1$ — l'argument du « plus grand $n$ », version multiplicative. Fixons $a_0 \in A$ avec $a_0 > 0$, et posons le pas $w := \tfrac{a_0\,(1 - t)}{2} > 0$. L'ensemble des $n \in \mathbb{N}$ tels que $n\,w \in A$ est non vide ($n = 0$, car $0 \in A$) et majoré : pour $p \notin A$, $n\,w \in A$ donne $n\,w < p$ (frontière), et <Prereq href="/maths/partie-ii/rationnels">Archimède dans $\mathbb{Q}$</Prereq> fournit $N$ avec $N\,w > p$, d'où $n < N$ (simplification par $w > 0$). Le bon ordre étendu (§5) lui donne un plus grand élément $n$ : ainsi $n\,w \in A$, $(n+1)\,w \notin A$ — et $(n+2)\,w \notin A$ non plus, par clôture vers le bas lue en contraposée. Posons $a := n\,w \in A$ et $b := \tfrac{1}{(n+2)\,w} > 0$ : le témoin $r := (n+1)\,w \notin A$ vérifie $r < (n+2)\,w = \tfrac1b$, donc $b \in A^{-1}$. Le produit vaut
+$(\supseteq)$ Soit $t < 1$. Si $t < 0$ : il est dans $0^*$. Si $t = 0$ : $0 = 0 \cdot 0$ avec $0 \in A$ (fait préalable) et $0 \in A^{-1}$. Reste $0 < t < 1$ — l'argument du « plus grand $n$ », version multiplicative. Fixons $a_0 \in A$ avec $a_0 > 0$ ($0 \in A$ et $A$ sans maximum), et posons le pas $w := a_0\,(1 - t) > 0$. L'ensemble des $n \in \mathbb{N}$ tels que $n\,w \in A$ est non vide ($n = 0$, car $0 \in A$) et majoré : pour $p \notin A$, $n\,w \in A$ donne $n\,w < p$ (frontière), et <Prereq href="/maths/partie-ii/rationnels">Archimède dans $\mathbb{Q}$</Prereq> fournit $N$ avec $N\,w > p$, d'où $n < N$ (simplification par $w > 0$). Le bon ordre étendu (§5) lui donne un plus grand élément $n$ — et $n \geq 1$, car $w < a_0$ met $w$ dans $A$ par clôture vers le bas. Posons $a := n\,w \in A$ — donc $a > 0$ — et $r := (n+1)\,w \notin A$. Alors $a = r - w$, et $a_0 < r$ (frontière), donc
 
 $$
-a\,b = \frac{n}{n+2} = 1 - \frac{2}{n+2}.
+\frac{w}{r} < \frac{w}{a_0} = 1 - t, \qquad\text{d'où}\qquad \frac{a}{r} = 1 - \frac{w}{r} > t, \qquad\text{c'est-à-dire}\qquad t\,r < a.
 $$
 
-Or $a_0 \in A$ et $(n+1)\,w \notin A$ donnent $a_0 < (n+1)\,w$ (frontière), c'est-à-dire $n + 1 > \tfrac{a_0}{w} = \tfrac{2}{1-t}$ ; a fortiori $n + 2 > \tfrac{2}{1-t}$, donc $\tfrac{2}{n+2} < 1 - t$, donc $a\,b > t$. La clôture vers le bas de $A \otimes A^{-1}$ — c'est une coupure, par l'encart du produit appliqué à $A$ et $A^{-1}$, tous deux $\geq 0^*$ — conclut : $t \in A \otimes A^{-1}$. $\quad\blacksquare$
+Le rationnel $b := \tfrac{t}{a}$ appartient alors à $A^{-1}$ — il est $> 0$, et le témoin $r$ convient : $r < \tfrac{a}{t} = \tfrac1b$ — et le produit tombe **exactement** sur la cible : $a \cdot b = t$. Donc $t \in A \otimes A^{-1}$, sans même avoir à invoquer la clôture du produit. $\quad\blacksquare$
 
 </Encart>
 
@@ -323,7 +321,7 @@ $$
 t^* := \{\, q \in \mathbb{Q} : q < t \,\}.
 $$
 
-C'en est bien une (non vide : $t - 1$ ; majorée : $t \notin t^*$ ; close vers le bas ; sans maximum par densité de $\mathbb{Q}$) — et l'application elle-même a son graphe, $\{\, (t, A) \in \mathbb{Q} \times \mathbb{R} : A = \{ q \in \mathbb{Q} : q < t \} \,\}$, formé par séparation, total et univoque. Comme aux chapitres précédents, séparons le théorème de la convention.
+C'en est bien une (non vide : $t - 1$ ; $\neq \mathbb{Q}$ : $t \notin t^*$ ; close vers le bas ; sans maximum par densité de $\mathbb{Q}$) — et l'application elle-même a son graphe, $\{\, (t, A) \in \mathbb{Q} \times \mathbb{R} : A = \{ q \in \mathbb{Q} : q < t \} \,\}$, formé par séparation, total et univoque. Comme aux chapitres précédents, séparons le théorème de la convention.
 
 <Resultat label="Plongement de ℚ dans ℝ">
 $$ t \mapsto t^* \ \text{ est injective, et } \quad (t + u)^* = t^* \oplus u^*, \qquad (t\,u)^* = t^* \otimes u^*, \qquad t \leq u \iff t^* \subseteq u^*. $$
@@ -338,6 +336,8 @@ $(\mathbb{R}, \oplus, \otimes, \subseteq)$ est un **corps totalement ordonné**,
 
 <Badge niveau="demontre" slot="badge">Facture : neutres et opposés démontrés (encarts), inverses démontrés (encarts), $0^* \neq 1^*$ vérifié, ordre total (§4) et complétude (§4) démontrés ; associativité, commutativité, distributivité et compatibilités de l'ordre : doubles inclusions routinières dans le cas positif — sur le modèle des encarts déroulés — puis raccords de signes par l'algèbre de $\ominus$. Aucune hypothèse nouvelle.</Badge>
 </Resultat>
+
+Un mot sur le mot : comme au <Prereq href="/maths/partie-ii/rationnels">chapitre précédent</Prereq>, « corps » — et « sous-corps » avec lui — reste ici **informel**. La liste exacte de ce qui est démontré est celle du bloc « Lois algébriques de $\mathbb{Q}$ », transposée à $(\mathbb{R}, \oplus, \otimes)$ et enrichie des inverses et des compatibilités d'ordre ; la définition officielle de « corps » attend la partie IV, avec les anneaux.
 
 **Le carré qui vaut $2$.** Reste à tenir la promesse : $A_{\sqrt2}$ est bien la racine de $2$.
 
@@ -365,9 +365,9 @@ La complétude entraîne, presque gratuitement, deux propriétés dont toute l'a
 
 <Encart type="calcul" titre="ℝ est archimédien, et ℚ y est dense">
 
-**Archimède.** Soient $x > 0^*$ et $y \in \mathbb{R}$. Il existe $n \in \mathbb{N}$ tel que $n\cdot x > y$ — où $n \cdot x$ est défini par récurrence ($0 \cdot x := 0^*$ et $(n+1)\cdot x := n\cdot x \oplus x$, définition légitimée par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>), et où l'on note désormais $u \ominus v := u \oplus (\ominus v)$. Sinon, l'ensemble $S_x := \{\, A \in \mathbb{R} : \exists\, n \in \mathbb{N},\ A = n \cdot x \,\}$ — chaque multiple est une coupure, donc $\mathbb{R}$ est un ambiant tout trouvé : séparation, avec le graphe de $n \mapsto n \cdot x$ en paramètre — serait majoré par $y$ ; par la complétude (§4) il aurait une borne supérieure $s$. Mais $s \ominus x < s$ n'est pas un majorant, donc $n\cdot x > s \ominus x$ pour un certain $n$, d'où $(n+1)\cdot x > s$ — ce qui contredit le fait que $s$ majore. $\blacksquare$
+**Archimède.** Soient $x > 0^*$ et $y \in \mathbb{R}$. Il existe $n \in \mathbb{N}$ tel que $n\cdot x > y$ — où $n \cdot x$ est défini par récurrence : $0 \cdot x := 0^*$ et $(n+1)\cdot x := n\cdot x \oplus x$, définition légitimée par le <Prereq href="/maths/partie-ii/arithmetique-de-n">théorème de récursion</Prereq>, dont le pas « $\oplus\, x$ » est bien une *fonction* de $\mathbb{R}$ dans $\mathbb{R}$ — graphe $\{(u, v) \in \mathbb{R} \times \mathbb{R} : v = u \oplus x\}$, séparation, le scrupule même du chapitre 5. On note désormais $u \ominus v := u \oplus (\ominus v)$. Sinon, l'ensemble $S_x := \{\, A \in \mathbb{R} : \exists\, n \in \mathbb{N},\ A = n \cdot x \,\}$ — chaque multiple est une coupure, donc $\mathbb{R}$ est un ambiant tout trouvé : séparation, avec le graphe de $n \mapsto n \cdot x$ en paramètre — serait majoré par $y$ ; par la complétude (§4) il aurait une borne supérieure $s$. Mais $s \ominus x < s$ n'est pas un majorant, donc $n\cdot x > s \ominus x$ pour un certain $n$, d'où $(n+1)\cdot x > s$ — ce qui contredit le fait que $s$ majore. $\blacksquare$
 
-**Densité.** Soient $x < y$ dans $\mathbb{R}$. Alors $y \ominus x > 0^*$ ; par Archimède, il existe $n \in \mathbb{N}^*$ avec $n\cdot(y \ominus x) > 1^*$, c'est-à-dire $\tfrac1n < y - x$ (en identifiant les rationnels à leurs coupures). L'ensemble des entiers $m$ tels que $\tfrac{m}{n} > x$ est non vide (Archimède, appliqué au pas $\tfrac1n$ et à la cible $x$) et minoré (Archimède appliqué à la cible $\ominus x$ donne un entier $k$ avec $\tfrac{k}{n} > \ominus x$, soit $-\tfrac{k}{n} < x$ : tout $m$ de l'ensemble vérifie $\tfrac{m}{n} > x > -\tfrac{k}{n}$, donc $m > -k$) ; par le bon ordre étendu à $\mathbb{Z}$ (§5), il admet un plus petit élément $m$. Alors $\tfrac{m-1}{n} \leq x$, donc $\tfrac{m}{n} \leq x + \tfrac1n < x + (y - x) = y$. Ainsi $x < \tfrac{m}{n} < y$. $\blacksquare$
+**Densité.** Soient $x < y$ dans $\mathbb{R}$. Alors $y \ominus x > 0^*$ ; par Archimède, il existe $n \in \mathbb{N}$ avec $n\cdot(y \ominus x) > 1^*$ — et $n \neq 0$, sans quoi on aurait $0^* > 1^*$. C'est-à-dire $\left(\tfrac1n\right)^{\!*} < y \ominus x$, en identifiant les rationnels à leurs coupures — identification qui repose ici sur deux ponts, récurrences immédiates l'une et l'autre : $n \cdot t^* = (n\,t)^*$ (depuis $(t+u)^* = t^* \oplus u^*$, le plongement) et la croissance de $u \mapsto n \cdot u$ (depuis la monotonie de $\oplus$, notée au micro-lemme (c)). Alors $n \cdot z > 1^*$ force bien $\left(\tfrac1n\right)^{\!*} < z$ : l'ordre étant total, $z \leq \left(\tfrac1n\right)^{\!*}$ donnerait $n \cdot z \leq n \cdot \left(\tfrac1n\right)^{\!*} = 1^*$. L'ensemble des entiers $m$ tels que $\tfrac{m}{n} > x$ est non vide (Archimède, appliqué au pas $\tfrac1n$ et à la cible $x$) et minoré (Archimède appliqué à la cible $\ominus x$ donne un entier $k$ avec $\tfrac{k}{n} > \ominus x$, soit $-\tfrac{k}{n} < x$ : tout $m$ de l'ensemble vérifie $\tfrac{m}{n} > x > -\tfrac{k}{n}$, donc $m > -k$) ; par le bon ordre étendu à $\mathbb{Z}$ (§5), il admet un plus petit élément $m$. Alors $\tfrac{m-1}{n} \leq x$, donc $\tfrac{m}{n} \leq x + \tfrac1n < x + (y - x) = y$. Ainsi $x < \tfrac{m}{n} < y$. $\blacksquare$
 
 </Encart>
 
