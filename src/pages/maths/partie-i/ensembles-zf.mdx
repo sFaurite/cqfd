@@ -70,18 +70,18 @@ La leçon est limpide : on ne peut **pas** fabriquer un ensemble à partir de n'
 
 ### Les axiomes de Zermelo–Fraenkel (ZF)
 
-Voici le système standard. Je les énonce intuitivement ; leur version logique formelle viendra plus tard si nécessaire. Une précision verrouille tout : quand un axiome parle d'une « propriété » $P$, il faut entendre une **formule du langage de ZF** — écrite avec $\in$, $=$ et la logique, éventuellement avec paramètres — et non une propriété vague du langage courant. C'est ce qui fait de la séparation et du remplacement des *schémas* : une instance d'axiome par formule.
+Voici le système standard. On les énonce intuitivement ; leur version logique formelle viendra plus tard si nécessaire. Une précision verrouille tout : quand un axiome parle d'une « propriété » $P$, il faut entendre une **formule du langage de ZF** — écrite avec $\in$, $=$ et la logique, éventuellement avec paramètres, c'est-à-dire en y mentionnant des ensembles déjà donnés, comme le $E$ lui-même ou tout autre ensemble sous la main — et non une propriété vague du langage courant. C'est ce qui fait de la séparation et du remplacement des *schémas* : une instance d'axiome par formule.
 
 <Hypotheses titre="Hypothèses de départ : les axiomes ZF">
 
 1. **Extensionnalité.** Deux ensembles qui ont exactement les mêmes éléments sont égaux. Un ensemble *est* l'ensemble de ses éléments — rien d'autre.
 2. **Paire.** Pour tous $a$, $b$, il existe un ensemble $\{a, b\}$ dont les éléments sont précisément $a$ et $b$.
 3. **Réunion.** Pour tout ensemble $E$, il existe l'ensemble $\bigcup E$ des éléments des éléments de $E$.
-4. **Ensemble des parties.** Pour tout $E$, il existe $\mathcal{P}(E)$, l'ensemble de tous les sous-ensembles de $E$.
+4. **Ensemble des parties.** Pour tout $E$, il existe $\mathcal{P}(E)$, l'ensemble de tous les sous-ensembles de $E$ — les ensembles dont chaque élément appartient à $E$.
 5. **Séparation (restreinte, schéma).** Pour tout ensemble $E$ et toute **formule** $P(x)$ du langage de ZF (éventuellement avec paramètres), il existe $\{x \in E : P(x)\}$. **Restreinte** à un $E$ donné : c'est elle qui évite Russell.
-6. **Infini.** Il existe un ensemble $I$ qui contient un élément sans éléments, et qui, avec chaque $x$, contient aussi $x \cup \{x\}$. Un tel ensemble est dit *inductif* ; c'est l'axiome qui rendra $\mathbb{N}$ possible. (On n'écrit pas « contient $\varnothing$ » : ce symbole n'est pas encore défini — l'existence de l'ensemble vide se *déduira* de cet axiome, juste en dessous.)
+6. **Infini.** Il existe un ensemble $I$ qui contient un élément sans éléments, et qui, avec chaque $x$, contient aussi $x \cup \{x\}$. Un tel ensemble est dit *inductif* ; c'est l'axiome qui rendra $\mathbb{N}$ possible. (On n'écrit pas « contient $\varnothing$ » : ce symbole n'est pas encore défini — l'existence de l'ensemble vide se *déduira* de cet axiome, juste en dessous. De même, $x \cup \{x\}$ désigne ici, en toutes lettres, l'ensemble dont les éléments sont ceux de $x$, plus $x$ lui-même — la notation $\cup$ sera construite un peu plus bas.)
 7. **Remplacement (schéma).** Si une formule $F(x, y)$ associe à chaque $x \in E$ un **unique** $y$ — une « fonction » définissable, les fonctions véritables n'existant pas encore —, alors l'ensemble de ces $y$ existe.
-8. **Fondation.** Tout ensemble non vide $A$ possède un élément **minimal pour $\in$** : un $y \in A$ tel que $y \cap A = \varnothing$. Conséquences intuitives : pas de boucle $x \in x$, pas de cycle $x_0 \ni x_1 \ni \cdots \ni x_0$, pas de chaîne d'appartenance infinie descendante.
+8. **Fondation.** Tout ensemble $A$ ayant au moins un élément possède un élément **minimal pour $\in$** : un $y \in A$ dont aucun élément n'appartient à $A$ (une fois nos notations construites, on l'écrira $y \cap A = \varnothing$). Conséquences intuitives : pas de boucle $x \in x$, pas de cycle $x_0 \ni x_1 \ni \cdots \ni x_0$, pas de chaîne d'appartenance infinie descendante — les deux premières se démontreront en une ligne dès que singletons et ensembles finis en extension seront construits, plus bas ; la troisième attendra les fonctions et $\mathbb{N}$ (partie II).
 
 </Hypotheses>
 
@@ -89,15 +89,17 @@ Voici le système standard. Je les énonce intuitivement ; leur version logique 
 
 ### À part : l'axiome du choix
 
-On adjoint souvent un axiome supplémentaire — le neuvième de *notre* liste, le décompte variant selon les présentations —, l'**axiome du choix** (AC) : étant donnée une famille d'ensembles non vides, on peut choisir simultanément un élément dans chacun. ZF + AC se note **ZFC**.
+On adjoint souvent un axiome supplémentaire — le neuvième de *notre* liste, le décompte variant selon les présentations —, l'**axiome du choix** (AC) : étant donnée une famille — entendez, pour l'instant : un ensemble — d'ensembles non vides, on peut choisir simultanément un élément dans chacun ; l'énoncé précis attendra les fonctions. ZF + AC se note **ZFC**.
 
 <Encart type="plusloin" titre="AC est indépendant de ZF">
 
-Gödel (1938) a montré qu'on ne peut pas **réfuter** AC à partir de ZF (en construisant un modèle, l'univers constructible $L$, où AC est vrai) ; Cohen (1963), par la méthode du *forcing*, qu'on ne peut pas le **démontrer** non plus. AC est donc strictement **indépendant** de ZF : ajouter AC ou sa négation donne deux théories toutes deux cohérentes **relativement à ZF** — si ZF est cohérente, chacune l'est aussi.
+Gödel (1938) a montré qu'on ne peut pas **réfuter** AC à partir de ZF (en construisant un modèle, l'univers constructible $L$, où AC est vrai) ; Cohen (1963), par la méthode du *forcing*, qu'on ne peut pas le **démontrer** non plus. AC est donc strictement **indépendant** de ZF (si ZF est cohérente — réserve qui court dans tout l'encart, car une théorie incohérente démontre tout) : ajouter AC ou sa négation donne deux théories toutes deux cohérentes **relativement à ZF** — si ZF est cohérente, chacune l'est aussi.
 
 <Badge niveau="demontre">L'indépendance est un théorème démontré (Gödel/Cohen). <a href="https://fr.wikipedia.org/wiki/Axiome_du_choix" target="_blank" rel="noopener">réf. ↗</a></Badge> Quant à l'*adoption* d'AC : <Badge niveau="admis">c'est un **choix** (un axiome supplémentaire), quasi universel car très commode, mais philosophiquement discuté — surtout pour ses conséquences contre-intuitives (Banach–Tarski).</Badge>
 
 </Encart>
+
+Ce cours, lui, travaille dans ZF : les huit axiomes ci-dessus, pas un de plus. Chaque fois qu'un résultat exigera l'axiome du choix — ou un fragment —, nous le dirons sur place, et le chapitre que la partie VI lui consacre soldera les comptes.
 
 ### On construit : l'ensemble vide
 
@@ -121,18 +123,22 @@ Les deux ensembles ont donc exactement les mêmes éléments (aucun). Par **exte
 <Resultat label="Unicité">
 
 $$
-\exists!\, \varnothing \quad \text{tel que} \quad \forall x,\ x \notin \varnothing
+\exists!\, v \quad \text{tel que} \quad \forall x,\ x \notin v
 $$
 
-<Badge niveau="demontre" slot="badge">Déduit rigoureusement de l'axiome d'extensionnalité.</Badge>
+C'est cet unique ensemble que note $\varnothing$.
+
+<Badge niveau="demontre" slot="badge">Existence par séparation dans l'ensemble que fournit l'axiome d'infini (déroulée dans le texte au-dessus de l'encart) ; unicité par extensionnalité (déroulée ci-dessus).</Badge>
 
 </Resultat>
 
 </Encart>
 
+Ce petit argument a une portée générale : chacune des écritures des axiomes — $\{a,b\}$, $\bigcup E$, $\mathcal{P}(E)$, $\{x \in E : P(x)\}$ — désigne *un* ensemble et un seul, car deux candidats auraient les mêmes éléments, donc seraient égaux. Les axiomes donnent l'existence ; l'extensionnalité rend les notations licites.
+
 ### Singletons, paires, réunions
 
-L'axiome de la paire donne directement $\{a, b\}$. En l'appliquant avec $a = b$, on obtient le **singleton** $\{a\} := \{a, a\}$ (un seul élément, par extensionnalité). En combinant paire et réunion, on forme $\{a\} \cup \{b\} = \{a, b\}$, puis de proche en proche n'importe quel ensemble fini écrit en extension. <Badge niveau="demontre">Constructions directes à partir des axiomes 2 et 3.</Badge>
+L'axiome de la paire donne directement $\{a, b\}$. En l'appliquant avec $a = b$, on obtient le **singleton** $\{a\} := \{a, a\}$ (ses éléments sont précisément $a$ et $a$ — un seul, donc, par l'axiome même). En combinant paire et réunion, on pose la **réunion binaire** : $A \cup B := \bigcup \{A, B\}$ — la paire $\{A, B\}$ existe (axiome 2), sa réunion aussi (axiome 3), et ses éléments sont exactement ceux de $A$ et ceux de $B$. Sa jumelle, l'**intersection** $A \cap B := \{x \in A : x \in B\}$, s'obtient par séparation dans l'ambiant $A$ — c'est elle que la forme symbolique de la fondation attendait, et le chapitre suivant s'en servira. En particulier $\{a\} \cup \{b\} = \{a, b\}$, puis de proche en proche — pour chaque écriture concrète, une construction finie explicite — n'importe quel ensemble fini écrit en extension. <Badge niveau="demontre">Constructions directes à partir des axiomes 2, 3 et 5.</Badge>
 
 ### Le couple ordonné : encoder l'ordre avec des accolades
 
@@ -144,7 +150,7 @@ $$
 
 L'idée géniale, lorsque $a \neq b$ : le « premier » $a$ est marqué deux fois (il est dans les deux blocs), le « second » $b$ une seule — l'asymétrie est encodée dans la structure même. Lorsque $a = b$, les deux blocs se confondent ($(a, a) = \{\{a\}\}$) : l'image mentale s'efface, mais la propriété caractéristique, elle, tient toujours — l'encart ci-dessous traite précisément ce cas.
 
-<Encart type="plusloin" titre="Pourquoi (a,b) encode vraiment l'ordre">
+<Encart type="calcul" titre="Pourquoi (a,b) encode vraiment l'ordre">
 
 On veut la propriété caractéristique :
 
@@ -152,9 +158,15 @@ $$
 (a, b) = (c, d) \iff a = c \ \text{et} \ b = d
 $$
 
-Le sens $\Leftarrow$ est immédiat. Pour $\Rightarrow$, on récupère $a$ comme l'unique élément de l'intersection $\bigcap (a,b) = \{a\} \cap \{a, b\} = \{a\}$, puis $b$ par élimination. Un examen des cas (selon que $a = b$ ou non) montre qu'on reconstruit $a$ puis $b$ sans ambiguïté.
+Le sens $\Leftarrow$ est immédiat (substitution des égaux). Pour $\Rightarrow$, supposons $\{\{a\},\{a,b\}\} = \{\{c\},\{c,d\}\}$ et déroulons les deux cas annoncés.
 
-<Badge niveau="demontre">Vérification finie, entièrement mécanique : Kuratowski encode bien le couple ordonné.</Badge>
+**Cas $a = b$.** Alors $(a,b) = \{\{a\}\}$ : l'ensemble $\{\{c\},\{c,d\}\}$ n'a qu'un élément, donc $\{c\} = \{c,d\} = \{a\}$. De $\{c\} = \{a\}$ on tire $c = a$ ; de $\{c,d\} = \{a\}$ on tire $d = a = b$. Les deux composantes coïncident.
+
+**Cas $a \neq b$.** D'abord $a = c$ : l'élément $\{a\}$ du membre de gauche appartient à $\{\{c\},\{c,d\}\}$, donc $\{a\} = \{c\}$ ou $\{a\} = \{c,d\}$. Dans le second cas, $c$ et $d$ appartiennent à $\{a\}$, donc $c = d = a$ ; alors $(c,d) = \{\{a\}\}$, et $\{a,b\}$, élément du membre de gauche, devrait valoir $\{a\}$ — ce qui forcerait $b = a$, exclu. Reste $\{a\} = \{c\}$, d'où $a = c$. Ensuite $b = d$ : l'élément $\{a,b\}$ appartient à $\{\{a\},\{a,d\}\}$ ; si $\{a,b\} = \{a\}$, alors $b = a$, exclu ; donc $\{a,b\} = \{a,d\}$, et $b$, distinct de $a$, ne peut être que $d$.
+
+Chaque pas ne mobilise que l'extensionnalité : deux ensembles écrits en extension sont égaux exactement quand ils ont les mêmes éléments.
+
+<Badge niveau="demontre">Démontré ci-dessus, cas $a = b$ et $a \neq b$ déroulés — seule l'extensionnalité est mobilisée.</Badge>
 
 </Encart>
 
@@ -164,7 +176,7 @@ Pensez au couple comme à une boîte à deux compartiments fermés. L'ensemble $
 
 </Encart>
 
-De là, le **produit cartésien** $A \times B = \{(a, b) : a \in A,\ b \in B\}$ s'obtient par séparation à l'intérieur de $\mathcal{P}(\mathcal{P}(A \cup B))$. Pourquoi cet ensemble-là ? Suivez les emboîtements : si $a \in A$ et $b \in B$, alors $\{a\}$ et $\{a, b\}$ sont des **parties** de $A \cup B$, donc des **éléments** de $\mathcal{P}(A \cup B)$ ; le couple $(a, b) = \{\{a\}, \{a, b\}\}$ est ainsi une partie de $\mathcal{P}(A \cup B)$, c'est-à-dire un élément de $\mathcal{P}(\mathcal{P}(A \cup B))$. Tous les couples y vivent déjà — grâce aux axiomes 2, 3 et 4 — et il ne reste qu'à découper par séparation. <Badge niveau="demontre">Construction complète : chaque étage d'emboîtement est justifié par un axiome posé.</Badge>
+De là, le **produit cartésien** $A \times B = \{(a, b) : a \in A,\ b \in B\}$ s'obtient par séparation à l'intérieur de $\mathcal{P}(\mathcal{P}(A \cup B))$. Pourquoi cet ensemble-là ? Suivez les emboîtements : si $a \in A$ et $b \in B$, alors $\{a\}$ et $\{a, b\}$ sont des **parties** de $A \cup B$, donc des **éléments** de $\mathcal{P}(A \cup B)$ ; le couple $(a, b) = \{\{a\}, \{a, b\}\}$ est ainsi une partie de $\mathcal{P}(A \cup B)$, c'est-à-dire un élément de $\mathcal{P}(\mathcal{P}(A \cup B))$. Tous les couples y vivent déjà — grâce aux axiomes 2, 3 et 4 — et il ne reste qu'à découper par séparation : on garde les $z$ de $\mathcal{P}(\mathcal{P}(A \cup B))$ tels que $\exists a \in A\ \exists b \in B,\ z = (a, b)$ — une formule à paramètres $A$ et $B$, exactement ce que le schéma autorise. <Badge niveau="demontre">Construction complète : chaque étage d'emboîtement est justifié par un axiome posé.</Badge>
 
 ### Ce qui vient ensuite
 
