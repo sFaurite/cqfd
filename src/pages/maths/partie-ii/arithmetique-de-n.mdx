@@ -178,6 +178,8 @@ $$ \le \ \text{est réflexive, transitive, antisymétrique, et}\ \forall m, n \i
 <Badge niveau="demontre" slot="badge">Les quatre propriétés sont démontrées ci-dessus — facture exacte : réflexivité et transitivité par la définition et l'associativité de $+$ ; antisymétrie par commutativité, régularité et les propriétés du successeur ; totalité par le petit lemme « zéro ou successeur » et le lemme B.</Badge>
 </Resultat>
 
+L'ordre et l'addition, enfin, se respectent — le compagnon de la régularité, dans l'autre sens : si $m \le n$, alors $m + p \le n + p$, et de même avec $\lt$. Le témoin voyage : de $m + k = n$ on tire $(m + p) + k = (m + k) + p = n + p$ par associativité et commutativité — même témoin $k$, donc $m + p \le n + p$ ; et si $k \neq 0$, l'équivalence de l'ordre strict (ci-dessus) donne $m + p \lt n + p$. Cette **compatibilité de l'ordre avec l'addition** servira sans relâche — dès les chapitres 6 et 8, puis pour peser les infinis en partie III. <Badge niveau="demontre">Le témoin de $\le$ transporté par associativité et commutativité ; le cas strict par l'équivalence « témoin non nul » démontrée plus haut.</Badge>
+
 <Encart type="plusloin" titre="L'élégance von Neumann : ≤, c'est ⊆ — démontré">
 Sur les entiers de von Neumann, $m \le n \iff m \subseteq n$ et $m \lt n \iff m \in n$ : l'ordre n'est pas une structure plaquée sur les entiers — comparer, c'est littéralement tester une inclusion. Le chapitre 4 a promis ces équivalences ; les voici, en quatre récurrences et deux ponts.
 
