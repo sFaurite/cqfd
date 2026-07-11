@@ -47,7 +47,7 @@ export const GLOSSAIRE: TermeGlossaire[] = [
   { terme: 'Nombre réel (ℝ)', def: 'Défini comme une coupure de Dedekind de ℚ. Comble les trous de ℚ (ex. √2) ; ℝ est complet (toute partie non vide et majorée a une borne supérieure).', voir: '/maths/partie-ii/reels-dedekind' },
   { terme: 'Borne supérieure (complétude)', def: 'Plus petit des majorants. Toute partie non vide majorée de ℝ en possède une : c’est LA propriété qui distingue ℝ de ℚ, moteur de toute l’analyse.', voir: '/maths/partie-ii/reels-dedekind' },
   { terme: 'Nombre complexe (ℂ)', def: 'Défini comme un couple de réels (a, b), noté a + bi, avec la multiplication (a,b)(c,d) = (ac−bd, ad+bc). Alors i = (0,1) vérifie i² = −1. Corps sans ordre compatible avec les opérations.', voir: '/maths/partie-ii/complexes' },
-  { terme: 'Module, conjugué', def: 'Pour z = a + bi : conjugué z̄ = a − bi, module |z| = √(a²+b²). On a z·z̄ = |z|² et |zw| = |z||w|.', voir: '/maths/partie-ii/complexes' },
+  { terme: 'Module, conjugué', def: 'Pour z = a + bi : conjugué z̄ = a − bi ; norme quadratique N(z) = a² + b² ; module |z| = √N(z). On a z·z̄ = N(z) et N(zw) = N(z)N(w) — les formes en module (|z|² , |zw| = |z||w|) attendent la racine carrée, soldée en partie V.', voir: '/maths/partie-ii/complexes' },
 
   // — Partie III : compter l’infini
   { terme: 'Équipotence', def: 'Deux ensembles sont équipotents s’il existe une bijection entre eux — « même taille », même infinis. La comparaison des infinis repose sur cette seule idée.', voir: '/maths/partie-iii/equipotence' },

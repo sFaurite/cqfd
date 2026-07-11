@@ -39,7 +39,7 @@ D'où sort la formule du produit ? Motivons-la *après coup*. Si un nombre $i$ v
 
 ## Le moment de vérité : i² = −1
 
-Définissons $i := (0,1)$, le point situé une unité au-dessus de l'origine — un objet de ZF comme un autre.
+Définissons $i := (0,1)$, le point situé une unité au-dessus de l'origine — un objet de ZF comme un autre. <Badge niveau="admis">Définition : un couple particulier du plan, rien de plus.</Badge>
 
 <Encart type="calcul" titre="Le carré de (0,1), ligne à ligne">
 Appliquons la définition du produit avec $a = 0$, $b = 1$, $c = 0$, $d = 1$ :
@@ -60,7 +60,7 @@ $$ i^2 = -1, \qquad \text{où } i := (0,1) $$
 <Badge niveau="demontre" slot="badge">Vérifié en trois lignes depuis la définition du produit : un couple, une table de multiplication, un calcul — rien d'imaginaire. L'écriture $-1$ pour le couple $(-1,0)$ est l'identification établie à la section suivante.</Badge>
 </Resultat>
 
-Un mot de prudence : dans ce cours, nous n'écrirons pas √(−1) — l'analyse complexe sait, bien plus tard, définir des « branches » de racine par conventions explicites, mais rien de tel n'est disponible ici. Sur les réels positifs, √ désigne *l'unique* racine positive ; or $-1$ possède deux racines carrées dans $\mathbb{C}$ — $i$, mais aussi $-i = (0,-1)$, dont le carré vaut $(-1,0)$ par le même calcul — et, nous le démontrerons plus bas, aucun ordre compatible ne permet d'en préférer une : la « racine principale » n'a pas de sens sans choix arbitraire de branche.
+Un mot de prudence : dans ce cours, nous n'écrirons pas √(−1) — l'analyse complexe sait, bien plus tard, définir des « branches » de racine par conventions explicites, mais rien de tel n'est disponible ici. Sur les réels positifs, √ désigne *l'unique* racine positive ; or $-1$ possède deux racines carrées dans $\mathbb{C}$ — $i$, mais aussi son opposé $-i := (0,-1)$ (les opposés de $\mathbb{C}$, composante à composante, entreront au décompte du corps à la section d'après), dont le carré vaut $(-1,0)$ par le même calcul — et, nous le démontrerons plus bas, aucun ordre compatible ne permet d'en préférer une : la « racine principale » n'a pas de sens sans choix arbitraire de branche.
 
 ## L'écriture a + bi, reconstruite
 
@@ -68,7 +68,7 @@ Où sont passés les réels ? Ils s'injectent dans le plan par $\varphi : a \map
 
 $$ (a,0) + (b,0) = (a+b,\ 0) \qquad \text{et} \qquad (a,0)\cdot(b,0) = (a\cdot b - 0\cdot 0,\ \ a\cdot 0 + 0\cdot b) = (ab,\ 0) $$
 
-et il est injectif : $(a,0) = (b,0)$ force $a = b$ par la propriété caractéristique du couple. <Badge niveau="demontre">Deux lignes de calcul ; l'injectivité vient de la propriété du couple de Kuratowski (chapitre 2).</Badge> Nous identifions désormais le réel $a$ et le couple $(a,0)$. Alors, pour tous réels $a$ et $b$ :
+et il est injectif : $(a,0) = (b,0)$ force $a = b$ par la propriété caractéristique du couple. <Badge niveau="demontre">Deux lignes de calcul ; l'injectivité vient de la propriété du couple de Kuratowski (chapitre 2).</Badge> Nous identifions désormais le réel $a$ et le couple $(a,0)$. <Badge niveau="admis">Convention d'identification, adossée au théorème de plongement qui précède — quatrième du genre après $\mathbb{N} \subseteq \mathbb{Z}$, $\mathbb{Z} \subseteq \mathbb{Q}$ et $\mathbb{Q} \subseteq \mathbb{R}$.</Badge> Alors, pour tous réels $a$ et $b$ :
 
 $$ a + b\,i = (a,0) + (b,0)\cdot(0,1) = (a,0) + (b\cdot 0 - 0\cdot 1,\ \ b\cdot 1 + 0\cdot 0) = (a,0) + (0,b) = (a,b) $$
 
@@ -76,16 +76,16 @@ $$ a + b\,i = (a,0) + (b,0)\cdot(0,1) = (a,0) + (b\cdot 0 - 0\cdot 1,\ \ b\cdot 
 
 ## Tout non nul s'inverse : ℂ est un corps
 
-Associativité, commutativité, distributivité, neutres $0 := (0,0)$ et $1 := (1,0)$ : chaque vérification est un développement mécanique qui se ramène aux propriétés de corps de $\mathbb{R}$ ; nous en déroulons **une comme modèle** et signalons honnêtement que les autres sont de la même encre. Le seul point qui mérite une vraie preuve : tout élément non nul admet un inverse.
+Associativité, commutativité, distributivité, neutres $0 := (0,0)$ et $1 := (1,0)$, opposés — $-(a,b) := (-a,-b)$, dont la somme avec $(a,b)$ s'annule composante à composante — et $0 \neq 1$, deux couples distincts par la propriété caractéristique puisque $0 \neq 1$ dans $\mathbb{R}$ (chapitre 8) : chaque vérification est un développement mécanique qui se ramène aux propriétés de corps de $\mathbb{R}$ ; nous en déroulons **une comme modèle** et signalons honnêtement que les autres sont de la même encre. Le seul point qui mérite une vraie preuve : tout élément non nul admet un inverse.
 
 <Encart type="plusloin" titre="Vérification-type : la distributivité">
-Développons les deux membres de $(a,b)\cdot\big((c,d) + (e,f)\big) = (a,b)\cdot(c,d) + (a,b)\cdot(e,f)$. À gauche : $(a,b)\cdot(c+e,\ d+f) = \big(a(c+e) - b(d+f),\ a(d+f) + b(c+e)\big) = (ac + ae - bd - bf,\ ad + af + bc + be)$, par distributivité dans $\mathbb{R}$. À droite : $(ac - bd,\ ad + bc) + (ae - bf,\ af + be) = (ac - bd + ae - bf,\ ad + bc + af + be)$. Les deux couples coïncident composante par composante (commutativité de $+$ dans $\mathbb{R}$), donc sont égaux. $\blacksquare$ Toutes les autres lois se vérifient sur ce modèle exact : développer les deux membres, comparer les coordonnées avec les lois de $\mathbb{R}$.
+Développons les deux membres de $(a,b)\cdot\big((c,d) + (e,f)\big) = (a,b)\cdot(c,d) + (a,b)\cdot(e,f)$. À gauche : $(a,b)\cdot(c+e,\ d+f) = \big(a(c+e) - b(d+f),\ a(d+f) + b(c+e)\big) = (ac + ae - bd - bf,\ ad + af + bc + be)$, par distributivité dans $\mathbb{R}$. À droite : $(ac - bd,\ ad + bc) + (ae - bf,\ af + be) = (ac - bd + ae - bf,\ ad + bc + af + be)$. Les deux couples coïncident composante par composante (commutativité et associativité de $+$ dans $\mathbb{R}$), donc sont égaux. $\blacksquare$ Toutes les autres lois se vérifient sur ce modèle exact : développer les deux membres, comparer les coordonnées avec les lois de $\mathbb{R}$.
 </Encart>
 
 <Encart type="calcul" titre="L'inverse de (a,b) ≠ (0,0), ligne à ligne">
 **Lemme préalable, dans $\mathbb{R}$ : si $(a,b) \neq (0,0)$, alors $a^2 + b^2 > 0$.** Soit $x$ un réel. L'ordre de $\mathbb{R}$ étant total, deux cas. Si $x \ge 0$ : la compatibilité du produit avec l'ordre donne $x^2 = x \cdot x \ge 0$. Si $x \le 0$ : en ajoutant $-x$ aux deux membres, $0 \le -x$, donc $(-x)(-x) \ge 0$ ; or $x(-x) + x \cdot x = x(-x + x) = x \cdot 0 = 0$ donne $x(-x) = -x^2$, puis $(-x)(-x) + x(-x) = (-x + x)(-x) = 0$ donne $(-x)(-x) = x^2$. Dans les deux cas, $x^2 \ge 0$. Si de plus $x \neq 0$, alors $x^2 \neq 0$ (sinon, en multipliant $x \cdot x = 0$ par l'inverse de $x$ dans $\mathbb{R}$, il viendrait $x = 0$), donc $x^2 > 0$. Enfin, si $(a,b) \neq (0,0)$, l'une des composantes est non nulle — disons $a$ : alors $a^2 > 0$, $b^2 \ge 0$, et la compatibilité de l'addition donne $a^2 + b^2 \ge a^2 + 0 > 0$. (Même argument si c'est $b$.)
 
-Le lemme autorise la division par $a^2 + b^2$ dans $\mathbb{R}$. Posons :
+Le lemme autorise la division par $a^2 + b^2$ dans $\mathbb{R}$ — diviser, c'est multiplier par l'inverse : entre réels, $x/y$ abrège $x \cdot y^{-1}$. Posons :
 
 $$ w := \left( \frac{a}{a^2+b^2},\ \frac{-b}{a^2+b^2} \right) $$
 
@@ -95,19 +95,23 @@ $$ \boxed{\,(a,b) \cdot w = (1,0) = 1\,} $$
 
 </Encart>
 
-<Badge niveau="demontre">$\mathbb{C}$ est un corps : l'existence de l'inverse est vérifiée ligne à ligne ci-dessus ; les autres axiomes sont des développements routiniers, signalés comme tels.</Badge>
+<Badge niveau="demontre">$\mathbb{C}$ est un corps : l'existence de l'inverse est vérifiée ligne à ligne ci-dessus ; les autres axiomes sont des développements routiniers, signalés comme tels — « corps » gardant, comme aux chapitres 7 et 8, son sens informel : la liste des lois effectivement vérifiées, en attendant la définition officielle de la partie IV.</Badge>
+
+Mot de charpente, comme au chapitre 8 : ici aucun quotient, donc aucun représentant à choisir — les composantes d'un couple étant uniques (propriété caractéristique), chaque formule définit sans ambiguïté — et les graphes de $+,\ \cdot : \mathbb{C} \times \mathbb{C} \to \mathbb{C}$ et du plongement $a \mapsto (a,0)$ se forment par séparation dans les produits cartésiens appropriés ; il en ira de même, à la section suivante, du conjugué et de la norme.
 
 ## Conjugué, module et l'identité de Brahmagupta
 
-Pour $z = (a,b) = a + bi$, posons le **conjugué** $\bar{z} := (a,-b) = a - bi$ (le symétrique de $z$ par rapport à la droite réelle) et la **norme quadratique** $N(z) := a^2 + b^2$ — un réel positif ou nul, entièrement disponible **sans aucune dette**. Le **module**, lui, sera $\lvert z \rvert := \sqrt{N(z)}$ : cette racine existe — tout réel positif admet une unique racine carrée positive, obtenue comme borne supérieure des $t \ge 0$ tels que $t^2 \le N(z)$, grâce à la <Prereq href="/maths/partie-ii/reels-dedekind">complétude</Prereq> — mais la vérification complète (que le carré de cette borne vaut bien $N(z)$) sera menée pour toutes les racines $n$-ièmes en partie V. Petite dette signalée honnêtement : elle pèse sur $\lvert z \rvert$, **pas** sur $N(z)$, et nous formulerons donc les théorèmes de cette section en termes de $N$.
+Pour $z = (a,b) = a + bi$, posons le **conjugué** $\bar{z} := (a,-b) = a - bi$ (le symétrique de $z$ par rapport à la droite réelle) et la **norme quadratique** $N(z) := a^2 + b^2$ — un réel positif ou nul, entièrement disponible **sans aucune dette**. Le **module**, lui, sera $\lvert z \rvert := \sqrt{N(z)}$ : cette racine existe — tout réel positif admet une unique racine carrée positive (l'unicité est exactement le corollaire de l'encart Brahmagupta, plus bas), obtenue comme borne supérieure des $t \ge 0$ tels que $t^2 \le N(z)$ : une partie de $\mathbb{R}$ formée par séparation, non vide ($0$ y est) et majorée par $N(z) + 1$ — tout $t > N(z) + 1 \ge 1$ vérifie $t^2 \ge t > N(z)$ —, à laquelle la <Prereq href="/maths/partie-ii/reels-dedekind">complétude</Prereq> s'applique donc — mais la vérification complète (que le carré de cette borne vaut bien $N(z)$) sera menée pour toutes les racines $n$-ièmes en partie V. Petite dette signalée honnêtement : elle pèse sur $\lvert z \rvert$, **pas** sur $N(z)$, et nous formulerons donc les théorèmes de cette section en termes de $N$. <Badge niveau="admis">Trois définitions — conjugué, norme quadratique, module ; la troisième vient avec la petite dette déclarée ci-dessus, les deux premières sans aucune.</Badge>
 
 Premier calcul, immédiat :
 
 $$ z\bar{z} = (a,b)\cdot(a,-b) = (a\cdot a - b\cdot(-b),\ \ a\cdot(-b) + b\cdot a) = (a^2 + b^2,\ 0) = N(z) $$
 
-— l'identification du couple $(N(z), 0)$ au réel $N(z)$ étant celle du plongement. Le conjugué obéit à quatre règles, chacune un calcul d'une ligne sur les couples : $\overline{z + w} = \bar z + \bar w$, $\overline{z\,w} = \bar z\, \bar w$, $\overline{\bar z} = z$, et $z\bar z = 0 \iff z = 0$ (car $N(z) = a^2 + b^2$ est nul seulement si $a = b = 0$, par le lemme de l'encart « inverse »). <Badge niveau="demontre">Quatre développements directs par la définition du produit et de la somme — le deuxième, le seul non immédiat, se vérifie exactement comme la distributivité-modèle ci-dessus.</Badge> Et l'inverse calculé plus haut se relit avec structure : pour $z \neq 0$,
+— l'identification du couple $(N(z), 0)$ au réel $N(z)$ étant celle du plongement. Le conjugué obéit à quatre règles, chacune un calcul d'une ligne sur les couples : $\overline{z + w} = \bar z + \bar w$, $\overline{z\,w} = \bar z\, \bar w$, $\overline{\bar z} = z$, et $z\bar z = 0 \iff z = 0$ (car $N(z) = a^2 + b^2$ est nul seulement si $a = b = 0$, par le lemme de l'encart « inverse »). <Badge niveau="demontre">Quatre développements directs par la définition du produit et de la somme — le deuxième, le seul non immédiat, se vérifie exactement comme la distributivité-modèle ci-dessus.</Badge> Et l'inverse calculé plus haut — l'unique, d'ailleurs, ce que la notation $z^{-1}$ suppose : si $zw = zw' = 1$, alors $w = w(zw') = (wz)w' = w'$, la même algèbre que l'unicité de l'opposé au chapitre 8 — se relit avec structure : pour $z \neq 0$,
 
-$$ z^{-1} = \frac{\bar z}{N(z)} \qquad \text{— la formule du lycée } \frac{1}{a+bi} = \frac{a - bi}{a^2+b^2}. $$
+$$ z^{-1} = \frac{\bar z}{N(z)} \qquad \text{— la formule du lycée } \frac{1}{a+bi} = \frac{a - bi}{a^2+b^2}, $$
+
+où $\bar z / N(z)$ abrège le couple $\big(a/N(z),\ -b/N(z)\big)$, c'est-à-dire le $w$ de l'encart.
 
 La norme est *multiplicative* — la preuve fait surgir une identité déjà connue de Diophante (IIIᵉ siècle) et systématisée par Brahmagupta (VIIᵉ siècle) :
 
@@ -128,7 +132,7 @@ C'est l'identité de Brahmagupta–Fibonacci : un produit de deux sommes de deux
 
 $$ \boxed{\,N(zw) = N(z)\,N(w)\,} $$
 
-**Corollaire pour le module.** Dès que la racine carrée positive est disponible, $\lvert zw \rvert^2 = N(zw) = N(z)N(w) = (\lvert z \rvert \lvert w \rvert)^2$ ; or deux réels positifs de même carré sont égaux — si $x^2 = y^2$ avec $x, y \ge 0$, alors $(x-y)(x+y) = 0$, et l'intégrité du corps $\mathbb{R}$ force $x = y$ ou $x = -y$, donc $x = y$. D'où $\lvert zw \rvert = \lvert z \rvert\,\lvert w \rvert$.
+**Corollaire pour le module.** Dès que la racine carrée positive est disponible, $\lvert zw \rvert^2 = N(zw) = N(z)N(w) = (\lvert z \rvert \lvert w \rvert)^2$ ; or deux réels positifs de même carré sont égaux — si $x^2 = y^2$ avec $x, y \ge 0$, alors $(x-y)(x+y) = 0$ ; si $x + y \neq 0$, la multiplication par son inverse dans $\mathbb{R}$ donne $x - y = 0$ ; et si $x + y = 0$, la positivité des deux membres force $x = y = 0$ — de $0 \le x = -y$ et $0 \le y$, l'antisymétrie tire $y = 0$. Dans les deux cas, $x = y$. D'où $\lvert zw \rvert = \lvert z \rvert\,\lvert w \rvert$.
 
 </Encart>
 
@@ -144,7 +148,7 @@ D'abord un fait déjà parfaitement rigoureux :
 
 $$ i \cdot (a,b) = (0,1)\cdot(a,b) = (0\cdot a - 1\cdot b,\ \ 0\cdot b + 1\cdot a) = (-b,\ a) $$
 
-Multiplier par $i$ envoie $(a,b)$ sur $(-b,a)$ : un quart de tour autour de l'origine. Appliqué deux fois : $(a,b) \mapsto (-b,a) \mapsto (-a,-b)$ — le demi-tour, c'est-à-dire la multiplication par $-1$. L'image d'ouverture est tenue : $i^2 = -1$ *est* « deux quarts de tour font un demi-tour ».
+Multiplier par $i$ envoie $(a,b)$ sur $(-b,a)$ : un quart de tour autour de l'origine. Appliqué deux fois : $(a,b) \mapsto (-b,a) \mapsto (-a,-b)$ — le demi-tour, c'est-à-dire la multiplication par $-1$ : $(-1,0)\cdot(a,b) = (-1\cdot a - 0\cdot b,\ -1\cdot b + 0\cdot a) = (-a,\,-b)$. L'image d'ouverture est tenue : $i^2 = -1$ *est* « deux quarts de tour font un demi-tour ».
 
 Plus généralement, admettons un instant la trigonométrie du lycée. Tout $z \neq 0$ s'écrit $z = r\,(\cos\theta,\ \sin\theta)$ avec $r = \lvert z \rvert$ — où $r\,(x,y)$ abrège $(rx,\ ry)$, c'est-à-dire le produit $(r,0)\cdot(x,y)$ —, et la définition du produit reproduit *exactement* les formules d'addition :
 
@@ -165,7 +169,7 @@ $\mathbb{R}$ était un corps *ordonné* : son ordre total vérifie (C1) — si $
 <Encart type="calcul" titre="Aucun ordre total compatible sur ℂ — démonstration complète">
 Supposons qu'il existe un ordre total $\le$ sur $\mathbb{C}$ vérifiant (C1) et (C2), et cherchons une contradiction.
 
-**Étape 1 : tout carré est positif.** Soit $z \in \mathbb{C}$. L'ordre étant total, ou bien $z \ge 0$, ou bien $z \le 0$. Si $0 \le z$ : (C2) appliqué à $x = y = z$ donne $0 \le z^2$. Si $z \le 0$ : en ajoutant $-z$ aux deux membres (C1), $0 \le -z$, donc (C2) donne $0 \le (-z)(-z)$ ; or $(-z)(-z) = z^2$, par le même calcul de distributivité que dans le lemme de l'encart « inverse », qui n'utilisait que les axiomes de corps — valables dans $\mathbb{C}$. Dans les deux cas, $0 \le z^2$.
+**Étape 1 : tout carré est positif.** Soit $z \in \mathbb{C}$. L'ordre étant total, ou bien $z \ge 0$, ou bien $z \le 0$. Si $0 \le z$ : (C2) appliqué à $x = y = z$ donne $0 \le z^2$. Si $z \le 0$ : en ajoutant $-z$ aux deux membres (C1), $0 \le -z$, donc (C2) donne $0 \le (-z)(-z)$ ; or $(-z)(-z) = z^2$, par le même calcul de distributivité que dans le lemme de l'encart « inverse », qui n'utilisait que les axiomes de corps — valables dans $\mathbb{C}$ — avec, en prime, $z \cdot 0 = 0$ : calcul direct sur les couples, $(a,b)\cdot(0,0) = (a\cdot 0 - b\cdot 0,\ a\cdot 0 + b\cdot 0) = (0,0)$. Dans les deux cas, $0 \le z^2$.
 
 **Étape 2 :** en particulier $0 \le 1^2 = 1$ ($1$ est neutre) et, par le théorème encadré plus haut, $0 \le i^2 = -1$.
 
@@ -194,7 +198,7 @@ Le gain est en réalité bien plus vaste que les racines carrées.
 
 $$ \text{Tout polynôme non constant à coefficients dans } \mathbb{C} \text{ admet au moins une racine dans } \mathbb{C} $$
 
-<Badge niveau="demontre" slot="badge">Théorème rigoureusement établi et consensuel — mais **cité ici sans preuve** : elle exige l'analyse de la partie V, et le chapitre des polynômes en donnera une esquisse honnête, présentée comme telle. <a href="https://fr.wikipedia.org/wiki/Théorème_de_d'Alembert-Gauss" target="_blank" rel="noopener">réf. ↗</a></Badge>
+<Badge niveau="demontre" slot="badge">Théorème rigoureusement établi et consensuel — mais **cité ici sans preuve** : elle exige l'analyse de la partie V, et le chapitre des polynômes — qui définira d'ailleurs officiellement la notion même de « polynôme », employée ici par anticipation — en donnera une esquisse honnête, présentée comme telle. <a href="https://fr.wikipedia.org/wiki/Théorème_de_d'Alembert-Gauss" target="_blank" rel="noopener">réf. ↗</a></Badge>
 </Resultat>
 
 Autrement dit : l'équation $a_n z^n + \dots + a_1 z + a_0 = 0$ (avec $n \ge 1$ et $a_n \neq 0$) possède toujours une solution complexe. Ce théorème dira, le moment venu, quelque chose de stupéfiant : en adjoignant *une seule* racine — celle de $x^2 + 1$ — on les aura *toutes* obtenues, $\mathbb{C}$ est **algébriquement clos**. Nous l'*énonçons* comme horizon, sans le démontrer ni l'utiliser : sa preuve exige l'analyse de la partie V, et le chapitre des polynômes — qui définira officiellement la notion même de polynôme — en donnera une esquisse structurée.
