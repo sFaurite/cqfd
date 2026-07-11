@@ -75,6 +75,8 @@ $$ f : A \to B \text{ est bijective} \iff \exists\, g : B \to A,\quad g \circ f 
 $\boxed{f \text{ bijective} \iff f \text{ inversible, et alors } f^{-1} \text{ est unique}}$
 </Encart>
 
+Trois corollaires d'une ligne serviront sans relâche. L'**identité est une bijection** — inversible, d'inverse elle-même, par neutralité. La **réciproque d'une bijection est une bijection** — $f^{-1}$ satisfait les deux identités du théorème, rôles échangés : elle est inversible, d'inverse $f$. Et la **composée $g \circ f$ de deux injections est injective** — $g(f(a)) = g(f(a'))$ force $f(a) = f(a')$ puis $a = a'$ — ; de deux surjections, surjective — tout $c$ s'écrit $g(b)$, tout $b$ s'écrit $f(a)$, donc $c = g(f(a))$ — ; de deux bijections, bijective. <Badge niveau="demontre">Trois vérifications d'une ligne, déroulées ici même à partir du théorème et des définitions.</Badge>
+
 <Encart type="rappel" titre="Attention : relation réciproque, fonction réciproque, image réciproque">
 Trois objets distincts se cachent sous le symbole $f^{-1}$. La **relation réciproque** $\{(b,a) \in B \times A : (a,b) \in f\}$ existe pour *toute* fonction $f$ — c'est celle de l'étape 1 ci-dessus. Mais elle n'est une *fonction* $B \to A$ que si $f$ est bijective : la totalité lui manque quand $f$ n'est pas surjective, l'univocité quand $f$ n'est pas injective. Dans ce cas seulement, on l'appelle la **fonction réciproque** et on la note $f^{-1}$. Enfin l'**image réciproque** $f^{-1}[C]$ d'une partie $C \subseteq B$, définie plus haut, existe pour *toute* fonction — les crochets la distinguent de la fonction réciproque ; la notation à parenthèses $f^{-1}(C)$ est courante ailleurs, et le contexte tranche.
 </Encart>
